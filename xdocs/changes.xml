@@ -53,7 +53,10 @@
   <ul>
     <li>
       TRQS20: mysql: "on delete cascade" not generated 
-    </li>  
+    </li>
+    <li>
+      TRQS101: Sql2Xml task should generate a dtd compliant xml
+    </li>
     <li>
       TRQS121: native limit and offset breaks on postgresql 7.3
     </li>
