@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <pomVersion>3</pomVersion>
+  <id>torque-gen</id>
+  <name>Torque generator</name>
+  <currentVersion>3.1-dev</currentVersion>
+  <organization>
+    <name>Apache Software Foundation</name>
+    <url>http://db.apache.org/</url>
+    <logo>/images/db-logo-blue.png</logo>
+  </organization>
+  <inceptionYear>2000</inceptionYear>
+  <package>org.apache.torque</package>
+  <logo>/images/blue-logo.gif</logo>
+
+  <!-- Gump integration -->
+  <gumpRepositoryId>jakarta</gumpRepositoryId>
+
+  <description>Torque is a persistence layer.</description>
+  <shortDescription>Persistence Layer</shortDescription>
+  <url>http://db.apache.org/torque/</url>
+  <issueTrackingUrl>http://scarab.werken.com/scarab/issues</issueTrackingUrl>
+  <siteAddress>db.apache.org</siteAddress>
+  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
+  <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
+
+  <repository>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
+    <url>http://cvs.apache.org/viewcvs/db-torque/</url>
+  </repository>
+
+  <mailingLists>
+    <mailingList>
+      <name>Torque User List</name>
+      <subscribe>torque-user-subscribe@db.apache.org</subscribe>
+      <unsubscribe>torque-user-unsubscribe@db.apache.org</unsubscribe>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=torque-user@db.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>Torque Developer List</name>
+      <subscribe>torque-dev-subscribe@db.apache.org</subscribe>
+      <unsubscribe>torque-dev-unsubscribe@db.apache.org</unsubscribe>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+    <developer>
+      <name>Jeffrey D. Brekke</name>
+      <id>brekke</id>
+      <email>brekke@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Eric Dobbs</name>
+      <id>dobbs</id>
+      <email>dobbs@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Scott Eade</name>
+      <id>seade</id>
+      <email>seade@backstagetech.com.au</email>
+      <organization>Backstage Technologies Pty. Ltd.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Stephen Haberman</name>
+      <id>stephenh</id>
+      <email>stephenh@chase3000.com</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Humberto Hernandez</name>
+      <id>hhernandez</id>
+      <email>hhernandez@itweb.com.mx</email>
+      <organization>Integrated Technology S.C.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Fedor Karpelevitch</name>
+      <id>fedor</id>
+      <email>fedor@karpelevitch.net</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Quinton McCombs</name>
+      <id>quintonm</id>
+      <email>quintonm@bellsouth.net</email>
+      <organization>NEqualsOne</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>John McNally</name>
+      <id>jmcnally</id>
+      <email>jmcnally@collab.net</email>
+      <organization>CollabNet</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Martin Poeschl</name>
+      <id>mpoeschl</id>
+      <email>mpoeschl@marmot.at</email>
+      <organization>Tucana.at</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Daniel Rall</name>
+      <id>dlr</id>
+      <email>dlr@finemaltcoding.com</email>
+      <organization>CollabNet, Inc.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Henning P. Schmiedehausen</name>
+      <id>henning</id>
+      <email>hps@intermeta.de</email>
+      <organization>INTERMETA - Gesellschaft fuer Mehrwertdienste mbH</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Kurt Schrader</name>
+      <id>kschrader</id>
+      <email>kschrader@karmalab.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>Jon Scott Stevens</name>
+      <id>jon</id>
+      <email>jon@latchkey.com</email>
+      <organization>CollabNet, Inc.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
+      <name>James Taylor</name>
+      <id>jtaylor</id>
+      <email>james@jamestaylor.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+  </developers>
+
+  <contributors>
+    <contributor>
+      <name>James Hillyerd</name>
+      <email>james@hillyerd.com</email>
+    </contributor>
+
+    <contributor>
+      <name>J. Russell Smyth</name>
+      <email>drfish@cox.net</email>
+    </contributor>
+  </contributors>
+
+  <dependencies>
+    <dependency>
+      <id>ant</id>
+      <version>1.5.1</version>
+      <url>http://jakarta.apache.org/ant/</url>
+    </dependency>
+    <dependency>
+      <id>commons-beanutils</id>
+      <version>1.5</version>
+      <url>http://jakarta.apache.org/commons/beanutils.html</url>
+    </dependency>
+    <dependency>
+      <id>commons-collections</id>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+    <dependency>
+      <id>commons-configuration</id>
+      <version>SNAPSHOT</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-dbcp</id>
+      <version>SNAPSHOT</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-lang</id>
+      <version>1.0.1</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.2</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-pool</id>
+      <version>1.0</version>
+      <url>http://jakarta.apache.org/commons/pool/</url>
+    </dependency>
+    <dependency>
+      <id>jcs</id>
+      <version>1.0-dev</version>
+      <url>http://jakarta.apache.org/turbine/jcs/</url>
+    </dependency>
+    <dependency>
+      <id>jdbc</id>
+      <version>2.0</version>
+      <url>http://java.sun.com/products/jdbc/download.html#spec</url>
+    </dependency>
+    <dependency>
+      <id>jndi</id>
+      <version>1.2.1</version>
+      <url>http://java.sun.com/products/jndi/</url>
+    </dependency>
+    <dependency>
+      <id>log4j</id>
+      <version>1.2.7</version>
+      <url>http://jakarta.apache.org/log4j/</url>
+    </dependency>
+    <dependency>
+      <id>velocity</id>
+      <version>1.3</version>
+      <url>http://jakarta.apache.org/velocity/</url>
+    </dependency>
+    <dependency>
+      <id>village</id>
+      <version>2.0-dev-20021111</version>
+      <url>http://share.whichever.com/index.php?SCREEN=village</url>
+    </dependency>
+    <dependency>
+      <id>xerces:xercesImpl</id>
+      <version>2.0.2</version>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+    <dependency>
+      <id>xerces:xmlParserAPIs</id>
+      <version>2.0.2</version>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+    <dependency>
+      <id>junit</id>
+      <version>3.8.1</version>
+      <url>http://www.junit.org</url>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <aspectSourceDirectory></aspectSourceDirectory>
+
+    <unitTest>
+      <includes>
+        <include>**/*Test*.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/BaseTestCase.java</exclude>
+      </excludes>
+    </unitTest>
+
+    <resources></resources>
+    <jars></jars>
+  </build>
+</project>
