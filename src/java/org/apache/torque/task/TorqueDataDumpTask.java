@@ -251,7 +251,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
             System.err.println("cannot load driver:");
             cnfe.printStackTrace();
         }
-
+        context.put("escape", new org.apache.velocity.anakia.Escape());
         return context;
     }
 
