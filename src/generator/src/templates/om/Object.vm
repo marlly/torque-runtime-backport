@@ -1424,7 +1424,20 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     public void setQueryKey(String key)
         throws TorqueException
     {
+  ## Work around the fact that BaseObject.setPrimaryKey() declares
+  ## that it throws Exception instead of TorqueException.
+  #set ($tableHasPrimaryKey = $table.PrimaryKey.size() > 0)
+  #if (!$tableHasPrimaryKey)
+        try
+        {
+  #end
         setPrimaryKey(key);
+  #if (!$tableHasPrimaryKey)
+        }
+        catch (Exception e)
+        {
+        }
+  #end
     }
 #end
 
