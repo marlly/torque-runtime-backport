@@ -100,10 +100,6 @@ public class Index
     public Index(List indexColumns)
     {
         this();
-        if (DEBUG)
-        {
-            System.out.println("indexColumns.size()=" + indexColumns.size());
-        }
         if (indexColumns.size() > 0)
         {
             StringBuffer buf = new StringBuffer();
@@ -117,8 +113,9 @@ public class Index
             this.indexColumns = indexColumns;
             if (DEBUG)
             {
-                System.out.println("Created Index named " + indexName + " with " +
-                                   indexColumns + " columns");
+                System.out.println("Created Index named " + indexName +
+                                   " with " + indexColumns.size() +
+                                   " columns");
             }
         }
         else
