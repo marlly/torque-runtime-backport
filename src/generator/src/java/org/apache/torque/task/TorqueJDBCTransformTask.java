@@ -511,18 +511,19 @@ public class TorqueJDBCTransformTask extends Task
             foreignKeys = dbMeta.getImportedKeys(null, dbSchema, tableName);
             while (foreignKeys.next())
             {
+                String refTableName = foreignKeys.getString(3);
                 String fkName = foreignKeys.getString(12);
                 // if FK has no name - make it up (use tablename instead)
                 if (fkName == null)
                 {
-                    fkName = foreignKeys.getString(3);
+                    fkName = refTableName;
                 }
                 Object[] fk = (Object[]) fks.get(fkName);
                 List refs;
                 if (fk == null)
                 {
                     fk = new Object[2];
-                    fk[0] = foreignKeys.getString(3); //referenced table name
+                    fk[0] = refTableName; //referenced table name
                     refs = new ArrayList();
                     fk[1] = refs;
                     fks.put(fkName, fk);

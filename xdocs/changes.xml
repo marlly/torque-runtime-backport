@@ -9,6 +9,22 @@
 
   <body>
 
+<section name="Torque 3.1-rc">
+<p>
+  Changes between Torque 3.1-beta1 and 3.1-rc. <br/>
+</p>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      JdbcTrasformTask: error fetching foreign keys using an ODBC source.
+    </li>
+  </ul>
+</p>
+</subsection>
+</section>
+
 <section name="Torque 3.1-beta1">
 <p>
   Changes between Torque 3.1-alpha2 and 3.1-beta1. <br/>
