@@ -217,7 +217,7 @@ public class TorqueJDBCTransformTask extends Task
         DatabaseMetaData dbMetaData = con.getMetaData();
 
         // The database map.
-        Vector tableList = getTableNames(dbMetaData);
+        List tableList = getTableNames(dbMetaData);
 
         appData = doc.createElement("app-data");
         database = doc.createElement("database");
@@ -227,13 +227,13 @@ public class TorqueJDBCTransformTask extends Task
 
         for (int i = 0; i < tableList.size(); i++)
         {
-            String curTable = (String) tableList.elementAt(i);
-            Vector columns = getColumns(dbMetaData, curTable);
+            String curTable = (String) tableList.get(i);
+            List columns = getColumns(dbMetaData, curTable);
 
             for (int j = 0; j < columns.size(); j++)
             {
-                Vector v = (Vector) columns.elementAt(j);
-                String name = (String) v.elementAt(0);
+                List col = (List) columns.get(j);
+                String name = (String) col.get(0);
 
                 columnTableMap.put(name, curTable);
             }
@@ -242,7 +242,7 @@ public class TorqueJDBCTransformTask extends Task
         for (int i = 0; i < tableList.size(); i++)
         {
             // Add Table.
-            String curTable = (String) tableList.elementAt(i);
+            String curTable = (String) tableList.get(i);
             // dbMap.addTable(curTable);
 
             Element table = doc.createElement("table");
@@ -270,10 +270,10 @@ public class TorqueJDBCTransformTask extends Task
 
             for (int j = 0; j < columns.size(); j++)
             {
-                Vector v = (Vector) columns.get(j);
-                String name = (String) v.elementAt(0);
-                Integer type = ((Integer) v.elementAt(1));
-                int size = ((Integer) v.elementAt(2)).intValue();
+                List col = (List) columns.get(j);
+                String name = (String) col.get(0);
+                Integer type = ((Integer) col.get(1));
+                int size = ((Integer) col.get(2)).intValue();
 
                 // From DatabaseMetaData.java
                 //
@@ -287,8 +287,8 @@ public class TorqueJDBCTransformTask extends Task
                 // Indicates NULLABILITY of column is unknown.
                 /* int columnNullableUnknown = 2; */
 
-                Integer nullType = (Integer) v.elementAt(3);
-                String defValue = (String)v.elementAt(4);
+                Integer nullType = (Integer) col.get(3);
+                String defValue = (String) col.get(4);
 
                 Element column = doc.createElement("column");
                 column.setAttribute("name", name);
@@ -343,7 +343,7 @@ public class TorqueJDBCTransformTask extends Task
             {
                 Object[] forKey = (Object[]) l.next();
                 String foreignKeyTable = (String)forKey[0];
-                Vector refs = (Vector)forKey[1];
+                List refs = (List) forKey[1];
                 Element fk = doc.createElement("foreign-key");
                 fk.setAttribute("foreignTable", foreignKeyTable);
                 for (int m=0; m<refs.size(); m++)
@@ -369,24 +369,34 @@ public class TorqueJDBCTransformTask extends Task
      * system tables.
      *
      * @param dbMeta JDBC database metadata.
-     * @return A Vector with all the tables in a database.
-     * @exception SQLException.
+     * @return The list of all the tables in a database.
+     * @exception SQLException
      */
-    public Vector getTableNames(DatabaseMetaData dbMeta)
+    public List getTableNames(DatabaseMetaData dbMeta)
         throws SQLException
     {
-        ResultSet tableNames = dbMeta.getTables(null,null, "%",null);
-        Vector tables = new Vector();
-        while (tableNames.next())
+        List tables = new Vector();
+        ResultSet tableNames = null;
+        try
         {
-            String name = tableNames.getString(3);
-            String type = tableNames.getString(4);
-            if (type.equals("TABLE"))
+            tableNames = dbMeta.getTables(null,null, "%",null);
+            while (tableNames.next())
             {
-                tables.addElement(name);
+                String name = tableNames.getString(3);
+                String type = tableNames.getString(4);
+                if (type.equals("TABLE"))
+                {
+                    tables.add(name);
+                }
             }
         }
-	   tableNames.close();
+        finally
+        {
+            if (tableNames != null)
+            {
+                tableNames.close();
+            }
+        }
         return tables;
     }
 
@@ -403,31 +413,40 @@ public class TorqueJDBCTransformTask extends Task
      * @param dbMeta JDBC metadata.
      * @param tableName Table from which to retrieve column
      * information.
-     * @return A Vector with the list of columns in tableName.
+     * @return The list of columns in <code>tableName</code>.
      */
-    public Vector getColumns(DatabaseMetaData dbMeta,
-                             String tableName)
+    public List getColumns(DatabaseMetaData dbMeta, String tableName)
         throws SQLException
     {
-        ResultSet columnSet = dbMeta.getColumns(null,null, tableName, null);
-        Vector columns = new Vector();
-        while (columnSet.next())
+        List columns = new Vector();
+        ResultSet columnSet = null;
+        try
         {
-            String name = columnSet.getString(4);
-            Integer sqlType = new Integer(columnSet.getString(5));
-            Integer size = new Integer(columnSet.getInt(7));
-            Integer nullType = new Integer(columnSet.getInt(11));
-            String defValue = columnSet.getString(13);
+            columnSet = dbMeta.getColumns(null,null, tableName, null);
+            while (columnSet.next())
+            {
+                String name = columnSet.getString(4);
+                Integer sqlType = new Integer(columnSet.getString(5));
+                Integer size = new Integer(columnSet.getInt(7));
+                Integer nullType = new Integer(columnSet.getInt(11));
+                String defValue = columnSet.getString(13);
 
-            Vector v = new Vector();
-            v.addElement (name);
-            v.addElement (sqlType);
-            v.addElement (size);
-            v.addElement (nullType);
-            v.addElement (defValue);
-            columns.addElement (v);
+                List col = new Vector(5);
+                col.add(name);
+                col.add(sqlType);
+                col.add(size);
+                col.add(nullType);
+                col.add(defValue);
+                columns.add(col);
+            }
         }
-	   columnSet.close();
+        finally
+        {
+            if (columnSet != null)
+            {
+                columnSet.close();
+            }
+        }
         return columns;
     }
 
@@ -442,14 +461,23 @@ public class TorqueJDBCTransformTask extends Task
     public List getPrimaryKeys(DatabaseMetaData dbMeta, String tableName)
         throws SQLException
     {
-        ResultSet parts = dbMeta.getPrimaryKeys(null, null, tableName);
         List pk = new Vector();
-        while (parts.next())
+        ResultSet parts = null;
+        try
         {
-            pk.add(parts.getString(4));
+            parts = dbMeta.getPrimaryKeys(null, null, tableName);
+            while (parts.next())
+            {
+                pk.add(parts.getString(4));
+            }
         }
-	   
-        parts.close();
+        finally
+        {
+            if (parts != null)
+            {
+                parts.close();
+            }
+        }
         return pk;
     }
 
@@ -463,36 +491,46 @@ public class TorqueJDBCTransformTask extends Task
     public Collection getForeignKeys(DatabaseMetaData dbMeta, String tableName)
         throws SQLException
     {
-        ResultSet foreignKeys = dbMeta.getImportedKeys(null, null, tableName);
         Hashtable fks = new Hashtable();
-        while (foreignKeys.next())
+        ResultSet foreignKeys = null;
+        try
         {
-            String fkName = foreignKeys.getString(12);
-            // if FK has no name - make it up (use tablename instead)
-            if (fkName==null)
+            foreignKeys = dbMeta.getImportedKeys(null, null, tableName);
+            while (foreignKeys.next())
             {
-                fkName = foreignKeys.getString(3);
+                String fkName = foreignKeys.getString(12);
+                // if FK has no name - make it up (use tablename instead)
+                if (fkName==null)
+                {
+                    fkName = foreignKeys.getString(3);
+                }
+                Object[] fk = (Object[])fks.get(fkName);
+                List refs;
+                if (fk==null)
+                {
+                    fk = new Object[2];
+                    fk[0] = foreignKeys.getString(3); //referenced table name
+                    refs = new Vector();
+                    fk[1] = refs;
+                    fks.put(fkName, fk);
+                }
+                else
+                {
+                    refs = (Vector)fk[1];
+                }
+                String[] ref = new String[2];
+                ref[0] = foreignKeys.getString(8); //local column
+                ref[1] = foreignKeys.getString(4); //foreign column
+                refs.add(ref);
             }
-            Object[] fk = (Object[])fks.get(fkName);
-            Vector refs;
-            if (fk==null)
-            {
-                fk = new Object[2];
-                fk[0] = foreignKeys.getString(3); //referenced table name
-                refs = new Vector();
-                fk[1] = refs;
-                fks.put(fkName, fk);
-            }
-            else
-            {
-                refs = (Vector)fk[1];
-            }
-            String[] ref = new String[2];
-            ref[0] = foreignKeys.getString(8); //local column
-            ref[1] = foreignKeys.getString(4); //foreign column
-            refs.add(ref);
         }
-	   foreignKeys.close();
+        finally
+        {
+            if (foreignKeys != null)
+            {
+                foreignKeys.close();
+            }
+        }
         return fks.values();
     }
 }
