@@ -29,6 +29,10 @@
 <p>
   <ul>
     <li>
+      The DTD resolver will now use the database.dtd from the classpath if the 
+      DTD is http://db.apache.org/torque/dtd/database_3_1.dtd.
+    </li>
+    <li>
       LargeSelect now implements Serializable, provides better debugging
       information and further methods for maintaining search parameters.
     </li>
