@@ -24,6 +24,17 @@
             </ul>
           </li>
           -->
+          <li>
+            <strong>07 Mar 2002</strong>
+            <ul>
+              <li>
+                Modified the Oracle db.props to set the VARBINARY type
+                to BLOB because Oracle requires a length limit for RAW.
+                Suggestion by: thierry.lach NOSPAM pentamark.com on the 
+                Scarab mailing list.
+              </li>
+            </ul>
+          </li>
 
           <li>
             <strong>01 Mar 2002</strong>
