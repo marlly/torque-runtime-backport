@@ -203,10 +203,18 @@ public class Torque implements Initializable, Configurable
             // than try the "services.DatabaseService" namespace. This
             // will soon be deprecated.
             configuration = originalConf.subset("services.DatabaseService");
-
-            // the configuration may already have any prefixes stripped
-            if (configuration == null || configuration.isEmpty())
+            if (configuration != null && !configuration.isEmpty())
             {
+                /*
+                category.warn("Torque's 'services.DatabaseService.' " +
+                              "configuration prefix has been deprecated in " +
+                              "favor of the 'torque.' prefix");
+                */
+            }
+            else
+            {
+                // Assume the original configuration already had any
+                // prefixes stripped.
                 configuration = originalConf;
             }
         }
