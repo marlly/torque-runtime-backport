@@ -20,7 +20,7 @@
   #else
     driver="$databaseDriver"
     protocol="jdbc"
-    subprotocol="$dataModel.database"
+    subprotocol="$database"
     dbalias="$databaseName"
   #end
     username="$databaseUser"
