@@ -37,6 +37,10 @@
     <antcall target="project-om"/>
   </target>
 
+  <target name="main-classpath" description="==> generates sql + om classes">
+    <antcall target="project-sql-classpath"/>
+    <antcall target="project-om-classpath"/>
+  </target>
 
   <!-- ================================================================ -->
   <!-- I N I T  T A S K  T A R G E T                                    -->
