@@ -255,10 +255,13 @@ public class IDBroker
         }
         if (!transactionsSupported)
         {
-            Torque.getCategory().warn("IDBroker is being used with db: " + dbName +
-                "\n which does not support transactions.  It is possible to " +
-                "\n generate duplicate keys, if multiple JVM's are used or other " +
-                "\n means are used to write to the database.");
+            Torque.getCategory().warn
+                ("IDBroker is being used with db '" + dbName +
+                 "', which does not support transactions.  IDBroker " +
+                 "attempts to use transactions to limit the possibility of " +
+                 "duplicate key generation.  Without transactions, " +
+                 "duplicate key generation is possible if multiple JVMs " +
+                 "are used or other means are used to write to the database.");
         }
     }
 
