@@ -100,6 +100,7 @@ public class DBFactory
         adapters.put("weblogic.jdbc.pool.Driver", DBWeblogic.class);
         adapters.put("org.axiondb.jdbc.AxionDriver", DBAxion.class);
         adapters.put("com.informix.jdbc.IfxDriver", DBInformix.class);
+        adapters.put("sun.jdbc.odbc.JdbcOdbcDriver", DBOdbc.class);
 
         // add some short names to be used when drivers are not used
         adapters.put("as400", DBDB2400.class);
@@ -118,6 +119,8 @@ public class DBFactory
         adapters.put("weblogic", DBWeblogic.class);
         adapters.put("axion", DBAxion.class);
         adapters.put("informix", DBInformix.class);
+        adapters.put("odbc", DBOdbc.class);
+        adapters.put("msaccess", DBOdbc.class);
 
         adapters.put("", DBNone.class);
     }

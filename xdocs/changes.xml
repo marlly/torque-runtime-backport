@@ -32,6 +32,9 @@
       Added a Maven plugin for executing Torque commands and updated the
       <a href="maven-howto.html">Maven Howto</a> to reflect the addition.
     </li>
+    <li>
+      Added support for MS Access (using the JDBC-ODBC Bridge driver).
+    </li>
   </ul>
 </p>
 </subsection>
