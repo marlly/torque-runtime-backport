@@ -364,10 +364,7 @@ public class XmlToAppData extends DefaultHandler
             {
                 if ("table".equals(rawName) && currTable != null)
                 {
-                    // Heavy indexing must wait until after all columns
-                    // composing a table's primary key have been parsed.
-                    // TODO: Make this conditional.
-                    currTable.doHeavyIndexing();
+                    currTable.loadedFromXML();
                 }
             }
         }
