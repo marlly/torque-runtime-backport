@@ -121,7 +121,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      *
      * @return $cjtype
      */
-    public $cjtype ${col.GetterName} ()
+    public $cjtype ${col.GetterName}()
     {
         return $clo;
     }
@@ -222,7 +222,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             for (int i = 0; i < ${collName}.size(); i++)
             {
                 ((${tblFK.JavaName}) ${collName}.get(i))
-                    .${colFK.SetterName}(v);
+                        .${colFK.SetterName}(v);
             }
         }
           #end
@@ -373,85 +373,85 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public void set${pVarName}Key(ObjectKey key) throws TorqueException
     {
-      #if ($fk.LocalColumns.size() > 1)
+    #if ($fk.LocalColumns.size() > 1)
         SimpleKey[] keys = (SimpleKey[]) key.getValue();
-        #set ($i = 0)
-        #foreach ($colName in $fk.LocalColumns)
-          #set ($col = $table.getColumn($colName) )
-
-          #set ($fktype = $col.JavaNative)
-          #if ($fktype == "short")
-        ${col.SetterName}(((NumberKey) keys[$i]).shortValue());
-          #elseif($fktype == "int")
-        ${col.SetterName}(((NumberKey) keys[$i]).intValue());
-          #elseif($fktype == "long")
-        ${col.SetterName}(((NumberKey) keys[$i]).longValue());
-          #elseif($fktype == "BigDecimal")
-        ${col.SetterName}(((NumberKey) keys[$i]).getBigDecimal());
-          #elseif($fktype == "byte")
-        ${col.SetterName}(((NumberKey) keys[$i]).byteValue());
-          #elseif($fktype == "float")
-        ${col.SetterName}(((NumberKey) keys[$i]).floatValue());
-          #elseif($fktype == "double")
-        ${col.SetterName}(((NumberKey) keys[$i]).doubleValue());
-          #elseif($fktype == "Short")
-        ${col.SetterName}(new Short(((NumberKey) keys[$i]).shortValue()));
-          #elseif($fktype == "Integer")
-        ${col.SetterName}(new Integer(((NumberKey) keys[$i]).intValue()));
-          #elseif($fktype == "Long")
-        ${col.SetterName}(new Long(((NumberKey) keys[$i]).longValue()));
-          #elseif($fktype == "Byte")
-        ${col.SetterName}(new Byte(((NumberKey) keys[$i]).byteValue()));
-          #elseif($fktype == "Float")
-        ${col.SetterName}(new Float(((NumberKey) keys[$i]).floatValue()));
-          #elseif($fktype == "Double")
-        ${col.SetterName}(new Double(((NumberKey) keys[$i]).doubleValue()));
-          #elseif($fktype == "String")
-        ${col.SetterName}(keys[$i].toString());
-          #elseif($fktype == "Date")
-        ${col.SetterName}(((DateKey)keys[$i]).getDate());
-          #end
-          #set ( $i = $i + 1 )
-        #end
-      #else
-        #set ($colName = $fk.LocalColumns.get(0))
+      #set ($i = 0)
+      #foreach ($colName in $fk.LocalColumns)
         #set ($col = $table.getColumn($colName) )
-
         #set ($fktype = $col.JavaNative)
         #if ($fktype == "short")
-        ${col.SetterName}(((NumberKey) key).shortValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).shortValue());
         #elseif($fktype == "int")
-        ${col.SetterName}(((NumberKey) key).intValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).intValue());
         #elseif($fktype == "long")
-        ${col.SetterName}(((NumberKey) key).longValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).longValue());
         #elseif($fktype == "BigDecimal")
-        ${col.SetterName}(((NumberKey) key).getBigDecimal());
+        ${col.SetterName}(((NumberKey) keys[$i]).getBigDecimal());
         #elseif($fktype == "byte")
-        ${col.SetterName}(((NumberKey) key).byteValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).byteValue());
         #elseif($fktype == "float")
-        ${col.SetterName}(((NumberKey) key).floatValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).floatValue());
         #elseif($fktype == "double")
-        ${col.SetterName}(((NumberKey) key).doubleValue());
+        ${col.SetterName}(((NumberKey) keys[$i]).doubleValue());
         #elseif($fktype == "Short")
-        ${col.SetterName}(new Short(((NumberKey) key).shortValue()));
+        ${col.SetterName}(new Short(((NumberKey) keys[$i]).shortValue()));
         #elseif($fktype == "Integer")
-        ${col.SetterName}(new Integer(((NumberKey) key).intValue()));
+        ${col.SetterName}(new Integer(((NumberKey) keys[$i]).intValue()));
         #elseif($fktype == "Long")
-        ${col.SetterName}(new Long(((NumberKey) key).longValue()));
+        ${col.SetterName}(new Long(((NumberKey) keys[$i]).longValue()));
         #elseif($fktype == "Byte")
-        ${col.SetterName}(new Byte(((NumberKey) key).byteValue()));
+        ${col.SetterName}(new Byte(((NumberKey) keys[$i]).byteValue()));
         #elseif($fktype == "Float")
-        ${col.SetterName}(new Float(((NumberKey) key).floatValue()));
+        ${col.SetterName}(new Float(((NumberKey) keys[$i]).floatValue()));
         #elseif($fktype == "Double")
-        ${col.SetterName}(new Double(((NumberKey) key).doubleValue()));
+        ${col.SetterName}(new Double(((NumberKey) keys[$i]).doubleValue()));
         #elseif($fktype == "String")
-        ${col.SetterName}(key.toString());
+        ${col.SetterName}(keys[$i].toString());
         #elseif($fktype == "Date")
-        ${col.SetterName}(((DateKey)key).getDate());
+        ${col.SetterName}(((DateKey)keys[$i]).getDate());
         #end
+
+        #set ( $i = $i + 1 )
       #end
+    #else
+      #set ($colName = $fk.LocalColumns.get(0))
+      #set ($col = $table.getColumn($colName) )
+
+      #set ($fktype = $col.JavaNative)
+      #if ($fktype == "short")
+        ${col.SetterName}(((NumberKey) key).shortValue());
+      #elseif($fktype == "int")
+        ${col.SetterName}(((NumberKey) key).intValue());
+      #elseif($fktype == "long")
+        ${col.SetterName}(((NumberKey) key).longValue());
+      #elseif($fktype == "BigDecimal")
+        ${col.SetterName}(((NumberKey) key).getBigDecimal());
+      #elseif($fktype == "byte")
+        ${col.SetterName}(((NumberKey) key).byteValue());
+      #elseif($fktype == "float")
+        ${col.SetterName}(((NumberKey) key).floatValue());
+      #elseif($fktype == "double")
+        ${col.SetterName}(((NumberKey) key).doubleValue());
+      #elseif($fktype == "Short")
+        ${col.SetterName}(new Short(((NumberKey) key).shortValue()));
+      #elseif($fktype == "Integer")
+        ${col.SetterName}(new Integer(((NumberKey) key).intValue()));
+      #elseif($fktype == "Long")
+        ${col.SetterName}(new Long(((NumberKey) key).longValue()));
+      #elseif($fktype == "Byte")
+        ${col.SetterName}(new Byte(((NumberKey) key).byteValue()));
+      #elseif($fktype == "Float")
+        ${col.SetterName}(new Float(((NumberKey) key).floatValue()));
+      #elseif($fktype == "Double")
+        ${col.SetterName}(new Double(((NumberKey) key).doubleValue()));
+      #elseif($fktype == "String")
+        ${col.SetterName}(key.toString());
+      #elseif($fktype == "Date")
+        ${col.SetterName}(((DateKey)key).getDate());
+      #end
+    #end
     }
-    #end   ## end of foreach loop over foreign keys
+  #end   ## end of foreach loop over foreign keys
 
   ##
   ## setup foreign key associations
@@ -498,10 +498,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
     }
 
-    #set ($interfaceName = $table.JavaName)
-    #if ($table.Interface)
-      #set ($interfaceName = $table.Interface)
-    #end
+        #set ($interfaceName = $table.JavaName)
+        #if ($table.Interface)
+          #set ($interfaceName = $table.Interface)
+        #end
 
     /**
      * Method called to associate a $tblFK.JavaName object to this object
@@ -589,7 +589,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                 // the following code is to determine if a new query is
                 // called for.  If the criteria is the same as the last
                 // one, just return the collection.
-      #end  
+      #end
       #foreach ($columnName in $fk.ForeignColumns)
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
@@ -843,7 +843,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #else
      * If this $table.JavaName is new, this method will return
     #end
-    * an empty collection; or if this $table.JavaName has previously
+     * an empty collection; or if this $table.JavaName has previously
      * been saved, it will retrieve related ${relCol} from storage.
      *
      * This method is protected by default in order to keep the public
@@ -862,12 +862,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             }
             else
             {
-     #foreach ($columnName in $fk.ForeignColumns)
-         #set ( $column = $table.getColumn($columnName) )
-         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
-         #set ( $colFK = $tblFK.getColumn($colFKName) )
+      #foreach ($columnName in $fk.ForeignColumns)
+        #set ( $column = $table.getColumn($columnName) )
+        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
+        #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, ${column.GetterName}());
-     #end
+      #end
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
             }
         }
@@ -876,15 +876,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             // the following code is to determine if a new query is
             // called for.  If the criteria is the same as the last
             // one, just return the collection.
-   #end
+    #end
 
-   #foreach ($columnName in $fk.ForeignColumns)
-       #set ( $column = $table.getColumn($columnName) )
-       #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
-       #set ( $colFK = $tblFK.getColumn($colFKName) )
+    #foreach ($columnName in $fk.ForeignColumns)
+      #set ( $column = $table.getColumn($columnName) )
+      #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
+      #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, ${column.GetterName}());
-   #end
-   #if ($objectIsCaching)
+    #end
+    #if ($objectIsCaching)
             if (!last${relCol}Criteria.equals(criteria))
             {
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
@@ -893,9 +893,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         last${relCol}Criteria = criteria;
 
         return $collName;
-   #else 
-            return ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
-   #end
+    #else 
+        return ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
+    #end
     }
 
   #end
@@ -1172,11 +1172,6 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 *#
   #end
 
-  #if ($table.PrimaryKey.size() > 0)
-    #set ($tableHasPrimaryKey = true)
-  #else
-    #set ($tableHasPrimaryKey = false)
-  #end
             // If this object has been modified, then save it to the database.
             if (isModified())
             {
@@ -1189,6 +1184,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
                 {
                     ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
                 }
+  #if ($table.PrimaryKey.size() > 0)
+    #set ($tableHasPrimaryKey = true)
+  #else
+    #set ($tableHasPrimaryKey = false)
+  #end
             }
 
   #if ($complexObjectModel)
@@ -1504,8 +1504,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
   #foreach ($col in $table.Columns)
     #if ($col.isPrimaryKey())
       #if($col.Primitive)
-		#set ($fktype = $col.JavaNative)
-	    #set ($casttype = "")
+        #set ($fktype = $col.JavaNative)
+        #set ($casttype = "")
         #if ($fktype == "short")
           #set ($casttype = "(short)")
         #elseif($fktype == "byte")
