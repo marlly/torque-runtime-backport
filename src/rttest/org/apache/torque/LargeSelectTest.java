@@ -99,11 +99,12 @@ public class LargeSelectTest extends BaseTestCase
         tearDown();
 
         // Create some test data
-        for (int i = 0; i < TEST_ROWS; i++) {
-
+        for (int i = 0; i < TEST_ROWS; i++)
+        {
             Author author = new Author();
             author.setName(LARGE_SELECT_AUTHOR);
-            try {
+            try
+            {
                 author.save();
             }
             catch (Exception e)
@@ -115,11 +116,9 @@ public class LargeSelectTest extends BaseTestCase
                 firstAuthorId = author.getAuthorId();
             }
         }
-
         // Set up the standard criteria for the test.
         criteria = new Criteria();
         criteria.add(AuthorPeer.NAME, LARGE_SELECT_AUTHOR);
-
     }
 
     public void tearDown()
@@ -127,14 +126,14 @@ public class LargeSelectTest extends BaseTestCase
         // Delete the test data
         criteria = new Criteria();
         criteria.add(AuthorPeer.NAME, LARGE_SELECT_AUTHOR);
-        try {
+        try
+        {
             AuthorPeer.doDelete(criteria);
         }
         catch (TorqueException e)
         {
             fail("Cannot delete test data for LargeSelectTest.");
         }
-
         criteria = null;
     }
 
@@ -154,7 +153,8 @@ public class LargeSelectTest extends BaseTestCase
     public void testBadCriteria11() throws TorqueException
     {
         criteria.setLimit(1);
-        try {
+        try
+        {
             new LargeSelect(criteria, TEST_PAGE_SIZE,
                     "org.apache.torque.test.AuthorPeer");
         }
@@ -170,7 +170,8 @@ public class LargeSelectTest extends BaseTestCase
     public void testBadCriteria12() throws TorqueException
     {
         criteria.setOffset(1);
-        try {
+        try
+        {
             new LargeSelect(criteria, TEST_PAGE_SIZE,
                     "org.apache.torque.test.AuthorPeer");
         }
@@ -185,7 +186,8 @@ public class LargeSelectTest extends BaseTestCase
      */
     public void testBadPageSize() throws TorqueException
     {
-        try {
+        try
+        {
             new LargeSelect(criteria, 0, "org.apache.torque.test.AuthorPeer");
         }
         catch (IllegalArgumentException success)
@@ -199,7 +201,8 @@ public class LargeSelectTest extends BaseTestCase
      */
     public void testBadMemoryLimit() throws TorqueException
     {
-        try {
+        try
+        {
             new LargeSelect(criteria, TEST_PAGE_SIZE, 0,
                     "org.apache.torque.test.AuthorPeer");
         }
@@ -214,7 +217,8 @@ public class LargeSelectTest extends BaseTestCase
      */
     public void testBadClass()
     {
-        try {
+        try
+        {
             new LargeSelect(criteria, TEST_PAGE_SIZE,
                     "org.apache.torque.test.Author");
         }
@@ -472,5 +476,4 @@ public class LargeSelectTest extends BaseTestCase
     // todo Add a test for getPaginated() - was previously returning false when 6 results and pageSize 5
 
     // todo Add test for parameter storage
-
 }
