@@ -27,7 +27,8 @@
   <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
 
   <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque:anoncvs</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.apache.org:/home/cvs:db-torque</developerConnection>
     <url>http://cvs.apache.org/viewcvs/db-torque/</url>
   </repository>
 

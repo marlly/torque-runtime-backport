@@ -25,8 +25,9 @@
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine-torque/</distributionDirectory>
 
   <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-torque</connection>
-    <url>http://cvs.apache.org/viewcvs/jakarta-turbine-torque/</url>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque:anoncvs</connection>
+    <developerConnection>scm:cvs:ext:${maven.username}@cvs.apache.org:/home/cvs:db-torque</developerConnection>
+    <url>http://cvs.apache.org/viewcvs/db-torque/</url>
   </repository>
 
   <mailingLists>
@@ -116,7 +117,8 @@
       </properties>
     </dependency>
     <dependency>
-      <id>torque-gen</id>
+      <groupId>torque</groupId>
+      <artifactId>torque-gen</artifactId>
       <version>3.1-dev</version>
       <properties>
         <classloader>root</classloader>
