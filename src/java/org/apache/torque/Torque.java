@@ -73,7 +73,6 @@ import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
-import org.apache.torque.util.BasePeer;
 
 /**
  * The implementation of Torque.
@@ -154,7 +153,7 @@ public class Torque
     }
 
     /**
-     * Brute-force initialization of Torque via a configuration file.
+     * Initialization of Torque with a properties file.
      *
      * @param configFile The path to the configuration file.
      */
@@ -162,21 +161,18 @@ public class Torque
         throws Exception
     {
         ExtendedProperties c = new ExtendedProperties(configFile);
-        c = c.subset("services.DatabaseService");
-
-        Properties p = new Properties();
-        p.load(new FileInputStream(configFile));
-        PropertyConfigurator.configure(p);
-
-        Torque.setConfiguration(c);
-        Torque.init();
-    }
-
-    public static void init2(String configFile)
-        throws Exception
-    {
-        ExtendedProperties c = new ExtendedProperties(configFile);
+        
+        // First look for properties that are in the "torque"
+        //  namespace.
         c = c.subset("torque");
+        
+        if (c.isEmpty())
+        {
+            // If there are no properties in the "torque" namespace
+            // than try the "services.DatabaseService" namespace. This
+            // will soon be deprecated.
+            c = c.subset("services.DatabaseService");
+        }
 
         if (isLoggingConfigured() == false)
         {

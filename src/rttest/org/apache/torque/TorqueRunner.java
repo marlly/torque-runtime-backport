@@ -79,7 +79,7 @@ public class TorqueRunner
         // initializing Torque
         try
         {
-            Torque.init2(configurationFile);
+            Torque.init(configurationFile);
         }
         catch (Exception e)
         {
