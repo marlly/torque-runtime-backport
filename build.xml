@@ -96,6 +96,15 @@
     <ant antfile="build-test.xml"/>
   </target>
 
+  <target
+    name="test-classpath"
+    depends="jar"
+    description="==> runtime tests using the -classpath tasks (set torque.testProfile in your build.properties)">
+
+    <ant antfile="build-test.xml"
+         target="test-classpath"/>
+  </target>
+
   <!-- ================================================================== -->
   <!-- I N I T                                                            -->
   <!-- ================================================================== -->
@@ -644,9 +653,9 @@
 
   <target
     name="maven:compile">
-    
+
     <ant antfile="build-maven.xml" target="maven:compile"/>
-    
+
   </target>
 
 </project>
