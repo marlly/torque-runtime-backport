@@ -2,6 +2,9 @@
 # so that it can be copied into the dist/lib directory.
 
 torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.4.jar
+torque.idMethod = idbroker
+torque.defaultDatabase = bookstore
+torque.databaseAdapter = DBMM
 
 # -------------------------------------------------------------------
 # 
@@ -57,7 +60,7 @@ addIntakeRetrievable=false
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:mysql://localhost:3306/bookstore
+createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
 databaseUrl = jdbc:mysql://localhost:3306/bookstore
 databaseDriver = org.gjt.mm.mysql.Driver
 databaseUser = root
