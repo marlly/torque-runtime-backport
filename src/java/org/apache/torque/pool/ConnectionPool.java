@@ -223,9 +223,10 @@ public class ConnectionPool
     }
 
     /**
-     * Attempt to establish a database connection.
+     * Attempt to establish a database connection.  Delegates to
+     * {@link #getConnection()}.
      */
-    public synchronized PooledConnection getPooledConnection()
+    public PooledConnection getPooledConnection()
         throws SQLException
     {
         try
@@ -239,10 +240,10 @@ public class ConnectionPool
     }
 
     /**
-     * Attempt to establish a database connection.
+     * Attempt to establish a database connection.  Delegates to
+     * {@link #getConnection(String, String, String, String)}.
      */
-    public synchronized PooledConnection getPooledConnection(String user,
-                                                String password)
+    public PooledConnection getPooledConnection(String user, String password)
         throws SQLException
     {
         try
@@ -287,8 +288,9 @@ public class ConnectionPool
     }
 
     /**
-     * This function is unsafe to use, since the user passed parameters
-     * that he has no way to know if are used.
+     * This function is unsafe to use, since the user passed
+     * parameters that he has no way to know if are used.  Delegates
+     * to {@link #getConnection()}.
      *
      * @param driver   The fully-qualified name of the JDBC driver to use.
      * @param url      The URL of the database from which the connection is
