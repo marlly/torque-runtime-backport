@@ -1,17 +1,65 @@
 <project name="Torque" default="main" basedir=".">
+  <!--
+    Note - You should not have to edit this file. 
+    
+    Instead, if calling build-torque.xml directly, edit the build.properties
+    that is in the same directory. If calling build-torque.xml via another
+    build file, you can also use the build.properties in the same directory,
+    or set the property torque.contextProperties to the file
+    to use in place of build.properties (e.g. project.properties).
+  -->
 
-  <property name="torque.home" value="."/>
+  <!--
+    For us to load the default.properties from the classpath, we need to bootstrap.
+    To know the right lib.dir for the torque-classpath, we need to manually 
+    figure out torque.lib.dir, but to do that, we need to manually figure
+    out torque.contextProperties and load that so that any old configurations
+    still work propertly. Then we can go on and do the rest of the mappings via
+    old.properties.
+   -->
   <property name="build.properties" value="build.properties"/>
-  <property file="${build.properties}"/>
+  <property name="torque.contextProperties" value="${build.properties}"/>
+  <property file="${torque.contextProperties}"/>
   <property name="lib.dir" value="lib"/>
-  <property name="idTableXMLFile" value=""/>
+  <property name="torque.lib.dir" value="${lib.dir}"/>
 
-  <!-- Build classpath -->
+  <!--
+    Build the classpath. Specifically point to each file we're including to avoid 
+    version conflicts in the case of the torque.lib.dir being something like lib.repo.
+    However, we still need to pull in the user's database driver and since we don't
+    know which jar that will be, after we've got all of our specific, version-safe jars, 
+    do a general inclusion of the torque.lib.dir to catch any drivers.
+  -->
   <path id="torque-classpath">
-    <fileset dir="${lib.dir}">
+    <pathelement location="${torque.lib.dir}/commons-beanutils-1.4-dev-20020724"/>
+    <pathelement location="${torque.lib.dir}/commons-collections-2.0.jar"/>
+    <pathelement location="${torque.lib.dir}/commons-configuration-1.0-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/commons-jdbc2pool-1.0-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/commons-lang-1.0-dev-20020716.jar"/>
+    <pathelement location="${torque.lib.dir}/commons-pool-1.0.jar"/>
+    <pathelement location="${torque.lib.dir}/jcs-1.0-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/jdbc-2.0.jar"/>
+    <pathelement location="${torque.lib.dir}/jndi-1.2.1.jar"/>
+    <pathelement location="${torque.lib.dir}/log4j-1.1.3.jar"/>
+    <pathelement location="${torque.lib.dir}/stratum-1.0-b3-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/tomcat-naming-1.0.jar"/>
+    <pathelement location="${torque.lib.dir}/torque-3.0-b4-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/velocity-1.3.jar"/>
+    <pathelement location="${torque.lib.dir}/village-1.5.3.jar"/>
+    <pathelement location="${torque.lib.dir}/xercesImpl-2.0.2.jar"/>
+    <pathelement location="${torque.lib.dir}/xmlParserAPIs-2.0.2.jar"/>
+    <fileset dir="${torque.lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
   </path>
+
+  <!--
+    The default.properties file will map old properties to the new ones along
+    with setting the corret defaults.
+  -->
+  <property
+    classpathref="torque-classpath"
+    resource="org/apache/torque/default.properties"/>
 
   <!--
     Do forward declarations of all of our tasks to 
@@ -67,21 +115,36 @@
     <antcall target="om"/>
   </target>
 
+
+  <!-- ================================================================ -->
+  <!-- C H E C K  U S E C L A S S P A T H                               -->
+  <!-- ================================================================ -->
+  <!-- Temporary hack around the propertiesUtil bug. Should             -->
+  <!-- be fixed soon.                                                   -->
+  <!-- ================================================================ -->
+
+  <target name="check-use-classpath">
+    <condition property="torque.internal.useClasspath">
+      <equals arg1="${torque.useClasspath}" arg2="true"/>
+    </condition>
+  </target>
+
   <!-- ================================================================ -->
   <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
   <!-- ================================================================ -->
-  <!-- Generate the SQL for your project, these are in addition         -->
+  <!-- Generate the SQL for your project, These are in addition         -->
   <!-- to the base Turbine tables! The tables you require for your      -->
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
   <target
     name="sql"
+    depends="check-use-classpath"
     description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
-    <echo message="| Generating SQL for YOUR Turbine project! |"/>
+    <echo message="| Generating SQL for YOUR Torque project!  |"/>
     <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
@@ -90,45 +153,35 @@
     <antcall target="sql-template"/>
   </target>
 
-  <target
-    name="sql-classpath"
-    if="useClasspath">
-
-    <echo message="using classpath"/>
-
+  <target name="sql-classpath" if="torque.internal.useClasspath">
     <torque-sql
-      contextProperties="${build.properties}"
-      controlTemplate="${SQLControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/sql"
-      useClasspath="${useClasspath}"
       basePathToDbProps="sql/base/"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputFile="report.${project}.sql.generation"
-      targetDatabase="${database}"
-      idTableXMLFile="${idTableXMLFile}">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.sql}"
+      idTableXMLFile="${torque.idTableXMLFile}"
+      outputDirectory="${torque.sql.dir}"
+      outputFile="report.${torque.project}.sql.generation"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      targetDatabase="${torque.database}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-sql>
   </target>
 
-  <target
-    name="sql-template"
-    unless="useClasspath">
-
-    <echo message="using template path ${templatePath}"/>
-
+  <target name="sql-template" unless="torque.internal.useClasspath">
     <torque-sql
-      contextProperties="${build.properties}"
-      controlTemplate="${SQLControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/sql"
-      templatePath="${templatePath}"
       basePathToDbProps="sql/base/"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputFile="report.${project}.sql.generation"
-      targetDatabase="${database}"
-      idTableXMLFile="${idTableXMLFile}">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.sql}"
+      idTableXMLFile="${torque.idTableXMLFile}"
+      outputDirectory="${torque.sql.dir}"
+      outputFile="report.${torque.project}.sql.generation"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      targetDatabase="${torque.database}"
+      templatePath="${torque.templatePath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-sql>
@@ -137,6 +190,10 @@
   <!-- ================================================================ -->
   <!-- G E N E R A T E   D O C S                                        -->
   <!-- ================================================================ -->
+  <!-- Generates documentation to                                       -->
+  <!-- ${torque.doc.dir}/project-schema.html                            -->
+  <!-- ================================================================ -->
+
 
   <target
     name="doc"
@@ -150,15 +207,15 @@
     <echo message="+------------------------------------------+"/>
 
     <torque-doc
-      contextProperties="${build.properties}"
-      controlTemplate="${DocControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/doc"
-      useClasspath="${useClasspath}"
-      outputFormat="${documentationFormat}"
-      templatePath="${templatePath}"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputFile="report.${project}.doc.generation">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.doc}"
+      outputDirectory="${torque.doc.dir}"
+      outputFile="report.${torque.project}.doc.generation"
+      outputFormat="${torque.doc.format}"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-doc>
@@ -177,13 +234,13 @@
     description="==> generates the target database">
 
     <torque-data-model
-      controlTemplate="sql/db-init/Control.vm"
-      outputDirectory="${torque.home}/${outputDirectory}/sql"
-      useClasspath="${useClasspath}"
-      targetDatabase="${database}"
-      templatePath="${templatePath}"
-      outputFile="create-db.sql">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      controlTemplate="${torque.template.sqlDbInit}"
+      outputDirectory="${torque.sql.dir}"
+      outputFile="create-db.sql"
+      targetDatabase="${torque.database}"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-data-model>
@@ -193,13 +250,13 @@
     </echo>
 
     <sql
-      driver="${databaseDriver}"
-      url="${createDatabaseUrl}"
-      userid="${databaseUser}"
-      password="${databasePassword}"
-      src="${torque.home}/${outputDirectory}/sql/create-db.sql"
       autocommit="true"
-      onerror="continue">
+      driver="${torque.database.driver}"
+      onerror="continue"
+      password="${torque.database.password}"
+      src="${torque.sql.dir}/create-db.sql"
+      url="${torque.database.createUrl}"
+      userid="${torque.database.user}">
       <classpath refid="torque-classpath"/>
     </sql>
   </target>
@@ -212,14 +269,14 @@
     name="insert-sql">
 
     <torque-sql-exec
-      driver="${databaseDriver}"
-      url="${buildDatabaseUrl}"
-      userid="${databaseUser}"
-      password="${databasePassword}"
       autocommit="true"
+      driver="${torque.database.driver}"
       onerror="continue"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      srcDir="${torque.home}/${outputDirectory}/sql">
+      password="${torque.database.password}"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      srcDir="${torque.sql.dir}"
+      url="${buildDatabaseUrl}"
+      userid="${torque.database.user}">
       <classpath refid="torque-classpath"/>
     </torque-sql-exec>
   </target>
@@ -238,15 +295,14 @@
     <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
-    <echo message=" taking build.properties from: ${build.properties}"/>
 
     <torque-jdbc-transform
-      dbUrl="${databaseUrl}"
-      dbDriver="${databaseDriver}"
-      dbUser="${databaseUser}"
-      dbPassword="${databasePassword}"
+      dbDriver="${torque.database.driver}"
+      dbPassword="${torque.database.password}"
       dbSchema="${databaseSchema}"
-      outputFile="${torque.home}/${outputDirectory}/schema.xml"
+      dbUrl="${torque.database.url}"
+      dbUser="${torque.database.user}"
+      outputFile="${torque.schema.dir}/schema.xml"
       sameJavaName="${sameJavaName}"
     />
   </target>
@@ -265,20 +321,19 @@
     <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
-    <echo message=" taking build.properties from: ${build.properties}"/>
 
     <torque-data-sql
-      contextProperties="${build.properties}"
-      controlTemplate="${DataSQLControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      outputFile="${project}-data.sql"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      dataXmlFile="${torque.home}/${schemaDirectory}/${project}-data.xml"
-      dataDTD="${torque.home}/${schemaDirectory}/${project}-data.dtd"
-      targetDatabase="${database}"
-      sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.dataSql}"
+      dataDTD="${torque.schema.dir}/${torque.project}-data.dtd"
+      dataXmlFile="${torque.schema.dir}/${torque.project}-data.xml"
+      outputDirectory="${torque.output.dir}"
+      outputFile="${torque.project}-data.sql"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      targetDatabase="${torque.database}"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}"
+      xmlFile="${torque.schema.dir}/${torque.project}-schema.xml"
     />
   </target>
 
@@ -297,16 +352,16 @@
     <echo message="+------------------------------------------+"/>
 
     <torque-sql
-      contextProperties="${build.properties}"
-      controlTemplate="${idTableControlTemplate}"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.idTable}"
+      outputDirectory="${torque.sql.dir}"
+      outputFile="${torque.database}-id-table-init.sql"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
       suffix="-idtable-init"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputDirectory="${torque.home}/${outputDirectory}/sql"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      outputFile="${database}-id-table-init.sql"
-      targetDatabase="${database}">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      targetDatabase="${torque.database}"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
@@ -327,21 +382,20 @@
     <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
-    <echo message=" taking build.properties from: ${build.properties}"/>
 
     <torque-data-dump
-      contextProperties="${build.properties}"
-      controlTemplate="${DataDumpControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      outputFile="report.${project}.datadump.generation"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      databaseDriver="${databaseDriver}"
-      databaseUrl="${databaseUrl}"
-      databaseUser="${databaseUser}"
-      databasePassword="${databasePassword}"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.dataDump}"
+      databaseDriver="${torque.database.driver}"
       databaseName="${databaseName}"
+      databaseUrl="${torque.database.url}"
+      databaseUser="${torque.database.user}"
+      databasePassword="${torque.database.password}"
+      outputDirectory="${torque.output.dir}"
+      outputFile="report.${torque.project}.datadump.generation"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}"
+      xmlFile="${torque.schema.dir}/${torque.project}-schema.xml"
     />
   </target>
 
@@ -363,13 +417,13 @@
     <echo message="+-----------------------------------------------+"/>
 
     <torque-data-model
-      contextProperties="${build.properties}"
-      controlTemplate="${DataDTDControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      outputFile="report.${project}.datadtd.generation"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.dataDtd}"
+      outputDirectory="${torque.output.dir}"
+      outputFile="report.${torque.project}.datadtd.generation"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}"
+      xmlFile="${torque.schema.dir}/${torque.project}-schema.xml"
     />
   </target>
 
@@ -382,6 +436,7 @@
 
   <target
     name="om"
+    depends="check-use-classpath"
     description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -393,48 +448,65 @@
 
     <antcall target="om-classpath"/>
     <antcall target="om-template"/>
+    <!-- antcall target="zip-base-om"/ -->
   </target>
 
-  <target
-    name="om-classpath"
-    if="useClasspath">
-
-    <echo message="using classpath"/>
-
+  <target name="om-classpath" if="torque.internal.useClasspath">
     <torque-data-model
-      contextProperties="${build.properties}"
-      controlTemplate="${OMControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/java"
-      useClasspath="${useClasspath}"
-      outputFile="report.${project}.om.generation"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.om}"
+      outputDirectory="${torque.java.dir}"
+      outputFile="report.${torque.project}.om.generation"
+      targetDatabase="${torque.database}"
       targetPackage="${targetPackage}"
-      targetDatabase="${database}">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
     </torque-data-model>
   </target>
 
-  <target
-    name="om-template"
-    unless="useClasspath">
-
-    <echo message="using template path ${templatePath}"/>
-
+  <target name="om-template" unless="torque.internal.useClasspath">
     <torque-data-model
-      contextProperties="${build.properties}"
-      controlTemplate="${OMControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/java"
-      templatePath="${templatePath}"
-      outputFile="report.${project}.om.generation"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.om}"
+      outputDirectory="${torque.java.dir}"
+      outputFile="report.${torque.project}.om.generation"
+      targetDatabase="${torque.database}"
       targetPackage="${targetPackage}"
-      targetDatabase="${database}">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      templatePath="${torque.templatePath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
     </torque-data-model>
+  </target>
+  
+  <target
+    name="zip-base-om"
+    if="torque.basezip.dir"
+    description="Moves BaseXxx om files to separate jar and out of the source tree">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Zipping the Base Object Model files for  |"/>
+    <echo message="| YOUR Turbine project! Woo hoo!           |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <jar
+      jarfile="${torque.basezip.dir}/${torque.project}-om-base.jar"
+      basedir="${torque.java.dir}"
+      includes="${targetPackage}/${basePrefix}*.java"
+    />
+
+    <delete>
+      <fileset
+        dir="${torque.java.dir}"
+        includes="${targetPackage}/${basePrefix}*.java"
+      />
+    </delete>
   </target>
 
   <!-- =================================================================== -->
@@ -445,24 +517,14 @@
     name="compile"
     description="==> compiles the OM classes">
 
-    <!--
-      This should be moved to the top of the file, and
-      the values should come from the build.properties file.
-    -->
+    <mkdir dir="${torque.compile.build.dir}"/>
 
-    <property name="src.dir" value="${outputDirectory}/java"/>
-    <property name="build.dest" value="bin/classes"/>
-    <property name="debug" value="on"/>
-    <property name="deprecation" value="off"/>
-    <property name="optimize" value="off"/>
-
-    <mkdir dir="${build.dest}"/>
-
-    <javac srcdir="${src.dir}"
-      destdir="${build.dest}"
-      debug="${debug}"
-      deprecation="${deprecation}"
-      optimize="${optimize}">
+    <javac
+      debug="${torque.compile.debug}"
+      deprecation="${torque.compile.deprecation}"
+      destdir="${torque.compile.build.dir}"
+      optimize="${torque.compile.optimize}"
+      srcdir="${torque.compile.src.dir}">
       <classpath refid="torque-classpath"/>
     </javac>
   </target>
@@ -482,8 +544,8 @@
     description="==> creates an xml schema from an sql schema">
 
     <torque-sql-transform
-      inputFile="schema/schema.sql"
-      outputFile="schema/schema.xml"
+      inputFile="${torque.schema.dir}/schema.sql"
+      outputFile="${torque.schema.dir}/schema.xml"
     />
   </target>
 
@@ -495,24 +557,22 @@
     name="javadocs"
     description="==> generates the API documentation">
 
-    <mkdir dir="${torque.home}/${outputDirectory}/javadoc"/>
+    <mkdir dir="${torque.javadoc.dir}"/>
 
     <javadoc
-      sourcepath="${torque.home}/${outputDirectory}/java"
-      packagenames="${targetPackage}.*"
-      destdir="${outputDirectory}/javadoc"
       author="true"
+      destdir="${torque.javadoc.dir}"
+      packagenames="${targetPackage}.*"
       private="true"
-      version="true"
-      use="true">
+      sourcepath="${torque.java.dir}"
+      use="true"
+      version="true">
       <classpath refid="torque-classpath"/>
     </javadoc>
   </target>
 
   <!-- =================================================================== -->
-  <!-- =================================================================== -->
   <!-- O J B   S T U F F                                                   -->
-  <!-- =================================================================== -->
   <!-- =================================================================== -->
 
   <target
@@ -525,16 +585,16 @@
     <echo message="+------------------------------------------+"/>
 
     <torque-data-model
-      contextProperties="${build.properties}"
-      controlTemplate="ojb/repository/Control.vm"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.ojb}"
+      targetDatabase="${torque.database}"
       targetPackage="${targetPackage}"
-      targetDatabase="${database}"
-      outputDirectory="${torque.home}/${outputDirectory}/ojb"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputFile="report.${project}.ojb.generation">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      outputDirectory="${torque.ojb.dir}"
+      outputFile="report.${torque.project}.ojb.generation"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-data-model>
@@ -550,16 +610,16 @@
     <echo message="+------------------------------------------+"/>
 
     <torque-data-model
-      contextProperties="${build.properties}"
-      controlTemplate="ojb/model/Control.vm"
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.ojbModel}"
+      targetDatabase="${torque.database}"
       targetPackage="${targetPackage}"
-      targetDatabase="${database}"
-      outputDirectory="${torque.home}/${outputDirectory}/ojb"
-      useClasspath="${useClasspath}"
-      templatePath="${templatePath}"
-      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
-      outputFile="report.${project}.ojb.generation">
-      <fileset dir="${torque.home}/${schemaDirectory}">
+      outputDirectory="${torque.ojb.dir}"
+      outputFile="report.${torque.project}.ojb.generation"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-data-model>

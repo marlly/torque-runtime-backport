@@ -12,6 +12,13 @@
   <!-- Set default values for the build -->
   <property file="project.properties" />
 
+   <!-- Include the default.properties in the classes dir. -->
+   <property name="maven.core.callback.post-compile.buildFile" value="build.xml"/>
+   <property name="maven.core.callback.post-compile.buildTarget" value="post-compile"/>
+   <target name="post-compile">
+     <copy file="src/conf/default.properties" todir="target/classes/org/apache/torque"/>
+   </target>
+
   <!-- ================================================================== -->
   <!-- T E S T                                                            -->
   <!-- ================================================================== -->
