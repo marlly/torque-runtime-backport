@@ -42,8 +42,8 @@ of type OID are java.sql.Types.INTEGER.
 There is also a bug in the released versions of the PostgreSQL which causes
 problems when reading and writing Timestamps.  This is fixed in CVS.  So to
 run Turbine with PostgreSQL you need to get the latest JDBC driver code from
-the PostgreSQL CVS server: :pserver:anoncvs@postgresql.org:/home/projects/pgsql/cvsroot
-the password is postgresql.  Before compiling the driver though, you must apply
+the PostgreSQL CVS server: :pserver:anoncvs@anoncvs.postgresql.org:/projects/cvsroot
+(leave the password blank).  Before compiling the driver though, you must apply
 a patch so the metadata says that OID columns are java.sql.Types.VARBINARY, not
 java.sql.Types.INTEGER.  <strong>Important: If you need the metadata to report
 that OID columns are integers for another application, this patch will break
