@@ -18,10 +18,10 @@
   <!-- These are meant to be the comprehensive tests for Torque.      -->
   <!-- ============================================================== -->
 
-  <target 
+  <target
     name="test">
 
-    <copy 
+    <copy
       todir="${torque.distDir}/lib"
       file="${torque.testDatabaseJar}"
     />
@@ -32,20 +32,25 @@
 
     <echo message="Copying profile into distribution directory: ${torque.testProfile}"/>
 
-    <copy 
+    <copy
       tofile="${torque.distDir}/build.properties"
       file="${torque.testProfile}"
       overwrite="yes"
     />
 
-    <copy 
+    <copy
       todir="${torque.distDir}/schema"
       file="${torque.testSchema}"
     />
-    
+
+    <!-- copy test sources -->
+    <copy todir="${torque.distDir}/src/java">
+      <fileset dir="${rttest.dir}"/>
+    </copy>
+
     <antcall target="test-generative"/>
     <antcall target="test-runtime"/>
-  
+
   </target>
 
   <!-- ============================================================== -->
@@ -79,12 +84,12 @@
 
   <target
     name="test-generative">
-    
+
     <antcall target="test-project-sql"/>
     <antcall target="test-create-db"/>
     <antcall target="test-project-insert-sql"/>
     <antcall target="test-project-om"/>
-    
+
     <!--
     <antcall target="test-project-datadtd"/>
     <antcall target="test-project-datadump"/>
@@ -102,7 +107,7 @@
 
   <target
     name="test-project-sql">
-    <ant 
+    <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-sql"
@@ -112,7 +117,7 @@
 
   <target
     name="test-create-db">
-    <ant 
+    <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-create-db"
@@ -122,7 +127,7 @@
 
   <target
     name="test-project-insert-sql">
-    <ant 
+    <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-insert-sql"
@@ -132,47 +137,47 @@
 
   <target
     name="test-project-om">
-    <ant 
+    <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-om"
       inheritAll="false">
     </ant>
-    
+
     <!-- Compile the classes -->
-    
-    <ant 
+
+    <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="compile"
       inheritAll="false">
     </ant>
   </target>
-  
+
   <target
     name="test-project-datadtd">
   </target>
-  
+
   <target
     name="test-project-datadump">
   </target>
-  
+
   <target
     name="test-project-datasql">
   </target>
-  
+
   <target
     name="test-project-jdbc">
   </target>
-  
+
   <target
     name="test-project-sql-classpath">
   </target>
-  
+
   <target
     name="test-project-om-classpath">
   </target>
-    
+
   <target
     name="test-project-sql2xml">
   </target>
@@ -188,11 +193,12 @@
     <pathelement location="${commons-util.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${build.dest}"/>
+    <pathelement location="${torque.destDir}"/>
   </path>
 
   <target
     name="test-runtime">
-    
+
     <java
       classname="org.apache.torque.TorqueRunner"
       fork="true">
