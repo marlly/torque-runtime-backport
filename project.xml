@@ -299,7 +299,7 @@
   </dependencies>
 
   <build>
-    <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
+    <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     <aspectSourceDirectory></aspectSourceDirectory>
