@@ -16,6 +16,11 @@
         resources required by your application and includes a runtime
         environment to run the generated classes.
       </p>
+      <p>
+        Torque was developed as part of the Turbine Framework. It is now
+        decoupled and can be used by itself. Starting with version 2.2 Turbine
+        will use the decoupled Torque.
+      </p>
 
       <subsection name="Torque's generation tasks">
         <p>
@@ -83,52 +88,84 @@
     </section>
 
     <section name="Supported RDBMS">
+      <table>
+        <tr>
+          <th>RDBMS</th>
+          <th>status</th>
+          <th>tester</th>
+        </tr>
+        <tr>
+          <td>DB2</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Hypersonic</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Informix</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>InstantDB</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Interbase</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><a href="mssql-howto.html">MS SQL</a></td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Mysql</td>
+          <td>no known problems</td>
+          <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
+        </tr>
+        <tr>
+          <td><a href="oracle-howto.html">Oracle</a></td>
+          <td>no known problems</td>
+          <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
+        </tr>
+        <tr>
+          <td><a href="postgres-howto.html">Postgres</a></td>
+          <td>no known problems</td>
+          <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
+        </tr>
+        <tr>
+          <td>SapDB</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><a href="sybase-howto.html">Sybase</a></td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Weblogic</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+      </table>
+
       <p>
-        Well tested RDBMS are marked <strong>bold</strong>
-
-        <ul>
-          <li>
-            DB2
-          </li>
-          <li>
-            Hypersonic
-          </li>
-          <li>
-            Informix
-          </li>
-          <li>
-            InstantDB
-          </li>
-          <li>
-            Interbase
-          </li>
-          <li>
-            <strong>Mysql</strong>
-          </li>
-          <li>
-            MS SQL <a href="mssql-howto.html">HowTo</a>
-          </li>
-          <li>
-            <strong>Oracle</strong> <a href="oracle-howto.html">HowTo</a>
-          </li>
-          <li>
-            <strong>Postgres</strong> <a href="postgres-howto.html">HowTo</a>
-          </li>
-          <li>
-            SapDB
-          </li>
-          <li>
-            Sybase <a href="sybase-howto.html">HowTo</a>
-          </li>
-          <li>
-            Weblogic
-          </li>
-        </ul>
-
-        If your database is not listed here, please read the document about
+        If your RDBMS is not listed here, please read the document about
         <a href="db-adapters.html">writing DB Adapters</a>
-     </p>
-   </section>
+      </p>
+      <p>
+        If there is no tester for your RDBMS and you want to help, please read
+        the <a href="developer-guide.html">developer-guide</a>, run the tests
+        and send your results (and bugfixes ;) to the turbine-dev list.
+      </p>
+    </section>
 
- </body>
- </document>
+  </body>
+</document>

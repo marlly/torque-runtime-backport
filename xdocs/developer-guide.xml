@@ -44,6 +44,7 @@
       </p>
       <source><![CDATA[
     velocity.jar
+    logkit.jar
     xerces.jar
     village.jar
     log4j.jar
