@@ -631,10 +631,10 @@ public class IDBroker implements Runnable, IdGenerator
         BigDecimal nextId = null;
         BigDecimal quantity = null;
         DatabaseMap dbMap = tableMap.getDatabaseMap();
-        TableMap tMap = dbMap.getTable(tableName);
 
         // Block on the table.  Multiple tables are allowed to ask for
         // ids simultaneously.
+        //        TableMap tMap = dbMap.getTable(tableName);
         //        synchronized(tMap)  see comment in the getNextIds method
         //        {
         if (adjustQuantity)
@@ -647,8 +647,8 @@ public class IDBroker implements Runnable, IdGenerator
             if (connection == null || configuration
                 .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
             {
-                String databaseName = dbMap.getName();
-                connection = Transaction.beginOptional(dbMap.getName(), transactionsSupported);
+                connection = Transaction.beginOptional(dbMap.getName(),
+                    transactionsSupported);
             }
 
             // Write the current value of quantity of keys to grab
