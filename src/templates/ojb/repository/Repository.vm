@@ -1,5 +1,5 @@
 #set ( $database = $dataModel.database )
-#set ( $unkownTorqueTypes = [  'NULL', 'OTHER',  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'REF', 'BOOLEANINT', 'BOOLEANCHAR' ] )
+#set ( $unknownTorqueTypes = [  'NULL', 'OTHER',  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'REF', 'BOOLEANINT', 'BOOLEANCHAR' ] )
 #set ( $mappedJdbcTypes = ['INTEGER', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'INTEGER', 'CHAR' ] )
 #set ( $fieldsWithNoSize = ['INTEGER', 'BLOB', 'CLOB', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'BIGINT', 'SMALLINT', 'TINYINT' ] ) 
 #set ( $space = "     " )
@@ -42,7 +42,7 @@ $!table.getDescription()
 ..............................................
 $!col.getDescription()
 -->
-    #set ( $mappingPos = $unkownTorqueTypes.indexOf($col.TorqueType) )
+    #set ( $mappingPos = $unknownTorqueTypes.indexOf($col.TorqueType) )
     #set ( $size = ${col.size} )
     #set ( $precision = "" )
     #set ( $colType = $col.getType() )
