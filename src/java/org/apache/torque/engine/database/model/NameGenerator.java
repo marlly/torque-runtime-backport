@@ -59,7 +59,6 @@ import java.util.List;
 /**
  * The generic interface to a name generation algorithm.
  *
- * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @version $Id$
  */
