@@ -147,6 +147,12 @@
     />
 
     <available
+      classname="org.apache.stratum.configuration.Configuration"
+      property="stratum.present"
+      classpathref="classpath"
+    />
+
+    <available
       classname="javax.sql.ConnectionPoolDataSource"
       property="jdbc.present"
       classpathref="classpath"
@@ -237,6 +243,16 @@
   </target>
 
   <target
+    name="check.stratum"
+    unless="stratum.present">
+
+    <antcall target="property-warning">
+      <param name="name" value="stratum.jar"/>
+      <param name="value" value="${stratum.jar}"/>
+    </antcall>
+  </target>
+
+  <target
     name="check.jdbc"
     unless="jdbc.present">
 
@@ -272,7 +288,7 @@
     name="prepare"
     depends="init,check.velocity,check.xerces,check.village,
              check.log4j,check.commons-collections,check.commons-util,
-             check.jdbc,env">
+             check.stratum,check.jdbc,env">
 
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dest}"/>
@@ -560,6 +576,7 @@
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-util.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${stratum.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
 
     <filter token="TORQUE_HOME" value="."/>
