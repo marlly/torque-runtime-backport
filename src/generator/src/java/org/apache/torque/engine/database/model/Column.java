@@ -986,12 +986,12 @@ public class Column
     {
         StringBuffer sb = new StringBuffer();
         sb.append(getName());
-        sb.append(" ");
+        sb.append(' ');
         sb.append(getDomain().getSqlType());
         if (getPlatform().hasSize(getDomain().getSqlType()))
         {
             sb.append(getDomain().printSize());
-            sb.append(" ");
+            sb.append(' ');
         }
         if (getDomain().getDefaultValue() != null)
         {
@@ -1005,10 +1005,10 @@ public class Column
             {
                 sb.append(getDefaultValue());
             }
-            sb.append(" ");
+            sb.append(' ');
         }
         sb.append(getNotNullString());
-        sb.append(" ");
+        sb.append(' ');
         sb.append(getAutoIncrementString());
         return sb.toString();
     }
