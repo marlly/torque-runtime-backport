@@ -26,8 +26,8 @@
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine/torque/</distributionDirectory>
 
   <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-torque</connection>
-    <url>http://cvs.apache.org/viewcvs/jakarta-turbine-torque/</url>
+    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
+    <url>http://cvs.apache.org/viewcvs/db-torque/</url>
   </repository>
 
   <mailingLists>
