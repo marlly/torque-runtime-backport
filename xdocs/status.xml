@@ -19,58 +19,67 @@
         A list of changes can be found <a href="changes-report.html">here</a>.
       </p>
 
+      <subsection name="05 June 2003 - Torque 3.0.1 is released!">
+        <p>
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0.1/">
+          here</a>. <br/>
+          This is a bugfix release. The docs including a full list of changes is available 
+          <a href="http://db.apache.org/torque/torque-301/">here</a>
+        </p>
+      </subsection>
+
       <subsection name="17 April 2003 - Torque 3.1-alpha1 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1-alpha1/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.1-alpha1/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="06 December 2002 - Torque 3.0 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="20 November 2002 - Torque 3.0 Release Candidate 2 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-rc2/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-rc2/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="26 October 2002 - Torque 3.0 Release Candidate 1 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-rc1/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-rc1/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="22 August 2002 - Torque 3.0 Beta 4 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b4/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-b4/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="17 July 2002 - Torque 3.0 Beta 3 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b3/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-b3/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="26 Juni 2002 - Torque 3.0 Beta 2 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b2/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-b2/">
           here</a>.
         </p>
       </subsection>
 
       <subsection name="19 March 2002 - Torque 3.0 Beta 1 is released!">
         <p>
-          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b1/">
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0-b1/">
           here</a>.
         </p>
       </subsection>
