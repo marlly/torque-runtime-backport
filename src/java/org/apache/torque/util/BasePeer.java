@@ -1381,7 +1381,7 @@ public abstract class BasePeer implements java.io.Serializable
             long startTime = System.currentTimeMillis();
             qds = new QueryDataSet( connection, queryString );
                 category.debug("Elapsed time=" +
-                ((System.currentTimeMillis()-startTime)/1000.0) + " secs");
+                (System.currentTimeMillis()-startTime) + " ms");
             results = getSelectResults( qds, start, numberOfResults,
                                         singleRecord);
         }
