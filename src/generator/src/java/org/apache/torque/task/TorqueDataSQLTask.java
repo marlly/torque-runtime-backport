@@ -54,10 +54,16 @@ package org.apache.torque.task;
  * <http://www.apache.org/>.
  */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.types.FileSet;
 import org.apache.velocity.context.Context;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
@@ -69,6 +75,7 @@ import org.apache.torque.engine.database.transform.XmlToData;
  * @author <a href="mailto:jvanzyl@periapt.com"> Jason van Zyl </a>
  * @author <a href="mailto:jmcnally@collab.net"> John McNally </a>
  * @author <a href="mailto:fedor.karpelevitch@home.com"> Fedor Karpelevitch </a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class TorqueDataSQLTask extends TorqueDataModelTask
@@ -146,7 +153,7 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
     }
 
     /**
-     * Set up the initialial context for generating the SQL from the XML schema.
+     * Set up the initial context for generating the SQL from the XML schema.
      *
      * @return the context
      * @throws Exception If there is an error parsing the data xml.
@@ -155,13 +162,51 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
     {
         super.initControlContext();
 
+        if (dataXmlFile == null && filesets.isEmpty())
+        {
+            throw new BuildException("You must specify an XML data file or "
+                    + "a fileset of XML data files!");
+        }
+
         AppData app = (AppData) getDataModels().get(0);
         Database db = app.getDatabase();
+                        
+        List data;
 
         try
         {
-            XmlToData dataXmlParser = new XmlToData(db, dataDTD);
-            List data = dataXmlParser.parseFile(dataXmlFile);
+            if (dataXmlFile != null)
+            {
+                XmlToData dataXmlParser = new XmlToData(db, dataDTD);
+                data = dataXmlParser.parseFile(dataXmlFile);
+            }
+            else
+            {
+                data = new ArrayList();
+                
+                // Deal with the filesets.
+                for (int i = 0; i < filesets.size(); i++)
+                {
+                    FileSet fs = (FileSet) filesets.get(i);
+                    DirectoryScanner ds = fs.getDirectoryScanner(project);
+                    File srcDir = fs.getDir(project);
+
+                    String[] dataModelFiles = ds.getIncludedFiles();
+                    
+                    // Make a transaction for each file
+                    for (int j = 0; j < dataModelFiles.length; j++)
+                    {
+                        File f = new File(srcDir, dataModelFiles[j]);
+                        XmlToData dataXmlParser = new XmlToData(db, dataDTD);
+                        List newData = dataXmlParser.parseFile(f.toString());
+
+                        for(Iterator it = newData.iterator(); it.hasNext(); )
+                        {
+                            data.add(it.next());
+                        }
+                    }
+                }
+            }
             context.put("data", data);
         }
         catch (Exception e)
