@@ -30,7 +30,7 @@
               <li>
                 Made SqlEnum implement Serializable (to facilitate
                 easy HttpSession serialization).
-                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/util/SqlEnum.java.diff?r1=1.3&r2=1.4">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/util/SqlEnum.java.diff?r1=1.3&amp;r2=1.4">Reference</a>.
               </li>
             </ul>
           </li>
