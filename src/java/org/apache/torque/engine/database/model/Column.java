@@ -117,6 +117,21 @@ public class Column
     }
 
     /**
+     * Return a comma delimited string listing the specified columns.
+     */
+    public static String makeList(List columns)
+    {
+        Column c = (Column) columns.get(0);
+        StringBuffer buf = new StringBuffer(c.getName());
+        for (int i = 1; i < columns.size(); i++)
+        {
+            c = (Column) columns.get(i);
+            buf.append(", ").append(c.getName());
+        }
+        return buf.toString();
+    }
+
+    /**
      * Imports a column from an XML specification
      */
     public void loadFromXML (Attributes attrib)
@@ -805,17 +820,5 @@ public class Column
             || "float".equals(t)
             || "double".equals(t)
             || "char".equals(t);
-    }
-
-
-    /**
-     * Creates a list of columns delimited by commas
-     */
-    public static String makeList(List cols)
-    {
-        StringBuffer res = new StringBuffer(cols.get(0).toString());
-        for (int i = 1; i < cols.size(); i++)
-            res.append(", ").append(cols.get(i).toString());
-        return res.toString();
     }
 }
