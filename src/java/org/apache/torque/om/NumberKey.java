@@ -285,7 +285,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as a byte. This value is subject
      * to the conversion rules set out in
-     * {@link java.math.BigDecimal.byteValue()}
+     * {@link java.math.BigDecimal#byteValue()}
      *
      * @return the NumberKey converted to a byte
      */
@@ -297,7 +297,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as an int. This value is subject
      * to the conversion rules set out in
-     * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
+     * {@link java.math.BigDecimal#intValue()}, importantly any fractional part
      * will be discarded and if the underlying value is too big to fit in an
      * int, only the low-order 32 bits are returned. Note that this
      * conversion can lose information about the overall magnitude and
@@ -314,7 +314,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as a short. This value is subject
      * to the conversion rules set out in
-     * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
+     * {@link java.math.BigDecimal#intValue()}, importantly any fractional part
      *  will be discarded and if the underlying value is too big to fit
      * in a long, only the low-order 64 bits are returned. Note that this
      * conversion can lose information about the overall magnitude and
@@ -331,7 +331,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as a long. This value is subject
      * to the conversion rules set out in
-     * {@link java.math.BigDecimal.intValue()}
+     * {@link java.math.BigDecimal#intValue()}
      *
      * @return the NumberKey converted to a long
      */
@@ -343,7 +343,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as a float. This value is subject to
      * the conversion rules set out in
-     * {@link java.math.BigDecimal.floatValue()}, most importantly if the
+     * {@link java.math.BigDecimal#floatValue()}, most importantly if the
      * underlying value has too great a magnitude to represent as a
      * float, it will be converted to Float.NEGATIVE_INFINITY
      * or Float.POSITIVE_INFINITY as appropriate.
@@ -358,7 +358,7 @@ public class NumberKey extends SimpleKey
     /**
      * Returns the value of this NumberKey as a double. This value is subject
      * to the conversion rules set out in
-     * {@link java.math.BigDecimal.doubleValue()}, most importantly if the
+     * {@link java.math.BigDecimal#doubleValue()}, most importantly if the
      * underlying value has too great a magnitude to represent as a
      * double, it will be converted to Double.NEGATIVE_INFINITY
      * or Double.POSITIVE_INFINITY as appropriate.

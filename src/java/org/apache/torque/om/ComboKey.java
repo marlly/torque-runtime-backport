@@ -103,7 +103,7 @@ public class ComboKey extends ObjectKey
      * Sets the internal representation to a String array.
      *
      * @param keys the key values
-     * @see toString()
+     * @see #toString()
      */
     public ComboKey(String keys)
     {
@@ -288,7 +288,7 @@ public class ComboKey extends ObjectKey
     /**
      *
      * @param sb the StringBuffer to append
-     * @see toString()
+     * @see #toString()
      */
     public void appendTo(StringBuffer sb)
     {
