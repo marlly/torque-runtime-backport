@@ -51,6 +51,13 @@
     </developer>
 
     <developer>
+      <name>Jon Scott Stevens</name>
+      <id>jon</id>
+      <email>jon@latchkey.com</email>
+      <organization>CollabNet, Inc.</organization>
+    </developer>
+
+    <developer>
       <name>Jason van Zyl</name>
       <id>jvanzyl</id>
       <email>jason@zenplex.com</email>
