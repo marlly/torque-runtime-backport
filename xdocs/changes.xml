@@ -9,9 +9,9 @@
 
   <body>
 
-<section name="Torque 3.1-alpha3 dev">
+<section name="Torque 3.1-beta1">
 <p>
-  Changes between Torque 3.1-alpha2 and the unreleased 3.1-alpha3. <br/>
+  Changes between Torque 3.1-alpha2 and 3.1-beta1. <br/>
 </p>
 
 <subsection name="Other changes">
@@ -27,7 +27,13 @@
       table data entries.
     </li>
     <li>
-      The old Torque connection pool is deprecated. You should use the commons-dbcp pool.
+      The old Torque connection pool is deprecated. You should use the 
+      commons-dbcp pool.
+    </li>
+    <li>
+      Upgraded to latest commons-dbcp snapshot. The new 
+      SharedPoolDatasourceFactory is now used by default. Don't forget to 
+      upgrade to your property file!
     </li>
   </ul>
 </p>
