@@ -1,11 +1,4 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $col.Domain.SqlType )
-	#if ( $type == 'MEDIUMTEXT' || $type == 'LONGTEXT' || $type == 'BLOB' || $type == 'MEDIUMBLOB' || $type == 'LONGBLOB' )
-		#set ( $size = '' )
-	#else
-		#set ( $size = $col.printSize() )
-	#end
-    #set ( $default = $col.DefaultSetting )
-    #set ( $entry = "$col.Name $type $size $default $col.NotNullString $col.AutoIncrementString," )
+    #set ( $entry = "$col.SqlString," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end
