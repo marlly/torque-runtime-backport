@@ -31,6 +31,7 @@
                 Merged the init() and init2() methods together. We will
                 still search in the "services.DatabaseService" namespace
                 until Scarab switches over to using the "torque" namespace.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/Torque.java.diff?r1=1.31&amp;r2=1.32&amp;diff_format=h">Reference</a>.
               </li>
               <li>
                 Added support to specify the schema used to get data from jdbc
