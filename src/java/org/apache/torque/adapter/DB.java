@@ -411,7 +411,7 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getDateString(String dateString)
     {
-       return "\'" + dateString + "\'";
+       return '\'' + dateString + '\'';
     }
 
 
