@@ -118,6 +118,15 @@ public class NumberKey extends SimpleKey
     }
 
     /**
+     * Creates a NumberKey equivalent to <code>key</code>.
+     * Convenience only. 
+     */
+    public NumberKey(Number key)
+    {
+        this.key = new BigDecimal(key.toString());
+    }
+
+    /**
      * Sets the internal representation using a String representation
      * of a number
      */
@@ -224,5 +233,92 @@ public class NumberKey extends SimpleKey
             return key.toString();
         }
         return "";
+    }
+
+    /** 
+     * Returns the value of this NumberKey as a long. This value is subject
+     * to the conversion rules set out in 
+     * {@link java.math.BigDecimal.intValue()}
+     *
+     * @return the NumberKey converted to a long
+     */
+    public byte byteValue()
+    {
+        return getBigDecimal().byteValue();
+    }
+
+    /** 
+     * Returns the value of this NumberKey as an int. This value is subject
+     * to the conversion rules set out in 
+     * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
+     * will be discarded and if the underlying value is too big to fit in an 
+     * int, only the low-order 32 bits are returned. Note that this 
+     * conversion can lose information about the overall magnitude and 
+     * precision of the NumberKey value as well as return a result with the 
+     * opposite sign.
+     * @return the NumberKey converted to an int
+     */
+    public int intValue()
+    {
+        return getBigDecimal().intValue();
+    }
+
+    /** 
+     * Returns the value of this NumberKey as a short. This value is subject
+     * to the conversion rules set out in 
+     * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
+     *  will be discarded and if the underlying value is too big to fit 
+     * in a long, only the low-order 64 bits are returned. Note that this 
+     * conversion can lose information about the overall magnitude and 
+     * precision of the NumberKey value as well as return a result with the 
+     * opposite sign.
+     *
+     * @return the NumberKey converted to a short
+     */
+    public short shortValue()
+    {
+        return getBigDecimal().shortValue();
+    }
+
+    /** 
+     * Returns the value of this NumberKey as a long. This value is subject
+     * to the conversion rules set out in 
+     * {@link java.math.BigDecimal.intValue()}
+     *
+     * @return the NumberKey converted to a long
+     */
+    public long longValue()
+    {
+        return getBigDecimal().longValue();
+    }
+
+    /** 
+     * Returns the value of this NumberKey as a float. This value is subject to
+     * the conversion rules set out in 
+     * {@link java.math.BigDecimal.floatValue()}, most importantly if the 
+     * underlying value has too great a magnitude to represent as a 
+     * float, it will be converted to Float.NEGATIVE_INFINITY 
+     * or Float.POSITIVE_INFINITY as appropriate.
+     *
+     * @return the NumberKey converted to a float
+     */
+    public float floatValue()
+    {
+        return getBigDecimal().floatValue();
+    }
+
+    /** 
+     * Returns the value of this NumberKey as a double. This value is subject
+     * to the conversion rules set out in 
+     * {@link java.math.BigDecimal.doubleValue()}, most importantly if the 
+     * underlying value has too great a magnitude to represent as a 
+     * double, it will be converted to Double.NEGATIVE_INFINITY 
+     * or Double.POSITIVE_INFINITY as appropriate.
+     *
+     * @return the NumberKey converted to a double
+     */
+    public double doubleValue()
+    {
+        return getBigDecimal().doubleValue();
     }
 }
