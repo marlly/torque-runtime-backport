@@ -43,6 +43,10 @@ Java class or method name.
   heavyIndexing (true|false) "false"
 >
 
+<!-- 
+     note: the interface="true", requires that useManagers=true in the
+     properties file. 
+-->
 <!ELEMENT table (column+,(foreign-key|index|unique|id-method-parameter)*)>
 <!ATTLIST table
   name CDATA #REQUIRED
@@ -53,6 +57,7 @@ Java class or method name.
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
+  interface (true|false) #IMPLIED
   javaNamingMethod (nochange|underscore|javaname) #IMPLIED
   heavyIndexing (true|false) #IMPLIED
   description CDATA #IMPLIED

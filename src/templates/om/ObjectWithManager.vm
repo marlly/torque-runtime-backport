@@ -155,11 +155,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #if ($complexObjectModel)
           #if ($col.isForeignKey())
             #set ( $tblFK = $table.Database.getTable($col.RelatedTableName) )
+            #set ($interfaceName = $tblFK.JavaName)
+            #if ($tblFK.Interface)
+                #set ($interfaceName = $tblFK.Interface)
+            #end    
             #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
             #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
-              #set ( $varName = "a${tblFK.JavaName}RelatedBy$col.JavaName" )
+              #set ( $varName = "a${interfaceName}RelatedBy$col.JavaName" )
             #else
-              #set ( $varName = "a$tblFK.JavaName" )
+              #set ( $varName = "a$interfaceName" )
             #end
 
         if ($varName != null &&  !Objects.equals(${varName}.get${colFK.JavaName}(), v) )
@@ -217,6 +221,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
    #set ( $className = $tblFK.JavaName )
+   #set ($interfaceName = $tblFK.JavaName)
+   #if ($tblFK.Interface)
+       #set ($interfaceName = $tblFK.Interface)
+   #end    
 
    #set ( $relCol = "" )
    #foreach ($columnName in $fk.LocalColumns)
@@ -229,16 +237,16 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #if ($relCol != "")
        #set ( $relCol = "RelatedBy$relCol" )
    #end
-   #set ( $pVarName = "$className$relCol" )
+   #set ( $pVarName = "$interfaceName$relCol" )
    #set ( $varName = "a$pVarName" )
-    private $className $varName;
+    private $interfaceName $varName;
 
     /**
-     * Declares an association between this object and a $className object
+     * Declares an association between this object and a $interfaceName object
      *
-     * @param $className v
+     * @param $interfaceName v
      */
-    public void set${pVarName}($className v) throws TorqueException
+    public void set${pVarName}($interfaceName v) throws TorqueException
     {
    #foreach ($columnName in $fk.LocalColumns)
     #set ( $column = $table.getColumn($columnName) )
@@ -268,8 +276,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $comma = ", " )
     #set ( $argsize = $argsize + 1 )
    #end
-    
-    public $className get${pVarName}() throws TorqueException
+
+    public $interfaceName get${pVarName}() throws TorqueException
     {
         if ( $conditional )
         {
@@ -280,9 +288,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
   #else
    #if ($argsize > 1)
        SimpleKey[] keys = { $arglist };
-        return ${className}Manager.getInstance(new ComboKey(keys));
+        return ${interfaceName}Manager.getInstance(new ComboKey(keys));
    #else
-        return ${className}Manager.getInstance($arglist);
+        return ${interfaceName}Manager.getInstance($arglist);
    #end
   #end
         }
@@ -365,6 +373,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
     }
 
+   #set ($interfaceName = $table.JavaName)
+   #if ($table.Interface)
+       #set ($interfaceName = $table.Interface)
+   #end    
+
     /**
      * Method called to associate a $tblFK.JavaName object to this object
      * through the $className foreign key attribute
@@ -374,7 +387,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public void add${relColMs}($className l) throws TorqueException
     {
         get${relCol}().add(l);
-        l.set${table.JavaName}${suffix}(($table.JavaName)this);
+        l.set${interfaceName}${suffix}(($table.JavaName)this);
     }
 
     /**
@@ -896,9 +909,13 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             }
 
 #if ($table.PrimaryKeys.size() > 0)
+    #set ($interfaceName = $table.JavaName)
+    #if ($table.Interface)
+        #set ($interfaceName = $table.Interface)
+    #end
             if (isCacheOnSave())
             {
-                ${table.JavaName}Manager.putInstance(this);
+                ${interfaceName}Manager.putInstance(this);
             }
 #end
         }

@@ -1,3 +1,8 @@
+#set ($interface = "")
+#if ($table.Interface)
+    #set ($interface = ", $table.Interface")
+#end
+
 #set ($db = $table.Database)
 #if ($db.Package)
     #set ($package = $db.Package)
@@ -25,6 +30,6 @@ import org.apache.torque.om.Persistent;
  */
 public $!abstract class $table.JavaName 
     extends ${package}.$basePrefix$table.JavaName
-    implements Persistent
+    implements Persistent$interface
 {
 }

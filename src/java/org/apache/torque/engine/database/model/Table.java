@@ -100,6 +100,7 @@ public class Table implements IDMethod
     private boolean skipSql;
     private boolean abstractValue;
     private String alias;
+    private String enterface;
     // private String pkg;
     private String baseClass;
     private String basePeer;
@@ -171,6 +172,7 @@ public class Table implements IDMethod
             || (!"false".equals(attrib.getValue("heavyIndexing")) &&
                 getDatabase().isHeavyIndexing());
         description = attrib.getValue("description");
+        enterface = attrib.getValue("interface");
     }
 
     /**
@@ -710,6 +712,26 @@ public class Table implements IDMethod
     {
         this.alias = v;
     }
+
+    
+    /**
+     * Interface which objects for this table will implement
+     * @return value of interface.
+     */
+    public String getInterface() 
+    {
+        return enterface;
+    }
+    
+    /**
+     * Interface which objects for this table will implement
+     * @param v  Value to assign to interface.
+     */
+    public void setInterface(String  v) 
+    {
+        this.enterface = v;
+    }
+    
 
     /**
      * When a table is abstract, it marks the business object class that is

@@ -1040,13 +1040,19 @@ public abstract class $basePrefix${table.JavaName}Peer
 
      #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
      #set ( $joinClassName = $joinTable.JavaName )
+     #set ($interfaceName = $joinTable.JavaName)
+     #if ($joinTable.Interface)
+       #set ($interfaceName = $joinTable.Interface)
+     #end    
 
      #if ($partJoinName == "")
         #set ( $joinColumnId = $joinClassName )
+        #set ( $joinInterface = $interfaceName )
         #set ( $collThisTable = "${className}s" )
         #set ( $collThisTableMs = $className )
      #else
         #set ( $joinColumnId= "${joinClassName}RelatedBy$partJoinName" )
+        #set ( $joinInterface= "${interfaceName}RelatedBy$partJoinName" )
         #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
         #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
      #end
@@ -1163,7 +1169,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             for (int j=0; j<results.size(); j++)
             {
                 $className temp_obj1 = ($className)results.elementAt(j);
-                $joinClassName temp_obj2 = temp_obj1.get${joinColumnId}();
+                $joinClassName temp_obj2 = ($joinClassName)temp_obj1.get${joinInterface}();
                 if ( temp_obj2.getPrimaryKey().equals(obj2.getPrimaryKey() ) )
                 {
                     newObject = false;
@@ -1319,6 +1325,10 @@ public abstract class $basePrefix${table.JavaName}Peer
       #if ( !($fk.ForeignTableName.equals($table.Name)) )
         #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
         #set ( $joinClassName = $joinTable.JavaName )
+        #set ($interfaceName = $joinTable.JavaName)
+        #if ($joinTable.Interface)
+            #set ($interfaceName = $joinTable.Interface)
+        #end    
 
         #if (!$joinClassName.equals($excludeClassName))
             #set ( $partJoinName = "" )
@@ -1330,11 +1340,11 @@ public abstract class $basePrefix${table.JavaName}Peer
             #end
 
             #if ($partJoinName == "")
-                #set ( $joinString = $joinClassName )
+                #set ( $joinString = $interfaceName )
                 #set ( $collThisTable = "${className}s" )
                 #set ( $collThisTableMs = $className )
             #else
-                #set ( $joinString="${joinClassName}RelatedBy$partJoinName" )
+                #set ( $joinString="${interfaceName}RelatedBy$partJoinName" )
                 #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
                 #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
             #end
@@ -1354,7 +1364,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             for (int j=0; j<results.size(); j++)
             {
                 $className temp_obj1 = ($className)results.elementAt(j);
-                $joinClassName temp_obj$index = temp_obj1.get${joinString}();
+                $joinClassName temp_obj$index = ($joinClassName)temp_obj1.get${joinString}();
                 if ( temp_obj${index}.getPrimaryKey().equals(obj${index}.getPrimaryKey() ) )
                 {
                     newObject = false;

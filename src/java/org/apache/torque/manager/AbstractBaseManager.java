@@ -1,4 +1,4 @@
-package org.apache.torque.om;
+package org.apache.torque.manager;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,9 +54,14 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.stratum.jcs.JCS;
 import org.apache.stratum.jcs.access.behavior.ICacheAccess;
@@ -80,7 +85,10 @@ public abstract class AbstractBaseManager
         Category.getInstance(AbstractBaseManager.class.getName());
 
     /** used to cache the om objects */
-    private ICacheAccess cache;
+    protected ICacheAccess cache;
+
+    /** method results cache */
+    protected MethodResultCache mrCache;
 
     /** the class that the service will instantiate */
     private Class omClass;
@@ -90,6 +98,10 @@ public abstract class AbstractBaseManager
     private String region;
 
     private boolean lockCache;
+    private int inGet;
+
+    protected Map validFields;
+    protected Map listenersMap = new HashMap();
 
     /**
      * Get the Class instance
@@ -157,10 +169,9 @@ public abstract class AbstractBaseManager
     /**
      * Return an instance of an om based on the id
      */
-    protected Persistent getOMInstance(ObjectKey id, boolean fromCache)
+    protected Persistent getOMInstance(ObjectKey key, boolean fromCache)
         throws TorqueException
     {
-        String key = id.toString();
         Persistent om = null;
         if (fromCache)
         {
@@ -169,7 +180,7 @@ public abstract class AbstractBaseManager
 
         if (om == null)
         {
-            om = retrieveStoredOM(id);
+            om = retrieveStoredOM(key);
             if (fromCache)
             {
                 putInstanceImpl(om);
@@ -179,7 +190,7 @@ public abstract class AbstractBaseManager
         return om;
     }
 
-    private Persistent cacheGet(String key)
+    private Persistent cacheGet(ObjectKey key)
     {
         Persistent om = null;
         if (cache != null)
@@ -193,7 +204,9 @@ public abstract class AbstractBaseManager
             }
             else
             {
+                inGet++;
                 om = (Persistent)cache.get(key);
+                inGet--;
             }
         }
         return om;
@@ -216,6 +229,41 @@ public abstract class AbstractBaseManager
         }
     }
 
+
+    protected Persistent removeInstanceImpl(ObjectKey key)
+        throws TorqueException
+    {
+        Persistent oldOm = null;
+        if (cache != null)
+        {
+            synchronized (this)
+            {
+                lockCache = true;
+                try
+                {
+                    oldOm = (Persistent)cache.get(key);
+                    while (inGet > 0) 
+                    {
+                        Thread.yield();
+                    }                    
+                    cache.remove(key);
+                }
+                catch (CacheException ce)
+                {
+                    lockCache = false;
+                    throw new TorqueException(
+                    "Could not remove from cache due to internal JCS error.", 
+                        ce);
+                }
+                finally
+                {
+                    lockCache = false;
+                }
+            }
+        }
+        return oldOm;
+    }
+
     protected Persistent putInstanceImpl(Persistent om)
         throws TorqueException
     {
@@ -234,8 +282,12 @@ public abstract class AbstractBaseManager
                 lockCache = true;
                 try
                 {
-                    String key = om.getPrimaryKey().toString();
+                    ObjectKey key = om.getPrimaryKey();
                     oldOm = (Persistent)cache.get(key);
+                    while (inGet > 0) 
+                    {
+                        Thread.yield();
+                    }                    
                     cache.put(key, om);
                 }
                 catch (CacheException ce)
@@ -300,8 +352,7 @@ public abstract class AbstractBaseManager
             List newIds = new ArrayList(ids.size());
             for ( int i=0; i<ids.size(); i++ )
             {
-                ObjectKey id = (ObjectKey)ids.get(i);
-                String key = id.toString();
+                ObjectKey key = (ObjectKey)ids.get(i);
                 Persistent om = null;
                 if (fromCache)
                 {
@@ -309,7 +360,7 @@ public abstract class AbstractBaseManager
                 }
                 if (om == null)
                 {
-                    newIds.add(id);
+                    newIds.add(key);
                 }
                 else
                 {
@@ -370,6 +421,7 @@ public abstract class AbstractBaseManager
         try
         {
             cache = JCS.getInstance(getRegion());
+            mrCache = new MethodResultCache(cache);
         }
         catch (Exception e)
         {
@@ -379,6 +431,108 @@ public abstract class AbstractBaseManager
         if (cache == null)
         {
             category.info("Cache was not be initialized for region: " + v);
+        }
+    }
+
+    public MethodResultCache getMethodResultCache()
+    {
+        return mrCache;
+    }
+
+    public void addCacheListenerImpl(CacheListener listener)
+    {
+        List subsetKeys = listener.getInterestedFields();
+        Iterator i = subsetKeys.iterator();
+        while (i.hasNext()) 
+        {
+            Object[] ie = (Object[])i.next();
+            String key1 = (String)ie[0];
+         
+            // Peer.column names are the fields
+            if (validFields != null && validFields.containsKey(key1)) 
+            {
+                ObjectKey key2 = (ObjectKey)ie[1];
+                Map subsetMap = (Map)listenersMap.get(key1);
+                if (subsetMap == null) 
+                {
+                    subsetMap = createSubsetMap(key1);
+                }
+                
+                List listeners = (List)subsetMap.get(key2);
+                if (listeners == null) 
+                {
+                    listeners = createIdList(subsetMap, key2);
+                }
+                synchronized (listeners)
+                {
+                    listeners.add(new WeakReference(listener));
+                }
+            }            
+        }
+    }
+
+    synchronized private Map createSubsetMap(String key)
+    {
+        Map map = null;
+        if (listenersMap.containsKey(key)) 
+        {
+            map = (Map)listenersMap.get(key);
+        }
+        else 
+        {
+            map = new HashMap();
+            listenersMap.put(key, map);
+        }
+        return map;
+    }
+
+    synchronized private List createIdList(Map map, ObjectKey key)
+    {
+        List l = null;
+        if (map.containsKey(key)) 
+        {
+            l = (List)map.get(key);
+        }
+        else 
+        {
+            l = new LinkedList();
+            map.put(key, l);
+        }
+        return l;
+    }
+
+    protected void notifyListeners(List listeners, 
+                                   Persistent oldOm, Persistent om)
+    {
+        if (listeners != null) 
+        {
+            synchronized (listeners)
+            {
+                Iterator i = listeners.iterator();
+                while (i.hasNext()) 
+                {
+                    CacheListener listener = (CacheListener)
+                        ((WeakReference)i.next()).get();
+                    if (listener == null) 
+                    {
+                        // remove reference as its object was cleared
+                        i.remove();
+                    }
+                    else 
+                    {
+                        if (oldOm == null) 
+                        {
+                            // object was added
+                            listener.addedObject(om);
+                        }
+                        else 
+                        {
+                            // object was refreshed
+                            listener.refreshedObject(om);
+                        }
+                    }
+                }
+            }
         }
     }
 }

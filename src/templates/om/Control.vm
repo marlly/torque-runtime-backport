@@ -46,11 +46,16 @@
 
 #if ($useManagers && $tbl.PrimaryKeys.size() > 0)
 
-    #set ( $fname = "${basePrefix}${firstcap}Manager.java" )
+    #set ($interfaceName = $table.JavaName)
+    #if ($table.Interface)
+        #set ($interfaceName = $table.Interface)
+    #end
+
+    #set ( $fname = "${basePrefix}${interfaceName}Manager.java" )
     #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
     $generator.parse("om/BaseManager.vm",$path,"table",$tbl)
 
-    #set ( $fname = "${firstcap}Manager.java" )
+    #set ( $fname = "${interfaceName}Manager.java" )
     #set ( $path = "${strings.getPackageAsPath($package)}$fname" )    
     #if (!$files.file($basePath,$path).exists())
       $generator.parse("om/ExtensionManager.vm",$path,"table",$tbl)
@@ -81,6 +86,16 @@
     #set ( $path = "${strings.getPackageAsPath($pkpeer)}$fname" )
     #if (!$files.file($basePath,$path).exists())
       $generator.parse("om/ExtensionPeer.vm",$path,"table",$tbl)
+    #end
+
+    #if ($tbl.Interface)
+
+        #set ( $fname = "${tbl.Interface}.java" )
+        #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+        #if (!$files.file($basePath,$path).exists())
+            $generator.parse("om/Interface.vm",$path,"table",$tbl)
+        #end
+
     #end
 
     #if ($tbl.ChildrenColumn)
