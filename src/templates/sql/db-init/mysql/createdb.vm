@@ -1,4 +1,4 @@
 #foreach ($databaseName in $databaseNames)
-drop database $databaseName;
+drop database if exists $databaseName;
 create database $databaseName;
 #end
