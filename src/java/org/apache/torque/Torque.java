@@ -838,14 +838,24 @@ public class Torque implements Initializable, Configurable
         throws TorqueException
     {
         Connection con = null;
+        DataSourceFactory dsf = null;
         try
         {
-            DataSourceFactory dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            dsf = (DataSourceFactory)dsFactoryMap.get(name);
             con = dsf.getDataSource().getConnection(username, password);
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+             if (dsf == null && e instanceof NullPointerException)
+             {
+                 throw new NullPointerException(
+                     "There was no DataSourceFactory "
+                     + "configured for the connection " + name);
+             }
+             else 
+             {
+                 throw new TorqueException(e);                 
+             }
         }
         return con;
     }
@@ -854,14 +864,24 @@ public class Torque implements Initializable, Configurable
         throws TorqueException
     {
         Connection con = null;
+        DataSourceFactory dsf = null;
         try
         {
-            DataSourceFactory dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            dsf = (DataSourceFactory)dsFactoryMap.get(name);
             con = dsf.getDataSource().getConnection();
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+             if (dsf == null && e instanceof NullPointerException)
+             {
+                 throw new NullPointerException(
+                     "There was no DataSourceFactory "
+                     + "configured for the connection " + name);
+             }
+             else 
+             {
+                 throw new TorqueException(e);                 
+             }
         }
         return con;
     }

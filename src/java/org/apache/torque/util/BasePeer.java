@@ -419,6 +419,14 @@ public abstract class BasePeer implements java.io.Serializable
     public static void rollBackTransaction(Connection con)
         throws TorqueException
     {
+        if (con == null) 
+        {
+            throw new NullPointerException("Connection object was null. " +
+                "This could be due to a misconfiguration of the " + 
+                "DataSourceFactory.  Check the logs and Torque.properties " +
+                "to better determine the cause.");
+        }
+        
         try
         {
             if ( con.getMetaData().supportsTransactions() )
