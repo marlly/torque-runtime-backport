@@ -38,37 +38,37 @@
     <dependency>
       <id>avalon-framework</id>
       <version>4.1.4</version>
-      <url>http://jakarta.apache.org/avalon/</url>
+      <url>http://avalon.apache.org/</url>
     </dependency>
     <dependency>
       <id>commons-beanutils</id>
       <version>1.6.1</version>
-      <url>http://jakarta.apache.org/commons/beanutils.html</url>
+      <url>http://jakarta.apache.org/commons/beanutils/</url>
     </dependency>
     <dependency>
       <id>commons-collections</id>
       <version>3.0</version>
-      <url>http://jakarta.apache.org/commons/collections.html</url>
+      <url>http://jakarta.apache.org/commons/collections/</url>
     </dependency>
     <dependency>
       <id>commons-configuration</id>
       <version>1.0-rc1</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/configuration/</url>
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
       <version>1.1</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/dbcp/</url>
     </dependency>
     <dependency>
       <id>commons-lang</id>
       <version>2.0</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/lang/</url>
     </dependency>
     <dependency>
       <id>commons-logging</id>
       <version>1.0.4</version>
-      <url>http://jakarta.apache.org/commons/</url>
+      <url>http://jakarta.apache.org/commons/logging/</url>
     </dependency>
     <dependency>
       <id>commons-pool</id>
@@ -98,7 +98,7 @@
     <dependency>
       <id>logkit</id>
       <version>1.0.1</version>
-      <url>http://jakarta.apache.org/avalon/logkit/</url>
+      <url>http://avalon.apache.org/products/runtime/system/logging/</url>
     </dependency>
     <dependency>
       <id>village</id>
@@ -114,6 +114,7 @@
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <version>1.0.b2</version>
+      <url>http://xml.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>junit</id>
@@ -136,7 +137,7 @@
         <exclude>**/BaseTestCase.java</exclude>
       </excludes>
     </unitTest>
-    
+
     <resources></resources>
   </build>
   
