@@ -19,6 +19,7 @@ package ${package};
 #end
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * $table.Name
@@ -30,7 +31,15 @@ public class $table.JavaName $extendsBaseClass
 {
 
     #foreach ($col in $table.Columns)
-    protected $col.JavaPrimitive $col.Name.toLowerCase() = null;
+      #set ( $cjtype = $col.JavaPrimitive )
+      #set ( $clo=$col.Name.toLowerCase() )
+      #set ( $defaultValue = "null" )
+      #if ( $cjtype == "boolean")
+        #set ( $defaultValue = "false" )
+      #elseif ($cjtype == "int")
+        #set ( $defaultValue = "0" )
+      #end
+    protected $cjtype $clo = $defaultValue;
     #end
 
     #foreach ($col in $table.Columns)
