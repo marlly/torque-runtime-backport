@@ -60,7 +60,8 @@ import java.util.List;
  * Information about unique columns of a table.  This class assumes
  * that in the underlying RDBMS, unique constraints and unique indices
  * are roughly equivalent.  For example, adding a unique constraint to
- * a column also creates an index on that column.
+ * a column also creates an index on that column (this is known to be
+ * true for MySQL and Oracle).
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
