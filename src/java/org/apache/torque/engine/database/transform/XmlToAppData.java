@@ -89,10 +89,18 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id$
  */
 public class XmlToAppData extends DefaultHandler
 {
+    private static final boolean DEBUG = false;
+
+    /**
+     * The name for the default database.
+     */
+    private static final String DEFAULT_DB_NAME = "default";
+
     private AppData app;
     private Database currDB;
     private Table currTable;
@@ -152,7 +160,8 @@ public class XmlToAppData extends DefaultHandler
             }
             catch (FileNotFoundException fnfe)
             {
-                throw new FileNotFoundException(new File(xmlFile).getAbsolutePath());
+                throw new FileNotFoundException
+                    (new File(xmlFile).getAbsolutePath());
             }
             BufferedReader br = new BufferedReader (fr);
             try
@@ -180,8 +189,6 @@ public class XmlToAppData extends DefaultHandler
         return app;
     }
 
-
-
     /**
      * Handles opening elements of the xml file.
      */
@@ -190,18 +197,18 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
-            if(!firstPass)
+            if (!firstPass)
             {
                 if (rawName.equals("database"))
                 {
                     String s = attributes.getValue("name");
                     
-                    if ( s == null )
+                    if (s == null)
                     {
                         //s =  TurbineDB.getDefaultDB();
                         // !!Hard coding this for now it should
                         // be a property.
-                        s = "default";
+                        s = DEFAULT_DB_NAME;
                     }
                     currDB = app.getDatabase(s);
                 }
@@ -212,14 +219,16 @@ public class XmlToAppData extends DefaultHandler
                     // check schema integrity
                     // if idMethod="autoincrement", make sure a column is
                     // specified as autoIncrement="true"
+                    // FIXME: Handle idMethod="native" via DB adapter.
                     if ( currTable.getIdMethod().equals("autoincrement") ) 
                     {
                         Column[] columns = currTable.getColumns();
                         boolean foundOne = false;
-                        for ( int i=0; i<columns.length && !foundOne; i++ ) 
+                        for (int i = 0; i < columns.length && !foundOne; i++)
                         {
                             foundOne = columns[i].isAutoIncrement();
                         }
+
                         if ( !foundOne ) 
                         {
                             errorMessage += "Table '" + currTable.getName() +
@@ -227,7 +236,6 @@ public class XmlToAppData extends DefaultHandler
                             "have a column which declared as the one to " +
                             "auto increment (i.e. autoIncrement=\"true\")\n";
                         }
-                        
                     }
                 }
                 else if (rawName.equals("foreign-key"))
@@ -333,7 +341,37 @@ public class XmlToAppData extends DefaultHandler
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Handles closing elements of the xml file.
+     */
+    public void endElement(String uri, String localName, String rawName)
+    {
+        if (DEBUG)
+        {
+            System.out.println("endElement(" + uri + ", " + localName + ", " +
+                               rawName + ") called");
+        }
+
+        try
+        {
+            if (firstPass)
+            {
+                if ("table".equals(rawName) && currTable != null)
+                {
+                    // Heavy indexing must wait until after all columns
+                    // composing a table's primary key have been parsed.
+                    // TODO: Make this conditional.
+                    currTable.doHeavyIndexing();
+                }
+            }
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
