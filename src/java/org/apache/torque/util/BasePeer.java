@@ -361,7 +361,7 @@ public abstract class BasePeer implements java.io.Serializable
      * not support transactions.
      *
      * @param dbName Name of database.
-     * @return The DBConnection for the transaction.
+     * @return The Connection for the transaction.
      * @exception TorqueException
      */
     public static Connection beginTransaction(String dbName)

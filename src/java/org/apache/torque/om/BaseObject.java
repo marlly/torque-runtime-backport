@@ -455,7 +455,7 @@ public abstract class BaseObject implements Persistent, Serializable
     public abstract void save(String dbName) throws Exception;
 
     /**
-     * @see org.apache.torque.om.Persistent#save(DBConnection)
+     * @see org.apache.torque.om.Persistent#save(Connection)
      */
     public abstract void save(Connection con) throws Exception;
 }
