@@ -1424,7 +1424,6 @@ public abstract class BasePeer implements java.io.Serializable
      * Method for performing a SELECT.  Returns all results.
      *
      * @param queryString A String with the sql statement to execute.
-     * @param dbName The database to connect to.
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @param dbCon A DBConnection.
@@ -1482,7 +1481,6 @@ public abstract class BasePeer implements java.io.Serializable
      * @param queryString A String with the sql statement to execute.
      * @param start The first row to return.
      * @param numberOfResults The number of rows to return.
-     * @param dbName The database to connect to.
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @param dbCon A DBConnection.
@@ -1989,7 +1987,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param stmt A String with the sql statement to execute.
      * @param dbName Name of database to connect to.
      * @return The number of rows affected.
-     * @exception Exception, a generic exception.  */
+     * @exception TorqueException, a generic exception.
+     */
     public static int executeStatement(String stmt,
                                        String dbName)
         throws TorqueException

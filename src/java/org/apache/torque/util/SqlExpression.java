@@ -89,10 +89,9 @@ public class SqlExpression
      * Used to specify a join on two columns.
      *
      * @param column A column in one of the tables to be joined.
-     * @param relatedColumn The column in the other table to be
-     * joined.
+     * @param relatedColumn The column in the other table to be joined.
      * @return A join expression, e.g. UPPER(table_a.column_a) =
-     * UPPER(table_b.column_b).
+     *         UPPER(table_b.column_b).
      */
     public static String buildInnerJoin( String column,
                                          String relatedColumn )
@@ -105,15 +104,13 @@ public class SqlExpression
      * Used to specify a join on two columns.
      *
      * @param column A column in one of the tables to be joined.
-     * @param relatedColumn The column in the other table to be
-     * joined.
-     * @param ignoreCase If true and columns represent Strings, the
-     * appropriate function defined for the database will be used to
-     * ignore differences in case.
-     * @param db Represents the database in use for vendor-specific
-     * functions.
+     * @param relatedColumn The column in the other table to be joined.
+     * @param ignoreCase If true and columns represent Strings, the appropriate
+     *        function defined for the database will be used to ignore
+     *        differences in case.
+     * @param db Represents the database in use for vendor-specific functions.
      * @return A join expression, e.g. UPPER(table_a.column_a) =
-     * UPPER(table_b.column_b).
+     *         UPPER(table_b.column_b).
      */
     public static String buildInnerJoin( String column,
                                          String relatedColumn,
@@ -131,17 +128,13 @@ public class SqlExpression
      * Used to specify a join on two columns.
      *
      * @param column A column in one of the tables to be joined.
-     * @param relatedColumn The column in the other table to be
-     * joined.
-     * @param ignoreCase If true and columns represent Strings, the
-     * appropriate function defined for the database will be used to
-     * ignore differences in case.
-     * @param db Represents the database in use for vendor-specific
-     * functions.
-     * @param whereClause A StringBuffer to which the sql expression
-     * will be appended.
-     * @return A join expression, e.g. UPPER(table_a.column_a) =
-     * UPPER(table_b.column_b).
+     * @param relatedColumn The column in the other table to be joined.
+     * @param ignoreCase If true and columns represent Strings, the appropriate
+     *        function defined for the database will be used to ignore
+     *        differences in case.
+     * @param db Represents the database in use for vendor-specific functions.
+     * @param whereClause A StringBuffer to which the sql expression will be
+     *        appended.
      */
     public static void buildInnerJoin( String column,
                                        String relatedColumn,
@@ -172,9 +165,9 @@ public class SqlExpression
      * @param columnName A column.
      * @param criteria The value to compare the column against.
      * @param comparison One of =, &lt;, &gt;, ^lt;=, &gt;=, &lt;&gt;,
-     * !=, LIKE, etc.
+     *        !=, LIKE, etc.
      * @return A simple SQL expression, e.g. UPPER(table_a.column_a)
-     * LIKE UPPER('ab%c').
+     *         LIKE UPPER('ab%c').
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -193,14 +186,13 @@ public class SqlExpression
      * @param columnName A column.
      * @param criteria The value to compare the column against.
      * @param comparison One of =, &lt;, &gt;, ^lt;=, &gt;=, &lt;&gt;,
-     * !=, LIKE, etc.
-     * @param ignoreCase If true and columns represent Strings, the
-     * appropriate function defined for the database will be used to
-     * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
+     *        !=, LIKE, etc.
+     * @param ignoreCase If true and columns represent Strings, the appropriate
+     *        function defined for the database will be used to ignore
+     *        differences in case.
+     * @param db Represents the database in use, for vendor specific functions.
      * @return A simple sql expression, e.g. UPPER(table_a.column_a)
-     * LIKE UPPER('ab%c').
+     *         LIKE UPPER('ab%c').
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -223,16 +215,13 @@ public class SqlExpression
      * @param columnName A column.
      * @param criteria The value to compare the column against.
      * @param comparison One of =, &lt;, &gt;, ^lt;=, &gt;=, &lt;&gt;,
-     * !=, LIKE, etc.
-     * @param ignoreCase If true and columns represent Strings, the
-     * appropriate function defined for the database will be used to
-     * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
-     * @param whereClause A StringBuffer to which the sql expression
-     * will be appended.
-     * @return A simple sql expression, e.g. UPPER(table_a.column_a)
-     * LIKE UPPER('ab%c').
+     *        !=, LIKE, etc.
+     * @param ignoreCase If true and columns represent Strings, the appropriate
+     *        function defined for the database will be used to ignore
+     *        differences in case.
+     * @param db Represents the database in use, for vendor specific functions.
+     * @param whereClause A StringBuffer to which the sql expression will be
+     *        appended.
      * @exception Exception, a generic exception.
      */
     public static void build( String columnName,
@@ -353,12 +342,11 @@ public class SqlExpression
      *
      * @param columnName A column.
      * @param criteria The value to compare the column against.
-     * @param comparision Whether to do a LIKE or a NOT LIKE
+     * @param comparison Whether to do a LIKE or a NOT LIKE
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
+     * @param db Represents the database in use, for vendor specific functions.
      * @return An SQL expression.
      */
     static String buildLike( String columnName,
@@ -386,12 +374,11 @@ public class SqlExpression
      *
      * @param columnName A column name.
      * @param criteria The value to compare the column against.
-     * @param comparision Whether to do a LIKE or a NOT LIKE
+     * @param comparison Whether to do a LIKE or a NOT LIKE
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
+     * @param db Represents the database in use, for vendor specific functions.
      * @param whereClause A StringBuffer to which the sql expression
      * will be appended.
      */
@@ -476,8 +463,7 @@ public class SqlExpression
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
+     * @param db Represents the database in use, for vendor specific functions.
      * @return An SQL expression.
      */
     static String buildIn(String columnName,
@@ -503,8 +489,7 @@ public class SqlExpression
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
-     * @param db Represents the database in use, for vendor specific
-     * functions.
+     * @param db Represents the database in use, for vendor specific functions.
      * @param whereClause A StringBuffer to which the sql expression
      * will be appended.
      */
@@ -564,8 +549,7 @@ public class SqlExpression
      *
      * @param value The value to process.
      * @param ignoreCase Coerce the value suitably for ignoring case.
-     * @param db Represents the database in use for vendor specific
-     * functions.
+     * @param db Represents the database in use for vendor specific functions.
      * @return Processed value as String.
      */
     static String processInValue(Object value,

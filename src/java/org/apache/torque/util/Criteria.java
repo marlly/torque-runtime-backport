@@ -223,7 +223,7 @@ public class Criteria extends Hashtable
 
     private HashMap aliases = null;
 
-    private boolean useTransaction = false;     
+    private boolean useTransaction = false;
 
     /**
      * Log4j category used for logging.
@@ -439,9 +439,9 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Will force the sql represented by this criteria to be executed within 
+     * Will force the sql represented by this criteria to be executed within
      * a transaction.  This is here primarily to support the oid type in
-     * postgresql.  Though it can be used to require any single sql statement 
+     * postgresql.  Though it can be used to require any single sql statement
      * to use a transaction.
      */
     public void setUseTransaction(boolean v)
@@ -585,7 +585,7 @@ public class Criteria extends Hashtable
     /**
      * Convenience method to return a Date.
      *
-     * @param table String name.
+     * @param name column name (TABLE.COLUMN)
      * @return A java.util.Date with the value of object at key.
      */
     public java.util.Date getDate(String name)
@@ -624,7 +624,7 @@ public class Criteria extends Hashtable
      * Set the DatabaseMap name.  If <code>null</code> is supplied, uses value
      * provided by <code>Torque.getDefaultDB()</code>.
      *
-     * @param map A String with the Database(Map) name.
+     * @param dbName A String with the Database(Map) name.
      */
     public void setDbName(String dbName)
     {
@@ -1038,10 +1038,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add ( String key,
+    public Criteria add ( String column,
                           Object value )
     {
-        add(key, value, EQUAL);
+        add(column, value, EQUAL);
         return this;
     }
 
@@ -1094,7 +1094,6 @@ public class Criteria extends Hashtable
      * @param table Name of the table which contains the column
      * @param column The column to run the comparison on
      * @param value An Object.
-     * @param comparison String describing how to compare the column with the value
      *
      * @return A modified Criteria object.
      */
@@ -1370,7 +1369,7 @@ public class Criteria extends Hashtable
 
     /**
      * @deprecated These methods were wrongly named and are misleading.
-                   Use addDate() instead.
+     *             Use addDate() instead.
      */
     public Criteria addTime( String column,
                              int year,
@@ -1383,7 +1382,7 @@ public class Criteria extends Hashtable
 
     /**
      * @deprecated These methods were wrongly named and are misleading.
-                   Use addDate() instead.
+     *             Use addDate() instead.
      */
     public Criteria addTime( String column,
                              int year,
@@ -2082,7 +2081,6 @@ public class Criteria extends Hashtable
      * @param table Name of the table which contains the column
      * @param column The column to run the comparison on
      * @param value An Object.
-     * @param comparison String describing how to compare the column with the value
      *
      * @return A modified Criteria object.
      */
@@ -2696,7 +2694,6 @@ public class Criteria extends Hashtable
      * @param table Name of the table which contains the column
      * @param column The column to run the comparison on
      * @param value An Object.
-     * @param comparison String describing how to compare the column with the value
      *
      * @return A modified Criteria object.
      */
