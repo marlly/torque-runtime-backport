@@ -44,7 +44,7 @@ $!col.getDescription()
     #set ( $colType = $col.getType() )
     #set ( $colTypeClass =  $colType.getClass() )
     #set ( $colTypeClassName =  $colTypeClass.getName() )
-    ## === determin the type of the field. OJB recognizes less types than Torque, thus unkown types must be mapped
+    ## === determine the type of the field. OJB recognizes less types than Torque, thus unkown types must be mapped
     #if ($mappingPos != -1)
       #set ( $jdbcFieldType = $mappedJdbcTypes.get($mappingPos) )
       #if ( $mappedJdbcTypes.get($mappingPos) == "CHAR" )
