@@ -1,4 +1,4 @@
-package org.apache.torque.util;
+package org.apache.torque;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
