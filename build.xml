@@ -263,9 +263,16 @@
   <!-- ================================================================== -->
   
   <target name="jar" depends="compile" description="==> generates the torque.jar">
-    <jar jarfile="${build.dir}/${final.name}.jar"
+    <jar jarfile="${build.dir}/${final.name}.jar">
+      <fileset dir="${build.dest}">
+        <exclude name="**/package.html"/>
+      </fileset>
+      <fileset dir="${src.dir}/templates"/>
+    </jar>
+    
+    <!--
          basedir="${build.dest}"
-         excludes="**/package.html"/>
+         excludes="**/package.html"/> -->
   </target>
 
   <!-- ================================================================== -->
