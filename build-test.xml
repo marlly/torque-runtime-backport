@@ -114,6 +114,7 @@
     <antcall target="test-id-table-init-sql"/>
     <antcall target="test-insert-sql"/>
     <antcall target="test-om"/>
+    <antcall target="test-ojb"/>
   </target>
 
   <!-- ============================================================== -->
@@ -243,6 +244,15 @@
       antfile="${torque.buildFile}"
       target="jdbc">
       <property name="torque.home" value="${torque.distDir}"/>
+    </ant>
+  </target>
+
+  <target
+    name="test-ojb">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="ojb">
     </ant>
   </target>
 
