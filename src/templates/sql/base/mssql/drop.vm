@@ -4,9 +4,9 @@ IF EXISTS (SELECT 1 FROM sysobjects WHERE type ='RI' AND name='$fk.Name')
 #end
 IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = '$table.Name')
 BEGIN
-     DECLARE @reftable nvarchar(60), @constraintname nvarchar(60)
+     DECLARE @reftable_${velocityCount} nvarchar(60), @constraintname_${velocityCount} nvarchar(60)
      DECLARE refcursor CURSOR FOR
-     select reftables.name tablename, cons.name constraitname
+     select reftables.name tablename, cons.name constraintname
       from sysobjects tables,
            sysobjects reftables,
            sysobjects cons,
@@ -16,11 +16,11 @@ BEGIN
          and reftables.id = ref.fkeyid
          and tables.name = '$table.Name'
      OPEN refcursor
-     FETCH NEXT from refcursor into @reftable, @constraintname
+     FETCH NEXT from refcursor into @reftable_${velocityCount}, @constraintname_${velocityCount}
      while @@FETCH_STATUS = 0
      BEGIN
-       exec ('alter table '+@reftable+' drop constraint '+@constraintname)
-       FETCH NEXT from refcursor into @reftable, @constraintname
+       exec ('alter table '+@reftable_${velocityCount}+' drop constraint '+@constraintname_${velocityCount})
+       FETCH NEXT from refcursor into @reftable_${velocityCount}, @constraintname_${velocityCount}
      END
      CLOSE refcursor
      DEALLOCATE refcursor
