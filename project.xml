@@ -5,7 +5,7 @@
   <id>torque</id>
   <groupId>torque</groupId>
   <name>Torque</name>
-  <currentVersion>3.1-beta1</currentVersion>
+  <currentVersion>3.1-rc-dev</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>
