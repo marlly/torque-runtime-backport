@@ -8,6 +8,21 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='henning' type='update'>
+        Upgrade to commons-collections-3.0, commons-configuration-1.0-rc1 and
+        commons-logging-1.0.4.
+      </action>
+      <action dev='seade' type='fix'>
+        TRQD26: Problems with Torque tutorial.  The Torque tutorial has been 
+        updated to reflect the separated generator and runtime components and
+        to use the Maven plugin.
+      </action>
+      <action dev='seade' type='fix'>
+        The generator logging configuration has been changed from DEBUG to INFO 
+        - this will make the day of all those people that for some reason have 
+        the torque-gen jar in their classpath at runtime.  <b>Hint: You don't
+        need this jar to use the Torque generated object model classes.</b>
+      </action>
       <action dev='mpoeschl' type='fix'>
         TRQS223: The get${pVarName} method in the Object.vm template does not 
         return related objects with a negative PK.  Thanks to Nick Curry for
