@@ -275,7 +275,7 @@
       password="${torque.database.password}"
       sqldbmap="${torque.sql.dir}/sqldb.map"
       srcDir="${torque.sql.dir}"
-      url="${buildDatabaseUrl}"
+      url="${torque.database.buildUrl}"
       userid="${torque.database.user}">
       <classpath refid="torque-classpath"/>
     </torque-sql-exec>
