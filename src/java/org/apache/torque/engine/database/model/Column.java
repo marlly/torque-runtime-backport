@@ -652,7 +652,9 @@ public class Column
         setType(tn);
 
         if (this.size != null)
+        {
             this.size = size;
+        }
 
         if (tn.indexOf ("CHAR") != -1)
         {
