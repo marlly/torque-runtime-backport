@@ -806,7 +806,7 @@ public abstract class BasePeer implements java.io.Serializable
         {
             tds = new TableDataSet(dbCon.getConnection(), tableName );
             Record rec = tds.addRecord();
-            insertOrUpdateRecord(rec, tableName, criteria);
+            BasePeer.insertOrUpdateRecord(rec, tableName, criteria);
         }
         finally
         {
@@ -841,7 +841,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @exception Exception, a generic exception.
      */
-    private void insertOrUpdateRecord(Record rec,
+    private static void insertOrUpdateRecord(Record rec,
                                              String tableName,
                                              Criteria criteria)
         throws Exception
@@ -1650,10 +1650,13 @@ public abstract class BasePeer implements java.io.Serializable
         {
             // Get a connection to the db.
             if (doTransaction)
+            {
                 db = beginTransaction(selectCriteria.getDbName());
+            }
             else
+            {
                 db = Torque.getConnection( selectCriteria.getDbName() );
-
+            }
             doUpdate(selectCriteria, updateValues, db);
         }
         finally
@@ -1759,12 +1762,16 @@ public abstract class BasePeer implements java.io.Serializable
                 for (int j=0; j<tds.size(); j++)
                 {
                     Record rec = tds.getRecord(j);
-                    insertOrUpdateRecord(rec, tables.get(i), updateValues);
+                    BasePeer
+                        .insertOrUpdateRecord(rec, tables.get(i), updateValues);
                 }
             }
             finally
             {
-                if (tds != null) tds.close();
+                if (tds != null)
+                {
+                    tds.close();
+                }
             }
         }
     }
@@ -1839,7 +1846,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            if (statement != null) statement.close();
+            if (statement != null)
+            {
+                statement.close();
+            }
         }
         return rowCount;
     }
@@ -1904,14 +1914,14 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 synchronized(mapBuilders)
                 {
-                   mb = (MapBuilder)mapBuilders.get(name);
-                   if (mb == null)
-                  {
-                      mb = (MapBuilder)Class.forName(name).newInstance();
-                      // Cache the MapBuilder before it is built.
-                      mapBuilders.put(name, mb);
-                  }
-               }
+                    mb = (MapBuilder)mapBuilders.get(name);
+                    if (mb == null)
+                    {
+                        mb = (MapBuilder)Class.forName(name).newInstance();
+                        // Cache the MapBuilder before it is built.
+                        mapBuilders.put(name, mb);
+                    }
+                }
             }
 
             // Build the MapBuilder in its own synchronized block to
