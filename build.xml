@@ -117,7 +117,7 @@
     />
 
     <available
-      classname="org/w3c/dom/events/Event"
+      classname="org.w3c.dom.ranges.DocumentRange"
       property="xmlParserAPIs.present"
       classpathref="classpath"
     />
@@ -174,8 +174,7 @@
   </target>
 
   <target
-    name="check.xerces"
-    unless="xerces.present">
+    name="check.xerces">
 
     <antcall target="check.xercesImpl"/>
     <antcall target="check.xmlParserAPIs"/>
@@ -194,7 +193,6 @@
   <target
     name="check.xmlParserAPIs"
     unless="xmlParserAPIs.present">
-
     <antcall target="property-warning">
       <param name="name" value="xmlParserAPIs.jar"/>
       <param name="value" value="${xmlParserAPIs.jar}"/>
@@ -382,9 +380,7 @@
     description="==> generates the torque.jar">
 
     <jar jarfile="${build.dir}/${final.name}.jar">
-      <fileset dir="${build.dest}">
-        <exclude name="**/package.html"/>
-      </fileset>
+      <fileset dir="${build.dest}" excludes="**/package.html"/>
       <fileset dir="${src.dir}/templates"/>
     </jar>
 
