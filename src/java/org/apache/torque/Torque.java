@@ -178,7 +178,8 @@ public class Torque
      * are serialized then unserialized prior to Torque being reinitialized.
      * This condition exists in a normal catalina restart.
      */
-    private static List mapBuilders = Collections.synchronizedList(new ArrayList());
+    private static List mapBuilders
+            = Collections.synchronizedList(new ArrayList());
 
 
     /**
@@ -192,9 +193,9 @@ public class Torque
     {
         if (configuration == null)
         {
-            throw new TorqueException("Torque cannot be initialized without " +
-                "a valid configuration. Please check the log files " +
-                    "for further details.");
+            throw new TorqueException("Torque cannot be initialized without "
+                    + "a valid configuration. Please check the log files "
+                    + "for further details.");
         }
 
         // Setup log4j, I suppose we might want to deal with
@@ -236,7 +237,7 @@ public class Torque
         initDataSourceFactories(configuration);
 
         isInit = true;
-        for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
+        for (Iterator i = mapBuilders.iterator(); i.hasNext();)
         {
             //this will add any maps in this builder to the proper database map
             BasePeer.getMapBuilder((String) i.next());
@@ -248,6 +249,12 @@ public class Torque
         initManagerMappings(configuration);
     }
 
+    /**
+     *
+     * @param configuration the Configuration representing the properties file
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     private static final void initAdapters(Configuration configuration)
         throws TorqueException
     {
@@ -256,28 +263,27 @@ public class Torque
         Configuration c = configuration.subset("database");
         if (c != null)
         {
-        try
-        {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
+            try
             {
-                String key = (String) i.next();
-                if (key.endsWith("adapter"))
+                Iterator i = c.getKeys();
+                while (i.hasNext())
                 {
-                    String adapter = c.getString(key);
-                    String handle = key.substring(0, key.indexOf('.'));
-                    DB db = DBFactory.create(adapter);
-                    // register the adapter for this name
-                    adapterMap.put(handle, db);
+                    String key = (String) i.next();
+                    if (key.endsWith("adapter"))
+                    {
+                        String adapter = c.getString(key);
+                        String handle = key.substring(0, key.indexOf('.'));
+                        DB db = DBFactory.create(adapter);
+                        // register the adapter for this name
+                        adapterMap.put(handle, db);
+                    }
                 }
             }
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }
-
+            catch (Exception e)
+            {
+                category.error("", e);
+                throw new TorqueException(e);
+            }
         }
         else
         {
@@ -285,6 +291,12 @@ public class Torque
         }
     }
 
+    /**
+     *
+     * @param configuration the Configuration representing the properties file
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     private static void initDataSourceFactories(Configuration configuration)
         throws TorqueException
     {
@@ -303,9 +315,8 @@ public class Torque
                     {
                         String classname = c.getString(key);
                         String handle = key.substring(0, key.indexOf('.'));
-                        category.debug("handle: " + handle +
-                                       " DataSourceFactory: " + classname);
-
+                        category.debug("handle: " + handle
+                                + " DataSourceFactory: " + classname);
                         Class dsfClass = Class.forName(classname);
                         DataSourceFactory dsf =
                             (DataSourceFactory) dsfClass.newInstance();
@@ -433,7 +444,8 @@ public class Torque
             if (key.startsWith(MANAGER_PREFIX)
                     && key.endsWith(MANAGER_SUFFIX))
             {
-                String managedClassKey = key.substring(pref, key.length() - suff);
+                String managedClassKey = key.substring(pref,
+                        key.length() - suff);
                 if (!managers.containsKey(managedClassKey))
                 {
                     String managerClass = configuration.getString(key);
@@ -460,9 +472,10 @@ public class Torque
     /**
      * Initialize a manager
      *
-     * @param name
-     * @param className
-     * @throws TorqueException
+     * @param name name of the manager
+     * @param className name of the manager class
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static synchronized void initManager(String name, String className)
         throws TorqueException
@@ -625,7 +638,7 @@ public class Torque
     /**
      * This method returns a Manager for the given name.
      *
-     * @param name
+     * @param name name of the manager
      * @return a Manager
      */
     public static AbstractBaseManager getManager(String name)
@@ -642,11 +655,12 @@ public class Torque
      * This methods returns either the Manager from the configuration file,
      * or the default one provided by the generated code.
      *
-     * @param name
+     * @param name name of the manager
      * @param defaultClassName the class to use if name has not been configured
      * @return a Manager
      */
-    public static AbstractBaseManager getManager(String name, String defaultClassName)
+    public static AbstractBaseManager getManager(String name,
+            String defaultClassName)
     {
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
@@ -798,9 +812,9 @@ public class Torque
     }
 
     /**
+     * Register a MapBuilder
      *
-     *
-     * @param className
+     * @param className the MapBuilder
      */
     public static void registerMapBuilder(String className)
     {
@@ -849,6 +863,8 @@ public class Torque
      * @return The requested connection.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @throws java.sql.SQLException never thrown
+     * @throws javax.naming.NamingException never thrown
      */
     public static Connection getConnection()
         throws TorqueException, java.sql.SQLException,
@@ -898,6 +914,13 @@ public class Torque
         return con;
     }
 
+    /**
+     *
+     * @param name The database name.
+     * @return a database connection
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     public static Connection getConnection(String name)
         throws TorqueException
     {
@@ -941,6 +964,8 @@ public class Torque
 
     /**
      * Returns the name of the default database.
+     *
+     * @return name of the default DB
      */
     public static String getDefaultDB()
     {
@@ -959,6 +984,7 @@ public class Torque
     }
 
     /**
+     * @return name of the default Map
      * @deprecated Use getDefaultDB() instead.
      */
     public static String getDefaultMap()
