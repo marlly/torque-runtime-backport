@@ -537,7 +537,7 @@
       url="${createDatabaseUrl}"
       userid="${databaseUser}"
       password="${databasePassword}"
-    </echo>      
+    </echo>
 
     <torque-create-db
       controlTemplate="sql/db-init/Control.vm"
@@ -681,7 +681,7 @@
   <!-- O J B   S T U F F                                                   -->
   <!-- =================================================================== -->
   <!-- =================================================================== -->
-  
+
   <target
     name="project-ojb-repository">
 
@@ -693,7 +693,7 @@
 
     <taskdef
       name="ojb-repository"
-      classname="org.apache.torque.task.TorqueObjectModelTask">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 
@@ -711,7 +711,7 @@
       </fileset>
     </ojb-repository>
   </target>
-  
+
   <target
     name="project-ojb-model">
 
@@ -723,7 +723,7 @@
 
     <taskdef
       name="ojb-model"
-      classname="org.apache.torque.task.TorqueObjectModelTask">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 
@@ -741,6 +741,6 @@
       </fileset>
     </ojb-model>
   </target>
-  
+
 </project>
 
