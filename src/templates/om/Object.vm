@@ -650,6 +650,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #foreach ($col in $table.Columns)
         fieldNames.add("${col.JavaName}");
     #end
+        fieldNames = Collections.unmodifiableList(fieldNames);
       }
       return fieldNames;
     }
