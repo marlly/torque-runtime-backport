@@ -46,7 +46,7 @@ database = mysql
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
-targetPackage=org.apache.torque
+targetPackage=org.apache.torque.test
 basePrefix=Base
 addSaveMethod=true
 addGetByNameMethod=true
