@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.7-bin.jar
+torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.13-bin.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
@@ -11,15 +11,15 @@ torque.sqlTest.databaseUrl = jdbc:mysql://localhost:3306/sqltest
 lib.dir = ../lib
 
 # -------------------------------------------------------------------
-# 
+#
 # T O R Q U E  C O N F I G U R A T I O N  F I L E
-# 
+#
 # -------------------------------------------------------------------
 
 project = bookstore
 
 # -------------------------------------------------------------------
-# 
+#
 #  T A R G E T  D A T A B A S E
 #
 # -------------------------------------------------------------------
@@ -27,7 +27,7 @@ project = bookstore
 database = mysql
 
 # -------------------------------------------------------------------
-# 
+#
 #  O B J E C T  M O D E L  I N F O R M A T I O N
 #
 # -------------------------------------------------------------------
@@ -55,7 +55,7 @@ addIntakeRetrievable=false
 useManagers=true
 
 # -------------------------------------------------------------------
-# 
+#
 #  D A T A B A S E  S E T T I N G S
 #
 # -------------------------------------------------------------------
@@ -93,7 +93,7 @@ documentationFormat=html
 # -------------------------------------------------------------------
 
 # -------------------------------------------------------------------
-# 
+#
 #  T E M P L A T E  P A T H
 #
 # -------------------------------------------------------------------
@@ -101,7 +101,7 @@ documentationFormat=html
 templatePath = ../templates
 
 # -------------------------------------------------------------------
-# 
+#
 #  C O N T R O L  T E M P L A T E S
 #
 # -------------------------------------------------------------------
@@ -115,7 +115,7 @@ DataSQLControlTemplate = sql/load/Control.vm
 DocControlTemplate = doc/Control.vm
 
 # -------------------------------------------------------------------
-# 
+#
 #  O U T P U T  D I R E C T O R Y
 #
 # -------------------------------------------------------------------
@@ -123,7 +123,7 @@ DocControlTemplate = doc/Control.vm
 outputDirectory=src
 
 # -------------------------------------------------------------------
-# 
+#
 #  S C H E M A  D I R E C T O R Y
 #
 # -------------------------------------------------------------------
