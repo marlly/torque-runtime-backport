@@ -9,6 +9,56 @@
 
   <body>
 
+<section name="Torque 3.0">
+<p>
+  Changes between Torque 3.0-rc2 and 3.0. <br/>
+</p>
+
+<subsection name="Changes that could (will) break older environments">
+<p>
+  <ul>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Other changes">
+<p>
+  <ul>
+    <li>
+      TRQS59: torque-jdbc-transform should not show password
+    </li>
+    <li>
+      TRQS86: uses @DATABASE@ variable for default database adapter instead
+      of mysql
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      TRQS61: more concise name on Criteria.setSingleRecord
+    </li>
+    <li>
+      TRQS73: Criteria.toString() modifies the Criteria object
+    </li>
+    <li>
+      TRQS81: getPrimaryKey() throws NullPointerException is pk is Object type
+      and null.
+    </li>
+    <li>
+      TRQS82: Constructor for DateKey and StringKey will throw NullPointer
+      exception if passed null value
+    </li>
+  </ul>
+</p>
+</subsection>
+</section>
+
 <section name="Torque 3.0-rc2">
 <p>
   Changes between Torque 3.0-rc1 and 3.0-rc2. <br/>
