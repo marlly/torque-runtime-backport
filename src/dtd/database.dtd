@@ -38,8 +38,8 @@ Java class or method name.
   package CDATA #IMPLIED
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
-
   defaultJavaNamingMethod (nochange|underscore|javaname) "underscore"
+  skipHeavyIndexing (true|false) "false"
 >
 
 <!ELEMENT table (column+,(foreign-key|index|unique|id-method-parameter)*)>
@@ -53,6 +53,7 @@ Java class or method name.
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
   javaNamingMethod (nochange|underscore|javaname) #IMPLIED
+  skipHeavyIndexing (true|false) "false"
 >
 
 <!ELEMENT id-method-parameter EMPTY>

@@ -105,6 +105,7 @@ public class Table implements IDMethod
     private Hashtable columnsByName;
     private Hashtable columnsByJavaName;
     private boolean needsTransactionInPostgres;
+    private boolean skipHeavyIndexing;
 
     /**
      * Default Constructor
@@ -164,6 +165,8 @@ public class Table implements IDMethod
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
         alias = attrib.getValue("alias");
+        skipHeavyIndexing = "true"
+            .equals(attrib.getValue("skipHeavyIndexing"));
     }
 
     /**
@@ -178,9 +181,11 @@ public class Table implements IDMethod
     {
         // Heavy indexing must wait until after all columns composing
         // a table's primary key have been parsed.
-        // TODO: Make this conditional on Torque or RDBMS property.
-        doHeavyIndexing();
-
+        if (!skipHeavyIndexing && !getDatabase().isSkipHeavyIndexing()) 
+        {
+            doHeavyIndexing();    
+        }
+        
         // Name any indices which are missing a name using the
         // appropriate algorithm.
         doNaming();

@@ -92,7 +92,8 @@ public class Database
     private AppData dbParent;
     private Hashtable tablesByName = new Hashtable();
     private Hashtable tablesByJavaName = new Hashtable();
-
+    private boolean skipHeavyIndexing;
+    
     /**
      * Creates a new instance with unset attributes.
      */
@@ -115,6 +116,8 @@ public class Database
         {
             defaultJavaNamingMethod = NameGenerator.CONV_METHOD_UNDERSCORE;
         }
+        skipHeavyIndexing = "true"
+            .equals(attrib.getValue("skipHeavyIndexing"));
     }
 
     /**
@@ -232,6 +235,24 @@ public class Database
         this.defaultJavaNamingMethod = v;
     }
 
+    /**
+     * Get the value of skipHeavyIndexing.
+     * @return value of skipHeavyIndexing.
+     */
+    public boolean isSkipHeavyIndexing() 
+    {
+        return skipHeavyIndexing;
+    }
+    
+    /**
+     * Set the value of skipHeavyIndexing.
+     * @param v  Value to assign to skipHeavyIndexing.
+     */
+    public void setSkipHeavyIndexing(boolean  v) 
+    {
+        this.skipHeavyIndexing = v;
+    }
+    
     /**
      * Return an array of all tables
      */
