@@ -63,7 +63,7 @@
                 Fix TorqueDataSQLTask (Column names were not generated)
               </li>
               <li>
-                Fix Path handling in TorqueSQLExex task
+                Fix Path handling in TorqueSQLExec task
               </li>
               <li>
                 Better mapping of binary data types for Postgres
