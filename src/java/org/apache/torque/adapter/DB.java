@@ -329,6 +329,6 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getBooleanString(Boolean b)
     {
-        return b.equals(Boolean.TRUE) ? "1" : "0";
+        return (Boolean.TRUE.equals(b) ? "1" : "0");
     }
 }
