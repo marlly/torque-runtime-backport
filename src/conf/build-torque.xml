@@ -390,7 +390,7 @@
       useClasspath="${useClasspath}"
       templatePath="${templatePath}"
       outputFile="report.${project}.om.generation"
-      targetPackage="${targetPackage}.om"
+      targetPackage="${targetPackage}"
       targetDatabase="${database}">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
@@ -501,7 +501,7 @@
     <ojb-repository
       contextProperties="${build.properties}"
       controlTemplate="ojb/repository/Control.vm"
-      targetPackage="${targetPackage}.om"
+      targetPackage="${targetPackage}"
       targetDatabase="${database}"
       outputDirectory="${torque.home}/${outputDirectory}/ojb"
       useClasspath="${useClasspath}"
@@ -532,7 +532,7 @@
     <ojb-model
       contextProperties="${build.properties}"
       controlTemplate="ojb/model/Control.vm"
-      targetPackage="${targetPackage}.om"
+      targetPackage="${targetPackage}"
       targetDatabase="${database}"
       outputDirectory="${torque.home}/${outputDirectory}/ojb"
       useClasspath="${useClasspath}"
