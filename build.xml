@@ -17,6 +17,11 @@
    <property name="maven.core.callback.post-compile.buildTarget" value="post-compile"/>
    <target name="post-compile">
      <copy file="src/conf/default.properties" todir="target/classes/org/apache/torque"/>
+     <!-- copy database.dtd to the right place -->
+     <copy
+       file="src/dtd/database.dtd"
+       todir="target/classes/org/apache/torque/engine/database/transform"
+     />
    </target>
 
   <!-- ================================================================== -->
@@ -53,10 +58,6 @@
 
   <target
     name="maven:jar">
-    <!-- copy database.dtd to the right place -->
-    <copy file="src/dtd/database.dtd"
-      todir="target/classes/org/apache/torque/engine/database/transform"/>
-
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
 
