@@ -55,8 +55,8 @@ package org.apache.torque.task;
  */
 
 import java.util.Date;
+
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.texen.ant.TexenTask;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.transform.XmlToAppData;
@@ -155,12 +155,17 @@ public class TorqueObjectModelTask extends TexenTask
         targetDatabase = v;
     }
 
-    public Context initControlContext()
+    /**
+     * Populates the initialial context with the model used to
+     * generate SQL from a XML schema.
+     *
+     * @param context The initial context, ripe for population.
+     * @exception Exception None expected.
+     */
+    protected void populateInitialContext(Context context)
+        throws Exception
     {
-        /*
-         * Create velocity context.
-         */
-        Context context = new VelocityContext();
+        super.populateInitialContext(context);
 
         /*
          * Build our application model from the
@@ -189,7 +194,5 @@ public class TorqueObjectModelTask extends TexenTask
          * Place the target package in the context.
          */
         context.put("targetPackage", targetPackage);
-
-        return context;
     }
 }
