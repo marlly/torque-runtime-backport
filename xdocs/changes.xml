@@ -39,6 +39,9 @@
     <li>
       TRQS152: Oracle DB using Criteria to select by Data doesn't work
     </li>
+    <li>
+      TRQS174: Problems on DB2 with BINARY, VARBINARY and INTEGER.
+    </li>
   </ul>
 </p>
 </subsection>
