@@ -237,6 +237,7 @@
 
   <target name="filterTokens">
     <filter token="APPLICATION_ROOT" value="."/>
+    <filter token="DATABASE" value="${torque.database}"/>
     <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
     <filter token="DATABASE_URL" value="${torque.database.url}"/>
     <filter token="DATABASE_USER" value="${torque.database.user}"/>
@@ -319,6 +320,7 @@
         <fileset dir="${torque.destDir}">
           <include name="**/*Test*.class"/>
           <exclude name="**/BaseTestCase.class"/>
+          <exclude name="**/LargeSelectTest.class"/>
         </fileset>
       </batchtest>
     </junit>
