@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.torque.NoRowsException;
+import org.apache.torque.TooManyRowsException;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.MapBuilder;
