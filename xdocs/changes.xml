@@ -44,6 +44,9 @@
 <p>
   <ul>
     <li>
+      TRQ19: recursive external schemas fail
+    </li>
+    <li>
       TRQ47: limit and offset patch for Oracle
     </li>
     <li>

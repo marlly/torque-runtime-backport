@@ -58,6 +58,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.util.Vector;
+import java.util.Stack;
 
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
@@ -107,6 +109,12 @@ public class XmlToAppData extends DefaultHandler
 
     private static SAXParserFactory saxFactory;
 
+    /** remember all files we have already parsed to detect looping. */
+    private Vector alreadyReadFiles;
+
+    /** this is the stack to store parsing data */
+    private Stack parsingStack = new Stack();
+
     static
     {
         saxFactory = SAXParserFactory.newInstance();
@@ -146,6 +154,20 @@ public class XmlToAppData extends DefaultHandler
             {
                 throw new Error("No more double pass");
             }
+            // check to see if we alread have parsed the file
+            if ((alreadyReadFiles != null)
+                    && alreadyReadFiles.contains(xmlFile))
+            {
+                return app;
+            }
+            else if (alreadyReadFiles == null)
+            {
+                alreadyReadFiles = new Vector(3, 1);
+            }
+
+            // remember the file to avoid looping
+            alreadyReadFiles.add(xmlFile);
+
             currentXmlFile = xmlFile;
 
             SAXParser parser = saxFactory.newSAXParser();
@@ -163,6 +185,7 @@ public class XmlToAppData extends DefaultHandler
             BufferedReader br = new BufferedReader(fr);
             try
             {
+                System.err.println("Parsing file: '" + (new File(xmlFile)).getName() + "'");
                 InputSource is = new InputSource(br);
                 parser.parse(is, this);
             }
@@ -235,7 +258,6 @@ public class XmlToAppData extends DefaultHandler
                 }
                 else if (rawName.equals("external-schema"))
                 {
-                    isExternalSchema = true;
                     String xmlFile = attributes.getValue("filename");
                     if (xmlFile.charAt(0) != '/')
                     {
@@ -243,8 +265,14 @@ public class XmlToAppData extends DefaultHandler
                         xmlFile = new File(f.getParent(), xmlFile).getPath();
                     }
 
+                    // put current state onto the stack
+                    ParseStackElement.pushState(this);
+
+                    isExternalSchema = true;
+
                     parseFile(xmlFile);
-                    isExternalSchema = false;
+                    // get the last state from the stack
+                    ParseStackElement.popState(this);
                 }
                 else if (rawName.equals("table"))
                 {
@@ -346,9 +374,75 @@ public class XmlToAppData extends DefaultHandler
         printParseError("Fatal Error", spe);
     }
 
+    /**
+     * Write an error to System.err.
+     *
+     * @param type error type
+     * @param spe The parse exception that caused the callback to be invoked.
+     */
     private final void printParseError(String type, SAXParseException spe)
     {
-        System.err.println(type + " [line " + spe.getLineNumber()
-                + ", row " + spe.getColumnNumber() + "]: " + spe.getMessage());
+        System.err.println(type + "[file '"
+                + (new File(currentXmlFile)).getName() + "', line "
+                + spe.getLineNumber() + ", row " + spe.getColumnNumber()
+                + "]: " + spe.getMessage());
+    }
+
+    /**
+     * When parsing multiple files that use nested <external-schema> tags we
+     * need to use a stack to remember some values.
+     */
+    private static class ParseStackElement
+    {
+        private boolean isExternalSchema;
+        private String currentPackage;
+        private String currentXmlFile;
+        private boolean firstPass;
+
+        /**
+         *
+         * @param parser
+         */
+        public ParseStackElement(XmlToAppData parser)
+        {
+            // remember current state of parent object
+            isExternalSchema = parser.isExternalSchema;
+            currentPackage = parser.currentPackage;
+            currentXmlFile = parser.currentXmlFile;
+            firstPass = parser.firstPass;
+
+            // push the state onto the stack
+            parser.parsingStack.push(this);
+        }
+
+        /**
+         * Removes the top element from the stack and activates the stored state
+         *
+         * @param parser
+         */
+        public static void popState(XmlToAppData parser)
+        {
+            if (!parser.parsingStack.isEmpty())
+            {
+                ParseStackElement elem = (ParseStackElement)
+                        parser.parsingStack.pop();
+
+                // activate stored state
+                parser.isExternalSchema = elem.isExternalSchema;
+                parser.currentPackage = elem.currentPackage;
+                parser.currentXmlFile = elem.currentXmlFile;
+                parser.firstPass = elem.firstPass;
+            }
+        }
+
+        /**
+         * Stores the current state on the top of the stack.
+         *
+         * @param parser
+         */
+        public static void pushState(XmlToAppData parser)
+        {
+            new ParseStackElement(parser);
+        }
     }
 }

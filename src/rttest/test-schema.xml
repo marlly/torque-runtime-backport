@@ -3,6 +3,9 @@
 <!-- this schema is used to test problems users reported -->
 
 <database name="@DATABASE_DEFAULT@" defaultIdMethod="idbroker" package="org.apache.torque.test">
+
+  <external-schema filename="ext-schema.xml" />
+
   <!-- TRQS15 -->
   <table name="varchar_pk">
     <column name="test_key" required="true" primaryKey="true" type="VARCHAR" size="30" />
@@ -54,6 +57,26 @@
     </foreign-key>
   </table>
 
+  <!-- reference to external schema -->
+  <table name="ext_schema">
+    <column name="ext_schema_id" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="ext_id" type="INTEGER"/>
+    <column name="test" required="true" type="INTEGER"/>
+
+    <foreign-key foreignTable="ext">
+      <reference local="ext_id" foreign="ext_id"/>
+    </foreign-key>
+  </table>
+
+  <table name="extext_schema">
+    <column name="extext_schema_id" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="extext_id" type="INTEGER"/>
+    <column name="test" required="true" type="INTEGER"/>
+
+    <foreign-key foreignTable="extext">
+      <reference local="extext_id" foreign="extext_id"/>
+    </foreign-key>
+  </table>
 
 </database>
 

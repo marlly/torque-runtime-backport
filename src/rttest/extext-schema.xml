@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+<database
+  name="@DATABASE_DEFAULT@"
+  defaultIdMethod="@DATABASE_ID_METHOD@">
+
+  <table name="extext">
+    <column
+      name="extext_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="test"
+      required="true"
+      type="VARCHAR"
+      size="15"
+    />
+  </table>
+</database>
