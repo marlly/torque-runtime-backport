@@ -37,6 +37,15 @@
       <reference local="singlepk_id" foreign="singlepk_id"/>
     </foreign-key>
   </table>
+
+  <table name="singlefk1">
+    <column name="id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="singlepk_id" required="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+    <foreign-key foreignTable="singlefk" onUpdate="cascade" onDelete="setnull">
+      <reference local="singlepk_id" foreign="id"/>
+    </foreign-key>
+  </table>
   
   <table name="multifk">
     <column name="id" required="true" primaryKey="true" type="INTEGER" />

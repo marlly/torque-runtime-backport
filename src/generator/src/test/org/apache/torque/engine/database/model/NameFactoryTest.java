@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,9 @@ package org.apache.torque.engine.database.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.torque.engine.EngineException;
+
 import junit.framework.TestCase;
 
 /**
@@ -183,6 +186,21 @@ public class NameFactoryTest extends TestCase
                     generated,
                     expected);
             }
+        }
+    }
+    
+    /**
+     * @throws Exception on fail
+     */
+    public void testException() throws Exception
+    {
+        try
+        {
+            NameFactory.generateName("non.existing.class", new ArrayList());
+            assertTrue("Expected an EngineException", false);           
+        }
+        catch (EngineException ex)
+        {
         }
     }
 

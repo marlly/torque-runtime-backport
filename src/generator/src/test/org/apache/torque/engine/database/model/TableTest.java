@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -141,6 +141,20 @@ public class TableTest extends TestCase
         ForeignKey fk = (ForeignKey) fks.get(0);
         assertEquals(fk.getForeignTableName(), "singlepk");
         assertTrue(fk.getForeignColumns().size() == 1);
+        assertFalse(fk.hasOnDelete());
+        assertFalse(fk.hasOnUpdate());
+    }
+
+    public void testOnUpdateOnDelete() throws Exception
+    {
+        Table table = db.getTable("singlefk1");
+        List fks = table.getForeignKeys();
+        assertTrue(fks.size() == 1);
+        ForeignKey fk = (ForeignKey) fks.get(0);
+        assertTrue(fk.hasOnUpdate());
+        assertEquals("CASCADE", fk.getOnUpdate());
+        assertTrue(fk.hasOnDelete());
+        assertEquals("SET NULL", fk.getOnDelete());
     }
 
     public void testMultiFk() throws Exception
