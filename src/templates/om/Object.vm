@@ -14,7 +14,6 @@ package ${package};
 
 import java.util.*;
 import java.math.*;
-import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.*;
 import org.apache.torque.util.BasePeer;
@@ -76,7 +75,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #if (!$col.isPrimitive() && $cjtype != "String")
                   #set ( $defaultValue = "new ${cjtype}($defaultValue)" )
               #end
-              #set ($defVal = "=$quote$defaultValue$quote")
+              #set ($defVal = " = $quote$defaultValue$quote")
           #end
         #end
 
@@ -115,7 +114,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         /**
          * Set the value of $cfc
          */
-        public void set${cfc}($cjtype v ) $throwsClause
+        public void set${cfc}($cjtype v) $throwsClause
         {
           #if ( ($cjtype == "NumberKey")
                || ($cjtype == "StringKey")
@@ -142,7 +141,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         if (this.$clo != v)
         {
  #else
-        if ( !Objects.equals(this.$clo, v) )
+        if (!Objects.equals(this.$clo, v))
         {
  #end
             this.$clo = v;
@@ -162,7 +161,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $varName = "a$tblFK.JavaName" )
             #end
 
-        if ($varName != null &&  !Objects.equals(${varName}.get${colFK.JavaName}(), v) )
+        if ($varName != null && !Objects.equals(${varName}.get${colFK.JavaName}(), v))
         {
             $varName = null;
         }
@@ -180,9 +179,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #end
 
               // update associated $tblFK.JavaName
-              if ($collName != null )
+              if ($collName != null)
               {
-                  for (int i=0; i<${collName}.size(); i++)
+                  for (int i = 0; i < ${collName}.size(); i++)
                   {
                       ((${tblFK.JavaName})${collName}.get(i))
                           .set${colFK.JavaName}(v);
@@ -199,7 +198,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      /**
       * Set the value of $cfc as a string.
       */
-      public void set${cfc}(String v ) $throwsClause
+      public void set${cfc}(String v) $throwsClause
       {
            set${cfc}(new ${cjtype}(v));
       }
@@ -296,7 +295,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         return $varName;
     }
 
-
     /**
      * Provides convenient way to set a relationship based on a
      * ObjectKey.  e.g.
@@ -326,7 +324,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         set${col.JavaName}(($col.JavaNative)key);
     #end
     }
-
  #end   ## end of foreach loop over foreign keys
 
  ##
@@ -435,7 +432,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         else
         {
             // criteria has no effect for a new object
-            if ( !isNew() )
+            if (!isNew())
             {
                 // the following code is to determine if a new query is
                 // called for.  If the criteria is the same as the last
@@ -446,7 +443,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
    #end
-                if ( !last${relCol}Criteria.equals(criteria)  )
+                if (!last${relCol}Criteria.equals(criteria))
                 {
                     $collName = ${className}Peer.doSelect(criteria);
                 }
@@ -530,7 +527,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ($collName == null)
         {
-            if ( isNew() )
+            if (isNew())
             {
                $collName = new ArrayList();
             }
@@ -557,7 +554,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
    #end
-            if ( !last${relCol}Criteria.equals(criteria)  )
+            if (!last${relCol}Criteria.equals(criteria))
             {
                 $collName = ${className}Peer.doSelectJoin${relCol2}(criteria);
             }
@@ -588,7 +585,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ($collName == null)
         {
-            if ( isNew() )
+            if (isNew())
             {
                $collName = new ArrayList();
             }
@@ -615,7 +612,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
    #end
-            if ( !last${relCol}Criteria.equals(criteria)  )
+            if (!last${relCol}Criteria.equals(criteria))
             {
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
             }
@@ -738,7 +735,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #foreach ($col in $table.Columns)
       #set ( $cfc = $col.JavaName )
       #set ( $cjtype = $col.JavaNative )
-    if ( pos == $i )
+    if (pos == $i)
     {
       #if ($cjtype == "int")
         return new Integer(get${cfc}());
@@ -784,12 +781,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         {
             if (isNew())
             {
-                ${table.JavaName}Peer.doInsert(($table.JavaName)this);
+                ${table.JavaName}Peer.doInsert(($table.JavaName) this);
                 setNew(false);
             }
             else
             {
-                ${table.JavaName}Peer.doUpdate(($table.JavaName)this);
+                ${table.JavaName}Peer.doUpdate(($table.JavaName) this);
             }
         }
  #end
@@ -825,17 +822,17 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         {
             try
             {
-                con = BasePeer.getConnection( dbName );
+                con = BasePeer.getConnection(dbName);
                 if (isNew())
                 {
                     ${table.JavaName}Peer
-                        .doInsert(($table.JavaName)this, con);
+                        .doInsert(($table.JavaName) this, con);
                     setNew(false);
                 }
                 else
                 {
                     ${table.JavaName}Peer
-                        .doUpdate(($table.JavaName)this, con);
+                        .doUpdate(($table.JavaName) this, con);
                 }
             }
             finally
@@ -881,7 +878,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
       #foreach ($aVarName in $aVars)
         #set($i = $velocityCount - 1)
         if ($aVarName != null)
-        {   
+        {
             ${aVarName}.save(con);
             set$pVars.get($i)($aVarName);
         }
@@ -896,12 +893,12 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         {
             if (isNew())
             {
-                ${table.JavaName}Peer.doInsert(($table.JavaName)this, con);
+                ${table.JavaName}Peer.doInsert(($table.JavaName) this, con);
                 setNew(false);
             }
             else
             {
-                ${table.JavaName}Peer.doUpdate(($table.JavaName)this, con);
+                ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
             }
         }
 
@@ -925,11 +922,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #end
         #set ( $collName = "coll$relCol" )
 
-          if ($collName != null )
+          if ($collName != null)
           {
-              for (int i=0; i<${collName}.size(); i++)
+              for (int i = 0; i < ${collName}.size(); i++)
               {
-                  ((${className})${collName}.get(i)).save(con);
+                  ((${className}) ${collName}.get(i)).save(con);
               }
           }
      #end
@@ -975,8 +972,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      * @param  $clo ObjectKey
      */
     public void setPrimaryKey(ObjectKey $clo)
-        $throwsClause {
-         set${col.JavaName}(($cjtype)$clo);
+        $throwsClause
+    {
+        set${col.JavaName}(($cjtype)$clo);
     }
 
     /**
@@ -1014,7 +1012,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 #end
      */
     public void setPrimaryKey($argList)
-        $throwsClause {
+        $throwsClause
+    {
 #foreach ($col in $table.PrimaryKeys)
          set${col.JavaName}($col.Name.toLowerCase());
 #end
@@ -1029,7 +1028,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 #end
      */
     public void setPrimaryKey($argList2)
-        $throwsClause {
+        $throwsClause
+    {
 #foreach ($col in $table.PrimaryKeys)
          set${col.JavaName}(new ${col.JavaNative}($col.Name.toLowerCase()));
 #end
@@ -1045,7 +1045,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      #set ($int = "int ")
      #foreach ($col in $table.PrimaryKeys)
         ${int}colonPos = key.indexOf(':', prevPos);
-        set${col.JavaName}( new ${col.JavaNative}(key.substring(prevPos, colonPos)) );
+        set${col.JavaName}(new ${col.JavaNative}(key.substring(prevPos, colonPos)));
         prevPos = colonPos + 1;
         #set ($int = "")
      #end
@@ -1152,11 +1152,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #end
 
         ${list}v = get${pCollName}();
-        for (int i=0; i<v.size(); i++)
+        for (int i = 0; i < v.size(); i++)
         {
             $className obj = ($className) v.get(i);
             copyObj.add$pCollNameNoS(obj.copy());
-            ((Persistent)v.get(i)).setNew(true);
+            ((Persistent) v.get(i)).setNew(true);
         }
         #set ( $list = "" )
     #end
