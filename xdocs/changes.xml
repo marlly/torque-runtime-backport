@@ -29,6 +29,16 @@
   </ul>
 </p>
 </subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      TRQS152: Oracle DB using Criteria to select by Data doesn't work
+    </li>
+  </ul>
+</p>
+</subsection>
 </section>
 
 <section name="Torque 3.1-alpha2">
