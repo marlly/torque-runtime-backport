@@ -723,7 +723,7 @@ public class TorqueSingleton
         map.setIdTable("ID_TABLE");
         TableMap tMap = map.getIdTable();
         tMap.addPrimaryKey("ID_TABLE_ID", new Integer(0));
-        tMap.addColumn("TABLE_NAME", new String(""));
+        tMap.addColumn("TABLE_NAME", "");
         tMap.addColumn("NEXT_ID", new Integer(0));
         tMap.addColumn("QUANTITY", new Integer(0));
     }
