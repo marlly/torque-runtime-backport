@@ -139,6 +139,7 @@ public class Torque
     {
         dbMaps = new HashMap();
         pools = new HashMap();
+        DBFactory.init(configuration);
 
         // Create monitor thread
         monitor = new Monitor();
@@ -148,8 +149,6 @@ public class Torque
         // to terminate in an orderly manner.
         monitor.setDaemon(true);
         monitor.start();
-
-        DBFactory.init(configuration);
     }
 
     /**
@@ -158,6 +157,20 @@ public class Torque
      * @param configFile The path to the configuration file.
      */
     public static void init(String configFile)
+        throws Exception
+    {
+        ExtendedProperties c = new ExtendedProperties(configFile);
+        c = c.subset("services.DatabaseService");
+
+        Properties p = new Properties();
+        p.load(new FileInputStream(configFile));
+        PropertyConfigurator.configure(p);
+
+        Torque.setConfiguration(c);
+        Torque.init();
+    }
+
+    public static void init2(String configFile)
         throws Exception
     {
         ExtendedProperties c = new ExtendedProperties(configFile);
