@@ -33,6 +33,25 @@
   <target
     name="update-jars">
 
+    <mkdir dir="${lib.repo}/velocity/jars/" />
+    <mkdir dir="${lib.repo}/xerces/jars/" />
+    <mkdir dir="${lib.repo}/xml-apis/jars/" />
+    <mkdir dir="${lib.repo}/village/jars/" />
+    <mkdir dir="${lib.repo}/log4j/jars/" />
+    <mkdir dir="${lib.repo}/commons-beanutils/jars/" />
+    <mkdir dir="${lib.repo}/commons-collections/jars/" />
+    <mkdir dir="${lib.repo}/commons-configuration/jars/" />
+    <mkdir dir="${lib.repo}/commons-jdbc2pool/jars/" />
+    <mkdir dir="${lib.repo}/commons-lang/jars/" />
+    <mkdir dir="${lib.repo}/commons-logging/jars/" />
+    <mkdir dir="${lib.repo}/commons-pool/jars/" />
+    <mkdir dir="${lib.repo}/jdbc/jars/" />
+    <mkdir dir="${lib.repo}/jndi/jars/" />
+    <mkdir dir="${lib.repo}/junit/jars/" />
+    <mkdir dir="${lib.repo}/stratum/jars/" />
+    <mkdir dir="${lib.repo}/jcs/jars/" />
+    <mkdir dir="${lib.repo}/tomcat/jars/" />
+
     <taskdef
       name="httpget"
       className="org.apache.tdk.task.Get">
@@ -48,9 +67,9 @@
     -->
 
     <httpget
-      baseUrl="http://jakarta.apache.org/turbine/jars/"
+      baseUrl="http://jakarta.apache.org/turbine/jars2/"
       dest="${lib.repo}"
-      dependencyFile="deps.list"
+      dependencyFile="jars.list"
     />
 
   </target>
