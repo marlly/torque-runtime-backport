@@ -202,7 +202,8 @@
   <!-- C O M P I L E                                                      -->
   <!-- ================================================================== -->
   
-  <target name="compile" depends="prepare" description="==> compiles the source code">
+  <target name="compile" depends="prepare"
+          description="==> compiles the source code">
     <javac srcdir="${build.src}"
       destdir="${build.dest}"
       excludes="**/package.html"
@@ -217,7 +218,7 @@
       todir="${build.dest}/org/apache/torque/engine/database/transform"/>
   </target>
 
-  <target name="compile-test" depends="prepare,compile" if="junit.present"
+  <target name="compile-test" depends="compile" if="junit.present"
           description="==> compiles the test source code">
     <mkdir dir="${build.test}"/>
 
