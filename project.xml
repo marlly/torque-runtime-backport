@@ -194,7 +194,7 @@
     </dependency>
     <dependency>
       <id>commons-beanutils</id>
-      <version>1.5</version>
+      <version>1.6.1</version>
       <url>http://jakarta.apache.org/commons/beanutils.html</url>
     </dependency>
     <dependency>
@@ -224,7 +224,7 @@
     </dependency>
     <dependency>
       <id>commons-pool</id>
-      <version>1.0</version>
+      <version>1.0.1</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
     </dependency>
     <dependency>
