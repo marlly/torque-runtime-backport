@@ -769,10 +769,26 @@ torque.database.bookstore.password = password
   ant project-create-db  
                 ]]></source>
                 <p>
+                    Note: this will fail in the current beta version of
+                    Torque due to an oversight that will be corrected in
+                    the next beta.  The fix is relatively simple, remove
+                    the following attributes from the
+                    <em>project-create-db</em> Ant task in
+                    <em>build.xml</em> (don't delete the '&gt;' on the
+                    <em>databaseHost</em> line!):
+                </p>
+                <source><![CDATA[
+  targetPlatform="${platform}"
+  databaseUser="${databaseUser}"
+  databasePassword="${databasePassword}"
+  databaseHost="${databaseHost}"
+                 ]]></source>
+                <p>
                     To create your tables, type the following command in
                     the top-level <em>torque</em> directory:
                 </p>
                 <source><![CDATA[
+  ant id-table-init-sql
   ant project-insert-sql  
                 ]]></source>
                 <p>
