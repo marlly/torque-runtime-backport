@@ -74,6 +74,7 @@ Java class or method name.
         | DATE | TIME    | TIMESTAMP   | BINARY     | VARBINARY | LONGVARBINARY
         | NULL | OTHER   | JAVA_OBJECT | DISTINCT   | STRUCT    | ARRAY
         | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
+        | DOUBLE
     ) "VARCHAR"       
   size CDATA #IMPLIED
   default CDATA #IMPLIED
