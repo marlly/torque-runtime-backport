@@ -1,0 +1,15 @@
+This patch allows a program to traverse the Map Builder and its
+database, table and column maps to examine and modify the Torque
+generated objects.
+
+At the moment, the ColumnMap contains only the SQL name of a column
+which can differ from the java name used for introspection (and in the
+generated beans) by using the javaName attribute in the XML file.
+
+You must rebuild your schema and your application after applying this
+patch because some of the method signatures in the TableMap class are
+changed.
+
+
+
+

@@ -1,0 +1,271 @@
+diff -u -b -r1.3 MapBuilder.vm
+--- db-torque/src/generator/src/templates/om/MapBuilder.vm	7 Aug 2003 13:13:00 -0000	1.3
++++ db-torque/src/generator/src/templates/om/MapBuilder.vm	17 Oct 2003 12:03:34 -0000
+@@ -122,18 +122,18 @@
+   #if($col.isPrimaryKey())
+     #if($col.isForeignKey())
+         tMap.addForeignPrimaryKey(
+-                "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" ,
++                "${table.Name}.$cup", "$cfc", $col.JavaObject , "$col.RelatedTableName" ,
+                 "$col.RelatedColumnName");
+     #else
+-        tMap.addPrimaryKey("${table.Name}.$cup", $col.JavaObject);
++        tMap.addPrimaryKey("${table.Name}.$cup", "$cfc", $col.JavaObject);
+     #end
+   #else
+     #if($col.isForeignKey())
+         tMap.addForeignKey(
+-                "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" ,
++                "${table.Name}.$cup", "$cfc", $col.JavaObject , "$col.RelatedTableName" ,
+                 "$col.RelatedColumnName");
+     #else
+-        tMap.addColumn("${table.Name}.$cup", $col.JavaObject);
++        tMap.addColumn("${table.Name}.$cup", "$cfc", $col.JavaObject);
+     #end
+   #end
+ #end
+Index: db-torque/src/java/org/apache/torque/TorqueInstance.java
+===================================================================
+RCS file: /home/cvs/db-torque/src/java/org/apache/torque/TorqueInstance.java,v
+retrieving revision 1.5
+diff -u -b -r1.5 TorqueInstance.java
+--- db-torque/src/java/org/apache/torque/TorqueInstance.java	5 Aug 2003 18:09:35 -0000	1.5
++++ db-torque/src/java/org/apache/torque/TorqueInstance.java	17 Oct 2003 12:03:34 -0000
+@@ -706,10 +706,10 @@
+     {
+         map.setIdTable("ID_TABLE");
+         TableMap tMap = map.getIdTable();
+-        tMap.addPrimaryKey("ID_TABLE_ID", new Integer(0));
+-        tMap.addColumn("TABLE_NAME", "");
+-        tMap.addColumn("NEXT_ID", new Integer(0));
+-        tMap.addColumn("QUANTITY", new Integer(0));
++        tMap.addPrimaryKey("ID_TABLE_ID", "IdTableId", new Integer(0));
++        tMap.addColumn("TABLE_NAME", "TableName", "");
++        tMap.addColumn("NEXT_ID", "NextId", new Integer(0));
++        tMap.addColumn("QUANTITY", "Quantity", new Integer(0));
+     }
+ 
+     /**
+Index: db-torque/src/java/org/apache/torque/map/ColumnMap.java
+===================================================================
+RCS file: /home/cvs/db-torque/src/java/org/apache/torque/map/ColumnMap.java,v
+retrieving revision 1.7
+diff -u -b -r1.7 ColumnMap.java
+--- db-torque/src/java/org/apache/torque/map/ColumnMap.java	21 Mar 2003 17:31:08 -0000	1.7
++++ db-torque/src/java/org/apache/torque/map/ColumnMap.java	17 Oct 2003 12:03:34 -0000
+@@ -86,6 +86,9 @@
+     /** The name of the column. */
+     private String columnName;
+ 
++    /** The java name of the column. */
++    private String javaName;
++
+ 
+     /**
+      * Constructor.
+@@ -107,6 +110,26 @@
+     public String getColumnName()
+     {
+         return columnName;
++    }
++
++    /**
++     * Set the java name of this column.
++     *
++     * @param javaName The name for this property
++     */
++    public void setJavaName(String javaName)
++    {
++        this.javaName = javaName;
++    }
++
++    /**
++     * Get the java name of a column.
++     *
++     * @return A String with the column name.
++     */
++    public String getJavaName()
++    {
++        return javaName;
+     }
+ 
+     /**
+Index: db-torque/src/java/org/apache/torque/map/TableMap.java
+===================================================================
+RCS file: /home/cvs/db-torque/src/java/org/apache/torque/map/TableMap.java,v
+retrieving revision 1.13
+diff -u -b -r1.13 TableMap.java
+--- db-torque/src/java/org/apache/torque/map/TableMap.java	23 Aug 2003 13:18:54 -0000	1.13
++++ db-torque/src/java/org/apache/torque/map/TableMap.java	17 Oct 2003 12:03:34 -0000
+@@ -321,120 +321,143 @@
+      * Add a column to this table of a certain type.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      */
+-    public void addColumn(String columnName, Object type)
++    public void addColumn(String columnName, 
++                          String javaName,
++                          Object type)
+     {
+-        addColumn(columnName, type, false, null, null, 0);
++        addColumn(columnName, javaName, type, false, null, null, 0);
+     }
+ 
+     /**
+      * Add a column to this table of a certain type and size.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param size An int specifying the size.
+      */
+-    public void addColumn(String columnName, Object type, int size)
++    public void addColumn(String columnName,
++                          String javaName,
++                          Object type, 
++                          int size)
+     {
+-        addColumn(columnName, type, false, null, null, size);
++        addColumn(columnName, javaName, type, false, null, null, size);
+     }
+ 
+     /**
+      * Add a primary key column to this Table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      */
+-    public void addPrimaryKey(String columnName, Object type)
++    public void addPrimaryKey(String columnName,
++                              String javaName,
++                              Object type)
+     {
+-        addColumn(columnName, type, true, null, null, 0);
++        addColumn(columnName, javaName, type, true, null, null, 0);
+     }
+ 
+     /**
+      * Add a primary key column to this Table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param size An int specifying the size.
+      */
+-    public void addPrimaryKey(String columnName, Object type, int size)
++    public void addPrimaryKey(String columnName, 
++                              String javaName,
++                              Object type, 
++                              int size)
+     {
+-        addColumn(columnName, type, true, null, null, size);
++        addColumn(columnName, javaName, type, true, null, null, size);
+     }
+ 
+     /**
+      * Add a foreign key column to the table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param fkTable A String with the foreign key table name.
+      * @param fkColumn A String with the foreign key column name.
+      */
+     public void addForeignKey(String columnName,
++                              String javaName,
+                               Object type,
+                               String fkTable,
+                               String fkColumn)
+     {
+-        addColumn(columnName, type, false, fkTable, fkColumn, 0);
++        addColumn(columnName, javaName, type, false, fkTable, fkColumn, 0);
+     }
+ 
+     /**
+      * Add a foreign key column to the table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param fkTable A String with the foreign key table name.
+      * @param fkColumn A String with the foreign key column name.
+      * @param size An int specifying the size.
+      */
+     public void addForeignKey(String columnName,
++                              String javaName,
+                               Object type,
+                               String fkTable,
+                               String fkColumn,
+                               int size)
+     {
+-        addColumn(columnName, type, false, fkTable, fkColumn, size);
++        addColumn(columnName, javaName, type, false, fkTable, fkColumn, size);
+     }
+ 
+     /**
+      * Add a foreign primary key column to the table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param fkTable A String with the foreign key table name.
+      * @param fkColumn A String with the foreign key column name.
+      */
+     public void addForeignPrimaryKey(String columnName,
++                                     String javaName,
+                                      Object type,
+                                      String fkTable,
+                                      String fkColumn)
+     {
+-        addColumn(columnName, type, true, fkTable, fkColumn, 0);
++        addColumn(columnName, javaName, type, true, fkTable, fkColumn, 0);
+     }
+ 
+     /**
+      * Add a foreign primary key column to the table.
+      *
+      * @param columnName A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param fkTable A String with the foreign key table name.
+      * @param fkColumn A String with the foreign key column name.
+      * @param size An int specifying the size.
+      */
+     public void addForeignPrimaryKey(String columnName,
++                                     String javaName,
+                                      Object type,
+                                      String fkTable,
+                                      String fkColumn,
+                                      int size)
+     {
+-        addColumn(columnName, type, true, fkTable, fkColumn, size);
++        addColumn(columnName, javaName, type, true, fkTable, fkColumn, size);
+     }
+ 
+     /**
+      * Add a column to the table.
+      *
+      * @param name A String with the column name.
++     * @param javaName A string with the Java property name
+      * @param type An Object specifying the type.
+      * @param pk True if column is a primary key.
+      * @param fkTable A String with the foreign key table name.
+@@ -442,6 +465,7 @@
+      * @param size An int specifying the size.
+      */
+     private void addColumn(String name,
++                           String javaName,
+                            Object type,
+                            boolean pk,
+                            String fkTable,
+@@ -464,6 +488,7 @@
+             }
+         }
+         ColumnMap col = new ColumnMap(name, this);
++        col.setJavaName(javaName);
+         col.setType(type);
+         col.setPrimaryKey(pk);
+         col.setForeignKey(fkTable, fkColumn);

@@ -1,0 +1,33 @@
+Did you actually know that there are no peer / object classes for the
+ID_TABLE used by the IDBroker of Torque?
+
+Do you want to know the reason why? You can't build them! Try it. If
+you do, you will notice that there is a clash between the constant for
+the TABLE_NAME column (which is called IdTablePeer.TABLE_NAME) and the
+TABLE_NAME constant which contains the Name of the table (IdTable).
+
+This quite largeish patch does two things (besides being quite intrusive
+and not much tested):
+
+- It prefixes all the columns from the ID_TABLE with "ID_TABLE_". So TABLE_NAME
+  becomes ID_TABLE_TABLE_NAME and NEXT_ID becomes TABLE_NAME_NEXT_ID
+
+  Yes, you must rebuild your database scheme after rebuilding your SQL/OM
+  with this patch applied. 
+
+- It adds (besides reworking the build process and removing a few bugs)
+  torque generated peer classes and a mapper to the torque.jar. These are
+  in org.apache.torque.oid.om. If you actually want to _use_ the Peer, 
+  you must make sure that it registers correctly with your database map
+  (it has database "default" hard coded) so you won't get any clashes
+  (Torque itself patches up some sort of "virtual aka hacked" table map
+  for the ID_TABLE of each database, which then in turn contains the 
+  right database name instead of being hardcoded on "default". This wants
+  more testing!
+
+This patch definitely is 3.2 material. Please test. It applies only if
+you have applied the java-columname patch before it (else you will get 
+rejects in TorqueInstance). 
+
+
+
