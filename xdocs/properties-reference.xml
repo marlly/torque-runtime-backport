@@ -276,15 +276,6 @@
   </td>
 </tr>
 <tr>
-  <td><code> torque.overloadKeySetters </code></td>
-  <td><code> true </code></td>
-  <td>
-    If false, this prevents overloading of the setter method for
-    primary/foreign keys.  This is useful when working with broken
-    JavaBean implementations.
-  </td>
-</tr>
-<tr>
   <td><code> torque.useClasspath </code></td>
   <td><code> false </code></td>
   <td>
