@@ -624,11 +624,19 @@ public class Torque
 
     public static  String getDefaultDB()
     {
+        if (configuration == null)
+        {
+            return "default";
+        }
         return configuration.getString(DATABASE_DEFAULT,"default");
     }
 
     public static  String getDefaultMap()
     {
+        if (configuration == null)
+        {
+            return "default";
+        }
         return configuration.getString(DATABASE_DEFAULT,"default");
     }
 }
