@@ -81,7 +81,6 @@ public class MethodResultCache
     private static final String keyClassName =
         "org.apache.torque.manager.MethodCacheKey";
     private ObjectPool pool;
-    private Map keys;
     private GroupCacheAccess jcsCache;
     private boolean lockCache;
     private int inGet;
@@ -90,7 +89,7 @@ public class MethodResultCache
     public MethodResultCache(GroupCacheAccess cache)
         throws TorqueException
     {
-        keys = new WeakHashMap();            
+        // keys = new WeakHashMap();            
         this.jcsCache = cache;            
         groups = new HashMap();
         pool = new StackObjectPool(new MethodCacheKey.Factory(), 10000);
@@ -103,22 +102,7 @@ public class MethodResultCache
             try
             {
                 jcsCache.remove();
-
-                // clear out local map of keys, return to pool
-                Iterator i = keys.keySet().iterator();
-                while (i.hasNext()) 
-                {
-                    try
-                    {
-                        pool.returnObject(i.next());
-                    }
-                    catch (Exception e)
-                    {
-                        log.warn(
-                            "Nonfatal error. Could not return key to pool", e);
-                    }
-                }
-                keys.clear();
+                groups.clear();
             }
             catch (CacheException ce)
             {
@@ -269,7 +253,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }            
         }
         return result;
@@ -299,7 +283,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -329,7 +313,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -360,7 +344,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -389,7 +373,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -406,7 +390,7 @@ public class MethodResultCache
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("", e);
         }
     }
 
@@ -422,7 +406,7 @@ public class MethodResultCache
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("", e);
         }
     }
 
@@ -438,7 +422,7 @@ public class MethodResultCache
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("", e);
         }
     }
 
@@ -454,7 +438,7 @@ public class MethodResultCache
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("", e);
         }
     }
 
@@ -469,7 +453,7 @@ public class MethodResultCache
         }
         catch (Exception e)
         {
-            log.error(e);
+            log.error("", e);
         }
     }
 
@@ -498,7 +482,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }            
         }
     }
@@ -527,7 +511,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }            
         }
         return result;
@@ -557,7 +541,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -587,7 +571,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -618,7 +602,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
@@ -647,7 +631,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("", e);
             }
         }
         return result;
