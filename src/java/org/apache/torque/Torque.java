@@ -54,6 +54,7 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -192,7 +193,17 @@ public class Torque
             // Get the applicationRoot for use in the log4j
             // properties.
             String applicationRoot = c.getString("applicationRoot", ".");
-        
+            
+            File logsDir = new File(applicationRoot, "logs");
+            
+            if (logsDir.exists() == false)
+            {
+                if (logsDir.mkdirs() == false)
+                {
+                    System.err.println("Cannot create logs directory!");
+                }                    
+            }
+            
             Properties p = new Properties();
             p.load(new FileInputStream(configFile));
             // Set the applicationRoot in the log4j properties so that
