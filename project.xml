@@ -166,6 +166,16 @@
       </roles>
     </developer>
 
+    <developer>
+      <name>Quinton McCombs</name>
+      <id>quintonm</id>
+      <email>quintonm@bellsouth.net</email>
+      <organization>NEqualsOne</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
   </developers>
 
   <contributors>
