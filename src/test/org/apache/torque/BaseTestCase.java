@@ -75,6 +75,11 @@ import junit.framework.TestCase;
 public abstract class BaseTestCase extends TestCase
 {
     /**
+     * Conditional compilation flag.
+     */
+    private static final boolean DEBUG = false;
+
+    /**
      * The path to the configuration file.
      */
     private static final String CONFIG_FILE =
@@ -113,8 +118,11 @@ public abstract class BaseTestCase extends TestCase
             ExtendedProperties config = new ExtendedProperties(CONFIG_FILE);
             // HELP: What about the database.* properties?
             config = config.subset("services.DatabaseService");
-            System.out.println("Using configuration file: " +
-                               config.getString(Torque.DATABASE_DEFAULT));
+            if (DEBUG)
+            {
+                System.out.println("Using configuration file: " +
+                                   config.getString(Torque.DATABASE_DEFAULT));
+            }
 
             Properties p = new Properties();
             p.load(new FileInputStream(CONFIG_FILE));
