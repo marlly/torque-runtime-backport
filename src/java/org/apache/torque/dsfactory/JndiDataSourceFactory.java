@@ -54,49 +54,27 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import java.io.IOException;
-import java.sql.Connection;
 import javax.sql.DataSource;
-import java.beans.PropertyDescriptor;
-import java.beans.PropertyEditorManager;
-import java.beans.PropertyEditor;
-import java.lang.reflect.Method;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Properties;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingException;
-import org.apache.log4j.Category;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.stratum.lifecycle.Configurable;
-import org.apache.stratum.lifecycle.Initializable;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.beanutils.MappedPropertyDescriptor;
 import org.apache.torque.TorqueException;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able
- * to deploy the DataSource based on properties found in the 
+ * to deploy the DataSource based on properties found in the
  * configuration.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
-public class JndiDataSourceFactory 
+public class JndiDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
@@ -112,7 +90,7 @@ public class JndiDataSourceFactory
         DataSource ds = null;
         try
         {
-            ds = ((DataSource)ctx.lookup(path));
+            ds = ((DataSource) ctx.lookup(path));
         }
         catch (Exception e)
         {
@@ -127,7 +105,7 @@ public class JndiDataSourceFactory
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public void initialize(Configuration configuration) 
+    public void initialize(Configuration configuration)
         throws TorqueException
     {
         if (configuration == null)
@@ -135,7 +113,7 @@ public class JndiDataSourceFactory
             throw new TorqueException("Torque cannot be initialized without " +
                 "a valid configuration. Please check the log files " +
                     "for further details.");
-        }        
+        }
         initJNDI(configuration);
         initDataSource(configuration);
     }
@@ -144,10 +122,10 @@ public class JndiDataSourceFactory
     private void initJNDI(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initJNDI"); 
+        category.debug("Starting initJNDI");
         Hashtable env = null;
         Configuration c = configuration.subset("jndi");
-        if (c == null) 
+        if (c == null)
         {
             throw new TorqueException("JndiDataSourceFactory requires a jndi "
                 + "path property to lookup the DataSource in JNDI.");
@@ -157,27 +135,28 @@ public class JndiDataSourceFactory
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();                
+                String key = (String) i.next();
                 if (key.equals("path"))
                 {
                     path = c.getString(key);
                     category.debug("JNDI path: " + path);
                 }
-                else                 {
-                    if (env == null) 
+                else
+                {
+                    if (env == null)
                     {
                         env = new Hashtable();
                     }
                     String value = c.getString(key);
-                    env.put(key, value); 
+                    env.put(key, value);
                     category.debug("Set jndi property: " + key + "=" + value);
                 }
             }
-            if (env == null) 
+            if (env == null)
             {
                 ctx = new InitialContext();
             }
-            else 
+            else
             {
                 ctx = new InitialContext(env);
             }
@@ -188,47 +167,46 @@ public class JndiDataSourceFactory
         {
             category.error("", e);
             throw new TorqueException(e);
-        }        
+        }
     }
 
     private void initDataSource(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initDataSources"); 
+        category.debug("Starting initDataSources");
         Configuration c = configuration.subset("datasource");
         try
         {
-            if (c != null) 
-            {            
+            if (c != null)
+            {
                 Object ds = null;
                 Iterator i = c.getKeys();
                 while (i.hasNext())
                 {
-                    String key = (String)i.next();
+                    String key = (String) i.next();
                     if (key.equals("classname"))
                     {
                         String classname = c.getString(key);
-                        category.debug("Datasource class: "+classname);
+                        category.debug("Datasource class: " + classname);
 
                         Class dsClass = Class.forName(classname);
                         ds = dsClass.newInstance();
                     }
-                    else 
+                    else
                     {
-                        category.debug("Setting datasource property: " 
-                                       + key);
+                        category.debug("Setting datasource property: " + key);
                         setProperty(key, c, ds);
                     }
                 }
 
                 bindDStoJndi(ctx, path, ds);
-            }            
+            }
         }
         catch (Exception e)
         {
             category.error("", e);
             throw new TorqueException(e);
-        }    
+        }
     }
 
     private void debugCtx(Context ctx)
@@ -237,61 +215,61 @@ public class JndiDataSourceFactory
         category.debug("InitialContext -------------------------------");
         Map env = ctx.getEnvironment();
         Iterator qw = env.keySet().iterator();
-        category.debug("Environment properties:" + env.size() );
-        while ( qw.hasNext() ) 
+        category.debug("Environment properties:" + env.size());
+        while ( qw.hasNext() )
         {
             Object prop = qw.next();
-            category.debug("    " + prop + ": " + env.get(prop) );
+            category.debug("    " + prop + ": " + env.get(prop));
         }
         category.debug("----------------------------------------------");
     }
 
-    private void bindDStoJndi(Context ctx, String path, Object ds) 
+    private void bindDStoJndi(Context ctx, String path, Object ds)
         throws Exception
     {
         debugCtx(ctx);
 
         // add subcontexts, if not added already
         int start = path.indexOf(':') + 1;
-        if ( start > 0 ) 
+        if ( start > 0 )
         {
             path = path.substring(start);
         }
         StringTokenizer st = new StringTokenizer(path, "/");
-        while ( st.hasMoreTokens() ) 
+        while ( st.hasMoreTokens() )
         {
             String subctx = st.nextToken();
-            if ( st.hasMoreTokens() ) 
+            if ( st.hasMoreTokens() )
             {
                 try
                 {
                     ctx.createSubcontext(subctx);
-                    category.debug("Added sub context: "+subctx); 
+                    category.debug("Added sub context: " + subctx);
                 }
-                catch(NameAlreadyBoundException nabe)
+                catch (NameAlreadyBoundException nabe)
                 {
                     // ignore
                 }
-                catch(NamingException ne)
+                catch (NamingException ne)
                 {
                     // even though there is a specific exception
                     // for this condition, some implementations
                     // throw the more general one.
                     /*
-                      if (ne.getMessage().indexOf("already bound") == -1 ) 
+                      if (ne.getMessage().indexOf("already bound") == -1 )
                       {
                       throw ne;
                       }
                     */
                     // ignore
                 }
-                ctx = (Context)ctx.lookup(subctx);
+                ctx = (Context) ctx.lookup(subctx);
             }
-            else 
+            else
             {
                 // not really a subctx, it is the ds name
                 ctx.bind(subctx, ds);
-            }                        
+            }
         }
     }
 }

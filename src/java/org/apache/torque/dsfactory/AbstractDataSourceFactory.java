@@ -54,43 +54,9 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import java.io.IOException;
-import java.sql.Connection;
-import javax.sql.DataSource;
-import java.beans.PropertyDescriptor;
-import java.beans.PropertyEditorManager;
-import java.beans.PropertyEditor;
-import java.lang.reflect.Method;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Properties;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NameAlreadyBoundException;
-import javax.naming.NamingException;
 import org.apache.log4j.Category;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.helpers.NullEnumeration;
-import org.apache.torque.adapter.DB;
-import org.apache.torque.adapter.DBFactory;
-import org.apache.torque.map.DatabaseMap;
-import org.apache.torque.map.TableMap;
-import org.apache.torque.oid.IDGeneratorFactory;
-import org.apache.torque.oid.IDBroker;
-import org.apache.torque.util.BasePeer;
-import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.stratum.lifecycle.Configurable;
-import org.apache.stratum.lifecycle.Initializable;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
@@ -110,8 +76,7 @@ abstract class AbstractDataSourceFactory
     protected static Category category =
         Category.getInstance("org.apache.torque");
 
-    protected void setProperty(String property, Configuration c, 
-                                    Object ds)
+    protected void setProperty(String property, Configuration c, Object ds)
         throws Exception
     {
         String key = property;
@@ -119,11 +84,11 @@ abstract class AbstractDataSourceFactory
         int dot = property.indexOf('.');
         try
         {
-            if ( dot > 0 )
+            if (dot > 0)
             {
-                property = property.substring(0, dot);                
+                property = property.substring(0, dot);
 
-                MappedPropertyDescriptor mappedPD = 
+                MappedPropertyDescriptor mappedPD =
                     new MappedPropertyDescriptor(property, dsClass);
                 Class propertyType = mappedPD.getMappedPropertyType();
                 Configuration subProps = c.subset(property);
@@ -131,18 +96,18 @@ abstract class AbstractDataSourceFactory
                 Iterator j = subProps.getKeys();
                 while (j.hasNext())
                 {
-                    String subProp = (String)j.next();
+                    String subProp = (String) j.next();
                     String propVal = subProps.getString(subProp);
                     Object value = ConvertUtils.convert(propVal, propertyType);
                     PropertyUtils
                         .setMappedProperty(ds, property, subProp, value);
                 }
             }
-            else 
+            else
             {
-                Class propertyType = 
+                Class propertyType =
                     PropertyUtils.getPropertyType(ds, property);
-                Object value = 
+                Object value =
                     ConvertUtils.convert(c.getString(property), propertyType);
                 PropertyUtils.setSimpleProperty(ds, property, value);
             }
@@ -151,10 +116,9 @@ abstract class AbstractDataSourceFactory
         {
             category.error("Property: " + property + " value: "
                            + c.getString(key) +
-                           " is not supported by DataSource: " + 
+                           " is not supported by DataSource: " +
                            ds.getClass().getName());
             throw e;
         }
     }
-
 }

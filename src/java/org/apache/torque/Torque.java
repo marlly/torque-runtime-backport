@@ -56,11 +56,6 @@ package org.apache.torque;
 
 import java.io.IOException;
 import java.sql.Connection;
-import javax.sql.DataSource;
-import java.beans.PropertyDescriptor;
-import java.beans.PropertyEditorManager;
-import java.beans.PropertyEditor;
-import java.lang.reflect.Method;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Enumeration;
@@ -70,12 +65,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NameAlreadyBoundException;
-import javax.naming.NamingException;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -92,9 +81,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.beanutils.MappedPropertyDescriptor;
 
 /**
  * The implementation of Torque.
@@ -142,18 +128,18 @@ public class Torque implements Initializable, Configurable
      */
     private static Map dbMaps;
 
-    /** 
-     * The cache of DataSourceFactory's 
+    /**
+     * The cache of DataSourceFactory's
      */
     private static Map dsFactoryMap;
 
-    /** 
-     * The cache of datasources 
+    /**
+     * The cache of datasources
      */
     private static Map dsMap;
 
-    /** 
-     * The cache of DB adapter keys 
+    /**
+     * The cache of DB adapter keys
      */
     private static Map adapterMap;
 
@@ -258,17 +244,17 @@ public class Torque implements Initializable, Configurable
     private static final void initAdapters(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initAdapters"); 
+        category.debug("Starting initAdapters");
         adapterMap = new HashMap();
         Configuration c = configuration.subset("database");
-        if (c != null) 
-        {        
+        if (c != null)
+        {
         try
         {
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();                
+                String key = (String)i.next();
                 if (key.endsWith("adapter"))
                 {
                     String adapter = c.getString(key);
@@ -284,37 +270,37 @@ public class Torque implements Initializable, Configurable
             category.error("", e);
             throw new TorqueException(e);
         }
-            
+
         }
-        else 
+        else
         {
             category.warn("There were no adapters in the configuration.");
-        }        
+        }
     }
 
     private static void initDataSourceFactories(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initDSF"); 
+        category.debug("Starting initDSF");
         dsFactoryMap = new HashMap();
         Configuration c = configuration.subset("dsfactory");
-        if (c != null) 
+        if (c != null)
         {
             try
             {
                 Iterator i = c.getKeys();
                 while (i.hasNext())
                 {
-                    String key = (String)i.next();                
+                    String key = (String)i.next();
                     if (key.endsWith("factory"))
                     {
                         String classname = c.getString(key);
                         String handle = key.substring(0, key.indexOf('.'));
-                        category.debug("handle: " + handle + 
+                        category.debug("handle: " + handle +
                                        " DataSourceFactory: " + classname);
-                        
+
                         Class dsfClass = Class.forName(classname);
-                        DataSourceFactory dsf = 
+                        DataSourceFactory dsf =
                             (DataSourceFactory)dsfClass.newInstance();
                         dsf.initialize(c.subset(handle));
                         dsFactoryMap.put(handle, dsf);
@@ -708,7 +694,7 @@ public class Torque implements Initializable, Configurable
         try
         {
             String key = getDatabaseProperty(name, "driver");
-            if ( key == null || key.length() == 0 ) 
+            if ( key == null || key.length() == 0 )
             {
                 key = getDatabaseProperty(name, "adapter");
             }
@@ -788,7 +774,7 @@ public class Torque implements Initializable, Configurable
      *         rethrown wrapped into a TorqueException.
      */
     public static Connection getConnection()
-        throws TorqueException, java.sql.SQLException, 
+        throws TorqueException, java.sql.SQLException,
                javax.naming.NamingException
     {
         return getConnection(getDefaultDB());
