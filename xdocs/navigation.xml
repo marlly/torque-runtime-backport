@@ -12,6 +12,7 @@
     <menu name="Torque">
       <item name="Overview"              href="/index.html"/>
       <item name="News and Status"       href="/status.html"/>
+      <item name="Downloads"             href="/status.html"/>
       <item name="Schema Reference"      href="/schema-reference.html"/>
       <item name="Properties Reference"  href="/properties-reference.html"/>
     </menu>
@@ -36,7 +37,7 @@
     </menu>
     <menu name="Development">
       <item name="DB Adapters"           href="/db-adapters.html"/>
-      <item name="Changes"               href="/changes.html"/>
+      <item name="Changes"               href="/changes-report.html"/>
       <item name="References"            href="/references.html"/>
       <item name="Todo"                  href="/todo.html"/>
     </menu>
