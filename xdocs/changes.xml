@@ -8,6 +8,9 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='add'>
+        DB2 limit and offset support.  Thanks to Augustin Vidovic for the patch.
+      </action>
       <action dev='seade' type='fix'>
         Fix NOT_LIKE with no wildcard bug.
       </action>

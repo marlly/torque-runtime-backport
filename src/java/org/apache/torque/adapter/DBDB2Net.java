@@ -28,6 +28,7 @@ import java.sql.SQLException;
  * </a>
  *
  * @author <a href="mailto:hakan42@gmx.de">Hakan Tandogan</a>
+ * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
  * @version $Id$
  */
 public class DBDB2Net
@@ -100,5 +101,16 @@ public class DBDB2Net
      */
     public void unlockTable(Connection con, String table) throws SQLException
     {
+    }
+
+    /**
+     * This method is used to check whether the database supports
+     * limiting the size of the resultset.
+     *
+     * @return LIMIT_STYLE_DB2.
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_DB2;
     }
 }

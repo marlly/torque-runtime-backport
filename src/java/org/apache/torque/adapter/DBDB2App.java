@@ -100,4 +100,15 @@ public class DBDB2App extends DB
     public void unlockTable(Connection con, String table) throws SQLException
     {
     }
+
+    /**
+     * This method is used to check whether the database supports
+     * limiting the size of the resultset.
+     *
+     * @return LIMIT_STYLE_DB2.
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_DB2;
+    }
 }

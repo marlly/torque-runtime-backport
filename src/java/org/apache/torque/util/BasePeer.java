@@ -72,6 +72,7 @@ import com.workingdogs.village.TableDataSet;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
  * @version $Id$
  */
 public abstract class BasePeer implements java.io.Serializable
@@ -925,6 +926,53 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
+     * Build DB2 (OLAP) -style query with limit or offset.
+     * If the original SQL is in variable: query then the requlting
+     * SQL looks like this:
+     * <pre>
+     * SELECT B.* FROM (
+     *          SELECT A.*, row_number() over() as TORQUE$ROWNUM FROM (
+     *                  query
+     *          ) A
+     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+     *     <= offset + limit
+     * </pre>
+     * 
+     * @param query the query
+     * @param limit 
+     * @param offset
+     * @return oracle-style query
+     */ 
+    private static String createDB2LimitOffsetQuery(Query query, 
+            int limit, int offset)
+    {
+        StringBuffer buf = new StringBuffer();
+        buf.append("SELECT B.* FROM ( ");
+        buf.append("SELECT A.*, row_number() over() AS TORQUE$ROWNUM FROM ( ");
+
+        buf.append(query.toString());
+        buf.append(" ) A ");
+        buf.append(" ) B WHERE ");
+
+        if (offset > 0)
+        {
+            buf.append(" B.TORQUE$ROWNUM > ");
+            buf.append(offset);
+            if (limit > 0)
+            {
+                buf.append(" AND B.TORQUE$ROWNUM <= ");
+                buf.append(offset + limit);
+            }
+        }
+        else
+        {
+            buf.append(" B.TORQUE$ROWNUM <= ");
+            buf.append(limit);
+        }
+        return buf.toString();
+    }
+
+    /**
      * Method to create an SQL query for actual execution based on values in a
      * Criteria.
      *
@@ -942,13 +990,21 @@ public abstract class BasePeer implements java.io.Serializable
         int limit = criteria.getLimit();
         int offset = criteria.getOffset();
 
-        String sql;
-        if ((limit > 0 || offset > 0)
-            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
+        String sql = null;
+        if (limit > 0 || offset > 0)
         {
-            sql = createOracleLimitOffsetQuery(query, limit, offset);
-            criteria.setLimit(-1);
-            criteria.setOffset(0);
+            if (db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
+            {
+                sql = createOracleLimitOffsetQuery(query, limit, offset);
+                criteria.setLimit(-1);
+                criteria.setOffset(0);
+            } 
+            else if (db.getLimitStyle() == DB.LIMIT_STYLE_DB2)
+            {
+                sql = createDB2LimitOffsetQuery(query, limit, offset);
+                criteria.setLimit(-1);
+                criteria.setOffset(0);
+            }
         }
         else
         {
@@ -2486,13 +2542,21 @@ public abstract class BasePeer implements java.io.Serializable
             }
         }
 
-        String sql;
-        if ((limit > 0 || offset > 0)
-            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
+        String sql = null;
+        if (limit > 0 || offset > 0) 
         {
-            sql = createOracleLimitOffsetQuery(query, limit, offset);
-            criteria.setLimit(-1);
-            criteria.setOffset(0);
+            if ( db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
+            {
+                sql = createOracleLimitOffsetQuery(query, limit, offset);
+                criteria.setLimit(-1);
+                criteria.setOffset(0);
+            }
+            else if ( db.getLimitStyle() == DB.LIMIT_STYLE_DB2)
+            {
+                sql = createDB2LimitOffsetQuery(query, limit, offset);
+                criteria.setLimit(-1);
+                criteria.setOffset(0);
+            }
         }
         else
         {

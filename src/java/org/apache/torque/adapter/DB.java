@@ -50,6 +50,7 @@ import java.sql.Timestamp;
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
  * @version $Id$
  */
 public abstract class DB implements Serializable, IDMethod
@@ -68,6 +69,9 @@ public abstract class DB implements Serializable, IDMethod
 
     /** <code><pre>SELECT ... WHERE ... AND ROWNUM < <limit></pre></code> */
     public static final int LIMIT_STYLE_ORACLE = 4;
+
+    /** <code><pre>SELECT ... WHERE ... AND ROW_NUMBER() OVER() < <limit></pre></code> */
+    public static final int LIMIT_STYLE_DB2 = 5;
 
     /**
      * Empty constructor.

@@ -20,6 +20,7 @@ package org.apache.torque.adapter;
  * Torque Database Adapter for DB2/400 on the IBM AS400 platform.
  *
  * @author <a href="mailto:sweaver@rippe.com">Scott Weaver</a>
+ * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
  * @version $Id$
  */
 public class DBDB2400 extends DBDB2App
@@ -72,5 +73,16 @@ public class DBDB2400 extends DBDB2App
     private String formatCase(String in)
     {
         return new StringBuffer(UCASE + "(").append(in).append(")").toString();
+    }
+
+    /**
+     * This method is used to check whether the database supports
+     * limiting the size of the resultset.
+     *
+     * @return LIMIT_STYLE_DB2.
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_DB2;
     }
 }
