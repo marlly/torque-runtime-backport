@@ -94,8 +94,18 @@ public class NumberKeyTest extends TestCase
         Assert.assertTrue(n1b.equals(n1a));
         
         Assert.assertTrue(!"1".equals(n1a));
-        Assert.assertTrue(!n1a.equals("1"));
-        
+        // As this used to give false, i.e. n1a was considered equal to "1"
+        // it can lead to difficult to find bugs if it is immediately
+        // changed to the opposite.  So this will throw an exception.
+        //Assert.assertTrue(!n1a.equals("1"));
+        try
+        {
+            Assert.assertTrue(!n1a.equals("1"));
+        }
+        catch (IllegalArgumentException e)
+        {
+            // expected
+        }
         Assert.assertTrue(!n1a.equals(new Integer(1)));
         Assert.assertTrue(!new Integer(1).equals(n1a));
     }

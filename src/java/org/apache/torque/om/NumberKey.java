@@ -168,6 +168,15 @@ public class NumberKey extends SimpleKey
         
         if (!(keyObj instanceof NumberKey))
         {
+            // NumberKeys used to be comparable to Strings.  This behavior has
+            // been changed, I don't think it is a good idea to fail silently
+            // as code may be dependent on the old behavior.
+            if (keyObj instanceof String) 
+            {
+                throw new IllegalArgumentException(
+                    "NumberKeys are not comparable to Strings");
+            }
+            
             return false;
         }
         
