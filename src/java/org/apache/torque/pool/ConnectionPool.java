@@ -127,7 +127,7 @@ class ConnectionPool implements ConnectionEventListener
     /**
      * The amount of time in milliseconds that a connection will be pooled.
      */
-    private int expiryTime = DEFAULT_EXPIRY_TIME;
+    private long expiryTime = DEFAULT_EXPIRY_TIME;
 
     /**
      * Counter that keeps track of the number of threads that are in
@@ -190,12 +190,12 @@ class ConnectionPool implements ConnectionEventListener
             (maxConnections > 0) ? maxConnections : DEFAULT_MAX_CONNECTIONS;
 
         this.expiryTime =
-            1000 * ((expiryTime > 0) ? expiryTime : DEFAULT_EXPIRY_TIME);
+            ((expiryTime > 0) ? expiryTime * 1000 : DEFAULT_EXPIRY_TIME);
 
         this.connectionWaitTimeout =
-            1000 * ((connectionWaitTimeout > 0)
-                    ? connectionWaitTimeout 
-                    : DEFAULT_CONNECTION_WAIT_TIMEOUT);
+            ((connectionWaitTimeout > 0)
+             ? connectionWaitTimeout * 1000 
+             : DEFAULT_CONNECTION_WAIT_TIMEOUT);
 
         this.logInterval = 1000 * logInterval;
 
@@ -274,12 +274,24 @@ class ConnectionPool implements ConnectionEventListener
             pc = cpds.getPooledConnection(username, password);
         }
         pc.addConnectionEventListener(this);
+
         // Age some connections so that there will not be a run on the db,
         // when connections start expiring
+        //
+        // I did some experimentation here with integers but as this
+        // is not a really time critical path, we keep the floating
+        // point calculation.
         long currentTime = System.currentTimeMillis();
-        double ratio = (1.0 * totalConnections) / maxConnections;
-        currentTime -= expiryTime * 0.25 * (1.0 - ratio);
-        timeStamps.put(pc, new Long(currentTime));
+
+        double ratio =
+            new Long(maxConnections - totalConnections).doubleValue() / maxConnections;
+
+        long ratioTime =
+            new Double(currentTime - (expiryTime * ratio)/4).longValue();
+
+        ratioTime = (expiryTime < 0 ) ? currentTime : ratioTime;
+
+        timeStamps.put(pc, new Long(ratioTime));
         totalConnections++;
         return pc;
     }
@@ -373,16 +385,22 @@ class ConnectionPool implements ConnectionEventListener
     /**
      * Helper method which determines whether a connection has expired.
      *
-     * @param connection The connection to test.
+     * @param pc The connection to test.
      * @return True if the connection is expired, false otherwise.
      */
-    private boolean isExpired(PooledConnection connection)
+    private boolean isExpired(PooledConnection pc)
     {
         // Test the age of the connection (defined as current time
         // minus connection birthday) against the connection pool
         // expiration time.
-        return (expiryTime < (System.currentTimeMillis()
-                - ((Long) timeStamps.get(connection)).longValue()));
+        long birth = ((Long) timeStamps.get(pc)).longValue();
+        long age   = System.currentTimeMillis() - birth;
+
+        boolean dead = (expiryTime > 0) 
+            ? age > expiryTime
+            : age > DEFAULT_EXPIRY_TIME;
+
+        return dead; // He is dead, Jim.
     }
 
     /**
