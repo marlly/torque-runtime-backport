@@ -379,6 +379,102 @@ public class Database
         return false;
     }
 
+    public void doFinalInitialization()
+    {
+        Table[] tables = getTables();
+        for (int i=0; i<tables.length; i++) 
+        {
+            Table currTable = tables[i];
+
+            // check schema integrity
+            // if idMethod="autoincrement", make sure a column is
+            // specified as autoIncrement="true"
+            // FIXME: Handle idMethod="native" via DB adapter.
+            if ( currTable.getIdMethod().equals("autoincrement") )
+            {
+                Column[] columns = currTable.getColumns();
+                boolean foundOne = false;
+                for (int j = 0; j < columns.length && !foundOne; j++)
+                {
+                    foundOne = columns[j].isAutoIncrement();
+                }
+                
+                if ( !foundOne )
+                {
+                    String errorMessage = "Table '" + currTable.getName() +
+                        "' is marked as autoincrement, but it does not " +
+                        "have a column which declared as the one to " +
+                        "auto increment (i.e. autoIncrement=\"true\")\n";
+                    System.out.println("Error in XML schema: " + errorMessage);
+                }
+            }
+
+            currTable.doFinalInitialization();
+
+            // setup reverse fk relations
+            ForeignKey[] fks = currTable.getForeignKeys();
+            for (int j=0; j<fks.length; j++) 
+            {
+                ForeignKey currFK = fks[j];
+                Table foreignTable = getTable(currFK.getForeignTableName());
+                if ( foreignTable == null )
+                {
+                    System.out.println("ERROR!! Attempt to set foreign"
+                                       + " key to nonexistent table, " +
+                                       currFK.getForeignTableName() + "!");
+                }
+
+                List referrers = foreignTable.getReferrers();
+                if ( (referrers == null || !referrers.contains(currFK)))
+                {
+                    foreignTable.addReferrer(currFK);
+                }
+
+                // local column references
+                Iterator localColumnNames = currFK.getLocalColumns().iterator();
+                while (localColumnNames.hasNext()) 
+                {
+                    Column local = currTable
+                        .getColumn((String)localColumnNames.next());
+                    // give notice of a schema inconsistency.
+                    // note we do not prevent the npe as there is nothing
+                    // that we can do, if it is to occur.
+                    if ( local == null )
+                    {
+                        System.out.println("ERROR!! Attempt to define foreign"
+                            + " key with nonexistent column, " +
+                            local.getName() + ", in table, " +
+                            currTable.getName() + "!" );
+                    }
+                    //check for foreign pk's
+                    if (local.isPrimaryKey())
+                    {
+                        currTable.setContainsForeignPK(true);
+                    }
+                    
+                }
+                
+                // foreign column references
+                Iterator foreignColumnNames = 
+                    currFK.getForeignColumns().iterator();
+                while (foreignColumnNames.hasNext()) 
+                {
+                    Column foreign = foreignTable
+                        .getColumn((String)foreignColumnNames.next());
+                    // if the foreign column does not exist, we may have an
+                    // external reference or a misspelling
+                    if ( foreign == null )
+                    {
+                        System.out.println("ERROR!! Attempt to set foreign"
+                                           + " key to nonexistent column, " +
+                                           foreign.getName() + ", in table, "
+                                           + foreignTable.getName() + "!" );
+                    }
+                    foreign.addReferrer(currFK);
+                }
+            }
+        }
+    }
 
     /**
      * Creats a string representation of this Database.

@@ -147,7 +147,7 @@
   <!-- C  T A B L E                                       -->
   <!-- =================================================== -->
 
-  <table name="c" description="c table contains fk to r_ab">
+  <table name="c" description="c table contains fk to r_ab and to b">
     <column
       name="c_id"
       required="true"
@@ -180,6 +180,22 @@
       <reference local="b_id" foreign="b_id"/>
     </foreign-key>
 
+  </table>
+
+
+  <table name="d">
+    <column name="d_id" required="true"
+            primaryKey="true" type="INTEGER"/>
+    <column name="name" required="true" size="255" type="VARCHAR"/>
+    <column name="b_id" primaryKey="true" required="true" type="INTEGER"/>
+    <column name="a_id" primaryKey="true" required="true" type="INTEGER"/>
+    <foreign-key foreignTable="a">
+        <reference local="a_id" foreign="a_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="r_ab">
+        <reference local="a_id" foreign="a_id"/>
+        <reference local="b_id" foreign="b_id"/>
+    </foreign-key>
   </table>
 
 

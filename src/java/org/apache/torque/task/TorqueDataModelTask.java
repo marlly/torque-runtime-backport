@@ -310,7 +310,6 @@ public class TorqueDataModelTask extends TexenTask
                 new XmlToAppData(getTargetDatabase(), getTargetPackage(), 
                                  getBasePathToDbProps());
             AppData ad = xmlParser.parseFile(xmlFile);
-            xmlParser.parseFile(xmlFile);
             ad.setName(grokName(xmlFile));
             dataModels.add(ad);
         }
@@ -333,7 +332,6 @@ public class TorqueDataModelTask extends TexenTask
                                                  getTargetPackage(), 
                                                  getBasePathToDbProps());
                     AppData ad = xmlParser.parseFile(f.toString());
-                    xmlParser.parseFile(f.toString());
                     ad.setName(grokName(f.toString()));
                     dataModels.add(ad);
                 }

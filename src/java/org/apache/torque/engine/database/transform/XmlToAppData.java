@@ -59,6 +59,7 @@ import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.List;
+import java.util.Iterator;
 
 import org.apache.torque.Torque;
 import org.apache.torque.engine.database.model.AppData;
@@ -140,9 +141,14 @@ public class XmlToAppData extends DefaultHandler
      * @return AppData populated by <code>xmlFile</code>.
      */
     public AppData parseFile(String xmlFile)
-    {
+    {        
         try
         {
+            // in case I am missing something, make it obvious
+            if (!firstPass) 
+            {
+                throw new Error("No more double pass");   
+            }
             currentXmlFile = xmlFile;
 
             SAXParser parser = saxFactory.newSAXParser();
@@ -194,6 +200,7 @@ public class XmlToAppData extends DefaultHandler
         return new DTDResolver().resolveEntity(publicId, systemId);
     }
 
+
     /**
      * Handles opening elements of the xml file.
      */
@@ -202,99 +209,6 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
-            if (!firstPass)
-            {
-                if (rawName.equals("database"))
-                {
-                    String s = attributes.getValue("name");
-                    if (s == null)
-                    {
-                        s = Torque.getDefaultDB();
-                    }
-                    currDB = app.getDatabase(s);
-                }
-                if (rawName.equals("table"))
-                {
-                    currTable = currDB.getTable(attributes.getValue("name"));
-
-                    // check schema integrity
-                    // if idMethod="autoincrement", make sure a column is
-                    // specified as autoIncrement="true"
-                    // FIXME: Handle idMethod="native" via DB adapter.
-                    if ( currTable.getIdMethod().equals("autoincrement") )
-                    {
-                        Column[] columns = currTable.getColumns();
-                        boolean foundOne = false;
-                        for (int i = 0; i < columns.length && !foundOne; i++)
-                        {
-                            foundOne = columns[i].isAutoIncrement();
-                        }
-
-                        if ( !foundOne )
-                        {
-                            errorMessage += "Table '" + currTable.getName() +
-                            "' is marked as autoincrement, but it does not " +
-                            "have a column which declared as the one to " +
-                            "auto increment (i.e. autoIncrement=\"true\")\n";
-                        }
-                    }
-                }
-                else if (rawName.equals("foreign-key"))
-                {
-                    String foreignTableName = 
-                            attributes.getValue("foreignTable");
-                    foreignTable = currDB.getTable(foreignTableName);
-                    if ( foreignTable == null )
-                    {
-                        System.out.println("ERROR!! Attempt to set foreign"
-                            + " key to nonexistent table, " +
-                            attributes.getValue("foreignTable") + "!");
-                    }
-                }
-                else if (rawName.equals("reference"))
-                {
-                    ForeignKey fk = currTable
-                        .getForeignKey(attributes.getValue("local"));
-                    List referrers = foreignTable.getReferrers();
-                    if (referrers == null || !referrers.contains(fk))
-                    {
-                        foreignTable.addReferrer(fk);
-                    }
-
-                    Column local = currTable
-                        .getColumn(attributes.getValue("local"));
-                    // give notice of a schema inconsistency.
-                    // note we do not prevent the npe as there is nothing
-                    // that we can do, if it is to occur.
-                    if ( local == null )
-                    {
-                        System.out.println("ERROR!! Attempt to define foreign"
-                            + " key with nonexistent column, " +
-                            attributes.getValue("local") + ", in table, " +
-                            currTable.getName() + "!" );
-                    }
-                    //check for foreign pk's
-                    if (local.isPrimaryKey())
-                    {
-                        currTable.setContainsForeignPK(true);
-                    }
-
-                    Column foreign = foreignTable
-                        .getColumn(attributes.getValue("foreign"));
-                    // if the foreign column does not exist, we may have an
-                    // external reference or a misspelling
-                    if ( foreign == null )
-                    {
-                        System.out.println("ERROR!! Attempt to set foreign"
-                            + " key to nonexistent column, " +
-                            attributes.getValue("foreign") + ", in table, "
-                            + foreignTable.getName() + "!" );
-                    }
-                    foreign.addReferrer(fk);
-                }
-            }
-            else
-            {
                 if (rawName.equals("database"))
                 {
                     if (isExternalSchema)
@@ -368,7 +282,6 @@ public class XmlToAppData extends DefaultHandler
                 {
                     currTable.addIdMethodParameter(attributes);
                 }
-            }
         }
         catch (Exception e)
         {
@@ -385,21 +298,6 @@ public class XmlToAppData extends DefaultHandler
         {
             System.out.println("endElement(" + uri + ", " + localName + ", " +
                                rawName + ") called");
-        }
-
-        try
-        {
-            if (firstPass)
-            {
-                if ("table".equals(rawName) && currTable != null)
-                {
-                    currTable.loadedFromXML();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 

@@ -189,7 +189,7 @@ public class Table implements IDMethod
      * <p>Performs heavy indexing and naming of elements which weren't
      * provided with a name.</p>
      */
-    public void loadedFromXML()
+    public void doFinalInitialization()
     {
         // Heavy indexing must wait until after all columns composing
         // a table's primary key have been parsed.
@@ -916,15 +916,26 @@ public class Table implements IDMethod
      */
     public ForeignKey getForeignKey (String col)
     {
+        ForeignKey firstFK = null;
         for (Iterator iter = foreignKeys.iterator(); iter.hasNext(); )
         {
             ForeignKey key = (ForeignKey) iter.next();
             if (key.getLocalColumns().contains(col))
             {
-                return key;
+                if (firstFK == null) 
+                {
+                    firstFK = key;   
+                }
+                else 
+                {
+                    //System.out.println(col+" is in multiple FKs.  This is not"
+                    //                   + " being handled properly.");
+                    //throw new IllegalStateException("Cannot call method if " +
+                    //    "column is referenced multiple times");
+                }
             }
         }
-        return null;
+        return firstFK;
     }
 
     /**

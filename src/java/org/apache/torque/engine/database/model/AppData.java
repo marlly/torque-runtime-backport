@@ -105,6 +105,9 @@ public class AppData
      */
     private String name;
 
+    // flag to complete initialization only once.
+    boolean isInitialized;
+
     /**
      * Creates a new instance for the specified database type.
      *
@@ -215,6 +218,7 @@ public class AppData
      */
     public Database getDatabase()
     {
+        doFinalInitialization();
         return (Database) dbList.get(0);
     }
 
@@ -225,6 +229,7 @@ public class AppData
      */
     public Database[] getDatabases()
     {
+        doFinalInitialization();
         int size = dbList.size();
         Database[] dbs = new Database[size];
         for (int i = 0; i < size; i++)
@@ -249,6 +254,7 @@ public class AppData
      */
     public Database getDatabase (String name)
     {
+        doFinalInitialization();
         for (Iterator i = dbList.iterator() ; i.hasNext() ;)
         {
             Database db = (Database) i.next();
@@ -287,6 +293,19 @@ public class AppData
             db.setDatabaseType(databaseType);
         }
         dbList.add(db);
+    }
+
+    private void doFinalInitialization()
+    {
+        if (!isInitialized) 
+        {
+            Iterator dbs = dbList.iterator();
+            while (dbs.hasNext()) 
+            {
+                ((Database)dbs.next()).doFinalInitialization();
+            }
+            isInitialized = true;
+        }        
     }
 
     /**
