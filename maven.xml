@@ -9,6 +9,12 @@
       todir="${maven.build.dest}/org/apache/torque/engine/database/transform"
     />
 
+    <!-- copy templates to the right place -->
+
+    <copy todir="${maven.build.dest}">
+      <fileset dir="${maven.src.dir}/templates" />
+    </copy>
+
   </postGoal>
 
 </project>
