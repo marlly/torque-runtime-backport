@@ -50,6 +50,12 @@
       <organization/>
     </developer>
     <developer>
+      <name>Stephen Haberman</name>
+      <id>stephenh</id>
+      <email>stephenh@chase3000.com</email>
+      <organization/>
+    </developer>
+    <developer>
       <name>Fedor Karpelevitch</name>
       <id>fedor</id>
       <email>fedor@karpelevitch.net</email>
@@ -65,7 +71,7 @@
       <name>Martin Poeschl</name>
       <id>mpoeschl</id>
       <email>mpoeschl@marmot.at</email>
-      <organization>Tucana</organization>
+      <organization>Tucana.at</organization>
     </developer>
     <developer>
       <name>Daniel Rall</name>
