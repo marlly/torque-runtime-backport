@@ -76,11 +76,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.NumberKey;
@@ -156,10 +155,10 @@ public abstract class BasePeer implements java.io.Serializable
         Object value = null;
         byte[] byteArray = null;
 
-        Enumeration keys = hash.keys();
-        while(keys.hasMoreElements())
+        Iterator keys = hash.keySet().iterator();
+        while(keys.hasNext())
         {
-            key = (String) keys.nextElement();
+            key = (String) keys.next();
             value = hash.get(key);
             if ( value instanceof Serializable )
                 saveData.put ( key, value );
@@ -597,10 +596,10 @@ public abstract class BasePeer implements java.io.Serializable
         // criteria if directed to delete all related records.
         // StringStack.add() only adds element if it is unique.
         StringStack tables = new StringStack();
-        Enumeration enum = criteria.keys();
-        while (enum.hasMoreElements())
+        Iterator it = criteria.keySet().iterator();
+        while (it.hasNext())
         {
-            String key = (String) enum.nextElement();
+            String key = (String) it.next();
             Criteria.Criterion c = criteria.getCriterion(key);
             String[] tableNames = c.getAllTables();
             for (int i=0; i<tableNames.length; i++)
@@ -829,10 +828,10 @@ public abstract class BasePeer implements java.io.Serializable
         // Get the table name and method for determining the primary
         // key value.
         String tableName = null;
-        Enumeration keys = criteria.keys();
-        if (keys.hasMoreElements())
+        Iterator keys = criteria.keySet().iterator();
+        if (keys.hasNext())
         {
-            tableName = criteria.getTableName((String)keys.nextElement());
+            tableName = criteria.getTableName((String)keys.next());
         }
         else
         {
@@ -1144,10 +1143,10 @@ public abstract class BasePeer implements java.io.Serializable
           selectClause.add((String)aliases.get(key) + " AS " + key);
         }
 
-        Enumeration e = criteria.keys();
-        while (e.hasMoreElements())
+        Iterator critKeys = criteria.keySet().iterator();
+        while (critKeys.hasNext())
         {
-            String key = (String)e.nextElement();
+            String key = (String)critKeys.next();
             Criteria.Criterion criterion =
                 (Criteria.Criterion)criteria.getCriterion(key);
             Criteria.Criterion[] someCriteria =
@@ -1340,13 +1339,13 @@ public abstract class BasePeer implements java.io.Serializable
      * Returns all results.
      *
      * @param criteria A Criteria.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector doSelect(Criteria criteria)
+    public static List doSelect(Criteria criteria)
         throws TorqueException
     {
-        Vector results = null;
+        List results = null;
         if (criteria.isUseTransaction())
         {
             DBConnection dbCon = beginTransaction(criteria.getDbName());
@@ -1377,10 +1376,10 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param criteria A Criteria.
      * @param dbCon A DBConnection.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector doSelect(Criteria criteria,
+    public static List doSelect(Criteria criteria,
                                   DBConnection dbCon)
         throws TorqueException
     {
@@ -1394,10 +1393,10 @@ public abstract class BasePeer implements java.io.Serializable
      * executeStatement for update, insert, and delete operations.
      *
      * @param queryString A String with the sql statement to execute.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString)
+    public static List executeQuery(String queryString)
         throws TorqueException
     {
         return executeQuery(queryString, Torque.getDefaultDB(), false);
@@ -1410,10 +1409,10 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param queryString A String with the sql statement to execute.
      * @param dbName The database to connect to.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString,
+    public static List executeQuery(String queryString,
                                       String dbName)
         throws TorqueException
     {
@@ -1427,10 +1426,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @param dbName The database to connect to.
      * @param singleRecord Whether or not we want to select only a
      * single record.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString,
+    public static List executeQuery(String queryString,
                                       String dbName,
                                       boolean singleRecord)
         throws TorqueException
@@ -1445,10 +1444,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @param dbCon A DBConnection.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString,
+    public static List executeQuery(String queryString,
                                       boolean singleRecord,
                                       DBConnection dbCon)
         throws TorqueException
@@ -1466,10 +1465,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @param dbName The database to connect to.
      * @param singleRecord Whether or not we want to select only a
      * single record.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString,
+    public static List executeQuery(String queryString,
                                       int start,
                                       int numberOfResults,
                                       String dbName,
@@ -1477,7 +1476,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         DBConnection db = null;
-        Vector results = null;
+        List results = null;
         try
         {
             // get a connection to the db
@@ -1502,10 +1501,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @param dbCon A DBConnection.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector executeQuery(String queryString,
+    public static List executeQuery(String queryString,
                                       int start,
                                       int numberOfResults,
                                       boolean singleRecord,
@@ -1523,7 +1522,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
 
         QueryDataSet qds = null;
-        Vector results = new Vector();
+        List results = new ArrayList();
         try
         {
             // execute the query
@@ -1556,21 +1555,21 @@ public abstract class BasePeer implements java.io.Serializable
 
 
     /**
-     * Returns all records in a QueryDataSet as a Vector of Record
+     * Returns all records in a QueryDataSet as a List of Record
      * objects.  Used for functionality like util.db.LargeSelect.
      *
      * @param qds A QueryDataSet.
-     * @return Vector of Record objects.
+     * @return List of Record objects.
      * @exception TorqueException
      */
-    public static Vector getSelectResults( QueryDataSet qds )
+    public static List getSelectResults( QueryDataSet qds )
         throws TorqueException
     {
         return getSelectResults( qds, 0, -1, false);
     }
 
     /**
-     * Returns all records in a QueryDataSet as a Vector of Record
+     * Returns all records in a QueryDataSet as a List of Record
      * objects.  Used for functionality like util.db.LargeSelect.
      *
      * @param qds A QueryDataSet.
@@ -1578,7 +1577,7 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @exception TorqueException
      */
-    public static Vector getSelectResults( QueryDataSet qds,
+    public static List getSelectResults( QueryDataSet qds,
                                            boolean singleRecord )
         throws TorqueException
     {
@@ -1586,7 +1585,7 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Returns numberOfResults records in a QueryDataSet as a Vector
+     * Returns numberOfResults records in a QueryDataSet as a List
      * of Record objects.  Starting at record 0.  Used for
      * functionality like util.db.LargeSelect.
      *
@@ -1596,12 +1595,12 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @exception TorqueException
      */
-    public static Vector getSelectResults( QueryDataSet qds,
+    public static List getSelectResults( QueryDataSet qds,
                                            int numberOfResults,
                                            boolean singleRecord )
         throws TorqueException
     {
-        Vector results = null;
+        List results = null;
         if (numberOfResults != 0)
         {
             results = getSelectResults(qds, 0, numberOfResults, singleRecord);
@@ -1610,7 +1609,7 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Returns numberOfResults records in a QueryDataSet as a Vector
+     * Returns numberOfResults records in a QueryDataSet as a List
      * of Record objects.  Starting at record start.  Used for
      * functionality like util.db.LargeSelect.
      *
@@ -1621,23 +1620,23 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @exception TorqueException
      */
-    public static Vector getSelectResults( QueryDataSet qds,
+    public static List getSelectResults( QueryDataSet qds,
                                            int start,
                                            int numberOfResults,
                                            boolean singleRecord )
         throws TorqueException
     {
-        Vector results;
+        List results;
         try
         {
             if ( numberOfResults <= 0 )
             {
-                results = new Vector();
+                results = new ArrayList();
                 qds.fetchRecords();
             }
             else
             {
-                results = new Vector(numberOfResults);
+                results = new ArrayList(numberOfResults);
                 qds.fetchRecords(start, numberOfResults);
             }
             if ( qds.size() > 1 && singleRecord )
@@ -1645,11 +1644,11 @@ public abstract class BasePeer implements java.io.Serializable
                 handleMultipleRecords(qds);
             }
 
-            // Return a Vector of Record objects.
+            // Return a List of Record objects.
             for ( int i=0; i<qds.size(); i++ )
             {
                 Record rec = qds.getRecord(i);
-                results.addElement(rec);
+                results.add(rec);
             }
         }
         catch (Exception e)
@@ -1878,11 +1877,11 @@ public abstract class BasePeer implements java.io.Serializable
         // Set up a list of required tables.  StringStack.add()
         // only adds element if it is unique.
         StringStack tables = new StringStack();
-        Enumeration enum = selectCriteria.keys();
-        while (enum.hasMoreElements())
+        Iterator it = selectCriteria.keySet().iterator();
+        while (it.hasNext())
         {
             tables.add( selectCriteria.getTableName
-                        ((String) enum.nextElement()) );
+                        ((String) it.next()) );
         }
 
         for (int i=0; i<tables.size(); i++)
@@ -2175,13 +2174,13 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @exception TorqueException Error performing database query.
      */
-    public static Vector doPSSelect(Criteria criteria, DBConnection dbCon)
+    public static List doPSSelect(Criteria criteria, DBConnection dbCon)
         throws TorqueException
     {
-        Vector v = null;
+        List v = null;
 
         StringBuffer qry = new StringBuffer();
-        Vector params = new Vector(criteria.size());
+        List params = new ArrayList(criteria.size());
 
         createPreparedStatement (criteria, qry, params);
 
@@ -2242,10 +2241,10 @@ public abstract class BasePeer implements java.io.Serializable
     /**
      * Do a Prepared Statement select according to the given criteria
      */
-    public static Vector doPSSelect(Criteria criteria) throws Exception
+    public static List doPSSelect(Criteria criteria) throws Exception
     {
         DBConnection dbCon = Torque.getConnection( criteria.getDbName() );
-        Vector v = null;
+        List v = null;
 
         try
         {
@@ -2337,10 +2336,10 @@ public abstract class BasePeer implements java.io.Serializable
           selectClause.add((String)aliases.get(key) + " AS " + key);
         }
 
-        Enumeration e = criteria.keys();
-        while (e.hasMoreElements())
+        Iterator critKeys = criteria.keySet().iterator();
+        while (critKeys.hasNext())
         {
-            String key = (String)e.nextElement();
+            String key = (String)critKeys.next();
             Criteria.Criterion criterion =
                 (Criteria.Criterion)criteria.getCriterion(key);
             Criteria.Criterion[] someCriteria =

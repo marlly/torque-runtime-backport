@@ -61,7 +61,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.log4j.Category;
@@ -151,7 +151,7 @@ public class IDBroker
      * The cached IDs for each table.
      *
      * Key: String table name.
-     * Value: Vector of Integer IDs.
+     * Value: List of Integer IDs.
      */
     private Hashtable ids = new Hashtable(DEFAULT_SIZE);
 
@@ -437,7 +437,7 @@ public class IDBroker
         {
             if (availableIds == null)
             {
-                category.info ("Forced id retrieval - no available vector");
+                category.info ("Forced id retrieval - no available list");
             }
             else
             {
@@ -538,10 +538,10 @@ public class IDBroker
             }
 
             // category.info("IDBroker thread checking for more keys.");
-            Enumeration e = ids.keys();
-            while (e.hasMoreElements())
+            Iterator it = ids.keySet().iterator();
+            while (it.hasNext())
             {
-                String tableName = (String)e.nextElement();
+                String tableName = (String)it.next();
                 category.info("IDBroker thread checking for more keys on table: " +
                          tableName);
                 List availableIds = (List)ids.get(tableName);

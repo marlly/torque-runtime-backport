@@ -60,7 +60,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.EventObject;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
@@ -121,7 +122,7 @@ public class DBConnection
     /**
      * ConnectionEventListeners
      */
-    private Vector eventListeners;
+    private List eventListeners;
 
     /**
      * Log4j category used for logging.
@@ -191,7 +192,7 @@ public class DBConnection
         this.username = username;
         this.pool = pool;
         this.timestamp = System.currentTimeMillis();
-        eventListeners = new Vector();
+        eventListeners = new ArrayList();
     }
 
     /**
@@ -214,7 +215,7 @@ public class DBConnection
         this.username = username;
         this.pool = pool;
         this.timestamp = System.currentTimeMillis();
-        eventListeners = new Vector();
+        eventListeners = new ArrayList();
     }
 
     /**

@@ -64,7 +64,7 @@ import java.sql.Types;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import org.apache.torque.engine.database.model.TypeMap;
@@ -385,7 +385,7 @@ public class TorqueJDBCTransformTask extends Task
         throws SQLException
     {
         log("Getting table list...");
-        List tables = new Vector();
+        List tables = new ArrayList();
         ResultSet tableNames = null;
         // these are the entity types we want from the database
         String[] types = {"TABLE", "VIEW"};
@@ -411,8 +411,8 @@ public class TorqueJDBCTransformTask extends Task
 
     /**
      * Retrieves all the column names and types for a given table from
-     * JDBC metadata.  It returns a vector of vectors.  Each element
-     * of the returned vector is a vector with:
+     * JDBC metadata.  It returns a List of Lists.  Each element
+     * of the returned List is a List with:
      *
      * element 0 => a String object for the column name.
      * element 1 => an Integer object for the column type.
@@ -427,7 +427,7 @@ public class TorqueJDBCTransformTask extends Task
     public List getColumns(DatabaseMetaData dbMeta, String tableName)
             throws SQLException
     {
-        List columns = new Vector();
+        List columns = new ArrayList();
         ResultSet columnSet = null;
         try
         {
@@ -440,7 +440,7 @@ public class TorqueJDBCTransformTask extends Task
                 Integer nullType = new Integer(columnSet.getInt(11));
                 String defValue = columnSet.getString(13);
 
-                List col = new Vector(5);
+                List col = new ArrayList(5);
                 col.add(name);
                 col.add(sqlType);
                 col.add(size);
@@ -471,7 +471,7 @@ public class TorqueJDBCTransformTask extends Task
     public List getPrimaryKeys(DatabaseMetaData dbMeta, String tableName)
             throws SQLException
     {
-        List pk = new Vector();
+        List pk = new ArrayList();
         ResultSet parts = null;
         try
         {
@@ -521,13 +521,13 @@ public class TorqueJDBCTransformTask extends Task
                 {
                     fk = new Object[2];
                     fk[0] = foreignKeys.getString(3); //referenced table name
-                    refs = new Vector();
+                    refs = new ArrayList();
                     fk[1] = refs;
                     fks.put(fkName, fk);
                 }
                 else
                 {
-                    refs = (Vector) fk[1];
+                    refs = (ArrayList) fk[1];
                 }
                 String[] ref = new String[2];
                 ref[0] = foreignKeys.getString(8); //local column

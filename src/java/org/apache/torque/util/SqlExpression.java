@@ -544,7 +544,7 @@ public class SqlExpression
      * Creates an appropriate string for an 'IN' clause from an
      * object.  Adds quoting and/or UPPER() as appropriate.  This is
      * broken out into a seperate method as it is used in two places
-     * in buildIn, depending on whether an array or Vector is being
+     * in buildIn, depending on whether an array or List is being
      * looped over.
      *
      * @param value The value to process.

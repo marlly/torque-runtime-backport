@@ -54,7 +54,7 @@ package org.apache.torque.map;
  * <http://www.apache.org/>.
  */
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import org.apache.torque.adapter.IDMethod;
@@ -195,11 +195,11 @@ public class DatabaseMap implements java.io.Serializable
     public TableMap[] getTables()
     {
         TableMap[] dbTables = new TableMap[tables.size()];
-        Enumeration e = tables.elements();
+        Iterator it = tables.values().iterator();
         int i = 0;
-        while (e.hasMoreElements())
+        while (it.hasNext())
         {
-            dbTables[i++] = (TableMap) e.nextElement() ;
+            dbTables[i++] = (TableMap) it.next() ;
         }
         return dbTables;
     }

@@ -57,7 +57,8 @@ package org.apache.torque.engine.database.transform;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
@@ -81,7 +82,7 @@ import org.apache.torque.adapter.IDMethod;
 public class SQLToAppData
 {
     private String sqlFile;
-    private Vector tokens;
+    private List tokens;
     private Token token;
     private AppData appData;
     private Database appDataDB;
@@ -135,7 +136,7 @@ public class SQLToAppData
     {
         if (count < tokens.size())
         {
-            token = (Token) tokens.elementAt(count++);
+            token = (Token) tokens.get(count++);
         }
         else
         {
@@ -334,7 +335,7 @@ public class SQLToAppData
         next();
 
         ForeignKey fk = new ForeignKey();
-        Vector localColumns = new Vector();
+        List localColumns = new ArrayList();
         tbl.addForeignKey(fk);
 
         String colName = token.getStr();

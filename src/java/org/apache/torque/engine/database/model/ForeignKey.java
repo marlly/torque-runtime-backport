@@ -256,7 +256,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the vector of local columns. You should not edit this vector.
+     * Return the list of local columns. You should not edit this List.
      */
     public List getLocalColumns()
     {
@@ -280,7 +280,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the vector of local columns. You should not edit this vector.
+     * Return the list of local columns. You should not edit this List.
      */
     public List getForeignColumns()
     {

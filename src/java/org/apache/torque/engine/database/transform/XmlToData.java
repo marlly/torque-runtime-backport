@@ -61,7 +61,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -92,7 +92,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
 {
     private Database database;
     private String errorMessage;
-    private Vector data;
+    private List data;
     private String dtdFileName;
     private File dtdFile;
     private InputSource dataDTD;
@@ -126,7 +126,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     {
         try
         {
-            data = new Vector();
+            data = new ArrayList();
 
             SAXParser parser = saxFactory.newSAXParser();
 
@@ -170,7 +170,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
             else
             {
                 Table table = database.getTableByJavaName(rawName);
-                Vector columnValues = new Vector();
+                List columnValues = new ArrayList();
                 for (int i = 0; i < attributes.getLength(); i++)
                 {
                     Column col = table
@@ -268,9 +268,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     public class DataRow
     {
         private Table table;
-        private Vector columnValues;
+        private List columnValues;
 
-        public DataRow(Table table, Vector columnValues)
+        public DataRow(Table table, List columnValues)
         {
             this.table = table;
             this.columnValues = columnValues;
@@ -281,7 +281,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
             return table;
         }
 
-        public Vector getColumnValues()
+        public List getColumnValues()
         {
             return columnValues;
         }

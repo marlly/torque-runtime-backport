@@ -55,7 +55,7 @@ package org.apache.torque.map;
  */
 
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.apache.torque.adapter.IDMethod;
@@ -202,10 +202,10 @@ public class TableMap implements IDMethod, java.io.Serializable
      */
     public boolean containsObjectColumn()
     {
-        Enumeration e = columns.elements();
-        while (e.hasMoreElements())
+        Iterator it = columns.values().iterator();
+        while (it.hasNext())
         {
-            Object theType = ((ColumnMap)e.nextElement()).getType();
+            Object theType = ((ColumnMap)it.next()).getType();
             if (! ( theType instanceof String ||
                     theType instanceof Number ||
                     theType instanceof java.util.Date ) )
@@ -294,11 +294,11 @@ public class TableMap implements IDMethod, java.io.Serializable
     public ColumnMap[] getColumns()
     {
         ColumnMap[] tableColumns = new ColumnMap[columns.size()];
-        Enumeration e = columns.elements();
+        Iterator it = columns.values().iterator();
         int i = 0;
-        while (e.hasMoreElements())
+        while (it.hasNext())
         {
-            tableColumns[i++] = (ColumnMap) e.nextElement();
+            tableColumns[i++] = (ColumnMap) it.next();
         }
         return tableColumns;
     }

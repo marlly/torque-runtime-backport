@@ -272,7 +272,7 @@ public class AppData
     }
 
     /**
-     * Add a database to the vector and sets the AppData property to this
+     * Add a database to the list and sets the AppData property to this
      * AppData
      */
     public void addDatabase(Database db)

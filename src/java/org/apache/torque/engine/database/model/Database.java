@@ -306,7 +306,7 @@ public class Database
     }
 
     /**
-     * Add a table to the vector and sets the Database property to this Database
+     * Add a table to the list and sets the Database property to this Database
      */
     public void addTable(Table tbl)
     {

@@ -61,7 +61,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Properties;
 import org.apache.commons.lang.exception.NestableException;
 import org.apache.log4j.Category;
@@ -166,7 +166,7 @@ public class Torque implements Initializable, Configurable
      * are serialized then unserialized prior to Torque being reinitialized.
      * This condition exists in a normal catalina restart.
      */
-    private static List mapBuilders = new Vector();
+    private static List mapBuilders = new ArrayList();
 
 
     /**

@@ -65,11 +65,10 @@ import java.io.FileReader;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.io.Reader;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.sql.Connection;
@@ -165,7 +164,7 @@ public class TorqueSQLExec extends Task
     /**
      * SQL transactions to perform
      */
-    private Vector transactions = new Vector();
+    private List transactions = new ArrayList();
 
     /**
      * SQL Statement delimiter
@@ -513,13 +512,13 @@ public class TorqueSQLExec extends Task
             String db = (String) k.next();
             ArrayList l = (ArrayList) h.get(db);
             Iterator j = l.iterator();
-            Vector ts = new Vector();
+            List ts = new ArrayList();
             while (j.hasNext())
             {
                 String s = (String) j.next();
                 Transaction t = new Transaction();
                 t.setSrc(new File(srcDir, s));
-                ts.addElement(t);
+                ts.add(t);
             }
 
             insertDatabaseSqlFiles(url, db, ts);
@@ -530,7 +529,7 @@ public class TorqueSQLExec extends Task
      * Take the base url, the target database and insert a set of SQL
      * files into the target database.
      */
-    private void insertDatabaseSqlFiles(String url, String database, Vector transactions)
+    private void insertDatabaseSqlFiles(String url, String database, List transactions)
     {
         url = Strings.replace(url, "@DB@", database);
         System.out.println("Our new url -> " + url);
@@ -603,10 +602,10 @@ public class TorqueSQLExec extends Task
                 }
 
                 // Process all transactions
-                for (Enumeration e = transactions.elements();
-                        e.hasMoreElements();)
+                for (Iterator it = transactions.iterator();
+                        it.hasNext();)
                 {
-                    ((Transaction) e.nextElement()).runTransaction(out);
+                    ((Transaction) it.next()).runTransaction(out);
                     if (!autocommit)
                     {
                         log("Commiting transaction", Project.MSG_VERBOSE);

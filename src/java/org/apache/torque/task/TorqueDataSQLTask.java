@@ -153,7 +153,7 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
     {
         super.initControlContext();
 
-        AppData app = (AppData) getDataModels().elementAt(0);
+        AppData app = (AppData) getDataModels().get(0);
         Database db = app.getDatabase();
 
         try

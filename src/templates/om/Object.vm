@@ -356,7 +356,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     /**
      * Collection to store aggregation of $collName
      */
-    protected Vector $collName;
+    protected List $collName;
 
     /**
      * Temporary storage of $collName to save a possible db hit in
@@ -367,7 +367,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ($collName == null)
         {
-            $collName = new Vector();
+            $collName = new ArrayList();
         }
     }
 
@@ -393,7 +393,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria())
      */
-    public Vector get${relCol}() throws TorqueException
+    public List get${relCol}() throws TorqueException
     {
         if ($collName == null)
         {
@@ -411,13 +411,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * an empty collection or the current collection, the criteria
      * is ignored on a new object.
      */
-    public Vector get${relCol}(Criteria criteria) throws TorqueException
+    public List get${relCol}(Criteria criteria) throws TorqueException
     {
         if ($collName == null)
         {
             if ( isNew() )
             {
-               $collName = new Vector();
+               $collName = new ArrayList();
             }
             else
             {
@@ -523,14 +523,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * api reasonable.  You can provide public methods for those you
      * actually need in ${table.JavaName}.
      */
-    protected Vector get${relCol}Join${relCol2}(Criteria criteria)
+    protected List get${relCol}Join${relCol2}(Criteria criteria)
         throws TorqueException
     {
         if ($collName == null)
         {
             if ( isNew() )
             {
-               $collName = new Vector();
+               $collName = new ArrayList();
             }
             else
             {
@@ -581,14 +581,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * api reasonable.  You can provide public methods for those you
      * actually need in ${table.JavaName}.
      */
-    protected Vector get${relCol}JoinAllExcept${table.JavaName}(Criteria criteria)
+    protected List get${relCol}JoinAllExcept${table.JavaName}(Criteria criteria)
         throws TorqueException
     {
         if ($collName == null)
         {
             if ( isNew() )
             {
-               $collName = new Vector();
+               $collName = new ArrayList();
             }
             else
             {
@@ -637,7 +637,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 ## getByName code
 ##
 #if (!$table.isAlias() && $addGetByNameMethod)
-    private static Vector fieldNames_ = null;
+    private static List fieldNames_ = null;
 
     /**
      * Generate a list of field names.
@@ -646,7 +646,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
       if (fieldNames_ == null)
       {
-        fieldNames_ = new Vector();
+        fieldNames_ = new ArrayList();
     #foreach ($col in $table.Columns)
         fieldNames_.add("${col.JavaName}");
     #end

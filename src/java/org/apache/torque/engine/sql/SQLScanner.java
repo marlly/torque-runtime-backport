@@ -56,7 +56,8 @@ package org.apache.torque.engine.sql;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A simple Scanner implementation that scans an
@@ -81,7 +82,7 @@ public class SQLScanner
     private Reader in;
     private int chr;
     private String token;
-    private Vector tokens;
+    private List tokens;
 
     private int line;
     private int col;
@@ -138,14 +139,14 @@ public class SQLScanner
             readChar();
             c = (char)chr;
         }
-        tokens.addElement(new Token (token,line,col));
+        tokens.add(new Token (token,line,col));
     }
 
     /**
      * Scan the input Reader and returns a list
      * of tokens.
      */
-    public Vector scan () throws IOException
+    public List scan () throws IOException
     {
         line = 1;
         col = 0;
@@ -153,7 +154,7 @@ public class SQLScanner
         boolean inCommentSlashStar = false;
         boolean inCommentDash = false;
 
-        tokens = new Vector();
+        tokens = new ArrayList();
         readChar();
         while (chr != -1)
         {
@@ -211,7 +212,7 @@ public class SQLScanner
             }
             else if (special.indexOf(c) >= 0)
             {
-                tokens.addElement(new Token (""+c,line,col));
+                tokens.add(new Token (""+c,line,col));
                 readChar();
             }
             else

@@ -57,7 +57,8 @@ package org.apache.torque.task;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
@@ -89,12 +90,12 @@ public class TorqueDataModelTask extends TexenTask
     /**
      * Fileset of XML schemas which represent our data models.
      */
-    protected Vector filesets = new Vector();
+    protected List filesets = new ArrayList();
 
     /**
      * Data models that we collect. One from each XML schema file.
      */
-    protected Vector dataModels = new Vector();
+    protected List dataModels = new ArrayList();
 
     /**
      * Velocity context which exposes our objects
@@ -173,9 +174,9 @@ public class TorqueDataModelTask extends TexenTask
      * Return the data models that have been
      * processed.
      *
-     * @return Vector data models
+     * @return List data models
      */
-    public Vector getDataModels()
+    public List getDataModels()
     {
         return dataModels;
     }
@@ -217,7 +218,7 @@ public class TorqueDataModelTask extends TexenTask
      */
     public void addFileset(FileSet set)
     {
-        filesets.addElement(set);
+        filesets.add(set);
     }
 
     /**
@@ -309,14 +310,14 @@ public class TorqueDataModelTask extends TexenTask
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
             ad.setName(grokName(xmlFile));
-            dataModels.addElement(ad);
+            dataModels.add(ad);
         }
         else
         {
             // Deal with the filesets.
             for (int i = 0; i < filesets.size(); i++)
             {
-                FileSet fs = (FileSet) filesets.elementAt(i);
+                FileSet fs = (FileSet) filesets.get(i);
                 DirectoryScanner ds = fs.getDirectoryScanner(project);
                 File srcDir = fs.getDir(project);
 
@@ -331,7 +332,7 @@ public class TorqueDataModelTask extends TexenTask
                     AppData ad = xmlParser.parseFile(f.toString());
                     xmlParser.parseFile(f.toString());
                     ad.setName(grokName(f.toString()));
-                    dataModels.addElement(ad);
+                    dataModels.add(ad);
                 }
             }
         }

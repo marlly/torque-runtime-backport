@@ -57,12 +57,12 @@ package org.apache.torque.pool;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.List;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
+import org.apache.commons.collections.ArrayStack;
 
 /**
  * This class implements a simple connection pooling scheme.  Multiple
@@ -83,7 +83,7 @@ public class ConnectionPool
     /**
      * Pool containing database connections.
      */
-    private Stack pool = null;
+    private ArrayStack pool = null;
 
     /**
      * The driver type for this pool.
@@ -189,7 +189,7 @@ public class ConnectionPool
                           long maxConnectionAttempts,
                           long connectionWaitTimeout)
     {
-        pool = new Stack();
+        pool = new ArrayStack();
 
         this.driver = driver;
         this.url = url;

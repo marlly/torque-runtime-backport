@@ -127,12 +127,12 @@ public abstract class $basePrefix${table.JavaName}Peer
      * resultset MUST return columns in the right order.  You can use
      * getFieldNames() in BaseObject to get the correct sequence.
      */
-    public static Vector resultSet2Objects (java.sql.ResultSet results) throws TorqueException
+    public static List resultSet2Objects (java.sql.ResultSet results) throws TorqueException
     {
         try
         {
             QueryDataSet qds = null;
-            Vector rows = null;
+            List rows = null;
             try
             {
                 qds = new QueryDataSet( results );
@@ -354,14 +354,14 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
     /** Method to do selects */
-    public static Vector doSelect( Criteria criteria ) throws TorqueException
+    public static List doSelect( Criteria criteria ) throws TorqueException
     {
         return populateObjects( doSelectVillageRecords(criteria) );
     }
 
 
     /** Method to do selects within a transaction */
-    public static Vector doSelect( Criteria criteria,
+    public static List doSelect( Criteria criteria,
                                    DBConnection dbCon )
         throws TorqueException
     {
@@ -375,7 +375,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * alter the data and call save(), your results may vary, but are
      * certainly likely to result in hard to track MT bugs.
      */
-    public static Vector doSelectVillageRecords( Criteria criteria )
+    public static List doSelectVillageRecords( Criteria criteria )
         throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
@@ -386,7 +386,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * Grabs the raw Village records to be formed into objects.
      * This method should be used for transactions
      */
-    public static Vector doSelectVillageRecords( Criteria criteria,
+    public static List doSelectVillageRecords( Criteria criteria,
                                                  DBConnection dbCon )
         throws TorqueException
     {
@@ -446,7 +446,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             criteria.setDbName(DATABASE_NAME);
         }
-        // BasePeer returns a Vector of Value (Village) arrays.  The array
+        // BasePeer returns a List of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
         if ( dbCon == null)
         {
@@ -459,18 +459,18 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
     /**
-     * The returned vector will contain objects of the default type or
+     * The returned List will contain objects of the default type or
      * objects that inherit from the default.
      */
-    public static Vector populateObjects(Vector records)
+    public static List populateObjects(List records)
         throws TorqueException
     {
-        Vector results = new Vector(records.size());
+        List results = new ArrayList(records.size());
 
         // populate the object(s)
         for ( int i=0; i<records.size(); i++ )
         {
-            Record row = (Record)records.elementAt(i);
+            Record row = (Record)records.get(i);
 #if ($table.ChildrenColumn)
             results.add(${table.JavaName}Peer.row2Object(row, 1,
                 ${table.JavaName}Peer.getOMClass(row, 1)));
@@ -717,7 +717,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      }
 
     /** Method to do selects */
-    public static Vector doSelect($table.JavaName obj) throws TorqueException
+    public static List doSelect($table.JavaName obj) throws TorqueException
     {
         return doSelect(buildCriteria(obj));
     }
@@ -864,14 +864,14 @@ public abstract class $basePrefix${table.JavaName}Peer
         #set ( $i = $i + 1 )
     #end
   #end
-        Vector v = doSelect(criteria, dbcon);
+        List v = doSelect(criteria, dbcon);
         if ( v.size() != 1)
         {
             throw new TorqueException("Failed to select one and only one row.");
         }
         else
         {
-            return ($table.JavaName)v.firstElement();
+            return ($table.JavaName)v.get(0);
         }
     }
 
@@ -1013,14 +1013,14 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $clo=$col.Name.toLowerCase() )
         criteria.add( $cup, $clo );
 #end
-        Vector v = doSelect(criteria, dbcon);
+        List v = doSelect(criteria, dbcon);
         if ( v.size() != 1)
         {
             throw new TorqueException("Failed to select one and only one row.");
         }
         else
         {
-            return ($table.JavaName) v.firstElement();
+            return ($table.JavaName) v.get(0);
         }
     }
 #end
@@ -1080,7 +1080,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     * api reasonable.  You can provide public methods for those you
     * actually need in ${table.JavaName}Peer.
     */
-    protected static Vector doSelectJoin${joinColumnId}(Criteria c)
+    protected static List doSelectJoin${joinColumnId}(Criteria c)
         throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
@@ -1149,12 +1149,12 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
-        Vector rows = BasePeer.doSelect(c);
-        Vector results = new Vector();
+        List rows = BasePeer.doSelect(c);
+        List results = new ArrayList();
 
         for (int i=0; i<rows.size(); i++)
         {
-            Record row = (Record)rows.elementAt(i);
+            Record row = (Record)rows.get(i);
 
 #set ($classDecl = "Class")
 #if ($table.ChildrenColumn)
@@ -1180,7 +1180,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             boolean newObject = true;
             for (int j=0; j<results.size(); j++)
             {
-                $className temp_obj1 = ($className)results.elementAt(j);
+                $className temp_obj1 = ($className)results.get(j);
                 $joinClassName temp_obj2 = ($joinClassName)temp_obj1.get${joinInterface}();
                 if ( temp_obj2.getPrimaryKey().equals(obj2.getPrimaryKey() ) )
                 {
@@ -1240,7 +1240,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     * api reasonable.  You can provide public methods for those you
     * actually need in ${table.JavaName}Peer.
     */
-    protected static Vector doSelectJoinAllExcept${excludeString}(Criteria c)
+    protected static List doSelectJoinAllExcept${excludeString}(Criteria c)
         throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
@@ -1312,12 +1312,12 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
-        Vector rows = BasePeer.doSelect(c);
-        Vector results = new Vector();
+        List rows = BasePeer.doSelect(c);
+        List results = new ArrayList();
 
         for (int i=0; i<rows.size(); i++)
         {
-            Record row = (Record)rows.elementAt(i);
+            Record row = (Record)rows.get(i);
 
       #set ($classDecl = "Class")
       #if ($table.ChildrenColumn)
@@ -1375,7 +1375,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             #if ($index == 2) boolean #end newObject = true;
             for (int j=0; j<results.size(); j++)
             {
-                $className temp_obj1 = ($className)results.elementAt(j);
+                $className temp_obj1 = ($className)results.get(j);
                 $joinClassName temp_obj$index = ($joinClassName)temp_obj1.get${joinString}();
                 if ( temp_obj${index}.getPrimaryKey().equals(obj${index}.getPrimaryKey() ) )
                 {

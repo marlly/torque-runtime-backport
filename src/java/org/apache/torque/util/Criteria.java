@@ -59,7 +59,6 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -67,7 +66,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
@@ -418,9 +416,9 @@ public class Criteria extends Hashtable
 
         DatabaseMap map = Torque.getDatabaseMap(databaseMapName);
         StringStack tables = new StringStack();
-        for (Enumeration e = super.elements(); e.hasMoreElements(); )
+        for (Iterator it = super.values().iterator(); it.hasNext(); )
         {
-            Criterion co = (Criterion)e.nextElement();
+            Criterion co = (Criterion)it.next();
             String tableName = co.getTable();
             String tableName2 = getTableForAlias(tableName);
             if (tableName2 != null)
@@ -850,27 +848,27 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to return a Vector.
+     * Convenience method to return a List.
      *
      * @param name A String with the name of the key.
-     * @return A Vector with the value of object at key.
+     * @return A List with the value of object at key.
      */
-    public Vector getVector(String name)
+    public List getList(String name)
     {
-        return (Vector) getCriterion(name).getValue();
+        return (List) getCriterion(name).getValue();
     }
 
     /**
-     * Convenience method to return a String.
+     * Convenience method to return a List.
      *
      * @param table String name of table.
      * @param column String name of column.
-     * @return A String with the value of object at key.
+     * @return A List with the value of object at key.
      */
-    public Vector getVector(String table,
-                            String column)
+    public List getList(String table,
+                        String column)
     {
-        return getVector(
+        return getList(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
             .toString() );
@@ -1556,7 +1554,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds an 'IN' clause with the criteria supplied as a Vector.
+     * Adds an 'IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -1630,7 +1628,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds a 'NOT IN' clause with the criteria supplied as a Vector.
+     * Adds a 'NOT IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -1878,10 +1876,10 @@ public class Criteria extends Hashtable
     public String toString()
     {
         StringBuffer sb = new StringBuffer("Criteria:: ");
-        Enumeration e = keys();
-        while (e.hasMoreElements())
+        Iterator it = keySet().iterator();
+        while (it.hasNext())
         {
-            String key = (String)e.nextElement();
+            String key = (String)it.next();
             sb.append(key).append("<=>")
                 .append(super.get(key).toString()).append(":  ");
         }
@@ -1926,9 +1924,9 @@ public class Criteria extends Hashtable
                )
             {
                 isEquiv = true;
-                for (Enumeration e=criteria.keys(); e.hasMoreElements(); )
+                for (Iterator it=criteria.keySet().iterator(); it.hasNext(); )
                 {
-                    String key = (String)e.nextElement();
+                    String key = (String)it.next();
                     if ( this.containsKey(key) )
                     {
                         Criterion a = this.getCriterion(key);
@@ -2465,7 +2463,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds an 'IN' clause with the criteria supplied as a Vector.
+     * Adds an 'IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -2479,11 +2477,11 @@ public class Criteria extends Hashtable
      * "AND"ed to the existing criterion.
      *
      * @param column The column to run the comparison on
-     * @param values A Vector with the allowed values.
+     * @param values A List with the allowed values.
      * @return A modified Criteria object.
      */
     public Criteria andIn(String column,
-                          Vector values)
+                          List values)
     {
         and(column, (Object)values, Criteria.IN);
         return this;
@@ -2539,7 +2537,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds a 'NOT IN' clause with the criteria supplied as a Vector.
+     * Adds a 'NOT IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -2553,11 +2551,11 @@ public class Criteria extends Hashtable
      * "AND"ed to the existing criterion.
      *
      * @param column The column to run the comparison on
-     * @param values A Vector with the disallowed values.
+     * @param values A List with the disallowed values.
      * @return A modified Criteria object.
      */
     public Criteria andNotIn(String column,
-                             Vector values)
+                             List values)
     {
         and(column, (Object)values, Criteria.NOT_IN);
         return this;
@@ -3077,7 +3075,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds an 'IN' clause with the criteria supplied as a Vector.
+     * Adds an 'IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -3091,11 +3089,11 @@ public class Criteria extends Hashtable
      * "OR"ed to the existing criterion.
      *
      * @param column The column to run the comparison on
-     * @param values A Vector with the allowed values.
+     * @param values A List with the allowed values.
      * @return A modified Criteria object.
      */
     public Criteria orIn(String column,
-                         Vector values)
+                         List values)
     {
         or(column, (Object)values, Criteria.IN);
         return this;
@@ -3151,7 +3149,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds a 'NOT IN' clause with the criteria supplied as a Vector.
+     * Adds a 'NOT IN' clause with the criteria supplied as a List.
      * For example:
      *
      * <p>
@@ -3165,11 +3163,11 @@ public class Criteria extends Hashtable
      * "OR"ed to the existing criterion.
      *
      * @param column The column to run the comparison on
-     * @param values A Vector with the disallowed values.
+     * @param values A List with the disallowed values.
      * @return A modified Criteria object.
      */
     public Criteria orNotIn(String column,
-                            Vector values)
+                            List values)
     {
         or(column, (Object)values, Criteria.NOT_IN);
         return this;
@@ -3572,9 +3570,9 @@ public class Criteria extends Hashtable
 
                     StringStack inClause = new StringStack();
 
-                    if (value instanceof Vector)
+                    if (value instanceof List)
                     {
-                        value = ((Vector)value).toArray (new Object[0]);
+                        value = ((List)value).toArray (new Object[0]);
                     }
 
                     for (int i = 0; i < Array.getLength(value); i++)

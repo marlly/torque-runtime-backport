@@ -55,7 +55,8 @@ package org.apache.torque.util;
  */
 
 import java.sql.Connection;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import org.apache.torque.Torque;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.pool.DBConnection;
@@ -92,7 +93,7 @@ public class LargeSelect
     private String dbName;
     private DBConnection db = null;
     private QueryDataSet qds = null;
-    private Vector results = null;
+    private List results = null;
     private Thread thread = null;
     private boolean killThread = false;
     private int position;
@@ -201,7 +202,7 @@ public class LargeSelect
     {
         this.memoryLimit = memoryLimit;
         this.name = name;
-        results = new Vector();
+        results = new ArrayList();
         query = BasePeer.createQueryString(criteria);
         dbName = criteria.getDbName();
         blockEnd = blockBegin + memoryLimit - 1;
@@ -211,10 +212,10 @@ public class LargeSelect
     /**
      * Gets the next block of rows.
      *
-     * @return A Vector of query results.
+     * @return A List of query results.
      * @exception Exception, a generic exception.
      */
-    public Vector getNextResults()
+    public List getNextResults()
         throws Exception
     {
         return getResults(position, miniblock);
@@ -223,10 +224,10 @@ public class LargeSelect
     /**
      * Gets a block of rows which have previously been retrieved.
      *
-     * @return a Vector of query results.
+     * @return a List of query results.
      * @exception Exception, a generic exception.
      */
-    public Vector getPreviousResults()
+    public List getPreviousResults()
         throws Exception
     {
         return getResults(position-2*miniblock, miniblock);
@@ -237,10 +238,10 @@ public class LargeSelect
      * rows in the block was specified in the constructor.
      *
      * @param start The starting row.
-     * @return a Vector of query results.
+     * @return a List of query results.
      * @exception Exception, a generic exception.
      */
-    public Vector getResults(int start) throws Exception
+    public List getResults(int start) throws Exception
     {
         return getResults(start, miniblock);
     }
@@ -251,11 +252,11 @@ public class LargeSelect
      *
      * @param start The starting row.
      * @param size The number of rows.
-     * @return a Vector of query results.
+     * @return a List of query results.
      * @exception Exception, a generic exception.
      */
-    synchronized public Vector getResults(int start,
-                                          int size)
+    synchronized public List getResults(int start,
+                                        int size)
         throws Exception
     {
         if (size > memoryLimit)
@@ -308,10 +309,10 @@ public class LargeSelect
             throw new Exception("parameter configuration not accounted for");
         }
 
-        Vector returnResults = new Vector(size);
+        List returnResults = new ArrayList(size);
         for (int i=(start-blockBegin); i<(start-blockBegin+size); i++)
         {
-            returnResults.addElement( results.elementAt(i) );
+            returnResults.add( results.get(i) );
         }
         position = start+size;
         return returnResults;
@@ -344,12 +345,12 @@ public class LargeSelect
                 {
                     size = blockEnd - currentlyFilledTo;
                 }
-                Vector tempResults = BasePeer.getSelectResults( qds,
-                                                                size,
-                                                                false);
+                List tempResults = BasePeer.getSelectResults( qds,
+                                                              size,
+                                                              false);
                 for (int i=0; i<tempResults.size(); i++)
                 {
-                    results.addElement( tempResults.elementAt(i) );
+                    results.add( tempResults.get(i) );
                 }
                 currentlyFilledTo += miniblock;
                 qds.clearRecords();

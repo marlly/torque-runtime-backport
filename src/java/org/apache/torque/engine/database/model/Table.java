@@ -387,7 +387,7 @@ public class Table implements IDMethod
     }
 
     /**
-     * Adds a new column to the column vector and set the
+     * Adds a new column to the column list and set the
      * parent table of the column to the current table
      * 
      * @param col the column to add
@@ -495,7 +495,7 @@ public class Table implements IDMethod
     }
 
     /**
-     * Adds a new FK to the FK vector and set the
+     * Adds a new FK to the FK list and set the
      * parent table of the column to the current table
      */
     public void addForeignKey(ForeignKey fk)
@@ -550,7 +550,7 @@ public class Table implements IDMethod
     }
 
     /**
-     * Adds a new index to the index vector and set the
+     * Adds a new index to the index list and set the
      * parent table of the column to the current table
      */
     public void addIndex(Index index)
@@ -572,7 +572,7 @@ public class Table implements IDMethod
     }
 
     /**
-     * Adds a new Unique to the Unique vector and set the
+     * Adds a new Unique to the Unique list and set the
      * parent table of the column to the current table
      */
     public void addUnique(Unique unique)

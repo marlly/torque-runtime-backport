@@ -346,7 +346,7 @@ public class Column
     }
 
     /**
-     * Adds a new inheritance definition to the inheritance vector and set the
+     * Adds a new inheritance definition to the inheritance list and set the
      * parent column of the inheritance to the current column
      */
     public void addInheritance(Inheritance inh)

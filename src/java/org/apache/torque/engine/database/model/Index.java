@@ -271,7 +271,7 @@ public class Index
     }
 
     /**
-     * Return the list of local columns. You should not edit this vector.
+     * Return the list of local columns. You should not edit this list.
      */
     public List getColumns()
     {
