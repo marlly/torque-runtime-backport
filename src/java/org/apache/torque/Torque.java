@@ -57,12 +57,12 @@ package org.apache.torque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.oid.AutoIncrementIdGenerator;
-import org.apache.torque.oid.SequenceIdGenerator;
+import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
@@ -217,46 +217,62 @@ public class Torque
     public static DatabaseMap getDatabaseMap(String name)
         throws TorqueException
     {
-        if ( name == null )
+        if (name == null)
         {
             throw new TorqueException ("DatabaseMap name was null!");
         }
 
         // Quick (non-sync) check for the map we want.
-        DatabaseMap map = (DatabaseMap)dbMaps.get(name);
-        if ( map == null )
+        DatabaseMap map = (DatabaseMap) dbMaps.get(name);
+        if (map == null)
         {
             // Map not there...
-            synchronized( dbMaps )
+            synchronized (dbMaps)
             {
                 // ... sync and look again to avoid race condition.
-                map = (DatabaseMap)dbMaps.get(name);
-                if ( map == null )
+                map = (DatabaseMap) dbMaps.get(name);
+                if (map == null)
                 {
                     // Still not there.  Create and add.
-                    map = new DatabaseMap(name);
-
-                    // Add info about IDBroker's table.
-                    setupIdTable(map);
-                    // setup other id generators
-                    try
-                    {
-                        DB db = DBFactory.create(
-                            getDatabaseProperty(name, "driver") );
-                        map.addIdGenerator(TableMap.AUTOINCREMENT,
-                                       new AutoIncrementIdGenerator(db) );
-                        map.addIdGenerator(TableMap.SEQUENCE,
-                                       new SequenceIdGenerator(db) );
-                    }
-                    catch (java.lang.InstantiationException e)
-                    {
-                        throw new TorqueException(e);
-                    }
-
-                    dbMaps.put(name, map);
+                    map = initDatabaseMap(name);
                 }
             }
         }
+        return map;
+    }
+
+    /**
+     * Creates and initializes the mape for the named database.
+     * Assumes that <code>dbMaps</code> member is sync'd.
+     *
+     * @param name The name of the database to map.
+     * @return The desired map.
+     */
+    private static final DatabaseMap initDatabaseMap(String name)
+        throws TorqueException
+    {
+        DatabaseMap map = new DatabaseMap(name);
+
+        // Add info about IDBroker's table.
+        setupIdTable(map);
+
+        // Setup other ID generators for this map.
+        try
+        {
+            DB db = DBFactory.create(getDatabaseProperty(name, "driver"));
+            for (int i = 0; i < IDGeneratorFactory.ID_GENERATOR_METHODS.length;
+                 i++)
+            {
+                map.addIdGenerator(IDGeneratorFactory.ID_GENERATOR_METHODS[i],
+                                   IDGeneratorFactory.create(db));
+            }
+        }
+        catch (java.lang.InstantiationException e)
+        {
+            throw new TorqueException(e);
+        }
+        dbMaps.put(name, map);
+
         return map;
     }
 
@@ -286,7 +302,7 @@ public class Torque
      *
      * @param map the DataBaseMap to setup.
      */
-    private static void setupIdTable(DatabaseMap map)
+    private static final void setupIdTable(DatabaseMap map)
     {
         map.setIdTable("ID_TABLE");
         TableMap tMap = map.getIdTable();
