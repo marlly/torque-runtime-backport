@@ -64,6 +64,15 @@
         <role>Java Developer</role>
       </roles>
     </developer>
+    <developer>
+      <name>Quinton McCombs</name>
+      <id>quintonm</id>
+      <email>quintonm@bellsouth.net</email>
+      <organization>NequalsOne</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <contributors>
@@ -104,7 +113,7 @@
     </dependency>
     <dependency>
       <id>log4j</id>
-      <version>1.2.6</version>
+      <version>1.2.7</version>
       <properties>
         <classloader>root</classloader>
       </properties>
@@ -138,12 +147,26 @@
         <classloader>root</classloader>
       </properties>
     </dependency>
+    <dependency>
+      <id>xerces:xercesImpl</id>
+      <version>2.0.2</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
+    <dependency>
+      <id>xerces:xmlParserAPIs</id>
+      <version>2.0.2</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
 
   </dependencies>
 
   <build>
 
-    <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
+    <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>
 
     <sourceDirectory>src/java</sourceDirectory>
 
