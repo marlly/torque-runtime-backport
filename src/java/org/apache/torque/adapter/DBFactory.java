@@ -221,8 +221,9 @@ public class DBFactory
             catch (IllegalAccessException e)
             {
                 throw new InstantiationException
-                    ("Could not instantiate JDBC driver: " + driver +
-                     ": Assure that driver is in your classpath");
+                    ("Could not instantiate adapter for JDBC driver: " +
+                     driver + ": Assure that adapter bytecodes are in your " +
+                     "classpath");
             }
         }
         else
