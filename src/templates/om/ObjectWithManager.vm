@@ -286,7 +286,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $column = $table.getColumn($columnName) )
     #set ( $colFKName = $fk.LocalForeignMapping.get($columnName) )
     #set ( $colFK = $tblFK.getColumn($colFKName) )
-        set${column.JavaName}(v.get${colFK.JavaName}());
+        if (v == null)
+        {
+            set${column.JavaName}(($column.JavaNative)null);
+        }
+        else
+        {
+            set${column.JavaName}(v.get${colFK.JavaName}());
+        }
    #end
         $varName = v;
     }
