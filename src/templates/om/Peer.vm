@@ -337,8 +337,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 #end
             #else
                 #if ($col.isPrimaryKey() || $col.isForeignKey() )
-            obj.set${col.JavaName}(
-                new ${col.JavaNative}(row.getValue(offset + $n).$col.VillageMethod));
+            ## The field should always be an Object type but make sure so we
+            ## are sure we can set it to null.
+            if ( row.getValue(offset+$n).$col.VillageMethod instanceof Object )
+            {
+               ## If the database value is a null value then set the Key
+               ## value to null so comparisons with ObjectUtils.equals really work.
+               if ( null == row.getValue(offset+$n).$col.VillageMethod )
+               { 
+                  obj.set${col.JavaName}( (${col.JavaNative}) null );
+               }
+               else
+               ## Do what we normally do
+               {
+                  obj.set${col.JavaName}(
+                      new ${col.JavaNative}(row.getValue(offset+$n).$col.VillageMethod));
+               } 
+            }
                 #else
             obj.set${col.JavaName}(row.getValue(offset + $n).$col.VillageMethod);
                 #end
