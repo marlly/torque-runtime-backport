@@ -59,9 +59,9 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.velocity.util.StringUtils;
-
 import org.xml.sax.Attributes;
+
+import org.apache.torque.TorqueException;
 
 /**
  * A Class for holding data about a column used in an Application.
@@ -219,12 +219,19 @@ public class Column
     {
         if (javaName == null)
         {
-            return StringUtils.removeUnderScores(name);
+            List inputs = new ArrayList(1);
+            inputs.add(name);
+            try
+            {
+                javaName = NameFactory.generateName(NameFactory.JAVA_GENERATOR,
+                                                    inputs);
+            }
+            catch (TorqueException e)
+            {
+                e.printStackTrace();
+            }
         }
-        else
-        {
-            return javaName;
-        }
+        return javaName;
     }
 
     /**
