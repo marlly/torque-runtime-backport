@@ -1,42 +1,42 @@
 <module name="jakarta-turbine-torque">
 
-
   <description>Persistence Layer</description>
   <url href="http://jakarta.apache.org/turbine/torque/"/>
-  
+
   <cvs repository="jakarta"/>
-  
+
   <!-- This is really the cvs module. We need to change this but -->
   <!-- I will leave this for now until everything works.         -->
-  
+
   <project name="jakarta-turbine-torque">
-    
+
     <!-- Standard Maven target to produce Javadocs, source -->
     <!-- and binary distributions.                         -->
-    
-    <ant buildfile="build-gump.xml" target="jar">
-      <property name="final.name" value="torque-@@DATE@@"/>
-    </ant>
-    
-    <!-- All Maven projects need Ant and Xerces to build. -->
-    <depend project="jakarta-ant"/>
-    <depend project="xml-xerces"/>
 
+    <ant buildfile="build-gump.xml" target="jar">
+      <property name="maven.build.dir" value="target"/>
+      <property name="maven.build.dest" value="target/classes"/>
+      <property name="maven.final.name" value="torque-@@DATE@@"/>
+    </ant>
+
+    <depend project="commons-beanutils"/>
     <depend project="commons-collections"/>
     <depend project="commons-configuration"/>
+    <depend project="commons-dbcp"/>
+    <depend project="commons-io"/>
     <depend project="commons-lang"/>
     <depend project="commons-pool"/>
-    <depend project="jdbc"/>
+    <depend project="dom4j"/>
+    <depend project="jakarta-ant"/>
     <depend project="jakarta-log4j"/>
-    <depend project="jakarta-turbine-stratum"/>
     <depend project="jakarta-turbine-jcs"/>
+    <depend project="jakarta-turbine-stratum"/>
     <depend project="jakarta-velocity"/>
+    <depend project="jakarta-velocity-dvsl"/>
+    <depend project="jdbc"/>
     <depend project="village"/>
     <depend project="xml-xerces"/>
     <depend project="xml-apis"/>
-    <depend project="jakarta-velocity-dvsl"/>
-    <depend project="dom4j"/>
-    <depend project="commons-io"/>
 
     <work nested="target/classes"/>
     <home nested="target"/>
@@ -45,8 +45,5 @@
 
     <nag from="turbine-torque-dev@jakarta.apache.org"
          to="turbine-torque-dev@jakarta.apache.org"/>
-
-    
   </project>
-  
 </module>
