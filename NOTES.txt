@@ -2,11 +2,6 @@
 T O R Q U E
 --------------------------------------------------------------------------
 
-o Separate the connection pool and make it pluggable
-  so that torque can easily be integrated into other application
-  that already use PoolMan, or the commons connection pool, or
-  the struts connection pool or whatever
-
 o XML as configuration
 
 o Use the digester to turn the datamodel into an object and
@@ -21,9 +16,6 @@ o Some analysis on what we actually have would be prudent. Torque
 
 o find all other OSS persistence layer projects and see if
   we can join forces.
-
-o separate the runtime system from the generation tools, place
-  them in different packages.
 
 o using cursors to allow controlled access to a large set
   of data. typically there is no need to see a massive
