@@ -75,7 +75,7 @@ import org.xml.sax.InputSource;
 public class DTDResolver implements EntityResolver
 {
     /** Where the DTD is located on the web. */
-    private static final String WEB_SITE_DTD
+    public static final String WEB_SITE_DTD
             = "http://db.apache.org/torque/dtd/database_3_1.dtd";
 
     /** InputSource for <code>database.dtd</code>. */
