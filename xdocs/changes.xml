@@ -38,6 +38,9 @@
       TRQS13: torque.overloadKeySetters obsoleted
     </li>
     <li>
+      TRQS15: Torque gererated code does not compile
+    </li>
+    <li>
       added support for the new com.mysql.jdbc.Driver
     </li>
     <li>

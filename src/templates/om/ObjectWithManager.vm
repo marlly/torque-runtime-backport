@@ -1201,7 +1201,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #elseif($cjtype == "Double")
             set${col.JavaName}(new Double(((NumberKey)$clo).doubleValue()));
         #elseif($cjtype == "String")
-            set${col.JavaName}($clo.toString());
+            set${col.JavaName}(${clo}.toString());
         #elseif($cjtype == "Date")
             set${col.JavaName}(((DateKey)$clo).getDate());
         #else
@@ -1241,11 +1241,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #elseif($cjtype == "Double")
             set${col.JavaName}(new Double(key));
         #elseif($cjtype == "String")
-            set${col.JavaName}($clo.toString());
+            set${col.JavaName}(key);
         #elseif($cjtype == "Date")
             set${col.JavaName}(new Date(key));
         #else
-            set${col.JavaName}(new ${cjtype}($clo));
+            set${col.JavaName}(new ${cjtype}(key));
         #end
     }
 
