@@ -273,6 +273,7 @@ public class TorqueDataModelTask extends TexenTask
      * constructed by appending the "getTargetDatabase()/db.props to this path.
      *
      * @return basepath to db.props
+     * @deprecated replaced by the platform package
      */
     public String getBasePathToDbProps()
     {
@@ -285,6 +286,7 @@ public class TorqueDataModelTask extends TexenTask
      * to this path.
      *
      * @param v basepath to db.props
+     * @deprecated replaced by the platform package
      */
     public void setBasePathToDbProps(String  v)
     {
