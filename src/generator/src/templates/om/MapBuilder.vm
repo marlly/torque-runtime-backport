@@ -92,10 +92,6 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
 #if ($table.IdMethod == "native")
         tMap.setPrimaryKeyMethod(TableMap.NATIVE);
-#elseif ($table.IdMethod == "autoincrement")
-        tMap.setPrimaryKeyMethod(TableMap.AUTO_INCREMENT);
-#elseif ($table.IdMethod == "sequence")
-        tMap.setPrimaryKeyMethod(TableMap.SEQUENCE);
 #elseif ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethod(TableMap.ID_BROKER);
 #else
@@ -109,7 +105,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         tMap.setPrimaryKeyMethodInfo("$imp.Value");
 #elseif ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
-#elseif ($table.IdMethod == "sequence" || ($table.IdMethod == "native" && $table.Database.Platform.NativeIdMethod == "sequence"))
+#elseif ($table.IdMethod == "native" && $table.Database.Platform.NativeIdMethod == "sequence")
         tMap.setPrimaryKeyMethodInfo("$table.SequenceName");
 #elseif ($table.IdMethod == "native" && $table.Database.Platform.NativeIdMethod == "identity")
         tMap.setPrimaryKeyMethodInfo("$table.Name");

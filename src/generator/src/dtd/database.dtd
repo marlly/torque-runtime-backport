@@ -34,7 +34,7 @@ Java class or method name.
 <!ELEMENT database (external-schema*, domain*, table+)>
 <!ATTLIST database
   name CDATA #IMPLIED
-  defaultIdMethod (idbroker|native|autoincrement|sequence|none) "none"
+  defaultIdMethod (idbroker|native|none) "none"
   defaultJavaType (object|primitive) "primitive"
   package CDATA #IMPLIED
   baseClass CDATA #IMPLIED
@@ -75,7 +75,7 @@ Java class or method name.
 <!ATTLIST table
   name CDATA #REQUIRED
   javaName CDATA #IMPLIED
-  idMethod (idbroker|native|autoincrement|sequence|none|null) "null"
+  idMethod (idbroker|native|none|null) "null"
   skipSql (true|false) "false"
   abstract (true|false) "false"
   baseClass CDATA #IMPLIED
