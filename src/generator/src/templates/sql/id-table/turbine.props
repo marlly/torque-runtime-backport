@@ -4,3 +4,9 @@
 # be for tables used for projects.
 # -------------------------------------------------------------------------
 initialID = 1
+
+#
+# Setting for initial Value and Step
+#
+initialIDValue = 1000
+initialIDStep  = 10

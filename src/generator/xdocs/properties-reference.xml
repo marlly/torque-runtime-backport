@@ -345,12 +345,32 @@
 </tr>
 <tr>
   <td><code> torque.initialID </code></td>
-  <td><code> 101 </code></td>
+  <td><code> 101</code></td>
   <td>
     Controls the starting id of table entries when creating SQL for the id-table. If you
     have two projects that use the same id-table in the same database with different tables,
     make sure that they have different initialID settings and the ranges (initialID is incremented
     for every new table) don't overlap.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.initialIDValue</code></td>
+  <td><code> 1000</code></td>
+  <td>
+    The start value of the ID broker for supplying IDs to Torque. This value is incremented every
+    time Torque requests ID keys from the broker. If you pre-load your table straight from SQL, 
+    make sure that you don't accidentially overlap with this setting, because Torque doesn't keep
+    record of what IDs are already taken in the database. If you overlap, inserting new objects
+    will fail because the ID assigned by Torque is already taken.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.initialIDStep</code></td>
+  <td><code> 10</code></td>
+  <td>
+    For performance reasons, the ID Broker does not request a single ID at a time but fetches a
+    whole range and increments the current next ID Value in the ID Table by this step. If you have
+    to do lots of inserts straight in a row, increment this value to get slightly better performance.
   </td>
 </tr>
 
