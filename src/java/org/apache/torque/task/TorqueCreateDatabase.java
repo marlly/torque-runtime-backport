@@ -73,28 +73,6 @@ public class TorqueCreateDatabase
     private String targetDatabase;
 
     /**
-     * The target platform we are creating the
-     * script for. The target platform controls
-     * which template is parsed
-     */
-    private String targetPlatform;
-
-    /**
-     * Database user.
-     */
-    private String databaseUser;
-    
-    /**
-     * Password for specified database user.
-     */
-    private String databasePassword;
-    
-    /**
-     * Host on which specified database resides.
-     */
-    private String databaseHost;
-
-    /**
      * Get the target database.
      *
      * @return String target database.
@@ -115,86 +93,6 @@ public class TorqueCreateDatabase
     }
 
     /**
-     * Get the target platform.
-     *
-     * @return String target platform.
-     */
-    public String getTargetPlatform ()
-    {
-        return targetPlatform;
-    }
-
-    /**
-     * Set the target platform.
-     *
-     * @param String target platform
-     */
-    public void setTargetPlatform (String v)
-    {
-        targetPlatform = v;
-    }
-
-    /**
-     * Get the database user.
-     *
-     * @return String target platform.
-     */
-    public String getDatabaseUser ()
-    {
-        return databaseUser;
-    }
-
-    /**
-     * Set the database user.
-     *
-     * @param String databaseUser
-     */
-    public void setDatabaseUser (String v)
-    {
-        databaseUser = v;
-    }
-
-    /**
-     * Get the database password.
-     *
-     * @return String database password.
-     */
-    public String getDatabasePassword()
-    {
-        return databasePassword;
-    }
-
-    /**
-     * Set the databasePassword
-     *
-     * @param String target platform
-     */
-    public void setDatabasePassword (String v)
-    {
-        databasePassword = v;
-    }
-
-    /**
-     * Get the database host.
-     *
-     * @return String database host.
-     */
-    public String getDatabaseHost ()
-    {
-        return databaseHost;
-    }
-
-    /**
-     * Set the database host.
-     *
-     * @param String database host.
-     */
-    public void setDatabaseHost (String v)
-    {
-        databaseHost = v;
-    }
-
-    /**
      * Place our target database and target platform
      * values into the context for use in the
      * templates.
@@ -203,13 +101,7 @@ public class TorqueCreateDatabase
         throws Exception
     {   
         super.initControlContext();
-        
         context.put("targetDatabase", targetDatabase);
-        context.put("targetPlatform", targetPlatform);
-        context.put("databaseUser", databaseUser);
-        context.put("databasePassword", databasePassword);
-        context.put("databaseHost", databaseHost);
-        
         return context;
     }
 }

@@ -168,17 +168,17 @@
     <torque-create-db
       controlTemplate="sql/db-init/Control.vm"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
-      templatePath="${templatePath}"
-      outputFile="create-db.sql"
-      targetPlatform="${platform}"
       targetDatabase="${database}"
-      databaseUser="${databaseUser}"
-      databasePassword="${databasePassword}"
-      databaseHost="${databaseHost}">
+      templatePath="${templatePath}"
+      outputFile="create-db.sql">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>
     </torque-create-db>
+
+    <echo>
+      Executing the create-db.sql script ...
+    </echo>
 
     <sql
       driver="${databaseDriver}"
@@ -207,7 +207,7 @@
 
     <torque-insert-sql
       driver="${databaseDriver}"
-      url="${databaseUrl}"
+      url="${buildDatabaseUrl}"
       userid="${databaseUser}"
       password="${databasePassword}"
       autocommit="true"
@@ -565,16 +565,19 @@
       <classpath refid="torque-classpath"/>
     </taskdef>
 
+    <echo>
+      driver="${databaseDriver}"
+      url="${createDatabaseUrl}"
+      userid="${databaseUser}"
+      password="${databasePassword}"
+    </echo>      
+
     <torque-create-db
       controlTemplate="sql/db-init/Control.vm"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
-      useClasspath="true"
-      outputFile="create-db.sql"
-      targetPlatform="${platform}"
       targetDatabase="${database}"
-      databaseUser="${databaseUser}"
-      databasePassword="${databasePassword}"
-      databaseHost="${databaseHost}">
+      useClasspath="true"
+      outputFile="create-db.sql">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>

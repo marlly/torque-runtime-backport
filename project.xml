@@ -144,6 +144,7 @@
     <!-- Unit test classes -->
     <unitTestClassEntries>
       <unitTestClassEntry>include = **/*Test*.class</unitTestClassEntry>
+      <unitTestClassEntry>exclude = **/BaseTestCase.class</unitTestClassEntry>
     </unitTestClassEntries>
 
     <!-- Runtime unit test classes -->

@@ -65,6 +65,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
+buildDatabaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
 databaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
 databaseDriver = oracle.jdbc.driver.OracleDriver
 databaseUser = dobbs

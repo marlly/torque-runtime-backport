@@ -65,6 +65,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
+buildDatabaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
 databaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
 databaseDriver = com.sap.dbtech.jdbc.DriverSapDB
 databaseUser = tdk

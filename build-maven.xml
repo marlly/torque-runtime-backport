@@ -11,8 +11,6 @@
   <property file="build.properties" />
   <!-- Set default values for the build -->
   <property file="project.properties" />
-  <!-- Set default values for the build -->
-  <property file="${ant.home}/maven/default.properties" />
 
   <!-- maven:start -->
   

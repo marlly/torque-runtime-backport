@@ -66,6 +66,7 @@ useManagers=true
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
+buildDatabaseUrl = jdbc:mysql://localhost:3306/bookstore
 databaseUrl = jdbc:mysql://localhost:3306/bookstore
 databaseDriver = org.gjt.mm.mysql.Driver
 databaseUser = root

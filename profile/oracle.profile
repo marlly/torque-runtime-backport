@@ -66,6 +66,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
+buildDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
 databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
 databaseDriver = oracle.jdbc.driver.OracleDriver
 databaseUser = torque

@@ -67,6 +67,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:as400://testhost/torquetest
+buildDatabaseUrl = jdbc:as400://testhost/torquetest
 databaseUrl = jdbc:as400://testhost/torquetest
 databaseDriver = com.ibm.as400.access.AS400JDBCDriver
 databaseUser = 

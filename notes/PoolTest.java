@@ -156,10 +156,6 @@ public class PoolTest implements Runnable
                     System.out.println("Released connection: " + thread);
                 }
             }
-            catch (ConnectionWaitTimeoutException cwte)
-            {
-                System.out.println ("Caught CWTE: " + thread);
-            }
             catch (Exception e)
             {
                 category.error(e);

@@ -65,6 +65,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:sybase:Tds:localhost:5000/master
+buildDatabaseUrl = jdbc:sybase:Tds:localhost:5000/bookstore
 databaseUrl = jdbc:sybase:Tds:localhost:5000/bookstore
 databaseDriver = com.sybase.jdbc2.jdbc.SybDriver
 databaseUser = sa

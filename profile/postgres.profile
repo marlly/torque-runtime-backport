@@ -66,6 +66,7 @@ addIntakeRetrievable=false
 # -------------------------------------------------------------------
 
 createDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/template1
+buildDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
 databaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
 databaseDriver = org.postgresql.Driver
 databaseUser = mpoeschl
