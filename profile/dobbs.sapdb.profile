@@ -1,12 +1,12 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/postgresql-7.2dev-1.2.jar
+torque.testDatabaseJar = ${lib.repo}/sapdb-jdbc-bin-7.3.0.19a.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:postgresql://127.0.0.1:5432/sqltest
+torque.sqlTest.databaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
 
 lib.dir = ../lib
 
@@ -24,7 +24,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = postgresql
+database = sapdb
 
 # -------------------------------------------------------------------
 # 
@@ -64,12 +64,12 @@ addIntakeRetrievable=false
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/template1
-databaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
-databaseDriver = org.postgresql.Driver
+createDatabaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
+databaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
+databaseDriver = com.sap.dbtech.jdbc.DriverSapDB
 databaseUser = dobbs
-databasePassword = 
-databaseHost = 127.0.0.1
+databasePassword = dobbs
+databaseHost = edobbs
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

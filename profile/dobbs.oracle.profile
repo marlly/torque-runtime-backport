@@ -1,12 +1,12 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/postgresql-7.2dev-1.2.jar
+torque.testDatabaseJar = ${lib.repo}/oracle_jdbc.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:postgresql://127.0.0.1:5432/sqltest
+torque.sqlTest.databaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
 
 lib.dir = ../lib
 
@@ -24,7 +24,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = postgresql
+database = oracle
 
 # -------------------------------------------------------------------
 # 
@@ -64,12 +64,13 @@ addIntakeRetrievable=false
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/template1
-databaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
-databaseDriver = org.postgresql.Driver
+createDatabaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
+databaseUrl = jdbc:oracle:thin:@linuxdb:1521:dev
+databaseDriver = oracle.jdbc.driver.OracleDriver
 databaseUser = dobbs
-databasePassword = 
-databaseHost = 127.0.0.1
+databasePassword = dobbs
+databaseHost = linuxdb
+#databaseSchema = dobbs
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
