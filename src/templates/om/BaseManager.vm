@@ -17,14 +17,14 @@ package ${package};
 
 import java.util.List;
 
-import org.apache.torque.om.ObjectKey;
-import org.apache.torque.om.Persistent;
-import org.apache.torque.manager.AbstractBaseManager;
-import org.apache.torque.manager.MethodResultCache;
-import org.apache.torque.manager.CacheListener;
-import org.apache.torque.util.Criteria;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
+import org.apache.torque.manager.AbstractBaseManager;
+import org.apache.torque.manager.CacheListener;
+import org.apache.torque.manager.MethodResultCache;
+import org.apache.torque.om.ObjectKey;
+import org.apache.torque.om.Persistent;
+import org.apache.torque.util.Criteria;
 
 /** 
  * This class manages $interfaceName objects.  

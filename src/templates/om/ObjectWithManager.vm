@@ -12,21 +12,29 @@ package ${package};
     #set ($extendsBaseClass = "extends $table.BaseClass" )
 #end
 
-import java.util.*;
-import java.math.*;
-import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
-import org.apache.torque.om.*;
-import org.apache.torque.util.BasePeer;
-import org.apache.torque.util.Criteria;
-import org.apache.torque.util.Transaction;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 #if ($addSaveMethod)
 import org.apache.commons.lang.ObjectUtils;
 #end
 #if ($addIntakeRetrievable)
 import org.apache.fulcrum.intake.Retrievable;
 #end
+import org.apache.torque.TorqueException;
+import org.apache.torque.om.BaseObject;
+import org.apache.torque.om.ComboKey;
+import org.apache.torque.om.DateKey;
+import org.apache.torque.om.NumberKey;
+import org.apache.torque.om.ObjectKey;
+import org.apache.torque.om.SimpleKey;
+import org.apache.torque.om.StringKey;
+import org.apache.torque.om.Persistent;
+import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Transaction;
 
 #foreach ($fk in $table.ForeignKeys)
    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
