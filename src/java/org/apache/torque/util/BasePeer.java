@@ -475,8 +475,7 @@ public abstract class BasePeer implements java.io.Serializable
         String dbName = criteria.getDbName();
 
         // Do the work, assuring the database connection is released.
-        if (Torque.getDB(dbName).objectDataNeedsTrans() &&
-            criteria.containsObjectColumn(dbName))
+        if (criteria.containsObjectColumn(dbName))
         {
             // For PostgreSQL and LOBs.
             try
@@ -672,10 +671,8 @@ public abstract class BasePeer implements java.io.Serializable
         DBConnection dbCon = null;
         ObjectKey id = null;
 
-        // Transaction stuff added for postgres.
-        boolean doTransaction = (Torque.getDB(criteria.getDbName()).
-            objectDataNeedsTrans() &&
-            criteria.containsObjectColumn(criteria.getDbName()));
+        boolean doTransaction =
+            criteria.containsObjectColumn(criteria.getDbName());
 
         try
         {
@@ -1206,11 +1203,8 @@ public abstract class BasePeer implements java.io.Serializable
     public static Vector doSelect(Criteria criteria)
         throws Exception
     {
-        // Transaction stuff added for postgres.
         Vector results = null;
-        if (Torque.getDB(criteria.getDbName())
-              .objectDataNeedsTrans() &&
-              criteria.containsObjectColumn(criteria.getDbName()))
+        if (criteria.containsObjectColumn(criteria.getDbName()))
         {
             DBConnection dbCon = beginTransaction(criteria.getDbName());
             try
@@ -1562,10 +1556,8 @@ public abstract class BasePeer implements java.io.Serializable
     public static void doUpdate(Criteria updateValues)
         throws Exception
     {
-        // Transaction stuff added for postgres.
-        boolean doTransaction = (Torque.getDB(updateValues.getDbName())
-            .objectDataNeedsTrans() &&
-            updateValues.containsObjectColumn(updateValues.getDbName()));
+        boolean doTransaction =
+            updateValues.containsObjectColumn(updateValues.getDbName());
         DBConnection db = null;
         try
         {
@@ -1664,10 +1656,8 @@ public abstract class BasePeer implements java.io.Serializable
                                 Criteria updateValues)
         throws Exception
     {
-        // Transaction stuff added for postgres.
-        boolean doTransaction = (Torque.getDB(updateValues.getDbName())
-            .objectDataNeedsTrans() &&
-            updateValues.containsObjectColumn(selectCriteria.getDbName()));
+        boolean doTransaction =
+            updateValues.containsObjectColumn(selectCriteria.getDbName());
         DBConnection db = null;
         try
         {
