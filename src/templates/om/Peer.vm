@@ -355,7 +355,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             obj.set${col.JavaName}(b ? Boolean.TRUE : Boolean.FALSE);
                 #end
             #elseif ($col.isBooleanInt())
-            $boolean b = (row.getValue(offset + $n).$col.VillageMethod == 1);
+            $boolean b = (row.getValue(offset + $n).$col.VillageMethod != 0);
                 #set ( $boolean = "" )
                 #if ($col.isUsePrimitive())
             obj.set${col.JavaName}(b);
