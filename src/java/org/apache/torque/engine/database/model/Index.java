@@ -90,25 +90,30 @@ public class Index
      * Creates a new instance for the list of columns composing an
      * index.  Otherwise performs as {@link #Index()}.
      *
+     * @param table The table this index is associated with.
      * @param indexColumns The list of {@link
      * org.apache.torque.engine.database.model.Column} objects which
      * make up this index.  Cannot be empty.
      * @exception TorqueException Error generating name.
      * @see #Index()
      */
-    public Index(List indexColumns)
+    protected Index(Table table, List indexColumns)
         throws TorqueException
     {
         this();
+        setTable(table);
         if (indexColumns.size() > 0)
         {
             this.indexColumns = indexColumns;
 
-            List inputs = getColumnNames();
+            List inputs = new ArrayList(4);
+            inputs.add(table.getDatabase());
+            inputs.add(table.getName());
             inputs.add("I");
-            inputs.add(0, getTable().getDatabase().getAppData());
-            indexName = NameFactory.generateName(NameFactory.GLOBAL_GENERATOR,
-                                                 inputs);
+            // ASSUMPTION: This Index not yet added to the list.
+            inputs.add(new Integer(table.getIndices().length + 1));
+            indexName = NameFactory.generateName
+                (NameFactory.CONSTRAINT_GENERATOR, inputs);
 
             if (DEBUG)
             {
