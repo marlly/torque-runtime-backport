@@ -1,8 +1,5 @@
 target
 *~
 build.properties
-velocity.log
-sql.log
-maven.log
-turbine.log
+*.log
 logs
