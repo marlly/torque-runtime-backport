@@ -162,16 +162,9 @@ public class TorqueDataSQLTask
         AppData app = (AppData) getDataModels().elementAt(0);
         Database db = app.getDatabase();
         
-        try
-        {
-            XmlToData dataXmlParser = new XmlToData(db, dataDTD);
-            List data = dataXmlParser.parseFile(dataXmlFile);
-            context.put("data", data);
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Exception parsing data XML:");
-        }
+        XmlToData dataXmlParser = new XmlToData(db, dataDTD);
+        List data = dataXmlParser.parseFile(dataXmlFile);
+        context.put("data", data);
         
         // Place our model in the context.
         context.put("appData", app);
