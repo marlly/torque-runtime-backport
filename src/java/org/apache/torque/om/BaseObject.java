@@ -55,7 +55,6 @@ package org.apache.torque.om;
  */
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import org.apache.log4j.Category;
 import java.sql.Connection;
 
@@ -78,13 +77,13 @@ public abstract class BaseObject implements Persistent, Serializable
      * Shared portion of the error message thrown for methods which
      * are not implemented.
      */
-    private static final String NOT_IMPLEMENTED =
-        "Not implemented: Method must be overridden if called";
+    private static final String NOT_IMPLEMENTED
+            = "Not implemented: Method must be overridden if called";
 
     /**
      * attribute to determine if this object has previously been saved.
      */
-    private boolean is_new = true;
+    private boolean isNew = true;
 
     /**
      * The unique id for the object which can be used for persistence.
@@ -116,99 +115,6 @@ public abstract class BaseObject implements Persistent, Serializable
     }
 
     /**
-     * Attempts to return the object primaryKey as an int.
-     *
-     * @return the object primaryKey as an int;
-     * returns -1 if primaryKey was not set
-     * or could not be represented as an int.
-     *
-     * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.torque.om.ObjectKey} for more information on type
-     * conversion.
-     */
-    public int getPrimaryKeyAsInt()
-    {
-        int pkInt = NEW_ID;
-        try
-        {
-            pkInt = Integer.parseInt(getPrimaryKey().toString());
-        }
-        catch (Exception e)
-        {
-        }
-        return pkInt;
-    }
-
-    /**
-     * Attempts to return the object primaryKey as a long.
-     *
-     * @return the object primaryKey as a long;
-     * returns -1 if primaryKey was not set
-     * or could not be represented as a long.
-     *
-     * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.torque.om.ObjectKey} for more information on type
-     * conversion.
-     */
-    public long getPrimaryKeyAsLong()
-    {
-        long pkLong = (long) NEW_ID;
-        try
-        {
-            pkLong = Long.parseLong(getPrimaryKey().toString());
-        }
-        catch (Exception e)
-        {
-        }
-        return pkLong;
-    }
-
-    /**
-     * Attempts to return the object primaryKey as a BigDecimal.
-     *
-     * @return the object primaryKey as a BigDecimal;
-     * returns -1 if primaryKey was not
-     * set or could not be represented as a BigDecimal.
-     *
-     * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.torque.om.ObjectKey} for more information on type
-     * conversion.
-     */
-    public BigDecimal getPrimaryKeyAsBigDecimal()
-    {
-        BigDecimal bd = null;
-        try
-        {
-            bd = new BigDecimal(getPrimaryKey().toString());
-        }
-        catch (Exception e)
-        {
-            bd = new BigDecimal(NEW_ID);
-        }
-        return bd;
-    }
-
-    /**
-     * Gets the object primaryKey as a String.
-     *
-     * @return the object primaryKey as a String;
-     * returns null if primaryKey was not
-     * set.
-     *
-     * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.torque.om.ObjectKey} for more information on type
-     * conversion.
-     */
-    public String getPrimaryKeyAsString()
-    {
-        if (getPrimaryKey() == null)
-        {
-            return null;
-        }
-        return getPrimaryKey().toString();
-    }
-
-    /**
      * Returns whether the object has been modified.
      *
      * @return True if the object has been modified.
@@ -227,7 +133,7 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public boolean isNew()
     {
-        return is_new;
+        return isNew;
     }
 
     /**
@@ -238,35 +144,7 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public void setNew(boolean b)
     {
-        this.is_new = b;
-    }
-
-    /**
-     * Sets the primaryKey for the object as an int.
-     *
-     * @param primaryKey The new primaryKey for the object.
-     * @exception Exception This method will not throw any exceptions
-     * but this allows for children to override the method more easily
-     *
-     * @deprecated
-     */
-    public void setPrimaryKey(int primaryKey) throws Exception
-    {
-        this.primaryKey = new NumberKey(BigDecimal.valueOf((long) primaryKey));
-    }
-
-    /**
-     * Sets the PrimaryKey for the object as an long.
-     *
-     * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception This method will not throw any exceptions
-     * but this allows for children to override the method more easily
-     *
-     * @deprecated
-     */
-    public void setPrimaryKey(long primaryKey) throws Exception
-    {
-        this.primaryKey = new NumberKey(String.valueOf(primaryKey));
+        this.isNew = b;
     }
 
     /**
@@ -341,6 +219,9 @@ public abstract class BaseObject implements Persistent, Serializable
      * Retrieves a field from the object by name passed in
      * as a String.  Must be overridden if called.
      * BaseObject's implementation will throw an Error.
+     *
+     * @param name field name
+     * @return value of the field
      */
     public Object getByPeerName(String name)
     {
@@ -351,6 +232,9 @@ public abstract class BaseObject implements Persistent, Serializable
      * Retrieves a field from the object by position as specified
      * in a database schema for example.  Must be overridden if called.
      * BaseObject's implementation will throw an Error.
+     *
+     * @param pos field position
+     * @return value of the field
      */
     public Object getByPosition(int pos)
     {
@@ -418,17 +302,6 @@ public abstract class BaseObject implements Persistent, Serializable
         }
 
         return ok.hashCode();
-    }
-
-    /**
-     * gets a log4j Category based on class name.
-     *
-     * @return a <code>Category</code> to write log to.
-     * @deprecated use log()
-     */
-    protected Category getCategory()
-    {
-        return Category.getInstance(getClass().getName());
     }
 
     /**
