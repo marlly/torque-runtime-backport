@@ -316,7 +316,7 @@ public class Criteria extends Hashtable
      */
     public void addAlias(String alias, String table)
     {
-        if ( aliases == null )
+        if (aliases == null)
         {
             aliases = new HashMap(8);
         }
@@ -331,7 +331,7 @@ public class Criteria extends Hashtable
      */
     public String getTableForAlias(String alias)
     {
-        if ( aliases == null )
+        if (aliases == null)
         {
             return null;
         }
@@ -345,8 +345,8 @@ public class Criteria extends Hashtable
      * @param column The name of the column.
      * @return True if this Criteria Object contain the specified key.
      */
-    public boolean containsKey( String table,
-                                String column )
+    public boolean containsKey(String table,
+                               String column)
     {
         return containsKey(table + '.' + column);
     }
@@ -375,7 +375,7 @@ public class Criteria extends Hashtable
         return getBoolean(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -409,14 +409,14 @@ public class Criteria extends Hashtable
     {
         // Peer or application may have noted the existence of a blob
         // so we can save the lookup.
-        if ( blobFlag != null)
+        if (blobFlag != null)
         {
             return blobFlag.booleanValue();
         }
 
         DatabaseMap map = Torque.getDatabaseMap(databaseMapName);
         StringStack tables = new StringStack();
-        for (Iterator it = super.values().iterator(); it.hasNext(); )
+        for (Iterator it = super.values().iterator(); it.hasNext();)
         {
             Criterion co = (Criterion)it.next();
             String tableName = co.getTable();
@@ -481,7 +481,7 @@ public class Criteria extends Hashtable
         return getCriterion(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -577,7 +577,7 @@ public class Criteria extends Hashtable
         return getComparison(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -604,7 +604,7 @@ public class Criteria extends Hashtable
         return getDate(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -656,7 +656,7 @@ public class Criteria extends Hashtable
         return getDouble(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -686,7 +686,7 @@ public class Criteria extends Hashtable
         return getFloat(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -716,7 +716,7 @@ public class Criteria extends Hashtable
         return getInteger(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -746,7 +746,7 @@ public class Criteria extends Hashtable
         return getInt(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -776,7 +776,7 @@ public class Criteria extends Hashtable
         return getBigDecimal(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -806,7 +806,7 @@ public class Criteria extends Hashtable
         return getLong(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -833,7 +833,7 @@ public class Criteria extends Hashtable
         return getString(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -871,7 +871,7 @@ public class Criteria extends Hashtable
         return getList(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -880,7 +880,7 @@ public class Criteria extends Hashtable
      * @param name A String with the name of the key.
      * @return An Object with the value of object at key.
      */
-    public Object getValue( String name )
+    public Object getValue(String name)
     {
         return getCriterion(name).getValue();
     }
@@ -892,13 +892,13 @@ public class Criteria extends Hashtable
      * @param column String name of column.
      * @return An Object with the value of object at key.
      */
-    public Object getValue( String table,
-                            String column )
+    public Object getValue(String table,
+                           String column)
     {
         return getValue(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -925,7 +925,7 @@ public class Criteria extends Hashtable
         return getObjectKey(
             new StringBuffer(table.length() + column.length() + 1)
             .append(table).append('.').append(column)
-            .toString() );
+            .toString());
     }
 
     /**
@@ -935,9 +935,9 @@ public class Criteria extends Hashtable
      * @param key An Object.
      * @return An Object.
      */
-    public Object get( Object key )
+    public Object get(Object key)
     {
-        return getValue( (String)key );
+        return getValue((String)key);
     }
 
     /**
@@ -955,7 +955,7 @@ public class Criteria extends Hashtable
      * @throws NullPointerException if key != String or key/value is null.
      * @return Instance of self.
      */
-    public Object put( Object key, Object value )
+    public Object put(Object key, Object value)
     {
         if (! (key instanceof String))
             throw new NullPointerException(
@@ -980,7 +980,7 @@ public class Criteria extends Hashtable
         {
             Map.Entry e = (Map.Entry) i.next();
             Object val = e.getValue();
-            if ( val instanceof Criteria.Criterion )
+            if (val instanceof Criteria.Criterion)
             {
                 super.put(e.getKey(), val);
             }
@@ -989,7 +989,7 @@ public class Criteria extends Hashtable
                 put(e.getKey(), val);
             }
         }
-        if ( t instanceof Criteria )
+        if (t instanceof Criteria)
         {
             Criteria c = (Criteria)t;
             this.joinL = c.joinL;
@@ -997,7 +997,7 @@ public class Criteria extends Hashtable
         }
         /* this would make a copy, not included
            but might want to use some of it.
-        if ( t instanceof Criteria )
+        if (t instanceof Criteria)
         {
             Criteria c = (Criteria)t;
             this.ignoreCase = c.ignoreCase;
@@ -1022,7 +1022,7 @@ public class Criteria extends Hashtable
      * <p>
      * <code>
      * Criteria crit = new Criteria().add(&quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -1036,8 +1036,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add ( String column,
-                          Object value )
+    public Criteria add (String column,
+                         Object value)
     {
         add(column, value, EQUAL);
         return this;
@@ -1067,11 +1067,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add ( String column,
-                          Object value,
-                          SqlEnum comparison )
+    public Criteria add (String column,
+                         Object value,
+                         SqlEnum comparison)
     {
-        super.put( column, new Criterion(column, value, comparison) );
+        super.put(column, new Criterion(column, value, comparison));
         return this;
     }
 
@@ -1084,7 +1084,7 @@ public class Criteria extends Hashtable
      * <code>
      * Criteria crit = new Criteria().add(&quot;table&quot;,
      *                                      &quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -1095,9 +1095,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add ( String table,
-                          String column,
-                          Object value )
+    public Criteria add (String table,
+                         String column,
+                         Object value)
     {
         add(table, column, value, EQUAL);
         return this;
@@ -1125,10 +1125,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String table,
-                          String column,
-                          Object value,
-                          SqlEnum comparison )
+    public Criteria add(String table,
+                        String column,
+                        Object value,
+                        SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length()+column.length()+1);
         sb.append(table);
@@ -1152,8 +1152,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
-                          boolean value )
+    public Criteria add(String column,
+                        boolean value)
     {
         add(column, (value ? Boolean.TRUE : Boolean.FALSE));
         return this;
@@ -1174,11 +1174,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
-                          boolean value,
-                          SqlEnum comparison )
+    public Criteria add(String column,
+                        boolean value,
+                        SqlEnum comparison)
     {
-        add(column, new Boolean(value), comparison );
+        add(column, new Boolean(value), comparison);
         return this;
     }
 
@@ -1197,10 +1197,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
-                          int value )
+    public Criteria add(String column,
+                        int value)
     {
-        add(column, new Integer(value) );
+        add(column, new Integer(value));
         return this;
     }
 
@@ -1220,11 +1220,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
-                          int value,
-                          SqlEnum comparison )
+    public Criteria add(String column,
+                        int value,
+                        SqlEnum comparison)
     {
-        add(column, new Integer(value), comparison );
+        add(column, new Integer(value), comparison);
         return this;
     }
 
@@ -1243,7 +1243,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         long value)
     {
         add(column, new Long(value));
@@ -1266,7 +1266,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         long value,
                         SqlEnum comparison)
     {
@@ -1289,7 +1289,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         float value)
     {
         add(column, new Float(value));
@@ -1312,7 +1312,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         float value,
                         SqlEnum comparison)
     {
@@ -1335,7 +1335,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         double value)
     {
         add(column, new Double(value));
@@ -1357,7 +1357,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria add( String column,
+    public Criteria add(String column,
                         double value,
                         SqlEnum comparison)
     {
@@ -1369,10 +1369,10 @@ public class Criteria extends Hashtable
      * @deprecated These methods were wrongly named and are misleading.
      *             Use addDate() instead.
      */
-    public Criteria addTime( String column,
-                             int year,
-                             int month,
-                             int date )
+    public Criteria addTime(String column,
+                            int year,
+                            int month,
+                            int date)
     {
         return addDate(column, year, month, date);
     }
@@ -1381,11 +1381,11 @@ public class Criteria extends Hashtable
      * @deprecated These methods were wrongly named and are misleading.
      *             Use addDate() instead.
      */
-    public Criteria addTime( String column,
-                             int year,
-                             int month,
-                             int date,
-                             SqlEnum comparison)
+    public Criteria addTime(String column,
+                            int year,
+                            int month,
+                            int date,
+                            SqlEnum comparison)
     {
         return addDate(column, year, month, date, comparison);
     }
@@ -1406,12 +1406,12 @@ public class Criteria extends Hashtable
      * @param date An int with the date.
      * @return A modified Criteria object.
      */
-    public Criteria addDate( String column,
-                             int year,
-                             int month,
-                             int date )
+    public Criteria addDate(String column,
+                            int year,
+                            int month,
+                            int date)
     {
-        add(column, new GregorianCalendar(year, month, date) );
+        add(column, new GregorianCalendar(year, month, date));
         return this;
     }
 
@@ -1432,13 +1432,13 @@ public class Criteria extends Hashtable
      * @param comparison String describing how to compare the column with the value
      * @return A modified Criteria object.
      */
-    public Criteria addDate( String column,
-                             int year,
-                             int month,
-                             int date,
-                             SqlEnum comparison)
+    public Criteria addDate(String column,
+                            int year,
+                            int month,
+                            int date,
+                            SqlEnum comparison)
     {
-        add(column, new GregorianCalendar(year, month, date), comparison );
+        add(column, new GregorianCalendar(year, month, date), comparison);
         return this;
     }
 
@@ -1449,10 +1449,10 @@ public class Criteria extends Hashtable
      * @param value A Key.
      * @return A modified Criteria object.
      * /
-    public Criteria add ( String key,
-                          Key value )
+    public Criteria add (String key,
+                         Key value)
     {
-        add( key, value.getInternalObject() );
+        add(key, value.getInternalObject());
         return this;
     }
     */
@@ -1472,10 +1472,10 @@ public class Criteria extends Hashtable
      * @param right A String with the right side of the join.
      * @return A modified Criteria object.
      */
-    public Criteria addJoin( String left,
-                             String right)
+    public Criteria addJoin(String left,
+                            String right)
     {
-        if ( joinL == null )
+        if (joinL == null)
         {
             joinL = new ArrayList(3);
             joinR = new ArrayList(3);
@@ -1784,9 +1784,9 @@ public class Criteria extends Hashtable
      * @param name A String with the name of the select column.
      * @return A modified Criteria object.
      */
-    public Criteria addSelectColumn( String name )
+    public Criteria addSelectColumn(String name)
     {
-        selectColumns.add( name );
+        selectColumns.add(name);
         return this;
     }
 
@@ -1814,9 +1814,9 @@ public class Criteria extends Hashtable
     /**
      * @deprecated Use addAscendingOrderByColumn() instead.
      */
-    public Criteria addOrderByColumn( String name )
+    public Criteria addOrderByColumn(String name)
     {
-        orderByColumns.add( name );
+        orderByColumns.add(name);
         return this;
     }
 
@@ -1826,9 +1826,9 @@ public class Criteria extends Hashtable
      * @param name The name of the column to order by.
      * @return A modified Criteria object.
      */
-    public Criteria addAscendingOrderByColumn( String name )
+    public Criteria addAscendingOrderByColumn(String name)
     {
-        orderByColumns.add( name + " " + ASC );
+        orderByColumns.add(name + " " + ASC);
         return this;
     }
 
@@ -1838,9 +1838,9 @@ public class Criteria extends Hashtable
      * @param name The name of the column to order by.
      * @return A modified Criteria object.
      */
-    public Criteria addDescendingOrderByColumn( String name )
+    public Criteria addDescendingOrderByColumn(String name)
     {
-        orderByColumns.add( name + " " + DESC );
+        orderByColumns.add(name + " " + DESC);
         return this;
     }
 
@@ -1901,37 +1901,37 @@ public class Criteria extends Hashtable
     public boolean equals(Object crit)
     {
         boolean isEquiv = false;
-        if ( crit == null || !(crit instanceof Criteria) )
+        if (crit == null || !(crit instanceof Criteria))
         {
             isEquiv = false;
         }
-        else if ( this == crit )
+        else if (this == crit)
         {
             isEquiv = true;
         }
-        else if ( this.size() == ((Criteria)crit).size() )
+        else if (this.size() == ((Criteria)crit).size())
         {
             Criteria criteria = (Criteria)crit;
-            if ( this.offset == criteria.getOffset()
-                 && this.limit == criteria.getLimit()
-                 && ignoreCase == criteria.isIgnoreCase()
-                 && singleRecord == criteria.isSingleRecord()
-                 && cascade == criteria.isCascade()
-                 && dbName.equals(criteria.getDbName())
-                 && selectModifiers.equals(criteria.getSelectModifiers())
-                 && selectColumns.equals(criteria.getSelectColumns())
-                 && orderByColumns.equals(criteria.getOrderByColumns())
+            if (this.offset == criteria.getOffset()
+                && this.limit == criteria.getLimit()
+                && ignoreCase == criteria.isIgnoreCase()
+                && singleRecord == criteria.isSingleRecord()
+                && cascade == criteria.isCascade()
+                && dbName.equals(criteria.getDbName())
+                && selectModifiers.equals(criteria.getSelectModifiers())
+                && selectColumns.equals(criteria.getSelectColumns())
+                && orderByColumns.equals(criteria.getOrderByColumns())
                )
             {
                 isEquiv = true;
-                for (Iterator it=criteria.keySet().iterator(); it.hasNext(); )
+                for (Iterator it=criteria.keySet().iterator(); it.hasNext();)
                 {
                     String key = (String)it.next();
-                    if ( this.containsKey(key) )
+                    if (this.containsKey(key))
                     {
                         Criterion a = this.getCriterion(key);
                         Criterion b = criteria.getCriterion(key);
-                        if ( !a.equals(b) )
+                        if (!a.equals(b))
                         {
                             isEquiv = false;
                             break;
@@ -1974,7 +1974,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( Criterion c)
+    public Criteria and(Criterion c)
     {
         Criterion oc = getCriterion(c.getTable()+"."+c.getColumn());
 
@@ -1997,7 +1997,7 @@ public class Criteria extends Hashtable
      * <p>
      * <code>
      * Criteria crit = new Criteria().and(&quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -2011,8 +2011,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         Object value )
+    public Criteria and(String column,
+                        Object value)
     {
         and(column, value, EQUAL);
         return this;
@@ -2042,16 +2042,16 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         Object value,
-                         SqlEnum comparison )
+    public Criteria and(String column,
+                        Object value,
+                        SqlEnum comparison)
     {
         Criterion oc = getCriterion(column);
         Criterion nc = new Criterion(column, value, comparison);
 
         if(oc == null)
         {
-            super.put( column, nc);
+            super.put(column, nc);
         }
         else
         {
@@ -2069,7 +2069,7 @@ public class Criteria extends Hashtable
      * <code>
      * Criteria crit = new Criteria().and(&quot;table&quot;,
      *                                      &quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -2080,9 +2080,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String table,
-                         String column,
-                         Object value )
+    public Criteria and(String table,
+                        String column,
+                        Object value)
     {
         and(table, column, value, EQUAL);
         return this;
@@ -2110,10 +2110,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String table,
-                         String column,
-                         Object value,
-                         SqlEnum comparison )
+    public Criteria and(String table,
+                        String column,
+                        Object value,
+                        SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length()+column.length()+1);
         sb.append(table);
@@ -2148,10 +2148,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         boolean value )
+    public Criteria and(String column,
+                        boolean value)
     {
-        and(column, new Boolean(value) );
+        and(column, new Boolean(value));
         return this;
     }
 
@@ -2166,15 +2166,16 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A Boolean.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         boolean value,
-                         SqlEnum comparison )
+    public Criteria and(String column,
+                        boolean value,
+                        SqlEnum comparison)
     {
-        and(column, new Boolean(value), comparison );
+        and(column, new Boolean(value), comparison);
         return this;
     }
 
@@ -2193,10 +2194,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         int value )
+    public Criteria and(String column,int value)
     {
-        and(column, new Integer(value) );
+        and(column, new Integer(value));
         return this;
     }
 
@@ -2216,11 +2216,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         int value,
-                         SqlEnum comparison )
+    public Criteria and(String column,
+                        int value,
+                        SqlEnum comparison)
     {
-        and(column, new Integer(value), comparison );
+        and(column, new Integer(value), comparison);
         return this;
     }
 
@@ -2239,8 +2239,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         long value)
+    public Criteria and(String column,
+                        long value)
     {
         and(column, new Long(value));
         return this;
@@ -2262,9 +2262,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         long value,
-                         SqlEnum comparison)
+    public Criteria and(String column,
+                        long value,
+                        SqlEnum comparison)
     {
         and(column, new Long(value), comparison);
         return this;
@@ -2285,8 +2285,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         float value)
+    public Criteria and(String column,
+                        float value)
     {
         and(column, new Float(value));
         return this;
@@ -2308,9 +2308,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         float value,
-                         SqlEnum comparison)
+    public Criteria and(String column,
+                        float value,
+                        SqlEnum comparison)
     {
         and(column, new Float(value), comparison);
         return this;
@@ -2331,8 +2331,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         double value)
+    public Criteria and(String column,
+                        double value)
     {
         and(column, new Double(value));
         return this;
@@ -2353,9 +2353,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria and( String column,
-                         double value,
-                         SqlEnum comparison)
+    public Criteria and(String column,
+                        double value,
+                        SqlEnum comparison)
     {
         and(column, new Double(value), comparison);
         return this;
@@ -2377,12 +2377,12 @@ public class Criteria extends Hashtable
      * @param date An int with the date.
      * @return A modified Criteria object.
      */
-    public Criteria andDate( String column,
-                             int year,
-                             int month,
-                             int date )
+    public Criteria andDate(String column,
+                            int year,
+                            int month,
+                            int date)
     {
-        and(column, new GregorianCalendar(year, month, date) );
+        and(column, new GregorianCalendar(year, month, date));
         return this;
     }
 
@@ -2403,13 +2403,13 @@ public class Criteria extends Hashtable
      * @param comparison String describing how to compare the column with the value
      * @return A modified Criteria object.
      */
-    public Criteria andDate( String column,
-                             int year,
-                             int month,
-                             int date,
-                             SqlEnum comparison)
+    public Criteria andDate(String column,
+                            int year,
+                            int month,
+                            int date,
+                            SqlEnum comparison)
     {
-        and(column, new GregorianCalendar(year, month, date), comparison );
+        and(column, new GregorianCalendar(year, month, date), comparison);
         return this;
     }
 
@@ -2587,7 +2587,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( Criterion c)
+    //FIXME NOW!!
+    public Criteria or(Criterion c)
     {
         Criterion oc = getCriterion(c.getTable()+"."+c.getColumn());
 
@@ -2610,7 +2611,7 @@ public class Criteria extends Hashtable
      * <p>
      * <code>
      * Criteria crit = new Criteria().or(&quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -2624,8 +2625,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        Object value )
+    public Criteria or(String column,
+                       Object value)
     {
         or(column, value, EQUAL);
         return this;
@@ -2655,16 +2656,16 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        Object value,
-                        SqlEnum comparison )
+    public Criteria or(String column,
+                       Object value,
+                       SqlEnum comparison)
     {
         Criterion oc = getCriterion(column);
         Criterion nc = new Criterion(column, value, comparison);
 
         if(oc == null)
         {
-            super.put( column, nc);
+            super.put(column, nc);
         }
         else
         {
@@ -2682,7 +2683,7 @@ public class Criteria extends Hashtable
      * <code>
      * Criteria crit = new Criteria().or(&quot;table&quot;,
      *                                      &quot;column&quot;,
-     *                                      &quot;value&quot; );
+     *                                      &quot;value&quot;);
      * </code>
      *
      * An EQUAL comparison is used for column and value.
@@ -2693,9 +2694,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String table,
-                        String column,
-                        Object value )
+    public Criteria or(String table,
+                       String column,
+                       Object value)
     {
         or(table, column, value, EQUAL);
         return this;
@@ -2723,10 +2724,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String table,
-                        String column,
-                        Object value,
-                        SqlEnum comparison )
+    //FIXME NOW!!
+    public Criteria or(String table,
+                       String column,
+                       Object value,
+                       SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length()+column.length()+1);
         sb.append(table);
@@ -2760,10 +2762,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        boolean value )
+    public Criteria or(String column,
+                       boolean value)
     {
-        or(column, new Boolean(value) );
+        or(column, new Boolean(value));
         return this;
     }
 
@@ -2782,11 +2784,11 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        boolean value,
-                        SqlEnum comparison )
+    public Criteria or(String column,
+                       boolean value,
+                       SqlEnum comparison)
     {
-        or(column, new Boolean(value), comparison );
+        or(column, new Boolean(value), comparison);
         return this;
     }
 
@@ -2805,10 +2807,10 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        int value )
+    public Criteria or(String column,
+                       int value)
     {
-        or(column, new Integer(value) );
+        or(column, new Integer(value));
         return this;
     }
 
@@ -2824,15 +2826,16 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value An int.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        int value,
-                        SqlEnum comparison )
+    public Criteria or(String column,
+                       int value,
+                       SqlEnum comparison)
     {
-        or(column, new Integer(value), comparison );
+        or(column, new Integer(value), comparison);
         return this;
     }
 
@@ -2851,8 +2854,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        long value)
+    public Criteria or(String column,
+                       long value)
     {
         or(column, new Long(value));
         return this;
@@ -2870,13 +2873,14 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A long.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        long value,
-                        SqlEnum comparison)
+    public Criteria or(String column,
+                       long value,
+                       SqlEnum comparison)
     {
         or(column, new Long(value), comparison);
         return this;
@@ -2897,8 +2901,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        float value)
+    public Criteria or(String column,
+                       float value)
     {
         or(column, new Float(value));
         return this;
@@ -2916,13 +2920,14 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A float.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        float value,
-                        SqlEnum comparison)
+    public Criteria or(String column,
+                       float value,
+                       SqlEnum comparison)
     {
         or(column, new Float(value), comparison);
         return this;
@@ -2943,8 +2948,8 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        double value)
+    public Criteria or(String column,
+                       double value)
     {
         or(column, new Double(value));
         return this;
@@ -2965,9 +2970,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria or( String column,
-                        double value,
-                        SqlEnum comparison)
+    public Criteria or(String column,
+                       double value,
+                       SqlEnum comparison)
     {
         or(column, new Double(value), comparison);
         return this;
@@ -2989,12 +2994,12 @@ public class Criteria extends Hashtable
      * @param date An int with the date.
      * @return A modified Criteria object.
      */
-    public Criteria orDate( String column,
-                            int year,
-                            int month,
-                            int date )
+    public Criteria orDate(String column,
+                           int year,
+                           int month,
+                           int date)
     {
-        or(column, new GregorianCalendar(year, month, date) );
+        or(column, new GregorianCalendar(year, month, date));
         return this;
     }
 
@@ -3012,16 +3017,17 @@ public class Criteria extends Hashtable
      * @param year An int with the year.
      * @param month An int with the month.
      * @param date An int with the date.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      * @return A modified Criteria object.
      */
-    public Criteria orDate( String column,
-                            int year,
-                            int month,
-                            int date,
-                            SqlEnum comparison)
+    public Criteria orDate(String column,
+                           int year,
+                           int month,
+                           int date,
+                           SqlEnum comparison)
     {
-        or(column, new GregorianCalendar(year, month, date), comparison );
+        or(column, new GregorianCalendar(year, month, date), comparison);
         return this;
     }
 
@@ -3237,7 +3243,7 @@ public class Criteria extends Hashtable
         /**
          * Creates a new instance, initializing a couple members.
          */
-        private Criterion( Object val, SqlEnum comp )
+        private Criterion(Object val, SqlEnum comp)
         {
             this.value = val;
             this.comparison = comp;
@@ -3251,10 +3257,10 @@ public class Criteria extends Hashtable
          * @param val An Object with the value for the Criteria.
          * @param comp A String with the comparison value.
          */
-        Criterion( String table,
-                        String column,
-                        Object val,
-                        SqlEnum comp )
+        Criterion(String table,
+                  String column,
+                  Object val,
+                  SqlEnum comp)
         {
             this(val, comp);
             this.table = (table == null ? "" : table);
@@ -3269,13 +3275,13 @@ public class Criteria extends Hashtable
          * @param val An Object with the value for the Criteria.
          * @param comp A String with the comparison value.
          */
-        Criterion( String tableColumn,
-                        Object val,
-                        SqlEnum comp )
+        Criterion(String tableColumn,
+                  Object val,
+                  SqlEnum comp)
         {
             this(val, comp);
             int dot = tableColumn.indexOf('.');
-            if ( dot == -1 )
+            if (dot == -1)
             {
                 table = "";
                 column = tableColumn;
@@ -3294,9 +3300,9 @@ public class Criteria extends Hashtable
          * @param column A String with the name of the column.
          * @param val An Object with the value for the Criteria.
          */
-        Criterion( String table,
-                        String column,
-                        Object val )
+        Criterion(String table,
+                  String column,
+                  Object val)
         {
             this(table, column, val, EQUAL);
         }
@@ -3308,8 +3314,8 @@ public class Criteria extends Hashtable
          * column.
          * @param val An Object with the value for the Criteria.
          */
-        Criterion( String tableColumn,
-                        Object val )
+        Criterion(String tableColumn,
+                  Object val)
         {
             this(tableColumn, val, EQUAL);
         }
@@ -3373,13 +3379,13 @@ public class Criteria extends Hashtable
         public DB getDb()
         {
             DB db = null;
-            if ( this.db == null )
+            if (this.db == null)
             {
                 // db may not be set if generating preliminary sql for
                 // debugging.
                 try
                 {
-                    db = Torque.getDB( getDbName() );
+                    db = Torque.getDB(getDbName());
                 }
                 catch (Exception e)
                 {
@@ -3409,7 +3415,7 @@ public class Criteria extends Hashtable
             
             for(int i=0;i<this.clauses.size();i++)
             {
-              ((Criterion)(clauses.get(i))).setDB(v);
+                ((Criterion)(clauses.get(i))).setDB(v);
             }
         }
 
@@ -3487,10 +3493,12 @@ public class Criteria extends Hashtable
 
             Criterion clause = null;
             for(int j=0;j<this.clauses.size();j++)
-              sb.append('(');
-            if ( CUSTOM == comparison )
             {
-                if ( value != null && ! "".equals(value) )
+                sb.append('(');
+            }
+            if (CUSTOM == comparison)
+            {
+                if (value != null && ! "".equals(value))
                 {
                     sb.append((String)value);
                 }
@@ -3540,10 +3548,12 @@ public class Criteria extends Hashtable
             DB db = getDb();
 
             for(int j=0;j<this.clauses.size();j++)
-              sb.append('(');
-            if ( CUSTOM == comparison )
             {
-                if ( !"".equals(value) )
+                sb.append('(');
+            }
+            if (CUSTOM == comparison)
+            {
+                if (!"".equals(value))
                 {
                     sb.append((String)value);
                 }
@@ -3563,10 +3573,11 @@ public class Criteria extends Hashtable
                         .toString();
                 }
 
-                if ( comparison.equals(Criteria.IN) || comparison.equals(Criteria.NOT_IN) )
+                if (comparison.equals(Criteria.IN)
+                     || comparison.equals(Criteria.NOT_IN))
                 {
-                    sb.append (field)
-                      .append (comparison);
+                    sb.append(field)
+                      .append(comparison);
 
                     StringStack inClause = new StringStack();
 
@@ -3579,11 +3590,14 @@ public class Criteria extends Hashtable
                     {
                         Object item = Array.get(value, i);
 
-                        inClause.add(SqlExpression.processInValue(item, ignoreCase, db));
+                        inClause.add(SqlExpression.processInValue(item,
+                                                                  ignoreCase,
+                                                                  db));
                     }
 
                     StringBuffer inString = new StringBuffer();
-                    inString.append('(').append(inClause.toString(",")).append(')');
+                    inString.append('(')
+                        .append(inClause.toString(",")).append(')');
 
                     sb.append (inString.toString());
                 }
@@ -3604,11 +3618,13 @@ public class Criteria extends Hashtable
 
                     if (value instanceof java.util.Date)
                     {
-                        params.add ( new java.sql.Date (((java.util.Date)value).getTime()) );
+                        params.add(new java.sql.Date(
+                            ((java.util.Date)value).getTime()));
                     }
                     else if (value instanceof DateKey)
                     {
-                        params.add ( new java.sql.Date (((DateKey)value).getDate().getTime()) );
+                        params.add(new java.sql.Date(
+                            ((DateKey)value).getDate().getTime()));
                     }
                     else
                     {
@@ -3652,29 +3668,29 @@ public class Criteria extends Hashtable
          */
         public boolean equals(Object obj)
         {
-            if ( this == obj )
+            if (this == obj)
             {
                 return true;
             }
 
-            if ( (obj == null) || !(obj instanceof Criterion) )
+            if ((obj == null) || !(obj instanceof Criterion))
             {
                 return false;
             }
 
             Criterion crit = (Criterion)obj;
 
-            boolean isEquiv = ( (table == null && crit.getTable() == null)
+            boolean isEquiv = ((table == null && crit.getTable() == null)
                 || (table != null && table.equals(crit.getTable()))
                               )
                 && column.equals(crit.getColumn())
                 && comparison.equals(crit.getComparison());
 
             // we need to check for value equality
-            if ( isEquiv )
+            if (isEquiv)
             {
                 Object b = crit.getValue();
-                if ( value instanceof Object[] && b instanceof Object[] )
+                if (value instanceof Object[] && b instanceof Object[])
                 {
                     isEquiv &= Arrays.equals((Object[])value, (Object[])b);
                 }
@@ -3743,12 +3759,12 @@ public class Criteria extends Hashtable
          */
         private void addCriterionTable(Criterion c, StringStack s)
         {
-            if ( c != null )
+            if (c != null)
             {
                 s.add(c.getTable());
                 for(int i=0;i<c.getClauses().size();i++)
                 {
-                  addCriterionTable((Criterion)(c.getClauses().get(i)), s);
+                    addCriterionTable((Criterion)(c.getClauses().get(i)), s);
                 }
             }
         }
@@ -3762,7 +3778,7 @@ public class Criteria extends Hashtable
             ArrayList crits = new ArrayList();
             traverseCriterion(this, crits);
             Criterion[]  crita = new Criterion[crits.size()];
-            for ( int i=0; i<crits.size(); i++ )
+            for (int i=0; i<crits.size(); i++)
             {
                 crita[i] = (Criterion)crits.get(i);
             }
@@ -3776,12 +3792,12 @@ public class Criteria extends Hashtable
          */
         private void traverseCriterion(Criterion c, ArrayList a)
         {
-            if ( c != null )
+            if (c != null)
             {
                 a.add(c);
                 for(int i=0;i<c.getClauses().size();i++)
                 {
-                  traverseCriterion((Criterion)(c.getClauses().get(i)), a);
+                    traverseCriterion((Criterion)(c.getClauses().get(i)), a);
                 }
             }
         }
