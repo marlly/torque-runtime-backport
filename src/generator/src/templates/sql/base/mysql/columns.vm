@@ -1,5 +1,5 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $type = $col.Domain.SqlType )
 	#if ( $type == 'MEDIUMTEXT' || $type == 'LONGTEXT' || $type == 'BLOB' || $type == 'MEDIUMBLOB' || $type == 'LONGBLOB' )
 		#set ( $size = '' )
 	#else

@@ -1,10 +1,5 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
-    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
-      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
-    #else
-      #set ( $autoIncrement = " " )
-    #end    
-    #set ( $entry = "$col.Name $type $autoIncrement," )
+    #set ( $type = $col.Domain.SqlType )
+    #set ( $entry = "$col.Name $type $col.AutoIncrementString," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

@@ -1,5 +1,5 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $type = $col.Domain.SqlType )
     #set ( $size = $col.printSize() )
     #set ( $default = $col.DefaultSetting )
     #set ( $entry = "$col.Name $type $size $default $col.NotNullString," )

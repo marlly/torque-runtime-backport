@@ -1,13 +1,8 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $type = $col.Domain.SqlType )
     #set ( $size = $col.printSize() )
     #set ( $default = $col.DefaultSetting )
-    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
-      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
-    #else
-      #set ( $autoIncrement = " " )
-    #end    
     #set ( $colName = $strings.concat(['"',$col.Name,'"']) )
-    #set ( $entry = "$colName $type $size $default $col.NotNullString $autoIncrement," )
+    #set ( $entry = "$colName $type $size $default $col.NotNullString $col.AutoIncrementString," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

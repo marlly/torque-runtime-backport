@@ -1,20 +1,10 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $type = $col.Domain.SqlType )
     #if ($type == "INT" || $type == "TEXT")
       #set ( $size = "" )
     #else   
       #set ( $size = $col.printSize() )
     #end
-    #if ( $dbprops.get("suppressDefaults") == "true" )
-        #set ( $default = "" )
-    #else
-        #set ( $default = $col.DefaultSetting )
-    #end
-    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
-      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
-    #else
-      #set ( $autoIncrement = " " )
-    #end    
-    #set ( $entry = "$col.Name $type $size $default $col.NotNullString $autoIncrement," )
+    #set ( $entry = "$col.Name $type $size $col.DefaultSetting $col.NotNullString $col.AutoIncrementString," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

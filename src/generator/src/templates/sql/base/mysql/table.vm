@@ -15,5 +15,4 @@ CREATE TABLE $table.Name
 #if($strings.allEmpty([$unique,$index]) && $fk.length() >0)$strings.chop($fk,2)#else$fk#end
 #if($strings.allEmpty([$index]) && $unique.length()>0)$strings.chop($unique,2)#else$unique#end
 #if($index.length() > 0)$strings.chop($index,2)#end
-
-)#if($dbprops.get('tableType')) Type=$dbprops.get('tableType')#end;
+)

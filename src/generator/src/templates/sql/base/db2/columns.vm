@@ -1,23 +1,18 @@
 #foreach ($col in $table.Columns)
-    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $type = $col.Domain.SqlType )
     #set ( $size = $col.printSize() )
     #if ( $type == "INTEGER" )
         #set ( $size = "" )
     #end
     #set ( $rawsize = $col.Size )
     #set ( $torquetype = $col.TorqueType )
-    #set ( $default = $col.DefaultSetting )
-    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
-      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
-    #else
-      #set ( $autoIncrement = " " )
-    #end    
+    #set ( $default = $col.DefaultSetting )  
     #if ( $torquetype == "BINARY" )
-        #set ( $entry = "$col.Name CHAR($rawsize) FOR BIT DATA $default $col.NotNullString $autoIncrement," )
+        #set ( $entry = "$col.Name CHAR($rawsize) FOR BIT DATA $default $col.NotNullString $col.AutoIncrementString," )
     #elseif ( $torquetype == "VARBINARY" )
-        #set ( $entry = "$col.Name VARCHAR($rawsize) FOR BIT DATA $default $col.NotNullString $autoIncrement," )
+        #set ( $entry = "$col.Name VARCHAR($rawsize) FOR BIT DATA $default $col.NotNullString $col.AutoIncrementString," )
     #else
-        #set ( $entry = "$col.Name $type $size $default $col.NotNullString $autoIncrement," )
+        #set ( $entry = "$col.Name $type $size $default $col.NotNullString $col.AutoIncrementString," )
     #end
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end
