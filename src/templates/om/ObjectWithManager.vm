@@ -1087,7 +1087,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      * returns an id that differentiates this object from others
      * of its class.
      */
-    public ObjectKey getPrimaryKey() 
+    public ObjectKey getPrimaryKey()
     {
 #if ($table.PrimaryKeys.size() == 1)
         return get${table.PrimaryKeys.get(0).JavaName}();
@@ -1099,7 +1099,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #end
         return comboPK;
 #else
-        return getPrimaryKey();
+        return null;
 #end
     }
 
