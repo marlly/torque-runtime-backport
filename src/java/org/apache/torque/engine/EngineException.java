@@ -1,9 +1,9 @@
-package org.apache.torque.engine.database.model;
+package org.apache.torque.engine;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,77 +54,59 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.List;
-
-import org.apache.torque.engine.EngineException;
+import org.apache.commons.lang.exception.NestableException;
 
 /**
- * A <code>NameGenerator</code> implementation for table-specific
- * constraints.  Conforms to the maximum column name length for the
- * type of database in use.
+ * The base class of all exceptions thrown by the engine.
  *
- * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
+ * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:jvz@apache.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ConstraintNameGenerator implements NameGenerator
+public class EngineException extends NestableException
 {
-    /**
-     * Conditional compilation flag.
-     */
-    private static final boolean DEBUG = false;
 
     /**
-     * First element of <code>inputs</code> should be of type {@link
-     * org.apache.torque.engine.database.model.Database}, second
-     * should be a table name, third is the type identifier (spared if
-     * trimming is necessary due to database type length constraints),
-     * and the fourth is a <code>Integer</code> indicating the number
-     * of this contraint.
-     *
-     * @see org.apache.torque.engine.database.model.NameGenerator
+     * Constructs a new <code>EngineException</code> without specified detail
+     * message.
      */
-    public String generateName(List inputs)
-        throws EngineException
+    public EngineException()
     {
-        StringBuffer name = new StringBuffer();
-        Database db = (Database) inputs.get(0);
-        name.append((String) inputs.get(1));
-        String namePostfix = (String) inputs.get(2);
-        String constraintNbr = inputs.get(3).toString();
+    }
 
-        // Calculate maximum RDBMS-specific column character limit.
-        int maxBodyLength = -1;
-        try
-        {
-            int maxColumnNameLength =
-                Integer.parseInt(db.getProperty("maxColumnNameLength"));
-            maxBodyLength = (maxColumnNameLength - namePostfix.length() -
-                             constraintNbr.length() - 2);
+    /**
+     * Constructs a new <code>EngineException</code> with specified detail
+     * message.
+     *
+     * @param msg the error message.
+     */
+    public EngineException(String msg)
+    {
+        super(msg);
+    }
 
-            if (DEBUG)
-            {
-                System.out.println("maxColumnNameLength=" +
-                                   maxColumnNameLength + " maxBodyLength=" +
-                                   maxBodyLength);
-            }
-        }
-        catch (EngineException e)
-        {
-            System.err.println(e.getMessage());
-        }
-        catch (NumberFormatException maxLengthUnknown)
-        {
-        }
+    /**
+     * Constructs a new <code>EngineException</code> with specified nested
+     * <code>Throwable</code>.
+     *
+     * @param nested the exception or error that caused this exception
+     *               to be thrown.
+     */
+    public EngineException(Throwable nested)
+    {
+        super(nested);
+    }
 
-        // Do any necessary trimming.
-        if (maxBodyLength != -1 && name.length() > maxBodyLength)
-        {
-            name.setLength(maxBodyLength);
-        }
-
-        name.append(STD_SEPARATOR_CHAR).append(namePostfix)
-            .append(STD_SEPARATOR_CHAR).append(constraintNbr);
-
-        return name.toString();
+    /**
+     * Constructs a new <code>EngineException</code> with specified detail
+     * message and nested <code>Throwable</code>.
+     *
+     * @param msg the error message.
+     * @param nested the exception or error that caused this exception
+     *               to be thrown.
+     */
+    public EngineException(String msg, Throwable nested)
+    {
+        super(msg, nested);
     }
 }

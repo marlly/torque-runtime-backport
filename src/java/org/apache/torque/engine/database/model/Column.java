@@ -61,7 +61,7 @@ import java.util.List;
 
 import org.xml.sax.Attributes;
 
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 
 /**
  * A Class for holding data about a column used in an Application.
@@ -115,7 +115,7 @@ public class Column
 
     /**
      * Creates a new column and set the name
-     * 
+     *
      * @param name column name
      */
     public Column(String name)
@@ -160,10 +160,10 @@ public class Column
 
         javaName = attrib.getValue("javaName");
         javaType = attrib.getValue("javaType");
-        if ( javaType != null && javaType.length() == 0 ) 
+        if ( javaType != null && javaType.length() == 0 )
         {
             javaType = null;
-        }        
+        }
 
         // retrieves the method for converting from specified name to
         // a java name.
@@ -266,7 +266,7 @@ public class Column
                 javaName = NameFactory.generateName(NameFactory.JAVA_GENERATOR,
                                                     inputs);
             }
-            catch (TorqueException e)
+            catch (EngineException e)
             {
                 e.printStackTrace();
             }
@@ -778,30 +778,30 @@ public class Column
     /**
      * Return a string representation of the primitive java type which
      * corresponds to the JDBC type of this column.
-     * 
+     *
      * @return string representation of the primitive java type
      */
     public String getJavaPrimitive()
     {
         return TypeMap.getJavaNative(torqueType);
     }
-    
+
     /**
      * Return a string representation of the native java type which corresponds
      * to the JDBC type of this column. Use in the generation of Base objects.
-     * This method is used by torque, so it returns Key types for primaryKey and 
+     * This method is used by torque, so it returns Key types for primaryKey and
      * foreignKey columns
-     * 
+     *
      * @return java datatype used by torque
      */
     public String getJavaNative()
     {
         String jtype = TypeMap.getJavaNativeObject(torqueType);
-        if ( isUsePrimitive() ) 
+        if ( isUsePrimitive() )
         {
             jtype = TypeMap.getJavaNative(torqueType);
         }
-        
+
         if ( isPrimaryKey() || isForeignKey() )
         {
             if ( jtype.equals("String") )
@@ -840,7 +840,7 @@ public class Column
     public String getVillageMethod()
     {
         String vmethod = TypeMap.getVillageObjectMethod(torqueType);
-        if ( isUsePrimitive() ) 
+        if ( isUsePrimitive() )
         {
             vmethod = TypeMap.getVillageMethod(torqueType);
         }
@@ -908,8 +908,8 @@ public class Column
     public boolean isUsePrimitive()
     {
         String s = getJavaType();
-        return (s != null && s.equals("primitive")) 
+        return (s != null && s.equals("primitive"))
             || (s == null && !"object".equals(
-               getTable().getDatabase().getDefaultJavaType())); 
+               getTable().getDatabase().getDefaultJavaType()));
     }
 }

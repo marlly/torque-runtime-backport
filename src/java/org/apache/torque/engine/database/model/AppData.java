@@ -67,7 +67,7 @@ import org.xml.sax.Attributes;
 
 import org.apache.commons.lang.Strings;
 import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 
 /**
  * A class for holding application data structures.
@@ -126,10 +126,10 @@ public class AppData
      * @param databaseType The type of database to retrieve the
      * properties of.
      * @return The idiosyncrasies of <code>databaseType</code>.
-     * @exception TorqueException Couldn't locate properties file.
+     * @exception EngineException Couldn't locate properties file.
      */
     protected Properties getIdiosyncrasies(String databaseType)
-        throws TorqueException
+        throws EngineException
     {
         Properties idiosyncrasies =
             (Properties) idiosyncrasyTable.get(databaseType);
@@ -154,11 +154,11 @@ public class AppData
                 }
                 idiosyncrasyTable.put(databaseType, idiosyncrasies);
             }
-            else 
+            else
             {
                 try
                 {
-                    String path = '/' + basePropsFilePath + databaseType + 
+                    String path = '/' + basePropsFilePath + databaseType +
                         "/db.props";
                     idiosyncrasies.load(getClass().getResourceAsStream(path));
                 }
@@ -167,10 +167,10 @@ public class AppData
                     e.printStackTrace();
                 }
             }
-            
-            if (idiosyncrasies.isEmpty()) 
+
+            if (idiosyncrasies.isEmpty())
             {
-                throw new TorqueException("Database-specific properties " +
+                throw new EngineException("Database-specific properties " +
                                           "file does not exist: " +
                                           propsFile.getAbsolutePath());
             }
@@ -207,7 +207,7 @@ public class AppData
     {
         return Strings.replace(name, "-schema", "");
     }
-    
+
     /**
      * Get database object.
      *
@@ -220,7 +220,7 @@ public class AppData
 
     /**
      * Return an array of all databases
-     * 
+     *
      * @return Array of Database objects
      */
     public Database[] getDatabases()
@@ -244,7 +244,7 @@ public class AppData
 
     /**
      * Return the database with the specified name.
-     * 
+     *
      * @return A Database object.  If it does not exist it returns null
      */
     public Database getDatabase (String name)

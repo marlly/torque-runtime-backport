@@ -61,7 +61,7 @@ import java.util.List;
 
 import org.apache.commons.lang.Strings;
 
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.adapter.IDMethod;
 
 import org.xml.sax.Attributes;
@@ -121,7 +121,7 @@ public class Table implements IDMethod
 
     /**
      * Constructs a table object with a name
-     * 
+     *
      * @param name table name
      */
     public Table(String name)
@@ -137,7 +137,7 @@ public class Table implements IDMethod
 
     /**
      * Load the table object from an xml tag.
-     * 
+     *
      * @param attrib xml attributes
      * @param defaultIdMethod defined at db level
      */
@@ -239,7 +239,7 @@ public class Table implements IDMethod
                 addIndex(new Index(this, pk.subList(i, size)));
             }
         }
-        catch (TorqueException e)
+        catch (EngineException e)
         {
             e.printStackTrace();
         }
@@ -285,7 +285,7 @@ public class Table implements IDMethod
             // as test cases), so we'll assume that we needn't add an
             // entry to the system name list for these.
         }
-        catch (TorqueException nameAlreadyInUse)
+        catch (EngineException nameAlreadyInUse)
         {
             nameAlreadyInUse.printStackTrace();
         }
@@ -293,14 +293,14 @@ public class Table implements IDMethod
 
     /**
      * Macro to a constraint name.
-     * 
+     *
      * @param nameType constraint type
      * @param nbr unique number for this constraint type
      * @return unique name for constraint
-     * @throws TorqueException
+     * @throws EngineException
      */
     private final String acquireConstraintName(String nameType, int nbr)
-            throws TorqueException
+            throws EngineException
     {
         List inputs = new ArrayList(4);
         inputs.add(getDatabase());
@@ -373,7 +373,7 @@ public class Table implements IDMethod
     /**
      * A utility function to create a new column from attrib and add it to this
      * table.
-     * 
+     *
      * @param attrib xml attributes for the column to add
      * @return the added column
      */
@@ -389,7 +389,7 @@ public class Table implements IDMethod
     /**
      * Adds a new column to the column list and set the
      * parent table of the column to the current table
-     * 
+     *
      * @param col the column to add
      */
     public void addColumn(Column col)
@@ -642,7 +642,7 @@ public class Table implements IDMethod
                 javaName = NameFactory.generateName(NameFactory.JAVA_GENERATOR,
                                                     inputs);
             }
-            catch (TorqueException e)
+            catch (EngineException e)
             {
                 e.printStackTrace();
             }
@@ -925,7 +925,7 @@ public class Table implements IDMethod
 
     /**
      * Set the parent of the table
-     * 
+     *
      * @param parent the parant database
      */
     public void setDatabase(Database parent)
@@ -935,7 +935,7 @@ public class Table implements IDMethod
 
     /**
      * Get the parent of the table
-     * 
+     *
      * @return the parant database
      */
     public Database getDatabase()
@@ -945,7 +945,7 @@ public class Table implements IDMethod
 
     /**
      * Returns a XML representation of this table.
-     * 
+     *
      * @return XML representation of this table
      */
     public String toString()

@@ -63,7 +63,7 @@ import java.util.Properties;
 import org.xml.sax.Attributes;
 
 import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.adapter.IDMethod;
 
 
@@ -93,7 +93,7 @@ public class Database
     private Hashtable tablesByName = new Hashtable();
     private Hashtable tablesByJavaName = new Hashtable();
     private boolean heavyIndexing;
-    
+
     /**
      * Creates a new instance with unset attributes.
      */
@@ -247,20 +247,20 @@ public class Database
      * Get the value of heavyIndexing.
      * @return value of heavyIndexing.
      */
-    public boolean isHeavyIndexing() 
+    public boolean isHeavyIndexing()
     {
         return heavyIndexing;
     }
-    
+
     /**
      * Set the value of heavyIndexing.
      * @param v  Value to assign to heavyIndexing.
      */
-    public void setHeavyIndexing(boolean  v) 
+    public void setHeavyIndexing(boolean  v)
     {
         this.heavyIndexing = v;
     }
-    
+
     /**
      * Return an array of all tables
      */
@@ -348,10 +348,10 @@ public class Database
      *
      * @param name The name of the property to retrieve the value of.
      * @return The value of the specified property.
-     * @exception TorqueException Couldn't access properties.
+     * @exception EngineException Couldn't access properties.
      */
     protected String getProperty(String name)
-        throws TorqueException
+        throws EngineException
     {
         Properties p = getAppData().getIdiosyncrasies(databaseType);
         return (p == null ? null : p.getProperty(name));
@@ -378,7 +378,7 @@ public class Database
         return false;
     }
 
-  
+
     /**
      * Creats a string representation of this Database.
      * The representation is given in xml format.

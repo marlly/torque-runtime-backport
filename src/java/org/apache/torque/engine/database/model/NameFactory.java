@@ -57,7 +57,7 @@ package org.apache.torque.engine.database.model;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 
 /**
  * A name generation factory.
@@ -143,7 +143,7 @@ public class NameFactory
      * @return The generated name.
      */
     public static String generateName(String algorithmName, List inputs)
-        throws TorqueException
+        throws EngineException
     {
         NameGenerator algorithm = instance.getAlgorithm(algorithmName);
         return algorithm.generateName(inputs);

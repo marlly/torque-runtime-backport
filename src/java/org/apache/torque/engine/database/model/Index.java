@@ -58,7 +58,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.torque.TorqueException;
+import org.apache.torque.engine.EngineException;
 
 import org.xml.sax.Attributes;
 
@@ -94,11 +94,11 @@ public class Index
      * @param indexColumns The list of {@link
      * org.apache.torque.engine.database.model.Column} objects which
      * make up this index.  Cannot be empty.
-     * @exception TorqueException Error generating name.
+     * @exception EngineException Error generating name.
      * @see #Index()
      */
     protected Index(Table table, List indexColumns)
-        throws TorqueException
+        throws EngineException
     {
         this();
         setTable(table);
@@ -116,12 +116,12 @@ public class Index
         }
         else
         {
-            throw new TorqueException("Cannot create a new Index using an " +
+            throw new EngineException("Cannot create a new Index using an " +
                                       "empty list Column object");
         }
     }
 
-    private void createName() throws TorqueException
+    private void createName() throws EngineException
     {
         Table table = getTable();
         List inputs = new ArrayList(4);
@@ -187,7 +187,7 @@ public class Index
                 // generate an index name if we don't have a supplied one
                 createName();
             }
-            catch (TorqueException e)
+            catch (EngineException e)
             {
                 // still no name
             }
