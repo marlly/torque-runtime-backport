@@ -3,12 +3,12 @@
 <project>
   <pomVersion>3</pomVersion>
   <id>torque</id>
-  <name>jakarta-turbine-torque</name>
+  <name>db-torque</name>
   <currentVersion>3.1-dev</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
-    <url>http://jakarta.apache.org/</url>
-    <logo>/images/jakarta-logo-blue.gif</logo>
+    <url>http://db.apache.org/</url>
+    <logo>/images/db-logo-blue.png</logo>
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.torque</package>
@@ -19,11 +19,11 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://jakarta.apache.org/turbine/torque/</url>
+  <url>http://db.apache.org/torque/</url>
   <issueTrackingUrl>http://scarab.werken.com/scarab/issues</issueTrackingUrl>
-  <siteAddress>jakarta.apache.org</siteAddress>
-  <siteDirectory>/www/jakarta.apache.org/turbine/torque/</siteDirectory>
-  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine/torque/</distributionDirectory>
+  <siteAddress>db.apache.org</siteAddress>
+  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
+  <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
 
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
@@ -33,15 +33,15 @@
   <mailingLists>
     <mailingList>
       <name>Torque User List</name>
-      <subscribe>turbine-torque-user-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-torque-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-torque-user@jakarta.apache.org</archive>
+      <subscribe>torque-user-subscribe@db.apache.org</subscribe>
+      <unsubscribe>torque-user-unsubscribe@db.apache.org</unsubscribe>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=torque-user@db.apache.org</archive>
     </mailingList>
     <mailingList>
       <name>Torque Developer List</name>
-      <subscribe>turbine-torque-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-torque-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-torque-dev@jakarta.apache.org</archive>
+      <subscribe>torque-dev-subscribe@db.apache.org</subscribe>
+      <unsubscribe>torque-dev-unsubscribe@db.apache.org</unsubscribe>
+      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
     </mailingList>
   </mailingLists>
 
