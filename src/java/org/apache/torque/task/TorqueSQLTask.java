@@ -131,7 +131,6 @@ public class TorqueSQLTask
      * generated java classes will live.
      *
      * @param String target database(s)
-     * @deprecated Use setConfigFile instead.
      */
     public void setTargetDatabase(String v)
     {
