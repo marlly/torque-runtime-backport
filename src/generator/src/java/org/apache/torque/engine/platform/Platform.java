@@ -103,4 +103,19 @@ public interface Platform
      */
     String getAutoIncrement();
     
+    /**
+     * Returns if the RDBMS-specific SQL type has a size attribute.
+     * 
+     * @param type the SchemaType
+     * @return true if the type has a size attribute
+     */
+    boolean hasSize(SchemaType type);
+    
+    /**
+     * Returns if the RDBMS-specific SQL type has a scale attribute.
+     * 
+     * @param type the SchemaType
+     * @return true if the type has a scale attribute
+     */
+    boolean hasScale(SchemaType type);
 }

@@ -79,21 +79,21 @@ public class PlatformPostgresqlImpl extends PlatformDefaultImpl
      */
     private void initialize()
     {
-        setSchemaDomainMapping(new Domain(SchemaType.BIT, "boolean"));
-        setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "int2"));
-        setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "int2"));
-        setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "int8"));
-        setSchemaDomainMapping(new Domain(SchemaType.REAL, "float"));
+        setSchemaDomainMapping(new Domain(SchemaType.BIT, "BOOLEAN"));
+        setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "INT2"));
+        setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "INT2"));
+        setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "INT8"));
+        setSchemaDomainMapping(new Domain(SchemaType.REAL, "FLOAT"));
         // TODO check this .. just copied from db.props
-        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "char"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "CHAR"));
         // TODO check this .. just copied from db.props
-        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "int2"));
-        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "double precision"));
-        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "text"));
-        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "bytea"));
-        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "bytea"));
-        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "bytea"));
-        setSchemaDomainMapping(new Domain(SchemaType.CLOB, "text"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "INT2"));
+        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "DOUBLE PRECISION"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "TEXT"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "BYTEA"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BYTEA"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "BYTEA"));
+        setSchemaDomainMapping(new Domain(SchemaType.CLOB, "TEXT"));
     }
     
     /**

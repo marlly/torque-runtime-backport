@@ -62,7 +62,6 @@ import org.apache.torque.engine.database.model.Domain;
 import org.apache.torque.engine.database.model.SchemaType;
 
 
-
 /**
  * Default implementation for the Platform interface.
  *
@@ -143,6 +142,24 @@ public class PlatformDefaultImpl implements Platform
     public String getAutoIncrement()
     {
         return "IDENTITY";
+    }
+
+    /**
+     * @see Platform#hasScale(String)
+     * TODO collect info for all platforms
+     */
+    public boolean hasScale(SchemaType type)
+    {
+        return true;
+    }
+
+    /**
+     * @see Platform#hasSize(String)
+     * TODO collect info for all platforms
+     */
+    public boolean hasSize(SchemaType type)
+    {
+        return true;
     }
 
 }

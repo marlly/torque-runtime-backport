@@ -88,6 +88,7 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.REAL, "NUMBER"));
         setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "FLOAT"));
         setSchemaDomainMapping(new Domain(SchemaType.DECIMAL, "NUMBER"));
+        setSchemaDomainMapping(new Domain(SchemaType.NUMERIC, "NUMBER"));
         setSchemaDomainMapping(new Domain(SchemaType.VARCHAR, "VARCHAR2"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR2", "2000"));
         setSchemaDomainMapping(new Domain(SchemaType.TIME, "DATE"));
@@ -113,4 +114,11 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
         return Platform.SEQUENCE;
     }
 
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "";
+    }
 }
