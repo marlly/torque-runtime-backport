@@ -936,7 +936,7 @@ public abstract class BasePeer implements java.io.Serializable
         for (int i = 0; i < select.size(); i++)
         {
             String columnName = select.get(i);
-            if (columnName.indexOf('.') == -1)
+            if (columnName.indexOf('.') == -1  && columnName.indexOf('*') == -1)
             {
                 throwMalformedColumnNameException("select", columnName);
             }
@@ -947,7 +947,7 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 tableName = columnName.substring(0, columnName.indexOf('.'));
             }
-            else
+            else if (columnName.indexOf('.') > -1)
             {
                 tableName =
                     columnName.substring(parenPos + 1, columnName.indexOf('.'));

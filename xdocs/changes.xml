@@ -43,6 +43,9 @@
 <p>
   <ul>
     <li>
+      TRQ37: Problem retrieving object/row count using Criteria
+    </li>
+    <li>
       TRQD6: update README (ant 1.5 is required)
     </li>
     <li>

@@ -335,4 +335,28 @@ public class CriteriaTest extends BaseTestCase
 
     }
 
+    public void testCountAster()
+    {
+        Criteria c = new Criteria()
+                .addSelectColumn("COUNT(*)")
+                .add("TABLE.DATE_COLUMN", Criteria.CURRENT_DATE)
+                .add("TABLE.TIME_COLUMN", Criteria.CURRENT_TIME);
+
+        String expect = "SELECT COUNT(*) FROM TABLE WHERE TABLE.TIME_COLUMN=CURRENT_TIME AND TABLE.DATE_COLUMN=CURRENT_DATE";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect,result);
+
+    }
+
 }
