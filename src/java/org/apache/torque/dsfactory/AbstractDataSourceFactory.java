@@ -167,7 +167,6 @@ public abstract class AbstractDataSourceFactory
                 + c.getString(key)
                 + " is not supported by DataSource: "
                 + ds.getClass().getName());
-            throw e;
         }
     }
 
