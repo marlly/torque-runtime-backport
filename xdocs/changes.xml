@@ -27,6 +27,9 @@
 <p>
   <ul>
     <li>
+      added support for the new com.mysql.jdbc.Driver
+    </li>
+    <li>
       improved JDBC to DB2 mappings.
     </li>
     <li>
