@@ -182,7 +182,7 @@ public class Transaction
     {
         if (con == null)
         {
-            log.error("Connection object was null. "
+            throw new TorqueException("Connection object was null. "
                     + "This could be due to a misconfiguration of the "
                     + "DataSourceFactory. Check the logs and Torque.properties "
                     + "to better determine the cause.");
@@ -214,19 +214,28 @@ public class Transaction
 
     /**
      * Roll back a transaction without throwing errors if they occur.
-     *
+     * A null Connection argument is logged at the debug level and other
+     * errors are logged at warn level.
+     * 
      * @param con The Connection for the transaction.
      * @see safeRollback
      */
-    public static void safeRollback(Connection con)
+    public static void safeRollback(Connection con) 
     {
-        try
+        if (con == null) 
         {
-            Transaction.rollback(con);
+            log.debug("called safeRollback with null argument");
         }
-        catch (TorqueException e)
+        else 
         {
-            log.error("An error occured during rollback.", e);
-        }
+            try
+            {
+                Transaction.rollback(con);
+            }
+            catch (TorqueException e)
+            {
+                log.warn("An error occured during rollback.", e);
+            }
+        }   
     }
 }
