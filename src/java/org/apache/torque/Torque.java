@@ -186,23 +186,23 @@ public class Torque
     {
         ExtendedProperties c = new ExtendedProperties(configFile);
         c = c.subset("torque");
-        
+
         if (isLoggingConfigured() == false)
         {
             // Get the applicationRoot for use in the log4j
             // properties.
             String applicationRoot = c.getString("applicationRoot", ".");
-            
+
             File logsDir = new File(applicationRoot, "logs");
-            
+
             if (logsDir.exists() == false)
             {
                 if (logsDir.mkdirs() == false)
                 {
                     System.err.println("Cannot create logs directory!");
-                }                    
+                }
             }
-            
+
             Properties p = new Properties();
             p.load(new FileInputStream(configFile));
             // Set the applicationRoot in the log4j properties so that
@@ -210,7 +210,7 @@ public class Torque
             p.setProperty("applicationRoot", applicationRoot);
             PropertyConfigurator.configure(p);
         }
-        
+
         Torque.setConfiguration(c);
         Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
         Torque.init();
@@ -248,7 +248,7 @@ public class Torque
      *
      * @return boolean Whether log4j is configured.
      */
-    protected static boolean isLoggingConfigured() 
+    protected static boolean isLoggingConfigured()
     {
         // This is a note from Ceki, taken from a message on the log4j
         // user list:
@@ -259,28 +259,28 @@ public class Torque
         // is the existence of appenders. The correct procedure is to
         // first check for appenders in the root category and if that
         // returns no appenders to check in other categories.
-        
+
         Enumeration enum = Category.getRoot().getAllAppenders();
-             
+
         if (!(enum instanceof NullEnumeration))
         {
             return true;
-        } 
-        else 
-        { 
+        }
+        else
+        {
             Enumeration cats =  Category.getCurrentCategories();
-            while(cats.hasMoreElements()) 
+            while(cats.hasMoreElements())
             {
                 Category c = (Category) cats.nextElement();
                 if (!(c.getAllAppenders() instanceof NullEnumeration))
                 {
                     return true;
-                }                     
+                }
             }
         }
-             
+
         return false;
-    } 
+    }
 
     /**
      * Shuts down the service.
@@ -303,7 +303,7 @@ public class Torque
                 }
             }
         }
-        
+
         if ( pools != null )
         {
             // Release connections for each pool.
@@ -443,7 +443,7 @@ public class Torque
      * Setup IDBroker's table information within given database map.
      *
      * This method should be called on all new database map to ensure that
-     * IDBroker functionality is available in all databases userd by the
+     * IDBroker functionality is available in all databases used by the
      * application.
      *
      * @param map the DataBaseMap to setup.
@@ -688,9 +688,9 @@ public class Torque
     /**
      * This method returns a pool with the specified name.  The pool must
      * either have been registered with the
-     * {@link #registerPool(String,String,String,String,String)} methd, or be
+     * {@link #registerPool(String,String,String,String,String)} method, or be
      * specified in the TurbineResources properties. This method is used
-     * interanlly by the service.
+     * internally by the service.
      *
      * @param name The name of the pool to get.
      * @return     The requested pool.
