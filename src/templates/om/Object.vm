@@ -1076,7 +1076,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #end
         return comboPK;
 #else
-        return getPrimaryKey();
+        return null;
 #end
     }
 
