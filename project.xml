@@ -37,6 +37,13 @@
   <developers>
 
     <developer>
+      <name>John McNally</name>
+      <id>jmcnally</id>
+      <email>jmcnally@collab.net</email>
+      <organization>CollabNet</organization>
+    </developer>
+
+    <developer>
       <name>Martin Poeschl</name>
       <id>mpoeschl</id>
       <email>mpoeschl@marmot.at</email>
