@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${maven.home}/repository/axion/jars/axion-1.0-dev.jar
+torque.testDatabaseJar = ${maven.home}/repository/axion/jars/axion-1.0-M1.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
