@@ -775,10 +775,23 @@ public class Column
     }
 
     /**
-     * Return a string representation of the
-     * native java type which corresponds to the JDBC
-     * type of this column. Use in the generation
-     * of Base objects.
+     * Return a string representation of the primitive java type which
+     * corresponds to the JDBC type of this column.
+     * 
+     * @return string representation of the primitive java type
+     */
+    public String getJavaPrimitive()
+    {
+        return TypeMap.getJavaNative(torqueType);
+    }
+    
+    /**
+     * Return a string representation of the native java type which corresponds
+     * to the JDBC type of this column. Use in the generation of Base objects.
+     * This method is used by torque, so it returns Key types for primaryKey and 
+     * foreignKey columns
+     * 
+     * @return java datatype used by torque
      */
     public String getJavaNative()
     {
