@@ -51,7 +51,7 @@ import org.apache.torque.util.BasePeer;
  * this class.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
+ * @author <a href="mailto:magnus@handtolvur.is">Magnï¿½s ï¿½ï¿½r Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
@@ -718,7 +718,12 @@ public class TorqueInstance
     protected DataSourceFactory getDataSourceFactory(String name)
             throws TorqueException
     {
-        DataSourceFactory dsf = null;
+    	if (!Torque.isInit()) 
+    	{
+            throw new TorqueException("Torque is not initialized.");    		
+    	}
+
+    	DataSourceFactory dsf = null;
 
         try
         {
