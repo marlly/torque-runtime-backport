@@ -4,6 +4,9 @@
 -----------------------------------------------------------------------------
 $generator.parse("$basepath/drop.vm", "", "table", $tbl)
 
+#set ( $sequence = $generator.parse("$basepath/sequence.vm", "", "table", $tbl) )
+#if ($sequence.length()>0)$sequence#end
+
 CREATE TABLE $table.Name
 (
 #set ( $cols = $generator.parse("$basepath/columns.vm", "", "table",$tbl) )

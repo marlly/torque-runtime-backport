@@ -1,1 +1,4 @@
-DROP TABLE $table.Name CASCADE;
+DROP TABLE $table.Name;
+#if ($table.IdMethod == "native")
+DROP SEQUENCE $table.SequenceName;
+#end
