@@ -132,6 +132,25 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             }
           #end 
 
+
+#if ($addSaveMethod)
+
+ #if ( ($cjtype == "int") || ($cjtype == "long") || ($cjtype == "boolean") 
+    || ($cjtype == "short") || ($cjtype == "float") || ($cjtype == "double")
+    || ($cjtype == "char") || ($cjtype == "byte") )
+        if (this.$clo != v)
+        {
+ #else
+        if ( !ObjectUtils.equals(this.$clo, v) )
+        {
+ #end
+            this.$clo = v;
+            setModified(true);
+        }
+#else
+          this.$clo = v;
+#end
+
         #if ($complexObjectModel)
           #if ($col.isForeignKey())
             #set ( $tblFK = $table.Database.getTable($col.RelatedTableName) )
@@ -141,7 +160,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #else
               #set ( $varName = "a$tblFK.JavaName" )
             #end
+
+        if ($varName != null &&  !ObjectUtils.equals(${varName}.get${colFK.JavaName}(), v) )
+        {
             $varName = null;
+        }
           #end
 
           #foreach ($fk in $col.Referrers)
@@ -167,24 +190,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #end
           #end 
         #end
-
-#if ($addSaveMethod)
-
- #if ( ($cjtype == "int") || ($cjtype == "long") || ($cjtype == "boolean") 
-    || ($cjtype == "short") || ($cjtype == "float") || ($cjtype == "double")
-    || ($cjtype == "char") || ($cjtype == "byte") )
-        if (this.$clo != v)
-        {
- #else
-        if ( !ObjectUtils.equals(this.$clo, v) )
-        {
- #end
-            this.$clo = v;
-            setModified(true);
-        }
-#else
-          this.$clo = v;
-#end
      }
 
 ##if ($complexObjectModel)
