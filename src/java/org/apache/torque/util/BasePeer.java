@@ -1270,7 +1270,7 @@ public abstract class BasePeer implements java.io.Serializable
                 case DB.LIMIT_STYLE_POSTGRES :
                     limitString = new StringBuffer()
                             .append(limit)
-                            .append(", ")
+                            .append(" offset ")
                             .append(offset)
                             .toString();
                     break;
@@ -2472,7 +2472,7 @@ public abstract class BasePeer implements java.io.Serializable
                 case DB.LIMIT_STYLE_POSTGRES :
                     limitString = new StringBuffer()
                             .append(limit)
-                            .append(", ")
+                            .append(" offset ")
                             .append(offset)
                             .toString();
                     break;

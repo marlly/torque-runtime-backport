@@ -36,8 +36,7 @@
 <p>
   <ul>
     <li>
-      TRQS153: BasePeer.doSelect(Criteria, Connection) calls executeQuery 
-      without offset and limit.
+      TRQS121: native limit and offset breaks on postgresql 7.3
     </li>
     <li>
       TRQS139: wrong invocation of populateObject in peer class
@@ -45,6 +44,10 @@
     <li>
       TRQS141: Table with no primary key results an empty ADD PRIMARY KEY ()
     </li>  
+    <li>
+      TRQS153: BasePeer.doSelect(Criteria, Connection) calls executeQuery 
+      without offset and limit.
+    </li>
     <li>
       TRQS165: columns in an external schema caused Manager imports to be 
       generated
