@@ -66,9 +66,9 @@ import java.io.Serializable;
 import java.io.IOException;
 
 import org.apache.commons.collections.FastArrayList;
-import org.apache.stratum.jcs.JCS;
-import org.apache.stratum.jcs.access.GroupCacheAccess;
-import org.apache.stratum.jcs.access.exception.CacheException;
+import org.apache.jcs.JCS;
+import org.apache.jcs.access.GroupCacheAccess;
+import org.apache.jcs.access.exception.CacheException;
 
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.ObjectKey;

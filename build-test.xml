@@ -259,6 +259,7 @@
     <pathelement location="${village.jar}"/>
     <pathelement location="${build.dest}"/>
     <pathelement location="${stratum.jar}"/>
+    <pathelement location="${jcs.jar}"/>
     <pathelement location="${torque.destDir}"/>
     <pathelement location="${torque.testDatabaseJar}"/>
   </path>
@@ -273,6 +274,7 @@
       ${commons-collections.jar}
       ${commons-lang.jar}
       ${village.jar}
+      ${jcs.jar}
       ${build.dest}
       ${torque.destDir}
       ${torque.testDatabaseJar}
@@ -309,6 +311,7 @@
     <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
     <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
     <copy file="${stratum.jar}" todir="${test.libDir}"/>
+    <copy file="${jcs.jar}" todir="${test.libDir}"/>
   </target>
 
   <target

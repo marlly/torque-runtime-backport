@@ -52,9 +52,8 @@ import java.util.WeakHashMap;
 import java.util.Iterator;
 import java.io.Serializable;
 import org.apache.log4j.Category;
-import org.apache.stratum.jcs.access.GroupCacheAccess;
-import org.apache.stratum.jcs.access.exception.CacheException;
-import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.jcs.access.GroupCacheAccess;
+import org.apache.jcs.access.exception.CacheException;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.StackObjectPool;
 

@@ -16,6 +16,7 @@
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${jcs.jar}"/>
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
@@ -63,6 +64,7 @@
     <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="xmlParserAPIs.jar = ${xmlParserAPIs.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
+    <echo message="jcs.jar = ${jcs.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
     <echo message="junit.jar = ${junit.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
