@@ -54,6 +54,8 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.configuration.BaseConfiguration;
@@ -314,10 +316,39 @@ public class CriteriaTest extends BaseTestCase
         assertEquals("TABLE.COLUMN=1", cc.toString());
     }
 
+    /**
+     * testcase for addDate()
+     */
     public void testAddDate()
     {
         Criteria c = new Criteria();
         c.addDate("TABLE.DATE_COLUMN", 2003, 0, 22);
+
+        String expect = "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN='20030122000000'";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+        assertEquals(expect, result);
+    }
+
+    /**
+     * testcase for add(Date)
+     */
+    public void testDateAdd()
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2003, 0, 22, 0, 0, 0);
+        Date date = cal.getTime();
+        Criteria c = new Criteria();
+        c.add("TABLE.DATE_COLUMN", date);
 
         String expect = "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN='20030122000000'";
 
