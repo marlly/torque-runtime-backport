@@ -9,6 +9,7 @@ BIGINT = int8
 FLOAT = float
 REAL = float
 BOOLEANCHAR = boolean
+BOOLEANINT = int2
 
 DOUBLE =
 NUMERIC =
