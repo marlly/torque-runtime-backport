@@ -1,0 +1,8 @@
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+databaseDriver = com.sap.dbtech.jdbc.DriverSapDB
+createDatabaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle
+buildDatabaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle
+databaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle

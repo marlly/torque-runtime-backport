@@ -1,0 +1,8 @@
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+databaseDriver = com.ibm.as400.access.AS400JDBCDriver
+createDatabaseUrl = jdbc:as400://yourAS400/${tdk.project}
+buildDatabaseUrl = jdbc:as400://yourAS400/${tdk.project}
+databaseUrl = jdbc:as400://yourAS400/${tdk.project}

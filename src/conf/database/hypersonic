@@ -1,0 +1,8 @@
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+databaseDriver = org.hsqldb.jdbcDriver
+createDatabaseUrl = jdbc:hsqldb:${tdk.home}/webapps/${tdk.project}/WEB-INF/db/${tdk.project}
+buildDatabaseUrl = jdbc:hsqldb:${tdk.home}/webapps/${tdk.project}/WEB-INF/db/${tdk.project}
+databaseUrl = jdbc:hsqldb:${webappRoot}/WEB-INF/db/${tdk.project}
