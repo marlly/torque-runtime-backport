@@ -65,6 +65,7 @@ import java.util.Properties;
 
 import org.xml.sax.Attributes;
 
+import org.apache.commons.lang.Strings;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
@@ -197,6 +198,16 @@ public class AppData
         return name;
     }
 
+    /**
+     * Get the short name of the database (without the '-schema' postfix).
+     *
+     * @return String name
+     */
+    public String getShortName()
+    {
+        return Strings.replace(name, "-schema", "");
+    }
+    
     /**
      * Get database object.
      *
