@@ -319,10 +319,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
         #set ( $n=0 )
         #set ( $boolean = "boolean" )
+        #set ( $String = "String" )
         #foreach ($col in $table.Columns)
             #if ($col.isBooleanChar())
-            $boolean b = "Y".equals(row.getValue(offset+$n).$col.VillageMethod);
+            $String bString = row.getValue(offset+$n).$col.VillageMethod;
+            $boolean b = ("Y".equals(bString) || "true".equals(bString));
             #set ( $boolean = "" )
+            #set ( $String = "" )
                 #if ($col.isUsePrimitive())
             obj.set${col.JavaName}(b);
                 #else
