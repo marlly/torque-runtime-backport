@@ -5,6 +5,7 @@
  <properties>
   <title>Criteria Howto</title>
   <author email="criley@ekmail.com">Cameron Riley</author>
+  <author email="seade@backstagetech.com.au">Scott Eade</author>
  </properties>
 
  <body>
@@ -207,6 +208,32 @@ List invoices = InvoicePeer.doSelect(criteria);
      greater than $1000. The other comparitors work similarly and can be used in
      the same manner though many of the comparators are present as methods in
      the Criteria Object already, such as the Joins.
+   </p>
+
+  </section>
+
+  <section name="Case insensitive LIKE Comparator">
+
+   <p>
+     A LIKE comparison is usually case sensitive (unless the underlying 
+     database only provides case sensitive LIKE clauses - e.g. MySQL).  To get
+     a case insensitive LIKE you need to tell the criteria that it should 
+     ignore the case thus:
+   </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(InvoicePeer.TABLE_NAME, searchField, 
+        (Object) ("%" + searchCriteria + "%"), Criteria.LIKE);
+criteria.getCriterion(InvoicePeer.TABLE_NAME, searchField).setIgnoreCase(true);
+
+List invoices = InvoicePeer.doSelect(criteria);
+</source>
+
+   <p>
+     For PostgreSQL this will use ILIKE, for other databases it will use the 
+     SQL upper() function on the column and search string (for Oracle you may
+     want to define a function index to make this efficient).
    </p>
 
   </section>

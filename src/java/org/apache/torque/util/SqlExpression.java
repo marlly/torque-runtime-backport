@@ -63,6 +63,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
+import org.apache.torque.adapter.DBPostgres;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
@@ -294,7 +295,9 @@ public class SqlExpression
         }
 
         if (comparison.equals(Criteria.LIKE)
-                || comparison.equals(Criteria.NOT_LIKE))
+                || comparison.equals(Criteria.NOT_LIKE)
+                || comparison.equals(Criteria.ILIKE)
+                || comparison.equals(Criteria.NOT_ILIKE))
         {
             buildLike(columnName, (String) criteria, comparison,
                        ignoreCase, db, whereClause);
@@ -390,11 +393,25 @@ public class SqlExpression
                            DB db,
                            StringBuffer whereClause)
     {
-        // If selection is case insensitive use SQL UPPER() function
-        // on column name.
+        // If selection is case insensitive use ILIKE for PostgreSQL or SQL 
+        // UPPER() function on column name for other databases.
         if (ignoreCase)
         {
-            columnName = db.ignoreCase(columnName);
+            if (db instanceof DBPostgres)
+            {
+                if (comparison.equals(Criteria.LIKE))
+                {
+                    comparison = Criteria.ILIKE; 
+                }
+                else if (comparison.equals(Criteria.NOT_LIKE))
+                {
+                    comparison = Criteria.NOT_ILIKE; 
+                }
+            }
+            else
+            {
+                columnName = db.ignoreCase(columnName);
+            }
         }
         whereClause.append(columnName);
 
@@ -445,7 +462,7 @@ public class SqlExpression
         // If selection is case insensitive use SQL UPPER() function
         // on criteria.
         String clauseItem = sb.toString();
-        if (ignoreCase)
+        if (ignoreCase && !(db instanceof DBPostgres))
         {
             clauseItem = db.ignoreCase(clauseItem);
         }

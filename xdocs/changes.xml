@@ -52,6 +52,9 @@
         TRQS149: For PostgreSQL the LONGVARCHAR datatype now maps to 
         <em>text</em> rather than <em>bytea</em>.
       </action>
+      <action dev='seade' type='update'>
+        Case insensitive LIKE comparisons now use ILIKE for PostgreSQL.
+      </action>
     </release>
   </body>
 </document>

@@ -96,6 +96,10 @@ class SqlEnum implements java.io.Serializable
         new SqlEnum(" LIKE ");
     public static final SqlEnum NOT_LIKE =
         new SqlEnum(" NOT LIKE ");
+    public static final SqlEnum ILIKE =
+        new SqlEnum(" ILIKE ");
+    public static final SqlEnum NOT_ILIKE =
+        new SqlEnum(" NOT ILIKE ");
     public static final SqlEnum IN =
         new SqlEnum(" IN ");
     public static final SqlEnum NOT_IN =

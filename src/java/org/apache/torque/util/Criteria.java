@@ -124,6 +124,12 @@ public class Criteria extends Hashtable
     public static final SqlEnum NOT_LIKE = SqlEnum.NOT_LIKE;
 
     /** Comparison type. */
+    public static final SqlEnum ILIKE = SqlEnum.ILIKE;
+
+    /** Comparison type. */
+    public static final SqlEnum NOT_ILIKE = SqlEnum.NOT_ILIKE;
+
+    /** Comparison type. */
     public static final SqlEnum CUSTOM = SqlEnum.CUSTOM;
 
     /** Comparison type. */
