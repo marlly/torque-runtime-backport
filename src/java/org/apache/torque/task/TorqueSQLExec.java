@@ -72,6 +72,8 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Properties;
+import java.util.TreeSet;
+import java.util.Iterator;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
@@ -463,10 +465,11 @@ public class TorqueSQLExec extends Task
         }
 
         Hashtable h = new Hashtable();
+        TreeSet keys = new TreeSet(p.keySet());
 
-        for (Enumeration e = p.propertyNames(); e.hasMoreElements();)
+        for (Iterator e = keys.iterator(); e.hasNext();)
         {
-            String sqlfile = (String) e.nextElement();
+            String sqlfile = (String) e.next();
             String database = p.getProperty(sqlfile);
 
             ArrayList x = (ArrayList) h.get(database);
