@@ -54,9 +54,7 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.ArrayList;
 import java.util.List;
-import org.xml.sax.Attributes;
 
 /**
  * Information about unique indices of a table.
