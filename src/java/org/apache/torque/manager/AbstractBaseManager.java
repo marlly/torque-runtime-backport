@@ -62,6 +62,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.io.Serializable;
+import java.io.IOException;
 
 import org.apache.stratum.jcs.JCS;
 import org.apache.stratum.jcs.access.behavior.ICacheAccess;
@@ -80,12 +82,13 @@ import org.apache.log4j.Category;
  * @version $Id$
  */
 public abstract class AbstractBaseManager
+    implements Serializable
 {
     protected static final Category category =
         Category.getInstance(AbstractBaseManager.class.getName());
 
-    /** used to cache the om objects */
-    protected ICacheAccess cache;
+    /** used to cache the om objects. cache is set by the region property */
+    transient protected ICacheAccess cache;
 
     /** method results cache */
     protected MethodResultCache mrCache;
@@ -533,6 +536,32 @@ public abstract class AbstractBaseManager
                     }
                 }
             }
+        }
+    }
+
+    // helper methods for the Serializable interface
+    private void writeObject(java.io.ObjectOutputStream out)
+        throws IOException
+    {
+        out.defaultWriteObject();
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+        throws IOException, ClassNotFoundException
+    {
+        in.defaultReadObject();
+        // initialize the cache
+        try
+        {
+            if (region != null) 
+            {
+                setRegion(region);                
+            }            
+        }
+        catch (Exception e)
+        {
+            category.error("Cache was not be initialized for region: " 
+                           + region + "after deserialization");
         }
     }
 }
