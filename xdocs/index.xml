@@ -91,71 +91,85 @@
       <table>
         <tr>
           <th>RDBMS</th>
+          <th>driver</th>
           <th>status</th>
           <th>tester</th>
         </tr>
         <tr>
           <td>Cloudscape</td>
+          <td>COM.cloudscape.core.JDBCDriver</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>DB2</td>
+          <td>COM.ibm.db2.jdbc.{app|net}.{DB2Driver|AS400JDBCDriver}</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>Hypersonic</td>
+          <td>org.hsql.jdbcDriver</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>Informix</td>
+          <td>???</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>InstantDB</td>
+          <td>org.enhydra.instantdb.jdbc.idbDriver</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>Interbase</td>
+          <td>interbase.interclient.Driver</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td><a href="mssql-howto.html">MS SQL</a></td>
+          <td>???</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>Mysql</td>
+          <td>org.gjt.mm.mysql.Driver</td>
           <td>no known problems</td>
           <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
         </tr>
         <tr>
           <td><a href="oracle-howto.html">Oracle</a></td>
+          <td>oracle.jdbc.driver.OracleDriver</td>
           <td>no known problems</td>
           <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
         </tr>
         <tr>
           <td><a href="postgres-howto.html">Postgres</a></td>
+          <td>org.postgresql.Driver</td>
           <td>no known problems</td>
           <td><a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a></td>
         </tr>
         <tr>
           <td>SapDB</td>
+          <td>com.sap.dbtech.jdbc.DriverSapDB</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td><a href="sybase-howto.html">Sybase</a></td>
+          <td>com.sybase.jdbc.SybDriver</td>
           <td>untested</td>
           <td></td>
         </tr>
         <tr>
           <td>Weblogic</td>
+          <td>weblogic.jdbc.pool.Driver</td>
           <td>untested</td>
           <td></td>
         </tr>
