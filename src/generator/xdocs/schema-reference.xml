@@ -89,8 +89,8 @@
                  clause of the SQL query used against this table for
                  the primary key index to be used.  This feature could
                  cause problems under MySQL with heavily indexed
-                 tables, by causing too many indices to be created
-                 (overrunning MySQL's table limit).</p></td>
+                 tables, by causing too many indices to be created,
+                 overrunning MySQL's table limit.</td>
            </tr>
          </table>
        </p>
