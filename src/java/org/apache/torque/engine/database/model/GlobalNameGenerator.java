@@ -70,7 +70,10 @@ import org.apache.torque.TorqueException;
  */
 public class GlobalNameGenerator implements NameGenerator
 {
-    private static final boolean DEBUG = true;
+    /**
+     * Conditional compilation flag.
+     */
+    private static final boolean DEBUG = false;
 
     /**
      * First element of <code>inputs</code> should be {@link
@@ -109,7 +112,7 @@ public class GlobalNameGenerator implements NameGenerator
         try
         {
             maxBodyLength = (Torque.getDB().getMaxColumnNameLength() -
-                             globalNameType.length());
+                             globalNameType.length() - 1);
         }
         catch (Exception e)
         {
@@ -139,8 +142,8 @@ public class GlobalNameGenerator implements NameGenerator
         {
             // Remove one character from trimmable section to make
             // room for value to add to ensure uniqueness.
-            buf.setLength(--maxBodyLength);
-            buf.replace(0, maxBodyLength, trimmable);
+            buf.setLength(0);
+            buf.append(trimmable.substring(0, --maxBodyLength));
             buf.append(STD_SEPARATOR_CHAR).append(globalNameType);
 
             String baseName = buf.toString();
