@@ -105,15 +105,7 @@ public class Index
         if (indexColumns.size() > 0)
         {
             this.indexColumns = indexColumns;
-
-            List inputs = new ArrayList(4);
-            inputs.add(table.getDatabase());
-            inputs.add(table.getName());
-            inputs.add("I");
-            // ASSUMPTION: This Index not yet added to the list.
-            inputs.add(new Integer(table.getIndices().length + 1));
-            indexName = NameFactory.generateName
-                (NameFactory.CONSTRAINT_GENERATOR, inputs);
+            createName();
 
             if (DEBUG)
             {
@@ -127,6 +119,26 @@ public class Index
             throw new TorqueException("Cannot create a new Index using an " +
                                       "empty list Column object");
         }
+    }
+
+    private void createName() throws TorqueException
+    {
+        Table table = getTable();
+        List inputs = new ArrayList(4);
+        inputs.add(table.getDatabase());
+        inputs.add(table.getName());
+        if (isUnique())
+        {
+            inputs.add("U");
+        }
+        else
+        {
+            inputs.add("I");
+        }
+        // ASSUMPTION: This Index not yet added to the list.
+        inputs.add(new Integer(table.getIndices().length + 1));
+        indexName = NameFactory.generateName
+          (NameFactory.CONSTRAINT_GENERATOR, inputs);
     }
 
     /**
@@ -168,6 +180,18 @@ public class Index
      */
     public String getName()
     {
+        if (indexName == null)
+        {
+            try
+            {
+                // generate an index name if we don't have a supplied one
+                createName();
+            }
+            catch (TorqueException e)
+            {
+                // still no name
+            }
+        }
         return indexName;
     }
 
