@@ -225,6 +225,8 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
 
             conn = DriverManager.getConnection(
                     databaseUrl, databaseUser, databasePassword);
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
 
             log("DB connection established", Project.MSG_DEBUG);
             context.put("tableTool", new TableTool());
@@ -303,10 +305,8 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         public TableTool fetch(String tableName) throws Exception
         {
             log("Fetching data for table " + tableName, Project.MSG_INFO);
-            // Set Statement object in associated TorqueDataDump
-            // instance
-            return new TableTool(conn.createStatement()
-                    .executeQuery("SELECT * FROM " + tableName));
+            return new TableTool(
+                    stmt.executeQuery("SELECT * FROM " + tableName));
         }
 
         /**
