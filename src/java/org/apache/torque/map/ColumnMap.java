@@ -259,14 +259,7 @@ public class ColumnMap implements java.io.Serializable
      */
     public boolean isForeignKey()
     {
-        if (relatedTableName != null && relatedTableName.length() > 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (relatedTableName != null && relatedTableName.length() > 0);
     }
 
     /**

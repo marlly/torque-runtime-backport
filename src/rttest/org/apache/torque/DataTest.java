@@ -3,7 +3,7 @@ package org.apache.torque;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
-import org.apache.torque.BaseTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
@@ -145,7 +144,7 @@ public class DataTest extends BaseTestCase
     public void testLimitOffset()
     {
         Map titleMap = new HashMap();
-        for (int j=0; j<validTitles.length; j++) 
+        for (int j = 0; j < validTitles.length; j++) 
         {
             titleMap.put(validTitles[j], null);
         }
@@ -153,8 +152,10 @@ public class DataTest extends BaseTestCase
         try
         {
             Criteria crit = new Criteria();
-            Criteria.Criterion c = crit.getNewCriterion(BookPeer.TITLE, (Object)"Book 6 - Author 1", Criteria.GREATER_EQUAL);
-            c.and(crit.getNewCriterion(BookPeer.TITLE, (Object)"Book 8 - Author 3", Criteria.LESS_EQUAL));
+            Criteria.Criterion c = crit.getNewCriterion(BookPeer.TITLE, 
+                    (Object) "Book 6 - Author 1", Criteria.GREATER_EQUAL);
+            c.and(crit.getNewCriterion(BookPeer.TITLE, 
+                    (Object) "Book 8 - Author 3", Criteria.LESS_EQUAL));
             crit.add(c);
             crit.addDescendingOrderByColumn(BookPeer.BOOK_ID);
             crit.setLimit(10);
@@ -162,9 +163,9 @@ public class DataTest extends BaseTestCase
             List books = BookPeer.doSelect(crit);
             assertTrue("List should have 10 books, not " + books.size(), 
                        books.size() == 10);
-            for (Iterator i=books.iterator(); i.hasNext();) 
+            for (Iterator i = books.iterator(); i.hasNext();) 
             {
-                String title = ((Book)i.next()).getTitle();
+                String title = ((Book) i.next()).getTitle();
                 assertTrue("Incorrect title: " + title, 
                            titleMap.containsKey(title));
             }

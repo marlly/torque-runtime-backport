@@ -3,7 +3,7 @@ package org.apache.torque.task;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -144,9 +144,6 @@ public class TorqueSQLExec extends Task
 
     /** SQL input command */
     private String sqlCommand = "";
-
-    /** SQL transactions to perform */
-    private List transactions = new ArrayList();
 
     /** SQL Statement delimiter */
     private String delimiter = ";";

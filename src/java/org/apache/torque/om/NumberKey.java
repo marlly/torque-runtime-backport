@@ -3,7 +3,7 @@ package org.apache.torque.om;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -139,7 +139,7 @@ public class NumberKey extends SimpleKey
      */
     public NumberKey(int key)
     {
-        this.key = new BigDecimal(new Integer(key).toString());
+        this.key = new BigDecimal(String.valueOf(key));
     }
 
     /**

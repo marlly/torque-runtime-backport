@@ -684,12 +684,6 @@ public abstract class BasePeer implements java.io.Serializable
         IdGenerator keyGen = tableMap.getIdGenerator();
 
         ColumnMap pk = getPrimaryKey(criteria);
-        // only get a new key value if you need to
-        // the reason is that a primary key might be defined
-        // but you are still going to set its value. for example:
-        // a join table where both keys are primary and you are
-        // setting both columns with your own values
-        boolean info = false;
 
         // pk will be null if there is no primary key defined for the table
         // we're inserting into.
@@ -1034,7 +1028,6 @@ public abstract class BasePeer implements java.io.Serializable
 
         StringStack orderBy = criteria.getOrderByColumns();
         StringStack groupBy = criteria.getGroupByColumns();
-        boolean ignoreCase = criteria.isIgnoreCase();
         StringStack select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
         StringStack modifiers = criteria.getSelectModifiers();
@@ -2300,7 +2293,6 @@ public abstract class BasePeer implements java.io.Serializable
         StringStack orderByClause = query.getOrderByClause();
 
         StringStack orderBy = criteria.getOrderByColumns();
-        boolean ignoreCase = criteria.isIgnoreCase();
         StringStack select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
         StringStack modifiers = criteria.getSelectModifiers();

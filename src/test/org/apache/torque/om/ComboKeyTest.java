@@ -3,7 +3,7 @@ package org.apache.torque.om;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -77,8 +77,6 @@ public class ComboKeyTest extends TestCase
     private java.util.Date now = new java.util.Date();
     private ComboKey c3a = new ComboKey(
         new SimpleKey[]{new StringKey("key1"), null, new DateKey(now)});
-    private ComboKey c3b = new ComboKey(new SimpleKey[]{
-        new StringKey("key1"), null, new DateKey(now)});
     private ComboKey c4a = new ComboKey(
         new SimpleKey[]{new StringKey("key1"), null, new NumberKey(123456)});
 
@@ -92,12 +90,19 @@ public class ComboKeyTest extends TestCase
         super(name);
     }
 
-
+	/**
+	 * 
+	 * @param args
+	 */
     public static void main(java.lang.String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
 
+	/**
+	 * 
+	 * @return Test
+	 */
     public static Test suite()
     {
         TestSuite suite = new TestSuite(ComboKeyTest.class);
@@ -105,6 +110,10 @@ public class ComboKeyTest extends TestCase
         return suite;
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testReflexive()
     {
         Assert.assertTrue(c1a.equals(c1a));
@@ -114,27 +123,38 @@ public class ComboKeyTest extends TestCase
         Assert.assertTrue(c3a.looseEquals(c3a));
     }
 
-//    public void testReflexiveWithNullKeyValue()
-//    {
-//        Assert.assertTrue(c3a.equals(c3a));
-//    }
-
+	/**
+	 * 
+	 *
+	 */
     public void testSymmetric()
     {
         Assert.assertTrue(c1a.equals(c1b));
         Assert.assertTrue(c1b.equals(c1a));
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testNull()
     {
         Assert.assertTrue(!c1a.equals(null));
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testNotEqual()
     {
         Assert.assertTrue(!c1a.equals(c2a));
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testRoundTripWithStringKeys()
     {
         // two strings
@@ -156,6 +176,10 @@ public class ComboKeyTest extends TestCase
         Assert.assertEquals(oldKey,newKey);
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testRoundTripWithComplexKey()
     {
         // complex key
@@ -169,14 +193,19 @@ public class ComboKeyTest extends TestCase
         {
             newKey = new ComboKey(stringValue);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            fail("Exception " + e.getClass().getName() + " thrown on new ComboKey("
-                 + stringValue + "):" + e.getMessage());
+            fail("Exception " + e.getClass().getName() 
+                    + " thrown on new ComboKey("
+                    + stringValue + "):" + e.getMessage());
         }
         Assert.assertEquals(oldKey,newKey);
     }
 
+	/**
+	 * 
+	 *
+	 */
     public void testRoundTripWithNullKey()
     {
         // with null key
@@ -189,10 +218,11 @@ public class ComboKeyTest extends TestCase
         {
             newKey = new ComboKey(stringValue);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            fail("Exception " + e.getClass().getName() + " thrown on new ComboKey("
-                 + stringValue + "):" + e.getMessage());
+            fail("Exception " + e.getClass().getName() 
+                    + " thrown on new ComboKey("
+                    + stringValue + "):" + e.getMessage());
         }
         // This currently has to use looseEquals as ComboKey.equals(Obj)
         // does not accept null key values (WHY!)
@@ -200,7 +230,9 @@ public class ComboKeyTest extends TestCase
     }
 
 
-    /** Test of appendTo method, of class org.apache.torque.om.ComboKey. */
+    /** 
+     * Test of appendTo method, of class org.apache.torque.om.ComboKey. 
+     */
     public void testAppendTo()
     {
         StringBuffer sb = new StringBuffer();
@@ -208,10 +240,11 @@ public class ComboKeyTest extends TestCase
         Assert.assertEquals("Skey1:Skey2:", sb.toString());
     }
 
-    /** Test of toString method, of class org.apache.torque.om.ComboKey. */
+    /** 
+     * Test of toString method, of class org.apache.torque.om.ComboKey. 
+     */
     public void testToString()
     {
         Assert.assertEquals("Skey1::N123456:", c4a.toString());
     }
 }
-

@@ -3,7 +3,7 @@ package org.apache.torque.task;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -219,9 +219,7 @@ public class TorqueJDBCTransformTask extends Task
         log("DB driver sucessfuly instantiated");
 
         // Attemtp to connect to a database.
-        Connection con = DriverManager.getConnection(dbUrl,
-                                                     dbUser,
-                                                     dbPassword);
+        Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         log("DB connection established");
 
         // Get the database Metadata.

@@ -55,7 +55,7 @@ package org.apache.torque.util;
  */
 
 import junit.framework.TestCase;
-import java.util.*;
+
 import org.apache.commons.collections.StringStack;
 
 /**
@@ -126,5 +126,4 @@ public class QueryTest extends TestCase
 		System.out.println(query.toString());
 		assertEquals(expected, query.toString());
 	}
-
 }

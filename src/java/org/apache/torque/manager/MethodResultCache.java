@@ -3,7 +3,7 @@ package org.apache.torque.manager;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,13 +54,16 @@ package org.apache.torque.manager;
  * <http://www.apache.org/>.
  */
 
-import java.util.Map;
-import java.util.HashMap;
 import java.io.Serializable;
-import org.apache.jcs.access.GroupCacheAccess;
-import org.apache.jcs.access.exception.CacheException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.StackObjectPool;
+
+import org.apache.jcs.access.GroupCacheAccess;
+import org.apache.jcs.access.exception.CacheException;
+
 import org.apache.log4j.Logger;
 
 import org.apache.torque.TorqueException;
@@ -73,8 +76,6 @@ import org.apache.torque.TorqueException;
  */
 public class MethodResultCache
 {
-    private static final String keyClassName =
-        "org.apache.torque.manager.MethodCacheKey";
     private ObjectPool pool;
     private GroupCacheAccess jcsCache;
     private boolean lockCache;

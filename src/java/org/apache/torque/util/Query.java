@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,12 +73,9 @@ public class Query
     private static final String FROM = " FROM ";
     private static final String WHERE = " WHERE ";
     private static final String AND = " AND ";
-    private static final String OR = " OR ";
     private static final String ORDER_BY = " ORDER BY ";
     private static final String GROUP_BY = " GROUP BY ";
     private static final String HAVING = " HAVING ";
-    private static final String IN = " IN ";
-    private static final String BETWEEN = " BETWEEN ";
     private static final String LIMIT = " LIMIT ";
     private static final String ROWCOUNT = " SET ROWCOUNT ";
 
