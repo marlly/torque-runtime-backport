@@ -103,10 +103,20 @@ public class TableTest extends TestCase
 		assertEquals(IDMethod.NATIVE, table2.getIdMethod());
     }
     
+    public void testNoPk() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("nopk");
+        assertFalse(table.hasPrimaryKey());
+        List pks = table.getPrimaryKey();
+        assertTrue(pks.size() == 0);
+    }
+    
     public void testSinglePk() throws Exception
     {
         Database db = appData.getDatabase("iddb");
         Table table = db.getTable("singlepk");
+        assertTrue(table.hasPrimaryKey());
         List pks = table.getPrimaryKey();
         assertTrue(pks.size() == 1);
         Column col = (Column) pks.get(0);
@@ -117,12 +127,14 @@ public class TableTest extends TestCase
     {
         Database db = appData.getDatabase("iddb");
         Table table = db.getTable("multipk");
+        assertTrue(table.hasPrimaryKey());
         List pks = table.getPrimaryKey();
         assertTrue(pks.size() == 2);
         Column cola = (Column) pks.get(0);
         assertEquals(cola.getName(), "multipk_a");        
         Column colb = (Column) pks.get(1);
-        assertEquals(colb.getName(), "multipk_b");        
+        assertEquals(colb.getName(), "multipk_b");  
+        assertEquals(table.printPrimaryKey(), "multipk_a,multipk_b");     
     }
  
     public void testSingleFk() throws Exception
@@ -155,6 +167,17 @@ public class TableTest extends TestCase
         assertTrue(refs.size() == 1);
         ForeignKey fk = (ForeignKey) refs.get(0);
         assertEquals(fk.getTableName(), "singlefk");        
+    }
+    
+    public void testUnique() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("unique_test");
+        Unique[] unices = table.getUnices();
+        assertTrue(unices.length == 1);
+        Unique unique = unices[0];
+        assertEquals(unique.getName(), "unique_name");   
+        assertTrue(unique.getColumns().size() == 2);     
     }
     
 }

@@ -13,6 +13,11 @@
     <column name="col_a" type="CHAR" size="5" />
   </table>
 
+  <table name="nopk">
+    <column name="col_a" type="CHAR" size="5" />
+    <column name="col_b" type="CHAR" size="5" />
+  </table>
+
   <table name="singlepk">
     <column name="singlepk_id" required="true" primaryKey="true" type="INTEGER" />
     <column name="col_a" type="CHAR" size="5" />
@@ -43,6 +48,17 @@
       <reference local="multipk_b" foreign="multipk_b"/>
     </foreign-key>
   </table>
+  
+  <table name="unique_test">
+    <column name="id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+    <column name="col_b" type="CHAR" size="5" />
+    <unique name="unique_name">
+      <unique-column name="col_a"/>
+      <unique-column name="col_b"/>
+    </unique>
+  </table>
+  
   
 </database>
 
