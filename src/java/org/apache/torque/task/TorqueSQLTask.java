@@ -54,9 +54,12 @@ package org.apache.torque.task;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
+import org.apache.commons.util.StringUtils;
+
 import org.apache.velocity.context.Context;
 import org.apache.velocity.texen.ant.TexenTask;
+
+import org.apache.torque.Torque;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 
@@ -66,6 +69,7 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @version $Id$
  */
 public class TorqueSQLTask
@@ -117,7 +121,7 @@ public class TorqueSQLTask
      *
      * @return String target database(s)
      */
-    public String getTargetDatabase ()
+    public String getTargetDatabase()
     {
         return targetDatabase;
     }
@@ -127,8 +131,9 @@ public class TorqueSQLTask
      * generated java classes will live.
      *
      * @param String target database(s)
+     * @deprecated Use setConfigFile instead.
      */
-    public void setTargetDatabase (String v)
+    public void setTargetDatabase(String v)
     {
         targetDatabase = v;
     }
@@ -146,13 +151,10 @@ public class TorqueSQLTask
         // Adds $now.
         super.populateInitialContext(context);
 
-        // Torque could be initialized here.
-
-        /*
-         * Transform the XML database schema into an
-         * object that represents our model.
-         */
-        XmlToAppData xmlParser = new XmlToAppData();
+        // Transform the XML database schema into an object that
+        // represents our model.
+        XmlToAppData xmlParser = new XmlToAppData
+            (getTargetDatabase(), getTemplatePath() + "/sql/base/");
         app = xmlParser.parseFile(xmlFile);
 
         /*
