@@ -169,7 +169,8 @@ public class Table implements IDMethod
         // TODO: Make this conditional on Torque or RDBMS property.
         doHeavyIndexing();
 
-        // Rename any indices which are missing a name.
+        // Name any indices which are missing a name using the
+        // appropriate algorithm.
         doNaming();
     }
 
@@ -214,7 +215,7 @@ public class Table implements IDMethod
      */
     private void doNaming()
     {
-        // TODO
+        // TODO: Name nested foreign-key, index, and unique entities.
     }
 
     /**
