@@ -55,7 +55,7 @@ column defined in those tables as well as the convenient
 one-to-one mapping to a table defined in your database
 schema.  For a more in-depth discussion on Peers and
 Data Objects, refer to the
-<a href="peers-howto.html#Peer%20Classes">Peers HOWTO</a>.
+<a href="../peers-howto.html#Peer%20Classes">Peers HOWTO</a>.
 An example of adding logic to both the Peer and Data
 Objects is presented later in the tutorial.
 </p>
