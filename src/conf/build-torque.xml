@@ -51,7 +51,6 @@
 
     <antcall target="project-sql-classpath"/>
     <antcall target="project-sql-template"/>
-
   </target>
 
   <target
@@ -415,6 +414,16 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
+    <antcall target="project-om-classpath"/>
+    <antcall target="project-om-template"/>
+  </target>
+
+  <target
+    name="project-om-classpath"
+    if="useClasspath">
+
+    <echo message="using classpath"/>
+
     <taskdef
       name="torque-om"
       classname="org.apache.torque.task.TorqueDataModelTask">
@@ -426,6 +435,32 @@
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/java"
       useClasspath="${useClasspath}"
+      outputFile="report.${project}.om.generation"
+      targetPackage="${targetPackage}"
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+        <exclude name="id-table-schema.xml"/>
+      </fileset>
+    </torque-om>
+  </target>
+
+  <target
+    name="project-om-template"
+    unless="useClasspath">
+
+    <echo message="using template path ${templatePath}"/>
+
+    <taskdef
+      name="torque-om"
+      classname="org.apache.torque.task.TorqueDataModelTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-om
+      contextProperties="${build.properties}"
+      controlTemplate="${OMControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/java"
       templatePath="${templatePath}"
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}"
