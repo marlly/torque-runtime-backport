@@ -5,9 +5,9 @@
 
   <body>
     <links>
-      <item name="runtime"               href="/torque/"/>
-      <item name="generator"             href="/torque/generator/"/>
-      <item name="maven-plugin"          href="/torque/maven-plugin/"/>
+      <item name="runtime"               href="../index.html"/>
+      <item name="generator"             href="../generator/"/>
+      <item name="maven-plugin"          href="/index.html"/>
     </links>
     
     <menu name="Overview">
