@@ -2030,7 +2030,7 @@ public abstract class BasePeer implements java.io.Serializable
         Connection con = null;
         try
         {
-            dbCon.getConnection();
+            con = dbCon.getConnection();
         }
         catch (SQLException e)
         {
