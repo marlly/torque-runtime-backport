@@ -67,22 +67,29 @@ public abstract class $basePrefix${table.JavaName}Peer
         "${package}.$table.JavaName";
 
     /** A class that can be returned by this peer. */
-    protected static final Class CLASS_DEFAULT = initClass();
+    protected static final Class CLASS_DEFAULT = initClass(CLASSNAME_DEFAULT);
 
-    /** Initialization method for static CLASS_DEFAULT attribute */
-    private static Class initClass()
+    /** Class object initialization method. */
+    private static Class initClass(String className)
     {
         Class c = null;
         try
         { 
-            c = Class.forName(CLASSNAME_DEFAULT);
+            c = Class.forName(className);
         }
-        catch (Exception e)
+        catch (Throwable t)
         {
-            category.error("A FATAL ERROR has occurred which should not" +
-                "have happened under any circumstance.  Please notify" +
-                "Turbine and give as many details as possible including the " +
-                "error stacktrace.", e);
+            category.error("A FATAL ERROR has occurred which should not " +
+                "have happened under any circumstance.  Please notify " +
+                "the Turbine developers <turbine-dev@jakarta.apache.org> " +
+                "and give as many details as possible (including the error " +
+                "stack trace).", t);
+
+            // Error objects should always be propogated.
+            if (t instanceof Error)
+            {
+                throw (Error) t.fillInStackTrace();
+            }
         }
         return c;
     }
@@ -140,29 +147,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
     /** A class that can be returned by this peer. */
     public static final Class CLASS_$child.Key.toUpperCase() = 
-        init${child.Key.toUpperCase()}Class();
-
-    /**
-     * Initialization method for static 
-     * CLASS_$child.Key.toUpperCase() attribute
-     */
-    private static Class init${child.Key.toUpperCase()}Class()
-    {
-        Class c = null;
-        try
-        { 
-            c = Class.forName(CLASSNAME_$child.Key.toUpperCase());
-        }
-        catch (Exception e)
-        {
-            category.error("A FATAL ERROR has occurred which should not" +
-                "have happened under any circumstance.  Please notify " +
-                "the Turbine developers <turbine-dev@jakarta.apache.org> " +
-                "and give as many details as possible (including the error " +
-                "stack trace).", e);
-        }
-        return c;
-    }
+        initClass(CLASSNAME_$child.Key.toUpperCase());
         #end
     #end
 #end
