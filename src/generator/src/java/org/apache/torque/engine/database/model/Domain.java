@@ -54,8 +54,6 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
 
 /**
@@ -66,8 +64,6 @@ import org.xml.sax.Attributes;
  */
 public class Domain
 {
-    /** Logging class from commons.logging */
-    private static Log log = LogFactory.getLog(Domain.class);
     private String name;
     private String description;
     private String size;
