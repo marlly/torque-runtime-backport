@@ -587,6 +587,21 @@ public class Column
     }
 
     /**
+     * Utility method to return the value as an element to be usable
+     * in an SQL insert statement. This is used from the SQL loader task
+     */
+    public boolean needEscapedValue()
+    {
+        return (torqueType != null) &&
+                ( torqueType.equals("VARCHAR")
+                        || torqueType.equals("LONGVARCHAR")
+                        || torqueType.equals("DATE")
+                        || torqueType.equals("DATETIME")
+                        || torqueType.equals("TIMESTAMP")
+                        || torqueType.equals("CHAR"));
+    }
+
+    /**
      * String representation of the column. This is an xml representation.
      *
      * @return string representation in xml
