@@ -32,87 +32,80 @@ dbprops.idMethod = $dbprops.get("idMethod")
   $files.mkdir("$outputDirectory/$path")
 
   #foreach ($tbl in $database.Tables)
-   #if (!$tbl.isForReferenceOnly())
-    $tbl.Name
-    #set ( $firstcap=$tbl.JavaName )
+    #if (!$tbl.isForReferenceOnly())
+      $tbl.Name
+      #set ( $firstcap=$tbl.JavaName )
 
-    #set ( $fname = "$basePrefix${firstcap}Peer.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
-    $generator.parse("om/Peer.vm",$path,"table",$tbl)
+      #set ( $fname = "$basePrefix${firstcap}Peer.java" )
+      #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+      $generator.parse("om/Peer.vm",$path,"table",$tbl)
 
-    #if (!$tbl.isAlias())
-      #set ( $fname = "${firstcap}MapBuilder.java" )
-      #set ( $path = "${strings.getPackageAsPath($pkmap)}$fname" )
-      $generator.parse("om/MapBuilder.vm",$path,"table",$tbl)
-    #end
+      #if (!$tbl.isAlias())
+        #set ( $fname = "${firstcap}MapBuilder.java" )
+        #set ( $path = "${strings.getPackageAsPath($pkmap)}$fname" )
+        $generator.parse("om/MapBuilder.vm",$path,"table",$tbl)
+      #end
 
-#if ($useManagers && $tbl.PrimaryKey.size() > 0)
+      #if ($useManagers && $tbl.PrimaryKey.size() > 0)
+        #set ($interfaceName = $table.JavaName)
+        #if ($table.Interface)
+          #set ($interfaceName = $table.Interface)
+        #end
 
-    #set ($interfaceName = $table.JavaName)
-    #if ($table.Interface)
-        #set ($interfaceName = $table.Interface)
-    #end
+        #set ( $fname = "${basePrefix}${interfaceName}Manager.java" )
+        #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+        $generator.parse("om/BaseManager.vm",$path,"table",$tbl)
 
-    #set ( $fname = "${basePrefix}${interfaceName}Manager.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
-    $generator.parse("om/BaseManager.vm",$path,"table",$tbl)
+        #set ( $fname = "${interfaceName}Manager.java" )
+        #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
+        #if (!$files.file($basePath,$path).exists())
+           $generator.parse("om/ExtensionManager.vm",$path,"table",$tbl)
+        #end
+      #end
+      
+      #if ($useManagers)
+        #set ( $fname = "${basePrefix}${firstcap}.java" )
+        #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+        $generator.parse("om/ObjectWithManager.vm",$path,"table",$tbl)
+      #else
+        #set ( $fname = "${basePrefix}${firstcap}.java" )
+        #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+        $generator.parse("om/Object.vm",$path,"table",$tbl)
+      #end
 
-    #set ( $fname = "${interfaceName}Manager.java" )
-    #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
-    #if (!$files.file($basePath,$path).exists())
-      $generator.parse("om/ExtensionManager.vm",$path,"table",$tbl)
-    #end
+      #set ( $fname = "${firstcap}.java" )
+      #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
+      #if (!$files.file($basePath,$path).exists())
+        $generator.parse("om/ExtensionObject.vm",$path,"table",$tbl)
+      #end
 
-#end
-#if ($useManagers)
+      #set ( $fname = "${firstcap}Peer.java" )
+      #set ( $path = "${strings.getPackageAsPath($pkpeer)}$fname" )
+      #if (!$files.file($basePath,$path).exists())
+        $generator.parse("om/ExtensionPeer.vm",$path,"table",$tbl)
+      #end
 
-    #set ( $fname = "${basePrefix}${firstcap}.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
-    $generator.parse("om/ObjectWithManager.vm",$path,"table",$tbl)
-
-#else
-
-    #set ( $fname = "${basePrefix}${firstcap}.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
-    $generator.parse("om/Object.vm",$path,"table",$tbl)
-
-#end
-
-    #set ( $fname = "${firstcap}.java" )
-    #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
-    #if (!$files.file($basePath,$path).exists())
-      $generator.parse("om/ExtensionObject.vm",$path,"table",$tbl)
-    #end
-
-    #set ( $fname = "${firstcap}Peer.java" )
-    #set ( $path = "${strings.getPackageAsPath($pkpeer)}$fname" )
-    #if (!$files.file($basePath,$path).exists())
-      $generator.parse("om/ExtensionPeer.vm",$path,"table",$tbl)
-    #end
-
-    #if ($tbl.Interface)
-
+      #if ($tbl.Interface)
         #set ( $fname = "${tbl.Interface}.java" )
         #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
         #if (!$files.file($basePath,$path).exists())
             $generator.parse("om/Interface.vm",$path,"table",$tbl)
         #end
+      #end
 
-    #end
-
-    #if ($tbl.ChildrenColumn)
-      #set ($col = $tbl.ChildrenColumn)
-      #if ($col.isEnumeratedClasses())
-        #foreach ($child in $col.Children)
-        #set ( $fname = "${child.ClassName}.java" )
-        #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
-        #if (!$files.file($basePath,$path).exists())
-          $generator.parse("om/MultiExtendObject.vm",$path,"child",$child)
-        #end
+      #if ($tbl.ChildrenColumn)
+        #set ($col = $tbl.ChildrenColumn)
+        #if ($col.isEnumeratedClasses())
+          #foreach ($child in $col.Children)
+            #set ( $fname = "${child.ClassName}.java" )
+            #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
+            #if (!$files.file($basePath,$path).exists())
+              $generator.parse("om/MultiExtendObject.vm",$path,"child",$child)
+            #end
+          #end
         #end
       #end
     #end
-   #end
   #end
 #end
 #end
