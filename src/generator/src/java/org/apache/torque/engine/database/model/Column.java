@@ -787,6 +787,16 @@ public class Column
         isAutoIncrement = value;
     }
 
+    public String getAutoIncrementString()
+    {
+        if (isAutoIncrement() 
+                && IDMethod.NATIVE.equals(getTable().getIdMethod()))
+        {
+            return getPlatform().getAutoIncrement();
+        }
+        return "";
+    }
+    
     /**
      * Set the column type from a string property
      * (normally a string from an sql input file)
