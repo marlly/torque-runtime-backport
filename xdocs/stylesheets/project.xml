@@ -33,6 +33,7 @@
       <item name="Postgres Howto"        href="/postgres-howto.html"/>
       <item name="Sybase Howto"          href="/sybase-howto.html"/>
       <item name="Caching Howto"         href="/managers-cache.html"/>
+      <item name="JDBC2 Pool Howto"      href="/jdbc2pool-howto.html"/>
     </menu>
     <menu name="Development">
       <item name="DB Adapters"           href="/db-adapters.html"/>
