@@ -54,22 +54,78 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
+import org.apache.commons.collections.ExtendedProperties;
+
+import org.apache.log4j.Category;
+import org.apache.log4j.PropertyConfigurator;
+
 import junit.framework.TestCase;
 
 /**
  * Base functionality to be extended by all Torque test cases.  Test
  * case implementations are used to automate unit testing via JUnit.
  *
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:celkins@scardini.com">Christopher Elkins</a>
  * @version $Id$
  */
 public abstract class BaseTestCase extends TestCase
 {
     /**
+     * The path to the configuration file.
+     */
+    private static final String CONFIG_FILE = "TurbineResources.properties";
+
+    /**
+     * Whether torque has been initialized.
+     */
+    private static boolean hasInitialized = false;
+
+    /**
      * Creates a new instance.
      */
     public BaseTestCase(String name)
     {
         super(name);
+        if (!hasInitialized)
+        {
+            synchronized (BaseTestCase.class)
+            {
+                if (!hasInitialized)
+                {
+                    initTorque();
+                }
+            }
+        }
+    }
+
+    /**
+     * Performs Torque initialization activities.
+     */
+    private final void initTorque()
+    {
+        try
+        {
+            ExtendedProperties config = new ExtendedProperties(CONFIG_FILE);
+            // HELP: What about the database.* properties?
+            config = config.subset("services.DatabaseService");
+            System.out.println("Using configuration file: " +
+                               config.getString(Torque.DATABASE_DEFAULT));
+
+            Properties p = new Properties();
+            p.load(new FileInputStream(CONFIG_FILE));
+            PropertyConfigurator.configure(p);
+
+            Torque.setConfiguration(config);
+            Torque.setCategory(Category.getInstance("ALL"));
+            Torque.init();
+        }
+        catch (Exception e)
+        {
+            fail("Couldn't initialize Torque: " + e.getMessage());
+        }
     }
 }
