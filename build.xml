@@ -4,9 +4,10 @@
 
   <!-- Allow any user specific values to override the defaults -->
   <property file="${user.home}/build.properties" />
-
-  <!-- Set default values for the build -->
+  <!-- Allow user defaults for this project -->
   <property file="build.properties" />
+  <!-- Set default values for the build -->
+  <property file="default.properties" />
 
   <!-- Construct compile classpath -->
   <path id="classpath">
