@@ -121,54 +121,34 @@ public class TorqueSQLExec extends Task
         }
     }
 
-    /**
-     * Database connection
-     */
+    /** Database connection */
     private Connection conn = null;
 
-    /**
-     * Autocommit flag. Default value is false
-     */
+    /** Autocommit flag. Default value is false */
     private boolean autocommit = false;
 
-    /**
-     * SQL statement
-     */
+    /** SQL statement */
     private Statement statement = null;
 
-    /**
-     * DB driver.
-     */
+    /** DB driver. */
     private String driver = null;
 
-    /**
-     * DB url.
-     */
+    /** DB url. */
     private String url = null;
 
-    /**
-     * User name.
-     */
+    /** User name. */
     private String userId = null;
 
-    /**
-     * Password
-     */
+    /** Password */
     private String password = null;
 
-    /**
-     * SQL input command
-     */
+    /** SQL input command */
     private String sqlCommand = "";
 
-    /**
-     * SQL transactions to perform
-     */
+    /** SQL transactions to perform */
     private List transactions = new ArrayList();
 
-    /**
-     * SQL Statement delimiter
-     */
+    /** SQL Statement delimiter */
     private String delimiter = ";";
 
     /**
@@ -177,50 +157,31 @@ public class TorqueSQLExec extends Task
      */
     private String delimiterType = DelimiterType.NORMAL;
 
-    /**
-     * Print SQL results.
-     */
+    /** Print SQL results. */
     private boolean print = false;
 
-    /**
-     * Print header columns.
-     */
+    /** Print header columns. */
     private boolean showheaders = true;
 
-    /**
-     * Results Output file.
-     */
+    /** Results Output file. */
     private File output = null;
 
-    /**
-     * RDBMS Product needed for this SQL.
-     **/
+    /** RDBMS Product needed for this SQL. */
     private String rdbms = null;
 
-    /**
-     * RDBMS Version needed for this SQL.
-     **/
+    /** RDBMS Version needed for this SQL. */
     private String version = null;
 
-    /**
-     * Action to perform if an error is found
-     **/
+    /** Action to perform if an error is found */
     private String onError = "abort";
 
-    /**
-     * Encoding to use when reading SQL statements from a file
-     */
+    /** Encoding to use when reading SQL statements from a file */
     private String encoding = null;
 
-    /**
-     * Src directory for the files listed in the sqldbmap.
-     */
+    /** Src directory for the files listed in the sqldbmap. */
     private String srcDir;
 
-    /**
-     * Properties file that maps an individual SQL
-     * file to a database.
-     */
+    /** Properties file that maps an individual SQL file to a database. */
     private File sqldbmap;
 
     /**
@@ -266,7 +227,7 @@ public class TorqueSQLExec extends Task
     /**
      * Set the classpath for loading the driver.
      *
-     * @param classpath
+     * @param classpath the classpath
      */
     public void setClasspath(Path classpath)
     {
@@ -316,6 +277,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the JDBC driver to be used.
+     *
+     * @param driver driver class name
      */
     public void setDriver(String driver)
     {
@@ -324,6 +287,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the DB connection url.
+     *
+     * @param url connection url
      */
     public void setUrl(String url)
     {
@@ -332,6 +297,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the user name for the DB connection.
+     *
+     * @param userId database user
      */
     public void setUserid(String userId)
     {
@@ -350,6 +317,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the password for the DB connection.
+     *
+     * @param password database password
      */
     public void setPassword(String password)
     {
@@ -358,6 +327,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the autocommit flag for the DB connection.
+     *
+     * @param autocommit
      */
     public void setAutocommit(boolean autocommit)
     {
@@ -369,6 +340,8 @@ public class TorqueSQLExec extends Task
      *
      * <p>For example, set this to "go" and delimitertype to "ROW" for
      * Sybase ASE or MS SQL Server.</p>
+     *
+     * @param delimiter
      */
     public void setDelimiter(String delimiter)
     {
@@ -380,6 +353,8 @@ public class TorqueSQLExec extends Task
      * values - normal and row. Normal means that any occurence of the delimiter
      * terminate the SQL command whereas with row, only a line containing just
      * the delimiter is recognized as the end of the command.
+     *
+     * @param delimiterType
      */
     public void setDelimiterType(DelimiterType delimiterType)
     {
@@ -388,6 +363,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the print flag.
+     *
+     * @param print
      */
     public void setPrint(boolean print)
     {
@@ -396,6 +373,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the showheaders flag.
+     *
+     * @param showheaders
      */
     public void setShowheaders(boolean showheaders)
     {
@@ -404,6 +383,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the output file.
+     *
+     * @param output
      */
     public void setOutput(File output)
     {
@@ -412,6 +393,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the rdbms required
+     *
+     * @param vendor
      */
     public void setRdbms(String vendor)
     {
@@ -420,6 +403,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the version required
+     *
+     * @param version
      */
     public void setVersion(String version)
     {
@@ -428,6 +413,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the action to perform onerror
+     *
+     * @param action
      */
     public void setOnerror(OnError action)
     {
@@ -436,6 +423,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Load the sql file and then execute it
+     *
+     * @throws BuildException
      */
     public void execute() throws BuildException
     {
@@ -526,7 +515,8 @@ public class TorqueSQLExec extends Task
                 }
                 else
                 {
-                    super.log("File '" + fileName + "' in sqldbmap does not exist, so skipping it.");
+                    super.log("File '" + fileName
+                            + "' in sqldbmap does not exist, so skipping it.");
                 }
             }
 
@@ -537,8 +527,13 @@ public class TorqueSQLExec extends Task
     /**
      * Take the base url, the target database and insert a set of SQL
      * files into the target database.
+     *
+     * @param url
+     * @param database
+     * @param transactions
      */
-    private void insertDatabaseSqlFiles(String url, String database, List transactions)
+    private void insertDatabaseSqlFiles(String url, String database,
+            List transactions)
     {
         url = StringUtils.replace(url, "@DB@", database);
         System.out.println("Our new url -> " + url);
@@ -551,7 +546,7 @@ public class TorqueSQLExec extends Task
             {
                 log("Loading " + driver
                         + " using AntClassLoader with classpath " + classpath,
-                        Project.MSG_VERBOSE );
+                        Project.MSG_VERBOSE);
 
                 loader = new AntClassLoader(project, classpath);
                 dc = loader.loadClass(driver);
@@ -582,7 +577,7 @@ public class TorqueSQLExec extends Task
 
         try
         {
-            log("connecting to " + url, Project.MSG_VERBOSE );
+            log("connecting to " + url, Project.MSG_VERBOSE);
             Properties info = new Properties();
             info.put("user", userId);
             info.put("password", password);
@@ -613,7 +608,7 @@ public class TorqueSQLExec extends Task
                 }
 
                 // Process all transactions
-                for (Iterator it = transactions.iterator(); it.hasNext(); )
+                for (Iterator it = transactions.iterator(); it.hasNext();)
                 {
                     ((Transaction) it.next()).runTransaction(out);
                     if (!autocommit)
@@ -704,11 +699,16 @@ public class TorqueSQLExec extends Task
             {
                 line = line.trim();
                 line = ProjectHelper.replaceProperties(project, line,
-                                                       project.getProperties());
-                if (line.startsWith("//")) continue;
-                if (line.startsWith("--")) continue;
-                if (line.length() > 2 &&
-                    line.substring(0, 3).equalsIgnoreCase("REM")) continue;
+                        project.getProperties());
+                if (line.startsWith("//") || line.startsWith("--"))
+                {
+                    continue;
+                }
+                if (line.length() > 2
+                        && line.substring(0, 3).equalsIgnoreCase("REM"))
+                {
+                    continue;
+                }
 
                 sql += " " + line;
                 sql = sql.trim();
@@ -747,6 +747,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Verify if connected to the correct RDBMS
+     *
+     * @param conn
      */
     protected boolean isValidRdbms(Connection conn)
     {
@@ -799,11 +801,17 @@ public class TorqueSQLExec extends Task
 
     /**
      * Exec the sql statement.
+     *
+     * @param sql
+     * @param out
      */
     protected void execSQL(String sql, PrintStream out) throws SQLException
     {
         // Check and ignore empty statements
-        if ("".equals(sql.trim())) return;
+        if ("".equals(sql.trim()))
+        {
+            return;
+        }
 
         try
         {
@@ -843,6 +851,9 @@ public class TorqueSQLExec extends Task
 
     /**
      * print any results in the statement.
+     *
+     * @param out
+     * @throws SQLException
      */
     protected void printResults(PrintStream out) throws java.sql.SQLException
     {
