@@ -59,6 +59,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.commons.collections.ExtendedProperties;
+import org.apache.commons.util.StringUtils;
 import org.apache.log4j.Category;
 
 /**
@@ -93,9 +94,9 @@ public class DBFactory
     }
 
     // This static code creates the list of possible drivers and adds
-    // the "NO DATABASE" adaptor to this list.  After all the
+    // the "NO DATABASE" adapter to this list.  After all the
     // configuration is queried to get a list of JDBC drivers and
-    // their associated adaptors.
+    // their associated adapters.
     public static void init()
     {
         drivers = new Hashtable();
@@ -103,13 +104,25 @@ public class DBFactory
         // Add the null db driver.
         registerDriver("", DBNone.class);
 
-        Enumeration adaptors =
-            configuration.getVector("database.adaptor").elements();
-        while (adaptors.hasMoreElements())
+        Enumeration adapters =
+            configuration.getVector("database.adapter").elements();
+        if (!adapters.hasMoreElements())
         {
-            String adaptor = (String)adaptors.nextElement();
+            // Unfortunately, once upon a time this property was
+            // spelled incorrectly.
+            adapters = configuration.getVector("database.adaptor").elements();
+        }
+        while (adapters.hasMoreElements())
+        {
+            String adapter = (String) adapters.nextElement();
             String driver =
-                configuration.getString("database.adaptor." + adaptor);
+                configuration.getString("database.adapter." + adapter);
+            if (!StringUtils.isValid(driver))
+            {
+                // Also previously spelled incorrectly.
+                driver =
+                    configuration.getString("database.adaptor." + adapter);
+            }
 
             Class c = null;
             try
@@ -118,13 +131,13 @@ public class DBFactory
                 // This needs to be configurable, or set
                 // in a hidden property file.
                 c = Class.forName(
-                    "org.apache.torque.adapter." + adaptor);
+                    "org.apache.torque.adapter." + adapter);
             }
             catch (ClassNotFoundException ign1)
             {
                 try
                 {
-                    c = Class.forName(adaptor);
+                    c = Class.forName(adapter);
                 }
                 catch (ClassNotFoundException ign2)
                 {
