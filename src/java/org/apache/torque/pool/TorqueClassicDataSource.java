@@ -419,7 +419,15 @@ public class TorqueClassicDataSource
                                                  String password)
         throws SQLException
     {
-        String key = getKey(username);
+        String key = null;
+        if (username != null)
+        {
+            key = getKey(username);
+        }
+        else
+        {
+            key = getKey(cpds.getPooledConnection().getConnection().getMetaData().getUserName());
+        }
         ConnectionPool pool = (ConnectionPool)pools.get(key);
         if ( pool == null )
         {
@@ -444,17 +452,37 @@ public class TorqueClassicDataSource
     private String getKey(String suffix)
     {
         String key = getDataSourceName();
-        if ( suffix != null )
+        if ( suffix != null && key != null)
         {
             key += suffix;
         }
+        else if (suffix != null)
+        {
+            return suffix;
+        }
+
         return key;
     }
 
     synchronized private void registerPool(String username, String password)
          throws javax.naming.NamingException
     {
-        String key = getKey(username);
+        String key = null;
+        if (username != null)
+        {
+            key = getKey(username);
+        }
+        else
+        {
+            try
+            {
+                key = getKey(cpds.getPooledConnection().getConnection().getMetaData().getUserName());
+            }
+            catch (SQLException e)
+            {
+                key = null;
+            }
+        }
         if ( !pools.containsKey(key) )
         {
             ConnectionPoolDataSource cpds = this.cpds;
