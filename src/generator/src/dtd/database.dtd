@@ -31,7 +31,7 @@ Java class or method name.
               to lowercase.
 -->
 
-<!ELEMENT database (external-schema*, table+)>
+<!ELEMENT database (external-schema*, domain*, table+)>
 <!ATTLIST database
   name CDATA #IMPLIED
   defaultIdMethod (idbroker|native|autoincrement|sequence|none) "none"
@@ -47,6 +47,25 @@ Java class or method name.
 <!ATTLIST external-schema
   filename CDATA #REQUIRED
 >
+
+<!ELEMENT domain EMPTY>
+<!ATTLIST domain
+  name CDATA #REQUIRED
+  type
+    (
+          BIT  | TINYINT | SMALLINT    | INTEGER    | BIGINT    | FLOAT
+        | REAL | NUMERIC | DECIMAL     | CHAR       | VARCHAR   | LONGVARCHAR
+        | DATE | TIME    | TIMESTAMP   | BINARY     | VARBINARY | LONGVARBINARY
+        | NULL | OTHER   | JAVA_OBJECT | DISTINCT   | STRUCT    | ARRAY
+        | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
+        | DOUBLE
+    ) "VARCHAR"
+  size CDATA #IMPLIED
+  scale CDATA #IMPLIED
+  default CDATA #IMPLIED
+  description CDATA #IMPLIED
+>
+
 
 <!-- 
      note: the interface="true", requires that useManagers=true in the
@@ -80,6 +99,7 @@ Java class or method name.
   javaName CDATA #IMPLIED
   primaryKey (true|false) "false"
   required (true|false) "false"
+  domain CDATA #IMPLIED
   type
     (
           BIT  | TINYINT | SMALLINT    | INTEGER    | BIGINT    | FLOAT
@@ -88,7 +108,7 @@ Java class or method name.
         | NULL | OTHER   | JAVA_OBJECT | DISTINCT   | STRUCT    | ARRAY
         | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
         | DOUBLE
-    ) "VARCHAR"
+    ) #IMPLIED 
   javaType (object|primitive) #IMPLIED
   size CDATA #IMPLIED
   default CDATA #IMPLIED

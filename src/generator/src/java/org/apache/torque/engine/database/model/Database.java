@@ -55,15 +55,16 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.transform.DTDResolver;
 import org.apache.torque.engine.platform.Platform;
 import org.apache.torque.engine.platform.PlatformFactory;
-
 import org.xml.sax.Attributes;
 
 
@@ -81,6 +82,7 @@ public class Database
 {
     private String databaseType = null;
     private List tableList = new ArrayList(100);
+    private Map domainMap = new HashMap();
     private String name;
     private String pkg;
     private String baseClass;
@@ -352,6 +354,14 @@ public class Database
         tbl.setPackage(getPackage());
     }
 
+    public void addDomain(Domain domain) {
+        domainMap.put(domain.getName(), domain);
+    }
+    
+    public Domain getDomain(String domainName) {
+        return (Domain) domainMap.get(domainName);
+    }
+    
     protected String getDatabaseType()
     {
         return databaseType;

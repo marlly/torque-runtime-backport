@@ -69,6 +69,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
+import org.apache.torque.engine.database.model.Domain;
 import org.apache.torque.engine.database.model.ForeignKey;
 import org.apache.torque.engine.database.model.Index;
 import org.apache.torque.engine.database.model.Table;
@@ -287,6 +288,12 @@ public class XmlToAppData extends DefaultHandler
                 parseFile(xmlFile);
                 // get the last state from the stack
                 ParseStackElement.popState(this);
+            }
+            else if (rawName.equals("domain"))
+            {
+                Domain domain = new Domain();
+                domain.loadFromXML(attributes);
+                database.addDomain(domain);
             }
             else if (rawName.equals("table"))
             {

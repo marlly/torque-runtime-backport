@@ -80,6 +80,7 @@ import org.xml.sax.Attributes;
  */
 public class Column
 {
+    private static final String DEFAULT_TYPE = "VARCHAR";
     /** Logging class from commons.logging */
     private static Log log = LogFactory.getLog(Column.class);
     private String name;
@@ -162,6 +163,17 @@ public class Column
      */
     public void loadFromXML(Attributes attrib)
     {
+        String dom = attrib.getValue("domain");
+        if (StringUtils.isNotEmpty(dom)) {
+            Domain domain = getTable().getDatabase().getDomain(dom);
+            size = domain.getSize();
+            setType(domain.getType());
+            defaultValue = domain.getDefaultValue();
+        } 
+        else
+        {
+            setType(DEFAULT_TYPE);
+        }
         //Name
         name = attrib.getValue("name");
 
@@ -202,11 +214,12 @@ public class Column
         isAutoIncrement = ("true".equals(autoIncrement));
 
         //Default column value.
-        defaultValue = attrib.getValue("default");
+        defaultValue = StringUtils.defaultString(
+                attrib.getValue("default"), defaultValue);
 
-        size = attrib.getValue("size");
+        size = StringUtils.defaultString(attrib.getValue("size"), size);
 
-        setType(attrib.getValue("type"));
+        setType(StringUtils.defaultString(attrib.getValue("type"), torqueType));
 
         inheritanceType = attrib.getValue("inheritance");
         isInheritance = (inheritanceType != null
@@ -214,6 +227,7 @@ public class Column
 
         this.inputValidator = attrib.getValue("inputValidator");
         description = attrib.getValue("description");
+        
     }
 
     /**
@@ -280,7 +294,7 @@ public class Column
                 log.error(e, e);
             }
         }
-        return StringUtils.capitalise(javaName);
+        return StringUtils.capitalize(javaName);
     }
     
     /**
@@ -288,7 +302,7 @@ public class Column
      */    
     public String getUncapitalisedJavaName()
     {
-        return StringUtils.uncapitalise(getJavaName());
+        return StringUtils.uncapitalize(getJavaName());
     }
 
     /**
