@@ -587,6 +587,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
 
     #set ( $tblFK2 = $table.Database.getTable($fk2.ForeignTableName) )
+    #set ( $doJoinGet = !$tblFK2.isForReferenceOnly())
     #set ( $relatedByCol2 = "" )
     #foreach ($columnName in $fk2.LocalColumns)
         #set ( $column = $tblFK.getColumn($columnName) )
