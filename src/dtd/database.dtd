@@ -20,7 +20,7 @@ agnostic way.
 
 <!-- 
 
-defaultConversionMethod determines how a table or column name,
+defaultJavaNamingMethod determines how a table or column name,
 from the name attribute in the xml database file, is converted to a
 Java class or method name.
 
@@ -41,7 +41,7 @@ Java class or method name.
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
 
-  defaultNameConversion (nochange|underscore|javaname) "underscore"
+  defaultJavaNamingMethod (nochange|underscore|javaname) "underscore"
 >
 
 <!ELEMENT table (column+,(foreign-key|index|unique|id-method-parameter)*)>
@@ -54,7 +54,7 @@ Java class or method name.
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
-  nameConversion (nochange|underscore|javaname) #IMPLIED
+  javaNamingMethod (nochange|underscore|javaname) #IMPLIED
 >
 
 <!ELEMENT id-method-parameter EMPTY>
@@ -82,7 +82,7 @@ Java class or method name.
   autoIncrement (true|false) "false"
   inheritance (single|false) "false" 
   inputValidator CDATA #IMPLIED
-  nameConversion (nochange|underscore|javaname) #IMPLIED
+  javaNamingMethod (nochange|underscore|javaname) #IMPLIED
 >
 
 <!ELEMENT inheritance EMPTY>

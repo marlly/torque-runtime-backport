@@ -88,7 +88,7 @@ public class Database
     private String baseClass;
     private String basePeer;
     private String defaultIdMethod;
-    private String defaultNameConversion;
+    private String defaultJavaNamingMethod;
     private AppData dbParent;
     private Hashtable tablesByName = new Hashtable();
     private Hashtable tablesByJavaName = new Hashtable();
@@ -110,10 +110,10 @@ public class Database
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
         defaultIdMethod = attrib.getValue("defaultIdMethod");
-        defaultNameConversion = attrib.getValue("defaultNameConversion");
-        if (defaultNameConversion == null)
+        defaultJavaNamingMethod = attrib.getValue("defaultJavaNamingMethod");
+        if (defaultJavaNamingMethod == null)
         {
-            defaultNameConversion = NameGenerator.CONV_METHOD_UNDERSCORE;
+            defaultJavaNamingMethod = NameGenerator.CONV_METHOD_UNDERSCORE;
         }
     }
 
@@ -214,23 +214,23 @@ public class Database
     }
 
     /**
-     * Get the value of defaultNameConversion which specifies the
+     * Get the value of defaultJavaNamingMethod which specifies the
      * method for converting schema names for table and column
      * to Java names.
      * @return The default naming conversion used by this database.
      */
-    public String getDefaultNameConversion()
+    public String getDefaultJavaNamingMethod()
     {
-        return defaultNameConversion;
+        return defaultJavaNamingMethod;
     }
 
     /**
-     * Set the value of defaultNameConversion.
+     * Set the value of defaultJavaNamingMethod.
      * @param v The default naming conversion for this database to use.
      */
-    public void setDefaultNameConversion(String  v)
+    public void setDefaultJavaNamingMethod(String  v)
     {
-        this.defaultNameConversion = v;
+        this.defaultJavaNamingMethod = v;
     }
 
     /**

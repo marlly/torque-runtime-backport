@@ -90,7 +90,7 @@ public class Table implements IDMethod
     private String name;
     private String javaName;
     private String idMethod;
-    private String nameConversion;
+    private String javaNamingMethod;
     private Database tableParent;
     private List referrers;
     private List foreignTableNames;
@@ -139,10 +139,10 @@ public class Table implements IDMethod
 
         // retrieves the method for converting from specified name to
         // a java name.
-        nameConversion = attrib.getValue("nameConversion");
-        if (nameConversion == null)
+        javaNamingMethod = attrib.getValue("javaNamingMethod");
+        if (javaNamingMethod == null)
         {
-            nameConversion = getDatabase().getDefaultNameConversion();
+            javaNamingMethod = getDatabase().getDefaultJavaNamingMethod();
         }
 
         if ("null".equals(idMethod))
@@ -594,7 +594,7 @@ public class Table implements IDMethod
         {
             List inputs = new ArrayList(2);
             inputs.add(name);
-            inputs.add(nameConversion);
+            inputs.add(javaNamingMethod);
             try
             {
                 javaName = NameFactory.generateName(NameFactory.JAVA_GENERATOR,
