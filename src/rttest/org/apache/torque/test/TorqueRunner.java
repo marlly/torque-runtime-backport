@@ -1,4 +1,4 @@
-package org.apache.torque;
+package org.apache.torque.test;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,6 +55,8 @@ package org.apache.torque;
  */
 
 import org.apache.log4j.Category;
+import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 
 /**
  * This class is an example of how to start Torque with a
