@@ -4,15 +4,13 @@
 # See http://www.postgresql.org/idocs/index.php?datatype.html for more
 # information on PostgreSQL data types.
 
-BIT =
+BIT = boolean
 TINYINT = int2
 SMALLINT = int2
 INTEGER = integer
 BIGINT = int8
 FLOAT = float
 REAL = float
-# The "boolean" data type might be more appropriat here
-# http://www.postgresql.org/idocs/index.php?datatype-boolean.html
 BOOLEANCHAR = char
 BOOLEANINT = int2
 
