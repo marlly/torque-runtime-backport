@@ -1226,7 +1226,7 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
           #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
-        if ( c.containsKey($cup) )
+        if ( criteria.containsKey($cup) )
         {
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
@@ -1236,7 +1236,7 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
           #elseif ($col.isBit())
         // check for conversion from boolean to bit (1/0)
-        if (c.containsKey($cup))
+        if (criteria.containsKey($cup))
         {
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
