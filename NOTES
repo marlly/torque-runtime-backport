@@ -32,3 +32,9 @@ o Some analysis on what we actually have would be prudent. Torque
   is somewhat based on the work of Scott Ambler and I would like
   to know where it is the same and where it diverges so we know
   what we're dealing with.
+
+o find all other OSS persistence layer projects and see if
+  we can join forces.
+  
+o separate the runtime system from the generation tools, place
+  them in different packages.
