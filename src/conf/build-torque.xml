@@ -49,6 +49,17 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
+    <antcall target="project-sql-classpath"/>
+    <antcall target="project-sql-template"/>
+
+  </target>
+
+  <target
+    name="project-sql-classpath"
+    if="useClasspath">
+
+    <echo message="using classpath"/>
+
     <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
@@ -60,6 +71,33 @@
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       useClasspath="${useClasspath}"
+      basePathToDbProps="sql/base/"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputFile="report.${project}.sql.generation"
+      targetDatabase="${database}"
+      idTableXMLFile="${idTableXMLFile}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-sql>
+  </target>
+
+  <target
+    name="project-sql-template"
+    unless="useClasspath">
+
+    <echo message="using template path ${templatePath}"/>
+
+    <taskdef
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-sql
+      contextProperties="${build.properties}"
+      controlTemplate="${SQLControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
       templatePath="${templatePath}"
       basePathToDbProps="sql/base/"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
