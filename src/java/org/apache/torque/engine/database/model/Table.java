@@ -59,6 +59,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.torque.adapter.IDMethod;
+
 import org.apache.velocity.util.StringUtils;
 
 import org.xml.sax.Attributes;
@@ -73,14 +75,8 @@ import org.xml.sax.Attributes;
  * @author <a href="mailto:dlr@collab.net>Daniel Rall</a>
  * @version $Id$
  */
-public class Table
+public class Table implements IDMethod
 {
-    /**
-     * A value indicating that the database-specific native ID method
-     * should be used for this table.
-     */
-    private static final String NATIVE_ID_METHOD = "native";
-
     //private AttributeListImpl attributes;
     private List columnList;
     private List foreignKeys;
@@ -144,9 +140,9 @@ public class Table
         {
             System.out.println("The value '" + idMethod + "' for Torque's " +
                      "table.idMethod attribute has been deprecated in favor " +
-                     "of '" + NATIVE_ID_METHOD + "'.  Please adjust your " +
+                     "of '" + NATIVE + "'.  Please adjust your " +
                      "Torque XML schema accordingly.");
-            idMethod = NATIVE_ID_METHOD;
+            idMethod = NATIVE;
         }
         skipSql = "true".equals(attrib.getValue("skipSql"));
         // pkg = attrib.getValue("package");
@@ -620,7 +616,7 @@ public class Table
     public String getSequenceName()
     {
         String result = null;
-        if ( getIdMethod().equals(NATIVE_ID_METHOD))
+        if (getIdMethod().equals(NATIVE))
         {
             List idMethodParams = getIdMethodParameters();
             if (idMethodParams == null)
