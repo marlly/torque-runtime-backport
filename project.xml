@@ -212,7 +212,7 @@
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
-      <version>1.1-RC1</version>
+      <version>1.1-RC2</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -227,7 +227,7 @@
     </dependency>
     <dependency>
       <id>commons-pool</id>
-      <version>1.1-RC1</version>
+      <version>1.1-RC2</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
     </dependency>
     <dependency>
@@ -312,7 +312,6 @@
     <report>maven-junit-report-plugin</report>
     <report>maven-tasklist-plugin</report>
     <report>maven-pmd-plugin</report>
-    <report>maven-findbugs-plugin</report>
     <report>maven-simian-plugin</report>
     <report>maven-jcoverage-plugin</report>
   </reports>
