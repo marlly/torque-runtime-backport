@@ -184,7 +184,7 @@ public class TorqueSQLTask extends TorqueDataModelTask
     {
         // Transform the XML database schema into
         // data model object.
-        XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(),
+        XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(), null,
                                                   getBasePathToDbProps());
         AppData ad = xmlParser.parseFile(getIdTableXMLFile());
         xmlParser.parseFile(getIdTableXMLFile());

@@ -31,7 +31,7 @@ Java class or method name.
               to lowercase.
 -->
 
-<!ELEMENT database (table+)>
+<!ELEMENT database (external-schema*, table+)>
 <!ATTLIST database
   name CDATA #IMPLIED
   defaultIdMethod (idbroker|native|autoincrement|sequence|none) "none"
@@ -41,6 +41,11 @@ Java class or method name.
   basePeer CDATA #IMPLIED
   defaultJavaNamingMethod (nochange|underscore|javaname) "underscore"
   heavyIndexing (true|false) "false"
+>
+
+<!ELEMENT external-schema EMPTY>
+<!ATTLIST external-schema
+  filename CDATA #REQUIRED
 >
 
 <!-- 

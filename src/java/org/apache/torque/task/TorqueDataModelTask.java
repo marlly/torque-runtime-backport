@@ -306,7 +306,8 @@ public class TorqueDataModelTask extends TexenTask
             // Transform the XML database schema into
             // data model object.
             xmlParser =
-                new XmlToAppData(getTargetDatabase(), getBasePathToDbProps());
+                new XmlToAppData(getTargetDatabase(), getTargetPackage(), 
+                                 getBasePathToDbProps());
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
             ad.setName(grokName(xmlFile));
@@ -328,6 +329,7 @@ public class TorqueDataModelTask extends TexenTask
                 {
                     File f = new File(srcDir, dataModelFiles[j]);
                     xmlParser = new XmlToAppData(getTargetDatabase(),
+                                                 getTargetPackage(), 
                                                  getBasePathToDbProps());
                     AppData ad = xmlParser.parseFile(f.toString());
                     xmlParser.parseFile(f.toString());

@@ -314,6 +314,7 @@ public class Database
         tableList.add(tbl);
         tablesByName.put(tbl.getName(), tbl);
         tablesByJavaName.put(tbl.getJavaName(), tbl);
+        tbl.setPackage(getPackage());
     }
 
     /**

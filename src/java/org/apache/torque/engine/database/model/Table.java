@@ -102,13 +102,14 @@ public class Table implements IDMethod
     private boolean abstractValue;
     private String alias;
     private String enterface;
-    // private String pkg;
+    private String pkg;    
     private String baseClass;
     private String basePeer;
     private Hashtable columnsByName;
     private Hashtable columnsByJavaName;
     private boolean needsTransactionInPostgres;
     private boolean heavyIndexing;
+    private boolean forReferenceOnly;
 
 
     /**
@@ -533,6 +534,7 @@ public class Table implements IDMethod
         return imp;
     }
 
+
     /**
      * Adds a new ID method parameter to the list and sets the parent
      * table of the column associated with the supplied parameter to this table.
@@ -688,7 +690,7 @@ public class Table implements IDMethod
      */
     public boolean isSkipSql()
     {
-        return (skipSql || isAlias());
+        return (skipSql || isAlias() || isForReferenceOnly());
     }
 
     /**
@@ -776,6 +778,24 @@ public class Table implements IDMethod
         this.abstractValue = v;
     }
 
+    /**
+     * Get the value of package.
+     * @return value of package.
+     */
+    public String getPackage() 
+    {
+        return pkg;
+    }
+    
+    /**
+     * Set the value of package.
+     * @param v  Value to assign to package.
+     */
+    public void setPackage(String  v) 
+    {
+        this.pkg = v;
+    }
+    
     /**
      * Returns an Array containing all the columns in the table
      */
@@ -943,6 +963,27 @@ public class Table implements IDMethod
         return tableParent;
     }
 
+    
+    /**
+     * Flag to determine if code/sql gets created for this table.
+     * Table will be skipped, if return true.
+     * @return value of forReferenceOnly.
+     */
+    public boolean isForReferenceOnly() 
+    {
+        return forReferenceOnly;
+    }
+    
+    /**
+     * Flag to determine if code/sql gets created for this table.
+     * Table will be skipped, if set to true.
+     * @param v  Value to assign to forReferenceOnly.
+     */
+    public void setForReferenceOnly(boolean  v) 
+    {
+        this.forReferenceOnly = v;
+    }
+    
     /**
      * Returns a XML representation of this table.
      *

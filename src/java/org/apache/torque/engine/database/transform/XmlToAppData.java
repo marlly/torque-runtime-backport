@@ -103,6 +103,10 @@ public class XmlToAppData extends DefaultHandler
     private boolean firstPass;
     private Table foreignTable;
     private String errorMessage;
+    private boolean isExternalSchema;
+    private String currentPackage;
+    private String currentXmlFile;
+    private String defaultPackage;
 
     private static SAXParserFactory saxFactory;
 
@@ -119,9 +123,11 @@ public class XmlToAppData extends DefaultHandler
      * @param basePropsFilePath The base of the path to the properties
      * file, including trailing slash.
      */
-    public XmlToAppData(String databaseType, String basePropsFilePath)
+    public XmlToAppData(String databaseType, String defaultPackage, 
+                        String basePropsFilePath)
     {
         app = new AppData(databaseType, basePropsFilePath);
+        this.defaultPackage = defaultPackage;
         firstPass = true;
         errorMessage = "";
     }
@@ -137,6 +143,8 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
+            currentXmlFile = xmlFile;
+
             SAXParser parser = saxFactory.newSAXParser();
 
             FileReader fr = null;
@@ -164,7 +172,10 @@ public class XmlToAppData extends DefaultHandler
         {
             e.printStackTrace();
         }
-        firstPass = false;
+        if (!isExternalSchema) 
+        {
+            firstPass = false;
+        }        
         if ( errorMessage.length() > 0 )
         {
             System.out.println("Error in XML schema: " + errorMessage);
@@ -286,11 +297,40 @@ public class XmlToAppData extends DefaultHandler
             {
                 if (rawName.equals("database"))
                 {
-                    currDB = app.addDatabase(attributes);
+                    if (isExternalSchema)
+                    {
+                        currentPackage = attributes.getValue("package");
+                        if (currentPackage == null) 
+                        {
+                            currentPackage = defaultPackage;
+                        }                        
+                    }
+                    else
+                    {
+                        currDB = app.addDatabase(attributes);
+                    }
+                }
+                else if (rawName.equals("external-schema"))
+                {
+                    isExternalSchema = true;
+                    String xmlFile = attributes.getValue("filename");
+                    if (xmlFile.charAt(0) != '/') 
+                    {
+                        File f = new File(currentXmlFile);
+                        xmlFile = new File(f.getParent(), xmlFile).getPath();
+                    }
+                    
+                    parseFile(xmlFile);
+                    isExternalSchema = false;
                 }
                 else if (rawName.equals("table"))
                 {
                     currTable = currDB.addTable(attributes);
+                    if (isExternalSchema) 
+                    {
+                        currTable.setForReferenceOnly(true);
+                        currTable.setPackage(currentPackage);
+                    }
                 }
                 else if (rawName.equals("column"))
                 {
