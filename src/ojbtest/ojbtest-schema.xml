@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+
+<database 
+  name="@DATABASE_DEFAULT@" 
+  defaultIdMethod="@DATABASE_ID_METHOD@">
+
+  <!-- =================================================== -->
+  <!-- B O O K  T A B L E                                  -->
+  <!-- =================================================== -->
+
+  <!--
+  <table name="">
+    <column name="" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="" required="true" type=""/>
+    <foreign-key foreignTable="">
+      <reference local="" foreign=""/>
+    </foreign-key>
+  </table>
+  -->
+
+  <table name="Artikel">
+    <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="Artikelname" type="VARCHAR" size="60"/>
+    <column name="Lieferanten_Nr" type="INTEGER"/>
+    <column name="Kategorie_Nr" type="INTEGER"/>
+    <column name="Liefereinheit" type="VARCHAR" size="30"/>
+    <column name="Einzelpreis" type="FLOAT"/>
+    <column name="Lagerbestand" type="INTEGER"/>
+    <column name="BestellteEinheiten" type="INTEGER"/>
+    <column name="MindestBestand" type="INTEGER"/>
+    <column name="Auslaufartikel" type="INTEGER"/>
+  </table>
+  
+  <table name="BOOKS">
+    <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="Artikelname" type="VARCHAR" size="60"/>
+    <column name="Lieferanten_Nr" type="INTEGER"/>
+    <column name="Kategorie_Nr" type="INTEGER"/>
+    <column name="Liefereinheit" type="VARCHAR" size="30"/>
+    <column name="Einzelpreis" type="FLOAT"/>
+    <column name="Lagerbestand" type="INTEGER"/>
+    <column name="BestellteEinheiten" type="INTEGER"/>
+    <column name="MindestBestand" type="INTEGER"/>
+    <column name="Auslaufartikel" type="INTEGER"/>
+    <column name="ISBN" type="CHAR" size="10"/>
+    <column name="AUHOR" type="VARCHAR" size="50"/>
+  </table>
+
+  <table name="CDS">
+    <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="Artikelname" type="VARCHAR" size="60"/>
+    <column name="Lieferanten_Nr" type="INTEGER"/>
+    <column name="Kategorie_Nr" type="INTEGER"/>
+    <column name="Liefereinheit" type="VARCHAR" size="30"/>
+    <column name="Einzelpreis" type="FLOAT"/>
+    <column name="Lagerbestand" type="INTEGER"/>
+    <column name="BestellteEinheiten" type="INTEGER"/>
+    <column name="MindestBestand" type="INTEGER"/>
+    <column name="Auslaufartikel" type="INTEGER"/>
+    <column name="LABEL" type="VARCHAR" size="50"/>
+    <column name="MUSICIANS" type="VARCHAR" size="250"/>
+  </table>
+
+  <table name="Kategorien">
+    <column name="Kategorie_Nr" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="KategorieName" type="VARCHAR" size="20"/>
+    <column name="Beschreibung" type="VARCHAR" size="60"/>
+  </table>
+
+  <table name="ORDER_POSITION">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="ORDER_ID" type="INTEGER"/>
+    <column name="ARTICLE_ID" type="INTEGER"/>
+  </table>
+
+  <table name="TREE">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DATA" type="VARCHAR" size="50"/>
+    <column name="PARENT_ID" type="INTEGER"/>
+  </table>
+
+  <table name="TREEGROUP">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="DATA" type="VARCHAR" size="50"/>
+    <column name="PARENT_ID" type="INTEGER"/>
+    <column name="GROUP_ID" type="INTEGER"/>
+  </table>
+
+  <table name="AB_TABLE">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="CLASS_NAME" type="VARCHAR" size="60"/>
+    <column name="VALUE_" type="INTEGER"/>
+  </table>
+
+  <!-- Product Table for Tutorial 1 & 2 -->
+  <table name="PRODUCT">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="NAME" type="VARCHAR" size="100"/>
+    <column name="PRICE" type="FLOAT"/>
+    <column name="STOCK" type="INTEGER"/>
+  </table>
+
+  <table name="PERSON">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="FIRSTNAME" type="VARCHAR" size="50"/>
+    <column name="LASTNAME" type="VARCHAR" size="50"/>
+  </table>
+
+  <table name="PROJECT">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="TITLE" type="VARCHAR" size="50"/>
+    <column name="DESCRIPTION" type="VARCHAR" size="250"/>
+  </table>
+
+  <table name="PERSON_PROJECT">
+    <column name="PERSON_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="PROJECT_ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="ROLENAME" type="VARCHAR" size="20"/>
+  </table>
+  
+  <table name="FAMILY_MEMBER">
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="FIRSTNAME" type="VARCHAR" size="50"/>
+    <column name="LASTNAME" type="VARCHAR" size="50"/>
+    <column name="MOTHER_ID" type="INTEGER"/>
+    <column name="FATHER_ID" type="INTEGER"/>
+  </table>
+
+<!--
+e CREATE TABLE LOCKED_BY_VERSION (
+    ID          INT NOT NULL PRIMARY KEY,
+    VALUE_      VARCHAR(60),
+    VERSION_    INT
+  );
+
+e CREATE TABLE LOCKED_BY_TIMESTAMP (
+    ID          INT NOT NULL PRIMARY KEY,
+    VALUE_      VARCHAR(60),
+    TIMESTAMP_ TIMESTAMP
+  );
+
+e CREATE TABLE BLOB_TEST (
+    ID          INT NOT NULL PRIMARY KEY,
+    BLOB_VALUE_ LONGVARBINARY,
+    CLOB_VALUE_ LONGVARCHAR
+);
+
+e CREATE TABLE MDTEST_MASTER (
+    MASTERID    INT NOT NULL PRIMARY KEY,
+    MASTER_TEXT VARCHAR(255)
+  );
+;    
+
+e CREATE TABLE MDTEST_DETAIL_FKINPK (
+    MASTERID    INT NOT NULL,
+    DETAILID    INT NOT NULL,
+    DETAIL_TEXT VARCHAR(255),
+    PRIMARY KEY (MASTERID, DETAILID),
+    FOREIGN KEY (MASTERID) REFERENCES MDTEST_MASTER(MASTERID)
+  );
+;   
+
+e CREATE TABLE MDTEST_DETAIL_FKNOPK (
+    DETAILID    INT NOT NULL PRIMARY KEY,
+    MASTERID    INT NOT NULL,
+    DETAIL_TEXT VARCHAR(255),
+    FOREIGN KEY (MASTERID) REFERENCES MDTEST_MASTER(MASTERID)
+  );
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+; OJB internal tables, do not modify !!!
+
+; create the OJB SequenceManager table
+e CREATE TABLE OJB_SEQ (
+    CLASSNAME    VARCHAR(175) NOT NULL,
+    FIELDNAME    VARCHAR(70) NOT NULL,
+    LAST_NUM     INT,
+    PRIMARY KEY (CLASSNAME, FIELDNAME)
+);
+
+; create the HIGH/LOW SequenceManager table
+e CREATE TABLE OJB_HL_SEQ (
+    CLASSNAME    VARCHAR(175) NOT NULL,
+    FIELDNAME    VARCHAR(70) NOT NULL,
+    MAX_KEY      INT,
+    GRAB_SIZE    INT,
+    PRIMARY KEY (CLASSNAME, FIELDNAME)
+);
+
+
+; create the OJB Lock table
+e CREATE TABLE OJB_LOCKENTRY (
+    OID_           VARCHAR(250) NOT NULL,
+    TX_ID          VARCHAR(50) NOT NULL,
+
+    TIMESTAMP_     DECIMAL,
+    ISOLATIONLEVEL INT,
+    LOCKTYPE       INT,
+
+    PRIMARY KEY (OID_, TX_ID)
+);
+
+
+; create the OJB NAMED ROOTS Table
+e CREATE TABLE OJB_NRM (
+    NAME         VARCHAR(250) NOT NULL PRIMARY KEY,
+
+    OID_         VARCHAR(1024)
+);
+
+
+;;;; THE DLIST IMPLEMENTATION
+;;;;
+; create DList table
+e CREATE TABLE OJB_DLIST (
+    ID          INT NOT NULL PRIMARY KEY,
+    SIZE_        INT
+);
+
+; create DList entry table
+e CREATE TABLE OJB_DLIST_ENTRIES (
+    ID          INT NOT NULL PRIMARY KEY,
+    DLIST_ID    INT NOT NULL,
+    POSITION_   INT,
+    OID_         VARCHAR(1024)
+
+);
+
+;;;; THE DSET IMPLEMENTATION
+;;;;
+; create DSet table
+e CREATE TABLE OJB_DSET (
+    ID          INT NOT NULL PRIMARY KEY,
+    SIZE_        INT
+);
+
+; create DSet entry table
+e CREATE TABLE OJB_DSET_ENTRIES (
+    ID          INT NOT NULL PRIMARY KEY,
+    DLIST_ID    INT NOT NULL,
+    POSITION_   INT,
+    OID_         VARCHAR(1024)
+);
+
+;;;; THE DMAP IMPLEMENTATION
+;;;;
+; create DMap table
+e CREATE TABLE OJB_DMAP (
+    ID          INT NOT NULL PRIMARY KEY,
+    SIZE_        INT
+);
+
+; create DMap entry table
+e CREATE TABLE OJB_DMAP_ENTRIES (
+    ID          INT NOT NULL PRIMARY KEY,
+    DMAP_ID     INT NOT NULL,
+
+    KEY_OID     VARCHAR(1024),
+    VALUE_OID   VARCHAR(1024)
+);
+
+-->
+</database>

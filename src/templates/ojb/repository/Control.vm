@@ -1,0 +1,12 @@
+#set ( $basepath = $generator.OutputPath)
+
+$generator.parse("ojb/repository/MainRepository.vm","repository.xml","dataModels",$dataModels)
+
+#foreach ($dataModel in $dataModels)
+
+  #set ( $outFile = "repository_${dataModel.name}.xml" )
+
+  File to be created: $outFile
+  $generator.parse("ojb/repository/Repository.vm",$outFile,"dataModel",$dataModel)
+ 
+#end

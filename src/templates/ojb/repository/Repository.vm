@@ -1,0 +1,23 @@
+#set ( $database = $dataModel.database )
+
+#foreach ($table in $database.tables)
+  <ClassDescriptor id="$velocityCount">
+    <class.name>${table.getDatabase().getPackage()}${table.JavaName}</class.name>
+    <class.proxy>dynamic</class.proxy>
+    <class.extent>test.ojb.broker.BookArticle</class.extent>
+    <class.extent>test.ojb.broker.CdArticle</class.extent>
+    <table.name>$table.Name</table.name>
+    <conversionStrategy>test.ojb.broker.ArticleConversionStrategy</conversionStrategy>
+  #foreach ($col in $table.Columns)
+    <FieldDescriptor id="$velocityCount">
+       <field.name>$col.JavaName</field.name>
+       <column.name>$col.Name</column.name>
+       <jdbc_type>INTEGER</jdbc_type>
+       <PrimaryKey>$col.isPrimaryKey()</PrimaryKey>
+       <autoincrement>true</autoincrement>
+    </FieldDescriptor>
+  #end
+  </ClassDescriptor>
+#end
+
+

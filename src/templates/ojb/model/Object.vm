@@ -1,0 +1,53 @@
+#set ($db = $table.Database)
+#if ($db.Package)
+    #set ($package = $db.Package)
+#else
+    #set ($package = $targetPackage)
+#end
+package ${package};
+
+#if ($table.BaseClass == "")
+    #set ($extendsBaseClass = "" )
+#else
+    #set ($extendsBaseClass = "extends $table.BaseClass" )
+#end
+
+import java.io.Serializable;
+
+/**
+ * $table.Name
+ *
+ * [$now]
+ */
+public class $table.JavaName $extendsBaseClass 
+        implements Serializable
+{
+
+    #foreach ($col in $table.Columns)
+    private $col.JavaNative $col.Name.toLowerCase() = null; 
+    #end
+
+    #foreach ($col in $table.Columns)
+        #set ( $cfc=$col.JavaName )
+        #set ( $clo=$col.Name.toLowerCase() )
+        #set ( $cjtype = $col.JavaNative )
+
+    /**
+     * Get the $cfc
+     * @return $cjtype
+     */
+    public $cjtype get${cfc}()
+    {
+        return $clo;
+    }
+
+    /**
+     * Set the value of $cfc
+     */
+    public void set${cfc}($cjtype v )
+    {
+        this.$clo = v;
+    }
+    
+    #end
+}

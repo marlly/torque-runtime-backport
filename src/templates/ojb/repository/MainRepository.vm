@@ -1,0 +1,36 @@
+#set ( $database = $dataModel.database )
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- defining entities for include-files -->
+<!DOCTYPE MappingRepository SYSTEM "repository.dtd" [
+<!ENTITY user SYSTEM "repository_user.xml">
+<!ENTITY junit SYSTEM "repository_junit.xml">
+<!ENTITY internal SYSTEM "repository_internal.xml">
+]>
+
+<MappingRepository>
+<!-- The Default JDBC Connection. If a Class does not specify its own JDBC Connection,
+     the Connection specified here will be used. -->
+
+   <JdbcConnectionDescriptor id="default">
+      <dbms.name>Hsqldb</dbms.name>
+      <driver.name>org.hsqldb.jdbcDriver</driver.name>
+      <url.protocol>jdbc</url.protocol>
+      <url.subprotocol>hsqldb</url.subprotocol>
+      <url.dbalias>../OJB</url.dbalias>
+      <!--url.dbalias>ojb-1-0/build/test/OJB</url.dbalias-->
+      <user.name>sa</user.name>
+      <user.passwd></user.passwd>
+   </JdbcConnectionDescriptor>
+
+    <!-- include user defined mappings here -->
+    &user;
+
+    <!-- include mappings for JUnit tests and sample apps here -->
+    &junit;
+
+    <!-- include ojb internal mappings here -->
+    &internal;
+
+</MappingRepository>
