@@ -39,6 +39,9 @@
       TRQS153: BasePeer.doSelect(Criteria, Connection) calls executeQuery 
       without offset and limit.
     </li>
+    <li>
+      TRQS139: wrong invocation of populateObject in peer class
+    </li>  
   </ul>
 </p>
 </subsection>
