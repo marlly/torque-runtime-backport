@@ -1,38 +1,4 @@
 #foreach ($col in $table.Columns)
-  #set ( $type = $col.Domain.SqlType )
-  #if ($col.TorqueType.indexOf("INT") == -1)
-    #set ( $size = $col.printSize() )
-  #else
-    #set ( $size = "" )
-  #end
-  #if (($table.IdMethod == "native") && ($col.isPrimaryKey()))
-    #set ( $default = "DEFAULT nextval('$table.SequenceName')" )
-  #else
-    #set ( $default = $col.DefaultSetting )
-  #end
-  #set ( $entry = "$col.Name $type $size $default $col.NotNullString" )
-  #set ( $entry = $strings.select($col.isAutoIncrement(), "$col.Name $col.AutoIncrementString", $entry) )
-
-##
-## the following works if you want to inline your foreign keys
-## if you turn it on, be sure to comment out foreignkey.vm
-  #if (false)
-    #if ($col.isForeignKey())
-      #set ($fk = $col.ForeignKey)
-      #set ($entry = "$entry REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)")
-      #if ($fk.hasOnUpdate())
-        #set ($entry = "$entry ON UPDATE $fk.OnUpdate ")
-      #end
-      #if ($fk.hasOnDelete())
-        #set ($entry = "$entry ON DELETE $fk.OnDelete ")
-      #end
-    #end
-  #end
-  ## add a nice comment
-  #if ($col.isForeignKey())
-    #set ($fk = $col.ForeignKey)
-      -- REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
-  #end
-  #set ( $entry = $strings.collapseSpaces("$entry,") )
-    $strings.sub($entry," ,",",")
+    #set ( $entry = "$col.SqlString," )
+    $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end
