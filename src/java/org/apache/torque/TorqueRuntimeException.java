@@ -25,13 +25,13 @@ package org.apache.torque;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -65,26 +65,26 @@ import java.util.StringTokenizer;
 /**
  * This is a base class of runtime exeptions thrown by Turbine.
  *
- * This class represents a non-checked type exception (see 
+ * This class represents a non-checked type exception (see
  * {@see java.lang.RuntimeException}). It has the nested stack trace
  * functionality found in the {@see TurbineException} class.
- * 
- * It's sad that this class is a straight copy/paste of Turbine exception. 
+ *
+ * It's sad that this class is a straight copy/paste of Turbine exception.
  * I wish that Java supported NonCheckedException marker interface...
- * 
+ *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  */
-public class TorqueRuntimeException 
+public class TorqueRuntimeException
     extends RuntimeException
 {
-    /** 
+    /**
      * Holds the reference to the exception or error that caused
      * this exception to be thrown.
      */
     private Throwable nested = null;
- 
+
     /**
-     * Constructs a new <code>TorqueRuntimeException</code> without specified 
+     * Constructs a new <code>TorqueRuntimeException</code> without specified
      * detail message.
      */
     public TorqueRuntimeException()
@@ -93,7 +93,7 @@ public class TorqueRuntimeException
     }
 
     /**
-     * Constructs a new <code>TorqueRuntimeException</code> with specified 
+     * Constructs a new <code>TorqueRuntimeException</code> with specified
      * detail message.
      *
      * @param msg the error message.
@@ -102,12 +102,12 @@ public class TorqueRuntimeException
     {
         super(msg);
     }
- 
+
     /**
-     * Constructs a new <code>TorqueRuntimeException</code> with specified 
+     * Constructs a new <code>TorqueRuntimeException</code> with specified
      * nested <code>Throwable</code>.
      *
-     * @param nested the exception or error that caused this exception 
+     * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
     public TorqueRuntimeException(Throwable nested)
@@ -115,13 +115,13 @@ public class TorqueRuntimeException
         super();
         this.nested = nested;
     }
- 
+
     /**
-     * Constructs a new <code>TorqueRuntimeException</code> with specified 
+     * Constructs a new <code>TorqueRuntimeException</code> with specified
      * detail message and nested <code>Throwable</code>.
      *
      * @param msg the error message.
-     * @param nested the exception or error that caused this exception 
+     * @param nested the exception or error that caused this exception
      *               to be thrown.
      */
     public TorqueRuntimeException(String msg, Throwable nested)
@@ -129,27 +129,27 @@ public class TorqueRuntimeException
         super(msg);
         this.nested = nested;
     }
- 
+
     /**
-     * Prints the stack trace of this exception the the standar error 
+     * Prints the stack trace of this exception the the standar error
      * stream.
      */
     public void printStackTrace()
     {
-        synchronized(System.err) 
+        synchronized(System.err)
         {
             printStackTrace(System.err);
         }
     }
- 
+
     /**
      * Prints the stack trace of this exception to the specified print stream.
      *
      * @param out <code>PrintStream</code> to use for output
      */
-    public void printStackTrace(PrintStream out) 
+    public void printStackTrace(PrintStream out)
     {
-        synchronized(out) 
+        synchronized(out)
         {
             PrintWriter pw=new PrintWriter(out, false);
             printStackTrace(pw);
@@ -157,7 +157,7 @@ public class TorqueRuntimeException
             pw.flush();
         }
     }
- 
+
     /**
      * Prints the stack trace of this exception to the specified print writer.
      *
@@ -165,12 +165,12 @@ public class TorqueRuntimeException
      */
     public void printStackTrace(PrintWriter out)
     {
-        synchronized(out) 
+        synchronized(out)
         {
             printStackTrace(out, 0);
         }
     }
- 
+
     /**
      * Prints the stack trace of this exception skiping a specified number
      * of stack frames.
@@ -181,27 +181,27 @@ public class TorqueRuntimeException
     public void printStackTrace(PrintWriter out, int skip)
     {
         String[] st = captureStackTrace();
-        if(nested != null) 
+        if(nested != null)
         {
-            if(nested instanceof TorqueRuntimeException) 
+            if(nested instanceof TorqueRuntimeException)
             {
                 ((TorqueRuntimeException)nested).printStackTrace(out, st.length - 2);
-            } 
-            else if(nested instanceof TorqueException) 
+            }
+            else if(nested instanceof TorqueException)
             {
                 ((TorqueException)nested).printStackTrace(out, st.length - 2);
-            } 
-            else 
+            }
+            else
             {
                 String[] nst = captureStackTrace(nested);
-                for(int i = 0; i<nst.length - st.length + 2; i++) 
+                for(int i = 0; i<nst.length - st.length + 2; i++)
                 {
                     out.println(nst[i]);
                 }
             }
             out.print("rethrown as ");
         }
-        for(int i=0; i<st.length - skip; i++) 
+        for(int i=0; i<st.length - skip; i++)
         {
             out.println(st[i]);
         }
@@ -211,41 +211,41 @@ public class TorqueRuntimeException
      * Captures the stack trace associated with this exception.
      *
      * @return an array of Strings describing stack frames.
-     */ 
-    private String[] captureStackTrace() 
+     */
+    private String[] captureStackTrace()
     {
         StringWriter sw = new StringWriter();
         super.printStackTrace(new PrintWriter(sw, true));
         return splitStackTrace(sw.getBuffer().toString());
     }
- 
+
     /**
-     * Captures the stack trace associated with a <code>Throwable</code> 
+     * Captures the stack trace associated with a <code>Throwable</code>
      * object.
      *
      * @param t the <code>Throwable</code>.
      * @return an array of Strings describing stack frames.
      */
-    private String[] captureStackTrace(Throwable t) 
+    private String[] captureStackTrace(Throwable t)
     {
         StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw, true));
         return splitStackTrace(sw.getBuffer().toString());
     }
-  
+
     /**
      * Splits the stack trace given as a newline separated string
      * into an array of stack frames.
-     * 
+     *
      * @param stackTrace the stack trace.
      * @return an array of Strings describing stack frames.
      */
-    private String[] splitStackTrace(String stackTrace) 
+    private String[] splitStackTrace(String stackTrace)
     {
         String linebreak = System.getProperty("line.separator");
         StringTokenizer st = new StringTokenizer(stackTrace, linebreak);
         LinkedList list = new LinkedList();
-        while(st.hasMoreTokens()) 
+        while(st.hasMoreTokens())
         {
             list.add(st.nextToken());
         }

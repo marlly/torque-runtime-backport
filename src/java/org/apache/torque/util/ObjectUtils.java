@@ -25,13 +25,13 @@ package org.apache.torque.util;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -115,7 +115,7 @@ public class ObjectUtils
     public static Object deserialize( byte[] objectData )
     {
         Object object = null;
-        if (objectData != null)            
+        if (objectData != null)
         {
             // These streams are closed in finally.
             ObjectInputStream in = null;
@@ -123,7 +123,7 @@ public class ObjectUtils
                 new ByteArrayInputStream(objectData);
             BufferedInputStream bufin =
                 new BufferedInputStream(bin);
-            try                
+            try
             {
                 in = new ObjectInputStream(bufin);
 
@@ -134,14 +134,14 @@ public class ObjectUtils
             catch (Exception e)
             {
             }
-            finally                
+            finally
             {
-                try 
+                try
                 {
                     if (in != null) in.close();
                     if (bufin != null) bufin.close();
                     if (bin != null) bin.close();
-                } 
+                }
                 catch(IOException e)
                 {
                 }
@@ -176,12 +176,12 @@ public class ObjectUtils
             return o1.equals(o2);
         }
     }
-    
+
     /**
      * Nice method for adding data to a Hashtable in such a way
      * as to not get NPE's. The point being that if the
      * value is null, Hashtable.put() will throw an exception.
-     * That blows in the case of this class cause you may want to 
+     * That blows in the case of this class cause you may want to
      * essentially treat put("Not Null", null ) == put("Not Null", "")
      * We will still throw a NPE if the key is null cause that should
      * never happen.

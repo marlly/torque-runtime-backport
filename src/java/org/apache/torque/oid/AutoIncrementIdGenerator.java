@@ -25,13 +25,13 @@ package org.apache.torque.oid;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -86,7 +86,7 @@ public class AutoIncrementIdGenerator
     }
 
     /**
-     * Returns the last ID used by this connection. 
+     * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -100,7 +100,7 @@ public class AutoIncrementIdGenerator
     }
 
     /**
-     * Returns the last ID used by this connection. 
+     * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -113,8 +113,8 @@ public class AutoIncrementIdGenerator
         return getIdAsVillageValue(connection, keyInfo).asLong();
     }
 
-    /** 
-     * Returns the last ID used by this connection. 
+    /**
+     * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -130,7 +130,7 @@ public class AutoIncrementIdGenerator
 
 
     /**
-     * Returns the last ID used by this connection. 
+     * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -165,7 +165,7 @@ public class AutoIncrementIdGenerator
     }
 
     /**
-     * A flag to determine whether a Connection is required to 
+     * A flag to determine whether a Connection is required to
      * generate an id.
      *
      * @return a <code>boolean</code> value
@@ -176,7 +176,7 @@ public class AutoIncrementIdGenerator
     }
 
     /**
-     * Returns the last ID used by this connection. 
+     * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -184,7 +184,7 @@ public class AutoIncrementIdGenerator
      * result of an insert.
      * @exception Exception Database error.
      */
-    private Value getIdAsVillageValue(Connection connection, 
+    private Value getIdAsVillageValue(Connection connection,
                                       Object keyInfo)
         throws Exception
     {

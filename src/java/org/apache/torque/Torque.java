@@ -25,13 +25,13 @@ package org.apache.torque;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -53,7 +53,7 @@ package org.apache.torque;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,11 +83,11 @@ import org.apache.velocity.runtime.configuration.Configuration;
 public class Torque
 {
     /**
-     * Name of property that specifies the default 
+     * Name of property that specifies the default
      * map builder and map.
      */
     public static final String DATABASE_DEFAULT = "database.default";
-    
+
     /** The global cache of database maps */
     private static Map dbMaps;
 
@@ -102,7 +102,7 @@ public class Torque
      * log4j category to use for logging in BasePeer.
      */
     private static final String CATEGORY = "log4j.category";
-    
+
     /**
      * The default log4j category to use if the
      * the log4j.category property isn't set.
@@ -111,9 +111,9 @@ public class Torque
 
     private static Category category;
     private static Configuration configuration;
-    
+
     private static Monitor monitor;
-    
+
     /**
      * Initializes the service.
      */
@@ -131,7 +131,7 @@ public class Torque
         // to terminate in an orderly manner.
         monitor.setDaemon(true);
         monitor.start();
-        
+
         DBFactory.setConfiguration(configuration);
         DBFactory.setCategory(category);
         DBFactory.init();
@@ -141,17 +141,17 @@ public class Torque
     public static void setCategory(Category c)
     {
         category = c;
-    }        
+    }
 
     public static Category getCategory()
     {
         return category;
-    }        
+    }
 
     public static void setConfiguration(Configuration c)
     {
         configuration = c;
-    }        
+    }
 
     /**
      * Shuts down the service.
@@ -161,7 +161,7 @@ public class Torque
      */
     public static void shutdown()
     {
-        Iterator maps = dbMaps.values().iterator(); 
+        Iterator maps = dbMaps.values().iterator();
         while ( maps.hasNext() )
         {
             DatabaseMap map = (DatabaseMap) maps.next();
@@ -171,7 +171,7 @@ public class Torque
                 idBroker.stop();
             }
         }
-    
+
         if ( pools != null )
         {
             // Release connections for each pool.
@@ -194,7 +194,7 @@ public class Torque
      * Returns the default database map information.
      *
      * @return A DatabaseMap.
-     * @throws TorqueException Any exceptions caught during procssing will be 
+     * @throws TorqueException Any exceptions caught during procssing will be
      *         rethrown wrapped into a TorqueException.
      */
     public static DatabaseMap getDatabaseMap()
@@ -203,7 +203,7 @@ public class Torque
         return getDatabaseMap(
             configuration.getString(DATABASE_DEFAULT,"default"));
     }
-    
+
     /**
      * Returns the database map information. Name relates to the name
      * of the connection pool to associate with the map.
@@ -211,7 +211,7 @@ public class Torque
      * @param name The name of the <code>DatabaseMap</code> to
      * retrieve.
      * @return The named <code>DatabaseMap</code>.
-     * @throws TorqueException Any exceptions caught during procssing will be 
+     * @throws TorqueException Any exceptions caught during procssing will be
      *         rethrown wrapped into a TorqueException.
      */
     public static DatabaseMap getDatabaseMap(String name)
@@ -235,7 +235,7 @@ public class Torque
                 {
                     // Still not there.  Create and add.
                     map = new DatabaseMap(name);
-       
+
                     // Add info about IDBroker's table.
                     setupIdTable(map);
                     // setup other id generators
@@ -281,7 +281,7 @@ public class Torque
      * Setup IDBroker's table information within given database map.
      *
      * This method should be called on all new database map to ensure that
-     * IDBroker functionality is available in all databases userd by the 
+     * IDBroker functionality is available in all databases userd by the
      * application.
      *
      * @param map the DataBaseMap to setup.
@@ -374,7 +374,7 @@ public class Torque
     }
 
     /**
-     * Release a connection back to the database pool.  <code>null</code> 
+     * Release a connection back to the database pool.  <code>null</code>
      * references are ignored.
      *
      * @throws TorqueException Any exceptions caught during processing will be
@@ -415,24 +415,24 @@ public class Torque
     {
         /**
          * Added so that the configuration file can define maxConnections &
-         * expiryTime for each database pool that is defined in the 
+         * expiryTime for each database pool that is defined in the
          * TurbineResources.properties
-         * Was defined as: database.expiryTime=3600000 
+         * Was defined as: database.expiryTime=3600000
          * If you need per database, it is
          * now database.helpdesk.expiryTime=3600000
          */
         registerPool(
-            name, 
-            driver, 
-            url, 
-            username, 
+            name,
+            driver,
+            url,
+            username,
             password,
             configuration.getInt(getProperty(name, "maxConnections"), 10),
             configuration.getLong(getProperty(name, "expiryTime"), 3600000),
             configuration.getLong(getProperty(name, "maxConnectionAttempts"), 50),
             configuration.getLong(getProperty(name, "connectionWaitTimeout"), 10000));
     }
-    
+
     /**
      * This thread-safe method registers a new pool using the given parameters.
      *
@@ -443,8 +443,8 @@ public class Torque
      * @param password The password of the database user.
      * @exception Exception A generic exception.
      */
-    public static  void registerPool( String name, 
-                              String driver, 
+    public static  void registerPool( String name,
+                              String driver,
                               String url,
                               String username,
                               String password,
@@ -467,15 +467,15 @@ public class Torque
                     // Still not there.  Create and add.
                     ConnectionPool pool =
                         new ConnectionPool(
-                            driver, 
+                            driver,
                             url,
-                            username, 
-                            password, 
+                            username,
+                            password,
                             maxCons,
                             expiryTime,
                             maxConnectionAttempts,
                             connectionWaitTimeout);
-                    
+
                     pools.put( name, pool );
                 }
             }
@@ -553,13 +553,13 @@ public class Torque
         // If the pool is not in the Hashtable, we must register it.
         if ( pool == null )
         {
-            registerPool( 
+            registerPool(
                 name,
                 getDatabaseProperty(name, "driver"),
                 getDatabaseProperty(name, "url"),
                 getDatabaseProperty(name, "username"),
                 getDatabaseProperty(name, "password"));
-            
+
             pool = (ConnectionPool) pools.get(name);
         }
 

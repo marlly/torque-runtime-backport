@@ -25,13 +25,13 @@ package org.apache.torque.oid;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -60,10 +60,10 @@ import org.apache.torque.adapter.DB;
 
 /**
  * Interface to be implemented by id generators.  It is possible
- * that some implementations might not require all the arguments, 
+ * that some implementations might not require all the arguments,
  * for example MySQL will not require a keyInfo Object, while the
  * IDBroker implementation does not require a Connection as
- * it only rarely needs one and retrieves a connection from the 
+ * it only rarely needs one and retrieves a connection from the
  * Connection pool service only when needed.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
@@ -72,7 +72,7 @@ import org.apache.torque.adapter.DB;
 public interface IdGenerator
 {
     /**
-     * Returns an id as a primitive int. 
+     * Returns an id as a primitive int.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -83,7 +83,7 @@ public interface IdGenerator
         throws Exception;
 
     /**
-     * Returns an id as a primitive long. 
+     * Returns an id as a primitive long.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -93,20 +93,20 @@ public interface IdGenerator
     public long getIdAsLong(Connection connection, Object keyInfo)
         throws Exception;
 
-    /** 
-     * Returns an id as a BigDecimal. 
+    /**
+     * Returns an id as a BigDecimal.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
      * @return A BigDecimal id.
      * @exception Exception Database error.
      */
-    public BigDecimal getIdAsBigDecimal(Connection connection, 
+    public BigDecimal getIdAsBigDecimal(Connection connection,
                                         Object keyInfo)
         throws Exception;
 
     /**
-     * Returns an id as a String. 
+     * Returns an id as a String.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -132,7 +132,7 @@ public interface IdGenerator
     public boolean isPostInsert();
 
     /**
-     * A flag to determine whether a Connection is required to 
+     * A flag to determine whether a Connection is required to
      * generate an id.
      *
      * @return a <code>boolean</code> value

@@ -25,13 +25,13 @@ package org.apache.torque.util;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -142,7 +142,7 @@ public abstract class BasePeer
     {
         category = c;
     }
-    
+
     /**
      * Converts a hashtable to a byte array for storage/serialization.
      *
@@ -331,16 +331,16 @@ public abstract class BasePeer
         throws Exception
     {
         DBConnection dbCon = Torque.getConnection( dbName );
-        if ( dbCon.getConnection().getMetaData().supportsTransactions() ) 
+        if ( dbCon.getConnection().getMetaData().supportsTransactions() )
         {
             dbCon.setAutoCommit(false);
         }
-        
+
         return dbCon;
     }
 
     /**
-     * Commit a transaction.  This method takes care of releasing the 
+     * Commit a transaction.  This method takes care of releasing the
      * connection after the commit.  in databases that do not support
      * transactions, it only returns the connection.
      *
@@ -350,7 +350,7 @@ public abstract class BasePeer
     public static void commitTransaction(DBConnection dbCon)
         throws Exception
     {
-        if ( dbCon.getConnection().getMetaData().supportsTransactions() ) 
+        if ( dbCon.getConnection().getMetaData().supportsTransactions() )
         {
             dbCon.commit();
             dbCon.setAutoCommit(true);
@@ -364,7 +364,7 @@ public abstract class BasePeer
      * Roll back a transaction in databases that support transactions.
      * It also releases the connection.  in databases that do not support
      * transactions, this method will log the attempt and release the
-     * connection.   
+     * connection.
      *
      * @param dbCon The DBConnection for the transaction.
      * @exception Exception, a generic exception.
@@ -372,12 +372,12 @@ public abstract class BasePeer
     public static void rollBackTransaction(DBConnection dbCon)
         throws Exception
     {
-        if ( dbCon.getConnection().getMetaData().supportsTransactions() ) 
+        if ( dbCon.getConnection().getMetaData().supportsTransactions() )
         {
             dbCon.rollback();
             dbCon.setAutoCommit(true);
         }
-        else 
+        else
         {
             category.error("An attempt was made to rollback a transaction but the"
                 + " database did not allow the operation to be rolled back.");
@@ -528,23 +528,23 @@ public abstract class BasePeer
             String key = (String)e.nextElement();
             Criteria.Criterion c = criteria.getCriterion(key);
             String[] tableNames = c.getAllTables();
-            for (int i=0; i<tableNames.length; i++) 
+            for (int i=0; i<tableNames.length; i++)
             {
                 String tableName2 = criteria.getTableForAlias(tableNames[i]);
-                if ( tableName2 != null ) 
+                if ( tableName2 != null )
                 {
-                    tables.add( 
-                        new StringBuffer(tableNames[i].length() + 
+                    tables.add(
+                        new StringBuffer(tableNames[i].length() +
                                          tableName2.length() + 1)
                         .append(tableName2).append(' ').append(tableNames[i])
                         .toString() );
                 }
-                else 
+                else
                 {
                     tables.add(tableNames[i]);
                 }
             }
-            
+
             if ( criteria.isCascade() )
             {
                 // This steps thru all the columns in the database.
@@ -609,7 +609,7 @@ public abstract class BasePeer
             {
                 tds = new TableDataSet(connection, tables.get(i), kd);
                 String sqlSnippet = whereClause.toString(" AND ");
-                
+
                 category.debug("BasePeer.doDelete: whereClause=" +
                     sqlSnippet);
 
@@ -672,7 +672,7 @@ public abstract class BasePeer
 
         // Transaction stuff added for postgres.
         boolean doTransaction = (Torque.getDB(criteria.getDbName()).
-            objectDataNeedsTrans() && 
+            objectDataNeedsTrans() &&
             criteria.containsObjectColumn(criteria.getDbName()));
 
         try
@@ -762,23 +762,23 @@ public abstract class BasePeer
         // only get a new key value if you need to
         // the reason is that a primary key might be defined
         // but you are still going to set its value. for example:
-        // a join table where both keys are primary and you are 
+        // a join table where both keys are primary and you are
         // setting both columns with your own values
         boolean info = false;
-        
+
         if (!criteria.containsKey(pk.getFullyQualifiedName()))
         {
             // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
             // before the insert.
-            
+
             if (keyGen.isPriorToInsert())
             {
-                if ( pk.getType() instanceof Number ) 
+                if ( pk.getType() instanceof Number )
                 {
                     id = new NumberKey( tableMap.getIdGenerator()
-                        .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) ); 
+                        .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) );
                 }
-                else 
+                else
                 {
                     id = new StringKey( tableMap.getIdGenerator()
                         .getIdAsString(dbCon.getConnection(), keyInfo) );
@@ -804,12 +804,12 @@ public abstract class BasePeer
         // now.
         if ((keyGen != null) && (keyGen.isPostInsert()))
         {
-            if ( pk.getType() instanceof Number ) 
+            if ( pk.getType() instanceof Number )
             {
                 id = new NumberKey( tableMap.getIdGenerator()
-                    .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) ); 
+                    .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) );
             }
-            else 
+            else
             {
                 id = new StringKey( tableMap.getIdGenerator()
                     .getIdAsString(dbCon.getConnection(), keyInfo) );
@@ -854,69 +854,69 @@ public abstract class BasePeer
                 if (obj == null)
                 {
                     rec.setValueNull(colMap.getColumnName());
-                }    
+                }
                 else if ( obj instanceof String )
                 {
                     rec.setValue( colMap.getColumnName(),
                                   (String)obj );
-                }                                  
+                }
                 else if ( obj instanceof Integer)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   criteria.getInt(key) );
-                }                                  
+                }
                 else if ( obj instanceof BigDecimal)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   (BigDecimal)obj );
-                }                                  
+                }
                 else if ( obj instanceof Long)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   criteria.getLong(key) );
-                }                                  
+                }
                 else if ( obj instanceof java.util.Date)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   (java.util.Date)obj );
-                }                                  
+                }
                 else if ( obj instanceof Float)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   criteria.getFloat(key) );
-                }                                  
+                }
                 else if ( obj instanceof Double)
                 {
                     rec.setValue( colMap.getColumnName(),
                                   criteria.getDouble(key) );
-                }                                  
+                }
                 else if ( obj instanceof Hashtable )
                 {
                     rec.setValue( colMap.getColumnName(),
                                   hashtableToByteArray( (Hashtable)obj ) );
-                }                                  
+                }
                 else if ( obj instanceof byte[])
                 {
                     rec.setValue( colMap.getColumnName(),
                                   (byte[])obj);
-                }                                  
+                }
                 else if ( obj instanceof Boolean)
                 {
                     rec.setValue( colMap.getColumnName(),
                                    criteria.getBoolean(key) ? 1 : 0);
-                }                                   
+                }
                 shouldSave = true;
              }
         }
-        
+
         if ( shouldSave )
         {
             rec.save();
-        }            
+        }
         else
         {
            throw new Exception ( "BasePeer.doInsert() - Nothing to insert" );
-        }           
+        }
     }
 
     /**
@@ -966,15 +966,15 @@ public abstract class BasePeer
                                                  columnName.indexOf('.') );
             }
             String tableName2 = criteria.getTableForAlias(tableName);
-            if ( tableName2 != null ) 
+            if ( tableName2 != null )
             {
-                fromClause.add( 
-                    new StringBuffer(tableName.length() + 
+                fromClause.add(
+                    new StringBuffer(tableName.length() +
                                      tableName2.length() + 1)
                     .append(tableName2).append(' ').append(tableName)
                     .toString() );
             }
-            else 
+            else
             {
                 fromClause.add(tableName);
             }
@@ -991,76 +991,76 @@ public abstract class BasePeer
         while (e.hasMoreElements())
         {
             String key = (String)e.nextElement();
-            Criteria.Criterion criterion = 
+            Criteria.Criterion criterion =
                 (Criteria.Criterion)criteria.getCriterion(key);
-            Criteria.Criterion[] someCriteria = 
+            Criteria.Criterion[] someCriteria =
                 criterion.getAttachedCriterion();
             String table = null;
-            for (int i=0; i<someCriteria.length; i++) 
+            for (int i=0; i<someCriteria.length; i++)
             {
                 String tableName = someCriteria[i].getTable();
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
-                    fromClause.add( 
-                        new StringBuffer(tableName.length() + 
+                    fromClause.add(
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                     table = tableName;
                 }
 
                 boolean ignorCase = (criteria.isIgnoreCase() &&
-                    (dbMap.getTable(table).getColumn( 
+                    (dbMap.getTable(table).getColumn(
                     someCriteria[i].getColumn()).getType() instanceof String));
-                
+
                 someCriteria[i].setIgnoreCase(ignorCase);
             }
-                
+
             criterion.setDB(db);
-            whereClause.add( criterion.toString() ); 
+            whereClause.add( criterion.toString() );
 
         }
 
         List join = criteria.getJoinL();
         if ( join != null)
         {
-            for ( int i=0; i<join.size(); i++ ) 
+            for ( int i=0; i<join.size(); i++ )
             {
                 String join1 = (String)join.get(i);
                 String join2 = (String)criteria.getJoinR().get(i);
-            
-                String tableName = join1.substring(0, join1.indexOf('.')); 
+
+                String tableName = join1.substring(0, join1.indexOf('.'));
                 String table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
-                    fromClause.add( 
-                        new StringBuffer(tableName.length() + 
+                    fromClause.add(
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                 }
 
                 int dot =  join2.indexOf('.');
-                tableName = join2.substring(0, dot); 
+                tableName = join2.substring(0, dot);
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
-                    fromClause.add( 
-                        new StringBuffer(tableName.length() + 
+                    fromClause.add(
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                     table = tableName;
@@ -1070,9 +1070,9 @@ public abstract class BasePeer
                     (dbMap.getTable(table).getColumn(
                         join2.substring(dot+1, join2.length()) )
                     .getType() instanceof String));
-                
-                whereClause.add( 
-                    SqlExpression.buildInnerJoin(join1, join2, 
+
+                whereClause.add(
+                    SqlExpression.buildInnerJoin(join1, join2,
                                                  ignorCase, db) );
             }
         }
@@ -1085,7 +1085,7 @@ public abstract class BasePeer
             {
                 String orderByColumn = orderBy.get(i);
                 String table = orderByColumn.substring(0,orderByColumn.indexOf('.') );
-                // See if there's a space (between the column list and sort 
+                // See if there's a space (between the column list and sort
                 // order in ORDER BY table.column DESC).
                 int spacePos = orderByColumn.indexOf(' ');
                 String columnName;
@@ -1096,7 +1096,7 @@ public abstract class BasePeer
                 ColumnMap column = dbMap.getTable(table).getColumn( columnName );
                 if ( column.getType() instanceof String )
                 {
-                    if (spacePos == -1) 
+                    if (spacePos == -1)
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn) );
                     else
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) + orderByColumn.substring(spacePos) );
@@ -1406,7 +1406,7 @@ public abstract class BasePeer
         if (numberOfResults != 0)
         {
             results = getSelectResults(qds, 0, numberOfResults, singleRecord);
-        }                                 
+        }
         return results;
     }
 
@@ -1874,7 +1874,7 @@ public abstract class BasePeer
         try
         {
             MapBuilder mb = (MapBuilder)mapBuilders.get(name);
-            // Use the 'double-check pattern' for syncing 
+            // Use the 'double-check pattern' for syncing
             //  caching of the MapBuilder.
             if (mb == null)
             {
@@ -1882,14 +1882,14 @@ public abstract class BasePeer
                 {
                    mb = (MapBuilder)mapBuilders.get(name);
                    if (mb == null)
-                  {            
+                  {
                       mb = (MapBuilder)Class.forName(name).newInstance();
                       // Cache the MapBuilder before it is built.
                       mapBuilders.put(name, mb);
                   }
                }
             }
-            
+
             // Build the MapBuilder in its own synchronized block to
             //  avoid locking up the whole Hashtable while doing so.
             // Note that *all* threads need to do a sync check on isBuilt()
@@ -1911,7 +1911,7 @@ public abstract class BasePeer
                       throw e;
                   }
                }
-            } 
+            }
             return mb;
         }
         catch(Exception e)
@@ -1944,12 +1944,12 @@ public abstract class BasePeer
         throws Exception
     {
         Vector v = null;
-        
+
         StringBuffer qry = new StringBuffer();
         Vector params = new Vector(criteria.size());
-        
+
         createPreparedStatement (criteria, qry, params);
-        
+
         PreparedStatement stmt = null;
         try
         {
@@ -1967,7 +1967,7 @@ public abstract class BasePeer
                     stmt.setString(i + 1, param.toString());
                 }
             }
-        
+
             QueryDataSet qds = null;
             try
             {
@@ -1989,13 +1989,13 @@ public abstract class BasePeer
                 stmt.close();
             }
         }
-        
+
         return v;
     }
 
 
     /**
-     * Do a Prepared Statement select according to the given criteria 
+     * Do a Prepared Statement select according to the given criteria
      */
     public static Vector doPSSelect(Criteria criteria) throws Exception
     {
@@ -2013,7 +2013,7 @@ public abstract class BasePeer
 
         return v;
     }
-        
+
 
     /**
      * Create a new PreparedStatement.  It builds a string representation
@@ -2026,9 +2026,9 @@ public abstract class BasePeer
     {
         DB db = Torque.getDB( criteria.getDbName() );
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
-        
+
         Query query = new Query();
-        
+
         StringStackBuffer selectModifiers = query.getSelectModifiers();
         StringStackBuffer selectClause = query.getSelectClause();
         StringStackBuffer fromClause = query.getFromClause();
@@ -2068,21 +2068,21 @@ public abstract class BasePeer
                                                  columnName.indexOf('.') );
             }
             String tableName2 = criteria.getTableForAlias(tableName);
-            if ( tableName2 != null ) 
+            if ( tableName2 != null )
             {
-                fromClause.add( 
-                    new StringBuffer(tableName.length() + 
+                fromClause.add(
+                    new StringBuffer(tableName.length() +
                                      tableName2.length() + 1)
                     .append(tableName2).append(' ').append(tableName)
                     .toString() );
             }
-            else 
+            else
             {
                 fromClause.add(tableName);
             }
         }
 
-        
+
         Iterator it = aliases.keySet().iterator();
         while(it.hasNext())
         {
@@ -2094,79 +2094,79 @@ public abstract class BasePeer
         while (e.hasMoreElements())
         {
             String key = (String)e.nextElement();
-            Criteria.Criterion criterion = 
+            Criteria.Criterion criterion =
                 (Criteria.Criterion)criteria.getCriterion(key);
-            Criteria.Criterion[] someCriteria = 
+            Criteria.Criterion[] someCriteria =
                 criterion.getAttachedCriterion();
-                
+
             String table = null;
-            for (int i=0; i<someCriteria.length; i++) 
+            for (int i=0; i<someCriteria.length; i++)
             {
                 String tableName = someCriteria[i].getTable();
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
                     fromClause.add(
-                        new StringBuffer(tableName.length() + 
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                     table = tableName;
                 }
 
                 boolean ignorCase = (criteria.isIgnoreCase() &&
-                    (dbMap.getTable(table).getColumn( 
+                    (dbMap.getTable(table).getColumn(
                     someCriteria[i].getColumn()).getType() instanceof String));
-                
+
                 someCriteria[i].setIgnoreCase(ignorCase);
             }
-                
+
             criterion.setDB(db);
             StringBuffer sb = new StringBuffer();
             criterion.appendPsTo (sb,params);
-            whereClause.add( sb.toString() ); 
+            whereClause.add( sb.toString() );
 
         }
-        
+
         List join = criteria.getJoinL();
         if ( join != null)
         {
-            for ( int i=0; i<join.size(); i++ ) 
+            for ( int i=0; i<join.size(); i++ )
             {
                 String join1 = (String)join.get(i);
                 String join2 = (String)criteria.getJoinR().get(i);
-            
-                String tableName = join1.substring(0, join1.indexOf('.')); 
+
+                String tableName = join1.substring(0, join1.indexOf('.'));
                 String table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
-                    fromClause.add( 
-                        new StringBuffer(tableName.length() + 
+                    fromClause.add(
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                 }
 
                 int dot =  join2.indexOf('.');
-                tableName = join2.substring(0, dot); 
+                tableName = join2.substring(0, dot);
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null ) 
+                if ( table != null )
                 {
-                    fromClause.add( 
-                        new StringBuffer(tableName.length() + 
+                    fromClause.add(
+                        new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
                         .toString() );
                 }
-                else 
+                else
                 {
                     fromClause.add(tableName);
                     table = tableName;
@@ -2176,9 +2176,9 @@ public abstract class BasePeer
                     (dbMap.getTable(table).getColumn(
                         join2.substring(dot+1, join2.length()) )
                     .getType() instanceof String));
-                
-                whereClause.add( 
-                    SqlExpression.buildInnerJoin(join1, join2, 
+
+                whereClause.add(
+                    SqlExpression.buildInnerJoin(join1, join2,
                                                  ignorCase, db) );
             }
         }
@@ -2191,7 +2191,7 @@ public abstract class BasePeer
             {
                 String orderByColumn = orderBy.get(i);
                 String table = orderByColumn.substring(0,orderByColumn.indexOf('.') );
-                // See if there's a space (between the column list and sort 
+                // See if there's a space (between the column list and sort
                 // order in ORDER BY table.column DESC).
                 int spacePos = orderByColumn.indexOf(' ');
                 String columnName;
@@ -2202,7 +2202,7 @@ public abstract class BasePeer
                 ColumnMap column = dbMap.getTable(table).getColumn( columnName );
                 if ( column.getType() instanceof String )
                 {
-                    if (spacePos == -1) 
+                    if (spacePos == -1)
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn) );
                     else
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) + orderByColumn.substring(spacePos) );

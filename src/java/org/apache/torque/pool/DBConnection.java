@@ -25,13 +25,13 @@ package org.apache.torque.pool;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -81,7 +81,7 @@ import org.apache.torque.Torque;
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @version $Id$
  */
-public class DBConnection 
+public class DBConnection
     implements ConnectionEventListener
 {
     /**
@@ -175,8 +175,8 @@ public class DBConnection
      * @param username   The user name we are connecting as
      * @param pool       The ConnectionPool that this DBConnection belongs to
      */
-    protected DBConnection(Connection connection, 
-                           String url, 
+    protected DBConnection(Connection connection,
+                           String url,
                            String username,
                            ConnectionPool pool)
     {
@@ -197,8 +197,8 @@ public class DBConnection
      * @param username   The user name we are connecting as
      * @param pool       The ConnectionPool that this DBConnection belongs to
      */
-    protected DBConnection(PooledConnection pooledConnection, 
-                           String url, 
+    protected DBConnection(PooledConnection pooledConnection,
+                           String url,
                            String username,
                            ConnectionPool pool)
     {
@@ -223,7 +223,7 @@ public class DBConnection
             // to a ConnectionPool, it means that it was taken from a pool
             // and not returned.  We log this fact, close the underlying
             // Connection, and return it to the ConnectionPool.
-            Torque.getCategory().warn( 
+            Torque.getCategory().warn(
                     "A DBConnection was finalized, without being returned "
                   + "to the ConnectionPool it belonged to" );
 

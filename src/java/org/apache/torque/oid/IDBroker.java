@@ -25,13 +25,13 @@ package org.apache.torque.oid;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -83,9 +83,9 @@ import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * This method of ID generation is used to ensure that code is
- * more database independent.  For example, MySQL has an auto-increment 
- * feature while Oracle uses sequences.  It caches several ids to 
- * avoid needing a Connection for every request. 
+ * more database independent.  For example, MySQL has an auto-increment
+ * feature while Oracle uses sequences.  It caches several ids to
+ * avoid needing a Connection for every request.
  *
  * This class uses the table ID_TABLE defined in
  * conf/master/id-table-schema.xml.  The columns in ID_TABLE are used as
@@ -178,7 +178,7 @@ public class IDBroker
      * The houseKeeperThread thread
      */
     private Thread houseKeeperThread = null;
-    
+
     /**
      * Are transactions supported?
      */
@@ -191,10 +191,10 @@ public class IDBroker
 
     private Configuration configuration;
 
-    private static final String DB_IDBROKER_CLEVERQUANTITY = 
+    private static final String DB_IDBROKER_CLEVERQUANTITY =
         "idbroker.clever.quantity";
 
-    private static final String DB_IDBROKER_PREFETCH = 
+    private static final String DB_IDBROKER_PREFETCH =
         "idbroker.prefetch";
 
     /**
@@ -205,15 +205,15 @@ public class IDBroker
     public IDBroker(TableMap tMap)
     {
         this.tableMap = tMap;
-        
+
         // Start the housekeeper thread only if prefetch has not been disabled
-        //if (configuration.getBoolean(DB_IDBROKER_PREFETCH, true)) 
+        //if (configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         if (true)
         {
             houseKeeperThread = new Thread(this);
-            // Indicate that this is a system thread. JVM will quit only when 
+            // Indicate that this is a system thread. JVM will quit only when
             // there are no more active user threads. Settings threads spawned
-            // internally Turbine as daemons allows commandline applications 
+            // internally Turbine as daemons allows commandline applications
             // using Turbine terminate in an orderly manner.
             houseKeeperThread.setDaemon(true);
             houseKeeperThread.start();
@@ -261,8 +261,8 @@ public class IDBroker
 
     /**
      * Returns an id as a primitive int.  Note this method does not
-     * require a Connection, it just implements the KeyGenerator 
-     * interface.  if a Connection is needed one will be requested. 
+     * require a Connection, it just implements the KeyGenerator
+     * interface.  if a Connection is needed one will be requested.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -278,7 +278,7 @@ public class IDBroker
 
     /**
      * Returns an id as a primitive long. Note this method does not
-     * require a Connection, it just implements the KeyGenerator 
+     * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
      *
      * @param connection A Connection.
@@ -292,17 +292,17 @@ public class IDBroker
         return getIdAsBigDecimal(null, tableName).longValue();
     }
 
-    /** 
+    /**
      * Returns an id as a BigDecimal. Note this method does not
-     * require a Connection, it just implements the KeyGenerator 
-     * interface.  if a Connection is needed one will be requested. 
+     * require a Connection, it just implements the KeyGenerator
+     * interface.  if a Connection is needed one will be requested.
      *
      * @param connection A Connection.
      * @param tableName, a String that identifies a table..
      * @return A BigDecimal id.
      * @exception Exception Database error.
      */
-    public BigDecimal getIdAsBigDecimal(Connection connection, 
+    public BigDecimal getIdAsBigDecimal(Connection connection,
                                         Object tableName)
         throws Exception
     {
@@ -312,8 +312,8 @@ public class IDBroker
 
     /**
      * Returns an id as a String. Note this method does not
-     * require a Connection, it just implements the KeyGenerator 
-     * interface.  if a Connection is needed one will be requested. 
+     * require a Connection, it just implements the KeyGenerator
+     * interface.  if a Connection is needed one will be requested.
      *
      * @param connection A Connection should be null.
      * @param tableName, a String that identifies a table.
@@ -348,7 +348,7 @@ public class IDBroker
     }
 
     /**
-     * A flag to determine whether a Connection is required to 
+     * A flag to determine whether a Connection is required to
      * generate an id.
      *
      * @return a <code>boolean</code> value
@@ -375,12 +375,12 @@ public class IDBroker
             throw new Exception ("getNextIds(): tableName == null");
         }
 
-        // A note about the synchronization:  I (jmcnally) looked at 
+        // A note about the synchronization:  I (jmcnally) looked at
         // the synchronized blocks to avoid thread issues that were
         // being used in this and the storeId method.  I do not think
         // they were being effective, so I synchronized the method.
         // I have left the blocks that did exist commented in the code
-        // to make it easier for others to take a look, because it 
+        // to make it easier for others to take a look, because it
         // would be preferrable to avoid the synchronization on the
         // method
 
@@ -392,7 +392,7 @@ public class IDBroker
             if (availableIds == null)
             {
                 Torque.getCategory().info ("Forced id retrieval - no available vector");
-            }            
+            }
             else
             {
                 Torque.getCategory().info ("Forced id retrieval - " + availableIds.size());
@@ -400,12 +400,12 @@ public class IDBroker
             storeIDs(tableName, true);
             availableIds = (List)ids.get(tableName);
         }
-        
+
         int size = availableIds.size() < numOfIdsToReturn ?
             availableIds.size() : numOfIdsToReturn;
-        
+
         BigDecimal[] results = new BigDecimal[size];
-        
+
         // We assume that availableIds will always come from the ids
         // Hashtable and would therefore always be the same object for
         // a specific table.
@@ -477,7 +477,7 @@ public class IDBroker
      * Shuts down the IDBroker thread.
      *
      * Calling this method stops the thread that was started for this
-     * instance of the IDBroker. This method should be called during 
+     * instance of the IDBroker. This method should be called during
      * MapBroker Service shutdown.
      */
     public void stop()
@@ -502,14 +502,14 @@ public class IDBroker
          * to false given the current default so I'm
          * going to comment it out for now. jvz.
          */
-        
+
         // Check if quantity changing is switched on.
         // If prefetch is turned off, changing quantity does not make sense
         //if (!configuration.getBoolean(DB_IDBROKER_CLEVERQUANTITY, true)
         //    || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         //{
         //    return;
-        //}            
+        //}
 
         // Get the last id request for this table.
         java.util.Date lastTime =
@@ -561,7 +561,7 @@ public class IDBroker
             if (adjustQuantity)
             {
                 checkTiming(tableName);
-            }                
+            }
 
             DBConnection dbCon = null;
             try
@@ -647,7 +647,7 @@ public class IDBroker
      * cached in memory.  This is either stored in quantityStore or
      * read from the db. (ie the value in ID_TABLE.QUANTITY).
      *
-     * Though this method returns a BigDecimal for the quantity, it is 
+     * Though this method returns a BigDecimal for the quantity, it is
      * unlikey the system could withstand whatever conditions would lead
      * to really needing a large quantity, it is retrieved as a BigDecimal
      * only because it is going to be added to another BigDecimal.
@@ -661,7 +661,7 @@ public class IDBroker
 
         /*
         // If prefetch is turned off we simply return 1
-        if (!configuration.getBoolean(DB_IDBROKER_PREFETCH, true)) 
+        if (!configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
             quantity = new BigDecimal(1);
         }
@@ -699,7 +699,7 @@ public class IDBroker
                 {
                     Torque.releaseConnection(dbCon);
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     Torque.getCategory().error("Release of connection failed.", e);
                 }
@@ -712,7 +712,7 @@ public class IDBroker
      * Helper method to select a row in the ID_TABLE.
      *
      * @param con A Connection.
-     * @param tableName The properly escaped name of the table to 
+     * @param tableName The properly escaped name of the table to
      * identify the row.
      * @return A BigDecimal[].
      * @exception Exception, a generic exception.
@@ -743,7 +743,7 @@ public class IDBroker
                 // is throwing an NotImplemented exception.
                 results[0] = new BigDecimal(rs.getString(1)); // next_id
                 results[1] = new BigDecimal(rs.getString(2)); // quantity
-            } 
+            }
             else
             {
                 throw new TorqueException("The table "+tableName+
@@ -772,7 +772,7 @@ public class IDBroker
                            String id)
         throws Exception
     {
-        StringBuffer stmt = 
+        StringBuffer stmt =
             new StringBuffer(id.length() + tableName.length() + 50);
         stmt.append( "UPDATE ID_TABLE" )
             .append( " SET next_id = " )

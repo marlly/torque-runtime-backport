@@ -25,13 +25,13 @@ package org.apache.torque.adapter;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -86,18 +86,18 @@ public class DBFactory
     private static Hashtable drivers = null;
 
     private static Configuration configuration;
-    
+
     private static Category category;
-    
+
     public static void setConfiguration(Configuration c)
     {
         configuration = c;
-    }        
+    }
 
     public static void setCategory(Category c)
     {
         category = c;
-    }        
+    }
 
     // This static code creates the list of possible drivers and adds
     // the "NO DATABASE" adaptor to this list.  After all the
@@ -159,16 +159,16 @@ public class DBFactory
         {
             // Add this new driver class to the list of known drivers.
             drivers.put(driver, dc);
-        }            
+        }
     }
 
     /**
-     * Creates an instance of the Turbine database adapter associated with the 
+     * Creates an instance of the Turbine database adapter associated with the
      * specified JDBC driver.
      *
-     * NOTE: This method used to be <code>protected</code>.  I'd like to try 
-     * to get it back that way ASAP.  I had to change its access level since 
-     * it is called by <code>ConnectionPool</code>, and these two 
+     * NOTE: This method used to be <code>protected</code>.  I'd like to try
+     * to get it back that way ASAP.  I had to change its access level since
+     * it is called by <code>ConnectionPool</code>, and these two
      * classes are no longer in the same package.  -Daniel <dlr@collab.net>
      *
      * @param driver The fully-qualified name of the JDBC driver to create.

@@ -25,13 +25,13 @@ package org.apache.torque.map;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -258,19 +258,19 @@ public class TableMap
     {
         return primaryKeyMethod;
     }
-    
+
     /**
      * Get the value of idGenerator.
      * @return value of idGenerator.
      */
-    public IdGenerator getIdGenerator() 
+    public IdGenerator getIdGenerator()
     {
         return getDatabaseMap().getIdGenerator(primaryKeyMethod);
     }
-        
+
 
     /**
-     * Get the information used to generate a primary key 
+     * Get the information used to generate a primary key
      *
      * @return An Object.
      */
@@ -511,7 +511,7 @@ public class TableMap
     }
 
     /**
-     * Sets the sequence information needed to generate a key 
+     * Sets the sequence information needed to generate a key
      *
      * @deprecated.  Use setPrimaryKeyMethodInfo
      */
@@ -521,9 +521,9 @@ public class TableMap
     }
 
     /**
-     * Sets the pk information needed to generate a key 
+     * Sets the pk information needed to generate a key
      *
-     * @param. pkInfo information needed to generate a key 
+     * @param. pkInfo information needed to generate a key
      */
     public void setPrimaryKeyMethodInfo(Object pkInfo)
     {

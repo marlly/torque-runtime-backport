@@ -25,13 +25,13 @@ package org.apache.torque.om;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -71,7 +71,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * The constant denoting an unset numeric database identifier.
      */
     public static final int NEW_ID = -1;
-    
+
     /**
      * Shared portion of the error message thrown for methods which
      * are not implemented.
@@ -109,7 +109,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Attempts to return the object primaryKey as an int.
      *
-     * @return the object primaryKey as an int; 
+     * @return the object primaryKey as an int;
      * returns -1 if primaryKey was not set
      * or could not be represented as an int.
      *
@@ -131,7 +131,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Attempts to return the object primaryKey as a long.
      *
-     * @return the object primaryKey as a long; 
+     * @return the object primaryKey as a long;
      * returns -1 if primaryKey was not set
      * or could not be represented as a long.
      *
@@ -153,7 +153,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Attempts to return the object primaryKey as a BigDecimal.
      *
-     * @return the object primaryKey as a BigDecimal; 
+     * @return the object primaryKey as a BigDecimal;
      * returns -1 if primaryKey was not
      * set or could not be represented as a BigDecimal.
      *
@@ -178,7 +178,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Gets the object primaryKey as a String.
      *
-     * @return the object primaryKey as a String; 
+     * @return the object primaryKey as a String;
      * returns null if primaryKey was not
      * set.
      *
@@ -232,7 +232,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *
      * @param primaryKey The new primaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
-     * but this allows for children to override the method more easily 
+     * but this allows for children to override the method more easily
      *
      * @deprecated
      */
@@ -246,7 +246,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *
      * @param PrimaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
-     * but this allows for children to override the method more easily 
+     * but this allows for children to override the method more easily
      *
      * @deprecated
      */
@@ -260,7 +260,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *
      * @param PrimaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
-     * but this allows for children to override the method more easily 
+     * but this allows for children to override the method more easily
      *
      */
     public void setPrimaryKey(String primaryKey) throws Exception
@@ -273,7 +273,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *
      * @param PrimaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
-     * but this allows for children to override the method more easily 
+     * but this allows for children to override the method more easily
      *
      */
     public void setPrimaryKey(SimpleKey[] primaryKey) throws Exception
@@ -318,7 +318,7 @@ public abstract class BaseObject implements Persistent, Serializable
     public void save()
         throws Exception
     {
-        throw new Error("BaseObject.save: " + NOT_IMPLEMENTED); 
+        throw new Error("BaseObject.save: " + NOT_IMPLEMENTED);
     }
 
     /**
@@ -331,7 +331,7 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public Object getByName(String field)
     {
-        throw new Error("BaseObject.getByName: " + NOT_IMPLEMENTED); 
+        throw new Error("BaseObject.getByName: " + NOT_IMPLEMENTED);
     }
 
     /**
@@ -341,7 +341,7 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public Object getByPeerName(String name)
     {
-        throw new Error("BaseObject.getByPeerName: " + NOT_IMPLEMENTED); 
+        throw new Error("BaseObject.getByPeerName: " + NOT_IMPLEMENTED);
     }
 
     /**
@@ -409,11 +409,11 @@ public abstract class BaseObject implements Persistent, Serializable
     public int hashCode()
     {
         ObjectKey ok = getPrimaryKey();
-        if ( ok == null) 
+        if ( ok == null)
         {
             return super.hashCode();
         }
-        
+
         return ok.hashCode();
     }
 }

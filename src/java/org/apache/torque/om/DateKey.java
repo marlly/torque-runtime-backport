@@ -25,13 +25,13 @@ package org.apache.torque.om;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -58,10 +58,10 @@ import java.util.Date;
 import org.apache.torque.TorqueException;
 
 /**
- * This class can be used as an ObjectKey to uniquely identify an 
+ * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id is a Date.
  */
-public class DateKey extends SimpleKey 
+public class DateKey extends SimpleKey
 {
 
     /**
@@ -76,7 +76,7 @@ public class DateKey extends SimpleKey
      * Creates a DateKey whose internal representation is a Date
      * given by the long number given by the String
      */
-    public DateKey(String key) throws NumberFormatException 
+    public DateKey(String key) throws NumberFormatException
     {
         this.key = new Date(Long.parseLong(key));
     }
@@ -128,33 +128,33 @@ public class DateKey extends SimpleKey
     }
 
     /**
-     * keyObj is equal to this DateKey if keyObj is a DateKey or String 
-     * that contains the same information this key contains. 
+     * keyObj is equal to this DateKey if keyObj is a DateKey or String
+     * that contains the same information this key contains.
      */
     public boolean equals(Object keyObj)
     {
         boolean isEqual = false;
 
-        if ( key != null ) 
+        if ( key != null )
         {
             if (keyObj instanceof String)
             {
-                isEqual =  toString().equals(keyObj);                
+                isEqual =  toString().equals(keyObj);
             }
-            // check against a DateKey. Two keys are equal, if their 
+            // check against a DateKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof DateKey) 
+            else if ( keyObj instanceof DateKey)
             {
                 Object obj = ((DateKey)keyObj).getValue();
-                isEqual =  key.equals(obj);                
-            }        
-        }        
+                isEqual =  key.equals(obj);
+            }
+        }
         return isEqual;
     }
 
     public String toString()
     {
-        if ( key != null ) 
+        if ( key != null )
         {
             return String.valueOf(((Date)key).getTime());
         }

@@ -25,13 +25,13 @@ package org.apache.torque.om;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -58,9 +58,9 @@ import java.io.Serializable;
 import org.apache.torque.TorqueException;
 
 /**
- * This class can be used to uniquely identify an object within 
+ * This class can be used to uniquely identify an object within
  * an application.  There are four subclasses: StringKey, NumberKey,
- * and DateKey, and ComboKey which is a Key made up of a combination 
+ * and DateKey, and ComboKey which is a Key made up of a combination
  * ofthe first three.
  */
 public abstract class ObjectKey implements Serializable, Comparable
@@ -86,7 +86,7 @@ public abstract class ObjectKey implements Serializable, Comparable
      */
     public int hashCode()
     {
-        if ( key == null ) 
+        if ( key == null )
         {
             return super.hashCode();
         }

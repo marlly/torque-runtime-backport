@@ -25,13 +25,13 @@ package org.apache.torque.util;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -120,7 +120,7 @@ public class SqlExpression
                                          DB db )
     {
         int addlength = (ignoreCase) ? 25 : 1;
-        StringBuffer sb = new StringBuffer(column.length() + 
+        StringBuffer sb = new StringBuffer(column.length() +
             relatedColumn.length() + addlength );
         buildInnerJoin(column, relatedColumn, ignoreCase, db, sb);
         return sb.toString();
@@ -236,19 +236,19 @@ public class SqlExpression
                               Object criteria,
                               String comparison,
                               boolean ignoreCase,
-                              DB db, 
+                              DB db,
                               StringBuffer whereClause)
     {
         // Allow null criteria
         // This will result in queries like
         // insert into table (name, parent) values ('x', null);
         //
-        
+
         /* Check to see if the criteria is an ObjectKey
          * and if the value of that ObjectKey is null.
          * In that case, criteria should be null.
          */
-        
+
         if (criteria != null && criteria instanceof ObjectKey)
         {
             if (((ObjectKey)criteria).getValue() == null)
@@ -260,7 +260,7 @@ public class SqlExpression
          *  is an =, <>, or !=.  If so, replace the comparison
          *  with the proper IS or IS NOT.
          */
-        
+
         if (criteria == null)
         {
             criteria = "null";
@@ -277,7 +277,7 @@ public class SqlExpression
                 comparison = Criteria.ISNOTNULL;
             }
         }
-        else 
+        else
         {
            if (criteria instanceof String ||
                criteria instanceof StringKey)
@@ -297,13 +297,13 @@ public class SqlExpression
 
         if ( comparison.equals(Criteria.LIKE) )
         {
-            buildLike( columnName, (String)criteria, 
+            buildLike( columnName, (String)criteria,
                        ignoreCase, db, whereClause);
         }
         else if ( comparison.equals(Criteria.IN) ||
                   comparison.equals(Criteria.NOT_IN) )
         {
-            buildIn( columnName, criteria, comparison, 
+            buildIn( columnName, criteria, comparison,
                      ignoreCase, db, whereClause);
         }
         else
@@ -406,7 +406,7 @@ public class SqlExpression
         while ( position < criteria.length() )
         {
             char checkWildcard = criteria.charAt(position);
-            
+
             switch (checkWildcard)
             {
             case BACKSLASH:

@@ -25,13 +25,13 @@ package org.apache.torque.oid;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -63,7 +63,7 @@ import com.workingdogs.village.Record;
 import com.workingdogs.village.Value;
 
 /**
- * This generator works with databases that have an sql syntax for 
+ * This generator works with databases that have an sql syntax for
  * getting an id prior to inserting a row into the database.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
@@ -85,7 +85,7 @@ public class SequenceIdGenerator
     }
 
     /**
-     * Retrieves an id as an int. 
+     * Retrieves an id as an int.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -99,7 +99,7 @@ public class SequenceIdGenerator
     }
 
     /**
-     * Retrieves an id as an long. 
+     * Retrieves an id as an long.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -112,8 +112,8 @@ public class SequenceIdGenerator
         return getIdAsVillageValue(connection, keyInfo).asLong();
     }
 
-    /** 
-     * Retrieves an id as a BigDecimal. 
+    /**
+     * Retrieves an id as a BigDecimal.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -127,7 +127,7 @@ public class SequenceIdGenerator
     }
 
     /**
-     * Retrieves an id as an String. 
+     * Retrieves an id as an String.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -161,7 +161,7 @@ public class SequenceIdGenerator
     }
 
     /**
-     * A flag to determine whether a Connection is required to 
+     * A flag to determine whether a Connection is required to
      * generate an id.
      *
      * @return a <code>boolean</code> value
@@ -172,14 +172,14 @@ public class SequenceIdGenerator
     }
 
     /**
-     * Retrieves an id as a Village Value. 
+     * Retrieves an id as a Village Value.
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
      * @return A Village Value id.
      * @exception Exception Database error.
      */
-    private Value getIdAsVillageValue(Connection connection, 
+    private Value getIdAsVillageValue(Connection connection,
                                       Object keyInfo)
         throws Exception
     {

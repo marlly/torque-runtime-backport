@@ -25,13 +25,13 @@ package org.apache.torque.om;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -57,11 +57,11 @@ package org.apache.torque.om;
 import org.apache.torque.TorqueException;
 
 /**
- * This class can be used as an ObjectKey to uniquely identify an 
+ * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id  consists
  * of a single entity such a GUID or the value of a db row's primary key.
  */
-public class StringKey extends SimpleKey 
+public class StringKey extends SimpleKey
 {
     /**
      * Creates an SimpleKey whose internal representation will be
@@ -118,33 +118,33 @@ public class StringKey extends SimpleKey
     }
 
     /**
-     * keyObj is equal to this StringKey if keyObj is a StringKey or String 
-     * that contains the same information this key contains. 
+     * keyObj is equal to this StringKey if keyObj is a StringKey or String
+     * that contains the same information this key contains.
      */
     public boolean equals(Object keyObj)
     {
         boolean isEqual = false;
 
-        if ( key != null ) 
+        if ( key != null )
         {
             if (keyObj instanceof String)
             {
                 isEqual = keyObj.equals(key);
             }
-            // check against a StringKey. Two keys are equal, if their 
+            // check against a StringKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof StringKey) 
+            else if ( keyObj instanceof StringKey)
             {
                 Object obj = ((StringKey)keyObj).getValue();
-                isEqual =  key.equals(obj);                
+                isEqual =  key.equals(obj);
             }
-        }       
+        }
         return isEqual;
     }
 
     public String toString()
     {
-        if ( key != null ) 
+        if ( key != null )
         {
             return (String)key;
         }
