@@ -1529,9 +1529,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         StringBuffer str = new StringBuffer();
         str.append("$table.JavaName:\n");
 #foreach ($col in $table.Columns)
-        str.append("$col.JavaName = ")
-           .append(get${col.JavaName}())
-           .append("\n");
+        str.append("$col.JavaName = ");
+        str.append(get${col.JavaName}());
+        str.append('\n');
 #end
         return(str.toString());
     }
