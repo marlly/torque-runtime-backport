@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,11 +66,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.StringStack;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
@@ -105,6 +107,7 @@ import com.workingdogs.village.TableDataSet;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public abstract class BasePeer implements java.io.Serializable
@@ -435,8 +438,7 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Method to perform deletes based on values and keys in a
-     * Criteria.
+     * Method to perform deletes based on values and keys in a Criteria.
      *
      * @param criteria The criteria to use.
      * @param con A Connection.
@@ -452,7 +454,7 @@ public abstract class BasePeer implements java.io.Serializable
         // Set up a list of required tables and add extra entries to
         // criteria if directed to delete all related records.
         // StringStack.add() only adds element if it is unique.
-        StringStack tables = new StringStack();
+        HashSet tables = new HashSet();
         Iterator it = criteria.keySet().iterator();
         while (it.hasNext())
         {
@@ -503,13 +505,14 @@ public abstract class BasePeer implements java.io.Serializable
                 }
             }
         }
-
-        for (int i = 0; i < tables.size(); i++)
+        Iterator tabIt = tables.iterator();
+        while (tabIt.hasNext())
         {
+            String tab = (String) tabIt.next();
             KeyDef kd = new KeyDef();
-            StringStack whereClause = new StringStack();
+            HashSet whereClause = new HashSet();
 
-            ColumnMap[] columnMaps = dbMap.getTable(tables.get(i)).getColumns();
+            ColumnMap[] columnMaps = dbMap.getTable(tab).getColumns();
             for (int j = 0; j < columnMaps.length; j++)
             {
                 ColumnMap colMap = columnMaps[j];
@@ -545,8 +548,8 @@ public abstract class BasePeer implements java.io.Serializable
             TableDataSet tds = null;
             try
             {
-                tds = new TableDataSet(con, tables.get(i), kd);
-                String sqlSnippet = whereClause.toString(" AND ");
+                tds = new TableDataSet(con, tab, kd);
+                String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
 
                 category.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
 
@@ -1134,7 +1137,6 @@ public abstract class BasePeer implements java.io.Serializable
 
             criterion.setDB(db);
             whereClause.add(criterion.toString());
-
         }
 
         List join = criteria.getJoinL();
@@ -1843,8 +1845,7 @@ public abstract class BasePeer implements java.io.Serializable
         Connection db = null;
         try
         {
-            db =
-                Transaction.beginOptional(
+            db = Transaction.beginOptional(
                     selectCriteria.getDbName(),
                     updateValues.isUseTransaction());
             doUpdate(selectCriteria, updateValues, db);
@@ -1885,21 +1886,22 @@ public abstract class BasePeer implements java.io.Serializable
 
         // Set up a list of required tables. StringStack.add()
         // only adds element if it is unique.
-        StringStack tables = new StringStack();
+        HashSet tables = new HashSet();
         Iterator it = selectCriteria.keySet().iterator();
         while (it.hasNext())
         {
             tables.add(selectCriteria.getTableName((String) it.next()));
         }
 
-        for (int i = 0; i < tables.size(); i++)
+        Iterator tabIt = tables.iterator();
+        while (tabIt.hasNext())
         {
+            String tab = (String) tabIt.next();
             KeyDef kd = new KeyDef();
-            StringStack whereClause = new StringStack();
+            HashSet whereClause = new HashSet();
             DatabaseMap tempDbMap = dbMap;
 
-            ColumnMap[] columnMaps =
-                tempDbMap.getTable(tables.get(i)).getColumns();
+            ColumnMap[] columnMaps = tempDbMap.getTable(tab).getColumns();
             for (int j = 0; j < columnMaps.length; j++)
             {
                 ColumnMap colMap = columnMaps[j];
@@ -1907,8 +1909,7 @@ public abstract class BasePeer implements java.io.Serializable
                 {
                     kd.addAttrib(colMap.getColumnName());
                 }
-                String key =
-                    new StringBuffer(colMap.getTableName())
+                String key = new StringBuffer(colMap.getTableName())
                         .append('.')
                         .append(colMap.getColumnName())
                         .toString();
@@ -1936,8 +1937,8 @@ public abstract class BasePeer implements java.io.Serializable
             try
             {
                 // Get affected records.
-                tds = new TableDataSet(con, tables.get(i), kd);
-                String sqlSnippet = whereClause.toString(" AND ");
+                tds = new TableDataSet(con, tab, kd);
+                String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
                 category.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
@@ -1949,10 +1950,7 @@ public abstract class BasePeer implements java.io.Serializable
                 for (int j = 0; j < tds.size(); j++)
                 {
                     Record rec = tds.getRecord(j);
-                    BasePeer.insertOrUpdateRecord(
-                        rec,
-                        tables.get(i),
-                        updateValues);
+                    BasePeer.insertOrUpdateRecord(rec, tab, updateValues);
                 }
             }
             catch (Exception e)
@@ -2406,7 +2404,6 @@ public abstract class BasePeer implements java.io.Serializable
             StringBuffer sb = new StringBuffer();
             criterion.appendPsTo(sb, params);
             whereClause.add(sb.toString());
-
         }
 
         List join = criteria.getJoinL();
