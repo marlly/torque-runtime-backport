@@ -161,18 +161,6 @@ public class NameFactoryTest extends BaseTestCase
         return buf.toString();
     }
 
-    /**
-     * Creates a test suite for this class.
-     *
-     * @return A test suite for this class.
-     */
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new NameFactoryTest("NameFactoryTest"));
-        return suite;
-    }
-
     /** Sets up the Torque model. */
     public void setUp()
     {
@@ -183,11 +171,9 @@ public class NameFactoryTest extends BaseTestCase
     }
 
     /**
-     * Runs this test case.
-     * 
      * @throws Exception on fail
      */
-    protected void testNames() throws Exception
+    public void testNames() throws Exception
     {
         for (int algoIndex = 0; algoIndex < ALGORITHMS.length; algoIndex++)
         {
