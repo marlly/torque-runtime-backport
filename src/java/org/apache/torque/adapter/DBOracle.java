@@ -73,7 +73,7 @@ public class DBOracle extends DB
 {
     /** date format used in getDateString() */
     private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
-    
+
     /**
      * Empty constructor.
      */
@@ -109,11 +109,12 @@ public class DBOracle extends DB
      * @param date the Date to format
      * @return The date formatted String for Oracle.
      */
-    public String getDateString(Date date) {
-        return "TO_DATE('" + new SimpleDateFormat(DATE_FORMAT).format(date) 
+    public String getDateString(Date date) 
+    {
+        return "TO_DATE('" + new SimpleDateFormat(DATE_FORMAT).format(date)
                 + "', 'DD-MM-YYYY HH24:MI:SS')";
     }
-    
+
     /**
      * @see org.apache.torque.adapter.DB#getIDMethodType()
      */
