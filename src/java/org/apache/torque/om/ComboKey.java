@@ -57,7 +57,7 @@ package org.apache.torque.om;
 import java.util.ArrayList;
 
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.ObjectUtils;
+import org.apache.commons.util.ObjectUtils;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
