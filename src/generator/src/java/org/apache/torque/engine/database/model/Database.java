@@ -472,15 +472,16 @@ public class Database
                         = currFK.getForeignColumns().iterator();
                 while (foreignColumnNames.hasNext())
                 {
-                    Column foreign = foreignTable
-                        .getColumn((String) foreignColumnNames.next());
+                    String foreignColumnName = (String) foreignColumnNames.next();
+                    Column foreign = foreignTable.getColumn(foreignColumnName);
                     // if the foreign column does not exist, we may have an
                     // external reference or a misspelling
                     if (foreign == null)
                     {
                         System.out.println("ERROR!! Attempt to set foreign"
-                                + " key to nonexistent column in table, "
-                                + foreignTable.getName() + "!");
+                                + " key to nonexistent column: table="
+                                +  currTable.getName() + ", foreign column=" 
+                                +  foreignColumnName + "!");
                     }
                     foreign.addReferrer(currFK);
                 }

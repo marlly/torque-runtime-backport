@@ -89,6 +89,9 @@
       TRQS104: Use of null Object
     </li>
     <li>
+      TRQS116: Database.java NPEs on bad foreign key
+    </li>
+    <li>
       TRQS118: Generated OM doesn't compile when using FLOAT as primary key
     </li>
     <li>
