@@ -1232,13 +1232,13 @@ public abstract class BasePeer implements java.io.Serializable
         }
         
         Criteria.Criterion having = criteria.getHaving();
-        if ( having != null )
+        if (having != null)
         {
-          //String groupByString = null; 
-          query.setHaving(having.toString());
+            //String groupByString = null; 
+            query.setHaving(having.toString());
         }
         
-        if ( orderBy != null && orderBy.size() > 0)
+        if (orderBy != null && orderBy.size() > 0)
         {
             // Check for each String/Character column and apply
             // toUpperCase().
@@ -1248,7 +1248,7 @@ public abstract class BasePeer implements java.io.Serializable
                 if (orderByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("order by",
-                            orderByColumn);
+                                                      orderByColumn);
                 }
                 String table = orderByColumn.substring(0,orderByColumn.indexOf('.') );
                 // See if there's a space (between the column list and sort

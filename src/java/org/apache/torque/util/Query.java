@@ -237,32 +237,46 @@ public class Query
     {
         StringBuffer stmt = new StringBuffer();
         if ( rowcount != null )
+        {
             stmt.append(ROWCOUNT)
                 .append(rowcount)
                 .append(" ");
+        }
         stmt.append(SELECT)
             .append(selectModifiers.toString(" "))
             .append(selectColumns.toString(", "))
             .append(FROM)
             .append(fromTables.toString(", "));
         if ( !whereCriteria.empty() )
+        {
             stmt.append(WHERE)
                 .append(whereCriteria.toString( AND ));
+        }
         if ( !groupByColumns.empty() )
+        {
             stmt.append(GROUP_BY)
                 .append(groupByColumns.toString(", "));
+        }
         if ( having != null )
+        {
             stmt.append(HAVING)
                 .append(having);
+        }
         if ( !orderByColumns.empty() )
+        {
             stmt.append(ORDER_BY)
                 .append(orderByColumns.toString(", "));
+        }
         if ( limit != null )
+        {
             stmt.append(LIMIT)
                 .append(limit);
+        }
         if ( rowcount != null )
+        {
             stmt.append(ROWCOUNT)
                 .append("0");
+        }
         return stmt.toString();
     }
 }
