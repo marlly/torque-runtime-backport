@@ -55,27 +55,73 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.torque.TorqueException;
+
 import org.xml.sax.Attributes;
 
 /**
  * A Class for information about indices of a table
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @version $Id$
  */
 public class Index
 {
+    private static final boolean DEBUG = true;
+
     private String indexName;
     private Table parentTable;
-    private List indexColumns = new ArrayList(3);
+    private List indexColumns;
     private boolean isUnique;
 
     /**
-     * Default Constructor
+     * Creates a new instance with default characteristics (no name or
+     * parent table, small column list size allocation, non-unique).
      */
     public Index()
     {
+        indexColumns = new ArrayList(3);
+        isUnique = false;
+    }
+
+    /**
+     * Creates a new instance for the list of columns composing an
+     * index.  Otherwise performs as {@link #Index()}.
+     *
+     * @param indexColumns The list of {@link
+     * org.apache.torque.engine.database.model.Column} objects which
+     * make up this index.  Cannot be empty.
+     * @see #Index()
+     */
+    public Index(List indexColumns)
+    {
+        this();
+        System.out.println("indexColumns.size()=" + indexColumns.size());
+        if (indexColumns.size() > 0)
+        {
+            StringBuffer buf = new StringBuffer();
+            Iterator i = indexColumns.iterator();
+            while (i.hasNext())
+            {
+                Column c = (Column) i.next();
+                buf.append(c.getName()).append('_');
+            }
+            indexName = buf.append('I').toString();
+            this.indexColumns = indexColumns;
+            System.out.println("Created Index named " + indexName + " with " +
+                               indexColumns + " columns");
+        }
+        else
+        {
+            // FIXME: This should be an exception, but I'm too lazy to
+            // propagate it today.
+            System.err.println("Cannot create a new Index using an " +
+                               "empty list Column object");
+        }
     }
 
     /**
@@ -139,7 +185,7 @@ public class Index
     }
 
     /**
-     *  adds a new column to an index
+     * Adds a new column to an index.
      */
     public void addColumn(Attributes attrib)
     {
@@ -147,23 +193,19 @@ public class Index
     }
 
     /**
-     * Creates a list of columns delimited by commas
-     */
-    private String makeColumnList(List cols)
-    {
-        StringBuffer res = new StringBuffer(cols.get(0).toString());
-        for (int i=1; i < cols.size(); i++)
-            res.append(", ")
-                .append(cols.get(i).toString());
-        return res.toString();
-    }
-
-    /**
-     * Return a comma delimited string of the index columns
+     * Return a comma delimited string of the columns which compose
+     * this index.
      */
     public String getIndexColumnList()
     {
-        return makeColumnList(indexColumns);
+        Column c = (Column) indexColumns.get(0);
+        StringBuffer res = new StringBuffer(c.getName());
+        for (int i = 1; i < indexColumns.size(); i++)
+        {
+            c = (Column) indexColumns.get(i);
+            res.append(", ").append(c.getName());
+        }
+        return res.toString();
     }
 
     /**
