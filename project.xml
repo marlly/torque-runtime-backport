@@ -152,6 +152,7 @@
     <dependency>
       <id>ant</id>
       <version>1.4.1</version>
+      <url>http://jakarta.apache.org/ant/</url>
     </dependency>
     <dependency>
       <id>commons-beanutils</id>
@@ -245,6 +246,7 @@
     <dependency>
       <id>junit</id>
       <version>3.7</version>
+      <url>http://www.junit.org</url>
     </dependency>
 
   </dependencies>
