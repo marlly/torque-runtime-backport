@@ -57,8 +57,7 @@ package org.apache.torque.engine.database.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.torque.BaseTestCase;
+import junit.framework.TestCase;
 
 /**
  * <p>Unit tests for class <code>NameFactory</code> and known
@@ -75,7 +74,7 @@ import org.apache.torque.BaseTestCase;
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id$
  */
-public class NameFactoryTest extends BaseTestCase
+public class NameFactoryTest extends TestCase
 {
 
     /** The database to mimic in generating the SQL. */
@@ -132,7 +131,7 @@ public class NameFactoryTest extends BaseTestCase
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param name the name of the test to run
      */
     public NameFactoryTest(String name)
@@ -144,7 +143,7 @@ public class NameFactoryTest extends BaseTestCase
      * Creates a string of the specified length consisting entirely of
      * the character <code>A</code>.  Useful for simulating table
      * names, etc.
-     * 
+     *
      * @param len the number of characters to include in the string
      * @return a string of length <code>len</code> with every character an 'A'
      */
