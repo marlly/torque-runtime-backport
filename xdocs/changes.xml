@@ -61,12 +61,13 @@
       generated
     </li>  
     <li>
-      Corrected deadly multi-CPU thread deadlock problem discovered by Ed
-      Korthof <ed@apache.org> and John McNally <jmcnally@apache.org>.  The
-      problem was due to emulation of synchronization using an int counter
-      (to improve performance by avoiding Java "synchronized" keyword).
-      Post-increment and decrement operators compile to three op codes (with
-      Sun's JDK 1.3.1 for Linux), unsafe on a multi-CPU box.      
+      Corrected deadly multi-CPU thread deadlock problem discovered by
+      Ed Korthof &lt;ed@apache.org&gt; and John McNally
+      &lt;jmcnally@apache.org&gt;.  The problem was due to emulation
+      of synchronization using an int counter (to improve performance
+      by avoiding Java "synchronized" keyword).  Post-increment and
+      decrement operators compile to three op codes (with Sun's JDK
+      1.3.1 for Linux), unsafe on a multi-CPU box.
     </li>
   </ul>
 </p>
