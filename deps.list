@@ -5,4 +5,5 @@ junit-3.7.jar
 log4j-1.1.3.jar
 velocity-1.3-dev.jar
 village-1.5.3-dev.jar
-xerces-1.4.4.jar
+xercesImpl-2.0.0.jar
+xmlParsersAPIs-2.0.0.jar
