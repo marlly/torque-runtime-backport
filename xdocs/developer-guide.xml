@@ -35,61 +35,10 @@
       ]]></source>
     </section>
 
-
     <section name="Building">
         <p>
-            Building the decoupled version of Torque from CVS is now
-            very easy.  Recently, changes have been made to the Torque
-            build process to simplify the acquisition of jar
-            dependencies.  The entire build process is now a four-step
-            process.
-        </p>
-        <p>
-            The first step of the process is to obtain the source.
-            Checkout the <code>jakarta-turbine-torque</code> 
-            repository.  If you are unfamiliar with the Jakarta CVS
-            repositories, please refer to the 
-            <a href="/site/cvsindex.html">CVS Repositories</a> document
-            for assistance.
-        </p>
-        <p>
-            Next, you must define the <code>lib.repo</code> property in
-            your <code>${user.home}/build.properties</code> file.  If
-            you do not have a <code>${user.home}/build.properties</code>
-            file, create one in your home directory and add the
-            following line:
-        </p>
-        <source><![CDATA[
-  lib.repo = /path/to/some/directory  
-        ]]></source>
-        <p> 
-            The value of this property determines the location that the
-            Torque dependencies will be stored after they have been
-            downloaded.  Note: this directory must exist in the
-            filesystem.
-        </p>
-        <p>
-            Next, in the top-level directory of the Torque distribution,
-            type the following command to download all of the
-            dependencies required to build Torque:
-        </p>
-        <source><![CDATA[
-  ant update-jars  
-        ]]></source>
-        <p>
-            Lastly, after all of the jars have been downloaded to your
-            <code>lib.repo</code> directory, building the Torque
-            distribution is only a matter of typing the following
-            command:
-        </p>
-        <source><![CDATA[
-  ant dist  
-        ]]></source>
-        <p>
-            The resulting jar file and zip distribution will be located
-            in the <code>bin</code> directory.  For those interested in
-            building applications with Torque, only the zip distribution
-            is needed.
+          Please refer to <a href="http://jakarta.apache.org/turbine/maven/">
+          Maven</a> for instructions on building.
         </p>
     </section>
 
