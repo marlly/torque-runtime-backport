@@ -798,12 +798,13 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 #end ## ends if (!$table.isAlias())
 
+#if ($table.PrimaryKeys.size() > 0)
 
-#if ($table.isAlias())
+  #if ($table.isAlias())
     #set ($retrieveMethod = "retrieve${table.JavaName}ByPK")
-#else
+  #else
     #set ($retrieveMethod = "retrieveByPK")
-#end
+  #end
 
     /**
      * Retrieve a single object by pk
@@ -839,9 +840,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
 
         Criteria criteria = new Criteria();
-#if ($table.PrimaryKeys.size() == 1)
+  #if ($table.PrimaryKeys.size() == 1)
             criteria.add( $table.PrimaryKeys.get(0).Name.toUpperCase(), pk );
-#else
+  #else
         SimpleKey[] keys = (SimpleKey[])pk.getValue();
     #set ( $i = 0 )
     #foreach ($col in $table.PrimaryKeys)
@@ -849,7 +850,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             criteria.add( $cup, keys[$i] );
         #set ( $i = $i + 1 )
     #end
-#end
+  #end
         Vector v = doSelect(criteria, dbcon);
         if ( v.size() != 1)
         {
@@ -902,9 +903,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         else
         {
             Criteria criteria = new Criteria();
-#if ($table.PrimaryKeys.size() == 1)
+  #if ($table.PrimaryKeys.size() == 1)
             criteria.addIn( $table.PrimaryKeys.get(0).Name.toUpperCase(), pks );
-#else
+  #else
             Iterator iter = pks.iterator();
             while (iter.hasNext())
             {
@@ -923,13 +924,13 @@ public abstract class $basePrefix${table.JavaName}Peer
                 #end
                 criteria.or(c0);
             }            
-#end
+  #end
         objs = doSelect(criteria, dbcon);
         }
         return objs;            
     }
 
-
+#end ## ends if($table.PrimaryKeys.size() > 0)
 
 #if ($table.PrimaryKeys.size() > 1)
 #set ( $comma = false )

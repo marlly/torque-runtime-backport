@@ -182,4 +182,21 @@
 
   </table>
 
+
+  <!-- =================================================== -->
+  <!-- N O P K  T A B L E                                  -->
+  <!-- =================================================== -->
+
+  <table name="nopk" idMethod="none" description="this table has no pk">
+    <column
+      name="intcol"
+      type="INTEGER"
+    />
+    <column
+      name="name"
+      type="VARCHAR"
+      size="50"
+    />
+  </table>
+
 </database>
