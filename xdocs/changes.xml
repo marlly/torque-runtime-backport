@@ -53,6 +53,9 @@
       TRQS29, TRQS93: fix endless loop in Monitor
     </li>
     <li>
+      TRQS35: id-table-schema.xml has no database name
+    </li>
+    <li>
       TRQS47: bug in torque generated copy() method
     </li>
     <li>
