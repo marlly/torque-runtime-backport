@@ -10,3 +10,4 @@
     <column name="moderated" type="INTEGER" />
 </table>
 </database>
+
