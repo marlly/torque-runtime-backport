@@ -435,7 +435,7 @@ public class ConnectionPool
         // no JDBC 2.0 compliance, go the old way...
         else
         {
-            DBConnection dbc = new DBConnection( getDB().getConnection(), url );
+            DBConnection dbc = new DBConnection(getDB().getConnection(), url);
             totalConnections++;
             return dbc;
         }
