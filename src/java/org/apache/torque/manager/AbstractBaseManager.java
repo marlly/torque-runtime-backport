@@ -195,7 +195,7 @@ public abstract class AbstractBaseManager
         return om;
     }
 
-    protected Persistent cacheGet(ObjectKey key)
+    protected Persistent cacheGet(Serializable key)
     {
         Persistent om = null;
         if (cache != null)
@@ -235,7 +235,7 @@ public abstract class AbstractBaseManager
     }
 
 
-    protected Persistent removeInstanceImpl(ObjectKey key)
+    protected Persistent removeInstanceImpl(Serializable key)
         throws TorqueException
     {
         Persistent oldOm = null;
@@ -269,7 +269,16 @@ public abstract class AbstractBaseManager
         return oldOm;
     }
 
+
     protected Persistent putInstanceImpl(Persistent om)
+        throws TorqueException
+    {
+        ObjectKey key = om.getPrimaryKey();
+        return putInstanceImpl(key, om);
+    }
+
+
+    protected Persistent putInstanceImpl(Serializable key, Persistent om)
         throws TorqueException
     {
         if (getOMClass() != null && !getOMClass().isInstance(om))
@@ -287,7 +296,6 @@ public abstract class AbstractBaseManager
                 lockCache = true;
                 try
                 {
-                    ObjectKey key = om.getPrimaryKey();
                     oldOm = (Persistent)cache.get(key);
                     while (inGet > 0) 
                     {
