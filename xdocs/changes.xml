@@ -58,6 +58,9 @@
       TRQS121: native limit and offset breaks on postgresql 7.3
     </li>
     <li>
+      TRQS138: NullPointer Exception When not setting the DbName explicitly
+    </li>
+    <li>
       TRQS139: wrong invocation of populateObject in peer class
     </li>  
     <li>
