@@ -54,7 +54,7 @@ import java.io.Serializable;
 import org.apache.log4j.Category;
 //import org.apache.stratum.configuration.Configuration;
 import org.apache.stratum.pool.DefaultPoolManager;
-import org.apache.stratum.jcs.access.behavior.ICacheAccess;
+import org.apache.stratum.jcs.access.GroupCacheAccess;
 import org.apache.stratum.jcs.access.exception.CacheException;
 
 import org.apache.torque.TorqueException;
@@ -74,10 +74,11 @@ public class MethodResultCache
         "org.apache.torque.manager.MethodCacheKey";
     private DefaultPoolManager pool;
     private Map keys;
-    private ICacheAccess jcsCache;
+    private GroupCacheAccess jcsCache;
     private Class keyClass;
     private boolean lockCache;
     private int inGet;
+    private Map groups;
 
     /*
     public MethodResultCache()
@@ -87,7 +88,7 @@ public class MethodResultCache
     }
     */
 
-    public MethodResultCache(ICacheAccess cache)
+    public MethodResultCache(GroupCacheAccess cache)
         throws ClassNotFoundException
     {
         keys = new WeakHashMap();            
@@ -95,6 +96,7 @@ public class MethodResultCache
         this.jcsCache = cache;            
         pool =  new DefaultPoolManager();
         pool.setCapacity(keyClassName, 10000);
+        groups = new HashMap();
     }
 
     public void clear()
@@ -130,13 +132,13 @@ public class MethodResultCache
             {
                 synchronized (this)
                 {
-                    result = jcsCache.get(key);
+                    result = jcsCache.getFromGroup(key, key.getGroupKey());
                 }
             }
             else
             {
                 inGet++;
-                result = jcsCache.get(key);
+                result = jcsCache.getFromGroup(key, key.getGroupKey());
                 inGet--;
             }
         }
@@ -153,6 +155,27 @@ public class MethodResultCache
     protected Object putImpl(MethodCacheKey key, Object value)
         throws TorqueException
     {
+        //register the group, if this is the first occurrence
+        String group = key.getGroupKey();
+        if (!groups.containsKey(group)) 
+        {
+            synchronized (jcsCache)
+            {
+                if (!groups.containsKey(group)) 
+                {
+                    try
+                    {
+                        jcsCache.defineGroup(group);
+                    }
+                    catch (CacheException ce)
+                    {
+                        throw new TorqueException(ce);
+                    }
+                    groups.put(group, null);
+                }                
+            }
+        }
+
         Object old = null;
         if (jcsCache != null)
         {
@@ -161,13 +184,12 @@ public class MethodResultCache
                 lockCache = true;
                 try
                 {
-                    old = jcsCache.get(key);
+                    old = jcsCache.getFromGroup(key, group);
                     while (inGet > 0) 
                     {
                         Thread.yield();
                     }                    
-                    jcsCache.put(key, value);
-                    keys.put(key, key);
+                    jcsCache.putInGroup(key, group, value);
                 }
                 catch (CacheException ce)
                 {
@@ -195,15 +217,16 @@ public class MethodResultCache
                 lockCache = true;
                 try
                 {
-                    old = jcsCache.get(key);
+                    old = jcsCache.getFromGroup(key, key.getGroupKey());
                     while (inGet > 0) 
                     {
                         Thread.yield();
                     }
-                    jcsCache.remove(key);
-                    pool.putInstance(keys.remove(key));
+                    jcsCache.remove(key, key.getGroupKey());
+                    pool.putInstance(key);
                 }
-                catch (CacheException ce)
+                // jcs does not throw an exception here, might remove this
+                catch (Exception ce) 
                 {
                     lockCache = false;
                     throw new TorqueException(
@@ -407,9 +430,8 @@ public class MethodResultCache
     }
 
 
-    public int removeAll(Serializable instanceOrClass, String method)
+    public void removeAll(Serializable instanceOrClass, String method)
     {
-        int result = -1;
         if (jcsCache != null) 
         {
             try
@@ -417,14 +439,7 @@ public class MethodResultCache
                 MethodCacheKey key = 
                     (MethodCacheKey)pool.getInstance(keyClass);
                 key.init(instanceOrClass, method);
-                key.setLenient(true);
-                Object obj = null;
-                do 
-                {
-                    obj = removeImpl(key);
-                    result++;
-                }
-                while (obj != null);
+                jcsCache.invalidateGroup(key.getGroupKey());
                 pool.putInstance(key);
             }
             catch (Exception e)
@@ -432,7 +447,6 @@ public class MethodResultCache
                 log.error(e);
             }            
         }
-        return result;
     }
 
 

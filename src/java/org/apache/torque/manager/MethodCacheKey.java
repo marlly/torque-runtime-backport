@@ -65,7 +65,7 @@ public class MethodCacheKey
     private Serializable arg2;
     private Serializable arg3;
     private Serializable[] moreThanThree;
-    private boolean lenient; 
+    private String groupKey;
 
     public MethodCacheKey()
     {
@@ -112,6 +112,7 @@ public class MethodCacheKey
         n = 0;
         this.instanceOrClass = instanceOrClass;
         this.method = method;
+        groupKey = instanceOrClass.toString() + method;
     }
 
     /**
@@ -125,9 +126,8 @@ public class MethodCacheKey
     public void init(Serializable instanceOrClass, String method, 
                      Serializable arg1)
     {
+        init(instanceOrClass, method);
         n = 1;
-        this.instanceOrClass = instanceOrClass;
-        this.method = method;
         this.arg1 = arg1;
     }
 
@@ -143,9 +143,8 @@ public class MethodCacheKey
     public void init(Serializable instanceOrClass, String method, 
                      Serializable arg1, Serializable arg2)
     {
+        init(instanceOrClass, method);
         n = 2;
-        this.instanceOrClass = instanceOrClass;
-        this.method = method;
         this.arg1 = arg1;
         this.arg2 = arg2;
     }
@@ -164,9 +163,8 @@ public class MethodCacheKey
                      Serializable arg1, Serializable arg2,
                      Serializable arg3)
     {
+        init(instanceOrClass, method);
         n = 3;
-        this.instanceOrClass = instanceOrClass;
-        this.method = method;
         this.arg1 = arg1;
         this.arg2 = arg2;
         this.arg3 = arg3;
@@ -183,9 +181,8 @@ public class MethodCacheKey
      */
     public void init(Serializable[] keys)
     {
+        init(keys[0], (String)keys[1]);
         n = keys.length-2;
-        this.instanceOrClass = keys[0];
-        this.method = (String)keys[1];
         if (n>0) 
         {
             this.arg1 = keys[2];
@@ -204,9 +201,9 @@ public class MethodCacheKey
         }
     }
 
-    public void setLenient(boolean v)
+    public String getGroupKey()
     {
-        lenient = v;
+        return groupKey;
     }
 
     public boolean equals(Object obj)
@@ -215,10 +212,10 @@ public class MethodCacheKey
         if ( obj instanceof MethodCacheKey ) 
         {
             MethodCacheKey sck = (MethodCacheKey)obj;
-            equal = lenient || sck.n == n;
+            equal = sck.n == n;
             equal &= Objects.equals(sck.method, method);
             equal &= Objects.equals(sck.instanceOrClass, instanceOrClass);
-            if (equal && n > 0 && !lenient && !sck.lenient) 
+            if (equal && n > 0) 
             {
                 equal &= Objects.equals(sck.arg1, arg1);
                 if (equal && n > 1) 
@@ -247,8 +244,6 @@ public class MethodCacheKey
     {
         int h = instanceOrClass.hashCode();
         h += method.hashCode();
-        /* lenient equals requires hashCode only reflect the
-           object and method name
         if (n > 0) 
         {
             h += (arg1 == null ? 0 : arg1.hashCode());
@@ -269,7 +264,6 @@ public class MethodCacheKey
                 }    
             }
         }
-        */
         return h;
     }
 
@@ -318,6 +312,6 @@ public class MethodCacheKey
         arg2 = null;
         arg3 = null;
         moreThanThree = null;
-        lenient = false;
+        groupKey = null;
     }
 }

@@ -65,8 +65,9 @@ import java.util.Iterator;
 import java.io.Serializable;
 import java.io.IOException;
 
+import org.apache.commons.collections.FastArrayList;
 import org.apache.stratum.jcs.JCS;
-import org.apache.stratum.jcs.access.behavior.ICacheAccess;
+import org.apache.stratum.jcs.access.GroupCacheAccess;
 import org.apache.stratum.jcs.access.exception.CacheException;
 
 import org.apache.torque.TorqueException;
@@ -88,7 +89,7 @@ public abstract class AbstractBaseManager
         Category.getInstance(AbstractBaseManager.class.getName());
 
     /** used to cache the om objects. cache is set by the region property */
-    transient protected ICacheAccess cache;
+    transient protected GroupCacheAccess cache;
 
     /** method results cache */
     protected MethodResultCache mrCache;
@@ -193,7 +194,7 @@ public abstract class AbstractBaseManager
         return om;
     }
 
-    private Persistent cacheGet(ObjectKey key)
+    protected Persistent cacheGet(ObjectKey key)
     {
         Persistent om = null;
         if (cache != null)
@@ -202,13 +203,13 @@ public abstract class AbstractBaseManager
             {
                 synchronized (this)
                 {
-                    om = (Persistent)cache.get(key);
+                    om = (Persistent)cache.get(key);  
                 }
             }
             else
             {
                 inGet++;
-                om = (Persistent)cache.get(key);
+                om = (Persistent)cache.get(key);  
                 inGet--;
             }
         }
@@ -248,7 +249,7 @@ public abstract class AbstractBaseManager
                     while (inGet > 0) 
                     {
                         Thread.yield();
-                    }                    
+                    }
                     cache.remove(key);
                 }
                 catch (CacheException ce)
@@ -444,65 +445,63 @@ public abstract class AbstractBaseManager
 
     public void addCacheListenerImpl(CacheListener listener)
     {
-        List subsetKeys = listener.getInterestedFields();
-        Iterator i = subsetKeys.iterator();
+        List keys = listener.getInterestedFields();
+        Iterator i = keys.iterator();
         while (i.hasNext()) 
         {
-            Object[] ie = (Object[])i.next();
-            String key1 = (String)ie[0];
-         
+            String key = (String)i.next();         
             // Peer.column names are the fields
-            if (validFields != null && validFields.containsKey(key1)) 
+            if (validFields != null && validFields.containsKey(key)) 
             {
-                ObjectKey key2 = (ObjectKey)ie[1];
-                Map subsetMap = (Map)listenersMap.get(key1);
-                if (subsetMap == null) 
-                {
-                    subsetMap = createSubsetMap(key1);
-                }
-                
-                List listeners = (List)subsetMap.get(key2);
+                List listeners = (List)listenersMap.get(key);
                 if (listeners == null) 
                 {
-                    listeners = createIdList(subsetMap, key2);
+                    listeners = createSubsetList(key);
                 }
-                synchronized (listeners)
+                
+                boolean isNew = true;
+                Iterator j = listeners.iterator();
+                while (j.hasNext()) 
+                {
+                    Object listener2 = 
+                        ((WeakReference)j.next()).get();
+                    if (listener2 == null) 
+                    {
+                        // do a little cleanup while checking for dupes
+                        // not thread-safe, not likely to be many nulls
+                        // but should revisit
+                        //j.remove();
+                    }
+                    else if (listener2 == listener)
+                    {
+                        isNew = false;
+                        break;
+                    }
+                }
+                if (isNew) 
                 {
                     listeners.add(new WeakReference(listener));
-                }
-            }            
+                }                    
+            }
         }
     }
 
-    synchronized private Map createSubsetMap(String key)
+    synchronized private List createSubsetList(String key)
     {
-        Map map = null;
+        FastArrayList list = null;
         if (listenersMap.containsKey(key)) 
         {
-            map = (Map)listenersMap.get(key);
+            list = (FastArrayList)listenersMap.get(key);
         }
         else 
         {
-            map = new HashMap();
-            listenersMap.put(key, map);
+            list = new FastArrayList();
+            list.setFast(true);
+            listenersMap.put(key, list);
         }
-        return map;
+        return list;
     }
 
-    synchronized private List createIdList(Map map, ObjectKey key)
-    {
-        List l = null;
-        if (map.containsKey(key)) 
-        {
-            l = (List)map.get(key);
-        }
-        else 
-        {
-            l = new LinkedList();
-            map.put(key, l);
-        }
-        return l;
-    }
 
     protected void notifyListeners(List listeners, 
                                    Persistent oldOm, Persistent om)
