@@ -128,6 +128,7 @@
       <roles>
         <role>Java Developer</role>
       </roles>
+      <timezone>+18</timezone>
     </developer>
     <developer>
       <name>Daniel Rall</name>
@@ -146,6 +147,7 @@
       <roles>
         <role>Java Developer</role>
       </roles>
+      <timezone>+18</timezone>
     </developer>
     <developer>
       <name>Kurt Schrader</name>
