@@ -66,6 +66,9 @@ import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.Table;
@@ -89,6 +92,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlToData extends DefaultHandler implements EntityResolver
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(XmlToData.class);
     private Database database;
     private String errorMessage;
     private List data;
@@ -143,11 +148,11 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         catch (Exception e)
         {
             //System.out.println("Error : "+e);
-            e.printStackTrace();
+            log.error(e, e);
         }
         if (errorMessage.length() > 0)
         {
-            System.out.println("ERROR in data file!!!\n" + errorMessage);
+            log.error("ERROR in data file!!!\n" + errorMessage);
         }
 
         return data;
@@ -181,7 +186,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e, e);
         }
     }
 
@@ -192,7 +197,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void warning(SAXParseException spe)
     {
-        System.out.println("Warning Line: " + spe.getLineNumber()
+        log.warn("Warning Line: " + spe.getLineNumber()
                 + " Row: " + spe.getColumnNumber()
                 + " Msg: " + spe.getMessage());
     }
@@ -204,7 +209,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void error(SAXParseException spe)
     {
-        System.out.println("Error Line: " + spe.getLineNumber()
+        log.error("Error Line: " + spe.getLineNumber()
                 + " Row: " + spe.getColumnNumber()
                 + " Msg: " + spe.getMessage());
     }
@@ -216,7 +221,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void fatalError(SAXParseException spe)
     {
-        System.out.println("Fatal Error Line: " + spe.getLineNumber()
+        log.fatal("Fatal Error Line: " + spe.getLineNumber()
                 + " Row: " + spe.getColumnNumber()
                 + " Msg: " + spe.getMessage());
     }
@@ -230,12 +235,12 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     {
         if (dataDTD != null && dtdFileName.equals(systemId))
         {
-            System.out.println("Resolver: used " + dtdFile.getPath());
+            log.info("Resolver: used " + dtdFile.getPath());
             return dataDTD;
         }
         else
         {
-            System.out.println("Resolver: used " + systemId);
+            log.info("Resolver: used " + systemId);
             return getInputSource(systemId);
         }
     }
@@ -255,7 +260,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         }
         catch (IOException ex)
         {
-            ex.printStackTrace();
+            log.error(ex, ex);
         }
         return new InputSource();
     }

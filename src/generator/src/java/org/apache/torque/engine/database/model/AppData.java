@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,8 +62,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.EngineException;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -76,6 +82,9 @@ import org.xml.sax.Attributes;
  */
 public class AppData
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(AppData.class);
+
     /**
      * The list of databases for this application.
      */
@@ -150,7 +159,7 @@ public class AppData
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    log.error(e, e);
                 }
                 idiosyncrasyTable.put(databaseType, idiosyncrasies);
             }
@@ -164,7 +173,7 @@ public class AppData
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    log.error(e, e);
                 }
             }
 

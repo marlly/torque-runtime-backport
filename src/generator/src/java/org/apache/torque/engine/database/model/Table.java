@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,8 +58,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.EngineException;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -75,8 +81,8 @@ import org.xml.sax.Attributes;
  */
 public class Table implements IDMethod
 {
-    /** enables debug output */
-    private static final boolean DEBUG = false;
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(Table.class);
 
     //private AttributeListImpl attributes;
     private List columnList;
@@ -158,7 +164,7 @@ public class Table implements IDMethod
         }
         if ("autoincrement".equals(idMethod) || "sequence".equals(idMethod))
         {
-            System.out.println("The value '" + idMethod + "' for Torque's "
+            log.warn("The value '" + idMethod + "' for Torque's "
                     + "table.idMethod attribute has been deprecated in favor "
                     + "of '" + NATIVE + "'.  Please adjust your "
                     + "Torque XML schema accordingly.");
@@ -218,9 +224,9 @@ public class Table implements IDMethod
      */
     private void doHeavyIndexing()
     {
-        if (DEBUG)
+        if (log.isDebugEnabled())
         {
-            System.out.println("doHeavyIndex() called on table " + name);
+            log.debug("doHeavyIndex() called on table " + name);
         }
 
         List pk = getPrimaryKey();
@@ -238,7 +244,7 @@ public class Table implements IDMethod
         }
         catch (EngineException e)
         {
-            e.printStackTrace();
+            log.error(e, e);
         }
     }
 
@@ -284,7 +290,7 @@ public class Table implements IDMethod
         }
         catch (EngineException nameAlreadyInUse)
         {
-            nameAlreadyInUse.printStackTrace();
+            log.error(nameAlreadyInUse, nameAlreadyInUse);
         }
     }
 
@@ -657,7 +663,7 @@ public class Table implements IDMethod
             }
             catch (EngineException e)
             {
-                e.printStackTrace();
+                log.error(e, e);
             }
         }
         return javaName;

@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,9 @@ package org.apache.torque.engine.database.model;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.EngineException;
 
 /**
@@ -67,6 +70,9 @@ import org.apache.torque.engine.EngineException;
  */
 public class NameFactory
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(NameFactory.class);
+
     /**
      * The fully qualified class name of the Java name generator.
      */
@@ -119,12 +125,12 @@ public class NameFactory
                 }
                 catch (InstantiationException e)
                 {
-                    System.err.println("Unable to instantiate class " + name
+                    log.error("Unable to instantiate class " + name
                             + ": Make sure it's in your run-time classpath");
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    log.error(e, e);
                 }
                 algorithms.put(name, algorithm);
             }

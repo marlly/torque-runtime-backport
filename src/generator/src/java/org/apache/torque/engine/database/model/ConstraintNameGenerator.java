@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,9 @@ package org.apache.torque.engine.database.model;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.EngineException;
 
 /**
@@ -68,10 +71,8 @@ import org.apache.torque.engine.EngineException;
  */
 public class ConstraintNameGenerator implements NameGenerator
 {
-    /**
-     * Conditional compilation flag.
-     */
-    private static final boolean DEBUG = false;
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(ConstraintNameGenerator.class);
 
     /**
      * First element of <code>inputs</code> should be of type {@link
@@ -101,15 +102,15 @@ public class ConstraintNameGenerator implements NameGenerator
             maxBodyLength = (maxColumnNameLength - namePostfix.length()
                     - constraintNbr.length() - 2);
 
-            if (DEBUG)
+            if (log.isDebugEnabled())
             {
-                System.out.println("maxColumnNameLength=" + maxColumnNameLength
+                log.debug("maxColumnNameLength=" + maxColumnNameLength
                         + " maxBodyLength=" + maxBodyLength);
             }
         }
         catch (EngineException e)
         {
-            System.err.println(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         catch (NumberFormatException maxLengthUnknown)
         {

@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,8 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.torque.engine.EngineException;
 import org.xml.sax.Attributes;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -75,6 +77,8 @@ import org.xml.sax.Attributes;
  */
 public class Database
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(Database.class);
     private String databaseType = null;
     private List tableList = new ArrayList(100);
     private String name;
@@ -419,7 +423,7 @@ public class Database
                             + "' is marked as autoincrement, but it does not "
                             + "have a column which declared as the one to "
                             + "auto increment (i.e. autoIncrement=\"true\")\n";
-                    System.out.println("Error in XML schema: " + errorMessage);
+                    log.error("Error in XML schema: " + errorMessage);
                 }
             }
 
@@ -433,7 +437,7 @@ public class Database
                 Table foreignTable = getTable(currFK.getForeignTableName());
                 if (foreignTable == null)
                 {
-                    System.out.println("ERROR!! Attempt to set foreign"
+                    log.error("ERROR!! Attempt to set foreign"
                             + " key to nonexistent table, "
                             + currFK.getForeignTableName() + "!");
                 }
@@ -455,7 +459,7 @@ public class Database
                     // that we can do, if it is to occur.
                     if (local == null)
                     {
-                        System.out.println("ERROR!! Attempt to define foreign"
+                        log.error("ERROR!! Attempt to define foreign"
                                 + " key with nonexistent column in table, "
                                 + currTable.getName() + "!");
                     }
@@ -478,7 +482,7 @@ public class Database
                     // external reference or a misspelling
                     if (foreign == null)
                     {
-                        System.out.println("ERROR!! Attempt to set foreign"
+                        log.error("ERROR!! Attempt to set foreign"
                                 + " key to nonexistent column: table="
                                 +  currTable.getName() + ", foreign column=" 
                                 +  foreignColumnName + "!");

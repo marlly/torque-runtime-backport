@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,12 @@ package org.apache.torque.engine.database.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.EngineException;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -69,8 +74,8 @@ import org.xml.sax.Attributes;
  */
 public class Index
 {
-    /** enables debug output */
-    private static final boolean DEBUG = false;
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(Index.class);
     /** name of the index */
     private String indexName;
     /** table */
@@ -108,9 +113,9 @@ public class Index
             this.indexColumns = indexColumns;
             createName();
 
-            if (DEBUG)
+            if (log.isDebugEnabled())
             {
-                System.out.println("Created Index named " + getName()
+                log.debug("Created Index named " + getName()
                         + " with " + indexColumns.size() + " columns");
             }
         }

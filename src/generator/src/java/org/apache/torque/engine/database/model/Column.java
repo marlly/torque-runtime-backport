@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,9 +59,12 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.xml.sax.Attributes;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.torque.engine.EngineException;
+
+import org.xml.sax.Attributes;
 
 /**
  * A Class for holding data about a column used in an Application.
@@ -75,6 +78,8 @@ import org.apache.torque.engine.EngineException;
  */
 public class Column
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(Column.class);
     private String name;
     private String description;
     private String javaName = null;
@@ -268,7 +273,7 @@ public class Column
             }
             catch (EngineException e)
             {
-                e.printStackTrace();
+                log.error(e, e);
             }
         }
         return javaName;

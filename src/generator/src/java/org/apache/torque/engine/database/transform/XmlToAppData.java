@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.transform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,6 +61,9 @@ import java.io.File;
 import java.util.Vector;
 import java.util.Stack;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
@@ -89,8 +92,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlToAppData extends DefaultHandler
 {
-    /** enables debug output */
-    private static final boolean DEBUG = false;
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(XmlToAppData.class);
 
     private AppData app;
     private Database currDB;
@@ -185,7 +188,7 @@ public class XmlToAppData extends DefaultHandler
             BufferedReader br = new BufferedReader(fr);
             try
             {
-                System.out.println("Parsing file: '"
+                log.info("Parsing file: '" 
                         + (new File(xmlFile)).getName() + "'");
                 InputSource is = new InputSource(br);
                 parser.parse(is, this);
@@ -197,7 +200,7 @@ public class XmlToAppData extends DefaultHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e, e);
         }
         if (!isExternalSchema)
         {
@@ -205,7 +208,7 @@ public class XmlToAppData extends DefaultHandler
         }
         if (errorMessage.length() > 0)
         {
-            System.out.println("Error in XML schema: " + errorMessage);
+            log.error("Error in XML schema: " + errorMessage);
         }
         return app;
     }
@@ -323,7 +326,7 @@ public class XmlToAppData extends DefaultHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.error(e, e);
         }
     }
 
@@ -338,9 +341,9 @@ public class XmlToAppData extends DefaultHandler
      */
     public void endElement(String uri, String localName, String rawName)
     {
-        if (DEBUG)
+        if (log.isDebugEnabled())
         {
-            System.out.println("endElement(" + uri + ", " + localName + ", "
+            log.debug("endElement(" + uri + ", " + localName + ", "
                     + rawName + ") called");
         }
     }
@@ -383,9 +386,9 @@ public class XmlToAppData extends DefaultHandler
      */
     private final void printParseError(String type, SAXParseException spe)
     {
-        System.err.println(type + "[file '"
-                + (new File(currentXmlFile)).getName() + "', line "
-                + spe.getLineNumber() + ", row " + spe.getColumnNumber()
+        log.error(type + "[file '" + (new File(currentXmlFile)).getName() 
+                + "', line " + spe.getLineNumber() 
+                + ", row " + spe.getColumnNumber()
                 + "]: " + spe.getMessage());
     }
 
