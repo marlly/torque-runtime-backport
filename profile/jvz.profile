@@ -2,6 +2,9 @@
 # so that it can be copied into the dist/lib directory.
 
 torque.testDatabaseJar = ${lib.repo}/postgresql.jar
+torque.idMethod = idbroker
+torque.defaultDatabase = bookstore
+torque.databaseAdapter = DBPostgresql
 
 # -------------------------------------------------------------------
 # 
