@@ -21,6 +21,7 @@
       <item name="Oracle 8i Howto"       href="/oracle-howto.html"/>
       <item name="Postgres Howto"        href="/postgres-howto.html"/>
       <item name="Sybase Howto"          href="/sybase-howto.html"/>
+      <item name="Caching Howto"         href="/managers-cache.html"/>
     </menu>
     <menu name="Development">
       <item name="DB Adapters"           href="/db-adapters.html"/>

@@ -70,9 +70,11 @@
   <source><![CDATA[
 
 jcs.region.net_bar_om_Foo=
-jcs.region.net_bar_om_Foo.cacheattributes=org.apache.stratum.jcs.engine.CompositeCacheAttributes
+jcs.region.net_bar_om_Foo.cacheattributes=
+    org.apache.stratum.jcs.engine.CompositeCacheAttributes
 jcs.region.net_bar_om_Foo.cacheattributes.MaxObjects=1200
-jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=org.apache.stratum.jcs.engine.memory.lru.LRUMemoryCache
+jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
+    org.apache.stratum.jcs.engine.memory.lru.LRUMemoryCache
 
   ]]></source>
 
