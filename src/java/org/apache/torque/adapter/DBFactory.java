@@ -54,13 +54,9 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
-
+import java.util.Iterator;
 import org.apache.commons.collections.ExtendedProperties;
-import org.apache.commons.util.StringUtils;
-
 import org.apache.log4j.Category;
 
 /**
@@ -81,22 +77,23 @@ public class DBFactory
      * keyed by the fully qualified class name of their associated
      * JDBC driver.
      */
-    private static Hashtable adapters = null;
+    private static Hashtable adapters;
 
     /**
      * The package name in which known adapters are stored.
      */
-    private static String adapterPackage = null;
+    private static String adapterPackage = "org.apache.torque.adapter";
 
-    private static ExtendedProperties configuration;
-
+    /**
+     * Log4j logging category used for logging.
+     */
     private static Category category =
         Category.getInstance(DBFactory.class.getName());
 
-    public static void setConfiguration(ExtendedProperties c)
-    {
-        configuration = c;
-    }
+    /**
+     * JDBC driver to Torque Adapter map.
+     */
+    private static Hashtable driverToAdapterMap;
 
     /**
      * This static code creates the list of possible adapters and adds
@@ -104,74 +101,56 @@ public class DBFactory
      * configuration is queried to get a list of JDBC drivers and
      * their associated adapters.
      */
-    public static void init()
+    public static void init(ExtendedProperties configuration)
     {
         adapters = new Hashtable();
-
+        initializeDriverToAdapterMap();
+        
         // Add the null database adapter.
         registerAdapter("", DBNone.class);
-
-        Enumeration adapters =
-            configuration.getVector("database.adapter").elements();
-        if (!adapters.hasMoreElements())
+        Iterator i = configuration.getKeys();
+        
+        while (i.hasNext())
         {
-            // Unfortunately, once upon a time this property was
-            // spelled incorrectly.
-            adapters = configuration.getVector("database.adaptor").elements();
-        }
-
-        while (adapters.hasMoreElements())
-        {
-            String adapter = (String) adapters.nextElement();
-            String driver =
-                configuration.getString("database.adapter." + adapter);
-            if (!StringUtils.isValid(driver))
+            String key = (String) i.next();
+            
+            if (key.endsWith("driver"))
             {
-                // Also previously spelled incorrectly.
-                driver =
-                    configuration.getString("database.adaptor." + adapter);
-            }
-
-            Class c = null;
-            try
-            {
-                c = Class.forName(getAdapterPackageName() + '.' + adapter);
-            }
-            catch (ClassNotFoundException ignored)
-            {
-                // Try adapter name as the fully qualified class name.
+                String driver = configuration.getString(key);
+                Class adapterClass = null;
+                String adapterClassName = 
+                    (String) adapterPackage + "." + driverToAdapterMap.get(driver);
+                
+                category.debug("Using " + adapterClassName);
+                
                 try
                 {
-                    c = Class.forName(adapter);
+                    adapterClass = Class.forName(adapterClassName);
                 }
                 catch (ClassNotFoundException e)
                 {
                     category.error(e);
                 }
-            }
 
-            if (c != null && driver != null)
-            {
-                registerAdapter(driver, c);
+                if (adapterClass != null && driver != null)
+                {
+                    registerAdapter(driver, adapterClass);
+                }
             }
-        }
+        }            
     }
 
     /**
-     * Returns the package name in which adapters are usually kept.
-     * Divines name from package of adapter description
-     * <code>DB</code>.
+     * Initialize the JDBC driver to Torque Adapter map.
      */
-    private static final String getAdapterPackageName()
+    private static void initializeDriverToAdapterMap()
     {
-        if (adapterPackage == null)
-        {
-            String clue = DB.class.getName();
-            int i = clue.lastIndexOf('.');
-            adapterPackage = (i > 0 ? clue.substring(0, i) : "");
-        }
-        return adapterPackage;
-    }
+        driverToAdapterMap = new Hashtable();
+        
+        driverToAdapterMap.put("org.gjt.mm.mysql.Driver", "DBMM");
+        driverToAdapterMap.put("org.postgresql.Driver", "DBPostgres");
+        driverToAdapterMap.put("oracle.jdbc.driver.OracleDriver", "DBOracle");
+    }        
 
     /**
      * Registers the <code>Class</code> of a database adapter at the
