@@ -989,6 +989,16 @@ public class Table implements IDMethod
     }
 
     /**
+     * Determine whether this table has a primary key.
+     *
+     * @return boolean
+     */
+    public boolean hasPrimaryKey()
+    {
+        return (getPrimaryKey().size() > 0);
+    }        
+
+    /**
      * Returns all parts of the primary key, separated by commas.
      *
      * @return A CSV list of primary key parts.
