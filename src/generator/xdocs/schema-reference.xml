@@ -21,6 +21,9 @@
 
    <section name="Elements and their attributes">
      <p>
+       <img src="images/schema.png"/>
+     </p>
+     <p>
        Some of the following examples are taken from the project-schema.xml
        document in the src/conf/torque/schema.
      </p>
