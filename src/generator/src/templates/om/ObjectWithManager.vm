@@ -96,6 +96,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ($defVal = "= new StringKey($quote$defaultValue$quote)")
       #elseif ($cjtype == 'Byte')
         #set ($defVal = "= new ${cjtype}((byte) $defaultValue)")
+      #elseif ($cjtype == "Short")
+        #set ( $quote = '"' )
+        #set ($defVal = "= new Short($quote$defaultValue$quote)")             
       #else
         #if (!$col.isPrimitive() && $cjtype != "String")
           #set ( $defaultValue = "new ${cjtype}($defaultValue)" )
@@ -269,12 +272,19 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $column = $table.getColumn($columnName) )
       #set ( $colFKName = $fk.LocalForeignMapping.get($columnName) )
       #set ( $colFK = $tblFK.getColumn($colFKName) )
+      #set ( $fktype = $colFK.JavaNative )
+      #set ( $casttype = "" )
         if (v == null)
         {
       #if($colFK.Primitive)
-        #set ($coldefval = "0")
+        #if ($fktype == "short")
+          #set ($casttype = "(short)")
+        #elseif($fktype == "byte")
+          #set ($casttype = "(byte)")
+        #end
+        #set ($coldefval =  "0") 
         #set ($coldefval = $column.DefaultValue)
-            set${column.JavaName}($coldefval);
+            set${column.JavaName}($casttype $coldefval);
       #else
             set${column.JavaName}(($column.JavaNative) null);
       #end
@@ -307,6 +317,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $argsize = $argsize + 1 )
     #end
 
+    /**
+     * Get the associated $interfaceName object
+     *
+     * @return the associated $interfaceName object
+     * @throws TorqueException
+     */
     public $interfaceName get${pVarName}() throws TorqueException
     {
         if ( $conditional )

@@ -153,5 +153,20 @@
     <column name="bint_value" required="true" type="BOOLEANINT" />
     <column name="bchar_value" required="true" type="BOOLEANCHAR" />
   </table>
-  
+
+  <!-- TRQS97 -->
+  <table name="LEAGUES_OBJECT" description="Contains all leagues">
+    <column name="LEAGUEID" primaryKey="true" required="true" type="TINYINT" javaType="object"/>
+    <column name="LEAGUENAME" required="false" size="100" type="VARCHAR"/>
+    <column name="LEAGUEYEAR" required="false" type="INTEGER" javaType="object"/>
+    <column name="LEAGUESCORETYPE" required="false" type="SMALLINT" default="0" javaType="object"/>
+  </table>
+
+  <table name="LEAGUES_PRIMITIVE" description="Contains all leagues">
+    <column name="LEAGUEID" primaryKey="true" required="true" type="TINYINT" javaType="primitive"/>
+    <column name="LEAGUENAME" required="false" size="100" type="VARCHAR"/>
+    <column name="LEAGUEYEAR" required="false" type="INTEGER" javaType="primitive"/>
+    <column name="LEAGUESCORETYPE" required="false" type="SMALLINT" default="0" javaType="primitive"/>
+  </table>
+
 </database>
