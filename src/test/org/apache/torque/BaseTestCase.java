@@ -3,7 +3,7 @@ package org.apache.torque;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,20 +66,11 @@ import junit.framework.TestCase;
  */
 public abstract class BaseTestCase extends TestCase
 {
-    /**
-     * Conditional compilation flag.
-     */
-    private static final boolean DEBUG = false;
+    /** The path to the configuration file. */
+    private static final String CONFIG_FILE 
+            = "src/test/TurbineResources.properties";
 
-    /**
-     * The path to the configuration file.
-     */
-    private static final String CONFIG_FILE =
-        "src/test/TurbineResources.properties";
-
-    /**
-     * Whether torque has been initialized.
-     */
+    /** Whether torque has been initialized. */
     private static boolean hasInitialized = false;
 
     /**
@@ -114,5 +105,4 @@ public abstract class BaseTestCase extends TestCase
             }
         }
     }
-
 }
