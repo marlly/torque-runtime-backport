@@ -1169,7 +1169,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 #set ( $argList = "" )
 #set ( $argList2 = "" )
 #set ( $comma = "" )
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #if ($complexObjectModel)
         #if ( $col.isForeignKey() || ($col.Referrers.size() > 0) )
             #set ( $throwsClause = "throws TorqueException" )
@@ -1184,9 +1184,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #set ( $comma = "," )
 #end
 
-#if ($table.PrimaryKeys.size() == 1)
+#if ($table.PrimaryKey.size() == 1)
 
-    #set ($col = $table.PrimaryKeys.get(0) )
+    #set ($col = $table.PrimaryKey.get(0) )
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
     /**
@@ -1274,9 +1274,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #end
     }
 
-#elseif ($table.PrimaryKeys.size() > 1)
+#elseif ($table.PrimaryKey.size() > 1)
 
-    private final SimpleKey[] pks = new SimpleKey[$table.PrimaryKeys.size()];
+    private final SimpleKey[] pks = new SimpleKey[$table.PrimaryKey.size()];
     private final ComboKey comboPK = new ComboKey(pks);
     /**
      * Set the PrimaryKey with an ObjectKey
@@ -1288,7 +1288,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         SimpleKey[] keys = (SimpleKey[]) key.getValue();
         SimpleKey tmpKey = null;
      #set ($i = 0)
-    #foreach ($pk in $table.PrimaryKeys)
+    #foreach ($pk in $table.PrimaryKey)
         #set ($pktype = $pk.JavaNative)
         #if ($pktype == "short")
             set${pk.JavaName}(((NumberKey)keys[$i]).shortValue());
@@ -1328,7 +1328,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     /**
      * Set the PrimaryKey using SimpleKeys.
      *
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
      * @param $cjtype $clo
@@ -1337,7 +1337,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     public void setPrimaryKey($argList)
         $throwsClause
     {
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
          set${col.JavaName}($col.Name.toLowerCase());
 #end
     }
@@ -1358,11 +1358,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      */
     public ObjectKey getPrimaryKey()
     {
-#if ($table.PrimaryKeys.size() == 1)
-        return SimpleKey.keyFor(get${table.PrimaryKeys.get(0).JavaName}());
-#elseif ($table.PrimaryKeys.size() > 1)
+#if ($table.PrimaryKey.size() == 1)
+        return SimpleKey.keyFor(get${table.PrimaryKey.get(0).JavaName}());
+#elseif ($table.PrimaryKey.size() > 1)
     #set ($i = 0)
-    #foreach ($pk in $table.PrimaryKeys)
+    #foreach ($pk in $table.PrimaryKey)
         pks[$i] = SimpleKey.keyFor(get${pk.JavaName}());
         #set ($i = $i +1)
     #end

@@ -825,7 +825,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
     public static void doInsert($table.JavaName obj) throws TorqueException
     {
-        #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
+        #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
         doInsert(buildCriteria(obj));
         #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj)));
@@ -868,7 +868,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doInsert($table.JavaName obj, Connection con)
         throws TorqueException
     {
-        #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
+        #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
         doInsert(buildCriteria(obj), con);
         #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj), con));
@@ -943,12 +943,12 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static Criteria buildCriteria( ObjectKey pk )
     {
         Criteria criteria = new Criteria();
-  #if ($table.PrimaryKeys.size() == 1)
-            criteria.add($table.PrimaryKeys.get(0).Name.toUpperCase(), pk);
+  #if ($table.PrimaryKey.size() == 1)
+            criteria.add($table.PrimaryKey.get(0).Name.toUpperCase(), pk);
   #else
         SimpleKey[] keys = (SimpleKey[])pk.getValue();
     #set ( $i = 0 )
-    #foreach ($col in $table.PrimaryKeys)
+    #foreach ($col in $table.PrimaryKey)
         #set ( $cup=$col.Name.toUpperCase() )
             criteria.add($cup, keys[$i]);
         #set ( $i = $i + 1 )
@@ -974,7 +974,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 #end ## ends if (!$table.isAlias())
 
-#if ($table.PrimaryKeys.size() > 0)
+#if ($table.PrimaryKey.size() > 0)
 
   #if ($table.isAlias())
     #set ($retrieveMethod = "retrieve${table.JavaName}ByPK")
@@ -1089,8 +1089,8 @@ public abstract class $basePrefix${table.JavaName}Peer
         else
         {
             Criteria criteria = new Criteria();
-  #if ($table.PrimaryKeys.size() == 1)
-            criteria.addIn( $table.PrimaryKeys.get(0).Name.toUpperCase(), pks );
+  #if ($table.PrimaryKey.size() == 1)
+            criteria.addIn( $table.PrimaryKey.get(0).Name.toUpperCase(), pks );
   #else
             Iterator iter = pks.iterator();
             while (iter.hasNext())
@@ -1098,7 +1098,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 ObjectKey pk = (ObjectKey)iter.next();
                 SimpleKey[] keys = (SimpleKey[])pk.getValue();
                 #set ( $i = 0 )
-                #foreach ($col in $table.PrimaryKeys)
+                #foreach ($col in $table.PrimaryKey)
                     #set ( $cup=$col.Name.toUpperCase() )
                     Criteria.Criterion c$i = criteria.getNewCriterion(
                         $cup, keys[$i], Criteria.EQUAL);
@@ -1116,21 +1116,21 @@ public abstract class $basePrefix${table.JavaName}Peer
         return objs;
     }
 
-#end ## ends if($table.PrimaryKeys.size() > 0)
+#end ## ends if($table.PrimaryKey.size() > 0)
 
-#if ($table.PrimaryKeys.size() > 1)
+#if ($table.PrimaryKey.size() > 1)
 #set ( $comma = false )
     /**
      * retrieve object using using pk values.
      *
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
 #end
      */
     public static $table.JavaName ${retrieveMethod}(
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype = $col.JavaNative )
     #if ($comma),#end $cjtype $clo
@@ -1145,7 +1145,7 @@ public abstract class $basePrefix${table.JavaName}Peer
            db = Torque.getConnection(DATABASE_NAME);
            retVal = retrieveByPK(
            #set ( $comma = false )
-           #foreach ($col in $table.PrimaryKeys)
+           #foreach ($col in $table.PrimaryKey)
                #set ( $clo=$col.Name.toLowerCase() )
                #if ($comma),#end $clo
                #set ( $comma = true )
@@ -1163,7 +1163,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * retrieve object using using pk values.
      *
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
@@ -1171,7 +1171,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param Connection con
      */
     public static $table.JavaName ${retrieveMethod}(
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype = $col.JavaNative )
     #if ($comma),#end $cjtype $clo
@@ -1181,7 +1181,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
 
         Criteria criteria = new Criteria(5);
-#foreach ($col in $table.PrimaryKeys)
+#foreach ($col in $table.PrimaryKey)
     #set ( $cup=$col.Name.toUpperCase() )
     #set ( $clo=$col.Name.toLowerCase() )
         criteria.add($cup, $clo);
