@@ -79,15 +79,13 @@ public class TorqueDataSQLTask
     private String dataDTD;
 
     /**
-     *  The target database(s) we are generating SQL
-     *  for. Right now we can only deal with a single
-     *  target, but we will support multiple targets
-     *  soon.
+     * The target database(s) we are generating SQL for. Right now we can only
+     * deal with a single target, but we will support multiple targets soon.
      */
     private String targetDatabase;
 
     /**
-     *  Sets the DataXmlFile attribute of the TorqueDataSQLTask object
+     * Sets the DataXmlFile attribute of the TorqueDataSQLTask object
      *
      * @param  dataXmlFile The new DataXmlFile value
      */
@@ -97,7 +95,7 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Gets the DataXmlFile attribute of the TorqueDataSQLTask object
+     * Gets the DataXmlFile attribute of the TorqueDataSQLTask object
      *
      * @return  The DataXmlFile value
      */
@@ -107,7 +105,7 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Get the current target database.
+     * Get the current target database.
      *
      * @return  String target database(s)
      */
@@ -117,8 +115,8 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Set the current target database.  This is where
-     *  generated java classes will live.
+     * Set the current target database.  This is where generated java classes
+     * will live.
      *
      * @param  v The new TargetDatabase value
      */
@@ -128,7 +126,7 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Gets the DataDTD attribute of the TorqueDataSQLTask object
+     * Gets the DataDTD attribute of the TorqueDataSQLTask object
      *
      * @return  The DataDTD value
      */
@@ -138,7 +136,7 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Sets the DataDTD attribute of the TorqueDataSQLTask object
+     * Sets the DataDTD attribute of the TorqueDataSQLTask object
      *
      * @param  dataDTD The new DataDTD value
      */
@@ -148,8 +146,7 @@ public class TorqueDataSQLTask
     }
 
     /**
-     *  Set up the initialial context for generating the
-     *  SQL from the XML schema.
+     * Set up the initialial context for generating the SQL from the XML schema.
      *
      * @return  Description of the Returned Value
      */
@@ -184,10 +181,8 @@ public class TorqueDataSQLTask
         fis.close();
 
         p.setProperty(getOutputFile(), db.getName());
-        p.store(new FileOutputStream(getSqlDbMap()),"Sqlfile -> Database map");
+        p.store(new FileOutputStream(getSqlDbMap()), "Sqlfile -> Database map");
 
         return context;
     }
 }
-
-
