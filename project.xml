@@ -25,8 +25,8 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque/</url>
-  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
+  <url>http://db.apache.org/torque-32/</url>
+  <siteDirectory>/www/db.apache.org/torque-32/</siteDirectory>
 
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>

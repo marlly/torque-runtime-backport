@@ -26,8 +26,8 @@
 
   <description>Maven Plugin for Torque</description>
   <shortDescription>Maven Plugin for Torque</shortDescription>
-  <url>http://db.apache.org/torque/maven-plugin/</url>
-  <siteDirectory>/www/db.apache.org/torque/maven-plugin</siteDirectory>
+  <url>http://db.apache.org/torque-32/maven-plugin/</url>
+  <siteDirectory>/www/db.apache.org/torque-32/maven-plugin</siteDirectory>
 
   <dependencies>
     <dependency>

@@ -29,8 +29,8 @@
 
   <description>Generator for Torque.</description>
   <shortDescription>Generator for Torque</shortDescription>
-  <url>http://db.apache.org/torque/generator</url>
-  <siteDirectory>/www/db.apache.org/torque/generator</siteDirectory>
+  <url>http://db.apache.org/torque-32/generator</url>
+  <siteDirectory>/www/db.apache.org/torque-32/generator</siteDirectory>
 
   <dependencies>
     <dependency>

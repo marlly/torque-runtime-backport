@@ -36,10 +36,10 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque/</url>
+  <url>http://db.apache.org/torque-32/</url>
   <issueTrackingUrl>http://issues.apache.org/scarab/issues</issueTrackingUrl>
   <siteAddress>db.apache.org</siteAddress>
-  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
+  <siteDirectory>/www/db.apache.org/torque-32/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository</distributionDirectory>
 
