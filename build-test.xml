@@ -38,6 +38,11 @@
   <!-- project-sql                                                    -->
   <!-- project-sql-classpath                                          -->
   <!-- project-sql2xml                                                -->
+  <!--                                                                -->
+  <!-- The project-sql is also another complete set of tests:         -->
+  <!-- we need to run the task for each of the supported databases    -->
+  <!-- to make sure that generated SQL remains coherent across        -->
+  <!-- changes to the templates.                                      -->
   <!-- ============================================================== -->
 
   <target
