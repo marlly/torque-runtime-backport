@@ -54,7 +54,7 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import org.apache.torque.util.StringStackBuffer;
+import org.apache.commons.util.StringStack;
 
 /**
  * Used to assemble an SQL SELECT query.  Attributes exist for the
@@ -79,11 +79,11 @@ public class Query
     private static final String LIMIT = " LIMIT ";
     private static final String ROWCOUNT = " SET ROWCOUNT ";
 
-    private StringStackBuffer selectModifiers = new StringStackBuffer();
-    private StringStackBuffer selectColumns = new StringStackBuffer();
-    private StringStackBuffer fromTables = new StringStackBuffer();
-    private StringStackBuffer whereCriteria = new StringStackBuffer();
-    private StringStackBuffer orderByColumns = new StringStackBuffer();
+    private StringStack selectModifiers = new StringStack();
+    private StringStack selectColumns = new StringStack();
+    private StringStack fromTables = new StringStack();
+    private StringStack whereCriteria = new StringStack();
+    private StringStack orderByColumns = new StringStack();
     private String limit;
     private String rowcount;
 
@@ -91,9 +91,9 @@ public class Query
      * Retrieve the modifier buffer in order to add modifiers to this
      * query.  E.g. DISTINCT and ALL.
      *
-     * @return A StringStackBuffer used to add modifiers.
+     * @return A StringStack used to add modifiers.
      */
-    public StringStackBuffer getSelectModifiers()
+    public StringStack getSelectModifiers()
     {
         return selectModifiers;
     }
@@ -103,9 +103,9 @@ public class Query
      * are returned in this query.
      *
      *
-     * @return A StringStackBuffer used to add columns to be selected.
+     * @return A StringStack used to add columns to be selected.
      */
-    public StringStackBuffer getSelectClause()
+    public StringStack getSelectClause()
     {
         return selectColumns;
     }
@@ -115,10 +115,10 @@ public class Query
      * involved in this query.
      *
      *
-     * @return A StringStackBuffer used to add tables involved in the
+     * @return A StringStack used to add tables involved in the
      * query.
      */
-    public StringStackBuffer getFromClause()
+    public StringStack getFromClause()
     {
         return fromTables;
     }
@@ -128,9 +128,9 @@ public class Query
      * criteria E.g. column_a=3.  Expressions added to the buffer will
      * be separated using AND.
      *
-     * @return A StringStackBuffer used to add selection criteria.
+     * @return A StringStack used to add selection criteria.
      */
-    public StringStackBuffer getWhereClause()
+    public StringStack getWhereClause()
     {
         return whereCriteria;
     }
@@ -139,9 +139,9 @@ public class Query
      * Retrieve the order by columns buffer in order to specify which
      * columns are used to sort the results of the query.
      *
-     * @return A StringStackBuffer used to add columns to sort on.
+     * @return A StringStack used to add columns to sort on.
      */
-    public StringStackBuffer getOrderByClause()
+    public StringStack getOrderByClause()
     {
         return orderByColumns;
     }

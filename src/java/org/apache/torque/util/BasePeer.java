@@ -95,7 +95,7 @@ import org.apache.torque.util.Query;
 import org.apache.torque.util.SqlExpression;
 
 //!! no good.
-import org.apache.torque.util.StringStackBuffer;
+import org.apache.commons.util.StringStack;
 import org.apache.torque.TorqueException;
 import org.apache.log4j.Category;
 
@@ -527,8 +527,8 @@ public abstract class BasePeer implements java.io.Serializable
 
         // Set up a list of required tables and add extra entries to
         // criteria if directed to delete all related records.
-        // StringStackBuffer.add() only adds element if it is unique.
-        StringStackBuffer tables = new StringStackBuffer();
+        // StringStack.add() only adds element if it is unique.
+        StringStack tables = new StringStack();
         Enumeration e = criteria.keys();
         while(e.hasMoreElements())
         {
@@ -580,7 +580,7 @@ public abstract class BasePeer implements java.io.Serializable
         for (int i=0; i<tables.size(); i++)
         {
             KeyDef kd = new KeyDef();
-            StringStackBuffer whereClause = new StringStackBuffer();
+            StringStack whereClause = new StringStack();
 
             ColumnMap[] columnMaps =
                 dbMap.getTable( tables.get(i) ).getColumns();
@@ -945,17 +945,17 @@ public abstract class BasePeer implements java.io.Serializable
         DB db = Torque.getDB( criteria.getDbName() );
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
 
-        StringStackBuffer selectModifiers = query.getSelectModifiers();
-        StringStackBuffer selectClause = query.getSelectClause();
-        StringStackBuffer fromClause = query.getFromClause();
-        StringStackBuffer whereClause = query.getWhereClause();
-        StringStackBuffer orderByClause = query.getOrderByClause();
+        StringStack selectModifiers = query.getSelectModifiers();
+        StringStack selectClause = query.getSelectClause();
+        StringStack fromClause = query.getFromClause();
+        StringStack whereClause = query.getWhereClause();
+        StringStack orderByClause = query.getOrderByClause();
 
-        StringStackBuffer orderBy = criteria.getOrderByColumns();
+        StringStack orderBy = criteria.getOrderByColumns();
         boolean ignoreCase = criteria.isIgnoreCase();
-        StringStackBuffer select = criteria.getSelectColumns();
+        StringStack select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
-        StringStackBuffer modifiers = criteria.getSelectModifiers();
+        StringStack modifiers = criteria.getSelectModifiers();
 
         for (int i=0; i<modifiers.size(); i++)
         {
@@ -1703,9 +1703,9 @@ public abstract class BasePeer implements java.io.Serializable
             Torque.getDatabaseMap( selectCriteria.getDbName() );
         Connection connection = dbCon.getConnection();
 
-        // Set up a list of required tables.  StringStackBuffer.add()
+        // Set up a list of required tables.  StringStack.add()
         // only adds element if it is unique.
-        StringStackBuffer tables = new StringStackBuffer();
+        StringStack tables = new StringStack();
         Enumeration e = selectCriteria.keys();
         while(e.hasMoreElements())
         {
@@ -1715,7 +1715,7 @@ public abstract class BasePeer implements java.io.Serializable
         for (int i=0; i<tables.size(); i++)
         {
             KeyDef kd = new KeyDef();
-            StringStackBuffer whereClause = new StringStackBuffer();
+            StringStack whereClause = new StringStack();
             DatabaseMap tempDbMap = dbMap;
 
             ColumnMap[] columnMaps =
@@ -2063,17 +2063,17 @@ public abstract class BasePeer implements java.io.Serializable
 
         Query query = new Query();
 
-        StringStackBuffer selectModifiers = query.getSelectModifiers();
-        StringStackBuffer selectClause = query.getSelectClause();
-        StringStackBuffer fromClause = query.getFromClause();
-        StringStackBuffer whereClause = query.getWhereClause();
-        StringStackBuffer orderByClause = query.getOrderByClause();
+        StringStack selectModifiers = query.getSelectModifiers();
+        StringStack selectClause = query.getSelectClause();
+        StringStack fromClause = query.getFromClause();
+        StringStack whereClause = query.getWhereClause();
+        StringStack orderByClause = query.getOrderByClause();
 
-        StringStackBuffer orderBy = criteria.getOrderByColumns();
+        StringStack orderBy = criteria.getOrderByColumns();
         boolean ignoreCase = criteria.isIgnoreCase();
-        StringStackBuffer select = criteria.getSelectColumns();
+        StringStack select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
-        StringStackBuffer modifiers = criteria.getSelectModifiers();
+        StringStack modifiers = criteria.getSelectModifiers();
 
         for (int i=0; i<modifiers.size(); i++)
         {

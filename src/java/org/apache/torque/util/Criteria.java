@@ -75,7 +75,7 @@ import org.apache.torque.map.TableMap;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.util.BasePeer;
-import org.apache.torque.util.StringStackBuffer;
+import org.apache.commons.util.StringStack;
 
 /**
  * This is a utility class that is used for retrieving different types
@@ -190,9 +190,9 @@ public class Criteria extends Hashtable
     private boolean ignoreCase = false;
     private boolean singleRecord = false;
     private boolean cascade = false;
-    private StringStackBuffer selectModifiers = new StringStackBuffer();
-    private StringStackBuffer selectColumns = new StringStackBuffer();
-    private StringStackBuffer orderByColumns = new StringStackBuffer();
+    private StringStack selectModifiers = new StringStack();
+    private StringStack selectColumns = new StringStack();
+    private StringStack orderByColumns = new StringStack();
     private Hashtable asColumns = new Hashtable(8);
     private ArrayList joinL = null;
     private ArrayList joinR = null;
@@ -397,7 +397,7 @@ public class Criteria extends Hashtable
         }
 
         DatabaseMap map = Torque.getDatabaseMap(databaseMapName);
-        StringStackBuffer tables = new StringStackBuffer();
+        StringStack tables = new StringStack();
         for (Enumeration e = super.elements(); e.hasMoreElements(); )
         {
             Criterion co = (Criterion)e.nextElement();
@@ -1750,10 +1750,10 @@ public class Criteria extends Hashtable
     /**
      * Get select columns.
      *
-     * @return A StringStackBuffer with the name of the select
+     * @return A StringStack with the name of the select
      * columns.
      */
-    public StringStackBuffer getSelectColumns()
+    public StringStack getSelectColumns()
     {
         return selectColumns;
     }
@@ -1761,9 +1761,9 @@ public class Criteria extends Hashtable
     /**
      * Get select modifiers.
      *
-     * @return A StringStackBuffer with the select modifiers.
+     * @return A StringStack with the select modifiers.
      */
-    public StringStackBuffer getSelectModifiers()
+    public StringStack getSelectModifiers()
     {
         return selectModifiers;
     }
@@ -1804,9 +1804,9 @@ public class Criteria extends Hashtable
     /**
      * Get order by columns.
      *
-     * @return A StringStackBuffer with the name of the order columns.
+     * @return A StringStack with the name of the order columns.
      */
-    public StringStackBuffer getOrderByColumns()
+    public StringStack getOrderByColumns()
     {
         return orderByColumns;
     }
@@ -3535,7 +3535,7 @@ public class Criteria extends Hashtable
                     sb.append (field)
                       .append (comparison);
 
-                    StringStackBuffer inClause = new StringStackBuffer();
+                    StringStack inClause = new StringStack();
 
                     if (value instanceof Vector)
                     {
@@ -3702,12 +3702,12 @@ public class Criteria extends Hashtable
 
         public String[] getAllTables()
         {
-            StringStackBuffer tables = new StringStackBuffer();
+            StringStack tables = new StringStack();
             addCriterionTable(this, tables);
             return tables.toStringArray();
         }
 
-        private void addCriterionTable(Criterion c, StringStackBuffer s)
+        private void addCriterionTable(Criterion c, StringStack s)
         {
             if ( c != null )
             {

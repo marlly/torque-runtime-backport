@@ -62,7 +62,7 @@ import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
-import org.apache.torque.util.StringStackBuffer;
+import org.apache.commons.util.StringStack;
 
 /**
  * This class represents a part of an SQL query found in the <code>WHERE</code>
@@ -517,7 +517,7 @@ public class SqlExpression
         }
 
         whereClause.append(comparison);
-        StringStackBuffer inClause = new StringStackBuffer();
+        StringStack inClause = new StringStack();
         if (criteria instanceof List)
         {
             Iterator iter = ((List)criteria).iterator();
