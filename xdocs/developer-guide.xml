@@ -36,11 +36,19 @@
     </section>
 
     <section name="Building">
-        <p>
-          Torque has been Maven-enabled.  Please refer to the Maven
-          <a href="http://jakarta.apache.org/turbine/maven/getting-started.html">
-          Getting Started</a> document for instructions on building.
-        </p>
+      <p>
+        Building Torque from CVS is now very easy because it has been
+        Maven-enabled.  Before you begin, you'll need to check out the
+        <code>jakarta-turbine-torque</code> CVS repository (if you are
+        not familiar with the Jakarta CVS repositories, please refer to
+        the <a href="/site/cvsindex.html">documentation</a>).  
+      </p>
+      <p>
+        Please refer to the Maven <a
+        href="http://jakarta.apache.org/turbine/maven/getting-started.html">Getting
+        Started</a> document for instructions on how to build the
+        project usnig Maven.
+      </p>
     </section>
 
     <section name="Testing">
