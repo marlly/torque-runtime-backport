@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/sapdb-jdbc-bin-7.3.0.19a.jar
+torque.testDatabaseJar = ${lib.repo}/sapdbc.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
