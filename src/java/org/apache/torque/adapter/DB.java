@@ -55,11 +55,9 @@ package org.apache.torque.adapter;
  */
 
 import java.io.Serializable;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import javax.sql.ConnectionPoolDataSource;
 
 /**
@@ -179,7 +177,8 @@ public abstract class DB implements Serializable
     public ConnectionPoolDataSource getConnectionPoolDataSource()
         throws SQLException
     {
-        throw new SQLException("ConnectionPoolDataSource objects not supported by JDBC driver");
+        throw new SQLException(
+            "ConnectionPoolDataSource objects not supported by JDBC driver");
     }
 
     /**
@@ -208,7 +207,7 @@ public abstract class DB implements Serializable
         else
         {
             throw new Exception("The JDBC driver must be set for the DB " +
-                                "object with a URL of " + url);
+                "object with a URL of " + url);
         }
     }
 
