@@ -34,6 +34,9 @@
 <p>
   <ul>
     <li>
+      TRQS51: Datadump does not recognize null columns properly
+    </li>
+    <li>
       TRQS152: Oracle DB using Criteria to select by Data doesn't work
     </li>
   </ul>

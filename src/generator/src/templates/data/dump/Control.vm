@@ -22,8 +22,8 @@ fetching table $tbl.Name
     #foreach ($r in $tableTool.fetch($tbl.Name)).##
         #set ($rout = "<$tbl.JavaName")
         #foreach ($col in $tbl.Columns)
-            #set ($cval = $r.get($col.Name))
-            #if ($cval)
+            #if ($r.get($col.Name))
+                #set ($cval = $r.get($col.Name))
                 #set ($rout = "$rout ${col.JavaName}=$q$escape.getText($cval)$q")
             #end
         #end

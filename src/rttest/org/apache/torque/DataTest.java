@@ -61,6 +61,7 @@ import java.util.Iterator;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
+import org.apache.torque.test.NullValueTable;
 import org.apache.torque.util.Criteria;
 import org.apache.torque.test.MultiPk;
 
@@ -174,5 +175,22 @@ public class DataTest extends BaseTestCase
         {
             ex.printStackTrace();
         }
+    }
+    
+    public void testDataDump()
+    {
+		try
+		{
+	    	NullValueTable nvt = new NullValueTable();
+    		nvt.setNumber1(1);
+	    	nvt.setNumber3(3);
+    		nvt.setText1("text");
+    		nvt.setNumberObj1(new Integer(1));
+    		nvt.save();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
     }
 }

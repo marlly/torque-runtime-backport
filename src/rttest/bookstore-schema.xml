@@ -67,6 +67,24 @@
   </table>
 
 
+  <!-- =================================================== -->
+  <!-- T E S T   T A B L E                                 -->
+  <!-- =================================================== -->
+
+  <!-- TRQS51 Datadump does not recognize null columns properly -->
+  <table name="NULL_VALUE_TABLE" 
+         description="table containing null values to test datadump">
+    <column name="NULL_VALUE_TABLE_ID" primaryKey="true" required="true" type="INTEGER"/>
+    <column name="number1" type="INTEGER"/>
+    <column name="number2" type="INTEGER"/>
+    <column name="number3" type="INTEGER"/>
+    <column name="text1" type="VARCHAR" size="20"/>
+    <column name="text2" type="VARCHAR" size="20"/>
+    <column name="number_obj1" type="INTEGER" javaType="object"/>
+    <column name="number_obj2" type="INTEGER" javaType="object"/>
+  	
+  </table>
+
 
   <!-- =================================================== -->
   <!-- A  T A B L E                                        -->
