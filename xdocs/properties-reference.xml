@@ -208,7 +208,7 @@
   <td><code> torque.database.name </code></td>
   <td><code> N/A </code></td>
   <td>
-    ?
+    The database name to use in the <code>datadump</code> target.
   </td>
 </tr>
 <tr>
@@ -310,14 +310,14 @@
   <td><code> torque.idTableXMLFile </code></td>
   <td><code> N/A </code></td>
   <td>
-    ?
+    
   </td>
 </tr>
 <tr>
   <td><code> torque.doc.format </code></td>
   <td><code> html </code></td>
   <td>
-    ?
+    Possible values are html and anakia.
   </td>
 </tr>
 <tr>
@@ -336,35 +336,35 @@
   <td><code> torque.compile.src.dir </code></td>
   <td><code> ${torque.java.dir} </code></td>
   <td>
-    ?
+    Where to read the Java om source files.
   </td>
 </tr>
 <tr>
   <td><code> torque.compile.build.dir </code></td>
   <td><code> bin/classes </code></td>
   <td>
-    ?
+    Where to put the compiled byte code for om classes.
   </td>
 </tr>
 <tr>
   <td><code> torque.compile.debug </code></td>
   <td><code> on </code></td>
   <td>
-    ?
+    Whether the om classes are compiled with debug code.
   </td>
 </tr>
 <tr>
   <td><code> torque.compile.deprecation </code></td>
   <td><code> off </code></td>
   <td>
-    ?
+    Whether the om classes are compiled with deprecation allowed.
   </td>
 </tr>
 <tr>
   <td><code> torque.compile.optimize </code></td>
   <td><code> off </code></td>
   <td>
-    ?
+    Whether the om classes are optimized during compilation.
   </td>
 </tr>
 </table>
