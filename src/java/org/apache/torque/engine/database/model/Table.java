@@ -155,6 +155,25 @@ public class Table implements IDMethod
     }
 
     /**
+     * <p>A hook for the SAX XML parser to call when this table has
+     * been fully loaded from the XML, and all nested elements have
+     * been processed.</p>
+     *
+     * <p>Performs heavy indexing and naming of elements which weren't
+     * provided with a name.</p>
+     */
+    public void loadedFromXML()
+    {
+        // Heavy indexing must wait until after all columns composing
+        // a table's primary key have been parsed.
+        // TODO: Make this conditional on Torque or RDBMS property.
+        doHeavyIndexing();
+
+        // Rename any indices which are missing a name.
+        doNaming();
+    }
+
+    /**
      * <p>Adds extra indices for multi-part primary key columns.</p>
      *
      * <p>For databases like MySQL, values in a where clause much
@@ -171,7 +190,7 @@ public class Table implements IDMethod
      * manual</a> for a better description of why heavy indexing is
      * useful for quickly searchable database tables.</p>
      */
-    public void doHeavyIndexing()
+    private void doHeavyIndexing()
     {
         if (DEBUG)
         {
@@ -188,6 +207,14 @@ public class Table implements IDMethod
         {
             addIndex(new Index(pk.subList(i, size)));
         }
+    }
+
+    /**
+     * Names composing objects which haven't yet been named.
+     */
+    private void doNaming()
+    {
+        // TODO
     }
 
     /**
