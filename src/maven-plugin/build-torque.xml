@@ -34,19 +34,19 @@
   <path id="torque-classpath">
     <pathelement location="torque.jar.fullpath"/>
     <fileset dir="${torque.lib.dir}">
-      <include name="**/commons-beanutils-1.4.jar"/>
+      <include name="**/commons-beanutils-1.4.1.jar"/>
       <include name="**/commons-collections-2.0.jar"/>
       <include name="**/commons-configuration-1.0-dev.jar"/>
       <include name="**/commons-dbcp-1.0-dev-20020806.jar"/>
-      <include name="**/commons-lang-1.0-b1.jar"/>
-      <include name="**/commons-logging-1.0.jar"/>
+      <include name="**/commons-lang-1.0.jar"/>
+      <include name="**/commons-logging-1.0.2.jar"/>
       <include name="**/commons-pool-1.0.jar"/>
       <include name="**/jcs-1.0-dev.jar"/>
       <include name="**/jdbc-2.0.jar"/>
       <include name="**/jndi-1.2.1.jar"/>
       <include name="**/log4j-1.2.6.jar"/>
       <include name="**/stratum-1.0-b3.jar"/>
-      <include name="**/tomcat-naming-common.jar"/>
+      <include name="**/tomcat-naming-1.0.jar"/>
       <include name="**/${torque.jar}"/>
       <include name="**/velocity-1.3.jar"/>
       <include name="**/village-1.5.3.jar"/>
@@ -310,7 +310,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="insert-sql">
+    name="insert-sql"
+    description="==> inserts the generated sql ">
 
     <torque-sql-exec
       autocommit="true"
@@ -386,7 +387,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="id-table-init-sql">
+    name="id-table-init-sql"
+    description="==> generates initialization sql for ID Broker">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -399,7 +401,7 @@
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.idTable}"
       outputDirectory="${torque.sql.dir}"
-      outputFile="${torque.database}-id-table-init.sql"
+      outputFile="report.idtable-init.sql.generation"
       sqldbmap="${torque.sql.dir}/sqldb.map"
       suffix="-idtable-init"
       targetDatabase="${torque.database}"
@@ -450,20 +452,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="check-datadtd"
-    depends="check-run-only-on-schema-change"
-    if="torque.internal.runOnlyOnSchemaChange">
-    <uptodate
-      property="torque.internal.datadtd.uptodate"
-      targetfile="${torque.output.dir}/${project}-data.dtd">
-        <srcfiles dir="${torque.schema.dir}" includes="**/*-schema.xml"/>
-    </uptodate>
-  </target>
-
-  <target
     name="datadtd"
-    unless="torque.internal.datadtd.uptodate"
-    depends="check-datadtd"
     description="==> generates the DATA DTD for your project">
 
     <echo message="+-----------------------------------------------+"/>
@@ -580,7 +569,7 @@
   <target
     name="om-zip"
     depends="check-om-zip"
-    description="Moves source om files to separate jar and out of the source tree">
+    description="==> moves source om files to separate jar and out of the source tree">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -738,7 +727,8 @@
   <!-- =================================================================== -->
 
   <target
-    name="ojb-repository">
+    name="ojb-repository"
+    description="==> generates the repository for ojb (experimental)">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -764,7 +754,8 @@
   </target>
 
   <target
-    name="ojb-model">
+    name="ojb-model"
+    description="==> generates an object model for ojb (experimental)">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
