@@ -234,15 +234,15 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
+        // Set the correct dbName if it has not been overridden
+        // criteria.getDbName will return the same object if not set to 
+        // another value so == check is okay and faster
+        if ( criteria.getDbName() == Torque.getDefaultDB() )
+        {
+            criteria.setDbName(DATABASE_NAME);
+        }
         if ( dbCon == null )
         {
-            // Set the correct dbName if it has not been overridden
-            // criteria.getDbName will return the same object if not set to 
-            // another value so == check is okay and faster
-            if ( criteria.getDbName() == Torque.getDefaultDB() )
-            {
-                criteria.setDbName(DATABASE_NAME);
-            }
             return BasePeer.doInsert( criteria );
         }
         else
@@ -402,17 +402,17 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
+        // Set the correct dbName if it has not been overridden
+        // criteria.getDbName will return the same object if not set to 
+        // another value so == check is okay and faster
+        if ( criteria.getDbName() == Torque.getDefaultDB() )
+        {
+            criteria.setDbName(DATABASE_NAME);
+        }
         // BasePeer returns a Vector of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
         if ( dbCon == null)
         {
-            // Set the correct dbName if it has not been overridden
-            // criteria.getDbName will return the same object if not set to 
-            // another value so == check is okay and faster
-            if ( criteria.getDbName() == Torque.getDefaultDB() )
-            {
-                criteria.setDbName(DATABASE_NAME);
-            }
             return BasePeer.doSelect(criteria);
         }
         else
@@ -571,15 +571,15 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
+        // Set the correct dbName if it has not been overridden
+        // criteria.getDbName will return the same object if not set to 
+        // another value so == check is okay and faster
+        if ( criteria.getDbName() == Torque.getDefaultDB() )
+        {
+            criteria.setDbName(DATABASE_NAME);
+        }
         if ( dbCon == null )
         {
-            // Set the correct dbName if it has not been overridden
-            // criteria.getDbName will return the same object if not set to 
-            // another value so == check is okay and faster
-            if ( criteria.getDbName() == Torque.getDefaultDB() )
-            {
-                criteria.setDbName(DATABASE_NAME);
-            }
             BasePeer.doUpdate( selectCriteria, criteria );
         }
         else
@@ -648,15 +648,15 @@ public abstract class $basePrefix${table.JavaName}Peer
          #end
      #end
 
+        // Set the correct dbName if it has not been overridden
+        // criteria.getDbName will return the same object if not set to 
+        // another value so == check is okay and faster
+        if ( criteria.getDbName() == Torque.getDefaultDB() )
+        {
+            criteria.setDbName(DATABASE_NAME);
+        }
         if ( dbCon == null )
         {
-            // Set the correct dbName if it has not been overridden
-            // criteria.getDbName will return the same object if not set to 
-            // another value so == check is okay and faster
-            if ( criteria.getDbName() == Torque.getDefaultDB() )
-            {
-                criteria.setDbName(DATABASE_NAME);
-            }
             BasePeer.doDelete ( criteria );
         }
         else
@@ -746,7 +746,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /** Build a Criteria object from the data object for this peer */
     public static Criteria buildCriteria( $table.JavaName obj )
     {
-        Criteria criteria = new Criteria();
+        Criteria criteria = new Criteria(DATABASE_NAME);
         #foreach ($col in $table.Columns)
             #set ( $cfc=$col.JavaName )
             #set ( $cup=$col.Name.toUpperCase() )
