@@ -257,14 +257,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         $varName = ${className}Peer.retrieveByPK($arglist);
   #end
 
-            // The following can be used instead of the line above to
-            // guarantee the related object contains a reference
-            // to this object, but this level of coupling 
-            // may be undesirable in many circumstances.
-            // As it can lead to a db query with many results that may
-            // never be used.  
-            // $className obj = ${className}Peer.retrieveByPK($arglist);
-            // obj.add${pCollName}(this);
+            /* The following can be used instead of the line above to
+               guarantee the related object contains a reference
+               to this object, but this level of coupling 
+               may be undesirable in many circumstances.
+               As it can lead to a db query with many results that may
+               never be used.  
+               $className obj = ${className}Peer.retrieveByPK($arglist);
+               obj.add${pCollName}(this); 
+             */
         }
         return $varName;
     }
@@ -332,17 +333,18 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * Collection to store aggregation of $collName
      */
     protected Vector $collName;
+
     /**
      * Temporary storage of $collName to save a possible db hit in
      * the event objects are add to the collection, but the
      * complete collection is never requested.
      */
-//    private Vector temp$collName;
-
     protected void init${relCol}()
     {
         if ($collName == null)
+        {
             $collName = new Vector();
+        }
     }
 
     /**
@@ -353,20 +355,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public void add${relColMs}($className l) throws Exception
     {
-        /*
-        if ($collName == null)
-        {
-            if (temp$collName == null)
-            {
-                temp$collName = new Vector();
-            }
-            temp${collName}.add(l);
-        }
-        else
-        {
-            ${collName}.add(l);
-        }
-        */
         get${relCol}().add(l);
         l.set${table.JavaName}${suffix}(($table.JavaName)this);
     }
@@ -417,20 +405,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
                 $collName = ${className}Peer.doSelect(criteria);
             }
-/*
-            if (temp$collName != null)
-            {
-                for (int i=0; i<temp${collName}.size(); i++)
-                {
-                    ${collName}.add(temp${collName}.get(i));
-                }
-                temp$collName = null;
-            }
-*/
         }
         else
         {
-           // criteria has no effect for a new object
+            // criteria has no effect for a new object
             if ( !isNew() ) 
             {
                 // the following code is to determine if a new query is
@@ -536,17 +514,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
                 $collName = ${className}Peer.doSelectJoin${relCol2}(criteria);
             }
-            
-            #* /*
-            if (temp$collName != null)
-            {
-                for (int i=0; i<temp${collName}.size(); i++)
-                {
-                    ${collName}.add(temp${collName}.get(i));
-                }
-                temp$collName = null;
-            } 
-               */ *#
         }
         else
         {
@@ -601,16 +568,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
             }
-/*
-            if (temp$collName != null)
-            {
-                for (int i=0; i<temp${collName}.size(); i++)
-                {
-                    ${collName}.add(temp${collName}.get(i));
-                }
-                temp$collName = null;
-            }
-*/
         }
         else
         {
