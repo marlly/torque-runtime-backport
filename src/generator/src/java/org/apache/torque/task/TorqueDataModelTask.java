@@ -421,7 +421,7 @@ public class TorqueDataModelTask extends TexenTask
                 {
                     newKey =
                         newKey.substring(0, j)
-                        +  StringUtils.capitalise(newKey.substring(j + 1));
+                        +  StringUtils.capitalize(newKey.substring(j + 1));
                     j = newKey.indexOf(".");
                 }
 

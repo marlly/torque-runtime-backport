@@ -132,7 +132,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = ((String) tok.nextElement()).toLowerCase();
-            name.append(StringUtils.capitalise(namePart));
+            name.append(StringUtils.capitalize(namePart));
         }
         return name.toString();
     }
@@ -155,7 +155,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(StringUtils.capitalise(namePart));
+            name.append(StringUtils.capitalize(namePart));
         }
         return name.toString();
     }

@@ -553,7 +553,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         while (st.hasMoreTokens())
         {
             String element = ((String) st.nextElement()).toLowerCase();
-            out.append (StringUtils.capitalise(element));
+            out.append (StringUtils.capitalize(element));
         }
         return out.toString();
     }
