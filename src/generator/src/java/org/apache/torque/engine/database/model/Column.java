@@ -612,7 +612,7 @@ public class Column
 
     /**
      * Utility method to see if the column is a string
-     * 
+     *
      * @deprecated will be removed after the 3.2 release
      */
     public boolean isString()
@@ -627,8 +627,7 @@ public class Column
     public boolean needEscapedValue()
     {
         String torqueType = domain.getType().getName();
-        return (torqueType != null) &&
-                ( torqueType.equals("VARCHAR")
+        return (torqueType != null) && (torqueType.equals("VARCHAR")
                         || torqueType.equals("LONGVARCHAR")
                         || torqueType.equals("DATE")
                         || torqueType.equals("DATETIME")
@@ -677,7 +676,7 @@ public class Column
         {
             result.append(" scale=\"").append(domain.getScale()).append('"');
         }
-        
+
         if (domain.getDefaultValue() != null)
         {
             result.append(" default=\"").append(domain.getDefaultValue()).append('"');
@@ -726,11 +725,11 @@ public class Column
     {
         domain.setScale(newScale);
     }
-    
+
     /**
      * Return the size and scale in brackets for use in an sql schema.
-     * 
-     * @return size and scale or an empty String if there are no values 
+     *
+     * @return size and scale or an empty String if there are no values
      *         available.
      */
     public String printSize()
@@ -802,27 +801,27 @@ public class Column
             domain.setSize(size);
         }
 
-        if (tn.indexOf ("CHAR") != -1)
+        if (tn.indexOf("CHAR") != -1)
         {
             domain.setType(SchemaType.VARCHAR);
         }
-        else if (tn.indexOf ("INT") != -1)
+        else if (tn.indexOf("INT") != -1)
         {
             domain.setType(SchemaType.INTEGER);
         }
-        else if (tn.indexOf ("FLOAT") != -1)
+        else if (tn.indexOf("FLOAT") != -1)
         {
             domain.setType(SchemaType.FLOAT);
         }
-        else if (tn.indexOf ("DATE") != -1)
+        else if (tn.indexOf("DATE") != -1)
         {
             domain.setType(SchemaType.DATE);
         }
-        else if (tn.indexOf ("TIME") != -1)
+        else if (tn.indexOf("TIME") != -1)
         {
             domain.setType(SchemaType.TIMESTAMP);
         }
-        else if (tn.indexOf ("BINARY") != -1)
+        else if (tn.indexOf("BINARY") != -1)
         {
             domain.setType(SchemaType.LONGVARBINARY);
         }
@@ -939,7 +938,7 @@ public class Column
             || (s == null && !"object".equals(
                getTable().getDatabase().getDefaultJavaType()));
     }
-    
+
     /**
      * @return Returns the domain.
      */
