@@ -75,6 +75,12 @@
       <organization>CollabNet, Inc.</organization>
     </developer>
     <developer>
+      <name>Kurt Schrader</name>
+      <id>kschrader</id>
+      <email>kschrader@karmalab.org</email>
+      <organization/>
+    </developer>
+    <developer>
       <name>Jon Scott Stevens</name>
       <id>jon</id>
       <email>jon@latchkey.com</email>
@@ -124,7 +130,7 @@
     </dependency>
     <dependency>
       <id>commons-lang</id>
-      <version>1.0-dev</version>
+      <version>SNAPSHOT</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
