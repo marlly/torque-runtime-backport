@@ -129,7 +129,7 @@ settings for making the connection to the database.
 </p>
 
 <source><![CDATA[
-torque.dsfactory.bookstore.pool.defaultMaxActive=30
+torque.dsfactory.bookstore.pool.maxActive=30
 torque.dsfactory.bookstore.pool.testOnBorrow=true
 torque.dsfactory.bookstore.pool.validationQuery=SELECT 1
 ]]></source>
