@@ -339,7 +339,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                                                  DBConnection dbCon ) 
         throws Exception
     {
-    #if ($database == "postgresql" && $table.requiresTransactionInPostgres())
+    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          criteria.setBlobFlag();
     #end 
@@ -945,7 +945,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static Vector doSelectJoin${joinColumnId}(Criteria c)
         throws Exception
     {
-    #if ($database == "postgresql" && $table.requiresTransactionInPostgres())
+    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag();
     #end 
@@ -1105,7 +1105,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static Vector doSelectJoinAllExcept${excludeString}(Criteria c) 
         throws Exception
     {
-    #if ($database == "postgresql" && $table.requiresTransactionInPostgres())
+    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag();
     #end 
