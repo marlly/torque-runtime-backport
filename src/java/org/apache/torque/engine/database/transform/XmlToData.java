@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.transform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -84,8 +84,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * A Class that is used to parse an input
- * xml schema file and creates and AppData java structure.
+ * A Class that is used to parse an input xml schema file and creates and
+ * AppData java structure. <br>
  * It uses apache Xerces to do the xml parsing.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
@@ -105,7 +105,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
 
     private static SAXParserFactory saxFactory;
 
-    static {
+
+    static
+    {
         saxFactory = SAXParserFactory.newInstance();
         saxFactory.setValidating(true);
     }
@@ -122,7 +124,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         dataDTD = new InputSource(dtdFile.toURL().openStream());
         errorMessage = "";
     }
-
 
     /**
      *
@@ -160,8 +161,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         return data;
     }
 
-
-
     /**
      * Handles opening elements of the xml file.
      */
@@ -170,6 +169,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     {
         try
         {
+            System.out.println("start: " + rawName);
             if (rawName.equals("dataset"))
             {
                 //ignore <dataset> for now.
@@ -178,10 +178,10 @@ public class XmlToData extends DefaultHandler implements EntityResolver
             {
                 Table table = database.getTableByJavaName(rawName);
                 Vector columnValues = new Vector();
-                for (int i=0; i<attributes.getLength(); i++)
+                for (int i = 0; i < attributes.getLength(); i++)
                 {
                     Column col = table
-                        .getColumnByJavaName(attributes.getLocalName(i));
+                        .getColumnByJavaName(attributes.getQName(i));
                     String value = attributes.getValue(i);
                     columnValues.add(new ColumnValue(col, value));
                 }
@@ -233,7 +233,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
                            " Msg: " + spe.getMessage());
     }
 
-
     /**
      * called by the XML parser
      *
@@ -241,8 +240,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public InputSource resolveEntity(String publicId, String systemId)
     {
-        if (dataDTD != null &&
-            dtdFileName.equals(systemId))
+        if (dataDTD != null && dtdFileName.equals(systemId))
         {
             System.out.println("Resolver: used " + dtdFile.getPath());
             return dataDTD;
@@ -274,6 +272,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         return new InputSource();
     }
 
+    /**
+     *
+     */
     public class DataRow
     {
         private Table table;
@@ -296,6 +297,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         }
     }
 
+    /**
+     *
+     */
     public class ColumnValue
     {
         private Column col;
