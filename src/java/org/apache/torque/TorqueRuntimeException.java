@@ -189,7 +189,7 @@ public class TorqueRuntimeException
             }
             else if(nested instanceof TorqueException)
             {
-                ((TorqueException)nested).printStackTrace(out, st.length - 2);
+                ((TorqueException)nested).printStackTrace(out);
             }
             else
             {
