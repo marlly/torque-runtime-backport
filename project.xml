@@ -5,7 +5,7 @@
   <id>torque</id>
   <groupId>torque</groupId>
   <name>Torque</name>
-  <currentVersion>3.1-rc</currentVersion>
+  <currentVersion>3.1-rc2-dev</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>
@@ -301,7 +301,9 @@
   <reports>
     <report>maven-jdepend-plugin</report>
     <report>maven-checkstyle-plugin</report>
+<!--    
     <report>maven-changes-plugin</report>
+-->
     <report>maven-changelog-plugin</report>
     <report>maven-file-activity-plugin</report>
     <report>maven-developer-activity-plugin</report>
