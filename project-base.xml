@@ -73,6 +73,7 @@
       <roles>
         <role>Java Developer</role>
       </roles>
+      <timezone>+10</timezone>
     </developer>
     <developer>
       <name>Stephen Haberman</name>
@@ -127,7 +128,7 @@
       <roles>
         <role>Java Developer</role>
       </roles>
-      <timezone>+18</timezone>
+      <timezone>+10</timezone>
     </developer>
     <developer>
       <name>Daniel Rall</name>
