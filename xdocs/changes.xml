@@ -52,6 +52,18 @@
 <p>
   <ul>
     <li>
+      TRQ26: string to date conversion in MSSQL/Sybase
+    </li>
+    <li>
+      TRQ31: ComboKey(String) ctor out-of-memory error
+    </li>
+    <li>
+      TRQ39: Data Dump task may generate invalid XML output
+    </li>
+    <li>
+      bugzilla #12626: Peer.vm was missing the DateKey import.
+    </li>
+    <li>
       postgres: Unable to identify an operator '=' for types 'smallint' and 'boolean'
     </li>
     <li>
@@ -59,15 +71,6 @@
     </li>
     <li>
       objects: avoid npe and set id to null if the object was null
-    </li>
-    <li>
-      TRQ39: Data Dump task may generate invalid XML output
-    </li>
-    <li>
-      TRQ26: string to date conversion in MSSQL/Sybase
-    </li>
-    <li>
-      bugzilla #12626: Peer.vm was missing the DateKey import.
     </li>
   </ul>
 </p>
