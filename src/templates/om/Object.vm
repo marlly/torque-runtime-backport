@@ -838,9 +838,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
              }
              catch (Exception rollBackEx)
              {
-                 // Ignore because we've already got an exception
+                 throw new TorqueException(e.getMessage() 
+                     + "; a rollback exception ocurred when rolling back the error: "
+                     + rollBackEx.getMessage(),
+                     e);
              }
-            throw e;
+             throw e;
         }
         BasePeer.commitTransaction(con);
 
