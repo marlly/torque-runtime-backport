@@ -39,6 +39,9 @@
     <li>
       TRQ47: limit and offset patch for Oracle
     </li>
+    <li>
+      TRQS29, TRQS93: fix endless loop in Monitor
+    </li>
   </ul>
 </p>
 </subsection>
