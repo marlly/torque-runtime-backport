@@ -636,8 +636,7 @@ public class ConnectionPool
     }
 
     /**
-     * Re
-     turns the Total connections in the pool
+     * Returns the Total connections in the pool
      */
     public int getTotalCount()
     {
