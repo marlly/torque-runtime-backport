@@ -74,7 +74,6 @@
         <include name="*-schema.xml"/>
       </fileset>
     </torque-sql>
-
   </target>
 
   <!-- ================================================================ -->
@@ -155,7 +154,6 @@
       onerror="continue">
       <classpath refid="torque-classpath"/>
     </sql>
-
   </target>
 
   <!-- ================================================================ -->
@@ -183,7 +181,6 @@
       <classpath refid="torque-classpath"/>
     </torque-insert-sql>
   </target>
-
 
   <!-- ================================================================ -->
   <!-- J D B C  TO  X M L                                               -->
@@ -216,7 +213,6 @@
       outputFile="${torque.home}/${outputDirectory}/schema.xml"
       sameJavaName="${sameJavaName}"
     />
-
   </target>
 
   <!-- ================================================================ -->
@@ -253,7 +249,6 @@
       targetDatabase="${database}"
       sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
     />
-
   </target>
 
   <!-- ================================================================ -->
@@ -327,7 +322,6 @@
       databasePassword="${databasePassword}"
       databaseName="${databaseName}"
     />
-
   </target>
 
   <!-- ================================================================ -->
@@ -361,7 +355,6 @@
       outputFile="report.${project}.datadtd.generation"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
     />
-
   </target>
 
   <!-- ================================================================ -->
@@ -370,7 +363,6 @@
   <!-- Generate the Peer-based object model for your project.           -->
   <!-- These are in addition to the base Turbine OM!                    -->
   <!-- ================================================================ -->
-
 
   <target
     name="project-om"
@@ -402,7 +394,6 @@
         <exclude name="id-table-schema.xml"/>
       </fileset>
     </torque-om>
-
   </target>
 
   <!-- ================================================================ -->
@@ -435,10 +426,12 @@
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       useClasspath="true"
       outputFile="report.${project}.sql.generation"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
       targetDatabase="${database}"
-    />
-
+    >
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-sql>
   </target>
 
   <!-- ================================================================ -->
@@ -471,10 +464,93 @@
       useClasspath="true"
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
-    />
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+        <exclude name="id-table-schema.xml"/>
+      </fileset>
+    </torque-om>
+  </target>
 
+  <!-- ================================================================ -->
+  <!-- C R E A T E  T A R G E T  D A T A B A S E                        -->
+  <!-- ================================================================ -->
+  <!-- Create the target database by executing a generated script       -->
+  <!-- that is capable of performing the task.                          -->
+  <!-- ================================================================ -->
+
+  <target
+    name="project-create-db-classpath"
+    unless="database.manual.creation"
+    description="--> generates the target database">
+
+    <taskdef
+      name="torque-create-db"
+      classname="org.apache.torque.task.TorqueCreateDatabase">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-create-db
+      controlTemplate="sql/db-init/Control.vm"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      useClasspath="true"
+      outputFile="create-db.sql"
+      targetPlatform="${platform}"
+      targetDatabase="${database}"
+      databaseUser="${databaseUser}"
+      databasePassword="${databasePassword}"
+      databaseHost="${databaseHost}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-create-db>
+
+    <sql
+      driver="${databaseDriver}"
+      url="${createDatabaseUrl}"
+      userid="${databaseUser}"
+      password="${databasePassword}"
+      src="${torque.home}/${outputDirectory}/sql/create-db.sql"
+      autocommit="true"
+      onerror="continue">
+      <classpath refid="torque-classpath"/>
+    </sql>
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E   I D   B R O K E R   I N I T   S Q L            -->
+  <!-- ================================================================ -->
+
+  <target
+    name="id-table-init-sql-classpath">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating initialization SQL            |"/>
+    <echo message="| for ID Broker system!                    |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-sql
+      contextProperties="sql/id-table/project.props"
+      controlTemplate="${idTableControlTemplate}"
+      useClasspath="true"
+      suffix="-idtable-init"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      outputFile="${database}-id-table-init.sql"
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+        <exclude name="id-table-schema.xml"/>
+      </fileset>
+    </torque-sql>
   </target>
 
   <!-- =================================================================== -->
