@@ -62,6 +62,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.torque.BaseTestCase;
+import org.apache.torque.engine.database.model.NameGenerator;
 
 /**
  * <p>Unit tests for class <code>NameFactory</code> and known
@@ -102,7 +103,9 @@ public class NameFactoryTest extends BaseTestCase
           { makeString(65), "I", new Integer(3) },
           { makeString(4), "FK", new Integer(1) },
           { makeString(5), "FK", new Integer(2) } },
-        { { "MY_USER" } }
+        { { "MY_USER", NameGenerator.CONV_METHOD_UNDERSCORE },
+          { "MY_USER", NameGenerator.CONV_METHOD_JAVANAME },
+          { "MY_USER", NameGenerator.CONV_METHOD_NOCHANGE } }
     };
 
     /**
@@ -115,7 +118,7 @@ public class NameFactoryTest extends BaseTestCase
           makeString(60) + "_I_3",
           makeString(4)  + "_FK_1",
           makeString(5)  + "_FK_2" },
-        { "MyUser" }
+        { "MyUser", "MYUSER", "MY_USER" }
     };
 
     /**
