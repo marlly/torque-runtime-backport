@@ -87,16 +87,8 @@ public class MethodResultCache
         this.jcsCache = cache;            
         groups = new HashMap();
 
-        try
-        {
-            PoolableObjectFactory factory = 
-                    new MethodCacheKey.Factory();
-            pool = new StackObjectPool(factory, 10000);
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
+        PoolableObjectFactory factory = new MethodCacheKey.Factory();
+        pool = new StackObjectPool(factory, 10000);
     }
 
     public void clear()
