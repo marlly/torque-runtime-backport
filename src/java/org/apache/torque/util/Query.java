@@ -250,7 +250,7 @@ public class Query
         if (!whereCriteria.empty())
         {
             stmt.append(WHERE)
-                .append(whereCriteria.toString( AND ));
+                .append(whereCriteria.toString(AND));
         }
         if (!groupByColumns.empty())
         {

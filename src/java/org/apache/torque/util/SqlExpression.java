@@ -82,7 +82,9 @@ import org.apache.commons.collections.StringStack;
  */
 public class SqlExpression
 {
+    /** escaped single quote */
     private static final char SINGLE_QUOTE = '\'';
+    /** escaped backslash */
     private static final char BACKSLASH = '\\';
 
     /**
@@ -219,7 +221,6 @@ public class SqlExpression
      * @param db Represents the database in use, for vendor specific functions.
      * @param whereClause A StringBuffer to which the sql expression will be
      *        appended.
-     * @exception Exception, a generic exception.
      */
     public static void build(String columnName,
                               Object criteria,
@@ -555,7 +556,7 @@ public class SqlExpression
         String ret = null;
         if (value instanceof String)
         {
-            ret = quoteAndEscapeText((String)value, db);
+            ret = quoteAndEscapeText((String) value, db);
         }
         else
         {
@@ -574,12 +575,12 @@ public class SqlExpression
      * escaped.
      *
      * @param rawText The <i>unquoted</i>, <i>unescaped</i> text to process.
-     * @param db
+     * @param db the db
      * @return Quoted and escaped text.
      */
     public static String quoteAndEscapeText(String rawText, DB db)
     {
-        StringBuffer buf = new StringBuffer((int)(rawText.length() * 1.1));
+        StringBuffer buf = new StringBuffer((int) (rawText.length() * 1.1));
 
         // Some databases do not need escaping.
         String escapeString = new String();
@@ -589,7 +590,8 @@ public class SqlExpression
         }
         else
         {
-            escapeString = String.valueOf(BACKSLASH) + String.valueOf(BACKSLASH);
+            escapeString = String.valueOf(BACKSLASH)
+                    + String.valueOf(BACKSLASH);
         }
 
         char[] data = rawText.toCharArray();
@@ -611,15 +613,5 @@ public class SqlExpression
         buf.append(SINGLE_QUOTE);
 
         return buf.toString();
-    }
-
-    /**
-     * @deprecated Use quoteAndEscapeText(String rawText, DB db) instead.
-     * the quoteAndEscapeText rules depend on the database.
-     * @see #quoteAndEscapeText(String, DB)
-     */
-    public static String quoteAndEscapeText(String rawText)
-    {
-        return quoteAndEscapeText(rawText, null);
     }
 }

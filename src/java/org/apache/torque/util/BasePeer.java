@@ -128,6 +128,7 @@ public abstract class BasePeer implements java.io.Serializable
     /** Hashtable that contains the cached mapBuilders. */
     private static Hashtable mapBuilders = new Hashtable(5);
 
+    /** the log */
     protected static Category category = Category.getInstance(BasePeer.class);
 
     /**
@@ -135,7 +136,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param hash The Hashtable to convert.
      * @return A byte[] with the converted Hashtable.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static byte[] hashtableToByteArray(Hashtable hash)
         throws TorqueException
@@ -333,7 +335,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param table The table to delete records from.
      * @param column The column in the where clause.
      * @param value The value of the column.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void deleteAll(
         Connection con,
@@ -386,7 +389,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param table The table to delete records from.
      * @param column The column in the where clause.
      * @param value The value of the column.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void deleteAll(String table, String column, int value)
         throws TorqueException
@@ -409,7 +413,8 @@ public abstract class BasePeer implements java.io.Serializable
      * Criteria.
      *
      * @param criteria The criteria to use.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doDelete(Criteria criteria) throws TorqueException
     {
@@ -436,7 +441,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param criteria The criteria to use.
      * @param con A Connection.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doDelete(Criteria criteria, Connection con)
         throws TorqueException
@@ -599,7 +605,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @return An Object which is the id of the row that was inserted
      * (if the table has a primary key) or null (if the table does not
      * have a primary key).
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static ObjectKey doInsert(Criteria criteria) throws TorqueException
     {
@@ -646,7 +653,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @return An Object which is the id of the row that was inserted
      * (if the table has a primary key) or null (if the table does not
      * have a primary key).
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static ObjectKey doInsert(Criteria criteria, Connection con)
         throws TorqueException
@@ -774,7 +782,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param rec A Record.
      * @param tableName Name of table.
      * @param criteria A Criteria.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static void insertOrUpdateRecord(
         Record rec,
@@ -906,6 +915,7 @@ public abstract class BasePeer implements java.io.Serializable
      * Criteria.
      *
      * @param criteria A Criteria.
+     * @return the SQL query for display
      * @exception TorqueException Trouble creating the query string.
      */
     static String createQueryDisplayString(Criteria criteria)
@@ -919,6 +929,7 @@ public abstract class BasePeer implements java.io.Serializable
      * Criteria.
      *
      * @param criteria A Criteria.
+     * @return the SQL query for actual execution
      * @exception TorqueException Trouble creating the query string.
      */
     public static String createQueryString(Criteria criteria)
@@ -932,36 +943,37 @@ public abstract class BasePeer implements java.io.Serializable
         int offset = criteria.getOffset();
 
         String sql;
-        if ((limit > 0 || offset > 0) 
-            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE) 
+        if ((limit > 0 || offset > 0)
+            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
         {
             // Build Oracle-style query with limit or offset.
-            // If the original SQL is in variable: query then the requlting 
+            // If the original SQL is in variable: query then the requlting
             // SQL looks like this:
-            // SELECT B.* FROM ( 
+            // SELECT B.* FROM (
             //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
             //                  query
             //          ) A
-            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM <= offset + limit
+            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+            //     <= offset + limit
             StringBuffer buf = new StringBuffer();
             buf.append("SELECT B.* FROM ( ");
             buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
-            
+
             buf.append(query.toString());
             buf.append(" ) A ");
             buf.append(" ) B WHERE ");
 
-            if (offset > 0) 
+            if (offset > 0)
             {
                 buf.append(" B.TORQUE$ROWNUM > ");
                 buf.append(offset);
-                if (limit > 0) 
+                if (limit > 0)
                 {
                     buf.append(" AND B.TORQUE$ROWNUM <= ");
                     buf.append(offset + limit);
                 }
             }
-            else 
+            else
             {
                 buf.append(" B.TORQUE$ROWNUM <= ");
                 buf.append(limit);
@@ -970,8 +982,8 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setOffset(0);
 
             sql = buf.toString();
-        } 
-        else 
+        }
+        else
         {
             if (offset > 0 && db.supportsNativeOffset())
             {
@@ -1001,6 +1013,7 @@ public abstract class BasePeer implements java.io.Serializable
      * is actually executed.
      *
      * @param criteria A Criteria.
+     * @return the sql query
      * @exception TorqueException Trouble creating the query string.
      */
     static Query createQuery(Criteria criteria)
@@ -1314,7 +1327,7 @@ public abstract class BasePeer implements java.io.Serializable
             //criteria.setLimit(-1);
             //criteria.setOffset(0);
         }
-        else if (limit > 0 && db.supportsNativeLimit() 
+        else if (limit > 0 && db.supportsNativeLimit()
                  && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
         {
             limitString = String.valueOf(limit);
@@ -1343,7 +1356,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param criteria A Criteria.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List doSelect(Criteria criteria) throws TorqueException
     {
@@ -1382,7 +1396,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @param con A Connection.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List doSelect(Criteria criteria, Connection con)
         throws TorqueException
@@ -1400,7 +1415,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param queryString A String with the sql statement to execute.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(String queryString) throws TorqueException
     {
@@ -1415,7 +1431,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param queryString A String with the sql statement to execute.
      * @param dbName The database to connect to.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(String queryString, String dbName)
         throws TorqueException
@@ -1431,7 +1448,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(
         String queryString,
@@ -1450,7 +1468,8 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @param con A Connection.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(
         String queryString,
@@ -1471,7 +1490,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param singleRecord Whether or not we want to select only a
      * single record.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(
         String queryString,
@@ -1512,7 +1532,8 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @param con A Connection.
      * @return List of Record objects.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List executeQuery(
         String queryString,
@@ -1561,6 +1582,10 @@ public abstract class BasePeer implements java.io.Serializable
      * objects.  Used for functionality like util.LargeSelect.
      *
      * @see #getSelectResults(QueryDataSet, int, int, boolean)
+     * @param qds the QueryDataSet
+     * @return a List of Record objects
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List getSelectResults(QueryDataSet qds)
         throws TorqueException
@@ -1573,6 +1598,11 @@ public abstract class BasePeer implements java.io.Serializable
      * objects.  Used for functionality like util.LargeSelect.
      *
      * @see #getSelectResults(QueryDataSet, int, int, boolean)
+     * @param qds the QueryDataSet
+     * @param singleRecord
+     * @return a List of Record objects
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List getSelectResults(QueryDataSet qds, boolean singleRecord)
         throws TorqueException
@@ -1586,6 +1616,12 @@ public abstract class BasePeer implements java.io.Serializable
      * functionality like util.LargeSelect.
      *
      * @see #getSelectResults(QueryDataSet, int, int, boolean)
+     * @param qds the QueryDataSet
+     * @param numberOfResults
+     * @param singleRecord
+     * @return a List of Record objects
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List getSelectResults(
         QueryDataSet qds,
@@ -1671,7 +1707,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @return ColumnMap if the Criteria object contains a primary
      *          key, or null if it doesn't.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static ColumnMap getPrimaryKey(Criteria criteria)
         throws TorqueException
@@ -1723,7 +1760,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param updateValues A Criteria object containing values used in
      *        set clause.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doUpdate(Criteria updateValues) throws TorqueException
     {
@@ -1760,7 +1798,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param updateValues A Criteria object containing values used in
      * set clause.
      * @param con A Connection.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doUpdate(Criteria updateValues, Connection con)
         throws TorqueException
@@ -1796,7 +1835,8 @@ public abstract class BasePeer implements java.io.Serializable
      *        clause.
      * @param updateValues A Criteria object containing values used in set
      *        clause.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doUpdate(Criteria selectCriteria, Criteria updateValues)
         throws TorqueException
@@ -1832,7 +1872,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param updateValues A Criteria object containing values used in set
      *        clause.
      * @param con A Connection.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void doUpdate(
         Criteria selectCriteria,
@@ -1943,7 +1984,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param stmt A String with the sql statement to execute.
      * @return The number of rows affected.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static int executeStatement(String stmt) throws TorqueException
     {
@@ -1958,7 +2000,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param stmt A String with the sql statement to execute.
      * @param dbName Name of database to connect to.
      * @return The number of rows affected.
-     * @exception TorqueException a generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static int executeStatement(String stmt, String dbName)
         throws TorqueException
@@ -1985,7 +2028,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @param stmt A String with the sql statement to execute.
      * @param con A Connection.
      * @return The number of rows affected.
-     * @exception TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static int executeStatement(String stmt, Connection con)
         throws TorqueException
@@ -2037,19 +2081,13 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * @deprecated Use the better-named handleMultipleRecords() instead.
-     */
-    protected static void handleMultiple(DataSet ds) throws TorqueException
-    {
-        handleMultipleRecords(ds);
-    }
-
-    /**
      * This method returns the MapBuilder specified in the
      * TurbineResources.properties file. By default, this is
      * org.apache.torque.util.db.map.TurbineMapBuilder.
      *
      * @return A MapBuilder.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static MapBuilder getMapBuilder() throws TorqueException
     {
@@ -2062,6 +2100,7 @@ public abstract class BasePeer implements java.io.Serializable
      * org.apache.torque.util.db.map.TurbineMapBuilder.  The
      * MapBuilder instances are cached in this class for speed.
      *
+     * @param name name of the MapBuilder
      * @return A MapBuilder, or null (and logs the error) if the
      * MapBuilder was not found.
      */
@@ -2134,7 +2173,10 @@ public abstract class BasePeer implements java.io.Serializable
      * Performs a SQL <code>select</code> using a PreparedStatement.
      * Note: this method does not handle null criteria values.
      *
-     * @exception TorqueException Error performing database query.
+     * @param criteria
+     * @param con
+     * @return
+     * @throws TorqueException Error performing database query.
      */
     public static List doPSSelect(Criteria criteria, Connection con)
         throws TorqueException
@@ -2208,6 +2250,11 @@ public abstract class BasePeer implements java.io.Serializable
 
     /**
      * Do a Prepared Statement select according to the given criteria
+     *
+     * @param criteria
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static List doPSSelect(Criteria criteria) throws TorqueException
     {
@@ -2229,6 +2276,12 @@ public abstract class BasePeer implements java.io.Serializable
     /**
      * Create a new PreparedStatement.  It builds a string representation
      * of a query and a list of PreparedStatement parameters.
+     *
+     * @param criteria
+     * @param queryString
+     * @param params
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void createPreparedStatement(
         Criteria criteria,
@@ -2287,8 +2340,8 @@ public abstract class BasePeer implements java.io.Serializable
             String tableName2 = criteria.getTableForAlias(tableName);
             if (tableName2 != null)
             {
-                fromClause.add(
-                    new StringBuffer(tableName.length() + tableName2.length() + 1)
+                fromClause.add(new StringBuffer(tableName.length()
+                        + tableName2.length() + 1)
                         .append(tableName2)
                         .append(' ')
                         .append(tableName)
@@ -2323,8 +2376,8 @@ public abstract class BasePeer implements java.io.Serializable
                 table = criteria.getTableForAlias(tableName);
                 if (table != null)
                 {
-                    fromClause.add(
-                        new StringBuffer(tableName.length() + table.length() + 1)
+                    fromClause.add(new StringBuffer(tableName.length()
+                            + table.length() + 1)
                             .append(table)
                             .append(' ')
                             .append(tableName)
@@ -2375,8 +2428,8 @@ public abstract class BasePeer implements java.io.Serializable
                 String table = criteria.getTableForAlias(tableName);
                 if (table != null)
                 {
-                    fromClause.add(
-                        new StringBuffer(tableName.length() + table.length() + 1)
+                    fromClause.add(new StringBuffer(tableName.length()
+                            + table.length() + 1)
                             .append(table)
                             .append(' ')
                             .append(tableName)
@@ -2392,8 +2445,8 @@ public abstract class BasePeer implements java.io.Serializable
                 table = criteria.getTableForAlias(tableName);
                 if (table != null)
                 {
-                    fromClause.add(
-                        new StringBuffer(tableName.length() + table.length() + 1)
+                    fromClause.add(new StringBuffer(tableName.length()
+                            + table.length() + 1)
                             .append(table)
                             .append(' ')
                             .append(tableName)
@@ -2521,7 +2574,7 @@ public abstract class BasePeer implements java.io.Serializable
         {
             switch (db.getLimitStyle())
             {
-                    /* Don't have a Sybase install to validate this against. (dlr)
+                    /* Don't have a Sybase install to validate this against(dlr)
                     case DB.LIMIT_STYLE_SYBASE:
                         query.setRowcount(limitString);
                         break;
@@ -2532,27 +2585,28 @@ public abstract class BasePeer implements java.io.Serializable
         }
 
         String sql;
-        if ((limit > 0 || offset > 0) 
-            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE) 
+        if ((limit > 0 || offset > 0)
+            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
         {
             // Build Oracle-style query with limit or offset.
-            // If the original SQL is in variable: query then the requlting 
+            // If the original SQL is in variable: query then the requlting
             // SQL looks like this:
-            // SELECT B.* FROM ( 
+            // SELECT B.* FROM (
             //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
             //                  query
             //          ) A
-            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM <= offset + limit
+            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+            //     <= offset + limit
             StringBuffer buf = new StringBuffer();
             buf.append("SELECT B.* FROM ( ");
             buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
-            
+
             buf.append(query.toString());
             buf.append(" ) A ");
             buf.append(" ) B WHERE ");
 
-            if (offset > 0) 
-            { 
+            if (offset > 0)
+            {
                 buf.append(" B.TORQUE$ROWNUM > ");
                 buf.append(offset);
                 if (limit > 0)
@@ -2560,7 +2614,7 @@ public abstract class BasePeer implements java.io.Serializable
                     buf.append(" AND B.TORQUE$ROWNUM <= ");
                     buf.append(offset + limit);
                 }
-            } 
+            }
             else
             {
                 buf.append(" B.TORQUE$ROWNUM <= ");
@@ -2570,8 +2624,8 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setOffset(0);
 
             sql = buf.toString();
-        } 
-        else 
+        }
+        else
         {
             sql = query.toString();
         }
@@ -2591,6 +2645,8 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @param criteriaPhrase a String, one of "select", "join", or "order by"
      * @param columnName a String containing the offending column name
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static void throwMalformedColumnNameException(
         String criteriaPhrase,

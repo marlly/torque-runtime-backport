@@ -64,16 +64,16 @@ import org.apache.torque.TorqueException;
 /**
  * Refactored begin/commit/rollback transaction methods away from
  * the <code>BasePeer</code>.
- * 
+ *
  * <p>
  * This can be used to handle cases where transaction support is optional.
- * The second parameter of beginOptionalTransaction will determine with a transaction 
+ * The second parameter of beginOptionalTransaction will determine with a transaction
  * is used or not. If a transaction is not used, the commit and rollback methods
  * do not have any effect. Instead it simply makes the logic easier to follow
  * by cutting down on the if statements based solely on whether a transaction
  * is needed or not.
- * 
- * 
+ *
+ *
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @version $Id$
  */
@@ -107,7 +107,8 @@ public class Transaction
      * @return The Connection for the transaction.
      * @throws TorqueException
      */
-    public static Connection beginOptional(String dbName, boolean useTransaction)
+    public static Connection beginOptional(String dbName,
+        boolean useTransaction)
         throws TorqueException
     {
         Connection con = Torque.getConnection(dbName);
@@ -137,10 +138,9 @@ public class Transaction
     {
         if (con == null)
         {
-            throw new NullPointerException(
-                "Connection object was null. "
+            throw new NullPointerException("Connection object was null. "
                     + "This could be due to a misconfiguration of the "
-                    + "DataSourceFactory.  Check the logs and Torque.properties "
+                    + "DataSourceFactory. Check the logs and Torque.properties "
                     + "to better determine the cause.");
         }
 
@@ -176,8 +176,7 @@ public class Transaction
     {
         if (con == null)
         {
-            throw new NullPointerException(
-                "Connection object was null. "
+            throw new NullPointerException("Connection object was null. "
                     + "This could be due to a misconfiguration of the "
                     + "DataSourceFactory. Check the logs and Torque.properties "
                     + "to better determine the cause.");
@@ -194,12 +193,9 @@ public class Transaction
         }
         catch (SQLException e)
         {
-            category.error(
-                "An attempt was made to rollback a transaction "
+            category.error("An attempt was made to rollback a transaction "
                     + "but the database did not allow the operation to be "
-                    + "rolled back.",
-                e);
-
+                    + "rolled back.", e);
             throw new TorqueException(e);
         }
         finally
@@ -207,14 +203,14 @@ public class Transaction
             Torque.closeConnection(con);
         }
     }
-    
+
     /**
      * Roll back a transaction without throwing errors if they occur.
-     * 
+     *
      * @param con The Connection for the transaction.
      * @see safeRollback
      */
-    public static void safeRollback(Connection con) 
+    public static void safeRollback(Connection con)
     {
         try
         {
@@ -225,6 +221,4 @@ public class Transaction
             category.error("An error occured during rollback.", e);
         }
     }
-
-
 }
