@@ -138,8 +138,8 @@ torque/
 
 <p>
   This is an example of what the XML database schema might look like. This
-  particular example is a snippet of the database used for Turbine's role-based
-  user system:
+  particular example is a snippet of the database used for role-based
+  user system of <a href="http://jakarta.apache.org/turbine/">Turbine</a>.
 </p>
 
 <source><![CDATA[
