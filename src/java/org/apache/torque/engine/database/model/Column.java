@@ -118,15 +118,27 @@ public class Column
 
     /**
      * Return a comma delimited string listing the specified columns.
+     *
+     * @param columns Either a list of <code>Column</code> objects, or
+     * a list of <code>String</code> objects with column names.
      */
     public static String makeList(List columns)
     {
-        Column c = (Column) columns.get(0);
-        StringBuffer buf = new StringBuffer(c.getName());
+        Object obj = columns.get(0);
+        boolean isColumnList = (obj instanceof Column);
+        if (isColumnList)
+        {
+            obj = ((Column) columns.get(0)).getName();
+        }
+        StringBuffer buf = new StringBuffer((String) obj);
         for (int i = 1; i < columns.size(); i++)
         {
-            c = (Column) columns.get(i);
-            buf.append(", ").append(c.getName());
+            obj = columns.get(i);
+            if (isColumnList)
+            {
+                obj = ((Column) obj).getName();
+            }
+            buf.append(", ").append(obj);
         }
         return buf.toString();
     }
