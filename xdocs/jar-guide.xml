@@ -141,8 +141,10 @@ changed.
 
 <section name="Example using Jar'd Torque and Maven">
 
-This section will give an example of using Torque from the jar with 
-<a href="/turbine/maven">Maven</a>. 
+<p>
+For an example of how to integrate Torque within the build process, see the
+<a href="maven-howto.html">Maven Howto</a>.
+</p>
 
 </section>
 
