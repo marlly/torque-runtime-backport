@@ -208,7 +208,7 @@ public class Table implements IDMethod
     /**
      * <p>Adds extra indices for multi-part primary key columns.</p>
      *
-     * <p>For databases like MySQL, values in a where clause much
+     * <p>For databases like MySQL, values in a where clause must
      * match key part order from the left to right.  So, in the key
      * definition <code>PRIMARY KEY (FOO_ID, BAR_ID)</code>,
      * <code>FOO_ID</code> <i>must</i> be the first element used in
