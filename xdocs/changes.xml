@@ -37,6 +37,9 @@
       TRQS51: Datadump does not recognize null columns properly
     </li>
     <li>
+      TRQS136: MySQL will not accept a size definition for TEXT and BLOB fields
+    </li>
+    <li>
       TRQS152: Oracle DB using Criteria to select by Data doesn't work
     </li>
     <li>
