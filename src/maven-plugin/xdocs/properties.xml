@@ -10,8 +10,8 @@
     <section name="Plugin Settings">
       <p>
         All of the settings used by the plugin are documented in the 
-        <a href="http://db.apache.org/torque/properties-reference.html">Properties Reference</a>
-        for Torque.
+        <a href="http://db.apache.org/torque/generator/properties-reference.html">
+        Properties Reference</a> for Torque.
       </p>
       <p>
         You can also view the default settings for each of the properties
