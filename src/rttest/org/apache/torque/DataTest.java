@@ -51,7 +51,7 @@ import com.workingdogs.village.Record;
  * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
-public class DataTest extends BaseTestCase
+public class DataTest extends BaseRuntimeTestCase
 {
     /**
      * Creates a new instance.

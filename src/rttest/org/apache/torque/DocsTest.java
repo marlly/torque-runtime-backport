@@ -32,7 +32,7 @@ import org.apache.torque.util.Criteria;
  * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
-public class DocsTest extends BaseTestCase
+public class DocsTest extends BaseRuntimeTestCase
 {
     public static final String AUTHOR_1_NAME = "Joshua Bloch";
     

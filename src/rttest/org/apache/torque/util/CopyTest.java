@@ -16,7 +16,7 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
-import org.apache.torque.BaseTestCase;
+import org.apache.torque.BaseRuntimeTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
 import org.apache.torque.test.Book;
@@ -27,7 +27,7 @@ import org.apache.torque.test.Book;
  * @author <a href="mailto:torque@kivus.myip.org">Rafal Maczewski</a>
  * @version $Id$
  */
-public class CopyTest extends BaseTestCase
+public class CopyTest extends BaseRuntimeTestCase
 {
     /**
      * Creates a new instance.

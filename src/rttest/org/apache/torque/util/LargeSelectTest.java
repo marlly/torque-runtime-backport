@@ -16,7 +16,7 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
-import org.apache.torque.BaseTestCase;
+import org.apache.torque.BaseRuntimeTestCase;
 import org.apache.torque.TorqueException;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public class LargeSelectTest extends BaseTestCase
+public class LargeSelectTest extends BaseRuntimeTestCase
 {
     private static final int TEST_PAGE_SIZE = 9;
     private static final int TEST_PAGES = 9;

@@ -25,7 +25,7 @@ import junit.framework.TestCase;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public abstract class BaseTestCase extends TestCase
+public abstract class BaseRuntimeTestCase extends TestCase
 {
     /** The path to the configuration file. */
     private static final String CONFIG_FILE
@@ -37,7 +37,7 @@ public abstract class BaseTestCase extends TestCase
     /**
      * Creates a new instance.
      */
-    public BaseTestCase(String name)
+    public BaseRuntimeTestCase(String name)
     {
         super(name);
     }
@@ -48,7 +48,7 @@ public abstract class BaseTestCase extends TestCase
      */
     public void setUp()
     {
-        synchronized (BaseTestCase.class)
+        synchronized (BaseRuntimeTestCase.class)
         {
             if (!hasInitialized)
             {

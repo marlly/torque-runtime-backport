@@ -23,7 +23,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.torque.BaseTestCase;
+import org.apache.torque.BaseRuntimeTestCase;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.sql.ParseException;
 import org.w3c.dom.Document;
@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:andyhot@di.uoa.gr">Andreas Andreou</a>
  * @version $Id$
  */
-public class SQLToAppDataTest extends BaseTestCase
+public class SQLToAppDataRuntimeTest extends BaseRuntimeTestCase
 {
     /** The path to the configuration file. */
     private static final String SQL_FOLDER = "target/test/rttest/sql";
@@ -46,7 +46,7 @@ public class SQLToAppDataTest extends BaseTestCase
     /**
      * Creates a new instance.
      */
-    public SQLToAppDataTest(String name)
+    public SQLToAppDataRuntimeTest(String name)
     {
         super(name);
     }
@@ -260,7 +260,7 @@ public class SQLToAppDataTest extends BaseTestCase
     // just for internal test
     public static void main(String args[])
     {
-        SQLToAppDataTest test = new SQLToAppDataTest("inner test");
+        SQLToAppDataRuntimeTest test = new SQLToAppDataRuntimeTest("inner test");
         //test.compareXmlFiles("c:/schema.sql.xml", "c:/schema.sql.xml.new");
         test.compareXmlFiles(
                 "C:/java/projects/jakarta-turbine-torque/jakarta-turbine-torque/target/test/rttest/sql/schema.sql.ref.xml",
