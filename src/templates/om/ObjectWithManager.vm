@@ -485,6 +485,80 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         return $collName;
     }
+
+    /**
+     * If this collection has already been initialized, returns
+     * the collection. Otherwise returns the results of
+     * get${relCol}(new Criteria(),Connection)
+     * This method takes in the Connection also as input so that
+     * referenced objects can also be obtained using a Connection 
+     * that is taken as input
+     */
+    public List get${relCol}(Connection con) throws TorqueException
+    {
+        if ($collName == null)
+        {
+            $collName = get${relCol}(new Criteria(10),con);
+        }
+        return $collName;
+    }
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this $table.JavaName has previously
+     * been saved, it will retrieve related ${relCol} from storage.
+     * If this $table.JavaName is new, it will return
+     * an empty collection or the current collection, the criteria
+     * is ignored on a new object.
+     * This method takes in the Connection also as input so that
+     * referenced objects can also be obtained using a Connection 
+     * that is taken as input
+     */
+    public List get${relCol}(Criteria criteria,Connection con) throws TorqueException
+    {
+        if ($collName == null)
+        {
+            if ( isNew() )
+            {
+               $collName = new ArrayList();
+            }
+            else
+            {
+    #foreach ($columnName in $fk.ForeignColumns)
+        #set ( $column = $table.getColumn($columnName) )
+        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
+        #set ( $colFK = $tblFK.getColumn($colFKName) )
+                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+    #end
+                 $collName = ${className}Peer.doSelect(criteria,con);
+             }
+         }
+         else
+         {
+             // criteria has no effect for a new object
+             if (!isNew())
+             {
+                 // the following code is to determine if a new query is
+                 // called for.  If the criteria is the same as the last
+                 // one, just return the collection.
+    #foreach ($columnName in $fk.ForeignColumns)
+        #set ( $column = $table.getColumn($columnName) )
+        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
+        #set ( $colFK = $tblFK.getColumn($colFKName) )
+                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+    #end
+                 if (!last${relCol}Criteria.equals(criteria))
+                 {
+                     $collName = ${className}Peer.doSelect(criteria,con);
+                 }
+             }
+         }
+         last${relCol}Criteria = criteria;
+
+         return $collName;
+     }
+
  #set ( $countFK = 0 )
  #foreach ($dummyFK in $tblFK.ForeignKeys)
     #set ( $countFK = $countFK + 1 )
