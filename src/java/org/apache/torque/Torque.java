@@ -133,6 +133,13 @@ public class Torque
     public static void init()
         throws Exception
     {
+        if (configuration == null)
+        {
+            throw new Exception("Torque cannot be initialized without " +
+                "a valid configuration. Please check the log files " +
+                    "for further details.");
+        }            
+    
         dbMaps = new HashMap();
         pools = new HashMap();
         DBFactory.init(configuration);
