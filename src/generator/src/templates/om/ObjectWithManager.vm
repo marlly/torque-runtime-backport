@@ -1428,9 +1428,16 @@ shows the infinite loop: System.out.println("Entering save for " + this);
   #foreach ($col in $table.Columns)
     #if ($col.isPrimaryKey())
       #if($col.Primitive)
-        #set ($coldefval = "0")
+		#set ($fktype = $col.JavaNative)
+	    #set ($casttype = "")
+        #if ($fktype == "short")
+          #set ($casttype = "(short)")
+        #elseif($fktype == "byte")
+          #set ($casttype = "(byte)")
+        #end
+        #set ($coldefval = "0") 
         #set ($coldefval = $col.DefaultValue)
-        copyObj.set${col.JavaName}($coldefval);
+        copyObj.set${col.JavaName}($casttype $coldefval);
       #else
         #set ( $pkid = "null" )
         #set ( $cjtype = $col.JavaNative )
