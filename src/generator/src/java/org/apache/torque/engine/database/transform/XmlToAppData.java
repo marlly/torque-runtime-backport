@@ -241,88 +241,88 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
-                if (rawName.equals("database"))
+            if (rawName.equals("database"))
+            {
+                if (isExternalSchema)
                 {
-                    if (isExternalSchema)
+                    currentPackage = attributes.getValue("package");
+                    if (currentPackage == null)
                     {
-                        currentPackage = attributes.getValue("package");
-                        if (currentPackage == null)
-                        {
-                            currentPackage = defaultPackage;
-                        }
-                    }
-                    else
-                    {
-                        currDB = app.addDatabase(attributes);
-                        if (currDB.getPackage() == null)
-                        {
-                            currDB.setPackage(defaultPackage);
-                        }
+                        currentPackage = defaultPackage;
                     }
                 }
-                else if (rawName.equals("external-schema"))
+                else
                 {
-                    String xmlFile = attributes.getValue("filename");
-                    if (xmlFile.charAt(0) != '/')
+                    currDB = app.addDatabase(attributes);
+                    if (currDB.getPackage() == null)
                     {
-                        File f = new File(currentXmlFile);
-                        xmlFile = new File(f.getParent(), xmlFile).getPath();
+                        currDB.setPackage(defaultPackage);
                     }
+                }
+            }
+            else if (rawName.equals("external-schema"))
+            {
+                String xmlFile = attributes.getValue("filename");
+                if (xmlFile.charAt(0) != '/')
+                {
+                    File f = new File(currentXmlFile);
+                    xmlFile = new File(f.getParent(), xmlFile).getPath();
+                }
 
-                    // put current state onto the stack
-                    ParseStackElement.pushState(this);
+                // put current state onto the stack
+                ParseStackElement.pushState(this);
 
-                    isExternalSchema = true;
+                isExternalSchema = true;
 
-                    parseFile(xmlFile);
-                    // get the last state from the stack
-                    ParseStackElement.popState(this);
-                }
-                else if (rawName.equals("table"))
+                parseFile(xmlFile);
+                // get the last state from the stack
+                ParseStackElement.popState(this);
+            }
+            else if (rawName.equals("table"))
+            {
+                currTable = currDB.addTable(attributes);
+                if (isExternalSchema)
                 {
-                    currTable = currDB.addTable(attributes);
-                    if (isExternalSchema)
-                    {
-                        currTable.setForReferenceOnly(true);
-                        currTable.setPackage(currentPackage);
-                    }
+                    currTable.setForReferenceOnly(true);
+                    currTable.setPackage(currentPackage);
                 }
-                else if (rawName.equals("column"))
-                {
-                    currColumn = currTable.addColumn(attributes);
-                }
-                else if (rawName.equals("inheritance"))
-                {
-                    currColumn.addInheritance(attributes);
-                }
-                else if (rawName.equals("foreign-key"))
-                {
-                    currFK = currTable.addForeignKey(attributes);
-                }
-                else if (rawName.equals("reference"))
-                {
-                    currFK.addReference(attributes);
-                }
-                else if (rawName.equals("index"))
-                {
-                    currIndex = currTable.addIndex(attributes);
-                }
-                else if (rawName.equals("index-column"))
-                {
-                    currIndex.addColumn(attributes);
-                }
-                else if (rawName.equals("unique"))
-                {
-                    currUnique = currTable.addUnique(attributes);
-                }
-                else if (rawName.equals("unique-column"))
-                {
-                    currUnique.addColumn(attributes);
-                }
-                else if (rawName.equals("id-method-parameter"))
-                {
-                    currTable.addIdMethodParameter(attributes);
-                }
+            }
+            else if (rawName.equals("column"))
+            {
+                currColumn = currTable.addColumn(attributes);
+            }
+            else if (rawName.equals("inheritance"))
+            {
+                currColumn.addInheritance(attributes);
+            }
+            else if (rawName.equals("foreign-key"))
+            {
+                currFK = currTable.addForeignKey(attributes);
+            }
+            else if (rawName.equals("reference"))
+            {
+                currFK.addReference(attributes);
+            }
+            else if (rawName.equals("index"))
+            {
+                currIndex = currTable.addIndex(attributes);
+            }
+            else if (rawName.equals("index-column"))
+            {
+                currIndex.addColumn(attributes);
+            }
+            else if (rawName.equals("unique"))
+            {
+                currUnique = currTable.addUnique(attributes);
+            }
+            else if (rawName.equals("unique-column"))
+            {
+                currUnique.addColumn(attributes);
+            }
+            else if (rawName.equals("id-method-parameter"))
+            {
+                currTable.addIdMethodParameter(attributes);
+            }
         }
         catch (Exception e)
         {
