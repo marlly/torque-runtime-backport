@@ -27,7 +27,9 @@
        Some of the following examples are taken from the project-schema.xml
        document in the src/conf/torque/schema.
      </p>
-     <subsection name="Element: database">
+   </section>
+   
+   <section name="Element: database">
        <p>
          The database element and its relevant attributes.
        </p>
@@ -104,12 +106,19 @@
        <p>
         <table>
           <tr>
+            <td>external-schema</td>
+            <td>0 or more</td>
+          </tr>
+          <tr>
+            <td>domain</td>
+            <td>0 or more</td>
+          </tr>
+          <tr>
             <td>table</td>
             <td>1 or more</td>
           </tr>
         </table>
        </p>
-     </subsection>
 
      <subsection name="Attribute: defaultIdMethod">
        <p>
@@ -193,7 +202,36 @@
          chain, i.e. it needs to be the superclass.
        </p>
      </subsection>
-     <subsection name="Element: table">
+   </section>
+   
+   <section name="Element: external-schema">
+       <p>
+         Includes another schema file.
+       </p>
+       <source><![CDATA[
+         <external-schema 
+           filename="extext-schema.xml" />
+       ]]>
+       </source>
+   </section>
+
+   <section name="Element: domain">
+       <p>
+         Domains are used to define attributes for columns.
+       </p>
+       <source><![CDATA[
+         <domain 
+           name="amount" 
+           type="NUMERIC" 
+           size="10" 
+           scale="2" 
+           default="0" 
+           description="amount domain" />
+       ]]>
+       </source>
+   </section>
+   
+   <section name="Element: table">
        <p>
          The table element and its relevant attributes
        </p>
@@ -298,7 +336,6 @@
            </tr>
          </table>
        </p>
-     </subsection>
      <subsection name="Attribute: javaName">
        <p>
          This is the Java class name to use when generating the Table or
@@ -311,7 +348,9 @@
          So YOUR_TABLE_NAME would become YourTableName.
        </p>
      </subsection>
-     <subsection name="Element: column">
+   </section>
+   
+   <section name="Element: column">
        <p>
          The column element and its relevant attributes
        </p>
@@ -405,9 +444,9 @@
           </tr>
         </table>
        </p>
-      </subsection>
+    </section>
 
-      <subsection name="Element: inheritance">
+    <section name="Element: inheritance">
         <p>
           The inheritance element and its relevant attributes
         </p>
@@ -438,9 +477,9 @@
       <p>
         The inheritance element can not contain other elements.
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: foreign-key">
+    <section name="Element: foreign-key">
       <p>
         The foreign-key element and its relevant attributes
       </p>
@@ -488,9 +527,9 @@
           </tr>
         </table>
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: reference">
+    <section name="Element: reference">
       <p>
         The reference element and its relevant attributes
       </p>
@@ -515,9 +554,9 @@
       <p>
         The reference element can not contain other elements.
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: index">
+    <section name="Element: index">
       <p>
         The index element and its relevant attributes
       </p>
@@ -548,9 +587,9 @@
           </tr>
         </table>
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: index-column">
+    <section name="Element: index-column">
       <p>
         The index-column element and its relevant attributes
       </p>
@@ -575,9 +614,9 @@
       <p>
         The index-column element can not contain other elements.
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: unique">
+    <section name="Element: unique">
       <p>
         The unique element and its relevant attributes
       </p>
@@ -608,9 +647,9 @@
           </tr>
         </table>
       </p>
-    </subsection>
+    </section>
 
-    <subsection name="Element: unique-column">
+    <section name="Element: unique-column">
       <p>
         The unique-column element and its relevant attributes
       </p>
@@ -631,8 +670,6 @@
       <p>
         The unique-column element can not contain other elements.
       </p>
-    </subsection>
-
   </section>
 </body>
 </document>
