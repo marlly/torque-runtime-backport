@@ -33,7 +33,7 @@
       improved JDBC to DB2 mappings.
     </li>
     <li>
-      improved JDBC to SAPDB mappings.
+      improved JDBC to SAPDB mappings (incl. TRQ35).
     </li>
     <li>
       peers: do not create the JoinAll method if any of the foreign keys
@@ -59,6 +59,15 @@
     </li>
     <li>
       objects: avoid npe and set id to null if the object was null
+    </li>
+    <li>
+      TRQ39: Data Dump task may generate invalid XML output
+    </li>
+    <li>
+      TRQ26: string to date conversion in MSSQL/Sybase
+    </li>
+    <li>
+      bugzilla #12626: Peer.vm was missing the DateKey import.
     </li>
   </ul>
 </p>
