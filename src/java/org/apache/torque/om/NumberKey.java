@@ -97,7 +97,14 @@ public class NumberKey extends SimpleKey
      */
     public NumberKey(NumberKey key)
     {
-        this.key = key.getValue();
+        if (key != null)
+        {
+            this.key = key.getValue();
+        }
+        else
+        {
+            this.key = null;
+        }
     }
 
     /**
@@ -119,11 +126,18 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
-     * Convenience only. 
+     * Convenience only.
      */
     public NumberKey(Number key)
     {
-        this.key = new BigDecimal(key.toString());
+        if (key != null)
+        {
+            this.key = new BigDecimal(key.toString());
+        }
+        else
+        {
+            this.key = null;
+        }
     }
 
     /**
@@ -164,7 +178,7 @@ public class NumberKey extends SimpleKey
 
     /**
      * Two ObjectKeys that both contain null values <strong>are not</strong> considered equal.
-     * 
+     *
      * @param keyObj the key to compare values to
      * @return whether the two objects are equal
      */
@@ -174,21 +188,21 @@ public class NumberKey extends SimpleKey
         {
             return true;
         }
-        
+
         if (!(keyObj instanceof NumberKey))
         {
             // NumberKeys used to be comparable to Strings.  This behavior has
             // been changed, I don't think it is a good idea to fail silently
             // as code may be dependent on the old behavior.
-            if (keyObj instanceof String) 
+            if (keyObj instanceof String)
             {
                 throw new IllegalArgumentException(
                     "NumberKeys are not comparable to Strings");
             }
-            
+
             return false;
         }
-        
+
         if (getValue() != null)
         {
             return getValue().equals(((NumberKey) keyObj).getValue());
@@ -199,10 +213,10 @@ public class NumberKey extends SimpleKey
             return false;
         }
     }
-   
+
     /**
      * @return a hash code based on the value
-     */ 
+     */
     public int hashCode()
     {
         if (getValue() == null)
@@ -214,9 +228,11 @@ public class NumberKey extends SimpleKey
             return getValue().hashCode();
         }
     }
-    
+
     /**
      * @return a numeric comparison of the two values
+     * @throws NullPointerException when the value of the NumberKey or the
+     *         comparison value is null
      */
     public int compareTo(Object o)
     {
@@ -224,55 +240,60 @@ public class NumberKey extends SimpleKey
     }
 
     /**
-     * Invokes the toString() method on the object.
+     * Invokes the toString() method on the object.  An empty string
+     * is returned is the value is null.
      */
     public String toString()
     {
-        if ( key != null )
+        if (key != null)
         {
             return key.toString();
         }
         return "";
     }
 
-    /** 
-     * Returns the value of this NumberKey as a long. This value is subject
-     * to the conversion rules set out in 
-     * {@link java.math.BigDecimal.intValue()}
+    /**
+     * Returns the value of this NumberKey as a byte. This value is subject
+     * to the conversion rules set out in
+     * {@link java.math.BigDecimal.byteValue()}
      *
-     * @return the NumberKey converted to a long
+     * @return the NumberKey converted to a byte
+     * @throws NullPointerException when the value of the NumberKey is null
      */
     public byte byteValue()
     {
         return getBigDecimal().byteValue();
     }
 
-    /** 
+    /**
      * Returns the value of this NumberKey as an int. This value is subject
-     * to the conversion rules set out in 
+     * to the conversion rules set out in
      * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
-     * will be discarded and if the underlying value is too big to fit in an 
-     * int, only the low-order 32 bits are returned. Note that this 
-     * conversion can lose information about the overall magnitude and 
-     * precision of the NumberKey value as well as return a result with the 
+     * will be discarded and if the underlying value is too big to fit in an
+     * int, only the low-order 32 bits are returned. Note that this
+     * conversion can lose information about the overall magnitude and
+     * precision of the NumberKey value as well as return a result with the
      * opposite sign.
+     *
      * @return the NumberKey converted to an int
+     * @throws NullPointerException when the value of the NumberKey is null
      */
     public int intValue()
     {
         return getBigDecimal().intValue();
     }
 
-    /** 
+    /**
      * Returns the value of this NumberKey as a short. This value is subject
-     * to the conversion rules set out in 
+     * to the conversion rules set out in
      * {@link java.math.BigDecimal.intValue()}, importantly any fractional part
-     *  will be discarded and if the underlying value is too big to fit 
-     * in a long, only the low-order 64 bits are returned. Note that this 
-     * conversion can lose information about the overall magnitude and 
-     * precision of the NumberKey value as well as return a result with the 
+     *  will be discarded and if the underlying value is too big to fit
+     * in a long, only the low-order 64 bits are returned. Note that this
+     * conversion can lose information about the overall magnitude and
+     * precision of the NumberKey value as well as return a result with the
      * opposite sign.
      *
+     * @throws NullPointerException when the value of the NumberKey is null
      * @return the NumberKey converted to a short
      */
     public short shortValue()
@@ -280,42 +301,45 @@ public class NumberKey extends SimpleKey
         return getBigDecimal().shortValue();
     }
 
-    /** 
+    /**
      * Returns the value of this NumberKey as a long. This value is subject
-     * to the conversion rules set out in 
+     * to the conversion rules set out in
      * {@link java.math.BigDecimal.intValue()}
      *
      * @return the NumberKey converted to a long
+     * @throws NullPointerException when the value of the NumberKey is null
      */
     public long longValue()
     {
         return getBigDecimal().longValue();
     }
 
-    /** 
+    /**
      * Returns the value of this NumberKey as a float. This value is subject to
-     * the conversion rules set out in 
-     * {@link java.math.BigDecimal.floatValue()}, most importantly if the 
-     * underlying value has too great a magnitude to represent as a 
-     * float, it will be converted to Float.NEGATIVE_INFINITY 
+     * the conversion rules set out in
+     * {@link java.math.BigDecimal.floatValue()}, most importantly if the
+     * underlying value has too great a magnitude to represent as a
+     * float, it will be converted to Float.NEGATIVE_INFINITY
      * or Float.POSITIVE_INFINITY as appropriate.
      *
      * @return the NumberKey converted to a float
+     * @throws NullPointerException when the value of the NumberKey is null
      */
     public float floatValue()
     {
         return getBigDecimal().floatValue();
     }
 
-    /** 
+    /**
      * Returns the value of this NumberKey as a double. This value is subject
-     * to the conversion rules set out in 
-     * {@link java.math.BigDecimal.doubleValue()}, most importantly if the 
-     * underlying value has too great a magnitude to represent as a 
-     * double, it will be converted to Double.NEGATIVE_INFINITY 
+     * to the conversion rules set out in
+     * {@link java.math.BigDecimal.doubleValue()}, most importantly if the
+     * underlying value has too great a magnitude to represent as a
+     * double, it will be converted to Double.NEGATIVE_INFINITY
      * or Double.POSITIVE_INFINITY as appropriate.
      *
      * @return the NumberKey converted to a double
+     * @throws NullPointerException when the value of the NumberKey is null
      */
     public double doubleValue()
     {
