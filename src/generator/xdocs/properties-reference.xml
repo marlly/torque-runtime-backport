@@ -77,7 +77,7 @@
 </tr>
 <tr>
   <td><code> torque.output.dir </code></td>
-  <td><code> ${torque.home}/src </code></td>
+  <td><code> ${torque.home}/target </code></td>
   <td>
     The base directory for the output files.
   </td>
@@ -98,7 +98,7 @@
 </tr>
 <tr>
   <td><code> torque.java.dir </code></td>
-  <td><code> ${torque.output.dir}/java </code></td>
+  <td><code> ${maven.src.dir}/java </code></td>
   <td>
     The directory to place all of the generated Java code in.
   </td>
@@ -119,20 +119,18 @@
 </tr>
 <tr>
   <td><code> torque.ojb.dir </code></td>
-  <td><code> ${torque.output.dir}/ojb </code></td>
+  <td><code> ${maven.src.dir}/ojb </code></td>
   <td>
     The directory to place all of the generated OJB code in.
   </td>
 </tr>
-<!--
-    <tr>
-      <td><code> torque.omzip.dir </code></td>
-      <td><code> ${torque.output.dir} </code></td>
-      <td>
-        The directory a jar of the Java om files.
-      </td>
-    </tr>
--->
+<tr>
+  <td><code> torque.omzip.dir </code></td>
+  <td><code> ${torque.output.dir} </code></td>
+  <td>
+    The directory to place the jar files output by the om-zip goal.
+  </td>
+</tr>
 
 
 <tr>
@@ -382,6 +380,45 @@
   </td>
 </tr>
 
+<tr>
+  <td><code> torque.omzip.src.base </code></td>
+  <td><code> false </code></td>
+  <td>
+    Whether the om generated base src (BaseX.java) files should be included in 
+    the src jar produced by om-zip.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.omzip.src.extension </code></td>
+  <td><code> false </code></td>
+  <td>
+    Whether the om generated extension src (X.java) files should be included in 
+    the src jar produced by om-zip.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.omzip.bin.base </code></td>
+  <td><code> false </code></td>
+  <td>
+    Whether the om generated base class (BaseX.class) files should be included 
+    in the bin jar produced by om-zip.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.omzip.bin.extension </code></td>
+  <td><code> false </code></td>
+  <td>
+    Whether the om generated extension class (X.class) files should be included 
+    in the bin jar produced by om-zip.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.omzip.deleteFiles </code></td>
+  <td><code> false </code></td>
+  <td>
+    Whether the generated om files should be deleted following the om-zip.
+  </td>
+</tr>
 
 <tr>
   <td colspan="3"><strong> Compile Settings </strong></td>

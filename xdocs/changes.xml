@@ -9,6 +9,14 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='fix'>
+        Changed the default property value for <code>torque.output.dir</code> 
+        from <code>maven.build.dest</code> to <code>maven.build.dir</code>.
+        This means many of the generated files will now appear in the 
+        <code>target</code> rather than the <code>target/classes</code>
+        directory. The properties reference was updated accordingly (a few 
+        missing properties were also documented).
+      </action>
       <action dev='seade' type='update'>
         Addressed a number of issues highlighted by 
         <a href="http://findbugs.sourceforge.net/">FindBugs</a> in generated 
