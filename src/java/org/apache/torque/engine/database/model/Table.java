@@ -77,6 +77,8 @@ import org.xml.sax.Attributes;
  */
 public class Table implements IDMethod
 {
+    private static final boolean DEBUG = false;
+
     //private AttributeListImpl attributes;
     private List columnList;
     private List foreignKeys;
@@ -150,6 +152,42 @@ public class Table implements IDMethod
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
         alias = attrib.getValue("alias");
+    }
+
+    /**
+     * <p>Adds extra indices for multi-part primary key columns.</p>
+     *
+     * <p>For databases like MySQL, values in a where clause much
+     * match key part order from the left to right.  So, in the key
+     * definition <code>PRIMARY KEY (FOO_ID, BAR_ID)</code>,
+     * <code>FOO_ID</code> <i>must</i> be the first element used in
+     * the <code>where</code> clause of the SQL query used against
+     * this table for the primary key index to be used.  This feature
+     * could cause problems under MySQL with heavily indexed tables,
+     * as MySQL currently only supports 16 indices per table (i.e. it
+     * might cause too many indices to be created).</p>
+     *
+     * <p>See <a href="http://www.mysql.com/doc/E/X/EXPLAIN.html">the
+     * manual</a> for a better description of why heavy indexing is
+     * useful for quickly searchable database tables.</p>
+     */
+    private void doHeavyIndexing()
+    {
+        if (DEBUG)
+        {
+            System.out.println("doHeavyIndex() called on table " + name);
+        }
+
+        List pk = getPrimaryKey();
+        int size = pk.size();
+
+        // We start at an offset of 1 because the entire column list
+        // is generally implicitly indexed by the fact that it's a
+        // primary key.
+        for (int i = 1; i < size; i++)
+        {
+            addIndex(new Index(pk.subList(i, size)));
+        }
     }
 
     /**
@@ -238,6 +276,12 @@ public class Table implements IDMethod
         columnsByJavaName.put(col.getJavaName(), col);
         col.setPosition(columnList.size());
         needsTransactionInPostgres |= col.requiresTransactionInPostgres();
+        if (col.isPrimaryKey())
+        {
+            // TODO: Make this conditional -- some databases may not
+            // appreciate it as much as MySQL and Oracle.
+            doHeavyIndexing();
+        }
     }
 
     /**
@@ -887,36 +931,5 @@ public class Table implements IDMethod
             }
         }
         return result.toString();
-    }
-
-    /**
-     * Returns a list of CSV strings for a primary key composed of
-     * multiple parts to create extra indices for.  In MySQL, values
-     * much match key part order from the left to right.  So, in the
-     * key definition <code>PRIMARY KEY (FOO_ID, BAR_ID)</code>,
-     * <code>FOO_ID</code> <i>must</i> be the first element used in
-     * the <code>where</code> clause of the SQL query used against
-     * this table for the primary key index to be used.  This feature
-     * could cause problems under MySQL with heavily indexed tables,
-     * as MySQL currently only supports 16 indices per table (i.e. it
-     * might cause too many indices to be created).
-     * <p>
-     * See <a href="http://www.mysql.com/doc/E/X/EXPLAIN.html">the manual</a>
-     * for a better description of this issue.
-     *
-     * @return A list of CSV list of primary key parts.
-     */
-    public List getAdditionalIndicesForPrimaryKey()
-    {
-        List pk = getPrimaryKey();
-        int nbrPKParts = pk.size();
-        List additionalIndices = new ArrayList(nbrPKParts - 1);
-
-        // We skip the first permutation because it's covered by the PK.
-        for (int i = 1; i < nbrPKParts; i++)
-        {
-            additionalIndices.add(printList(pk.subList(i, nbrPKParts)));
-        }
-        return additionalIndices;
     }
 }
