@@ -63,7 +63,17 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $defaultValue = "false" )
             #end
           #end
-          #set ($defVal = "=$quote$defaultValue$quote")
+          #if ($cjtype == "BigDecimal")
+              #set ($defVal = "= new BigDecimal($defaultValue)")
+          #elseif ($cjtype == "NumberKey")
+              #set ( $quote = '"' )
+              #set ($defVal = "= new NumberKey($quote$defaultValue$quote)")
+          #elseif ($cjtype == "StringKey")
+              #set ( $quote = '"' )
+              #set ($defVal = "= new StringKey($quote$defaultValue$quote)")
+          #else
+              #set ($defVal = "=$quote$defaultValue$quote")
+          #end            
         #end
       
         /** 
