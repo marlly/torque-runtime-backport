@@ -86,6 +86,10 @@ import org.apache.torque.util.BasePeer;
 
 /**
  * The implementation of Torque.
+ * <br/>
+ * <b>The stratum lifecycle interfaces are deprecated and will not be supported 
+ * in future versions on Torque. Instead you can use Torque as an avalon 
+ * component.</b>
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
