@@ -72,7 +72,10 @@ import org.apache.torque.adapter.DB;
 public interface IdGenerator
 {
     /**
-     * Returns an id as a primitive int.
+     * Returns an id as a primitive int.  If you use numeric
+     * identifiers, it's suggested that {@link
+     * #getIdAsLong(Connection, Object)} be used instead (due to the
+     * limitted range of this method).
      *
      * @param connection A Connection.
      * @param keyInfo an Object that contains additional info.
