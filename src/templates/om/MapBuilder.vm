@@ -43,7 +43,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
      */
     public static String get${tfc}_${cfc}()
     {
-        return getTable() + ".$cup";
+        return "${table.Name}.$cup";
     }
     #end
 
