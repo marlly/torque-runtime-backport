@@ -15,7 +15,9 @@
 This document is only relevant for Torque-3.0b3 and higher versions.  For
 instructions on configuring torque's built-in connection pool in earlier
 versions see the runtime configuration section of 
-<a href="tutorial.html">the tutorial</a>.
+<a href="tutorial.html">the tutorial</a>.  If you are using Torque-3.0b3 or higher,
+make sure that you have commons-dbcp jar that is newer then commons-dbcp-1.0.dev.
+Otherwise you will have null connection objects.
 </p>
 
 <p>
