@@ -298,6 +298,16 @@
     If true, Torque will generate Manager classes that use JCS for caching.
     Still considered experimental.
   </td>
+<tr>
+  <td><code> torque.objectIsCaching </code></td>
+  <td><code> true </code></td>
+  <td>
+    If true, Torque generates data objects that cache their foreign
+    key relationships. If this is not desired (because the underlying objects
+    can be manipulated from other code), set this property to false. This currently
+    cannot combined with the manager setting from above.
+  </td>
+</tr>
 </tr>
 
 

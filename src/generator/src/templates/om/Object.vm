@@ -206,6 +206,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #set ( $collName = "coll${tblFK.JavaName}s" )
           #end
 
+          #if ($objectIsCaching)
         // update associated $tblFK.JavaName
         if ($collName != null)
         {
@@ -217,6 +218,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
         #end
       #end
+    #end
     #end
     }
   #end
@@ -458,6 +460,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #end
       #set ( $collName = "coll$relCol" )
 
+      #if ($objectIsCaching)
     /**
      * Collection to store aggregation of $collName
      */
@@ -493,6 +496,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * The criteria used to select the current contents of $collName
      */
     private Criteria last${relCol}Criteria = null;
+      #end
 
     /**
      * If this collection has already been initialized, returns
@@ -503,11 +507,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public List get${relCol}() throws TorqueException
     {
+      #if ($objectIsCaching)
         if ($collName == null)
         {
             $collName = get${relCol}(new Criteria(10));
         }
         return $collName;
+      #else
+            return get${relCol}(new Criteria(10));
+      #end
     }
 
     /**
@@ -523,6 +531,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public List get${relCol}(Criteria criteria) throws TorqueException
     {
+      #if ($objectIsCaching)
         if ($collName == null)
         {
             if (isNew())
@@ -548,12 +557,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                 // the following code is to determine if a new query is
                 // called for.  If the criteria is the same as the last
                 // one, just return the collection.
+      #end  
       #foreach ($columnName in $fk.ForeignColumns)
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
         #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
       #end
+      #if ($objectIsCaching)
                 if (!last${relCol}Criteria.equals(criteria))
                 {
                     $collName = ${className}Peer.doSelect(criteria);
@@ -563,6 +574,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         last${relCol}Criteria = criteria;
 
         return $collName;
+      #else
+                return ${className}Peer.doSelect(criteria);
+      #end
     }
 
     /**
@@ -575,11 +589,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public List get${relCol}(Connection con) throws TorqueException
     {
+      #if ($objectIsCaching)
         if ($collName == null)
         {
             $collName = get${relCol}(new Criteria(10), con);
         }
         return $collName;
+      #else
+            return get${relCol}(new Criteria(10), con);
+      #end
     }
 
     /**
@@ -597,6 +615,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public List get${relCol}(Criteria criteria, Connection con)
             throws TorqueException
     {
+      #if ($objectIsCaching)
         if ($collName == null)
         {
             if (isNew())
@@ -622,12 +641,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                  // the following code is to determine if a new query is
                  // called for.  If the criteria is the same as the last
                  // one, just return the collection.
+       #end
       #foreach ($columnName in $fk.ForeignColumns)
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
         #set ( $colFK = $tblFK.getColumn($colFKName) )
                  criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
       #end
+      #if ($objectIsCaching)
                  if (!last${relCol}Criteria.equals(criteria))
                  {
                      $collName = ${className}Peer.doSelect(criteria, con);
@@ -637,6 +658,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
          last${relCol}Criteria = criteria;
 
          return $collName;
+      #else
+                 return ${className}Peer.doSelect(criteria, con);
+      #end
      }
 
       #set ( $countFK = 0 )
@@ -715,6 +739,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     protected List get${relCol}Join${relCol2}(Criteria criteria)
         throws TorqueException
     {
+            #if ($objectIsCaching)
         if ($collName == null)
         {
             if (isNew())
@@ -737,6 +762,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             // the following code is to determine if a new query is
             // called for.  If the criteria is the same as the last
             // one, just return the collection.
+            #end
             boolean newCriteria = true;
             #foreach ($columnName in $fk.ForeignColumns)
               #set ( $column = $table.getColumn($columnName) )
@@ -744,6 +770,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $colFK = $tblFK.getColumn($colFKName) )
             criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
             #end
+            #if ($objectIsCaching)
             if (!last${relCol}Criteria.equals(criteria))
             {
                 $collName = ${className}Peer.doSelectJoin${relCol2}(criteria);
@@ -752,6 +779,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         last${relCol}Criteria = criteria;
 
         return $collName;
+            #else
+            return ${className}Peer.doSelectJoin${relCol2}(criteria);
+            #end
     }
           #end 
         #end 
@@ -776,6 +806,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     protected List get${relCol}JoinAllExcept${table.JavaName}(Criteria criteria)
         throws TorqueException
     {
+   #if ($objectIsCaching)
         if ($collName == null)
         {
             if (isNew())
@@ -798,6 +829,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             // the following code is to determine if a new query is
             // called for.  If the criteria is the same as the last
             // one, just return the collection.
+   #end
             boolean newCriteria = true;
    #foreach ($columnName in $fk.ForeignColumns)
        #set ( $column = $table.getColumn($columnName) )
@@ -805,6 +837,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $colFK = $tblFK.getColumn($colFKName) )
                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
+   #if ($objectIsCaching)
             if (!last${relCol}Criteria.equals(criteria))
             {
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
@@ -813,6 +846,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         last${relCol}Criteria = criteria;
 
         return $collName;
+   #else 
+            return ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
+   #end
     }
 
   #end
@@ -1126,6 +1162,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #end
         #set ( $collName = "coll$relCol" )
 
+        #if ($objectIsCaching)
             if ($collName != null)
             {
                 for (int i = 0; i < ${collName}.size(); i++)
@@ -1135,6 +1172,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             }
       #end
     #end
+  #end
   #end
   #if ($complexObjectModel)
             alreadyInSave = false;
@@ -1432,6 +1470,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
           #end
         #end
 
+        #if ($objectIsCaching)
         #if ($relCol == "")
           #set ( $pCollName = "${className}s" )
           #set ( $pCollNameNoS = "${className}" )
@@ -1446,6 +1485,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             $className obj = ($className) v.get(i);
             copyObj.add$pCollNameNoS(obj.copy());
         }
+        #end
         #set ( $list = "" )
       #end
     #end

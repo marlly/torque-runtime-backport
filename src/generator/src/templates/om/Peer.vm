@@ -1326,14 +1326,18 @@ public abstract class $basePrefix${table.JavaName}Peer
                 if (temp_obj2.getPrimaryKey().equals(obj2.getPrimaryKey()))
                 {
                     newObject = false;
+          #if ($objectIsCaching)
                     temp_obj2.add${collThisTableMs}(obj1);
+          #end
                     break;
                 }
             }
             if (newObject)
             {
+          #if ($objectIsCaching)
                 obj2.init${collThisTable}();
                 obj2.add${collThisTableMs}(obj1);
+          #end
             }
             results.add(obj1);
         }
@@ -1524,14 +1528,18 @@ public abstract class $basePrefix${table.JavaName}Peer
                 if (temp_obj${index}.getPrimaryKey().equals(obj${index}.getPrimaryKey()))
                 {
                     newObject = false;
+                #if ($objectIsCaching)
                     temp_obj${index}.add${collThisTableMs}(obj1);
+                #end
                     break;
                 }
             }
             if (newObject)
             {
+                #if ($objectIsCaching)
                 obj${index}.init${collThisTable}();
                 obj${index}.add${collThisTableMs}(obj1);
+                #end
             }
               #end
             #end
