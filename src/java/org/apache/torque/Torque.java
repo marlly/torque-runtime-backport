@@ -150,14 +150,21 @@ public class Torque
         // configuration consist only of the remain torque specific
         // properties that are contained in the configuration. First 
         // look for properties that are in the "torque" namespace.
+        ExtendedProperties originalConf = configuration;
         configuration = configuration.subset("torque");
         
-        if (configuration.isEmpty())
+        if (configuration == null || configuration.isEmpty())
         {
             // If there are no properties in the "torque" namespace
             // than try the "services.DatabaseService" namespace. This
             // will soon be deprecated.
-            configuration = configuration.subset("services.DatabaseService");
+            configuration = originalConf.subset("services.DatabaseService");
+
+            // the configuration may already have any prefixes stripped
+            if (configuration == null || configuration.isEmpty())
+            {
+                configuration = originalConf;
+            }            
         }
 
         dbMaps = new HashMap();
