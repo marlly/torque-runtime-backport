@@ -56,6 +56,7 @@ package org.apache.torque.om;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import org.apache.log4j.Category;
 import org.apache.torque.pool.DBConnection;
 
 /**
@@ -407,6 +408,16 @@ public abstract class BaseObject implements Persistent, Serializable
         }
 
         return ok.hashCode();
+    }
+
+    /**
+     * gets a log4j Category based on class name.
+     *
+     * @return a <code>Category</code> to write log to.
+     */
+    protected Category getCategory()
+    {
+     	return Category.getInstance(getClass().getName());
     }
 
     /**
