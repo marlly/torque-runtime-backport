@@ -61,6 +61,8 @@ import java.io.Reader;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.List;
+
+import org.apache.torque.Torque;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
@@ -70,8 +72,10 @@ import org.apache.torque.engine.database.model.Index;
 import org.apache.torque.engine.database.model.Inheritance;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.database.model.Unique;
+
 import org.apache.xerces.framework.XMLParser;
 import org.apache.xerces.parsers.SAXParser;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
