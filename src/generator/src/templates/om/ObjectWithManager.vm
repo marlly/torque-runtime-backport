@@ -1107,7 +1107,12 @@ shows the infinite loop: System.out.println("Entering save for " + this);
                     ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
                 }
 
-  #set ($tableHasPrimaryKey = $table.PrimaryKey.size() > 0)
+  #if ($table.PrimaryKey.size() > 0)
+    #set ($tableHasPrimaryKey = true)
+  #else
+    #set ($tableHasPrimaryKey = false)
+  #end
+
   #if ($tableHasPrimaryKey)
     #set ($interfaceName = $table.JavaName)
     #if ($table.Interface)
