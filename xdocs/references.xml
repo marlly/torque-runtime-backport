@@ -26,5 +26,15 @@
         </ul>
       </p>
     </section>
+
+    <section name="Articles about Torque">
+      <ul>
+        <li>
+          <a href="http://softwaredev.earthweb.com/java/article/0,,12082_1457081,00.html">
+          Installing and Using the Torque Object Mapper
+          </a>
+        </li>
+      </ul>
+    </section>
   </body>
 </document>
