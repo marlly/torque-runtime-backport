@@ -273,7 +273,7 @@ public class ForeignKey
     {
         Hashtable h = new Hashtable();
 
-        for (int i=0; i<localColumns.size(); i++)
+        for (int i = 0; i < localColumns.size(); i++)
         {
             h.put (localColumns.get(i),foreignColumns.get(i));
         }
