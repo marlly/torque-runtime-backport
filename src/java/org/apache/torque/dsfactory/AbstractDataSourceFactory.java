@@ -55,7 +55,7 @@ package org.apache.torque.dsfactory;
  */
 
 import java.util.Iterator;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -85,10 +85,10 @@ public abstract class AbstractDataSourceFactory
     public static final String DEFAULT_CONNECTION_KEY = "defaults.connection";
 
     /**
-     * The logging category.
+     * The logging logger.
      */
-    private static Category category =
-        Category.getInstance(AbstractDataSourceFactory.class);
+    private static Logger logger =
+        Logger.getLogger(AbstractDataSourceFactory.class);
 
     /**
      * Encapsulates setting configuration properties on 
@@ -125,9 +125,9 @@ public abstract class AbstractDataSourceFactory
                     PropertyUtils
                         .setMappedProperty(ds, property, subProp, value);
 
-                    if (category.isDebugEnabled())
+                    if (logger.isDebugEnabled())
                     {
-                        category.debug("setMappedProperty(" 
+                        logger.debug("setMappedProperty(" 
                                        + ds + ", "
                                        + property + ", "
                                        + subProp + ", "
@@ -144,9 +144,9 @@ public abstract class AbstractDataSourceFactory
                     ConvertUtils.convert(c.getString(property), propertyType);
                 PropertyUtils.setSimpleProperty(ds, property, value);
 
-                if (category.isDebugEnabled())
+                if (logger.isDebugEnabled())
                 {
-                    category.debug("setSimpleProperty(" 
+                    logger.debug("setSimpleProperty(" 
                                    + ds + ", "
                                    + property + ", "
                                    + value 
@@ -156,7 +156,7 @@ public abstract class AbstractDataSourceFactory
         }
         catch (Exception e)
         {
-            category.error(
+            logger.error(
                 "Property: "
                 + property
                 + " value: "
@@ -179,7 +179,7 @@ public abstract class AbstractDataSourceFactory
     protected void applyConfiguration(Configuration c, Object o)
         throws TorqueException
     {
-        category.debug("applyConfiguration(" + c + ", " + o + ")");
+        logger.debug("applyConfiguration(" + c + ", " + o + ")");
         
         if(c != null)
         {
@@ -193,7 +193,7 @@ public abstract class AbstractDataSourceFactory
             }
             catch (Exception e)
             {
-                category.error(e);
+                logger.error(e);
                 throw new TorqueException(e);
             }
         }

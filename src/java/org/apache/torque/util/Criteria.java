@@ -66,7 +66,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections.StringStack;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.torque.Torque;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
@@ -190,9 +190,9 @@ public class Criteria extends Hashtable
 
     private boolean useTransaction = false;
 
-    /** Log4j category used for logging. */
-    private static Category category
-            = Category.getInstance(Criteria.class.getName());
+    /** Log4j logger used for logging. */
+    private static Logger logger
+            = Logger.getLogger(Criteria.class);
 
     /**
      * Creates a new instance with the default capacity.
@@ -3175,7 +3175,7 @@ public class Criteria extends Hashtable
                 {
                     // we are only doing this to allow easier debugging, so
                     // no need to throw up the exception, just make note of it.
-                    category.error(
+                    logger.error(
                        "Could not get a DB adapter, so sql may be wrong");
                 }
             }

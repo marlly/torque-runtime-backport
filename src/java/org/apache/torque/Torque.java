@@ -69,7 +69,7 @@ import java.util.Properties;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.stratum.lifecycle.Configurable;
@@ -155,10 +155,10 @@ public class Torque
     protected static Map managers = new HashMap();
 
     /**
-     * The logging category.
+     * The logging logger.
      */
-    private static Category category
-            = Category.getInstance(Torque.class.getName());
+    private static Logger logger
+            = Logger.getLogger(Torque.class);
 
     /**
      * Torque-specific configuration.
@@ -217,7 +217,7 @@ public class Torque
             if (configuration != null && !configuration.isEmpty())
             {
                 /*
-                category.warn("Torque's 'services.DatabaseService.' " +
+                logger.warn("Torque's 'services.DatabaseService.' " +
                               "configuration prefix has been deprecated in " +
                               "favor of the 'torque.' prefix");
                 */
@@ -256,7 +256,7 @@ public class Torque
     private static final void initAdapters(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initAdapters");
+        logger.debug("Starting initAdapters");
         adapterMap = new HashMap();
         Configuration c = configuration.subset("database");
         if (c != null)
@@ -279,13 +279,13 @@ public class Torque
             }
             catch (Exception e)
             {
-                category.error("", e);
+                logger.error("", e);
                 throw new TorqueException(e);
             }
         }
         else
         {
-            category.warn("There were no adapters in the configuration.");
+            logger.warn("There were no adapters in the configuration.");
         }
     }
 
@@ -298,7 +298,7 @@ public class Torque
     private static void initDataSourceFactories(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initDSF");
+        logger.debug("Starting initDSF");
         dsFactoryMap = new HashMap();
         Configuration c = configuration.subset("dsfactory");
         if (c != null)
@@ -313,7 +313,7 @@ public class Torque
                     {
                         String classname = c.getString(key);
                         String handle = key.substring(0, key.indexOf('.'));
-                        category.debug("handle: " + handle
+                        logger.debug("handle: " + handle
                                 + " DataSourceFactory: " + classname);
                         Class dsfClass = Class.forName(classname);
                         DataSourceFactory dsf =
@@ -325,7 +325,7 @@ public class Torque
             }
             catch (Exception e)
             {
-                category.error("", e);
+                logger.error("", e);
                 throw new TorqueException(e);
             }
         }
@@ -348,7 +348,7 @@ public class Torque
         if (dsFactoryMap.get(DEFAULT_NAME) == null
             && !defaultDB.equals(DEFAULT_NAME))
         {
-            category.debug("Adding a dummy entry for "
+            logger.debug("Adding a dummy entry for "
                            + DEFAULT_NAME + ", mapped onto " + defaultDB);
             dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
         }
@@ -447,7 +447,7 @@ public class Torque
                 if (!managers.containsKey(managedClassKey))
                 {
                     String managerClass = configuration.getString(key);
-                    category.info("Added Manager for Class: " + managedClassKey
+                    logger.info("Added Manager for Class: " + managedClassKey
                                   + " -> " + managerClass);
                     try
                     {
@@ -458,7 +458,7 @@ public class Torque
                         // the exception thrown here seems to disappear.
                         // At least when initialized by Turbine, should find
                         // out why, but for now make sure it is noticed.
-                        category.error("", e);
+                        logger.error("", e);
                         e.printStackTrace();
                         throw e;
                     }
@@ -572,7 +572,7 @@ public class Torque
 
                 // We have to deal with Configuration way
                 // of dealing with "," in properties which is to
-                // make them separate values. Log4j category
+                // make them separate values. Log4j logger
                 // properties contain commas so we must stick them
                 // back together for log4j.
                 String[] values = getConfiguration().getStringArray(key);
@@ -591,7 +591,7 @@ public class Torque
             }
 
             PropertyConfigurator.configure(p);
-            category.info("Logging has been configured by Torque.");
+            logger.info("Logging has been configured by Torque.");
         }
     }
 
@@ -609,10 +609,10 @@ public class Torque
         // configuration. Remember that most categories are created
         // outside the configuration file. What you want to check for
         // is the existence of appenders. The correct procedure is to
-        // first check for appenders in the root category and if that
+        // first check for appenders in the root logger and if that
         // returns no appenders to check in other categories.
 
-        Enumeration enum = Category.getRoot().getAllAppenders();
+        Enumeration enum = Logger.getRoot().getAllAppenders();
 
         if (!(enum instanceof NullEnumeration))
         {
@@ -620,10 +620,10 @@ public class Torque
         }
         else
         {
-            Enumeration cats = Category.getCurrentCategories();
+            Enumeration cats = Logger.getCurrentCategories();
             while (cats.hasMoreElements())
             {
-                Category c = (Category) cats.nextElement();
+                Logger c = (Logger) cats.nextElement();
                 if (!(c.getAllAppenders() instanceof NullEnumeration))
                 {
                     return true;
@@ -644,7 +644,7 @@ public class Torque
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
         {
-            category.error("No configured manager for key " + name + ".");
+            logger.error("No configured manager for key " + name + ".");
         }
         return m;
     }
@@ -663,7 +663,7 @@ public class Torque
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
         {
-            category.debug("Added late Manager mapping for Class: "
+            logger.debug("Added late Manager mapping for Class: "
                            + name + " -> " + defaultClassName);
 
             try
@@ -672,7 +672,7 @@ public class Torque
             }
             catch (TorqueException e)
             {
-                category.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
 
             // Try again now that the default manager should be in the map
@@ -994,7 +994,7 @@ public class Torque
             }
             catch (SQLException e)
             {
-                category.error("Error occured while closing connection.", e);
+                logger.error("Error occured while closing connection.", e);
             }
         }
     }

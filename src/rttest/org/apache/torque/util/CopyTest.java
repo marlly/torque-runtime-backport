@@ -54,7 +54,6 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;

@@ -56,6 +56,7 @@ package org.apache.torque.om;
 
 import java.io.Serializable;
 import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import java.sql.Connection;
 
 /**
@@ -103,6 +104,12 @@ public abstract class BaseObject implements Persistent, Serializable
      * Cache the logger to avoid looking it up every time its needed.
      */
     private transient Category log = null;
+
+
+    /**
+     * Cache the logger to avoid looking it up every time its needed.
+     */
+    private transient Logger logger = null;
 
     /**
      * getter for the object primaryKey.
@@ -308,6 +315,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * gets a log4j Category based on class name.
      *
      * @return a <code>Category</code> to write log to.
+     * @deprecated Use getLog()
      */
     protected Category log()
     {
@@ -316,6 +324,20 @@ public abstract class BaseObject implements Persistent, Serializable
             log = Category.getInstance(getClass().getName());
         }
         return log;
+    }
+
+    /**
+     * gets a log4j Logger based on class name.
+     *
+     * @return a <code>Logger</code> to write log to.
+     */
+    protected Logger getLog()
+    {
+        if (logger == null)
+        {
+            logger = Logger.getLogger(getClass());
+        }
+        return logger;
     }
 
     /**

@@ -57,7 +57,7 @@ package org.apache.torque.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
@@ -81,7 +81,7 @@ public class Transaction
 {
 
     /** The log. */
-    private static Category category = Category.getInstance(Transaction.class);
+    private static Logger logger = Logger.getLogger(Transaction.class);
 
     /**
      * Begin a transaction.  This method will fallback gracefully to
@@ -108,7 +108,7 @@ public class Transaction
      * @throws TorqueException
      */
     public static Connection beginOptional(String dbName,
-        boolean useTransaction)
+                                           boolean useTransaction)
         throws TorqueException
     {
         Connection con = Torque.getConnection(dbName);
@@ -139,9 +139,9 @@ public class Transaction
         if (con == null)
         {
             throw new NullPointerException("Connection object was null. "
-                    + "This could be due to a misconfiguration of the "
-                    + "DataSourceFactory. Check the logs and Torque.properties "
-                    + "to better determine the cause.");
+                                           + "This could be due to a misconfiguration of the "
+                                           + "DataSourceFactory. Check the logs and Torque.properties "
+                                           + "to better determine the cause.");
         }
 
         try
@@ -176,10 +176,10 @@ public class Transaction
     {
         if (con == null)
         {
-            category.error("Connection object was null. "
-                    + "This could be due to a misconfiguration of the "
-                    + "DataSourceFactory. Check the logs and Torque.properties "
-                    + "to better determine the cause.");
+            logger.error("Connection object was null. "
+                         + "This could be due to a misconfiguration of the "
+                         + "DataSourceFactory. Check the logs and Torque.properties "
+                         + "to better determine the cause.");
         }
         else
         {
@@ -194,9 +194,9 @@ public class Transaction
             }
             catch (SQLException e)
             {
-                category.error("An attempt was made to rollback a transaction "
-                               + "but the database did not allow the operation to be "
-                               + "rolled back.", e);
+                logger.error("An attempt was made to rollback a transaction "
+                             + "but the database did not allow the operation to be "
+                             + "rolled back.", e);
                 throw new TorqueException(e);
             }
             finally
@@ -220,7 +220,7 @@ public class Transaction
         }
         catch (TorqueException e)
         {
-            category.error("An error occured during rollback.", e);
+            logger.error("An error occured during rollback.", e);
         }
     }
 }

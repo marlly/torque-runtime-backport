@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
-import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;

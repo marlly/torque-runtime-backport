@@ -54,7 +54,7 @@ package org.apache.torque.pool;
  * <http://www.apache.org/>.
  */
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.Torque;
@@ -94,7 +94,7 @@ public class PoolTest implements Runnable
 
     private static int currentThreadCount = 0;
 
-    private static Category category;
+    private static Logger logger = Logger.getLogger(PoolTest.class);
 
     protected PoolTest()
     {
@@ -158,7 +158,7 @@ public class PoolTest implements Runnable
             }
             catch (Exception e)
             {
-                category.error(e);
+                logger.error(e);
                 e.printStackTrace();
             }
         }

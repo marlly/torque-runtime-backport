@@ -62,7 +62,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
@@ -168,10 +169,6 @@ import com.workingdogs.village.DataSetException;
  */
 public class LargeSelect implements Runnable
 {
-
-    /** The log. */
-    private static final Category log = Category.getInstance(LargeSelect.class);
-
     /** The number of records that a page consists of.  */
     private int pageSize;
     /** The maximum number of records to maintain in memory. */
@@ -259,6 +256,10 @@ public class LargeSelect implements Runnable
 
     /** A place to store search parameters that relate to this query. */
     private Hashtable params = null;
+
+    /** Logging */
+    private static Logger log =
+        Logger.getLogger(LargeSelect.class);
 
     /**
      * Creates a LargeSelect whose results are returned as a <code>List</code>

@@ -57,11 +57,11 @@ package org.apache.torque.manager;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Serializable;
-import org.apache.log4j.Category;
 import org.apache.jcs.access.GroupCacheAccess;
 import org.apache.jcs.access.exception.CacheException;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.StackObjectPool;
+import org.apache.log4j.Logger;
 
 import org.apache.torque.TorqueException;
 
@@ -73,10 +73,6 @@ import org.apache.torque.TorqueException;
  */
 public class MethodResultCache
 {
-    /** the log */
-    private static final Category log =
-        Category.getInstance("org.apache.torque");
-
     private static final String keyClassName =
         "org.apache.torque.manager.MethodCacheKey";
     private ObjectPool pool;
@@ -84,6 +80,10 @@ public class MethodResultCache
     private boolean lockCache;
     private int inGet;
     private Map groups;
+
+    /** Logging */
+    private static Logger log =
+        Logger.getLogger(MethodResultCache.class);
 
     public MethodResultCache(GroupCacheAccess cache)
         throws TorqueException

@@ -64,7 +64,7 @@ import javax.sql.ConnectionEventListener;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * This class implements a simple connection pooling scheme.  Multiple
@@ -136,10 +136,10 @@ class ConnectionPool implements ConnectionEventListener
     private int waitCount = 0;
 
     /**
-     * The logging category.
+     * The logging logger.
      */
-    private static Category category
-        = Category.getInstance(ConnectionPool.class.getName());
+    private static Logger logger
+        = Logger.getLogger(ConnectionPool.class);
 
     /** Interval (in seconds) that the monitor thread reports the pool state */
     private int logInterval = 0;
@@ -201,7 +201,7 @@ class ConnectionPool implements ConnectionEventListener
 
         if (logInterval > 0)
         {
-            category.debug("Starting Pool Monitor Thread with Log Interval " 
+            logger.debug("Starting Pool Monitor Thread with Log Interval " 
                            + logInterval + " Milliseconds");
 
             // Create monitor thread
@@ -600,7 +600,7 @@ class ConnectionPool implements ConnectionEventListener
         }
         catch (Exception e)
         {
-            category.error("Error occurred trying to close a "
+            logger.error("Error occurred trying to close a "
                            + "PooledConnection.", e);
         }
         finally
@@ -638,7 +638,7 @@ class ConnectionPool implements ConnectionEventListener
                 buf.append(" avail: ").append(getNbrAvailable());
                 buf.append(" in use: ").append(getNbrCheckedOut());
                 buf.append(" total: ").append(getTotalCount());
-                category.info(buf.toString());
+                logger.info(buf.toString());
 
                 // Wait for a bit.
                 try

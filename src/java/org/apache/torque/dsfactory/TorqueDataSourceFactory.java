@@ -61,7 +61,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.pool.TorqueClassicDataSource;
@@ -79,8 +79,8 @@ public class TorqueDataSourceFactory
 {
 
     /** The log. */
-    private static Category category =
-        Category.getInstance(TorqueDataSourceFactory.class);
+    private static Logger logger =
+        Logger.getLogger(TorqueDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
@@ -121,7 +121,7 @@ public class TorqueDataSourceFactory
     protected ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initCPDS");
+        logger.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = null;
 
@@ -144,7 +144,7 @@ public class TorqueDataSourceFactory
         Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initTorqueClassic");
+        logger.debug("Starting initTorqueClassic");
         TorqueClassicDataSource ds = new TorqueClassicDataSource();
 
         Configuration c = null;

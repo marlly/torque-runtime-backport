@@ -73,7 +73,7 @@ import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.Persistent;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * This class contains common functionality of a Manager for
@@ -86,8 +86,8 @@ public abstract class AbstractBaseManager
     implements Serializable
 {
     /** the log */
-    protected static final Category category =
-        Category.getInstance(AbstractBaseManager.class.getName());
+    protected static final Logger logger =
+        Logger.getLogger(AbstractBaseManager.class);
 
     /** used to cache the om objects. cache is set by the region property */
     protected transient GroupCacheAccess cache;
@@ -466,7 +466,7 @@ public abstract class AbstractBaseManager
         }
         if (cache == null)
         {
-            category.info("Cache could not be initialized for region: " + v);
+            logger.info("Cache could not be initialized for region: " + v);
         }
     }
 
@@ -611,7 +611,7 @@ public abstract class AbstractBaseManager
         }
         catch (Exception e)
         {
-            category.error("Cache could not be initialized for region: "
+            logger.error("Cache could not be initialized for region: "
                            + region + "after deserialization");
         }
     }

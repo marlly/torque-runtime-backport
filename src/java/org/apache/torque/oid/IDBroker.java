@@ -64,7 +64,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -202,10 +202,10 @@ public class IDBroker implements Runnable, IdGenerator
         "idbroker.usenewconnection";
 
     /**
-     * Category used for logging.
+     * Logger used for logging.
      */
-    private Category category =
-        Category.getInstance(IDBroker.class.getName());
+    private Logger logger =
+        Logger.getLogger(IDBroker.class);
 
     /**
      * Creates an IDBroker for the ID table.
@@ -256,13 +256,13 @@ public class IDBroker implements Runnable, IdGenerator
         }
         if (!transactionsSupported)
         {
-            category.warn("IDBroker is being used with db '" + dbName
-                    + "', which does not support transactions. IDBroker "
-                    + "attempts to use transactions to limit the possibility "
-                    + "of duplicate key generation.  Without transactions, "
-                    + "duplicate key generation is possible if multiple JVMs "
-                    + "are used or other means are used to write to the "
-                    + "database.");
+            logger.warn("IDBroker is being used with db '" + dbName
+                        + "', which does not support transactions. IDBroker "
+                        + "attempts to use transactions to limit the possibility "
+                        + "of duplicate key generation.  Without transactions, "
+                        + "duplicate key generation is possible if multiple JVMs "
+                        + "are used or other means are used to write to the "
+                        + "database.");
         }
     }
 
@@ -284,7 +284,7 @@ public class IDBroker implements Runnable, IdGenerator
      * @exception Exception Database error.
      */
     public int getIdAsInt(Connection connection, Object tableName)
-            throws Exception
+        throws Exception
     {
         return getIdAsBigDecimal(connection, tableName).intValue();
     }
@@ -430,11 +430,11 @@ public class IDBroker implements Runnable, IdGenerator
         {
             if (availableIds == null)
             {
-                category.debug("Forced id retrieval - no available list");
+                logger.debug("Forced id retrieval - no available list");
             }
             else
             {
-                category.debug("Forced id retrieval - " + availableIds.size());
+                logger.debug("Forced id retrieval - " + availableIds.size());
             }
             storeIDs(tableName, true, connection);
             availableIds = (List) ids.get(tableName);
@@ -448,14 +448,14 @@ public class IDBroker implements Runnable, IdGenerator
         // We assume that availableIds will always come from the ids
         // Hashtable and would therefore always be the same object for
         // a specific table.
-//        synchronized (availableIds)
-//        {
-            for (int i = size - 1; i >= 0; i--)
-            {
-                results[i] = (BigDecimal) availableIds.get(i);
-                availableIds.remove(i);
-            }
-//        }
+        //        synchronized (availableIds)
+        //        {
+        for (int i = size - 1; i >= 0; i--)
+        {
+            results[i] = (BigDecimal) availableIds.get(i);
+            availableIds.remove(i);
+        }
+        //        }
 
         return results;
     }
@@ -500,7 +500,7 @@ public class IDBroker implements Runnable, IdGenerator
             }
             catch (Exception e)
             {
-                category.error("Release of connection failed.", e);
+                logger.error("Release of connection failed.", e);
             }
         }
         return exists;
@@ -513,7 +513,7 @@ public class IDBroker implements Runnable, IdGenerator
      */
     public void run()
     {
-        category.debug("IDBroker thread was started.");
+        logger.debug("IDBroker thread was started.");
 
         Thread thisThread = Thread.currentThread();
         while (houseKeeperThread == thisThread)
@@ -527,13 +527,13 @@ public class IDBroker implements Runnable, IdGenerator
                 // ignored
             }
 
-            // category.info("IDBroker thread checking for more keys.");
+            // logger.info("IDBroker thread checking for more keys.");
             Iterator it = ids.keySet().iterator();
             while (it.hasNext())
             {
                 String tableName = (String) it.next();
-                category.debug("IDBroker thread checking for more keys "
-                        + "on table: " + tableName);
+                logger.debug("IDBroker thread checking for more keys "
+                             + "on table: " + tableName);
                 List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
                 if (quantity > availableIds.size())
@@ -544,18 +544,18 @@ public class IDBroker implements Runnable, IdGenerator
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false, null);
-                        category.debug("Retrieved more ids for table: "
-                                + tableName);
+                        logger.debug("Retrieved more ids for table: "
+                                     + tableName);
                     }
                     catch (Exception exc)
                     {
-                        category.error("There was a problem getting new IDs "
-                                + "for table: " + tableName, exc);
+                        logger.error("There was a problem getting new IDs "
+                                     + "for table: " + tableName, exc);
                     }
                 }
             }
         }
-        category.debug("IDBroker thread finished.");
+        logger.debug("IDBroker thread finished.");
     }
 
     /**
@@ -584,7 +584,7 @@ public class IDBroker implements Runnable, IdGenerator
         // Check if quantity changing is switched on.
         // If prefetch is turned off, changing quantity does not make sense
         if (!configuration.getBoolean(DB_IDBROKER_CLEVERQUANTITY, true)
-                || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
+            || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
             return;
         }
@@ -600,14 +600,14 @@ public class IDBroker implements Runnable, IdGenerator
             int timeLapse = (int) (nowLong - thenLong);
             if (timeLapse < sleepPeriod && timeLapse > 0)
             {
-                category.debug("Unscheduled retrieval of more ids for table: "
-                        + tableName);
+                logger.debug("Unscheduled retrieval of more ids for table: "
+                             + tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
                 float rate = getQuantity(tableName, null).floatValue()
-                        / (float) timeLapse;
+                    / (float) timeLapse;
                 quantityStore.put(tableName, new BigDecimal(
-                        Math.ceil(sleepPeriod * rate * safetyMargin)));
+                                      Math.ceil(sleepPeriod * rate * safetyMargin)));
             }
         }
         lastQueryTime.put(tableName, now);
@@ -635,62 +635,62 @@ public class IDBroker implements Runnable, IdGenerator
 
         // Block on the table.  Multiple tables are allowed to ask for
         // ids simultaneously.
-//        synchronized(tMap)  see comment in the getNextIds method
-//        {
-            if (adjustQuantity)
+        //        synchronized(tMap)  see comment in the getNextIds method
+        //        {
+        if (adjustQuantity)
+        {
+            checkTiming(tableName);
+        }
+
+        try
+        {
+            if (connection == null || configuration
+                .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
             {
-                checkTiming(tableName);
+                String databaseName = dbMap.getName();
+                connection = Transaction.beginOptional(dbMap.getName(), transactionsSupported);
             }
 
-            try
-            {
-                if (connection == null || configuration
-                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
-                {
-                    String databaseName = dbMap.getName();
-                    connection = Transaction.beginOptional(dbMap.getName(), transactionsSupported);
-                }
+            // Write the current value of quantity of keys to grab
+            // to the database, primarily to obtain a write lock
+            // on the table/row, but this value will also be used
+            // as the starting value when an IDBroker is
+            // instantiated.
+            quantity = getQuantity(tableName, connection);
+            updateQuantity(connection, tableName, quantity);
 
-                // Write the current value of quantity of keys to grab
-                // to the database, primarily to obtain a write lock
-                // on the table/row, but this value will also be used
-                // as the starting value when an IDBroker is
-                // instantiated.
-                quantity = getQuantity(tableName, connection);
-                updateQuantity(connection, tableName, quantity);
+            // Read the next starting ID from the ID_TABLE.
+            BigDecimal[] results = selectRow(connection, tableName);
+            nextId = results[0]; // NEXT_ID column
 
-                // Read the next starting ID from the ID_TABLE.
-                BigDecimal[] results = selectRow(connection, tableName);
-                nextId = results[0]; // NEXT_ID column
+            // Update the row based on the quantity in the
+            // ID_TABLE.
+            BigDecimal newNextId = nextId.add(quantity);
+            updateNextId(connection, tableName, newNextId.toString());
 
-                // Update the row based on the quantity in the
-                // ID_TABLE.
-                BigDecimal newNextId = nextId.add(quantity);
-                updateNextId(connection, tableName, newNextId.toString());
+            Transaction.commit(connection);
+        }
+        catch (Exception e)
+        {
+            Transaction.rollback(connection);
+            throw e;
+        }
 
-                Transaction.commit(connection);
-            }
-            catch (Exception e)
-            {
-                Transaction.rollback(connection);
-                throw e;
-            }
+        List availableIds = (List) ids.get(tableName);
+        if (availableIds == null)
+        {
+            availableIds = new ArrayList();
+            ids.put(tableName, availableIds);
+        }
 
-            List availableIds = (List) ids.get(tableName);
-            if (availableIds == null)
-            {
-                availableIds = new ArrayList();
-                ids.put(tableName, availableIds);
-            }
-
-            // Create the ids and store them in the list of available ids.
-            int numId = quantity.intValue();
-            for (int i = 0; i < numId; i++)
-            {
-                availableIds.add(nextId);
-                nextId = nextId.add(ONE);
-            }
-//        }
+        // Create the ids and store them in the list of available ids.
+        int numId = quantity.intValue();
+        for (int i = 0; i < numId; i++)
+        {
+            availableIds.add(nextId);
+            nextId = nextId.add(ONE);
+        }
+        //        }
     }
 
     /**
@@ -754,7 +754,7 @@ public class IDBroker implements Runnable, IdGenerator
                 }
                 catch (Exception e)
                 {
-                    category.error("Release of connection failed.", e);
+                    logger.error("Release of connection failed.", e);
                 }
             }
         }
@@ -771,14 +771,14 @@ public class IDBroker implements Runnable, IdGenerator
      * @exception Exception a generic exception.
      */
     private BigDecimal[] selectRow(Connection con, String tableName)
-            throws Exception
+        throws Exception
     {
         StringBuffer stmt = new StringBuffer();
         stmt.append("SELECT " + NEXT_ID + ", " + QUANTITY)
-                .append(" FROM " + ID_TABLE)
-                .append(" WHERE TABLE_NAME = '")
-                .append(tableName)
-                .append('\'');
+            .append(" FROM " + ID_TABLE)
+            .append(" WHERE TABLE_NAME = '")
+            .append(tableName)
+            .append('\'');
 
         Statement statement = null;
 
@@ -799,7 +799,7 @@ public class IDBroker implements Runnable, IdGenerator
             else
             {
                 throw new TorqueException("The table " + tableName +
-                    " does not have a proper entry in the " + ID_TABLE);
+                                          " does not have a proper entry in the " + ID_TABLE);
             }
         }
         finally
@@ -823,22 +823,22 @@ public class IDBroker implements Runnable, IdGenerator
      * @exception Exception Database error.
      */
     private void updateNextId(Connection con, String tableName, String id)
-            throws Exception
+        throws Exception
     {
 
 
         StringBuffer stmt = new StringBuffer(id.length()
-                + tableName.length() + 50);
+                                             + tableName.length() + 50);
         stmt.append("UPDATE " + ID_TABLE)
-                .append(" SET NEXT_ID = ")
-                .append(id)
-                .append(" WHERE TABLE_NAME = '")
-                .append(tableName)
-                .append('\'');
+            .append(" SET NEXT_ID = ")
+            .append(id)
+            .append(" WHERE TABLE_NAME = '")
+            .append(tableName)
+            .append('\'');
 
         Statement statement = null;
 
-        category.debug("updateNextId: " + stmt.toString());
+        logger.debug("updateNextId: " + stmt.toString());
 
         try
         {
@@ -864,21 +864,21 @@ public class IDBroker implements Runnable, IdGenerator
      * @exception Exception Database error.
      */
     private void updateQuantity(Connection con, String tableName,
-            BigDecimal quantity)
-            throws Exception
+                                BigDecimal quantity)
+        throws Exception
     {
         StringBuffer stmt = new StringBuffer(quantity.toString().length()
-                + tableName.length() + 50);
+                                             + tableName.length() + 50);
         stmt.append("UPDATE " + ID_TABLE)
-                .append(" SET QUANTITY = ")
-                .append(quantity)
-                .append(" WHERE TABLE_NAME = '")
-                .append(tableName)
-                .append('\'');
+            .append(" SET QUANTITY = ")
+            .append(quantity)
+            .append(" WHERE TABLE_NAME = '")
+            .append(tableName)
+            .append('\'');
 
         Statement statement = null;
 
-        category.debug("updateQuantity: " + stmt.toString());
+        logger.debug("updateQuantity: " + stmt.toString());
 
         try
         {

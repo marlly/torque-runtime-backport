@@ -165,7 +165,7 @@
     />
 
     <available
-      classname="org.apache.log4j.Category"
+      classname="org.apache.log4j.Logger"
       property="log4j.present"
       classpathref="classpath"
     />

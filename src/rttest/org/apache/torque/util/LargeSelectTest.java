@@ -54,7 +54,6 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.TorqueException;
 import org.apache.torque.test.Author;
@@ -70,10 +69,6 @@ import java.util.List;
  */
 public class LargeSelectTest extends BaseTestCase
 {
-    /** Category used for logging in the runtime test class. */
-    private static Category category =
-            Category.getInstance(LargeSelectTest.class.getName());
-
     private static final int TEST_PAGE_SIZE = 9;
     private static final int TEST_PAGES = 9;
     private static final int TEST_ROWS = TEST_PAGE_SIZE * TEST_PAGES;
