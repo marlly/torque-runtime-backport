@@ -71,9 +71,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.StringStack;
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.log4j.Logger;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
@@ -457,22 +458,23 @@ public abstract class BasePeer implements java.io.Serializable
         {
             String key = (String) it.next();
             Criteria.Criterion c = criteria.getCriterion(key);
-            String[] tableNames = c.getAllTables();
-            for (int i = 0; i < tableNames.length; i++)
+            List tableNames = c.getAllTables();
+            for (int i = 0; i < tableNames.size(); i++)
             {
-                String tableName2 = criteria.getTableForAlias(tableNames[i]);
+                String name = (String) tableNames.get(i);
+                String tableName2 = criteria.getTableForAlias(name);
                 if (tableName2 != null)
                 {
                     tables.add(new StringBuffer(
-                            tableNames[i].length() + tableName2.length() + 1)
+                            name.length() + tableName2.length() + 1)
                             .append(tableName2)
                             .append(' ')
-                            .append(tableNames[i])
+                            .append(name)
                             .toString());
                 }
                 else
                 {
-                    tables.add(tableNames[i]);
+                    tables.add(name);
                 }
             }
 
@@ -997,18 +999,18 @@ public abstract class BasePeer implements java.io.Serializable
         DB db = Torque.getDB(criteria.getDbName());
         DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
 
-        StringStack selectModifiers = query.getSelectModifiers();
-        StringStack selectClause = query.getSelectClause();
-        StringStack fromClause = query.getFromClause();
-        StringStack whereClause = query.getWhereClause();
-        StringStack orderByClause = query.getOrderByClause();
-        StringStack groupByClause = query.getGroupByClause();
+        UniqueList selectModifiers = query.getSelectModifiers();
+        UniqueList selectClause = query.getSelectClause();
+        UniqueList fromClause = query.getFromClause();
+        UniqueList whereClause = query.getWhereClause();
+        UniqueList orderByClause = query.getOrderByClause();
+        UniqueList groupByClause = query.getGroupByClause();
 
-        StringStack orderBy = criteria.getOrderByColumns();
-        StringStack groupBy = criteria.getGroupByColumns();
-        StringStack select = criteria.getSelectColumns();
+        UniqueList orderBy = criteria.getOrderByColumns();
+        UniqueList groupBy = criteria.getGroupByColumns();
+        UniqueList select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
-        StringStack modifiers = criteria.getSelectModifiers();
+        UniqueList modifiers = criteria.getSelectModifiers();
 
         for (int i = 0; i < modifiers.size(); i++)
         {
@@ -1017,7 +1019,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         for (int i = 0; i < select.size(); i++)
         {
-            String columnName = select.get(i);
+            String columnName = (String) select.get(i);
             if (columnName.indexOf('.') == -1  && columnName.indexOf('*') == -1)
             {
                 throwMalformedColumnNameException("select", columnName);
@@ -1174,7 +1176,7 @@ public abstract class BasePeer implements java.io.Serializable
         {
             for (int i = 0; i < groupBy.size(); i++)
             {
-                String groupByColumn = groupBy.get(i);
+                String groupByColumn = (String) groupBy.get(i);
                 if (groupByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("group by",
@@ -1197,7 +1199,7 @@ public abstract class BasePeer implements java.io.Serializable
             // toUpperCase().
             for (int i = 0; i < orderBy.size(); i++)
             {
-                String orderByColumn = orderBy.get(i);
+                String orderByColumn = (String) orderBy.get(i);
                 if (orderByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("order by",
@@ -2239,16 +2241,16 @@ public abstract class BasePeer implements java.io.Serializable
 
         Query query = new Query();
 
-        StringStack selectModifiers = query.getSelectModifiers();
-        StringStack selectClause = query.getSelectClause();
-        StringStack fromClause = query.getFromClause();
-        StringStack whereClause = query.getWhereClause();
-        StringStack orderByClause = query.getOrderByClause();
+        UniqueList selectModifiers = query.getSelectModifiers();
+        UniqueList selectClause = query.getSelectClause();
+        UniqueList fromClause = query.getFromClause();
+        UniqueList whereClause = query.getWhereClause();
+        UniqueList orderByClause = query.getOrderByClause();
 
-        StringStack orderBy = criteria.getOrderByColumns();
-        StringStack select = criteria.getSelectColumns();
+        UniqueList orderBy = criteria.getOrderByColumns();
+        UniqueList select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
-        StringStack modifiers = criteria.getSelectModifiers();
+        UniqueList modifiers = criteria.getSelectModifiers();
 
         for (int i = 0; i < modifiers.size(); i++)
         {
@@ -2257,7 +2259,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         for (int i = 0; i < select.size(); i++)
         {
-            String columnName = select.get(i);
+            String columnName = (String) select.get(i);
             if (columnName.indexOf('.') == -1)
             {
                 throwMalformedColumnNameException("select", columnName);
@@ -2418,7 +2420,7 @@ public abstract class BasePeer implements java.io.Serializable
             // toUpperCase().
             for (int i = 0; i < orderBy.size(); i++)
             {
-                String orderByColumn = orderBy.get(i);
+                String orderByColumn = (String) orderBy.get(i);
                 if (orderByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("order by",

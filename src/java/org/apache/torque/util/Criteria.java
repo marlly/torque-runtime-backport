@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,8 +65,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.collections.StringStack;
+
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.log4j.Logger;
+
 import org.apache.torque.Torque;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
@@ -86,6 +89,7 @@ import org.apache.torque.om.ObjectKey;
  * @author <a href="mailto:eric@dobbse.net">Eric Dobbs</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class Criteria extends Hashtable
@@ -159,10 +163,10 @@ public class Criteria extends Hashtable
     private boolean ignoreCase = false;
     private boolean singleRecord = false;
     private boolean cascade = false;
-    private StringStack selectModifiers = new StringStack();
-    private StringStack selectColumns = new StringStack();
-    private StringStack orderByColumns = new StringStack();
-    private StringStack groupByColumns = new StringStack();
+    private UniqueList selectModifiers = new UniqueList();
+    private UniqueList selectColumns = new UniqueList();
+    private UniqueList orderByColumns = new UniqueList();
+    private UniqueList groupByColumns = new UniqueList();
     private Criterion having = null;
     private Hashtable asColumns = new Hashtable(8);
     private ArrayList joinL = null;
@@ -1652,10 +1656,10 @@ public class Criteria extends Hashtable
     /**
      * Get select columns.
      *
-     * @return A StringStack with the name of the select
+     * @return An StringStack with the name of the select
      * columns.
      */
-    public StringStack getSelectColumns()
+    public UniqueList getSelectColumns()
     {
         return selectColumns;
     }
@@ -1663,9 +1667,9 @@ public class Criteria extends Hashtable
     /**
      * Get select modifiers.
      *
-     * @return A StringStack with the select modifiers.
+     * @return An UniqueList with the select modifiers.
      */
-    public StringStack getSelectModifiers()
+    public UniqueList getSelectModifiers()
     {
         return selectModifiers;
     }
@@ -1709,9 +1713,9 @@ public class Criteria extends Hashtable
     /**
      * Get order by columns.
      *
-     * @return A StringStack with the name of the order columns.
+     * @return An UniqueList with the name of the order columns.
      */
-    public StringStack getOrderByColumns()
+    public UniqueList getOrderByColumns()
     {
         return orderByColumns;
     }
@@ -1719,9 +1723,9 @@ public class Criteria extends Hashtable
     /**
      * Get group by columns.
      *
-     * @return A StringStack with the name of the groupBy clause.
+     * @return An UniqueList with the name of the groupBy clause.
      */
-    public StringStack getGroupByColumns()
+    public UniqueList getGroupByColumns()
     {
         return groupByColumns;
     }
@@ -3366,7 +3370,7 @@ public class Criteria extends Hashtable
                     sb.append(field)
                       .append(comparison);
 
-                    StringStack inClause = new StringStack();
+                    UniqueList inClause = new UniqueList();
 
                     if (value instanceof List)
                     {
@@ -3383,8 +3387,8 @@ public class Criteria extends Hashtable
                     }
 
                     StringBuffer inString = new StringBuffer();
-                    inString.append('(')
-                        .append(inClause.toString(",")).append(')');
+                    inString.append('(').append(StringUtils.join(
+                            inClause.iterator(), (","))).append(')');
                     sb.append(inString.toString());
                 }
                 else
@@ -3531,19 +3535,21 @@ public class Criteria extends Hashtable
 
         /**
          * get all tables from nested criterion objects
+         *
+         * @return the list of tables
          */
-        public String[] getAllTables()
+        public List getAllTables()
         {
-            StringStack tables = new StringStack();
+            UniqueList tables = new UniqueList();
             addCriterionTable(this, tables);
-            return tables.toStringArray();
+            return tables;
         }
 
         /**
          * method supporting recursion through all criterions to give
          * us a StringStack of tables from each criterion
          */
-        private void addCriterionTable(Criterion c, StringStack s)
+        private void addCriterionTable(Criterion c, UniqueList s)
         {
             if (c != null)
             {

@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,8 +54,11 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
+
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DBFactory;
@@ -177,12 +180,12 @@ public class CriteriaTest extends BaseTestCase
         assertEquals(crit4, crita[2]);
         assertEquals(crit5, crita[3]);
 
-        String[] tables = crit2.getAllTables();
+        List tables = crit2.getAllTables();
 
-        assertEquals(crit2.getTable(), tables[0]);
-        assertEquals(crit3.getTable(), tables[1]);
-        assertEquals(crit4.getTable(), tables[2]);
-        assertEquals(crit5.getTable(), tables[3]);
+        assertEquals(crit2.getTable(), tables.get(0));
+        assertEquals(crit3.getTable(), tables.get(1));
+        assertEquals(crit4.getTable(), tables.get(2));
+        assertEquals(crit5.getTable(), tables.get(3));
 
         // simple confirmations that equality operations work
         assertTrue(crit2.hashCode() == crit2.hashCode());

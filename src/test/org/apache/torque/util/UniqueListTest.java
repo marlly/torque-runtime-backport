@@ -57,71 +57,39 @@ package org.apache.torque.util;
 import junit.framework.TestCase;
 
 /**
- * Tests for Query
+ * Test for UniqueList
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class QueryTest extends TestCase
+public class UniqueListTest extends TestCase
 {
-
-    /**
-     * Constructor for QueryTest.
-     * @param arg0
-     */
-    public QueryTest(String arg0)
+    public UniqueListTest(String name)
     {
-        super(arg0);
+        super(name);
     }
 
     /**
-     * Test for String toString()
+     * null values are not allowed
      */
-    public void testColumns()
+    public void testNull()
     {
-        String expected
-                = "SELECT tableA.column1, tableA.column2, tableB.column1 FROM ";
-        Query query = new Query();
-
-        UniqueList columns = new UniqueList();
-        columns.add("tableA.column1");
-        columns.add("tableA.column2");
-        columns.add("tableB.column1");
-        query.setSelectClause(columns);
-
-        System.out.println(expected);
-        System.out.println(query.toString());
-        assertEquals(expected, query.toString());
+        UniqueList uniqueList = new UniqueList();
+        Object o = null;
+        boolean actualReturn = uniqueList.add(o);
+        assertEquals("return value", false, actualReturn);
     }
 
     /**
-     * Test for String toString()
+     * duplicates values are not allowed
      */
-    public void testToString()
+    public void testUnique()
     {
-        String expected	= "SELECT tableA.column1, tableA.column2, "
-                + "tableB.column1 FROM tableA, tableB WHERE tableA.A = tableB.A"
-                + " AND tableA.B = 1234";
-        Query query = new Query();
-
-        UniqueList columns = new UniqueList();
-        columns.add("tableA.column1");
-        columns.add("tableA.column2");
-        columns.add("tableB.column1");
-        query.setSelectClause(columns);
-
-        UniqueList tables = new UniqueList();
-        tables.add("tableA");
-        tables.add("tableB");
-        query.setFromClause(tables);
-
-        UniqueList where = new UniqueList();
-        where.add("tableA.A = tableB.A");
-        where.add("tableA.B = 1234");
-        query.setWhereClause(where);
-
-        System.out.println(expected);
-        System.out.println(query.toString());
-        assertEquals(expected, query.toString());
+        UniqueList uniqueList = new UniqueList();
+        uniqueList.add("Table");
+        uniqueList.add("TableA");
+        uniqueList.add("Table");
+        uniqueList.add("TableB");
+        assertEquals(3, uniqueList.size());
     }
 }

@@ -54,74 +54,28 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
 
 /**
- * Tests for Query
+ * List with unique entries. UniqueList does not allow null nor duplicates.
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class QueryTest extends TestCase
+class UniqueList extends ArrayList
 {
-
     /**
-     * Constructor for QueryTest.
-     * @param arg0
+     * Adds an Object to the list.
+     *
+     * @param o the Object to add
+     * @return true if the Object is added
      */
-    public QueryTest(String arg0)
+    public boolean add(Object o)
     {
-        super(arg0);
-    }
-
-    /**
-     * Test for String toString()
-     */
-    public void testColumns()
-    {
-        String expected
-                = "SELECT tableA.column1, tableA.column2, tableB.column1 FROM ";
-        Query query = new Query();
-
-        UniqueList columns = new UniqueList();
-        columns.add("tableA.column1");
-        columns.add("tableA.column2");
-        columns.add("tableB.column1");
-        query.setSelectClause(columns);
-
-        System.out.println(expected);
-        System.out.println(query.toString());
-        assertEquals(expected, query.toString());
-    }
-
-    /**
-     * Test for String toString()
-     */
-    public void testToString()
-    {
-        String expected	= "SELECT tableA.column1, tableA.column2, "
-                + "tableB.column1 FROM tableA, tableB WHERE tableA.A = tableB.A"
-                + " AND tableA.B = 1234";
-        Query query = new Query();
-
-        UniqueList columns = new UniqueList();
-        columns.add("tableA.column1");
-        columns.add("tableA.column2");
-        columns.add("tableB.column1");
-        query.setSelectClause(columns);
-
-        UniqueList tables = new UniqueList();
-        tables.add("tableA");
-        tables.add("tableB");
-        query.setFromClause(tables);
-
-        UniqueList where = new UniqueList();
-        where.add("tableA.A = tableB.A");
-        where.add("tableA.B = 1234");
-        query.setWhereClause(where);
-
-        System.out.println(expected);
-        System.out.println(query.toString());
-        assertEquals(expected, query.toString());
+        if (o != null && !contains(o))
+        {
+            return super.add(o);
+        }
+        return false;
     }
 }

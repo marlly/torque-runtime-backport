@@ -54,7 +54,7 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import org.apache.commons.collections.StringStack;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Used to assemble an SQL SELECT query.  Attributes exist for the
@@ -65,6 +65,7 @@ import org.apache.commons.collections.StringStack;
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class Query
@@ -79,12 +80,12 @@ public class Query
     private static final String LIMIT = " LIMIT ";
     private static final String ROWCOUNT = " SET ROWCOUNT ";
 
-    private StringStack selectModifiers = new StringStack();
-    private StringStack selectColumns = new StringStack();
-    private StringStack fromTables = new StringStack();
-    private StringStack whereCriteria = new StringStack();
-    private StringStack orderByColumns = new StringStack();
-    private StringStack groupByColumns = new StringStack();
+    private UniqueList selectModifiers = new UniqueList();
+    private UniqueList selectColumns = new UniqueList();
+    private UniqueList fromTables = new UniqueList();
+    private UniqueList whereCriteria = new UniqueList();
+    private UniqueList orderByColumns = new UniqueList();
+    private UniqueList groupByColumns = new UniqueList();
     private String having;
     private String limit;
     private String rowcount;
@@ -93,21 +94,21 @@ public class Query
      * Retrieve the modifier buffer in order to add modifiers to this
      * query.  E.g. DISTINCT and ALL.
      *
-     * @return A StringStack used to add modifiers.
+     * @return An UniqueList used to add modifiers.
      */
-    public StringStack getSelectModifiers()
+    public UniqueList getSelectModifiers()
     {
         return selectModifiers;
     }
-    
+
     /**
      * Set the modifiers. E.g. DISTINCT and ALL.
-     * 
+     *
      * @param modifiers the modifiers
      */
-    public void setSelectModifiers(StringStack modifiers)
+    public void setSelectModifiers(UniqueList modifiers)
     {
-		selectModifiers = modifiers;
+        selectModifiers = modifiers;
     }
 
     /**
@@ -115,73 +116,73 @@ public class Query
      * are returned in this query.
      *
      *
-     * @return A StringStack used to add columns to be selected.
+     * @return An UniqueList used to add columns to be selected.
      */
-    public StringStack getSelectClause()
+    public UniqueList getSelectClause()
     {
         return selectColumns;
     }
 
-	/**
-	 * Set the columns.
-	 * 
-	 * @param columns columns list
-	 */
-	public void setSelectClause(StringStack columns)
-	{
-		selectColumns = columns;
-	}
+    /**
+     * Set the columns.
+     *
+     * @param columns columns list
+     */
+    public void setSelectClause(UniqueList columns)
+    {
+        selectColumns = columns;
+    }
 
     /**
      * Retrieve the from buffer in order to specify which tables are
      * involved in this query.
      *
-     * @return A StringStack used to add tables involved in the query.
+     * @return An UniqueList used to add tables involved in the query.
      */
-    public StringStack getFromClause()
+    public UniqueList getFromClause()
     {
         return fromTables;
     }
 
-	/**
-	 * Set the from clause.
-	 * 
-	 * @param tables the tables
-	 */
-	public void setFromClause(StringStack tables)
-	{
-		fromTables = tables;
-	}
+    /**
+     * Set the from clause.
+     *
+     * @param tables the tables
+     */
+    public void setFromClause(UniqueList tables)
+    {
+        fromTables = tables;
+    }
 
     /**
      * Retrieve the where buffer in order to specify the selection
      * criteria E.g. column_a=3.  Expressions added to the buffer will
      * be separated using AND.
      *
-     * @return A StringStack used to add selection criteria.
+     * @return An UniqueList used to add selection criteria.
      */
-    public StringStack getWhereClause()
+    public UniqueList getWhereClause()
     {
         return whereCriteria;
     }
 
-	/**
-	 * Set the where clause.
-	 *  
-	 * @param where where clause
-	 */
-	public void setWhereClause(StringStack where)
-	{
-		whereCriteria = where;
-	}
+    /**
+     * Set the where clause.
+     *
+     * @param where where clause
+     */
+    public void setWhereClause(UniqueList where)
+    {
+        whereCriteria = where;
+    }
 
     /**
      * Retrieve the order by columns buffer in order to specify which
      * columns are used to sort the results of the query.
      *
-     * @return A StringStack used to add columns to sort on.
+     * @return An UniqueList used to add columns to sort on.
      */
-    public StringStack getOrderByClause()
+    public UniqueList getOrderByClause()
     {
         return orderByColumns;
     }
@@ -190,9 +191,9 @@ public class Query
      * Retrieve the group by columns buffer in order to specify which
      * columns are used to group the results of the query.
      *
-     * @return A StringStack used to add columns to group on.
+     * @return An UniqueList used to add columns to group on.
      */
-    public StringStack getGroupByClause()
+    public UniqueList getGroupByClause()
     {
         return groupByColumns;
     }
@@ -278,29 +279,29 @@ public class Query
                 .append(" ");
         }
         stmt.append(SELECT)
-            .append(selectModifiers.toString(" "))
-            .append(selectColumns.toString(", "))
+            .append(StringUtils.join(selectModifiers.iterator(), " "))
+            .append(StringUtils.join(selectColumns.iterator(), ", "))
             .append(FROM)
-            .append(fromTables.toString(", "));
-        if (!whereCriteria.empty())
+            .append(StringUtils.join(fromTables.iterator(), ", "));
+        if (!whereCriteria.isEmpty())
         {
             stmt.append(WHERE)
-                .append(whereCriteria.toString(AND));
+                .append(StringUtils.join(whereCriteria.iterator(), AND));
         }
-        if (!groupByColumns.empty())
+        if (!groupByColumns.isEmpty())
         {
             stmt.append(GROUP_BY)
-                .append(groupByColumns.toString(", "));
+                .append(StringUtils.join(groupByColumns.iterator(), ", "));
         }
         if (having != null)
         {
             stmt.append(HAVING)
                 .append(having);
         }
-        if (!orderByColumns.empty())
+        if (!orderByColumns.isEmpty())
         {
             stmt.append(ORDER_BY)
-                .append(orderByColumns.toString(", "));
+                .append(StringUtils.join(orderByColumns.iterator(), ", "));
         }
         if (limit != null)
         {
