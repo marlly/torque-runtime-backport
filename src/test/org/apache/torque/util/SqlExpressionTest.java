@@ -54,6 +54,8 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
+import java.lang.reflect.Array;
+
 import junit.framework.TestCase;
 
 import org.apache.torque.adapter.DB;
@@ -123,4 +125,20 @@ public class SqlExpressionTest extends TestCase
                 true, db);
         assertEquals(result, "COL IN ('42','43','44')");
 	}
+    
+    public void testLargeBuildInStringObjectSqlEnumbooleanDB()
+    {
+        int size = 10000;
+        String[] values = new String[size];
+        for (int i = 0; i < size; i++)
+        {
+            Array.set(values, i, String.valueOf(i));
+        }
+        long start = System.currentTimeMillis();
+        String result = SqlExpression.buildIn("COL", values, SqlEnum.IN, 
+                true, db);
+        long end =  System.currentTimeMillis();
+        System.out.println("large buildIn: " + (end - start));
+    }
+    
 }

@@ -56,6 +56,7 @@ package org.apache.torque.util;
 
 import java.lang.reflect.Array;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -509,7 +510,7 @@ public class SqlExpression
         }
 
         whereClause.append(comparison);
-        UniqueList inClause = new UniqueList();
+        HashSet inClause = new HashSet();
         if (criteria instanceof List)
         {
             Iterator iter = ((List) criteria).iterator();
