@@ -106,20 +106,6 @@ torque/
     </td>
 </tr>
 <tr>
-    <td>extend</td>
-    <td>Used in conjuction with the OM generation.</td>
-</tr>
-<tr>
-    <td>mapname</td>
-    <td>Used in conjuction with the OM generation.</td>
-</tr>
-<tr>
-    <td>suffix</td>
-    <td>
-        Used in conjuction with the OM generation.
-    </td>
-</tr>
-<tr>
     <td>targetPackage</td>
     <td>
         Used in conjuction with the OM generation.
@@ -168,10 +154,6 @@ torque/
 <tr>
     <td><strong>You should not have to edit any properties below here!</strong></td>
     <td></td>
-</tr>
-<tr>
-    <td>configDir</td>
-    <td>The directory Torque looks in for the <em>build.properties</em> file.</td>
 </tr>
 <tr>
     <td>templatePath</td>
