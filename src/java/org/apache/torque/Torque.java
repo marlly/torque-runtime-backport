@@ -432,7 +432,7 @@ public class Torque implements Initializable, Configurable
      * @param className
      * @throws TorqueException
      */
-    private static void initManager(String name, String className)
+    private synchronized static void initManager(String name, String className)
         throws TorqueException
     {
         AbstractBaseManager manager = (AbstractBaseManager) managers.get(name);
@@ -599,7 +599,44 @@ public class Torque implements Initializable, Configurable
      */
     public static AbstractBaseManager getManager(String name)
     {
-        return (AbstractBaseManager) managers.get(name);
+        AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
+        if (m == null)
+        {
+            category.error("No configured manager for key " + name + ".");
+        }
+        return m;
+    }
+
+    /**
+     * This methods returns either the Manager from the configuration file,
+     * or the default one provided by the generated code.
+     *
+     * @param name
+     * @param defaultClassName the class to use if name has not been configured
+     * @return a Manager
+     */
+    public static AbstractBaseManager getManager(String name, String defaultClassName)
+    {
+        AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
+        if (m == null)
+        {
+            category.debug("Added late Mapping for Manager: "
+                           + name + " -> " + defaultClassName);
+
+            try
+            {
+                initManager(name, defaultClassName);
+            }
+            catch (TorqueException e)
+            {
+                category.error(e.getMessage(), e);
+            }
+        }
+
+        // Try again now that the default manager should be in the map
+        m = (AbstractBaseManager) managers.get(name);
+
+        return m;
     }
 
     /**
