@@ -338,8 +338,8 @@ Category with id 2.
 
 <source>
 Criteria crit = new Criteria();
-crit.add (ItemPeer.CATEGORY_ID,2);
-Vector v = ItemPeer.doSelect (crit);
+crit.add(ItemPeer.CATEGORY_ID,2);
+List items = ItemPeer.doSelect(crit);
 </source>
 
 <p>
@@ -361,8 +361,8 @@ the newly added row.
 
 <source>
 Criteria crit = new Criteria();
-crit.add (CategoryPeer.NAME,"New Category");
-Object o = CategoryPeer.doInsert (crit);
+crit.add(CategoryPeer.NAME,"New Category");
+Object o = CategoryPeer.doInsert(crit);
 </source>
 
 <p>
@@ -372,10 +372,10 @@ that once again we don't set the id - the ID BROKER does this for us.
 
 <source>
 Item itm = new Item();
-itm.setName ("New Item");
-itm.setPrice (100);
-itm.setCategoryId (1);
-Object o = ItemPeer.doInsert (itm);
+itm.setName("New Item");
+itm.setPrice(100);
+itm.setCategoryId(1);
+Object o = ItemPeer.doInsert(itm);
 </source>
 
 <p>
@@ -393,7 +393,7 @@ have code like this:
 <source>
 Item itm =  new Item()
 data.getParameters().setProperties(itm);
-Object o = ItemPeer.doInsert (itm);
+Object o = ItemPeer.doInsert(itm);
 </source>
 
 <p>
@@ -412,8 +412,8 @@ Criteria and call doDelete.
 
 <source>
 Criteria crit = new Criteria();
-crit.add (ItemPeer.ITEM_ID,3);
-ItemPeer.doDelete (crit);
+crit.add(ItemPeer.ITEM_ID,3);
+ItemPeer.doDelete(crit);
 </source>
 </section>
 
@@ -456,7 +456,7 @@ ItemPeer.doDelete (crit);
 <source>
 public class CategoryPeer extends BaseCategoryPeer
 {
-    static public Vector doSelectAll() throws Exception
+    static public List doSelectAll() throws Exception
     {
         Criteria crit = new Criteria();
         return = doSelect(crit);
@@ -473,11 +473,11 @@ public class CategoryPeer extends BaseCategoryPeer
 <source>
 public class ItemPeer extends BaseItemPeer
 {
-    static public Vector doSelectForCategory(int categoryid) throws Exception
+    static public List doSelectForCategory(int categoryid) throws Exception
     {
         Criteria crit = new Criteria();
-        crit.add (CATEGORY_ID,categoryid);
-        return doSelect (crit);
+        crit.add(CATEGORY_ID,categoryid);
+        return doSelect(crit);
     }
 }
 </source>
@@ -504,9 +504,9 @@ public class ItemPeer extends BaseItemPeer
 <source>
 // select all Items with their associated Category
 Criteria crit = new Criteria();
-Vector v = ItemPeer.doSelectJoinCategory(crit);
+List items = ItemPeer.doSelectJoinCategory(crit);
 // access the Category associated with the first Item in the vector
-Item itm = (Item)v.elementAt(0);
+Item itm = (Item)items.get(0);
 Category cat = itm.getCategory();
 </source>
    <p>
@@ -517,9 +517,9 @@ Category cat = itm.getCategory();
 // select only Items with a category of 2
 Criteria crit = new Criteria();
 crit.add(Item.CATEGORY_ID, 2);
-Vector v = ItemPeer.doSelectJoinCategory(crit);
+List items = ItemPeer.doSelectJoinCategory(crit);
 // get the name of category 2
-Item itm = (Item)v.elementAt(0);
+Item itm = (Item)items.get(0);
 Category cat = itm.getCategory();
 String name = cat.getName();
 </source>
@@ -537,16 +537,12 @@ select * from abc where (a < 1 and b > 2) or (  a > 5  and b < 3)
 
 <source><![CDATA[
 Criteria crit = new Criteria();
-Criteria.Criterion a1 = crit.getNewCriterion(ABC.A, 1,
-Criteria.LESS_THAN);
-Criteria.Criterion b2 = crit.getNewCriterion(ABC.B, 2,
-Criteria.GREATER_THAN);
-Criteria.Criterion a5 = crit.getNewCriterion(ABC.A, 5,
-Criteria.GREATER_THAN);
-Criteria.Criterion b3 = crit.getNewCriterion(ABC.B, 3,
-Criteria.LESS_THAN);
+Criteria.Criterion a1 = crit.getNewCriterion(ABC.A, 1, Criteria.LESS_THAN);
+Criteria.Criterion b2 = crit.getNewCriterion(ABC.B, 2, Criteria.GREATER_THAN);
+Criteria.Criterion a5 = crit.getNewCriterion(ABC.A, 5, Criteria.GREATER_THAN);
+Criteria.Criterion b3 = crit.getNewCriterion(ABC.B, 3, Criteria.LESS_THAN);
 
-crit.add( a1.and(b2).or(a5.and(b3)) );
+crit.add(a1.and(b2).or(a5.and(b3)));
 ]]></source>
 
   <p>

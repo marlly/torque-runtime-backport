@@ -45,7 +45,7 @@ Criteria criteria = new Criteria();
 criteria.addJoin(PermissionPeer.PERMISSION_ID,RolePermissionPeer.PERMISSION_ID);
 criteria.addJoin(RolePermissionPeer.ROLE_ID, RolePeer.ROLE_ID);
 
-Vector v = RolePeer.doSelect(criteria);
+List roles = RolePeer.doSelect(criteria);
 </source>
 
    <p>
@@ -66,7 +66,7 @@ Criteria criteria = new Criteria();
 criteria.addJoin(RolePeer.ROLE_ID,RolePermissionPeer.ROLE_ID);
 criteria.addJoin(RolePermissionPeer.PERMISSION_ID, PermissionPeer.PERMISSION_ID);
 
-Vector v = PermissionPeer.doSelect(criteria);
+List permissions = PermissionPeer.doSelect(criteria);
 </source>
 
   </section>
@@ -89,7 +89,7 @@ criteria.addJoin(PermissionPeer.PERMISSION_ID,RolePermissionPeer.PERMISSION_ID);
 criteria.addJoin(RolePermissionPeer.ROLE_ID, RolePeer.ROLE_ID);
 criteria.setDistinct();
 
-Vector v = RolePeer.doSelect(criteria);
+List roles = RolePeer.doSelect(criteria);
 </source>
 
   </section>
@@ -113,7 +113,7 @@ criteria.addJoin(RolePermissionPeer.ROLE_ID, RolePeer.ROLE_ID);
 criteria.setDistinct();
 criteria.addOrderByColumn(RolePeer.NAME);
 
-Vector v = RolePeer.doSelect(criteria);
+List roles = RolePeer.doSelect(criteria);
 </source>
 
   </section>
@@ -129,9 +129,9 @@ Vector v = RolePeer.doSelect(criteria);
     </p>
 
 <source>
-public Vector allUsersGroups(RunData data) throws Exception
+public List allUsersGroups(RunData data) throws Exception
 {
-    Vector v = new Vector(10);
+    List groups = new ArrayList(10);
 
     //get the User from RunData
     User user = data.getUser();
@@ -140,13 +140,13 @@ public Vector allUsersGroups(RunData data) throws Exception
     if (user.hasLoggedIn())
     {
         Criteria criteria = new Criteria();
-        criteria.addJoin(GroupPeer.GROUP_ID,UserGroupRolePeer.GROUP_ID);
-        criteria.addJoin(UserGroupRolePeer.USER_ID,TurbineUserPeer.USER_ID);
+        criteria.addJoin(GroupPeer.GROUP_ID, UserGroupRolePeer.GROUP_ID);
+        criteria.addJoin(UserGroupRolePeer.USER_ID, TurbineUserPeer.USER_ID);
         criteria.add(TurbineUserPeer.USERNAME, user.getUserName());
         criteria.addOrderByColumn(GroupPeer.NAME);
         criteria.setDistinct();
 
-        v = GroupPeer.doSelect(criteria);
+        groups = GroupPeer.doSelect(criteria);
     }
     return v;
 }
@@ -199,7 +199,7 @@ Criteria.NOT_IN
 Criteria criteria = new Criteria();
 criteria.add(InvoicePeer.COST, 1000, Criteria.GREATER_THAN);
 
-Vector v = InvoicePeer.doSelect(criteria);
+List invoices = InvoicePeer.doSelect(criteria);
 </source>
 
    <p>
@@ -224,7 +224,7 @@ Vector v = InvoicePeer.doSelect(criteria);
 Criteria criteria = new Criteria();
 criteria.add(InvoicePeer.DESCRIPTION, (Object)"DESCRIPTION is NULL", Criteria.CUSTOM);
 
-Vector v = InvoicePeer.doSelect(criteria);
+List invoices = InvoicePeer.doSelect(criteria);
 </source>
 
   </section>
@@ -251,7 +251,7 @@ Vector v = InvoicePeer.doSelect(criteria);
 
 <source>
 Criteria criteria = new Criteria();
-criteria.add(InvoicePeer.COST,1000, Criteria.GREATER_EQUAL);
+criteria.add(InvoicePeer.COST, 1000, Criteria.GREATER_EQUAL);
 
 Criteria.Criterion criterion = criteria.getCriterion(InvoicePeer.COST);
 criterion.and(
@@ -362,7 +362,7 @@ public class SimpleCriteria extends Criteria
 SimpleCriteria criteria = new SimpleCriteria();
 criteria.isBetween(InvoicePeer.COST, 1000, 5000);
 
-Vector v = InvoicePeer.doSelect(criteria);
+List invoices = InvoicePeer.doSelect(criteria);
 </source>
 
   </section>
