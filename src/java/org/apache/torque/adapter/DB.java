@@ -373,4 +373,15 @@ public abstract class DB implements Serializable
     {
         return LIMIT_STYLE_NONE;
     }
+
+    /**
+     * This method is used to format any date string.
+     * Database can use different default date formats.
+     *
+     * @return The proper date formated String.
+     */
+    public String getDateString(String dateString)
+    {
+       return "\'" + dateString + "\'";
+    }
 }

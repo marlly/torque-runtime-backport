@@ -178,6 +178,16 @@ public class Criteria extends Hashtable
      */
     private static final String DESC = "DESC";
 
+    /**
+     * "IS NULL" null comparison
+     */
+    public static final String ISNULL = " IS NULL ";
+  
+    /**
+     * "IS NOT NULL" null comparison
+     */
+    public static final String ISNOTNULL = " IS  NOT NULL ";
+
     private static final int DEFAULT_CAPACITY = 10;
 
     private boolean ignoreCase = false;

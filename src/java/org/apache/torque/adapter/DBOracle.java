@@ -205,5 +205,28 @@ public class DBOracle
         }
     }
 
+   /**
+    * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
+    * any string in a SqlExpression with a BACKSLASH will either be changed to
+    * "\\" or left as "\".  SapDB does not need the escape character.
+    *
+    * @return false.
+    */
+    
+    public boolean escapeText()
+    {
+        return false;
+    }
 
+
+    /**
+     * This method is used to format any date string.
+     * Database can use different default date formats.
+     *
+     * @return The proper date formated String.
+     */
+  public String getDateString(String dateString)
+  {
+    return "TO_DATE('" + dateString + "', 'yyyy-mm-dd hh24:mi:ss..' )";
+  }
 }

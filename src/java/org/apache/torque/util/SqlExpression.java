@@ -266,25 +266,28 @@ public class SqlExpression
             criteria = "null";
             if (comparison.equals(Criteria.EQUAL))
             {
-                comparison = " IS ";
+                comparison = Criteria.ISNULL;
             }
             else if (comparison.equals(Criteria.NOT_EQUAL))
             {
-                comparison = " IS NOT ";
+                comparison = Criteria.ISNOTNULL;
             }
             else if (comparison.equals(Criteria.ALT_NOT_EQUAL))
             {
-                comparison = " IS NOT ";
+                comparison = Criteria.ISNOTNULL;
             }
         }
         else 
         {
            if (criteria instanceof String ||
-               criteria instanceof java.util.Date ||
-               criteria instanceof StringKey ||
-               criteria instanceof DateKey)
+               criteria instanceof StringKey)
            {
                criteria = quoteAndEscapeText(criteria.toString(), db);
+           }
+           else if( criteria instanceof java.util.Date ||
+                    criteria instanceof DateKey)
+           {
+               criteria = db.getDateString(criteria.toString());
            }
            else if( criteria instanceof Boolean )
            {
@@ -305,6 +308,16 @@ public class SqlExpression
         }
         else
         {
+          // Do not put the upper/lower keyword around IS NULL
+          //  or IS NOT NULL
+          if ( comparison.equals(Criteria.ISNULL) ||
+               comparison.equals(Criteria.ISNOTNULL))
+          {
+            whereClause.append(columnName)
+            .append(comparison);
+          }
+          else
+          {
             String columnValue = criteria.toString();
             if (ignoreCase && db != null)
             {
@@ -314,6 +327,7 @@ public class SqlExpression
             whereClause.append(columnName)
                 .append(comparison)
                 .append(columnValue);
+           }
         }
     }
 
@@ -593,7 +607,7 @@ public class SqlExpression
                 buf.append(SINGLE_QUOTE).append(SINGLE_QUOTE);
                 break;
             case BACKSLASH:
-                buf.append(BACKSLASH).append(BACKSLASH);
+                buf.append(escapeString);
                 break;
             default:
                 buf.append(data[i]);
