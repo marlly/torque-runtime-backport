@@ -34,12 +34,12 @@
   <path id="torque-classpath">
     <pathelement location="torque.jar.fullpath"/>
     <fileset dir="${torque.lib.dir}">
-      <include name="**/commons-beanutils-1.4.jar"/>
+      <include name="**/commons-beanutils-1.4.1.jar"/>
       <include name="**/commons-collections-2.0.jar"/>
       <include name="**/commons-configuration-1.0-dev.jar"/>
       <include name="**/commons-dbcp-1.0-dev-20020806.jar"/>
-      <include name="**/commons-lang-1.0-b1.jar"/>
-      <include name="**/commons-logging-1.0.1.jar"/>
+      <include name="**/commons-lang-1.0.jar"/>
+      <include name="**/commons-logging-1.0.2.jar"/>
       <include name="**/commons-pool-1.0.jar"/>
       <include name="**/jcs-1.0-dev.jar"/>
       <include name="**/jdbc-2.0.jar"/>

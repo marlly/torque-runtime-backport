@@ -3,17 +3,17 @@
 # change the src/conf/build-torque.xml file!!!!!
 # also make sure to sync with the default.properties!!!!
 
-commons-beanutils/jars/commons-beanutils-1.4.jar
+commons-beanutils/jars/commons-beanutils-1.4.1.jar
 commons-collections/jars/commons-collections-2.0.jar
 commons-configuration/jars/commons-configuration-1.0-dev.jar
 commons-dbcp/jars/commons-dbcp-1.0-dev-20020806.jar
-commons-lang/jars/commons-lang-1.0-b1.jar
-commons-logging/jars/commons-logging-1.0.1.jar
+commons-lang/jars/commons-lang-1.0.jar
+commons-logging/jars/commons-logging-1.0.2.jar
 commons-pool/jars/commons-pool-1.0.jar
 jcs/jars/jcs-1.0-dev.jar
 jdbc/jars/jdbc-2.0.jar
 jndi/jars/jndi-1.2.1.jar
-junit/jars/junit-3.7.jar
+junit/jars/junit-3.8.1.jar
 log4j/jars/log4j-1.2.6.jar
 stratum/jars/stratum-1.0-b3-dev.jar
 tomcat/jars/tomcat-naming-1.0.jar
