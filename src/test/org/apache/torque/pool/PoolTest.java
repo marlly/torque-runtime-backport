@@ -58,11 +58,16 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.io.FileInputStream;
 
-import org.apache.velocity.runtime.configuration.Configuration;
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 
+import org.apache.torque.BaseTestCase;
 import org.apache.torque.Torque;
+
+/* TODO: Turn this into a JUnit test case.
+import junit.framework.Test;
+import junit.framework.TestSuite; */
 
 /**
  * 25 concurrent
@@ -70,11 +75,21 @@ import org.apache.torque.Torque;
  */
 public class PoolTest implements Runnable
 {
-    private static int threadCount = 90;   // number
-    private static int holdCount = 500;     // ms
-//    private static final int sleepPeriod = 1 * 60000;
-    private static final String dbName = "default";
-    private static final String configFile =
+    /**
+     * The number of threads to use for concurrent connections.
+     */
+    private static final int NBR_THREADS = 90;
+
+    /**
+     * The number of milliseconds to hold onto a database connection
+     * for.
+     */
+    private static final int CONN_HOLD_TIME = 500;
+
+    /**
+     * The path to the configuration file.
+     */
+    private static final String CONFIG_FILE =
         "./TurbineResources.properties";
 
     private static Thread executionThread = null;
@@ -89,7 +104,8 @@ public class PoolTest implements Runnable
 
     protected PoolTest()
     {
-        Thread thread = new Thread(threadGroup, this, "Thread+" + currentThreadCount++);
+        Thread thread = new Thread(threadGroup, this,
+                                   "Thread+" + currentThreadCount++);
         thread.setDaemon(false);
         thread.start();
     }
@@ -98,12 +114,13 @@ public class PoolTest implements Runnable
     {
         try
         {
-            Configuration config = new Configuration(configFile);
+            ExtendedProperties config = new ExtendedProperties(CONFIG_FILE);
             config = config.subset ("services.DatabaseService");
-            System.out.println ("CONFIG: " + config.getString("database.default"));
+            System.out.println ("CONFIG: " +
+                                config.getString("database.default"));
 
             Properties p = new Properties();
-            p.load(new FileInputStream(configFile));
+            p.load(new FileInputStream(CONFIG_FILE));
             PropertyConfigurator.configure(p);
 
             Torque.setConfiguration(config);
@@ -111,7 +128,7 @@ public class PoolTest implements Runnable
             Torque.setCategory(category);
             Torque.init();
 
-            for (int i=0; i<threadCount; i++)
+            for (int i = 0; i < NBR_THREADS; i++)
             {
                 PoolTest pt = new PoolTest();
             }
@@ -134,13 +151,17 @@ public class PoolTest implements Runnable
                 try
                 {
                     System.out.println ("Open Connection1: " + thread);
-                    dbCon = Torque.getConnection(dbName);
+                    dbCon = Torque.getConnection();
                     System.out.println ("Open Connection2: " + thread);
                     try
                     {
-                        System.out.println("Start Holding: " + System.currentTimeMillis() + " : " + thread);
-                        thread.sleep(holdCount);
-                        System.out.println("Finish Holding: " + System.currentTimeMillis() + " : " + thread);
+                        System.out.println("Start Holding: " +
+                                           System.currentTimeMillis() +
+                                           " : " + thread);
+                        thread.sleep(CONN_HOLD_TIME);
+                        System.out.println("Finish Holding: " +
+                                           System.currentTimeMillis() +
+                                           " : " + thread);
                     }
                     catch (InterruptedException ie)
                     {
