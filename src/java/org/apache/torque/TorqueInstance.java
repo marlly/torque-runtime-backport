@@ -184,12 +184,12 @@ public class TorqueInstance
         // configuration consist only of the remain torque specific
         // properties that are contained in the configuration. First
         // look for properties that are in the "torque" namespace.
-        Configuration originalConf = conf;
-        conf = conf.subset("torque");
 
-        if (conf == null || conf.isEmpty())
+        Configuration subConf = conf.subset("torque");
+
+        if (!subConf.isEmpty())
         {
-            conf = originalConf;
+            setConfiguration(subConf);
         }
 
         dbMaps = new HashMap();
@@ -219,7 +219,7 @@ public class TorqueInstance
     private final void initAdapters(Configuration conf)
             throws TorqueException
     {
-        log.debug("Starting initAdapters");
+        log.debug("initAdapters(" + conf + ")");
         adapterMap = new HashMap();
         Configuration c = conf.subset("database");
 
@@ -239,6 +239,7 @@ public class TorqueInstance
                         DB db = DBFactory.create(adapter);
                         // register the adapter for this name
                         adapterMap.put(handle, db);
+                        log.debug("Adding " + adapter + " -> " + handle + " as Adapter");
                         foundAdapters = true;
                     }
                 }
@@ -271,7 +272,7 @@ public class TorqueInstance
     private void initDataSourceFactories(Configuration conf)
             throws TorqueException
     {
-        log.debug("Starting initDSF");
+        log.debug("initDataSourceFactories(" + conf + ")");
         dsFactoryMap = new HashMap();
         Configuration c = conf.subset("dsfactory");
         if (c != null)
@@ -343,10 +344,13 @@ public class TorqueInstance
     public void init(String configFile)
             throws TorqueException
     {
+        log.debug("init(" + configFile + ")");
         try
         {
             Configuration conf = (Configuration)
                     new PropertiesConfiguration(configFile);
+
+            log.debug("Config Object is " + conf);
             init(conf);
         }
         catch (IOException e)
@@ -365,6 +369,7 @@ public class TorqueInstance
     public void init(Configuration conf)
             throws TorqueException
     {
+        log.debug("init(" + conf + ")");
         setConfiguration(conf);
         initialize();
     }
@@ -480,6 +485,7 @@ public class TorqueInstance
      */
     public void setConfiguration(Configuration conf)
     {
+        log.debug("setConfiguration(" + conf + ")");
         this.conf = conf;
     }
 
@@ -490,6 +496,7 @@ public class TorqueInstance
      */
     public Configuration getConfiguration()
     {
+        log.debug("getConfiguration() = " + conf);
         return conf;
     }
 
