@@ -970,7 +970,7 @@ public class Torque
         {
             // Determine default database name.
             defaultDBName =
-                configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
+                configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME).trim();
         }
 
         return defaultDBName;

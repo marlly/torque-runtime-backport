@@ -554,7 +554,7 @@ public class Criteria extends Hashtable
      */
     public void setDbName(String dbName)
     {
-        this.dbName = (dbName == null ? Torque.getDefaultDB() : dbName);
+        this.dbName = (dbName == null ? Torque.getDefaultDB() : dbName.trim());
     }
 
     /**
