@@ -526,6 +526,10 @@
       <fileset dir="./examples"/>
     </copy>
 
+    <copy todir="${torque.dir}/schema" filtering="yes">
+      <fileset dir="./src/schema"/>
+    </copy>
+
     <zip zipfile="${build.dir}/${final.name}.zip"
       basedir="${build.dir}/torque"
     />
