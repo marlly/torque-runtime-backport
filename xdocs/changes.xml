@@ -38,7 +38,7 @@
     </li>
     <li>
       The DTD resolver will now use the database.dtd from the classpath if the DTD
-      is http://jakarta.apache.org/turbine/dtd/database_3_0_1.dtd.  This change
+      is http://jakarta.apache.org/turbine/dtd/database_3_1.dtd.  This change
       allows XML editor to use the proper version of the DTD.
     </li>
   </ul>
