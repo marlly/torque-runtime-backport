@@ -185,10 +185,6 @@ public class TorqueComponent
     }
 
     /**
-     * This does nothing but must be present so the container does
-     * not defer initialization until the component is requested for
-     * the first time.
-     *
      * @see org.apache.avalon.framework.activity.Startable#start()
      */
     public void start()
