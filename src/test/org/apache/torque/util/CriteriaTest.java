@@ -75,7 +75,7 @@ public class CriteriaTest extends BaseTestCase
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param name the name of the test to run
      */
     public CriteriaTest(String name)
@@ -253,6 +253,23 @@ public class CriteriaTest extends BaseTestCase
         }
 
         assertEquals(expect, result);
+    }
+
+    /**
+     * Test Criterion.setIgnoreCase().
+     * As the output is db specific the test just prints the result to
+     * System.out
+     */
+    public void testCriterionIgnoreCase()
+    {
+        Criteria myCriteria = new Criteria();
+
+        Criteria.Criterion myCriterion = myCriteria.getNewCriterion(
+                "TABLE.COLUMN", (Object)"FoObAr", Criteria.LIKE);
+        System.out.println("before setIgnoreCase: " + myCriterion);
+
+        Criteria.Criterion ignoreCriterion = myCriterion.setIgnoreCase(true);
+        System.out.println("after setIgnoreCase: " + ignoreCriterion);
     }
 
     /**
