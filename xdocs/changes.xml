@@ -18,6 +18,8 @@
 <p>
   <ul>
     <li>
+      TRQ2: the TorqueSQLExec task ignores lines starting with '//', '--' or
+      'REM ' (notice the space!!).
     </li>
   </ul>
 </p>
@@ -37,6 +39,9 @@
 <subsection name="Fixed bugs">
 <p>
   <ul>
+    <li>
+      TRQD6: update README (ant 1.5 is required)
+    </li>
     <li>
       Doc generation (anakia format): escape characters not allowed in XML
     </li>

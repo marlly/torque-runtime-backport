@@ -679,6 +679,8 @@ public class TorqueSQLExec extends Task
     }
 
     /**
+     * Read the statements from the .sql file and execute them.
+     * Lines starting with '//', '--' or 'REM ' are ignored.
      *
      * @param reader
      * @param out
@@ -704,8 +706,8 @@ public class TorqueSQLExec extends Task
                 {
                     continue;
                 }
-                if (line.length() > 2
-                        && line.substring(0, 3).equalsIgnoreCase("REM"))
+                if (line.length() > 4
+                        && line.substring(0, 4).equalsIgnoreCase("REM "))
                 {
                     continue;
                 }
