@@ -9,10 +9,6 @@
 
 package $package;
 
-#if ($table.isAbstract())
-    #set ($abstract = "abstract")
-#end
-
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.Persistent;
@@ -41,10 +37,4 @@ public class ${interfaceName}Manager
     {
         super();
     }
-
 }
-
-
-
-
-
