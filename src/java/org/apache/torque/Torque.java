@@ -147,7 +147,7 @@ public class Torque
     /**
      * Initialization of Torque with a properties file.
      *
-     * @param configFile The path to the configuration file.
+     * @param configFile The absolute path to the configuration file.
      */
     public static void init(String configFile)
         throws Exception
@@ -159,7 +159,7 @@ public class Torque
     /**
      * Initialization of Torque with a properties file.
      *
-     * @param configFile The path to the configuration file.
+     * @param c The Torque configuration.
      */
     public static void init(ExtendedProperties c)
         throws Exception
