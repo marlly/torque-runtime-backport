@@ -25,6 +25,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     public static final String CLASS_NAME =
         "${package}.map.${table.JavaName}MapBuilder";
 
+#if ($generateDeprecated)
     /**
      * Item
      * @deprecated use ${table.JavaName}Peer.TABLE_NAME constant
@@ -49,7 +50,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         return "${table.Name}.$cup";
     }
     #end
-
+#end
 
     /**
      * The database map.

@@ -46,6 +46,8 @@ torque.database = mysql
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
+torque.generateDeprecated = false
+
 torque.targetPackage=org.apache.torque.test
 torque.basePrefix=Base
 torque.addSaveMethod=true

@@ -36,6 +36,11 @@
       peers: do not create the JoinAll method if any of the foreign keys
       reference external tables.
     </li>
+    <li>
+      new property 'torque.generateDeprecated' ( = 'true'). <br/>
+      if set to 'false' deprecated methods in the om/peer classes are not
+      generated
+    </li>
   </ul>
 </p>
 </subsection>
