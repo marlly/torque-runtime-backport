@@ -193,8 +193,8 @@ public class Criteria extends Hashtable
     private boolean useTransaction = false;
 
     /** Log4j category used for logging. */
-    private static Category category =
-        Category.getInstance(Criteria.class.getName());
+    private static Category category
+            = Category.getInstance(Criteria.class.getName());
 
     /**
      * Creates a new instance with the default capacity.
@@ -395,7 +395,7 @@ public class Criteria extends Hashtable
      * be done with the useTransaction() method.
      */
     public boolean containsObjectColumn(String databaseMapName)
-        throws TorqueException
+            throws TorqueException
     {
         // Peer or application may have noted the existence of a blob
         // so we can save the lookup.
@@ -406,7 +406,7 @@ public class Criteria extends Hashtable
 
         DatabaseMap map = Torque.getDatabaseMap(databaseMapName);
         StringStack tables = new StringStack();
-        for (Iterator it = super.values().iterator(); it.hasNext(); )
+        for (Iterator it = super.values().iterator(); it.hasNext();)
         {
             Criterion co = (Criterion) it.next();
             String tableName = co.getTable();
@@ -525,8 +525,8 @@ public class Criteria extends Hashtable
      */
     public Criteria add(Criterion c)
     {
-        StringBuffer sb = new StringBuffer(c.getTable().length() +
-                                           c.getColumn().length() + 1);
+        StringBuffer sb = new StringBuffer(c.getTable().length()
+                + c.getColumn().length() + 1);
         sb.append(c.getTable());
         sb.append('.');
         sb.append(c.getColumn());
@@ -947,9 +947,11 @@ public class Criteria extends Hashtable
      */
     public Object put(Object key, Object value)
     {
-        if (! (key instanceof String))
+        if (!(key instanceof String))
+        {
             throw new NullPointerException(
                             "Criteria: Key must be a String object.");
+        }
         return add((String) key, value);
     }
 
@@ -1259,7 +1261,6 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A float.
-     *
      * @return A modified Criteria object.
      */
     public Criteria add(String column, float value)

@@ -65,8 +65,6 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Category;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.BasePeer;
-import org.apache.torque.util.Criteria;
 
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.DataSetException;
@@ -178,14 +176,14 @@ public class LargeSelect implements Runnable
     private int pageSize;
     /** The maximum number of records to maintain in memory. */
     private int memoryLimit;
-    
+
     /** The record number of the first record in memory. */
     private int blockBegin = 0;
     /** The record number of the last record in memory. */
     private int blockEnd;
     /** How much of the memory block is currently occupied with result data. */
     private volatile int currentlyFilledTo = -1;
-    
+
     /** The SQL query that this <code>LargeSelect</code> represents. */
     private String query;
     /** The database name to get from Torque. */
@@ -215,7 +213,7 @@ public class LargeSelect implements Runnable
      * their final values.
      */
     private boolean totalsFinalized = false;
-    
+
     /** The cursor position in the result set. */
     private int position;
     /** The total number of pages known to exist. */
@@ -225,19 +223,19 @@ public class LargeSelect implements Runnable
     /** The number of the page that was last retrieved. */
     private int currentPageNumber = 0;
 
-    /** The criteria used for the query. */    
+    /** The criteria used for the query. */
     private Criteria criteria = null;
     /** The last page of results that were returned. */
     private List lastResults;
 
-    /** 
-     * The class that is possibly used to construct the criteria and used 
-     * to transform the Village Records into the desired OM or business objects. 
-     */
-    private Class returnBuilderClass = null;    
     /**
-     * A reference to the method in the return builder class that will 
-     * convert the Village Records to the desired class. 
+     * The class that is possibly used to construct the criteria and used
+     * to transform the Village Records into the desired OM or business objects.
+     */
+    private Class returnBuilderClass = null;
+    /**
+     * A reference to the method in the return builder class that will
+     * convert the Village Records to the desired class.
      */
     private Method populateObjectsMethod = null;
 
@@ -559,7 +557,7 @@ public class LargeSelect implements Runnable
      * @throws TorqueException if invoking the <code>populateObjects()<code>
      * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    synchronized private List getResults(int start, int size)
+    private synchronized List getResults(int start, int size)
             throws IllegalArgumentException, TorqueException
     {
         log.debug("getResults(start: " + start
@@ -753,7 +751,7 @@ public class LargeSelect implements Runnable
                 }
                 qds.clearRecords();
             }
-            
+
             log.debug("run(): While loop terminated because either:");
             log.debug("run(): 1. qds.allRecordsRetrieved(): "
                     + qds.allRecordsRetrieved());
@@ -1115,8 +1113,8 @@ public class LargeSelect implements Runnable
         position = 0;
         totalPages = -1;
         totalRecords = 0;
-        // todo Perhaps store the oldPageNumber and immediately restart the query.
-        // oldPageNumber = currentPageNumber;
+        // todo Perhaps store the oldPageNumber and immediately restart the
+        // query. oldPageNumber = currentPageNumber;
         currentPageNumber = 0;
         queryCompleted = false;
         totalsFinalized = false;

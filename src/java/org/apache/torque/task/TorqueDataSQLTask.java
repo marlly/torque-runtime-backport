@@ -73,7 +73,9 @@ import org.apache.torque.engine.database.transform.XmlToData;
  */
 public class TorqueDataSQLTask extends TorqueDataModelTask
 {
+    /** the XML data file */
     private String dataXmlFile;
+    /** the data dtd file */
     private String dataDTD;
 
     /**
@@ -147,7 +149,7 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
      * Set up the initialial context for generating the SQL from the XML schema.
      *
      * @return the context
-     * @throws Exception
+     * @throws Exception If there is an error parsing the data xml.
      */
     public Context initControlContext() throws Exception
     {

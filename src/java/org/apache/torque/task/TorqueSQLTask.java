@@ -83,21 +83,37 @@ public class TorqueSQLTask extends TorqueDataModelTask
 
     private String idTableXMLFile = null;
 
+    /**
+     *
+     * @param database
+     */
     public void setDatabase(String database)
     {
         this.database = database;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDatabase()
     {
         return database;
     }
 
+    /**
+     *
+     * @param suffix
+     */
     public void setSuffix(String suffix)
     {
         this.suffix = suffix;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSuffix()
     {
         return suffix;

@@ -70,36 +70,38 @@ import org.apache.torque.engine.database.transform.SQLToAppData;
  */
 public class TorqueSQLTransformTask extends Task
 {
-    /**
-     * SQL input file.
-     */
+    /** SQL input file. */
     private String inputFile;
-    
-    /**
-     * XML descriptor output file.
-     */
+
+    /** XML descriptor output file. */
     private String outputFile;
 
     /**
      * Get the current input file
+     *
+     * @return the input file
      */
-    public String getInputFile ()
+    public String getInputFile()
     {
         return inputFile;
     }
 
     /**
      * Set the sql input file.  This file must exist
+     *
+     * @param v the input file
      */
-    public void setInputFile (String v)
+    public void setInputFile(String v)
     {
         inputFile = v;
     }
 
     /**
      * Get the current output file.
+     *
+     * @return the output file
      */
-    public String getOutputFile ()
+    public String getOutputFile()
     {
         return outputFile;
     }
@@ -108,6 +110,8 @@ public class TorqueSQLTransformTask extends Task
      * Set the current output file.  If the file does not
      * exist it will be created.  If the file exists all
      * it's contents will be replaced.
+     *
+     * @param v the output file
      */
     public void setOutputFile (String v)
     {
@@ -117,25 +121,25 @@ public class TorqueSQLTransformTask extends Task
     /**
      * Execute the task.
      *
-     * @throws BuildException
+     * @throws BuildException Any exceptions caught during procssing will be
+     *         rethrown wrapped into a BuildException
      */
-    public void execute() 
-        throws BuildException
+    public void execute() throws BuildException
     {
         try
         {
-            System.out.println ("Parsing SQL Schema");
+            System.out.println("Parsing SQL Schema");
 
             SQLToAppData sqlParser = new SQLToAppData(inputFile);
             AppData app = sqlParser.execute();
 
-            System.out.println ("Preparing to write xml schema");
-            FileWriter fr = new FileWriter (outputFile);
+            System.out.println("Preparing to write xml schema");
+            FileWriter fr = new FileWriter(outputFile);
             BufferedWriter br = new BufferedWriter (fr);
 
-            br.write (app.toString());
+            br.write(app.toString());
 
-            System.out.println ("Writing xml schema");
+            System.out.println("Writing xml schema");
 
             br.flush();
             br.close();

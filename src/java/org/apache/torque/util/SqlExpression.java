@@ -93,8 +93,7 @@ public class SqlExpression
      * @return A join expression, e.g. UPPER(table_a.column_a) =
      *         UPPER(table_b.column_b).
      */
-    public static String buildInnerJoin(String column,
-                                         String relatedColumn)
+    public static String buildInnerJoin(String column, String relatedColumn)
     {
         // 'db' can be null because 'ignoreCase' is false.
         return buildInnerJoin(column, relatedColumn, false, null);
@@ -118,8 +117,8 @@ public class SqlExpression
                                          DB db)
     {
         int addlength = (ignoreCase) ? 25 : 1;
-        StringBuffer sb = new StringBuffer(column.length() +
-            relatedColumn.length() + addlength);
+        StringBuffer sb = new StringBuffer(column.length()
+                + relatedColumn.length() + addlength);
         buildInnerJoin(column, relatedColumn, ignoreCase, db, sb);
         return sb.toString();
     }
@@ -144,17 +143,15 @@ public class SqlExpression
     {
         if (ignoreCase)
         {
-            whereClause
-                .append(db.ignoreCase(column))
-                .append('=')
-                .append(db.ignoreCase(relatedColumn));
+            whereClause.append(db.ignoreCase(column))
+                    .append('=')
+                    .append(db.ignoreCase(relatedColumn));
         }
         else
         {
-            whereClause
-                .append(column)
-                .append('=')
-                .append(relatedColumn);
+            whereClause.append(column)
+                    .append('=')
+                    .append(relatedColumn);
         }
     }
 
@@ -243,7 +240,7 @@ public class SqlExpression
 
         if (criteria != null && criteria instanceof ObjectKey)
         {
-            if (((ObjectKey)criteria).getValue() == null)
+            if (((ObjectKey) criteria).getValue() == null)
             {
                 criteria = null;
             }
@@ -271,8 +268,7 @@ public class SqlExpression
         }
         else
         {
-            if (criteria instanceof String ||
-                criteria instanceof StringKey)
+            if (criteria instanceof String || criteria instanceof StringKey)
             {
                 criteria = quoteAndEscapeText(criteria.toString(), db);
             }
@@ -288,18 +284,18 @@ public class SqlExpression
             }
             else if (criteria instanceof Boolean)
             {
-                criteria = db.getBooleanString((Boolean)criteria);
+                criteria = db.getBooleanString((Boolean) criteria);
             }
         }
 
-        if (comparison.equals(Criteria.LIKE) ||
-             comparison.equals(Criteria.NOT_LIKE))
+        if (comparison.equals(Criteria.LIKE)
+                || comparison.equals(Criteria.NOT_LIKE))
         {
-            buildLike(columnName, (String)criteria, comparison,
+            buildLike(columnName, (String) criteria, comparison,
                        ignoreCase, db, whereClause);
         }
-        else if (comparison.equals(Criteria.IN) ||
-                  comparison.equals(Criteria.NOT_IN))
+        else if (comparison.equals(Criteria.IN)
+                || comparison.equals(Criteria.NOT_IN))
         {
             buildIn(columnName, criteria, comparison,
                      ignoreCase, db, whereClause);
@@ -308,11 +304,11 @@ public class SqlExpression
         {
             // Do not put the upper/lower keyword around IS NULL
             //  or IS NOT NULL
-            if (comparison.equals(Criteria.ISNULL) ||
-                comparison.equals(Criteria.ISNOTNULL))
+            if (comparison.equals(Criteria.ISNULL)
+                    || comparison.equals(Criteria.ISNOTNULL))
             {
                 whereClause.append(columnName)
-                  .append(comparison);
+                        .append(comparison);
             }
             else
             {
@@ -323,8 +319,8 @@ public class SqlExpression
                     columnValue = db.ignoreCase(columnValue);
                 }
                 whereClause.append(columnName)
-                    .append(comparison)
-                    .append(columnValue);
+                        .append(comparison)
+                        .append(columnValue);
             }
         }
     }
@@ -513,7 +509,7 @@ public class SqlExpression
         StringStack inClause = new StringStack();
         if (criteria instanceof List)
         {
-            Iterator iter = ((List)criteria).iterator();
+            Iterator iter = ((List) criteria).iterator();
             while (iter.hasNext())
             {
                 Object value = iter.next();
@@ -578,6 +574,7 @@ public class SqlExpression
      * escaped.
      *
      * @param rawText The <i>unquoted</i>, <i>unescaped</i> text to process.
+     * @param db
      * @return Quoted and escaped text.
      */
     public static String quoteAndEscapeText(String rawText, DB db)

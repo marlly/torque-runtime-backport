@@ -236,7 +236,7 @@ public class Query
     public String toString()
     {
         StringBuffer stmt = new StringBuffer();
-        if ( rowcount != null )
+        if (rowcount != null)
         {
             stmt.append(ROWCOUNT)
                 .append(rowcount)
@@ -247,32 +247,32 @@ public class Query
             .append(selectColumns.toString(", "))
             .append(FROM)
             .append(fromTables.toString(", "));
-        if ( !whereCriteria.empty() )
+        if (!whereCriteria.empty())
         {
             stmt.append(WHERE)
                 .append(whereCriteria.toString( AND ));
         }
-        if ( !groupByColumns.empty() )
+        if (!groupByColumns.empty())
         {
             stmt.append(GROUP_BY)
                 .append(groupByColumns.toString(", "));
         }
-        if ( having != null )
+        if (having != null)
         {
             stmt.append(HAVING)
                 .append(having);
         }
-        if ( !orderByColumns.empty() )
+        if (!orderByColumns.empty())
         {
             stmt.append(ORDER_BY)
                 .append(orderByColumns.toString(", "));
         }
-        if ( limit != null )
+        if (limit != null)
         {
             stmt.append(LIMIT)
                 .append(limit);
         }
-        if ( rowcount != null )
+        if (rowcount != null)
         {
             stmt.append(ROWCOUNT)
                 .append("0");

@@ -299,17 +299,16 @@ public class TorqueDataModelTask extends TexenTask
 
         if (xmlFile == null && filesets.isEmpty())
         {
-            throw new BuildException("You must specify an XML schema or " +
-                "fileset of XML schemas!");
+            throw new BuildException("You must specify an XML schema or "
+                    + "fileset of XML schemas!");
         }
 
         if (xmlFile != null)
         {
             // Transform the XML database schema into
             // data model object.
-            xmlParser =
-                new XmlToAppData(getTargetDatabase(), getTargetPackage(), 
-                                 getBasePathToDbProps());
+            xmlParser = new XmlToAppData(getTargetDatabase(),
+                    getTargetPackage(), getBasePathToDbProps());
             AppData ad = xmlParser.parseFile(xmlFile);
             ad.setName(grokName(xmlFile));
             dataModels.add(ad);
@@ -330,7 +329,7 @@ public class TorqueDataModelTask extends TexenTask
                 {
                     File f = new File(srcDir, dataModelFiles[j]);
                     xmlParser = new XmlToAppData(getTargetDatabase(),
-                                                 getTargetPackage(), 
+                                                 getTargetPackage(),
                                                  getBasePathToDbProps());
                     AppData ad = xmlParser.parseFile(f.toString());
                     ad.setName(grokName(f.toString()));
@@ -397,7 +396,7 @@ public class TorqueDataModelTask extends TexenTask
         }
         return name;
     }
-    
+
     /**
      * Override Texen's context properties to map the
      * torque.xxx properties (including defaults set by the
@@ -413,10 +412,10 @@ public class TorqueDataModelTask extends TexenTask
     public void setContextProperties(String file)
     {
         super.setContextProperties(file);
-        
+
         // Map the torque.xxx elements from the env to the contextProperties
         Hashtable env = super.getProject().getProperties();
-        for (Iterator i = env.keySet().iterator(); i.hasNext(); )
+        for (Iterator i = env.keySet().iterator(); i.hasNext();)
         {
             String key = (String) i.next();
             if (key.startsWith("torque."))
@@ -434,5 +433,5 @@ public class TorqueDataModelTask extends TexenTask
                 contextProperties.setProperty(newKey, env.get(key));
             }
         }
-    }        
+    }
 }
