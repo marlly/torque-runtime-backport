@@ -90,6 +90,7 @@ public class Database
     private String baseClass;
     private String basePeer;
     private String defaultIdMethod;
+    private String defaultJavaType;
     private String defaultJavaNamingMethod;
     private AppData dbParent;
     private Hashtable tablesByName = new Hashtable();
@@ -112,6 +113,7 @@ public class Database
         pkg = attrib.getValue("package");
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
+        defaultJavaType = attrib.getValue("defaultJavaType");
         defaultIdMethod = attrib.getValue("defaultIdMethod");
         defaultJavaNamingMethod = attrib.getValue("defaultJavaNamingMethod");
         if (defaultJavaNamingMethod == null)
@@ -216,6 +218,14 @@ public class Database
     public void setDefaultIdMethod(String  v)
     {
         this.defaultIdMethod = v;
+    }
+
+    /**
+     * Get type to use in Java sources (primitive || object)
+     */
+    public String getDefaultJavaType()
+    {
+        return defaultJavaType;
     }
 
     /**

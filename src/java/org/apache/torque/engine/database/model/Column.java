@@ -82,6 +82,7 @@ public class Column
     private boolean isNotNull = false;
     private String size;
     private String torqueType;
+    private String javaType;
     private Object columnType;
     private Table parentTable;
     private int position;
@@ -155,6 +156,11 @@ public class Column
         name = attrib.getValue("name");
 
         javaName = attrib.getValue("javaName");
+        javaType = attrib.getValue("javaType");
+        if ( javaType != null && javaType.length() == 0 ) 
+        {
+            javaType = null;
+        }        
 
         // retrieves the method for converting from specified name to
         // a java name.
@@ -273,6 +279,13 @@ public class Column
         this.javaName = javaName;
     }
 
+    /**
+     * Get type to use in Java sources
+     */
+    public String getJavaType()
+    {
+        return javaType;
+    }
 
     /**
      * Get the location of this column within the table (one-based).
@@ -768,7 +781,12 @@ public class Column
      */
     public String getJavaNative()
     {
-        String jtype = TypeMap.getJavaNative(torqueType);
+        String jtype = TypeMap.getJavaNativeObject(torqueType);
+        if ( isUsePrimitive() ) 
+        {
+            jtype = TypeMap.getJavaNative(torqueType);
+        }
+        
         if ( isPrimaryKey() || isForeignKey() )
         {
             if ( jtype.equals("String") )
@@ -785,11 +803,16 @@ public class Column
                       || jtype.equals("BigDecimal")
                       || jtype.equals("byte")
                       || jtype.equals("float")
-                      || jtype.equals("double") )
+                      || jtype.equals("double")
+                      || jtype.equals("Short")
+                      || jtype.equals("Integer")
+                      || jtype.equals("Long")
+                      || jtype.equals("Byte")
+                      || jtype.equals("Float")
+                      || jtype.equals("Double") )
             {
                 jtype = "NumberKey";
             }
-
         }
 
         return jtype;
@@ -801,7 +824,12 @@ public class Column
      */
     public String getVillageMethod()
     {
-        String vmethod = TypeMap.getVillageMethod(torqueType);
+        String vmethod = TypeMap.getVillageObjectMethod(torqueType);
+        if ( isUsePrimitive() ) 
+        {
+            vmethod = TypeMap.getVillageMethod(torqueType);
+        }
+
         String jtype = TypeMap.getJavaNative(torqueType);
         if ( isPrimaryKey() || isForeignKey() )
         {
@@ -860,5 +888,13 @@ public class Column
             || "float".equals(t)
             || "double".equals(t)
             || "char".equals(t);
+    }
+
+    public boolean isUsePrimitive()
+    {
+        String s = getJavaType();
+        return (s != null && s.equals("primitive")) 
+            || (s == null && !"object".equals(
+               getTable().getDatabase().getDefaultJavaType())); 
     }
 }

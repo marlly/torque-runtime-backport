@@ -298,9 +298,12 @@ public abstract class $basePrefix${table.JavaName}Peer
             #if ($col.isBooleanChar())
             obj.set${col.JavaName}
                 ("Y".equals(row.getValue(offset+$n).$col.VillageMethod));
-            #elseif ($col.isBooleanInt())
+            #elseif ($col.isBooleanInt() && $col.isUsePrimitive())
             obj.set${col.JavaName}
                 (1 == row.getValue(offset+$n).$col.VillageMethod);
+            #elseif ($col.isBooleanInt())
+            obj.set${col.JavaName}(new Boolean(
+                1 == row.getValue(offset+$n).${col.VillageMethod}.intValue()));
             #else
                 #if ($col.isPrimaryKey() || $col.isForeignKey() )
             obj.set${col.JavaName}(

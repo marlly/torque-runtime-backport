@@ -84,14 +84,14 @@ import java.math.BigDecimal;
  * LONGVARCHAR   | String               | String
  * NUMERIC       | java.math.BigDecimal | java.math.BigDecimal
  * DECIMAL       | java.math.BigDecimal | java.math.BigDecimal
- * BIT           | boolean              | Boolean
- * TINYINT       | byte                 | Byte
- * SMALLINT      | short                | Short
- * INTEGER       | int                  | Integer
- * BIGINT        | long                 | Long
- * REAL          | float                | Float
- * FLOAT         | double               | Double
- * DOUBLE        | double               | Double
+ * BIT           | boolean OR Boolean   | Boolean
+ * TINYINT       | byte OR Byte         | Byte
+ * SMALLINT      | short OR Short       | Short
+ * INTEGER       | int OR Integer       | Integer
+ * BIGINT        | long OR Long         | Long
+ * REAL          | float OR Float       | Float
+ * FLOAT         | double OR Double     | Double
+ * DOUBLE        | double OR Double     | Double
  * BINARY        | byte[]               | ?
  * VARBINARY     | byte[]               | ?
  * LONGVARBINARY | byte[]               | ?
@@ -102,8 +102,8 @@ import java.math.BigDecimal;
  * -------------------------------------------------------
  * A couple variations have been introduced to cover cases
  * that may arise, but are not covered above
- * BOOLEANCHAR   | boolean              | String
- * BOOLEANINT    | boolean              | Integer
+ * BOOLEANCHAR   | boolean OR Boolean   | String
+ * BOOLEANINT    | boolean OR Boolean   | Integer
  * </pre>
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
@@ -188,6 +188,17 @@ public class TypeMap
     public static final String BOOLEANCHAR_NATIVE_TYPE = "boolean";
     public static final String BOOLEANINT_NATIVE_TYPE = "boolean";
 
+    public static final String BIT_NATIVE_OBJECT_TYPE = "Boolean";
+    public static final String TINYINT_NATIVE_OBJECT_TYPE = "Byte";
+    public static final String SMALLINT_NATIVE_OBJECT_TYPE = "Short";
+    public static final String INTEGER_NATIVE_OBJECT_TYPE = "Integer";
+    public static final String BIGINT_NATIVE_OBJECT_TYPE = "Long";
+    public static final String REAL_NATIVE_OBJECT_TYPE = "Float";
+    public static final String FLOAT_NATIVE_OBJECT_TYPE = "Double";
+    public static final String DOUBLE_NATIVE_OBJECT_TYPE = "Double";
+    public static final String BOOLEANCHAR_NATIVE_OBJECT_TYPE = "Boolean";
+    public static final String BOOLEANINT_NATIVE_OBJECT_TYPE = "Boolean";
+
     public static final String CHAR_VILLAGE_METHOD = "asString()";
     public static final String VARCHAR_VILLAGE_METHOD = "asString()";
     public static final String LONGVARCHAR_VILLAGE_METHOD = "asString()";
@@ -211,6 +222,17 @@ public class TypeMap
     public static final String TIMESTAMP_VILLAGE_METHOD = "asUtilDate()";
     public static final String BOOLEANCHAR_VILLAGE_METHOD = "asString()";
     public static final String BOOLEANINT_VILLAGE_METHOD = "asInt()";
+
+    public static final String BIT_VILLAGE_OBJECT_METHOD = "asBooleanObj()";
+    public static final String TINYINT_VILLAGE_OBJECT_METHOD = "asByteObj()";
+    public static final String SMALLINT_VILLAGE_OBJECT_METHOD = "asShortObj()";
+    public static final String INTEGER_VILLAGE_OBJECT_METHOD = "asIntegerObj()";
+    public static final String BIGINT_VILLAGE_OBJECT_METHOD = "asLongObj()";
+    public static final String REAL_VILLAGE_OBJECT_METHOD = "asFloatObj()";
+    public static final String FLOAT_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
+    public static final String DOUBLE_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
+    public static final String BOOLEANINT_VILLAGE_OBJECT_METHOD = 
+        "asIntegerObj()";
 
     public static final String CHAR_PP_METHOD = "getString(ppKey)";
     public static final String VARCHAR_PP_METHOD = "getString(ppKey)";
@@ -236,7 +258,9 @@ public class TypeMap
 
     private static Hashtable jdbcToJavaObjectMap = null;
     private static Hashtable jdbcToJavaNativeMap = null;
+    private static Hashtable jdbcToJavaNativeObjectMap = null;
     private static Hashtable jdbcToVillageMethodMap = null;
+    private static Hashtable jdbcToVillageObjectMethodMap = null;
     private static Hashtable jdbcToPPMethodMap = null;
     private static Hashtable torqueTypeToJdbcTypeMap = null;
     private static Hashtable jdbcToTorqueTypeMap = null;
@@ -310,6 +334,20 @@ public class TypeMap
             jdbcToJavaNativeMap.put(BOOLEANCHAR, BOOLEANCHAR_NATIVE_TYPE);
             jdbcToJavaNativeMap.put(BOOLEANINT, BOOLEANINT_NATIVE_TYPE);
 
+            jdbcToJavaNativeObjectMap = new Hashtable();
+            jdbcToJavaNativeObjectMap.put(BIT, BIT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(TINYINT, TINYINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SMALLINT, SMALLINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(INTEGER, INTEGER_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(BIGINT, BIGINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(REAL, REAL_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(FLOAT, FLOAT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(DOUBLE, DOUBLE_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(BOOLEANCHAR, 
+                                          BOOLEANCHAR_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(BOOLEANINT, 
+                                          BOOLEANINT_NATIVE_OBJECT_TYPE);
+
             /*
              * Create JDBC -> Village asX() mappings.
              */
@@ -339,6 +377,24 @@ public class TypeMap
             jdbcToVillageMethodMap.put(TIMESTAMP, TIMESTAMP_VILLAGE_METHOD);
             jdbcToVillageMethodMap.put(BOOLEANCHAR, BOOLEANCHAR_VILLAGE_METHOD);
             jdbcToVillageMethodMap.put(BOOLEANINT, BOOLEANINT_VILLAGE_METHOD);
+
+
+            jdbcToVillageObjectMethodMap = new Hashtable();
+            jdbcToVillageObjectMethodMap.put(BIT, BIT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(TINYINT, 
+                                             TINYINT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(SMALLINT, 
+                                             SMALLINT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(INTEGER, 
+                                             INTEGER_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(BIGINT, 
+                                             BIGINT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(REAL, REAL_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(FLOAT, FLOAT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(DOUBLE, 
+                                             DOUBLE_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(BOOLEANINT, 
+                                             BOOLEANINT_VILLAGE_OBJECT_METHOD);
 
             /*
              * Create JDBC -> ParameterParser getX() mappings.
@@ -464,6 +520,24 @@ public class TypeMap
     }
 
     /**
+     * Return native java type which corresponds to the
+     * JDBC type provided. Use in the base object class generation.
+     */
+    public static String getJavaNativeObject(String jdbcType)
+    {
+        // Make sure the we are initialized.
+        if (isInitialized == false)
+            initialize();
+        
+        String s = (String)jdbcToJavaNativeObjectMap.get(jdbcType);
+        if ( s == null ) 
+        {
+            s = (String)jdbcToJavaNativeMap.get(jdbcType); 
+        }
+        return s;
+    }
+
+    /**
      * Return Village asX() method which corresponds to the
      * JDBC type provided. Use in the Peer class generation.
      */
@@ -474,6 +548,24 @@ public class TypeMap
             initialize();
 
         return (String) jdbcToVillageMethodMap.get(jdbcType);
+    }
+
+    /**
+     * Return Village asX() method which corresponds to the
+     * JDBC type provided. Use in the Peer class generation.
+     */
+    public static String getVillageObjectMethod(String jdbcType)
+    {
+        // Make sure the we are initialized.
+        if (isInitialized == false)
+            initialize();
+
+        String s = (String)jdbcToVillageObjectMethodMap.get(jdbcType);
+        if ( s == null ) 
+        {
+            s = (String)jdbcToVillageMethodMap.get(jdbcType); 
+        }
+        return s;
     }
 
     /**

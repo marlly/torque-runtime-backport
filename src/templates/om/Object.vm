@@ -56,7 +56,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #set ( $quote = '"' )
           #end
           #set ( $defaultValue = $col.DefaultValue )
-          #if ( $cjtype == "boolean" )
+          #if ( $cjtype == "boolean" || $cjtype == "Boolean" )
             #if ( $defaultValue == "1" || $defaultValue == "Y" )
               #set ( $defaultValue = "true" )
             #elseif ( $defaultValue == "0" || $defaultValue == "N" )
@@ -72,6 +72,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $quote = '"' )
               #set ($defVal = "= new StringKey($quote$defaultValue$quote)")
           #else
+              #if (!$col.isPrimitive() && $cjtype != "String")
+                  #set ( $defaultValue = "new ${cjtype}($defaultValue)" )
+              #end
               #set ($defVal = "=$quote$defaultValue$quote")
           #end            
         #end

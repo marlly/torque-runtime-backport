@@ -35,6 +35,7 @@ Java class or method name.
 <!ATTLIST database
   name CDATA #IMPLIED
   defaultIdMethod (idbroker|native|autoincrement|sequence|none) "none"
+  defaultJavaType (object|primitive) "primitive"
   package CDATA #IMPLIED
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
@@ -78,6 +79,7 @@ Java class or method name.
         | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
         | DOUBLE
     ) "VARCHAR"
+  javaType (object|primitive) #IMPLIED
   size CDATA #IMPLIED
   default CDATA #IMPLIED
   autoIncrement (true|false) "false"
