@@ -146,7 +146,7 @@ public abstract class DB implements Serializable
     public Connection getConnection()
         throws SQLException
     {
-        // Workaround for buggy WebTorque.getCategory()ic 5.1 classloader - ignore the
+        // Workaround for buggy Weblogic 5.1 classloader - ignore the
         // exception upon first invocation.
         try
         {

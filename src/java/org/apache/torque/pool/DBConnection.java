@@ -254,8 +254,8 @@ public class DBConnection
 
         //If we use a PooledConnection object, then request from it a Connection
         //object. This forces the PooledConnection to create a wrapper for the
-        //physical connection it represents and return a local Connection object
-        //that is currently in control of it.
+        //physical connection it represents and return the logical Connection
+        //object that is currently in control of it.
         if ( pooledConnection != null )
         {
             try
@@ -574,7 +574,7 @@ public class DBConnection
                 //just ignore
             }
 
-            //this will also close the Torque.getCategory()ical Connection object so a future
+            //this will also close the logical Connection object so a future
             //call to isClosed() will return true
             try
             {

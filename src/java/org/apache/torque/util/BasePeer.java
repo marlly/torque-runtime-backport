@@ -133,7 +133,7 @@ public abstract class BasePeer
     /** Hashtable that contains the cached mapBuilders. */
     private static Hashtable mapBuilders = new Hashtable(5);
 
-    /** Torque.getCategory()ging category tag */
+    /** logging category tag */
     private final static String CATEGORY = "sql";
 
     protected static Category category;
@@ -1917,7 +1917,7 @@ public abstract class BasePeer
         catch(Exception e)
         {
             // Have to catch possible exceptions because method is
-            // used in initialization of Peers.  Torque.getCategory() the exception and
+            // used in initialization of Peers.  Log the exception and
             // return null.
             String message = "BasePeer.MapBuilder failed trying to instantiate: " +
                     name;
