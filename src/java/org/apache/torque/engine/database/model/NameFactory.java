@@ -68,16 +68,11 @@ import org.apache.torque.TorqueException;
 public class NameFactory
 {
     /**
-     * The fully qualified class name of the default name generator.
+     * The fully qualified class name of the constraint name
+     * generator.
      */
-    public static final String DEFAULT_GENERATOR =
-        DefaultNameGenerator.class.getName();
-
-    /**
-     * The fully qualified class name of the global name generator.
-     */
-    public static final String GLOBAL_GENERATOR =
-        GlobalNameGenerator.class.getName();
+    public static final String CONSTRAINT_GENERATOR =
+        ConstraintNameGenerator.class.getName();
 
     /**
      * The single instance of this class.
@@ -149,16 +144,5 @@ public class NameFactory
     {
         NameGenerator algorithm = instance.getAlgorithm(algorithmName);
         return algorithm.generateName(inputs);
-    }
-
-    /**
-     * Produces a name using the default generator.
-     *
-     * @see #generateName(String algorithmName, List inputs)
-     */
-    public static String generateName(List inputs)
-        throws TorqueException
-    {
-        return generateName(DEFAULT_GENERATOR, inputs);
     }
 }
