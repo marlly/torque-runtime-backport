@@ -9,8 +9,15 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='add'>
+        TRQS163: Add domain element to schema.xml. Domains are used to define 
+        attributes for columns.
+      </action>
       <action dev='mpoeschl' type='update'>
-        Upgrade to commons-pool-1.1-RC1 and commons-dbcp-1.1RC1
+        Upgrade to commons-lang-2.0
+      </action>
+      <action dev='mpoeschl' type='update'>
+        Upgrade to commons-pool-1.1 and commons-dbcp-1.1
       </action>
       <action dev='mpoeschl' type='update'>
         Refactored generator model (removed AppData class)
@@ -26,15 +33,15 @@
         Changed ojb-model task to generate Object + BaseObject (like for the 
         torque om).
       </action>
-      <action dev='mpoeschl' type='add'>
+      <action dev='mpoeschl' type='fix'>
         Fix package name for TorqueComponent in roleConfiguration.xml
       </action>
       <action dev='mpoeschl' type='remove'>
         Removed PasePeer.DEFAULT_MAP_BUILDER and BasePeer.getMapBuilder()
       </action>
       <action dev='seade' type='update'>
-        For PostgreSQL the LONGVARCHAR datatype now maps to <em>text</em>
-        rather than <em>bytea</em>.
+        TRQS149: For PostgreSQL the LONGVARCHAR datatype now maps to 
+        <em>text</em> rather than <em>bytea</em>.
       </action>
     </release>
   </body>
