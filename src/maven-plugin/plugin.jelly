@@ -3,7 +3,7 @@
 <project xmlns:j="jelly:core">
 
   <goal
-    name="torque" 
+    name="torque"
     description="delegate to torque:main"
     prereqs="torque:main"/>
 
