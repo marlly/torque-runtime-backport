@@ -1,6 +1,10 @@
 #foreach ($col in $table.Columns)
     #set ( $type = $dbprops.get($col.Type) )
-    #set ( $size = $col.printSize() )
+    #if ($type == "INT" || $type == "TEXT")
+      #set ( $size = "" )
+    #else   
+      #set ( $size = $col.printSize() )
+    #end
     #set ( $default = $col.DefaultSetting )
     #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),$dbprops.get("NULL")) )
     #set ( $autoIncrement = $strings.select($col.isAutoIncrement(), $dbprops.get("AUTOINCREMENT"),"") )

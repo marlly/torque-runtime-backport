@@ -8,7 +8,7 @@ REAL = REAL
 DOUBLE = FLOAT
 NUMERIC = NUMERIC
 DECIMAL = DECIMAL
-CHAR = VARCHAR
+CHAR = CHAR
 VARCHAR = VARCHAR
 LONGVARCHAR = TEXT
 DATE = DATETIME
@@ -31,5 +31,5 @@ AUTOINCREMENT = IDENTITY (1,1)
 NOTNULL = NOT NULL
 
 removeNotNullWithAutoIncrement = false
-
 suppressDefaults = false
+maxColumnNameLength = 30
