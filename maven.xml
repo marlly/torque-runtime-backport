@@ -114,12 +114,12 @@
     <echo message="Copying profile into distribution directory: ${torque.testProfile}"/>
 
     <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
-    <filter token="DATABASE_URL" value="${databaseUrl}"/>
-    <filter token="DATABASE_USER" value="${databaseUser}"/>
-    <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
-    <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
+    <filter token="DATABASE_URL" value="${torque.database.url}"/>
+    <filter token="DATABASE_USER" value="${torque.database.user}"/>
+    <filter token="DATABASE_DRIVER" value="${torque.database.driver}"/>
+    <filter token="DATABASE_PASSWORD" value="${torque.database.password}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
-    <filter token="DATABASE_ADAPTER" value="${database}"/>
+    <filter token="DATABASE_ADAPTER" value="${torque.database}"/>
 
     <copy
       tofile="${torque.distDir}/build.properties"

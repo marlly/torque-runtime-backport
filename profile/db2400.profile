@@ -18,7 +18,7 @@ lib.dir = ../lib
 #
 # -------------------------------------------------------------------
 
-project = bookstore
+torque.project = bookstore
 
 # -------------------------------------------------------------------
 #
@@ -26,7 +26,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = db2400
+torque.database = db2400
 
 # -------------------------------------------------------------------
 #
@@ -47,14 +47,14 @@ database = db2400
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
-targetPackage=org.apache.torque.test
-basePrefix=Base
-addSaveMethod=true
-addGetByNameMethod=true
-complexObjectModel=true
-addTimeStamp=true
-addIntakeRetrievable=false
-useManagers=true
+torque.targetPackage=org.apache.torque.test
+torque.basePrefix=Base
+torque.addSaveMethod=true
+torque.addGetByNameMethod=true
+torque.complexObjectModel=true
+torque.addTimeStamp=true
+torque.addIntakeRetrievable=false
+torque.useManagers=true
 
 # -------------------------------------------------------------------
 #
@@ -67,61 +67,14 @@ useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:as400://testhost/torquetest
-buildDatabaseUrl = jdbc:as400://testhost/torquetest
-databaseUrl = jdbc:as400://testhost/torquetest
-databaseDriver = com.ibm.as400.access.AS400JDBCDriver
-databaseUser =
-databasePassword =
-databaseHost = testhost
+torque.database.createUrl = jdbc:as400://testhost/torquetest
+torque.database.buildUrl = jdbc:as400://testhost/torquetest
+torque.database.url = jdbc:as400://testhost/torquetest
+torque.database.driver = com.ibm.as400.access.AS400JDBCDriver
+torque.database.user =
+torque.database.password =
+torque.database.host = testhost
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
-sameJavaName=false
-
-# -------------------------------------------------------------------
-# You should NOT have to edit anything below here.
-# -------------------------------------------------------------------
-
-# -------------------------------------------------------------------------
-# The values for the ID_TABLE_ID column in the ID_TABLE start
-# at 101 for tables used in projects.
-# -------------------------------------------------------------------------
-initialID = 101
-
-# -------------------------------------------------------------------
-#
-#  T E M P L A T E  P A T H
-#
-# -------------------------------------------------------------------
-
-templatePath = ../templates
-
-# -------------------------------------------------------------------
-#
-#  C O N T R O L  T E M P L A T E S
-#
-# -------------------------------------------------------------------
-
-SQLControlTemplate = sql/base/Control.vm
-OMControlTemplate = om/Control.vm
-idTableControlTemplate = sql/id-table/Control.vm
-DataDTDControlTemplate = data/Control.vm
-DataDumpControlTemplate = data/dump/Control.vm
-DataSQLControlTemplate = sql/load/Control.vm
-
-# -------------------------------------------------------------------
-#
-#  O U T P U T  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-outputDirectory=src
-
-# -------------------------------------------------------------------
-#
-#  S C H E M A  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-schemaDirectory=schema
+torque.sameJavaName=false

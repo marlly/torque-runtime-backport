@@ -17,7 +17,7 @@ lib.dir = ../lib
 #
 # -------------------------------------------------------------------
 
-project = bookstore
+torque.project = bookstore
 
 # -------------------------------------------------------------------
 #
@@ -25,7 +25,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = oracle
+torque.database = oracle
 
 # -------------------------------------------------------------------
 #
@@ -46,14 +46,14 @@ database = oracle
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
-targetPackage=org.apache.torque.test
-basePrefix=Base
-addSaveMethod=true
-addGetByNameMethod=true
-complexObjectModel=true
-addTimeStamp=true
-addIntakeRetrievable=false
-useManagers=true
+torque.targetPackage=org.apache.torque.test
+torque.basePrefix=Base
+torque.addSaveMethod=true
+torque.addGetByNameMethod=true
+torque.complexObjectModel=true
+torque.addTimeStamp=true
+torque.addIntakeRetrievable=false
+torque.useManagers=true
 
 # -------------------------------------------------------------------
 #
@@ -66,73 +66,14 @@ useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
-buildDatabaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
-databaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
-databaseDriver = oracle.jdbc.driver.OracleDriver
-databaseUser = protot2
-databasePassword = protot2protot2
-databaseHost = cpddev2.engin.umich.edu
+torque.database.createUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+torque.database.buildUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+torque.database.url = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+torque.database.driver = oracle.jdbc.driver.OracleDriver
+torque.database.user = protot2
+torque.database.password = protot2protot2
+torque.database.host = cpddev2.engin.umich.edu
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
 sameJavaName=false
-
-# -------------------------------------------------------------------
-#
-#  D O C U M E N T A T I O   S E T T I N G S
-#
-# -------------------------------------------------------------------
-# These settings will allow you to customize the way your schema
-# documentation is created.
-# Valid formats are: html, anakia (for use with jakarta-site2)
-# -------------------------------------------------------------------
-documentationFormat=html
-
-# -------------------------------------------------------------------
-# You should NOT have to edit anything below here.
-# -------------------------------------------------------------------
-
-# -------------------------------------------------------------------------
-# The values for the ID_TABLE_ID column in the ID_TABLE start
-# at 101 for tables used in projects.
-# -------------------------------------------------------------------------
-initialID = 101
-
-# -------------------------------------------------------------------
-#
-#  T E M P L A T E  P A T H
-#
-# -------------------------------------------------------------------
-
-templatePath = ../templates
-
-# -------------------------------------------------------------------
-#
-#  C O N T R O L  T E M P L A T E S
-#
-# -------------------------------------------------------------------
-
-SQLControlTemplate = sql/base/Control.vm
-OMControlTemplate = om/Control.vm
-idTableControlTemplate = sql/id-table/Control.vm
-DataDTDControlTemplate = data/Control.vm
-DataDumpControlTemplate = data/dump/Control.vm
-DataSQLControlTemplate = sql/load/Control.vm
-DocControlTemplate = doc/Control.vm
-
-# -------------------------------------------------------------------
-#
-#  O U T P U T  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-outputDirectory=src
-
-# -------------------------------------------------------------------
-#
-#  S C H E M A  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-schemaDirectory=schema

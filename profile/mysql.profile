@@ -1,4 +1,4 @@
-c# location of jar that you will be using for testing
+# location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
 torque.testDatabaseJar = ${maven.home}/repository/mm.mysql/jars/mm.mysql-2.0.13-bin.jar
@@ -25,7 +25,7 @@ torque.project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = mysql
+torque.database = mysql
 
 # -------------------------------------------------------------------
 #
@@ -46,14 +46,14 @@ database = mysql
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
-targetPackage=org.apache.torque.test
-basePrefix=Base
-addSaveMethod=true
-addGetByNameMethod=true
-complexObjectModel=true
-addTimeStamp=true
-addIntakeRetrievable=false
-useManagers=true
+torque.targetPackage=org.apache.torque.test
+torque.basePrefix=Base
+torque.addSaveMethod=true
+torque.addGetByNameMethod=true
+torque.complexObjectModel=true
+torque.addTimeStamp=true
+torque.addIntakeRetrievable=false
+torque.useManagers=true
 
 # -------------------------------------------------------------------
 #
@@ -66,73 +66,14 @@ useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
-buildDatabaseUrl = jdbc:mysql://localhost:3306/bookstore
-databaseUrl = jdbc:mysql://localhost:3306/bookstore
-databaseDriver = org.gjt.mm.mysql.Driver
-databaseUser = root
-databasePassword =
-databaseHost = 127.0.0.1
+torque.database.createUrl = jdbc:mysql://localhost:3306/mysql
+torque.database.buildUrl = jdbc:mysql://localhost:3306/bookstore
+torque.database.url = jdbc:mysql://localhost:3306/bookstore
+torque.database.driver = org.gjt.mm.mysql.Driver
+torque.database.user = root
+torque.database.password =
+torque.database.host = 127.0.0.1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
-sameJavaName=false
-
-# -------------------------------------------------------------------
-#
-#  D O C U M E N T A T I O   S E T T I N G S
-#
-# -------------------------------------------------------------------
-# These settings will allow you to customize the way your schema
-# documentation is created.
-# Valid formats are: html, anakia (for use with jakarta-site2)
-# -------------------------------------------------------------------
-documentationFormat=html
-
-# -------------------------------------------------------------------
-# You should NOT have to edit anything below here.
-# -------------------------------------------------------------------
-
-# -------------------------------------------------------------------------
-# The values for the ID_TABLE_ID column in the ID_TABLE start
-# at 101 for tables used in projects.
-# -------------------------------------------------------------------------
-initialID = 101
-
-# -------------------------------------------------------------------
-#
-#  T E M P L A T E  P A T H
-#
-# -------------------------------------------------------------------
-
-templatePath = templates
-
-# -------------------------------------------------------------------
-#
-#  C O N T R O L  T E M P L A T E S
-#
-# -------------------------------------------------------------------
-
-SQLControlTemplate = sql/base/Control.vm
-OMControlTemplate = om/Control.vm
-idTableControlTemplate = sql/id-table/Control.vm
-DataDTDControlTemplate = data/Control.vm
-DataDumpControlTemplate = data/dump/Control.vm
-DataSQLControlTemplate = sql/load/Control.vm
-DocControlTemplate = doc/Control.vm
-
-# -------------------------------------------------------------------
-#
-#  O U T P U T  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-outputDirectory=src
-
-# -------------------------------------------------------------------
-#
-#  S C H E M A  D I R E C T O R Y
-#
-# -------------------------------------------------------------------
-
-torque.schema.dir=schema
+torque.sameJavaName = false
