@@ -285,7 +285,6 @@ For the schema described above, the XML would look something like
 </p>
 
 <source><![CDATA[
-<app-data>
 <database>
   <table name="category" idMethod="autoincrement">
     <column name="category_id" required="true" autoIncrement="true"
@@ -302,8 +301,7 @@ For the schema described above, the XML would look something like
         <reference local="category_id" foreign="category_id"/>
     </foreign-key>
   </table>
-<app-data>
-<database>
+</database>
 ]]>
 </source>
 

@@ -9,43 +9,56 @@
   </properties>
 
   <body>
-    <section name="Table of Contents">
-      <p>
-        <ol>
-          <li>
-            <a href="#About this Guide">About this Guide</a>
-          </li>
-        </ol>
-      </p>
-    </section>
 
-    <section name="About this Guide">
-      <p>
-        The Torque User's guide is intended to help those who intend
-        to incorporate Torque into their project to provide a means
-        of persistence for application objects.
-      </p>
-    </section>
+<section name="Table of Contents">
 
-    <section name="Torque Directory Structure">
+<p>
+  <ol>
+    <li>
+      <a href="#About this Guide">About this Guide</a>
+    </li>
+    <li>
+      <a href="#Torque Directory Structure">Torque Directory Structure</a>
+    </li>
+    <li>
+      <a href="#Quick Start Guide">Quick Start Guide</a>
+    </li>
+    <li>
+      <a href="#Configuring Torque">Configuring Torque</a>
+    </li>
+  </ol>
+</p>
 
-      <p>
-        Here is what the Torque directory structure looks like. There are slight
-        differences between the stand-alone and TDK versions but nothing
-        significant:
-      </p>
+</section>
 
-      <source><![CDATA[
+<section name="About this Guide">
+
+<p>
+  The Torque User's guide is intended to help those who intend
+  to incorporate Torque into their project to provide a means
+  of persistence for application objects.
+</p>
+
+</section>
+
+<section name="Torque Directory Structure">
+
+<p>
+  Here is what the Torque directory structure looks like. There are slight
+  differences between the stand-alone and TDK versions but nothing
+  significant:
+</p>
+
+<source><![CDATA[
 torque/
     lib/              <--  Jar files required by Torque (stand-alone version)
-    dtd/              <--- DTD for Torque XML database descriptors.
     schema/           <--- Project specific XML database descriptor.
     templates/        <--- Velocity templates used for source generation.
     src/              <--- Target location for output (stand-alone version).
 
     build.xml         <--- Ant build file that controls Torque.
     build.properties  <--- Properties file that controls Torque behaviour.
-      ]]></source>
+]]></source>
 
 <p>
   A typical user of Torque would really only ever need to edit the
@@ -70,122 +83,60 @@ torque/
   <em>build.properties</em> file eventually so that your generated sources have names
   that reflect your project name, but you can do that later :-). You also have to
   remember that if you change the <em>project</em> property that you have to
-  change the name of your project XML database schema to match! For example if you
-  change the <em>project</em> property from the default value of "project" to
-  "killerapp" then you must change the name of the default schema in the
-  <strong>schema</strong> directory from <em>project-schema.xml</em> to
-  <em>killerapp-schema.xml</em>.
+  change the name of your project XML database schema to match!
+</p>
+
+<p>
+  For example if you change the <em>project</em> property from the default 
+  value of "project" to "killerapp" then you must change the name of the default 
+  schema in the <strong>schema</strong> directory from <em>project-schema.xml</em>
+  to <em>killerapp-schema.xml</em>.
 </p>
 
 </section>
 
 <section name="Configuring Torque">
 
-<strong>build.properties</strong>
+<subsection name="build.properties">
 
 <p>
-  Here is a list of all the properties currently supported by Torque:
+  For a complete list of build properties, please refer to the 
+  <a href="properties-reference.html">properties reference</a>. Below
+  is a short list of the primary properties you should be interested in.
 </p>
 
 <table>
-<tr>
-    <td>project</td>
-    <td>The name of your Turbine project. The project name is reflected in the
-    names used for the generated output. If your project is set to "killerapp"
-    then you will get the following files:<br/>
-    killerapp-schema.sql<br/>
-    killerapp.generation.report<br/>
-    Remember when changing this property to change the name
-    of your XML database schema to match!
-    </td>
-</tr>
-<tr>
-    <td>database</td>
-    <td>The target database for your Turbine project. This is used in conjuction
-    with SQL generation.
-    </td>
-</tr>
-<tr>
-    <td>targetPackage</td>
-    <td>
-        Used in conjuction with the OM generation.
-    </td>
-</tr>
-<tr>
-    <td>databaseUrl</td>
-    <td>
-        Used by the JDBC -> XML process, and by the SQL Ant Task
-        that will initialize your target database with the
-        generated SQL.
-    </td>
-</tr>
-<tr>
-    <td>databaseDriver</td>
-    <td>
-        Used by the JDBC -> XML process, and by the SQL Ant Task
-        that will initialize your target database with the
-        generated SQL.
-    </td>
-</tr>
-<tr>
-    <td>databaseUser</td>
-    <td>
-        Used by the JDBC -> XML process, and by the SQL Ant Task
-        that will initialize your target database with the
-        generated SQL.
-    </td>
-</tr>
-<tr>
-    <td>databasePassword</td>
-    <td>
-        Used by the JDBC -> XML process, and by the SQL Ant Task
-        that will initialize your target database with the
-        generated SQL.
-    </td>
-</tr>
-<tr>
-    <td>databaseSchema</td>
-    <td>
-        Used by the JDBC -> XML process, and by the SQL Ant Task
-        that will initialize your target database with the
-        generated SQL. This is only used by Oracle at this time.
-     </td>
-</tr>
-<tr>
-    <td><strong>You should not have to edit any properties below here!</strong></td>
-    <td></td>
-</tr>
-<tr>
-    <td>templatePath</td>
-    <td>The path to the Velocity templates used for source generation.</td>
-</tr>
-<tr>
-    <td>SQLControlTemplate</td>
-    <td>Control template used for SQL source generation.</td>
-</tr>
-<tr>
-    <td>OMControlTemplate</td>
-    <td>Control template used for object model source generation.</td>
-</tr>
-<tr>
-    <td>idTableControlTemplate</td>
-    <td>Control template used for Id Broker source generation.</td>
-</tr>
-<tr>
-    <td>outputDirectory</td>
-    <td>Directory where the generated sources are placed.</td>
-</tr>
-<tr>
-    <td>schemaDirectory</td>
-    <td>Directory where Torque looks for XML database schemas.</td>
-</tr>
+  <tr>
+    <td>torque.project</td>
+  </tr>
+  <tr>
+    <td>torque.database</td>
+  </tr>
+  <tr>
+    <td>torque.targetPackage</td>
+  </tr>
+  <tr>
+    <td>torque.database.url</td>
+  </tr>
+  <tr>
+    <td>torque.database.driver</td>
+  </tr>
+  <tr>
+    <td>torque.database.user</td>
+  </tr>
+  <tr>
+    <td>torque.database.password</td>
+  </tr>
 </table>
 
-<strong>project-schema.xml</strong>
+</subsection>
+
+<subsection name="project-schema.xml">
+
 <p>
-This is an example of what the XML database schema might look like. This
-particular example is a snippet of the database used for Turbines role-based
-user system:
+  This is an example of what the XML database schema might look like. This
+  particular example is a snippet of the database used for Turbine's role-based
+  user system:
 </p>
 
 <source><![CDATA[
@@ -230,15 +181,17 @@ user system:
 ]]></source>
 
 <p>
-Please refer to <a href="schema-reference.html">Torque Schema Reference</a>
-to find out more about the the different elements and attributes.
+  Please refer to <a href="schema-reference.html">Torque Schema Reference</a>
+  to find out more about the the different elements and attributes.
 </p>
+
+</subsection>
 
 <!--
 
 <p>
-This is what the resultant SQL looks like, in the case the target database is
-<a href="http://www.mysql.com">MySQL</a>:
+  This is what the resultant SQL looks like, in the case the target database is
+  <a href="http://www.mysql.com">MySQL</a>:
 </p>
 
 <source><![CDATA[
@@ -268,326 +221,105 @@ CREATE TABLE Jobentry
 ]]></source>
 
 <p>
-This is what the sources look like for the Peer based object model:
+  This is what the sources look like for the Peer based object model:
 </p>
 
 <p>
-<ul>
+  <ul>
     <li>BaseObjects
-        <ul>
-            <li><a href="resources/IdTable.java">IdTable.java</a></li>
-            <li><a href="resources/Jobentry.java">Jobentry.java</a></li>
-        </ul>
+      <ul>
+        <li><a href="resources/IdTable.java">IdTable.java</a></li>
+        <li><a href="resources/Jobentry.java">Jobentry.java</a></li>
+      </ul>
     </li>
 
     <li>Peers
-        <ul>
-            <li><a href="resources/IdTablePeer.java">IdTablePeer.java</a></li>
-            <li><a href="resources/JobentryPeer.java">JobentryPeer.java</a></li>
-        </ul>
+      <ul>
+        <li><a href="resources/IdTablePeer.java">IdTablePeer.java</a></li>
+        <li><a href="resources/JobentryPeer.java">JobentryPeer.java</a></li>
+      </ul>
     </li>
 
     <li>MapBuilders
-        <ul>
-            <li><a href="resources/IdTableMapBuilder.java">IdTableMapBuilder.java</a></li>
-            <li><a href="resources/JobentryMapBuilder.java">JobentryMapBuilder.java</a></li>
-        </ul>
+      <ul>
+        <li><a href="resources/IdTableMapBuilder.java">IdTableMapBuilder.java</a></li>
+        <li><a href="resources/JobentryMapBuilder.java">JobentryMapBuilder.java</a></li>
+      </ul>
     </li>
-</ul>
+  </ul>
 </p>
 
 <p>
-Please refer to <a href="getting-started.html">Getting Started</a> to find out
-more about the Peer based object model.
+  Please refer to <a href="getting-started.html">Getting Started</a> to find out
+  more about the Peer based object model.
 </p>
 
 <p>
-This is what the HTML description of the database looks like:
+  This is what the HTML description of the database looks like:
 </p>
 
 <table>
-<tr>
+  <tr>
     <td colspan="3">
-        <strong>
-        <font face="Lucida,Verdana,Helvetica,Arial" color="white">ID_TABLE</font>
-        </strong>
+      <strong>
+      <font face="Lucida,Verdana,Helvetica,Arial" color="white">ID_TABLE</font>
+      </strong>
     </td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>Column</td><td>Type</td><td>Size</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>ID_TABLE_ID</td><td >INTEGER</td><td>&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>TABLE_NAME</td><td >VARCHAR</td><td >255&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>NEXT_ID</td><td >INTEGER</td><td >&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>QUANTITY</td><td >INTEGER</td><td >&#160;</td>
-</tr>
+  </tr>
 
 </table>
 
 <table>
-<tr>
+  <tr>
     <td colspan="3">
-        <strong>
-        <font face="Lucida,Verdana,Helvetica,Arial" color="white">Jobentry</font>
-        </strong>
+      <strong>
+      <font face="Lucida,Verdana,Helvetica,Arial" color="white">Jobentry</font>
+      </strong>
     </td>
-</tr>
-<tr><td>Column</td><td>Type</td><td>Size</td>
-</tr>
-<tr>
+  </tr>
+  <tr><td>Column</td><td>Type</td><td>Size</td>
+  </tr>
+  <tr>
     <td>JOBID</td><td >INTEGER</td><td>&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>MINUTE</td><td >INTEGER</td><td>&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>HOUR</td><td >INTEGER</td><td>&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>WEEKDAY</td><td >INTEGER</td><td>&#160;</td>
-</tr>
-<tr>
-    <td>DAY_OF_MONTH</td><td >INTEGER</td><td>&#160;</td
-></tr>
-<tr>
+  </tr>
+  <tr>
+    <td>DAY_OF_MONTH</td><td >INTEGER</td><td>&#160;</td>
+  </tr>
+  <tr>
     <td>TASK</td><td >VARCHAR</td><td >99&#160;</td>
-</tr>
-<tr>
+  </tr>
+  <tr>
     <td>EMAIL</td><td >VARCHAR</td><td >99&#160;</td>
-</tr>
+  </tr>
 
 </table>
 -->
 
 </section>
-
-<section name="Inheritance and the Object Relational Map">
-
-<p>
-
-  Torque can handle object-oriented inheritance.  There are generally
-  considered to be 3 methods of object-relational mapping designs.  Torque
-  uses one of the fastest, mapping all objects in a class hierarchy to a
-  single table.  All attributes for every class in the hierarchy are stored
-  in the table.  Consider an abstract ComputerComponent class that has Monitor
-  and Keyboard subclasses. There would only be one table - both Monitor and
-  Keyboard objects would be persisted to the same place. The table would
-  consist of all ComputerComponent attributes, any unique Monitor attributes,
-  and any unique Keyboard attributes. Keyboard table rows would have NULL for
-  any unique Monitor data columns, and vice versa.
-
-</p>
-<p>
-
-  The other fast method is to map each concrete class to a distinct
-  table. Every object stores all attributes in a single row in the class table.
-  An example would be that if we had a Kitchen class that inherited from Room,
-  two tables would be needed for storage. The Kitchen table would contain all
-  of the columns of the Room table, plus any additional data columns needed to
-  describe the additional Kitchen attributes.
-
-</p>
-<p>
-
-  The slowest, but most object-oriented method is to store each class in its
-  own table. Only attributes that are added to a derived class are stored in
-  its table. The persistence layer would need to join tables to read an object
-  out of storage. Saving objects would be more complex, because objects will
-  need to be distributed across multiple tables.  For our Kitchen and Room
-  example, there would also be two tables, Kitchen and Room, but the Kitchen
-  table would only contain those attributes which weren't part of the Room
-  class.
-
-</p>
-<p>
-
-  One of the advantages of the first method (the one Torque uses) is that it
-  does not require joins like the third method described above. Another
-  advantage is that the data model is easier to maintain than the second
-  method.  It falls short in modelling a class hierarchy where the related
-  classes have a non intersecting collection of attributes, as in this case
-  a row in the table will have several null columns.
-
-</p>
-<p>
-
-  For more information, visit Scott Ambler's excellent web site,
-  <a href="http://www.ambysoft.com/">AmbySoft.com</a>, where he discusses
-  object mapping to relational databases.
-
-</p>
-
-</section>
-
-<section name="A Class Hierarchy">
-
-<source>
-       A
-       |
-     -----
-    |     |
-    B     C
-    |
-    D
-</source>
-
-<p>
-
-  There are two ways that are built into the torque generated Peers in order
-  to specify what class a particular row in the table A represents.  A row
-  will need to have some information that can distinguish the class.  You
-  should specify the column in the table that serves this purpose with the
-  attribute "inheritance"
-
-</p>
-
-<source><![CDATA[
-<table name="A"...>
-  ...
-  <column name="FOO" inheritance="single" type="VARCHAR".../>
-</table>
-]]></source>
-
-<p>
-  In this case you would need to specify the full className in column FOO, so
-  the valid values of FOO would be:
-</p>
-
-<source>
-com.mycompany.project.om.A
-com.mycompany.project.om.B
-com.mycompany.project.om.C
-com.mycompany.project.om.D
-</source>
-
-<p>
-  This is slightly inefficient in storage and also generates some inefficient
-  code in the Peers because the Peer cannot know what classes are available
-  until it gets each record and so will call Class.forName(FOO's value) for each
-  row.
-</p>
-
-<p>
-  The efficiency can be improved in the case where the class hierarchy is
-  known, which would be in most circumstances.  So you can specify the
-  classes in the xml specification:
-</p>
-
-<source><![CDATA[
-<table name="A"...>
-  ...
-  <column name="FOO" inheritance="single" type="CHAR" size="1"...>
-    <inheritance key="B" class="B" extends="com.mycompany.project.om.A"/>
-    <inheritance key="C" class="C" extends="com.mycompany.project.om.A"/>
-    <inheritance key="D" class="D" extends="com.mycompany.project.om.B"/>
-  </column>
-</table>
-]]></source>
-
-<p>
-  where in the above we are using NULL (or any other value) to stand for class
-  "A".  An numeric column could also be used for the key.  Using the above
-  method, torque will cache a copy of each class, so the Class.forName is only
-  done during APeer's initial load into memory.
-</p>
-
-</section>
-
-<section name="Overriding the Default Behavior">
-
-<p>
-  The following example comes from <a href="http://scarab.tigris.org">Scarab</a>
-  (an issue tracking system). In Scarab a class hierarchy definition is
-  described in a few tables, this provides for an evolving hierarchy.  This
-  arrangement can be provided for using the following extensions.  In the
-  xml specification, the column responsible for determining the class
-  is marked using the inheritance="single" attribute.
-</p>
-
-<source><![CDATA[
-<table name="SCARAB_ISSUE_ATTRIBUTE_VALUE" idMethod="none"
-        javaName="AttributeValue">
-    <column name="ISSUE_ID" primaryKey="true" required="true"
-            type="INTEGER"/>
-    <column name="ATTRIBUTE_ID" primaryKey="true" required="true"
-            type="INTEGER" inheritance="single"/>
-    <column name="OPTION_ID" required="false" type="INTEGER"/>
-...
-    <foreign-key foreignTable="SCARAB_ISSUE">
-        <reference local="ISSUE_ID" foreign="ISSUE_ID"/>
-    </foreign-key>
-    <foreign-key foreignTable="SCARAB_ATTRIBUTE">
-        <reference local="ATTRIBUTE_ID" foreign="ATTRIBUTE_ID"/>
-    </foreign-key>
-    <foreign-key foreignTable="SCARAB_ATTRIBUTE_OPTION">
-        <reference local="OPTION_ID" foreign="OPTION_ID"/>
-    </foreign-key>
-...
-</table>
-]]></source>
-
-<p>
-  It might be interesting to note that the column responsible for the determining
-  the class is also a primary and foreign key.  Marking the column this way
-  will cause torque to generate an BaseAttributeValuePeer.getOMClass method.The
-  code in this method will be attempting to create a class from the information
-  provided in column which is an integer.  This is obviously wrong, but it
-  gives us a method to override to provide the correct information.
-</p>
-
-<p>
-  So in AttributeValuePeer, we override the method:
-</p>
-
-<source><![CDATA[
-/**
- * Get the className appropriate for a row in the
- * SCARAB_ISSUE_ATTRIBUTE_VALUE table
- */
-public static Class getOMClass(Record record, int offset)
-    throws Exception
-{
-    NumberKey attId = new NumberKey(record.getValue(offset-1 + 2)
-                                        .asString());
-    Attribute attribute = Attribute.getInstance(attId);
-    String className = attribute.getAttributeType().getJavaClassName();
-
-    TurbineGlobalCacheService tgcs =
-        (TurbineGlobalCacheService)TurbineServices
-        .getInstance().getService(GlobalCacheService.SERVICE_NAME);
-
-    String key = getClassCacheKey(className);
-    Class c = null;
-    try
-    {
-        c = (Class)tgcs.getObject(key).getContents();
-    }
-    catch (ObjectExpiredException oee)
-    {
-        c = Class.forName(className);
-        tgcs.addObject(key, new CachedObject(c));
-    }
-    return c;
-}
-]]></source>
-
-<p>
-  where in the above method, we use the foreign key(s) to traverse
-  the tables to get the class information.  Then we cache the Class to
-  avoid the inefficiency of Class.forName on each row.  (We also cache
-  the contents of the class hierarchy tables, since the dataset is
-  quite small and static.)
-</p>
-
-</section>
-
 
   </body>
 </document>

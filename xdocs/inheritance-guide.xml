@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Torque Inheritance Guide</title>
+    <author email="jvanzyl@apache.org">Jason van Zyl</author>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  </properties>
+
+  <body>
+
+<section name="Table of Contents">
+
+<p>
+  <ol>
+    <li>
+      <a href="#About this Guide">About this Guide</a>
+    </li>
+    <li>
+      <a href="#Inheritance and the Object Relational Map">
+        Inheritance and the Object Relational Map
+      </a>
+    </li>
+    <li>
+      <a href="#A Class Hierarchy">A Class Hierarchy</a>
+    </li>
+    <li>
+      <a href="#Overriding the Default Behavior">
+        Overriding the Default Behavior
+      </a>
+    </li>
+  </ol>
+</p>
+
+</section>
+
+<section name="About this Guide">
+
+<p>
+
+  The Torque User's guide is intended to help those who intend
+  to incorporate Torque into their project to provide a means
+  of persistence for application objects.
+
+</p>
+
+</section>
+
+<section name="Inheritance and the Object Relational Map">
+
+<p>
+
+  Torque can handle object-oriented inheritance.  There are generally
+  considered to be 3 methods of object-relational mapping designs.  Torque
+  uses one of the fastest, mapping all objects in a class hierarchy to a
+  single table.  All attributes for every class in the hierarchy are stored
+  in the table.  Consider an abstract ComputerComponent class that has Monitor
+  and Keyboard subclasses. There would only be one table - both Monitor and
+  Keyboard objects would be persisted to the same place. The table would
+  consist of all ComputerComponent attributes, any unique Monitor attributes,
+  and any unique Keyboard attributes. Keyboard table rows would have NULL for
+  any unique Monitor data columns, and vice versa.
+
+</p>
+<p>
+
+  The other fast method is to map each concrete class to a distinct
+  table. Every object stores all attributes in a single row in the class table.
+  An example would be that if we had a Kitchen class that inherited from Room,
+  two tables would be needed for storage. The Kitchen table would contain all
+  of the columns of the Room table, plus any additional data columns needed to
+  describe the additional Kitchen attributes.
+
+</p>
+<p>
+
+  The slowest, but most object-oriented method is to store each class in its
+  own table. Only attributes that are added to a derived class are stored in
+  its table. The persistence layer would need to join tables to read an object
+  out of storage. Saving objects would be more complex, because objects will
+  need to be distributed across multiple tables.  For our Kitchen and Room
+  example, there would also be two tables, Kitchen and Room, but the Kitchen
+  table would only contain those attributes which weren't part of the Room
+  class.
+
+</p>
+<p>
+
+  One of the advantages of the first method (the one Torque uses) is that it
+  does not require joins like the third method described above. Another
+  advantage is that the data model is easier to maintain than the second
+  method.  It falls short in modelling a class hierarchy where the related
+  classes have a non intersecting collection of attributes, as in this case
+  a row in the table will have several null columns.
+
+</p>
+<p>
+
+  For more information, visit Scott Ambler's excellent web site,
+  <a href="http://www.ambysoft.com/">AmbySoft.com</a>, where he discusses
+  object mapping to relational databases.
+
+</p>
+
+</section>
+
+<section name="A Class Hierarchy">
+
+<source>
+       A
+       |
+     -----
+    |     |
+    B     C
+    |
+    D
+</source>
+
+<p>
+
+  There are two ways that are built into the torque generated Peers in order
+  to specify what class a particular row in the table A represents.  A row
+  will need to have some information that can distinguish the class.  You
+  should specify the column in the table that serves this purpose with the
+  attribute "inheritance"
+
+</p>
+
+<source><![CDATA[
+<table name="A"...>
+  ...
+  <column name="FOO" inheritance="single" type="VARCHAR".../>
+</table>
+]]></source>
+
+<p>
+  In this case you would need to specify the full className in column FOO, so
+  the valid values of FOO would be:
+</p>
+
+<source>
+com.mycompany.project.om.A
+com.mycompany.project.om.B
+com.mycompany.project.om.C
+com.mycompany.project.om.D
+</source>
+
+<p>
+  This is slightly inefficient in storage and also generates some inefficient
+  code in the Peers because the Peer cannot know what classes are available
+  until it gets each record and so will call Class.forName(FOO's value) for each
+  row.
+</p>
+
+<p>
+  The efficiency can be improved in the case where the class hierarchy is
+  known, which would be in most circumstances.  So you can specify the
+  classes in the xml specification:
+</p>
+
+<source><![CDATA[
+<table name="A"...>
+  ...
+  <column name="FOO" inheritance="single" type="CHAR" size="1"...>
+    <inheritance key="B" class="B" extends="com.mycompany.project.om.A"/>
+    <inheritance key="C" class="C" extends="com.mycompany.project.om.A"/>
+    <inheritance key="D" class="D" extends="com.mycompany.project.om.B"/>
+  </column>
+</table>
+]]></source>
+
+<p>
+  where in the above we are using NULL (or any other value) to stand for class
+  "A".  An numeric column could also be used for the key.  Using the above
+  method, torque will cache a copy of each class, so the Class.forName is only
+  done during APeer's initial load into memory.
+</p>
+
+</section>
+
+<section name="Overriding the Default Behavior">
+
+<p>
+  The following example comes from <a href="http://scarab.tigris.org">Scarab</a>
+  (an issue tracking system). In Scarab a class hierarchy definition is
+  described in a few tables, this provides for an evolving hierarchy.  This
+  arrangement can be provided for using the following extensions.  In the
+  xml specification, the column responsible for determining the class
+  is marked using the inheritance="single" attribute.
+</p>
+
+<source><![CDATA[
+<table name="SCARAB_ISSUE_ATTRIBUTE_VALUE" idMethod="none"
+        javaName="AttributeValue">
+    <column name="ISSUE_ID" primaryKey="true" required="true"
+            type="INTEGER"/>
+    <column name="ATTRIBUTE_ID" primaryKey="true" required="true"
+            type="INTEGER" inheritance="single"/>
+    <column name="OPTION_ID" required="false" type="INTEGER"/>
+...
+    <foreign-key foreignTable="SCARAB_ISSUE">
+        <reference local="ISSUE_ID" foreign="ISSUE_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="SCARAB_ATTRIBUTE">
+        <reference local="ATTRIBUTE_ID" foreign="ATTRIBUTE_ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="SCARAB_ATTRIBUTE_OPTION">
+        <reference local="OPTION_ID" foreign="OPTION_ID"/>
+    </foreign-key>
+...
+</table>
+]]></source>
+
+<p>
+  It might be interesting to note that the column responsible for the determining
+  the class is also a primary and foreign key.  Marking the column this way
+  will cause torque to generate an BaseAttributeValuePeer.getOMClass method.The
+  code in this method will be attempting to create a class from the information
+  provided in column which is an integer.  This is obviously wrong, but it
+  gives us a method to override to provide the correct information.
+</p>
+
+<p>
+  So in AttributeValuePeer, we override the method:
+</p>
+
+<source><![CDATA[
+/**
+ * Get the className appropriate for a row in the
+ * SCARAB_ISSUE_ATTRIBUTE_VALUE table
+ */
+public static Class getOMClass(Record record, int offset)
+    throws Exception
+{
+    NumberKey attId = new NumberKey(record.getValue(offset-1 + 2).asString());
+    Attribute attribute = Attribute.getInstance(attId);
+    String className = attribute.getAttributeType().getJavaClassName();
+
+    TurbineGlobalCacheService tgcs =
+        (TurbineGlobalCacheService) TurbineServices
+        .getInstance().getService(GlobalCacheService.SERVICE_NAME);
+
+    String key = getClassCacheKey(className);
+    Class c = null;
+    try
+    {
+        c = (Class) tgcs.getObject(key).getContents();
+    }
+    catch (ObjectExpiredException oee)
+    {
+        c = Class.forName(className);
+        tgcs.addObject(key, new CachedObject(c));
+    }
+    return c;
+}
+]]></source>
+
+<p>
+  where in the above method, we use the foreign key(s) to traverse
+  the tables to get the class information.  Then we cache the Class to
+  avoid the inefficiency of Class.forName on each row.  (We also cache
+  the contents of the class hierarchy tables, since the dataset is
+  quite small and static.)
+</p>
+
+</section>
+
+
+  </body>
+</document>

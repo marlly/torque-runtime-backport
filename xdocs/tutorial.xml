@@ -2,569 +2,528 @@
 
 <document>
 
-    <properties>
-        <title>Torque Tutorial</title>
-        <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
-    </properties>
+  <properties>
+    <title>Torque Tutorial</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+  </properties>
 
-    <body>
-        <section name="About this Tutorial"> 
-            <p> 
-                This tutorial is intended to give first-time users an
-                introduction to using Torque, an object-relational tool.
-                Torque was developed as part of the Turbine web
-                application framework.  Until recently, it was tightly
-                coupled in that framework, and could not be used
-                independently.  This tutorial is an introduction to the
-                decoupled version of Torque.
-            </p>
-            <p>
-                This will include how to obtain the Torque distribution,
-                setting up a database, and writing a sample application
-                to demonstrate the power of Torque.  The tutorial is not
-                meant to be an exhaustive introduction to Torque, please
-                refer to the documentation on the 
-                <a href="index.html">Torque homepage</a> for more
-                detailed information.
-            </p> 
-            <p>
-                The example used throughout this tutorial is based on an
-                email sent to the <a href="/site/mail.html">
-                turbine-user</a> mailing list by Steven F. Davis
-                called 
-                <a href="http://www.mail-archive.com/turbine-user%40jakarta.apache.org/msg03639.html">
-                torque outside turbine - detailed example (long)</a>.
-            </p>
-        </section>
+  <body>
 
-        <section name="Step 1: Obtaining the Torque Distribution">
-            <p>
-                First, you need to obtain the Torque distribution.  As
-                of this writing, the standalone version of Torque has
-                not been released; however, there is a beta version <a
-                href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">available</a>.
-                After you have obtained your copy of the Torque
-                distribution, you need to unpack it to a directory where
-                you want to develop your application.  This will create
-                a directory called <em>torque</em>.  It is here that you
-                will configure Torque and build your application.
-            </p>
-        </section>
+<section name="About this Tutorial"> 
 
-        <section name="Step 2: Configuring Torque">
-            <p>
-                The following section outlines the necessary steps to
-                define your database schema and configure Torque to use
-                your schema.  Upon completion, you'll be able to use
-                Torque to create your object model and all of the Java
-                classes that support it.  In addition, Torque can
-                generate and execute all of the appropriate SQL commands
-                to create your database, freeing you from doing it
-                yourself.
-            </p>
-            <p>
-                To accomplish all of the above, you only need to
-                create/edit three files: the Torque build properties,
-                the Torque database schema, and the Torque run-time
-                properties.  Each of these files is covered in the
-                following sections.
-            </p>
+<p> 
+  This tutorial is intended to give first-time users an
+  introduction to using Torque, an object-relational tool.
+  Torque was developed as part of the Turbine web
+  application framework.  Until recently, it was tightly
+  coupled in that framework, and could not be used
+  independently.  This tutorial is an introduction to the
+  decoupled version of Torque.
+</p>
 
-            <subsection name="Torque Build Properties">
-                <p>
-                    Torque is a system that literally builds Java
-                    source/class files representing your object model,
-                    SQL statements for your specific database, and
-                    documentation.  To accomplish these tasks, it uses
-                    <a href="/ant/index.html">Ant</a> to control its
-                    build process, and ant uses the
-                    <em>build.properties</em> file in the top-level
-                    Torque directory to setup your development
-                    environment.  It is this file that we will now edit. 
-                </p>
-                <p>
-                    Keep in mind, this tutorial is going to show you the
-                    bare minimum to get your first Torque application up
-                    and running.  However, the <em>build.properties</em>
-                    file is thoroughly commented, so please refer to it
-                    if you have a question regarding part of the file
-                    that is not covered here.  Make the following
-                    changes and edit appropriately for your environment.
-                    The properties are described in the table following
-                    (note: you'll need to add the
-                    <em>buildDatabaseUrl</em> property):
-                </p>
-                <source><![CDATA[
-  project = bookstore
-  database = mysql
-  targetPackage = com.kazmier.om 
-  createDatabaseUrl = jdbc:mysql://127.0.0.1/mysql  
-  buildDatabaseUrl = jdbc:mysql://127.0.0.1/bookstore
-  databaseUrl = jdbc:mysql://127.0.0.1/bookstore
-  databaseDriver = org.gjt.mm.mysql.Driver
-  databaseUser = adminuser
-  databasePassword = adminpassword
-  databaseHost = 127.0.0.1
-                ]]></source>
-                <p/>
-                <table>
-                    <tr> <th>Property</th> <th>Description</th> </tr>
-                    <tr>
-                        <td>project</td>
-                        <td>
-                            This is the name of your project.
-                            Historically, this name was used by Torque
-                            to locate your database schema file
-                            (described in the next section).  It is no
-                            longer used for this purpose (contrary to
-                            what the comment indicates in the property
-                            file).  This value is only used by Torque
-                            to name the report files that are generated
-                            when Torque is invoked.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>database</td>
-                        <td>
-                            Torque must know the target database
-                            platform in order to generate the
-                            appropriate Java and SQL code.  Set it
-                            appropriately for your specific database.
-                            The possible choices are: db2, db2400,
-                            hypersonic, mysql, oracle, postgresql, and
-                            mssql.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>targetPackage</td>
-                        <td>
-                            The name of the package that the
-                            Torque-generated classes will reside.  It is
-                            custom that your package name ends in
-                            &#145;om&#146; (object model), although, it
-                            is not required.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>createDatabaseURL</td>
-                        <td>
-                            The URL that Torque can use to create and
-                            drop databases if instructed to do so.  This
-                            is typically an administrative URL.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>buildDatabaseURL</td>
-                        <td>
-                            The URL that will be used to access your
-                            database.  Torque can use this to create
-                            your tables if instructed to do so.  This
-                            value should reflect the database name
-                            specified in the database schema file
-                            (described in the next section).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>databaseURL</td>
-                        <td>
-                            This should contain the same value as
-                            <em>buildDatabaseURL</em>.  [not quite sure
-                            why both of these properties exist]
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>databaseDriver</td>
-                        <td>
-                            The JDBC database driver to use when
-                            connecting to your database.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>databaseUser</td>
-                        <td>
-                            The administrative username that has
-                            sufficient privileges to create and drop
-                            databases and tables.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>databasePassword</td>
-                        <td>
-                            The administrative password for the supplied
-                            username.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>databaseHost</td>
-                        <td>
-                            The hostname or IP address of your database
-                            server.
-                        </td>
-                    </tr>
-                </table>
-                <p>
-                    Setting these properties correctly is very
-                    important.  These enable Torque to generate all of
-                    the required sources and SQL for your specific
-                    database.  If you experience problems later in this
-                    tutorial, it would be wise to double-check these
-                    values.
-                </p>
-            </subsection>
+<p>
+  This will include how to obtain the Torque distribution,
+  setting up a database, and writing a sample application
+  to demonstrate the power of Torque.  The tutorial is not
+  meant to be an exhaustive introduction to Torque, please
+  refer to the documentation on the 
+  <a href="index.html">Torque homepage</a> for more
+  detailed information.
+</p>
 
-            <subsection name="Torque Database Schema">
-                <p>
-                    The second file that you must edit to configure
-                    Torque is the database schema.  The database schema
-                    is an XML file that represents your SQL database in
-                    Torque.  This is where you define all of your
-                    tables, column names and types, as well as the keys
-                    used to index these tables.
-                </p>
-                <p>
-                    The database schema file is located in the
-                    <em>torque/schema</em> directory.  Here you will
-                    find two XML files: <em>id-table-schema.xml</em> and
-                    <em>project-schema.xml</em>.  The
-                    <em>id-table-schema.xml</em> file is used internally
-                    by Torque's IDBroker service (which is a database
-                    independent method for generating unique IDs).
-                    <em>project-schema.xml</em> is where you'll define
-                    your database schema.  Historically, the name of
-                    your database schema file was required to be in the
-                    format of <em>name-schema.xml</em> where
-                    <em>name</em> was the same as the <em>project</em>
-                    property defined in <em>build.properties</em>;
-                    otherwise, Torque was not be able to find your
-                    database schema file.  This is no longer the case,
-                    <em>name</em> is no longer restricted to the project
-                    name. However, it must end with
-                    &#145;-schema.xml&#146; because Torque will only
-                    generate object models for files ending with that
-                    pattern.
-                </p>
-                <p>
-                    For this tutorial, we will use a simple database
-                    that might be used to support a bookstore
-                    application.  The database will contain three
-                    tables: author, publisher, and book.  The first
-                    table will contain author information (first
-                    and last name).  The second table will
-                    contain publisher information (name).  And the third
-                    table will contain book information (title, and
-                    ISBN).  The author id and publisher id will be
-                    foreign keys in the book table.  The schema
-                    representation for this database is as follows:
-                </p>
-                <source><![CDATA[
+<p>
+  The example used throughout this tutorial is based on an
+  email sent to the <a href="/site/mail.html">
+  turbine-user</a> mailing list by Steven F. Davis
+  called 
+  <a href="http://www.mail-archive.com/turbine-user%40jakarta.apache.org/msg03639.html">
+  torque outside turbine - detailed example (long)</a>.
+</p>
+
+</section>
+
+<section name="Step 1: Obtaining the Torque Distribution">
+
+<p>
+  First, you need to obtain the Torque distribution.  As
+  of this writing, the standalone version of Torque has
+  not been released; however, there is a beta version 
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
+  available</a>.
+</p>
+
+<p>
+  After you have obtained your copy of the Torque, you can either
+  unpack the jar and integrate all of the Torque files into your
+  source tree, or keep Torque in the jar and use it via the classpath.
+</p>
+
+<p>
+  This tutorial will take the former approach. See <a href="jar-guide.html">jar
+  guide</a> for a description of the latter approach.
+</p>
+
+<p>
+  You need to unpack the Torque jar to a directory where
+  you want to develop your application.  This will create
+  a directory called <em>torque</em>.  It is here that you
+  will configure Torque and build your application.
+</p>
+
+</section>
+
+<section name="Step 2: Configuring Torque">
+
+<p>
+  The following section outlines the necessary steps to
+  define your database schema and configure Torque to use
+  your schema.  Upon completion, you'll be able to use
+  Torque to create your object model and all of the Java
+  classes that support it.  In addition, Torque can
+  generate and execute all of the appropriate SQL commands
+  to create your database, freeing you from doing it
+  yourself.
+</p>
+
+<p>
+  To accomplish all of the above, you only need to
+  create/edit three files: the Torque build properties,
+  the Torque database schema, and the Torque run-time
+  properties.  Each of these files is covered in the
+  following sections.
+</p>
+
+<subsection name="Torque Build Properties">
+
+<p>
+  Torque is a system that literally builds Java
+  source/class files representing your object model,
+  SQL statements for your specific database, and
+  documentation.  To accomplish these tasks, it uses
+  <a href="/ant/index.html">Ant</a> to control its
+  build process, and ant uses the
+  <em>build.properties</em> file in the top-level
+  Torque directory to setup your development
+  environment.  It is this file that we will now edit. 
+</p>
+
+<p>
+  Keep in mind, this tutorial is going to show you the
+  bare minimum to get your first Torque application up
+  and running.  However, the <em>build.properties</em>
+  file is thoroughly commented, so please refer to it
+  if you have a question regarding part of the file
+  that is not covered here.  Make the following
+  changes and edit appropriately for your environment.
+  The properties are described in the table following
+  (note: you'll need to add the
+  <em>torque.database.buildUrl</em> property):
+</p>
+
+<source><![CDATA[
+  torque.project = bookstore
+  torque.database = mysql
+  torque.targetPackage = com.kazmier.om 
+  torque.database.createUrl = jdbc:mysql://127.0.0.1/mysql  
+  torque.database.buildUrl = jdbc:mysql://127.0.0.1/bookstore
+  torque.database.url = jdbc:mysql://127.0.0.1/bookstore
+  torque.database.driver = org.gjt.mm.mysql.Driver
+  torque.database.user = adminuser
+  torque.database.password = adminpassword
+  torque.database.host = 127.0.0.1
+]]></source>
+
+<p>
+  For a reference as to what each property, and others, controls, please
+  see the <a href="properties-reference.html">properties reference</a>.
+</p>
+
+<p>
+  Setting these properties correctly is very
+  important.  These enable Torque to generate all of
+  the required sources and SQL for your specific
+  database.  If you experience problems later in this
+  tutorial, it would be wise to double-check these
+  values.
+</p>
+
+</subsection>
+
+<subsection name="Torque Database Schema">
+
+<p>
+  The second file that you must edit to configure
+  Torque is the database schema.  The database schema
+  is an XML file that represents your SQL database in
+  Torque.  This is where you define all of your
+  tables, column names and types, as well as the keys
+  used to index these tables.
+</p>
+
+<p>
+  The database schema file is located in the
+  <em>torque/schema</em> directory.  Here you will
+  find two XML files: <em>id-table-schema.xml</em> and
+  <em>project-schema.xml</em>.  The
+  <em>id-table-schema.xml</em> file is used internally
+  by Torque's IDBroker service (which is a database
+  independent method for generating unique IDs).
+  <em>project-schema.xml</em> is where you'll define
+  your database schema.  Historically, the name of
+  your database schema file was required to be in the
+  format of <em>name-schema.xml</em> where
+  <em>name</em> was the same as the <em>project</em>
+  property defined in <em>build.properties</em>;
+  otherwise, Torque was not be able to find your
+  database schema file.  This is no longer the case,
+  <em>name</em> is no longer restricted to the project
+  name. However, it must end with
+  &#145;-schema.xml&#146; because Torque will only
+  generate object models for files ending with that
+  pattern.
+</p>
+
+<p>
+  For this tutorial, we will use a simple database
+  that might be used to support a bookstore
+  application.  The database will contain three
+  tables: author, publisher, and book.  The first
+  table will contain author information (first
+  and last name).  The second table will
+  contain publisher information (name).  And the third
+  table will contain book information (title, and
+  ISBN).  The author id and publisher id will be
+  foreign keys in the book table.  The schema
+  representation for this database is as follows:
+</p>
+
+<source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM 
  "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 <database 
-    name="bookstore" 
-    defaultIdMethod="idbroker">
+  name="bookstore" 
+  defaultIdMethod="idbroker">
 
-    <table name="book" description="Book Table">
-        <column 
-            name="book_id" 
-            required="true" 
-            primaryKey="true" 
-            type="INTEGER" 
-            description="Book Id"/>
-        <column 
-            name="title" 
-            required="true" 
-            type="VARCHAR" 
-            size="255" 
-            description="Book Title"/>
-        <column 
-            name="isbn" 
-            required="true" 
-            type="VARCHAR" 
-            size="24" 
-            javaName="ISBN"
-            description="ISBN Number"/>
-        <column 
-            name="publisher_id" 
-            required="true" 
-            type="INTEGER"
-            description="Foreign Key Publisher"/>
-        <column 
-            name="author_id" 
-            required="true" 
-            type="INTEGER"
-            description="Foreign Key Author"/>
-        <foreign-key foreignTable="publisher">
-            <reference 
-                local="publisher_id" 
-                foreign="publisher_id"/>
-        </foreign-key>
-        <foreign-key foreignTable="author">
-            <reference 
-                local="author_id" 
-                foreign="author_id"/>
-        </foreign-key>
-    </table>
-    <table name="publisher" description="Publisher Table">
-        <column 
-            name="publisher_id" 
-            required="true" 
-            primaryKey="true"
-            type="INTEGER" 
-            description="Publisher Id"/>
-        <column 
-            name="name" 
-            required="true" 
-            type="VARCHAR" 
-            size="128"
-            description="Publisher Name"/>
-    </table>
-    <table name="author" description="Author Table">
-        <column 
-            name="author_id" 
-            required="true" 
-            primaryKey="true"
-            type="INTEGER" 
-            description="Author Id"/>
-        <column 
-            name="first_name" 
-            required="true" 
-            type="VARCHAR" 
-            size="128"
-            description="First Name"/>
-        <column 
-            name="last_name" 
-            required="true" 
-            type="VARCHAR" 
-            size="128"
-            description="Last Name"/>
-    </table>
+  <table name="book" description="Book Table">
+    <column 
+      name="book_id" 
+      required="true" 
+      primaryKey="true" 
+      type="INTEGER" 
+      description="Book Id"/>
+    <column 
+      name="title" 
+      required="true" 
+      type="VARCHAR" 
+      size="255" 
+      description="Book Title"/>
+    <column 
+      name="isbn" 
+      required="true" 
+      type="VARCHAR" 
+      size="24" 
+      javaName="ISBN"
+      description="ISBN Number"/>
+    <column 
+      name="publisher_id" 
+      required="true" 
+      type="INTEGER"
+      description="Foreign Key Publisher"/>
+    <column 
+      name="author_id" 
+      required="true" 
+      type="INTEGER"
+      description="Foreign Key Author"/>
+    <foreign-key foreignTable="publisher">
+      <reference 
+        local="publisher_id" 
+        foreign="publisher_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="author">
+      <reference 
+        local="author_id" 
+        foreign="author_id"/>
+    </foreign-key>
+  </table>
+  <table name="publisher" description="Publisher Table">
+    <column 
+      name="publisher_id" 
+      required="true" 
+      primaryKey="true"
+      type="INTEGER" 
+      description="Publisher Id"/>
+    <column 
+      name="name" 
+      required="true" 
+      type="VARCHAR" 
+      size="128"
+      description="Publisher Name"/>
+  </table>
+  <table name="author" description="Author Table">
+    <column 
+      name="author_id" 
+      required="true" 
+      primaryKey="true"
+      type="INTEGER" 
+      description="Author Id"/>
+    <column 
+      name="first_name" 
+      required="true" 
+      type="VARCHAR" 
+      size="128"
+      description="First Name"/>
+    <column 
+      name="last_name" 
+      required="true" 
+      type="VARCHAR" 
+      size="128"
+      description="Last Name"/>
+  </table>
 </database>
-             ]]></source>
-                <p>
-                    Edit <em>project-schema.xml</em> to reflect the
-                    above database schema.  If you would rather create
-                    your own schema file, be sure the filename ends in
-                    &#145;-schema.xml&#146;, and delete
-                    <em>project-schema.xml</em> because Torque will
-                    generate an object model for that file as well.  Do
-                    not delete <em>id-table-schema.xml</em> if you plan
-                    on using Torque's IDBroker service, which is used in
-                    this tutorial.
-                </p>
-                <p>
-                    There are several items of importance to note.  The
-                    <em>database</em> element's <em>name</em> attribute
-                    must be the same as the database name specified by
-                    the <em>databaseUrl</em> property in
-                    <em>build.properties</em>; likewise, the run-time
-                    properties (described in the next section) should
-                    also reflect this value.  Failure to do so will
-                    prevent Torque from creating your database tables
-                    (if instructed to do so) or prevent your object
-                    model from working properly.
-                </p>
-                <p>
-                    Another item of importance is the <em>database</em>
-                    element's <em>defaultIdMethod</em> attribute.  This
-                    attribute specifies the default method that Torque
-                    will use to generate IDs for primary keys (columns
-                    with the <em>primaryKey</em> attribute set to
-                    <em>true</em>: <em>book_id</em>,
-                    <em>publisher_id</em>, and <em>author_id</em>) in
-                    your database tables.  There are several possible
-                    values:
-                </p>
-                <table>
-                    <tr> <th>Property</th> <th>Description</th> </tr>
-                    <tr>
-                        <td>idbroker</td>
-                        <td> 
-                            Instructs Torque to use its 
-                            <a href="peers-howto.html#ID%20Broker">IDBroker</a>
-                            service to generate IDs in a database agnostic
-                            manner.  This is the method that will be
-                            used in this tutorial.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>native</td>
-                        <td> 
-                            Instructs Torque to use the underlying
-                            database's mechanism to generate IDs (varies
-                            per database).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>none</td>
-                        <td> 
-                            Instructs Torque to not generate IDs.  This
-                            can be useful in some situations (an example
-                            is described below).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>autoincrement</td>
-                        <td>
-                            This method has been deprecated.  Use the
-                            <em>native</em> method instead.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>sequence</td>
-                        <td>
-                            This method has been deprecated.  Use the
-                            <em>native</em> method instead.
-                        </td>
-                    </tr>
-                </table>
-                <p>
-                    The <em>defaultIdMethod</em> selected will be used
-                    for all tables in your schema unless an individual
-                    <em>table</em> element contains the
-                    <em>idMethod</em> attribute, in which case, its
-                    value will override the <em>defaultIdMethod</em>.
-                    <em>idMethod</em> takes the same values as
-                    <em>defaultIdMethod</em>.
-                </p>
-                <p>
-                    One common reason that a table might override the
-                    <em>defaultIdMethod</em> is when a table is composed
-                    only of foreign keys (i.e. a &#145;junction
-                    entity&#146; in database-speak).  In this case, all
-                    columns should be defined as primary keys because
-                    they are all needed to declare a row as unique.
-                    However, Torque should not generate primary key IDs
-                    for objects in this table because the objects that
-                    compose the table already have primary key IDs.
-                    Thus, the <em>idMethod</em> attribute of the table
-                    must be set to <em>none</em>.  For example, if the
-                    <em>book</em> table defined above did not have any
-                    additional attributes other than a
-                    <em>publisher_id</em> and <em>author_id</em>, the
-                    schema for the <em>book</em> table should be defined
-                    as:
-                </p>
-                <source><![CDATA[
-    <table name="book" idMethod="none" description="Book Table">
-        <column 
-            name="publisher_id" 
-            required="true" 
-            primaryKey="true" 
-            type="INTEGER"
-            description="Foreign Key Publisher"/>
-        <column 
-            name="author_id" 
-            required="true" 
-            primaryKey="true" 
-            type="INTEGER"
-            description="Foreign Key Author"/>
-        <foreign-key foreignTable="publisher">
-            <reference 
-                local="publisher_id" 
-                foreign="publisher_id"/>
-        </foreign-key>
-        <foreign-key foreignTable="author">
-            <reference 
-                local="author_id" 
-                foreign="author_id"/>
-        </foreign-key>
-    </table>
-                ]]></source>
-                <p>
-                    Another common mistake is to forget that XML is
-                    <b>case-sensitive</b>.  All of the elements and
-                    attributes must be specified according to the 
-                    <a href="/turbine/dtd/database.dtd">DTD</a>
-                    for the database schema.  In addition, you must
-                    include the XML declaration and DTD specification in
-                    your database schema file.  Failure to do so can
-                    result it errors.
-                </p>
-                <p>
-                    Finally, you must also edit (or add if its not
-                    present) the <em>name</em> attribute to the
-                    <em>database</em> element in
-                    <em>id-table-schema.xml</em>.  The value should be
-                    identical to the value in your database schema file.
-                    This will instruct Torque to create
-                    <em>id-table</em> in the same database as your
-                    schema.  Below is the file used in this example:
-                </p>
-                <source><![CDATA[
+]]></source>
+
+<p>
+  Edit <em>project-schema.xml</em> to reflect the
+  above database schema.  If you would rather create
+  your own schema file, be sure the filename ends in
+  &#145;-schema.xml&#146;, and delete
+  <em>project-schema.xml</em> because Torque will
+  generate an object model for that file as well.  Do
+  not delete <em>id-table-schema.xml</em> if you plan
+  on using Torque's IDBroker service, which is used in
+  this tutorial.
+</p>
+
+<p>
+  There are several items of importance to note.  The
+  <em>database</em> element's <em>name</em> attribute
+  must be the same as the database name specified by
+  the <em>databaseUrl</em> property in
+  <em>build.properties</em>; likewise, the run-time
+  properties (described in the next section) should
+  also reflect this value.  Failure to do so will
+  prevent Torque from creating your database tables
+  (if instructed to do so) or prevent your object
+  model from working properly.
+</p>
+
+<p>
+  Another item of importance is the <em>database</em>
+  element's <em>defaultIdMethod</em> attribute.  This
+  attribute specifies the default method that Torque
+  will use to generate IDs for primary keys (columns
+  with the <em>primaryKey</em> attribute set to
+  <em>true</em>: <em>book_id</em>,
+  <em>publisher_id</em>, and <em>author_id</em>) in
+  your database tables.  There are several possible
+  values:
+</p>
+
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>idbroker</td>
+    <td> 
+      Instructs Torque to use its 
+      <a href="peers-howto.html#ID%20Broker">IDBroker</a>
+      service to generate IDs in a database agnostic
+      manner.  This is the method that will be
+      used in this tutorial.
+    </td>
+  </tr>
+  <tr>
+    <td>native</td>
+    <td> 
+      Instructs Torque to use the underlying
+      database's mechanism to generate IDs (varies
+      per database).
+    </td>
+  </tr>
+  <tr>
+    <td>none</td>
+    <td> 
+      Instructs Torque to not generate IDs.  This
+      can be useful in some situations (an example
+      is described below).
+    </td>
+  </tr>
+  <tr>
+    <td>autoincrement</td>
+    <td>
+      This method has been deprecated.  Use the
+      <em>native</em> method instead.
+    </td>
+  </tr>
+  <tr>
+    <td>sequence</td>
+    <td>
+      This method has been deprecated.  Use the
+      <em>native</em> method instead.
+    </td>
+  </tr>
+</table>
+
+<p>
+  The <em>defaultIdMethod</em> selected will be used
+  for all tables in your schema unless an individual
+  <em>table</em> element contains the
+  <em>idMethod</em> attribute, in which case, its
+  value will override the <em>defaultIdMethod</em>.
+  <em>idMethod</em> takes the same values as
+  <em>defaultIdMethod</em>.
+</p>
+
+<p>
+  One common reason that a table might override the
+  <em>defaultIdMethod</em> is when a table is composed
+  only of foreign keys (i.e. a &#145;junction
+  entity&#146; in database-speak).  In this case, all
+  columns should be defined as primary keys because
+  they are all needed to declare a row as unique.
+  However, Torque should not generate primary key IDs
+  for objects in this table because the objects that
+  compose the table already have primary key IDs.
+  Thus, the <em>idMethod</em> attribute of the table
+  must be set to <em>none</em>.  For example, if the
+  <em>book</em> table defined above did not have any
+  additional attributes other than a
+  <em>publisher_id</em> and <em>author_id</em>, the
+  schema for the <em>book</em> table should be defined
+  as:
+</p>
+
+<source><![CDATA[
+  <table name="book" idMethod="none" description="Book Table">
+    <column 
+      name="publisher_id" 
+      required="true" 
+      primaryKey="true" 
+      type="INTEGER"
+      description="Foreign Key Publisher"/>
+    <column 
+      name="author_id" 
+      required="true" 
+      primaryKey="true" 
+      type="INTEGER"
+      description="Foreign Key Author"/>
+    <foreign-key foreignTable="publisher">
+      <reference 
+        local="publisher_id" 
+        foreign="publisher_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="author">
+      <reference 
+        local="author_id" 
+        foreign="author_id"/>
+    </foreign-key>
+  </table>
+]]></source>
+
+<p>
+  Another common mistake is to forget that XML is
+  <b>case-sensitive</b>.  All of the elements and
+  attributes must be specified according to the 
+  <a href="/turbine/dtd/database.dtd">DTD</a>
+  for the database schema.  In addition, you must
+  include the XML declaration and DTD specification in
+  your database schema file.  Failure to do so can
+  result it errors.
+</p>
+
+<p>
+  Finally, you must also edit (or add if its not
+  present) the <em>name</em> attribute to the
+  <em>database</em> element in
+  <em>id-table-schema.xml</em>.  The value should be
+  identical to the value in your database schema file.
+  This will instruct Torque to create
+  <em>id-table</em> in the same database as your
+  schema.  Below is the file used in this example:
+</p>
+
+<source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM 
  "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 <database name="bookstore">
-    <table name="ID_TABLE" idMethod="idbroker">
-        <column 
-            name="ID_TABLE_ID" 
-            required="true" 
-            primaryKey="true" 
-            type="INTEGER"/>
-        <column 
-            name="TABLE_NAME" 
-            required="true" 
-            size="255" 
-            type="VARCHAR"/>
-        <column 
-            name="NEXT_ID" 
-            type="INTEGER"/>
-        <column 
-            name="QUANTITY" 
-            type="INTEGER"/>
-        <unique>
-            <unique-column name="TABLE_NAME"/>
-        </unique>        
-    </table>
+  <table name="ID_TABLE" idMethod="idbroker">
+    <column 
+      name="ID_TABLE_ID" 
+      required="true" 
+      primaryKey="true" 
+      type="INTEGER"/>
+    <column 
+      name="TABLE_NAME" 
+      required="true" 
+      size="255" 
+      type="VARCHAR"/>
+    <column 
+      name="NEXT_ID" 
+      type="INTEGER"/>
+    <column 
+      name="QUANTITY" 
+      type="INTEGER"/>
+    <unique>
+      <unique-column name="TABLE_NAME"/>
+    </unique>    
+  </table>
 </database>
-             ]]></source>
-                <p>
-                    Torque uses the database schema files to generate
-                    your object model and Java classes to support it.
-                    In addition, Torque generates SQL that can be used
-                    to create your databases and tables from these
-                    schemas.  In the next section, we will conclude the
-                    configuration of Torque by editing the Torque
-                    run-time properties.  For additional information on
-                    the XML elements and attributes, please refer to the
-                    <a href="/turbine/torque/schema-reference.html">
-                    Torque Schema Reference</a>.  
-                </p>
-            </subsection>
+]]></source>
 
-            <subsection name="Torque Run-Time Properties">
-                <p>
-                    The last step in the configuration of Torque are the
-                    Torque run-time properties.  As the name suggests,
-                    these properties are used when your application is
-                    executing the object model code generated by Torque.
-                    The run-time properties control logging and database
-                    parameters such as drivers, usernames, and
-                    passwords.  These properties can be saved in any
-                    file because your application must explicitly
-                    initialize Torque (as you'll see later in this
-                    document).  
-                </p>
-                <p>
-                    There is a sample run-time properties file included
-                    in the Torque distribution called
-                    <em>Torque.properties</em> located in the
-                    <em>torque/schema</em> directory.  However, for
-                    simplicity, we'll just create our own.  Again, this
-                    tutorial will guide you through the bare minimum to
-                    get your application up and running.  For more
-                    information regarding the Torque run-time
-                    properties, refer to the comments in the sample file
-                    included in the distribution.  Create a new file
-                    called <em>Torque.properties</em> in the top-level
-                    <em>torque</em> directory (to avoid overwriting the
-                    sample property file) and add the following lines to
-                    it:
-                </p>
-                <source><![CDATA[
+<p>
+  Torque uses the database schema files to generate
+  your object model and Java classes to support it.
+  In addition, Torque generates SQL that can be used
+  to create your databases and tables from these
+  schemas.  In the next section, we will conclude the
+  configuration of Torque by editing the Torque
+  run-time properties.  For additional information on
+  the XML elements and attributes, please refer to the
+  <a href="/turbine/torque/schema-reference.html">
+  Torque Schema Reference</a>.  
+</p>
+
+</subsection>
+
+<subsection name="Torque Run-Time Properties">
+
+<p>
+  The last step in the configuration of Torque are the
+  Torque run-time properties.  As the name suggests,
+  these properties are used when your application is
+  executing the object model code generated by Torque.
+  The run-time properties control logging and database
+  parameters such as drivers, usernames, and
+  passwords.  These properties can be saved in any
+  file because your application must explicitly
+  initialize Torque (as you'll see later in this
+  document).  
+</p>
+
+<p>
+  There is a sample run-time properties file included
+  in the Torque distribution called
+  <em>Torque.properties</em> located in the
+  <em>torque/schema</em> directory.  However, for
+  simplicity, we'll just create our own.  Again, this
+  tutorial will guide you through the bare minimum to
+  get your application up and running.  For more
+  information regarding the Torque run-time
+  properties, refer to the comments in the sample file
+  included in the distribution.  Create a new file
+  called <em>Torque.properties</em> in the top-level
+  <em>torque</em> directory (to avoid overwriting the
+  sample property file) and add the following lines to
+  it:
+</p>
+
+<source><![CDATA[
 log4j.rootCategory = DEBUG, default
 log4j.appender.default = org.apache.log4j.FileAppender
 log4j.appender.default.file = ./torque.log
@@ -575,826 +534,898 @@ torque.database.bookstore.driver = org.gjt.mm.mysql.Driver
 torque.database.bookstore.url = jdbc:mysql://127.0.0.1/bookstore
 torque.database.bookstore.username = user
 torque.database.bookstore.password = password
-                ]]></source>
-                <p/>
-                <table>
-                    <tr> <th>Property</th> <th>Description</th> </tr>
-                    <tr>
-                        <td>log4j.rootCategory</td>
-                        <td>
-                            Torque uses <a href="/log4j/index.html">Log4J</a>
-                            for a logging.  This parameter configures
-                            the Log4J system to log all messages (debug,
-                            info, warn, error, and fatal).  
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>log4j.appender.default</td>
-                        <td>
-                            Configures Log4J to send all logging
-                            messages to a file in the filesystem.  Log4J
-                            could just as easily send all logging to a
-                            syslog server.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>log4j.appender.default.file</td>
-                        <td>
-                            The name of the file where messages are
-                            logged.  This is relative to the starting
-                            point of the JVM.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>log4j.appender.default.layout</td>
-                        <td>
-                            Log4J logs messages using a layout.  Layouts
-                            can be very simple or complicated.  This
-                            tutorial uses the very rudimentary
-                            SimpleLayout.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>torque.database.default</td>
-                        <td>
-                            Torque has the ability to use multiple
-                            databases.  This command specifies which
-                            database is to be used as the default.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>torque.database.bookstore.driver</td>
-                        <td>
-                            The JDBC database driver to use when
-                            connecting to your database.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>torque.database.bookstore.url</td>
-                        <td>
-                            The URL that will be used to access your
-                            database.  Torque's generated object model
-                            will perform all database operations using
-                            this URL.  This value should reflect the
-                            database name specified in your database
-                            schema file (see the <em>database</em>
-                            element's <em>name</em> attribute).
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>torque.database.bookstore.username</td>
-                        <td>
-                            The username that has sufficient privileges
-                            to access your database.  This user does not
-                            require privileges to create and drop
-                            tables, unlike the username that was
-                            specified in the Torque
-                            <em>build.properties</em>.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>torque.database.bookstore.password</td>
-                        <td>
-                            The password for the specified username.
-                        </td>
-                    </tr>
-                </table>
-                <p>
-                    It is worth re-iterating that these run-time
-                    properties are not used by Torque when generating
-                    your object model and creating your database.  They
-                    are used only by the application utilizing the
-                    Torque-generated object model classes at run-time.
-                </p>
-            </subsection>
-            <p>
-                That completes the configuration of Torque.  You are now
-                ready to start building your object model and creating
-                your database.
-            </p>
-        </section>
+  ]]></source>
+  <p/>
+  <table>
+    <tr> <th>Property</th> <th>Description</th> </tr>
+    <tr>
+      <td>log4j.rootCategory</td>
+      <td>
+        Torque uses <a href="/log4j/index.html">Log4J</a>
+        for a logging.  This parameter configures
+        the Log4J system to log all messages (debug,
+        info, warn, error, and fatal).  
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default</td>
+      <td>
+        Configures Log4J to send all logging
+        messages to a file in the filesystem.  Log4J
+        could just as easily send all logging to a
+        syslog server.
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default.file</td>
+      <td>
+        The name of the file where messages are
+        logged.  This is relative to the starting
+        point of the JVM.
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default.layout</td>
+      <td>
+        Log4J logs messages using a layout.  Layouts
+        can be very simple or complicated.  This
+        tutorial uses the very rudimentary
+        SimpleLayout.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.default</td>
+      <td>
+        Torque has the ability to use multiple
+        databases.  This command specifies which
+        database is to be used as the default.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.driver</td>
+      <td>
+        The JDBC database driver to use when
+        connecting to your database.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.url</td>
+      <td>
+        The URL that will be used to access your
+        database.  Torque's generated object model
+        will perform all database operations using
+        this URL.  This value should reflect the
+        database name specified in your database
+        schema file (see the <em>database</em>
+        element's <em>name</em> attribute).
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.username</td>
+      <td>
+        The username that has sufficient privileges
+        to access your database.  This user does not
+        require privileges to create and drop
+        tables, unlike the username that was
+        specified in the Torque
+        <em>build.properties</em>.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.password</td>
+      <td>
+        The password for the specified username.
+      </td>
+    </tr>
+  </table>
+  <p>
+    It is worth re-iterating that these run-time
+    properties are not used by Torque when generating
+    your object model and creating your database.  They
+    are used only by the application utilizing the
+    Torque-generated object model classes at run-time.
+  </p>
 
-        <section name="Step 3: Invoking Torque">
-            <p>
-                With the configuration of Torque completed, you can now
-                generate the object model to support your database, and
-                optionally create your database and all of its
-                associated tables.  As mentioned earlier in this
-                tutorial, Torque utilizes Ant to perform these tasks.
-                Each of these tasks is covered in the following
-                sections.
-            </p>
+</subsection>
 
-            <subsection name="Generating the Object Model and Associated SQL">
-                <p>
-                    The generation of your object model will produce
-                    Java source files that can be used to represent your
-                    database.  These classes enable you to create, edit,
-                    delete, and select objects that represent rows in
-                    your database tables.  In addition, Torque will
-                    generate SQL to create your database tables (you
-                    have the option of executing the SQL as demonstrated
-                    later in this tutorial).
-                </p>
-                <p>
-                    The object model consists of four classes for each
-                    table in your schema.  For example, the
-                    <em>author</em> table, defined in this tutorial,
-                    will result in the following four classes:
-                    <em>Author</em>, <em>AuthorPeer</em>,
-                    <em>BaseAuthor</em>, and <em>BaseAuthorPeer</em> (a
-                    discussion on the use of these classes is deferred
-                    until we write our sample application).
-                </p>
-                <p>
-                    To generate your object model and the associated
-                    SQL, type the following command in the top-level
-                    <em>torque</em> directory:
-                </p>
-                <source><![CDATA[
-  ant -f build-torque.xml 
-                ]]></source>
-                <p/>
-                <p>
-                    Upon a successful build, indicated by the
-                    &#145;BUILD SUCCESSFUL&#146; message, you will find
-                    a new <em>torque/src</em> directory.  It is here
-                    that you will find the generated Java classes and
-                    generated SQL.
-                </p>
-                <p>
-                    The Java classes are located in the <em>java</em>
-                    directory and will be in a directory hierarchy
-                    matching that of the <em>targetPackage</em> you
-                    specified in your Torque <em>build.properties</em>.
-                    These are the files that will be compiled into your
-                    object model classes.
-                </p>
-                <p>
-                    The SQL files are located in the <em>sql</em>
-                    directory.  For each database schema in your
-                    <em>torque/schema</em> directory, there will be a
-                    corresponding file with a <em>.sql</em> extension
-                    instead of <em>.xml</em> extension.  The contents of
-                    these files are the SQL commands that can be used to
-                    manually or automatically (see next section) create
-                    your database tables.
-                </p>
-                <p>
-                    If you encounter errors while building, it is more
-                    than likely a formatting error of your database
-                    schema file.  Check the format of the file and make
-                    sure it conforms to the 
-                    <a href="/turbine/torque/schema-reference.html">
-                    Torque Schema Reference</a>.
-                </p>
-            </subsection>
+<p>
+  That completes the configuration of Torque.  You are now
+  ready to start building your object model and creating
+  your database.
+</p>
 
-            <subsection name="Creating the Database and Tables">
-                <p>
-                    As mentioned previously, Torque can automatically
-                    create your database and all of the associated
-                    tables for you.  However, you must first make sure
-                    that the appropriate database driver (the one you
-                    defined in <em>build.properties</em>) is in your
-                    classpath so that Torque can connect to your
-                    database and execute the generated SQL commands.
-                    The easiest way to accomplish that is to add your
-                    database driver to the <em>torque/lib</em>
-                    directory.  Ant's build file automatically adds all
-                    of the jar files in this directory to its classpath.
-                </p>
-                <p>
-                    <b>
-                        Note: Torque will <em>drop</em> the database and
-                        tables that it is about to create if they exist!
-                        You should skip this step if you are working
-                        with an existing database full of data.
-                    </b>
-                </p>
-                <p>
-                    To create your database, type the following command
-                    in the top-level <em>torque</em> directory:
-                </p>
-                <source><![CDATA[
-  ant -f build-torque.xml create-db  
-                ]]></source>
-                <p>
-                    To create your tables, type the following commands in
-                    the top-level <em>torque</em> directory:
-                </p>
-                <source><![CDATA[
-  ant -f build-torque.xml id-table-init-sql
-  ant -f build-torque.xml insert-sql  
-                ]]></source>
-                <p>
-                    Note: if this tutorial had not utilized Torque's
-                    <em>idbroker</em> method (as described earlier), it
-                    would not have been necessary to execute the
-                    <em>id-table-init-sql</em> target.
-                </p>
-                <p>
-                    Success will be indicated by the &#145;BUILD
-                    SUCCESSFUL&#146; message.  You can also validate
-                    this by checking your database.  For example, the
-                    <em>bookstore-schema.xml</em> and
-                    <em>id-table-schema.xml</em>, defined in this
-                    tutorial, should have created a database called
-                    <em>bookstore</em>, with the following tables:
-                    <em>ID_TABLE</em>, <em>author</em>, <em>book</em>,
-                    and <em>publisher</em>.
-                </p>
-                <p>
-                    If you encounter errors while creating your
-                    database, it is more than likely a misconfiguration
-                    of your <em>build.properties</em>.  Another common
-                    problem is that the user specified in the
-                    <em>build.properties</em> does not have sufficient
-                    privilege to create databases and tables.  In either
-                    case, refer to the section above that explains the
-                    <em>build.properties</em> file.
-                </p>
-            </subsection>
-            <p>
-                Now that you have generated all of your object model
-                classes and created your database, you are now ready to
-                build your first Torque application.
-            </p>
-        </section>
+</section>
 
-        <section name="Step 4: Writing a Sample Application">
-            <p>
-                Congratulations, you have finally reached the fun the
-                part of this tutorial.  This is where you'll discover
-                the power of Torque.  Be warned, you'll never want to
-                write another SQL statement ever again!
-            </p>
-            <p>
-                As mentioned earlier, when Torque created your object
-                model, it created four Java classes for each table
-                defined in your database schema.  For example, the
-                <em>book</em> table, defined in the database schema
-                presented earlier, will result in the following classes:
-                <em>Book</em>, <em>BookPeer</em>, <em>BaseBook</em>, and
-                <em>BaseBookPeer</em>.  
-            </p>
-            <p>
-                <em>Book</em> and <em>BookPeer</em> are subclasses of
-                <em>BaseBook</em> and <em>BaseBookPeer</em>
-                respectively.  The two Base classes (<em>BaseBook</em>
-                and <em>BaseBookPeer</em>) contain Torque-generated
-                logic and should <b>not</b> be modified because Torque
-                will overwrite your changes if you happen to generate
-                your object model again (via <em>ant</em>).  Any
-                business logic that you might want to add should be
-                placed in the <em>Book</em> and <em>BookPeer</em>
-                classes.  This is covered later in the tutorial.
-            </p>
-            <p>
-                You might be asking yourself, what is the difference
-                between the Peer classes (<em>BookPeer</em> and
-                <em>BaseBookPeer</em>) and their counterparts
-                (<em>Book</em> and <em>BaseBook</em>), also known as
-                Data Objects?  The Peer classes &#147;wrap&#148; their
-                associated database tables and provide static methods to
-                manipulate those tables such as <em>doSelect</em>,
-                <em>doInsert</em>, and <em>doUpdate</em>.  Data Objects,
-                on the other hand, &#147;wrap&#148; individual rows
-                within those tables and provide getters/mutators for each
-                column defined in those tables as well as the convenient
-                <em>save</em> method.  Both Peer and Data Objects have a
-                one-to-one mapping to a table defined in your database
-                schema.  For a more in-depth discussion on Peers and
-                Data Objects, refer to the 
-                <a href="peers-howto.html#Peer%20Classes">Peers HOWTO</a>.  
-                An example of adding logic to both the Peer and Data
-                Objects is presented later in the tutorial.
-            </p>
-            <p>
-                Now that we've covered the basics of the object model
-                that Torque generated for you, the rest of this section
-                describes the Torque-way of doing database inserts,
-                selects, updates, and deletes illustrated with small
-                segments of code.  These segments of code are part of a
-                sample application that is presented in full after a
-                brief discussion on extending the object model classes.
-                Finally, instructions on how to compile and run the
-                application are detailed.
-            </p>
+<section name="Step 3: Invoking Torque">
 
-            <subsection name="Inserting Rows">
-                <p>
-                    Inserting rows into your tables is easy with Torque.
-                    Simply instantiate a new Data Object of the
-                    appropriate class, set its properties using the
-                    mutators named after the table's columns,
-                    then invoke the Data Object's <em>save</em> method.
-                    Note: It is not necessary to set the object's
-                    primary key ID because Torque will do this for you
-                    automatically unless you've specified otherwise (see
-                    the Database Schema Configuration section above).
-                </p>
-                <p> 
-                    For example, to insert a new row in the
-                    <em>author</em> table (as defined in this tutorial's
-                    database schema): instantiate a new <em>Author</em>
-                    object, invoke the object's <em>setFirstName</em>
-                    and <em>setLastName</em> methods with appropriate
-                    values, then call the <em>save</em> method.  Thats
-                    it.  The following is from the sample application:
-                </p>
-                <source><![CDATA[
-  Publisher addison = new Publisher();
-  addison.setName("Addison Wesley Professional");  
-  addison.save();
+<p>
+With the configuration of Torque completed, you can now
+generate the object model to support your database, and
+optionally create your database and all of its
+associated tables.  As mentioned earlier in this
+tutorial, Torque utilizes Ant to perform these tasks.
+Each of these tasks is covered in the following
+sections.
+</p>
 
-  Author bloch = new Author();
-  bloch.setFirstName("Joshua");
-  bloch.setLastName("Bloch");
-  bloch.save();
-                ]]></source>
+<subsection name="Generating the Object Model and Associated SQL">
 
-                <p>
-                    It is also possible to insert a row using the Peer
-                    class directly instead of invoking the <em>save</em>
-                    method of your Data Object.  Recall, the Peer class
-                    provides static methods to perform operations on a
-                    table.  One of these operations is the ability to
-                    insert rows via the <em>doInsert</em> method.  The
-                    Data Object's <em>save</em> method actually calls
-                    <em>doInsert</em> for you (or <em>doUpdate</em> if
-                    the object is not new and must be updated).
-                </p>
-                <p>
-                    For example, you can use
-                    <em>AuthorPeer.doInsert</em> as an alternative
-                    method to insert a new row in the <em>author</em>
-                    table.  The following is from the sample
-                    application:
-                </p>
-                <source><![CDATA[
-  Author stevens = new Author();
-  stevens.setFirstName("W.");
-  stevens.setLastName("Stevens");  
-  AuthorPeer.doInsert(stevens);
-                ]]></source>
+<p>
+  The generation of your object model will produce
+  Java source files that can be used to represent your
+  database.  These classes enable you to create, edit,
+  delete, and select objects that represent rows in
+  your database tables.  In addition, Torque will
+  generate SQL to create your database tables (you
+  have the option of executing the SQL as demonstrated
+  later in this tutorial).
+</p>
 
-                <p>
-                    It should also be noted for completeness that
-                    <em>doInsert</em> can be passed a <em>Criteria</em>
-                    object (discussed in the next section) instead of a
-                    Data Object (see the Javadoc for details).  However,
-                    the most common method for the insertion of rows in
-                    a table is via the <em>save</em> method of the Data
-                    Object rather than directly using the Peer's
-                    <em>doInsert</em> method.
-                </p>
-                <p>
-                    Inserting a row in a table that contains a foreign
-                    key is also simple.  As a convenience, Torque creates
-                    a mutator for the specific Data Object class
-                    that represents the foreign-key in the object model.
-                    The name of this method is <em>setTable</em> where
-                    <em>Table</em> is the name of the foreign-key's
-                    table (as defined in the database schema).  Upon
-                    calling this method with a reference to the
-                    appropriate Data Object, Torque will automatically
-                    extract and insert the foreign-key for you.
-                </p>
-                <p>
-                    For example, the <em>book</em> table (as defined in
-                    the database schema) contains two foreign-keys:
-                    <em>author_id</em> and <em>publisher_id</em>.  To
-                    insert a row in this table, follow the same
-                    procedure as above, but instead of explicitly
-                    setting the foreign-keys (via <em>setAuthorId</em>
-                    and <em>setPublisherId</em>), use <em>setAuthor</em>
-                    and <em>setPublisher</em> and pass references to an
-                    <em>Author</em> and <em>Publisher</em> Data Object.
-                    Both methods are illustrated in the following code
-                    which builds upon the earlier objects that were
-                    created:
-                </p>
-                <source><![CDATA[
-  /*
-   * Using the convenience methods to handle
-   * the foreign keys.
-   */
-  Book effective = new Book();
-  effective.setTitle("Effective Java");
-  effective.setISBN("0-618-12902-2");
-  effective.setPublisher(addison);
-  effective.setAuthor(bloch);
-  effective.save();
+<p>
+  The object model consists of four classes for each
+  table in your schema.  For example, the
+  <em>author</em> table, defined in this tutorial,
+  will result in the following four classes:
+  <em>Author</em>, <em>AuthorPeer</em>,
+  <em>BaseAuthor</em>, and <em>BaseAuthorPeer</em> (a
+  discussion on the use of these classes is deferred
+  until we write our sample application).
+</p>
 
-  /*
-   * Inserting the foreign-keys manually.
-   */
-  Book tcpip = new Book();
-  tcpip.setTitle("TCP/IP Illustrated, Volume 1");  
-  tcpip.setISBN("0-201-63346-9");
-  tcpip.setPublisherId(addison.getPublisherId());
-  tcpip.setAuthorId(stevens.getAuthorId());
-  tcpip.save();
-                ]]></source>
-                <p>
-                    As you can see, inserting rows into your database is
-                    very easy to do with your Torque object model.  
-                </p>
-            </subsection>
+<p>
+  To generate your object model and the associated
+  SQL, type the following command in the top-level
+  <em>torque</em> directory:
+</p>
 
-            <subsection name="Selecting Rows">
-                <p>
-                    Selecting rows from your database is just as easy as
-                    inserting rows.  The Peer class associated with a
-                    table defines a static method called
-                    <em>doSelect</em> which is used to pull data out of
-                    the table.  The argument to <em>doSelect</em> is a
-                    <em>Critieria</em> object.  It is this object that
-                    specifies the criteria to be used when selecting
-                    data from the database.  As a result of the query,
-                    <em>doSelect</em> returns a vector of Data Objects
-                    representing the rows of data selected.  To use
-                    these Data Objects in your application, you must
-                    cast them to the appropriate type in your object
-                    model.
-                </p>
-                <p>
-                    For example, to select all of the rows from the
-                    <em>book</em> table that were inserted in the
-                    previous section, you must first create an
-                    <em>Criteria</em> object.  Because we want to select
-                    everything from the table, no criteria will be
-                    specified (i.e. no WHERE clause in the underlying
-                    SELECT statement).  To perform the query, the empty
-                    <em>Criteria</em> object is passed to
-                    <em>BookPeer.doSelect</em>, as illustrated below:
-                </p>
-                <source><![CDATA[
-  Criteria crit = new Criteria();
-  List v = BookPeer.doSelect(crit);  
-                ]]></source>
-                <p>
-                    The results are stored in a vector which can then be
-                    iterated over to access the individual <em>Book</em>
-                    objects retrieved from the table.  The following
-                    code prints the <em>Book</em> to standard output (a
-                    better approach is presented later):
-                </p>
-                <source><![CDATA[
-  Iterator i = v.iterator();
-  while (i.hasNext())
-  {
-      Book book = (Book) i.next();
-      System.out.println("Title: " + book.getTitle() + "\n"); 
-      System.out.println("ISBN:  " + book.getISBN() + "\n");
-      System.out.println("Publisher: " + 
-          book.getPublisher().getName() + "\n");
-      System.out.println("Author: " + 
-          book.getAuthor().getLastName() + ", " + 
-          book.getAuthor().getFirstName() + "\n");
-  }
-                ]]></source>
-                <p>
-                    In the above example, you may have noticed that by
-                    calling <em>getAuthor</em> and
-                    <em>getPublisher</em>, the object model
-                    automatically retrieved the <em>Author</em> and
-                    <em>Publisher</em> Data Objects for you.  This
-                    results in an additional behind-the-scenes SQL query
-                    for each table.  Although <em>getAuthor</em> is
-                    called twice, only a single SQL query occurs because
-                    all of the <em>Author</em> columns are selected in
-                    behind-the-scenes query.
-                </p>
-                <table>
-                    <tr> <th>The Gory Details (not for the faint)</th></tr>
-                    <tr>
-                        <td>
-                            Even still, this is not the most efficient
-                            method to query and populate Data Objects
-                            for an entire table with foreign-keys (one
-                            query for the table, then two additional
-                            queries for each row).  A single query using
-                            a join would be much more efficient.  As a
-                            convenience, Torque generates the following
-                            <em>protected</em> methods in the BasePeer
-                            classes whose tables contain foreign-keys:
-                            <em>doSelectJoinTable</em> where
-                            <em>Table</em> is the name of the
-                            foreign-key table.  This method efficiently
-                            queries the database (using a single join
-                            query) and automatically populates all of
-                            the Data Objects.  This eliminates the
-                            additional query that is issued when
-                            retrieving the foreign-key Data Object.  For
-                            example, <em>doSelectJoinAuthor</em> and
-                            <em>doSelectJoinPublisher</em> were
-                            generated in the <em>BaseBookPeer</em> class
-                            that <em>BookPeer</em> extends.  As a
-                            reminder, to use these convenience methods,
-                            you must provide <em>public</em> members to
-                            <em>BookPeer</em> for clients because they
-                            are <em>protected</em> in
-                            <em>BaseBookPeer</em>.  Unfortunately,
-                            Torque does not generate a
-                            <em>doSelectJoinAll</em> or
-                            <em>doSelectJoinAuthorPublisher</em> method.
-                            Those are left to the reader as an exercise
-                            to implement in the <em>BookPeer</em> class.
-                        </td>
-                    </tr>
-                </table>
-                <p>
-                    To select a specific <em>Book</em> from the table,
-                    create a <em>Criteria</em> object (or just reuse the
-                    previous one) and use the <em>add</em> method to
-                    specify some criteria.  Specifying criteria is
-                    simply a matter of choosing a column (defined as
-                    static constants in your Peer class) and some value
-                    you want to match.  Thus, selecting a book with the
-                    following ISBN, &#145;0-618-12902-2&#146;, is as
-                    simple as:
-                </p>
-                <source><![CDATA[
-  Criteria crit = new Criteria();
-  crit.add(BookPeer.ISBN, "0-618-12902-2");  
-  List v = BookPeer.doSelect(crit);
-                ]]></source>
-                <p>
-                    This section has only skimmed the surface of
-                    <em>Criteria</em> objects.  <em>Criteria</em> can be
-                    used to specify very simple to very complex queries.
-                    For a much more in-depth discussion of
-                    <em>Criteria</em>, please refer to the 
-                    <a href="criteria-howto.html">Criteria HOWTO</a>.
-                </p>
-            </subsection>
+<source><![CDATA[
+ant -f build-torque.xml 
+]]></source>
+<p/>
 
-            <subsection name="Updating Rows">
-                <p>
-                    Updating a row in a table is only a matter of
-                    changing one or more properties of the Data Object
-                    that represents the row by invoking one or more
-                    mutators and then calling its <em>save</em> method.
-                    When a mutator is called, the Data Object sets an
-                    internal flag to indicate that its been modified.
-                    This flag is checked when <em>save</em> is invoked
-                    to determine if the Peer's <em>doInsert</em> or
-                    <em>doUpdate</em> is called to perform the database
-                    operation.  
-                </p>
-                <p>
-                    For example, changing the author of the
-                    &#145;Effective Java&#146; book created earlier is
-                    as simple as:
-                </p>
-                <source><![CDATA[
-  effective.setAuthor(stevens);  
-  effective.save();
-                ]]></source>
-                <p>
-                    Alternatively, instead of calling the Data Object's
-                    <em>save</em> method, the Peer's <em>doUpdate</em>
-                    method may be called directly with a Data Object
-                    that has been modified as the argument.  This is
-                    illustrated in the following fragment of code that
-                    changes the author of the &#145;TCP/IP
-                    Illustrated&#146; book:
-                </p>
-                <source><![CDATA[
-  tcpip.setAuthor(bloch);
-  BookPeer.doUpdate(tcpip);  
-                ]]></source>
-                <p>
-                    Again, for completeness, <em>doUpdate</em> could
-                    have been passed a <em>Criteria</em> object to
-                    update a row (see the Javadoc for details).  However,
-                    the most common method to update rows in a table is
-                    via the Data Object's <em>save</em> method rather
-                    than directly using the Peer's <em>doUpdate</em>
-                    method.
-                </p>
-            </subsection>
+<p>
+  Upon a successful build, indicated by the
+  &#145;BUILD SUCCESSFUL&#146; message, you will find
+  a new <em>torque/src</em> directory.  It is here
+  that you will find the generated Java classes and
+  generated SQL.
+</p>
 
-            <subsection name="Deleting Rows">
-                <p>
-                    Deleting rows from a table is easy as well.  The
-                    Peer class defines a static method <em>doDelete</em>
-                    which can be used for this purpose.  Similar to the
-                    other Peer methods, <em>doDelete</em> may be passed
-                    a <em>Criteria</em> object or a Data Object to
-                    specify which row or rows to delete.  It should be
-                    noted that there is no corresponding method in the
-                    Data Object to delete a row.  
-                </p>
-                <p>
-                    For example, the following code deletes all of the
-                    rows from the three tables that were inserted during
-                    the course of this tutorial using both forms of
-                    <em>doDelete</em>.  First, the books are deleted by
-                    specifying <em>Criteria</em>, then the authors and
-                    publishers are deleted by passing the Data Objects
-                    directly to <em>doDelete</em>.
-                </p>
-                <source><![CDATA[
-  crit = new Criteria();
-  crit.add(BookPeer.ISBN, "0-618-12902-2");
-  BookPeer.doDelete(crit);
+<p>
+  The Java classes are located in the <em>java</em>
+  directory and will be in a directory hierarchy
+  matching that of the <em>targetPackage</em> you
+  specified in your Torque <em>build.properties</em>.
+  These are the files that will be compiled into your
+  object model classes.
+</p>
 
-  crit = new Criteria();
-  crit.add(BookPeer.ISBN, "0-201-63346-9");
-  crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
-  BookPeer.doDelete(crit);
+<p>
+  The SQL files are located in the <em>sql</em>
+  directory.  For each database schema in your
+  <em>torque/schema</em> directory, there will be a
+  corresponding file with a <em>.sql</em> extension
+  instead of <em>.xml</em> extension.  The contents of
+  these files are the SQL commands that can be used to
+  manually or automatically (see next section) create
+  your database tables.
+</p>
 
-  AuthorPeer.doDelete(bloch);
-  AuthorPeer.doDelete(stevens);
-  PublisherPeer.doDelete(addison);
-                ]]></source>
-                <p>
-                    Note: Deleting a row from a table that contains
-                    foreign-keys does not automatically delete the
-                    foreign-keys from their tables.  If you want to
-                    delete the foreign-keys, you must do so explicitly
-                    as shown in the above example.  I.e.,  deleting the
-                    books from the <em>book</em> table does not
-                    automatically delete the corresponding rows in the
-                    <em>author</em> and <em>publisher</em> tables.
-                    
-                </p>
-                <table>
-                    <tr> <th>The Gory Details (not for the faint)</th></tr>
-                    <tr>
-                        <td>
-                            It should also be noted that
-                            <em>doDelete</em> does not construct its
-                            WHERE clause in a similar manner as the
-                            <em>doSelect</em> method.  <em>doDelete</em>
-                            processes <em>Criteria</em> in a more
-                            primitive fashion.  Specifically,
-                            <em>Criteria</em> assembled using the
-                            <em>and</em> and <em>or</em> methods (not
-                            covered in this tutorial) are effectively
-                            ignored.  In addition, passing an empty
-                            <em>Criteria</em> to <em>doDelete</em> will
-                            not delete all of the rows from a table.  In
-                            summary, you cannot assume that a
-                            <em>Criteria</em> object which successfully
-                            selects rows from a table via
-                            <em>doSelect</em> will delete those rows if
-                            passed to <em>doDelete</em>.  In the future,
-                            <em>doDelete</em> may be modified to be
-                            consistent in the handling of
-                            <em>Criteria</em> objects.
-                        </td>
-                    </tr>
-                </table>
-            </subsection>
+<p>
+  If you encounter errors while building, it is more
+  than likely a formatting error of your database
+  schema file.  Check the format of the file and make
+  sure it conforms to the 
+  <a href="/turbine/torque/schema-reference.html">
+  Torque Schema Reference</a>.
+</p>
 
-            <subsection name="Adding Functionality to the Object Model">
-                <p>
-                    This section will provide examples of adding
-                    functionality to both the Peer and Data Object
-                    classes.  As you may recall, Torque generated four
-                    classes for each table defined in the database
-                    schema.  Two of these classes (the Base Data Object
-                    and Base Peer class) contain Torque-generated logic
-                    while the other two are empty subclasses that you
-                    can use to include business logic.  By now, you
-                    should have a decent understanding of the type of
-                    logic that might be added to these classes.  Keep in
-                    mind, Torque will overwrite any changes that are
-                    inadvertently added to the Base classes if you
-                    regenerate your object model; however, it will not
-                    overwrite changes in the non-Base classes.
-                </p>
-                <p>
-                    The first change that we'll make to our object model
-                    is to provide our Data Objects with adequate
-                    <em>toString</em> methods.  Theses methods can then
-                    be used to print the Data Objects without adding
-                    unnecessary code to the core of the application.
-                    The following are the modified <em>Book</em>,
-                    <em>Author</em>, and <em>Publisher</em> classes,
-                    which are located in a directory hierarchy matching
-                    that of the <em>targetPackage</em> you specified in
-                    your Torque <em>build.properties</em>:
-                </p>
-                <source><![CDATA[
+</subsection>
+
+<subsection name="Creating the Database and Tables">
+
+<p>
+  As mentioned previously, Torque can automatically
+  create your database and all of the associated
+  tables for you.  However, you must first make sure
+  that the appropriate database driver (the one you
+  defined in <em>build.properties</em>) is in your
+  classpath so that Torque can connect to your
+  database and execute the generated SQL commands.
+  The easiest way to accomplish that is to add your
+  database driver to the <em>torque/lib</em>
+  directory.  Ant's build file automatically adds all
+  of the jar files in this directory to its classpath.
+</p>
+
+<p>
+  <b>
+    Note: Torque will <em>drop</em> the database and
+    tables that it is about to create if they exist!
+    You should skip this step if you are working
+    with an existing database full of data.
+  </b>
+</p>
+
+<p>
+  To create your database, type the following command
+  in the top-level <em>torque</em> directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml create-db  
+]]></source>
+
+<p>
+  To create your tables, type the following commands in
+  the top-level <em>torque</em> directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml id-table-init-sql
+ant -f build-torque.xml insert-sql  
+]]></source>
+
+<p>
+  Note: if this tutorial had not utilized Torque's
+  <em>idbroker</em> method (as described earlier), it
+  would not have been necessary to execute the
+  <em>id-table-init-sql</em> target.
+</p>
+
+<p>
+  Success will be indicated by the &#145;BUILD
+  SUCCESSFUL&#146; message.  You can also validate
+  this by checking your database.  For example, the
+  <em>bookstore-schema.xml</em> and
+  <em>id-table-schema.xml</em>, defined in this
+  tutorial, should have created a database called
+  <em>bookstore</em>, with the following tables:
+  <em>ID_TABLE</em>, <em>author</em>, <em>book</em>,
+  and <em>publisher</em>.
+</p>
+
+<p>
+  If you encounter errors while creating your
+  database, it is more than likely a misconfiguration
+  of your <em>build.properties</em>.  Another common
+  problem is that the user specified in the
+  <em>build.properties</em> does not have sufficient
+  privilege to create databases and tables.  In either
+  case, refer to the section above that explains the
+  <em>build.properties</em> file.
+</p>
+
+</subsection>
+
+<p>
+Now that you have generated all of your object model
+classes and created your database, you are now ready to
+build your first Torque application.
+</p>
+
+</section>
+
+<section name="Step 4: Writing a Sample Application">
+
+<p>
+Congratulations, you have finally reached the fun the
+part of this tutorial.  This is where you'll discover
+the power of Torque.  Be warned, you'll never want to
+write another SQL statement ever again!
+</p>
+
+<p>
+As mentioned earlier, when Torque created your object
+model, it created four Java classes for each table
+defined in your database schema.  For example, the
+<em>book</em> table, defined in the database schema
+presented earlier, will result in the following classes:
+<em>Book</em>, <em>BookPeer</em>, <em>BaseBook</em>, and
+<em>BaseBookPeer</em>.  
+</p>
+
+<p>
+<em>Book</em> and <em>BookPeer</em> are subclasses of
+<em>BaseBook</em> and <em>BaseBookPeer</em>
+respectively.  The two Base classes (<em>BaseBook</em>
+and <em>BaseBookPeer</em>) contain Torque-generated
+logic and should <b>not</b> be modified because Torque
+will overwrite your changes if you happen to generate
+your object model again (via <em>ant</em>).  Any
+business logic that you might want to add should be
+placed in the <em>Book</em> and <em>BookPeer</em>
+classes.  This is covered later in the tutorial.
+</p>
+
+<p>
+You might be asking yourself, what is the difference
+between the Peer classes (<em>BookPeer</em> and
+<em>BaseBookPeer</em>) and their counterparts
+(<em>Book</em> and <em>BaseBook</em>), also known as
+Data Objects?  The Peer classes &#147;wrap&#148; their
+associated database tables and provide static methods to
+manipulate those tables such as <em>doSelect</em>,
+<em>doInsert</em>, and <em>doUpdate</em>.  Data Objects,
+on the other hand, &#147;wrap&#148; individual rows
+within those tables and provide getters/mutators for each
+column defined in those tables as well as the convenient
+<em>save</em> method.  Both Peer and Data Objects have a
+one-to-one mapping to a table defined in your database
+schema.  For a more in-depth discussion on Peers and
+Data Objects, refer to the 
+<a href="peers-howto.html#Peer%20Classes">Peers HOWTO</a>.  
+An example of adding logic to both the Peer and Data
+Objects is presented later in the tutorial.
+</p>
+
+<p>
+Now that we've covered the basics of the object model
+that Torque generated for you, the rest of this section
+describes the Torque-way of doing database inserts,
+selects, updates, and deletes illustrated with small
+segments of code.  These segments of code are part of a
+sample application that is presented in full after a
+brief discussion on extending the object model classes.
+Finally, instructions on how to compile and run the
+application are detailed.
+</p>
+
+<subsection name="Inserting Rows">
+
+<p>
+  Inserting rows into your tables is easy with Torque.
+  Simply instantiate a new Data Object of the
+  appropriate class, set its properties using the
+  mutators named after the table's columns,
+  then invoke the Data Object's <em>save</em> method.
+  Note: It is not necessary to set the object's
+  primary key ID because Torque will do this for you
+  automatically unless you've specified otherwise (see
+  the Database Schema Configuration section above).
+</p>
+
+<p> 
+  For example, to insert a new row in the
+  <em>author</em> table (as defined in this tutorial's
+  database schema): instantiate a new <em>Author</em>
+  object, invoke the object's <em>setFirstName</em>
+  and <em>setLastName</em> methods with appropriate
+  values, then call the <em>save</em> method.  Thats
+  it.  The following is from the sample application:
+</p>
+
+<source><![CDATA[
+Publisher addison = new Publisher();
+addison.setName("Addison Wesley Professional");  
+addison.save();
+
+Author bloch = new Author();
+bloch.setFirstName("Joshua");
+bloch.setLastName("Bloch");
+bloch.save();
+]]></source>
+
+<p>
+  It is also possible to insert a row using the Peer
+  class directly instead of invoking the <em>save</em>
+  method of your Data Object.  Recall, the Peer class
+  provides static methods to perform operations on a
+  table.  One of these operations is the ability to
+  insert rows via the <em>doInsert</em> method.  The
+  Data Object's <em>save</em> method actually calls
+  <em>doInsert</em> for you (or <em>doUpdate</em> if
+  the object is not new and must be updated).
+</p>
+
+<p>
+  For example, you can use
+  <em>AuthorPeer.doInsert</em> as an alternative
+  method to insert a new row in the <em>author</em>
+  table.  The following is from the sample
+  application:
+</p>
+
+<source><![CDATA[
+Author stevens = new Author();
+stevens.setFirstName("W.");
+stevens.setLastName("Stevens");  
+AuthorPeer.doInsert(stevens);
+]]></source>
+
+<p>
+  It should also be noted for completeness that
+  <em>doInsert</em> can be passed a <em>Criteria</em>
+  object (discussed in the next section) instead of a
+  Data Object (see the Javadoc for details).  However,
+  the most common method for the insertion of rows in
+  a table is via the <em>save</em> method of the Data
+  Object rather than directly using the Peer's
+  <em>doInsert</em> method.
+</p>
+
+<p>
+  Inserting a row in a table that contains a foreign
+  key is also simple.  As a convenience, Torque creates
+  a mutator for the specific Data Object class
+  that represents the foreign-key in the object model.
+  The name of this method is <em>setTable</em> where
+  <em>Table</em> is the name of the foreign-key's
+  table (as defined in the database schema).  Upon
+  calling this method with a reference to the
+  appropriate Data Object, Torque will automatically
+  extract and insert the foreign-key for you.
+</p>
+
+<p>
+  For example, the <em>book</em> table (as defined in
+  the database schema) contains two foreign-keys:
+  <em>author_id</em> and <em>publisher_id</em>.  To
+  insert a row in this table, follow the same
+  procedure as above, but instead of explicitly
+  setting the foreign-keys (via <em>setAuthorId</em>
+  and <em>setPublisherId</em>), use <em>setAuthor</em>
+  and <em>setPublisher</em> and pass references to an
+  <em>Author</em> and <em>Publisher</em> Data Object.
+  Both methods are illustrated in the following code
+  which builds upon the earlier objects that were
+  created:
+</p>
+
+<source><![CDATA[
+/*
+* Using the convenience methods to handle
+* the foreign keys.
+*/
+Book effective = new Book();
+effective.setTitle("Effective Java");
+effective.setISBN("0-618-12902-2");
+effective.setPublisher(addison);
+effective.setAuthor(bloch);
+effective.save();
+
+/*
+* Inserting the foreign-keys manually.
+*/
+Book tcpip = new Book();
+tcpip.setTitle("TCP/IP Illustrated, Volume 1");  
+tcpip.setISBN("0-201-63346-9");
+tcpip.setPublisherId(addison.getPublisherId());
+tcpip.setAuthorId(stevens.getAuthorId());
+tcpip.save();
+]]></source>
+
+<p>
+  As you can see, inserting rows into your database is
+  very easy to do with your Torque object model.  
+</p>
+
+</subsection>
+
+<subsection name="Selecting Rows">
+
+<p>
+  Selecting rows from your database is just as easy as
+  inserting rows.  The Peer class associated with a
+  table defines a static method called
+  <em>doSelect</em> which is used to pull data out of
+  the table.  The argument to <em>doSelect</em> is a
+  <em>Critieria</em> object.  It is this object that
+  specifies the criteria to be used when selecting
+  data from the database.  As a result of the query,
+  <em>doSelect</em> returns a vector of Data Objects
+  representing the rows of data selected.  To use
+  these Data Objects in your application, you must
+  cast them to the appropriate type in your object
+  model.
+</p>
+
+<p>
+  For example, to select all of the rows from the
+  <em>book</em> table that were inserted in the
+  previous section, you must first create an
+  <em>Criteria</em> object.  Because we want to select
+  everything from the table, no criteria will be
+  specified (i.e. no WHERE clause in the underlying
+  SELECT statement).  To perform the query, the empty
+  <em>Criteria</em> object is passed to
+  <em>BookPeer.doSelect</em>, as illustrated below:
+</p>
+
+<source><![CDATA[
+Criteria crit = new Criteria();
+List v = BookPeer.doSelect(crit);  
+]]></source>
+
+<p>
+  The results are stored in a vector which can then be
+  iterated over to access the individual <em>Book</em>
+  objects retrieved from the table.  The following
+  code prints the <em>Book</em> to standard output (a
+  better approach is presented later):
+</p>
+
+<source><![CDATA[
+Iterator i = v.iterator();
+while (i.hasNext())
+{
+Book book = (Book) i.next();
+System.out.println("Title: " + book.getTitle() + "\n"); 
+System.out.println("ISBN:  " + book.getISBN() + "\n");
+System.out.println("Publisher: " + 
+book.getPublisher().getName() + "\n");
+System.out.println("Author: " + 
+book.getAuthor().getLastName() + ", " + 
+book.getAuthor().getFirstName() + "\n");
+}
+]]></source>
+
+<p>
+  In the above example, you may have noticed that by
+  calling <em>getAuthor</em> and
+  <em>getPublisher</em>, the object model
+  automatically retrieved the <em>Author</em> and
+  <em>Publisher</em> Data Objects for you.  This
+  results in an additional behind-the-scenes SQL query
+  for each table.  Although <em>getAuthor</em> is
+  called twice, only a single SQL query occurs because
+  all of the <em>Author</em> columns are selected in
+  behind-the-scenes query.
+</p>
+
+<table>
+  <tr> <th>The Gory Details (not for the faint)</th></tr>
+  <tr>
+    <td>
+      Even still, this is not the most efficient
+      method to query and populate Data Objects
+      for an entire table with foreign-keys (one
+      query for the table, then two additional
+      queries for each row).  A single query using
+      a join would be much more efficient.  As a
+      convenience, Torque generates the following
+      <em>protected</em> methods in the BasePeer
+      classes whose tables contain foreign-keys:
+      <em>doSelectJoinTable</em> where
+      <em>Table</em> is the name of the
+      foreign-key table.  This method efficiently
+      queries the database (using a single join
+      query) and automatically populates all of
+      the Data Objects.  This eliminates the
+      additional query that is issued when
+      retrieving the foreign-key Data Object.  For
+      example, <em>doSelectJoinAuthor</em> and
+      <em>doSelectJoinPublisher</em> were
+      generated in the <em>BaseBookPeer</em> class
+      that <em>BookPeer</em> extends.  As a
+      reminder, to use these convenience methods,
+      you must provide <em>public</em> members to
+      <em>BookPeer</em> for clients because they
+      are <em>protected</em> in
+      <em>BaseBookPeer</em>.  Unfortunately,
+      Torque does not generate a
+      <em>doSelectJoinAll</em> or
+      <em>doSelectJoinAuthorPublisher</em> method.
+      Those are left to the reader as an exercise
+      to implement in the <em>BookPeer</em> class.
+    </td>
+  </tr>
+</table>
+
+<p>
+  To select a specific <em>Book</em> from the table,
+  create a <em>Criteria</em> object (or just reuse the
+  previous one) and use the <em>add</em> method to
+  specify some criteria.  Specifying criteria is
+  simply a matter of choosing a column (defined as
+  static constants in your Peer class) and some value
+  you want to match.  Thus, selecting a book with the
+  following ISBN, &#145;0-618-12902-2&#146;, is as
+  simple as:
+</p>
+
+<source><![CDATA[
+Criteria crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-618-12902-2");  
+List v = BookPeer.doSelect(crit);
+]]></source>
+
+<p>
+  This section has only skimmed the surface of
+  <em>Criteria</em> objects.  <em>Criteria</em> can be
+  used to specify very simple to very complex queries.
+  For a much more in-depth discussion of
+  <em>Criteria</em>, please refer to the 
+  <a href="criteria-howto.html">Criteria HOWTO</a>.
+</p>
+
+</subsection>
+
+<subsection name="Updating Rows">
+
+<p>
+  Updating a row in a table is only a matter of
+  changing one or more properties of the Data Object
+  that represents the row by invoking one or more
+  mutators and then calling its <em>save</em> method.
+  When a mutator is called, the Data Object sets an
+  internal flag to indicate that its been modified.
+  This flag is checked when <em>save</em> is invoked
+  to determine if the Peer's <em>doInsert</em> or
+  <em>doUpdate</em> is called to perform the database
+  operation.  
+</p>
+
+<p>
+  For example, changing the author of the
+  &#145;Effective Java&#146; book created earlier is
+  as simple as:
+</p>
+
+<source><![CDATA[
+effective.setAuthor(stevens);  
+effective.save();
+]]></source>
+
+<p>
+  Alternatively, instead of calling the Data Object's
+  <em>save</em> method, the Peer's <em>doUpdate</em>
+  method may be called directly with a Data Object
+  that has been modified as the argument.  This is
+  illustrated in the following fragment of code that
+  changes the author of the &#145;TCP/IP
+  Illustrated&#146; book:
+</p>
+
+<source><![CDATA[
+tcpip.setAuthor(bloch);
+BookPeer.doUpdate(tcpip);  
+]]></source>
+
+<p>
+  Again, for completeness, <em>doUpdate</em> could
+  have been passed a <em>Criteria</em> object to
+  update a row (see the Javadoc for details).  However,
+  the most common method to update rows in a table is
+  via the Data Object's <em>save</em> method rather
+  than directly using the Peer's <em>doUpdate</em>
+  method.
+</p>
+
+</subsection>
+
+<subsection name="Deleting Rows">
+
+<p>
+  Deleting rows from a table is easy as well.  The
+  Peer class defines a static method <em>doDelete</em>
+  which can be used for this purpose.  Similar to the
+  other Peer methods, <em>doDelete</em> may be passed
+  a <em>Criteria</em> object or a Data Object to
+  specify which row or rows to delete.  It should be
+  noted that there is no corresponding method in the
+  Data Object to delete a row.  
+</p>
+
+<p>
+  For example, the following code deletes all of the
+  rows from the three tables that were inserted during
+  the course of this tutorial using both forms of
+  <em>doDelete</em>.  First, the books are deleted by
+  specifying <em>Criteria</em>, then the authors and
+  publishers are deleted by passing the Data Objects
+  directly to <em>doDelete</em>.
+</p>
+
+<source><![CDATA[
+crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-618-12902-2");
+BookPeer.doDelete(crit);
+
+crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-201-63346-9");
+crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+BookPeer.doDelete(crit);
+
+AuthorPeer.doDelete(bloch);
+AuthorPeer.doDelete(stevens);
+PublisherPeer.doDelete(addison);
+]]></source>
+
+<p>
+  Note: Deleting a row from a table that contains
+  foreign-keys does not automatically delete the
+  foreign-keys from their tables.  If you want to
+  delete the foreign-keys, you must do so explicitly
+  as shown in the above example.  I.e.,  deleting the
+  books from the <em>book</em> table does not
+  automatically delete the corresponding rows in the
+  <em>author</em> and <em>publisher</em> tables.
+  
+</p>
+
+<table>
+  <tr> <th>The Gory Details (not for the faint)</th></tr>
+  <tr>
+    <td>
+      It should also be noted that
+      <em>doDelete</em> does not construct its
+      WHERE clause in a similar manner as the
+      <em>doSelect</em> method.  <em>doDelete</em>
+      processes <em>Criteria</em> in a more
+      primitive fashion.  Specifically,
+      <em>Criteria</em> assembled using the
+      <em>and</em> and <em>or</em> methods (not
+      covered in this tutorial) are effectively
+      ignored.  In addition, passing an empty
+      <em>Criteria</em> to <em>doDelete</em> will
+      not delete all of the rows from a table.  In
+      summary, you cannot assume that a
+      <em>Criteria</em> object which successfully
+      selects rows from a table via
+      <em>doSelect</em> will delete those rows if
+      passed to <em>doDelete</em>.  In the future,
+      <em>doDelete</em> may be modified to be
+      consistent in the handling of
+      <em>Criteria</em> objects.
+    </td>
+  </tr>
+</table>
+</subsection>
+
+<subsection name="Adding Functionality to the Object Model">
+
+<p>
+  This section will provide examples of adding
+  functionality to both the Peer and Data Object
+  classes.  As you may recall, Torque generated four
+  classes for each table defined in the database
+  schema.  Two of these classes (the Base Data Object
+  and Base Peer class) contain Torque-generated logic
+  while the other two are empty subclasses that you
+  can use to include business logic.  By now, you
+  should have a decent understanding of the type of
+  logic that might be added to these classes.  Keep in
+  mind, Torque will overwrite any changes that are
+  inadvertently added to the Base classes if you
+  regenerate your object model; however, it will not
+  overwrite changes in the non-Base classes.
+</p>
+
+<p>
+  The first change that we'll make to our object model
+  is to provide our Data Objects with adequate
+  <em>toString</em> methods.  Theses methods can then
+  be used to print the Data Objects without adding
+  unnecessary code to the core of the application.
+  The following are the modified <em>Book</em>,
+  <em>Author</em>, and <em>Publisher</em> classes,
+  which are located in a directory hierarchy matching
+  that of the <em>targetPackage</em> you specified in
+  your Torque <em>build.properties</em>:
+</p>
+
+<source><![CDATA[
 // Book.java
 public class Book 
-    extends com.kazmier.om.BaseBook
-    implements Persistent
+  extends com.kazmier.om.BaseBook
+  implements Persistent
 {
-    public String toString()
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+    try
     {
-        StringBuffer sb = new StringBuffer();
-        try
-        {
-            sb.append("Title:      " + getTitle()     + "\n");
-            sb.append("ISBN:       " + getISBN()      + "\n");
-            sb.append("Publisher:  " + getPublisher() + "\n");
-            sb.append("Author:     " + getAuthor()    + "\n");
-        }
-        catch (Exception ignored)
-        {
-        }
-        return sb.toString();
+      sb.append("Title:    " + getTitle()   + "\n");
+      sb.append("ISBN:     " + getISBN()    + "\n");
+      sb.append("Publisher:  " + getPublisher() + "\n");
+      sb.append("Author:   " + getAuthor()  + "\n");
     }
+    catch (Exception ignored)
+    {
+    }
+    return sb.toString();
+  }
 }
 
 // Author.java
 public  class Author
-    extends com.kazmier.om.BaseAuthor
-    implements Persistent
+  extends com.kazmier.om.BaseAuthor
+  implements Persistent
 {
-    public String toString()
-    {
-        return getLastName() + ", " + getFirstName();
-    }
+  public String toString()
+  {
+    return getLastName() + ", " + getFirstName();
+  }
 }
 
 // Publisher.java
 public  class Publisher
-    extends com.kazmier.om.BasePublisher
-    implements Persistent
+  extends com.kazmier.om.BasePublisher
+  implements Persistent
 {
-    public String toString()
-    {
-        return getName();
-    }
+  public String toString()
+  {
+    return getName();
+  }
 }
-                ]]></source>
-                <p>
-                    The next change that we'll make is to the Peer
-                    classes.  For convenience (and based on the
-                    suggestion in the 
-                    <a href="peers-howto.html#Useful%20Methods">Peers
-                    Howto</a>) we'll add <em>doSelectAll</em>
-                    methods which will return a List of all the Data
-                    Objects in a table.  The following are the modified
-                    <em>BookPeer</em>, <em>AuthorPeer</em>, and
-                    <em>PublisherPeer</em> classes which are located in
-                    the same directory as the Data Objects:
-                </p>
-                <source><![CDATA[
+]]></source>
+
+<p>
+  The next change that we'll make is to the Peer
+  classes.  For convenience (and based on the
+  suggestion in the 
+  <a href="peers-howto.html#Useful%20Methods">Peers
+  Howto</a>) we'll add <em>doSelectAll</em>
+  methods which will return a List of all the Data
+  Objects in a table.  The following are the modified
+  <em>BookPeer</em>, <em>AuthorPeer</em>, and
+  <em>PublisherPeer</em> classes which are located in
+  the same directory as the Data Objects:
+</p>
+
+<source><![CDATA[
 // BookPeer.java
 import org.apache.torque.util.*;
 
 public class BookPeer 
-    extends com.kazmier.om.BaseBookPeer
+  extends com.kazmier.om.BaseBookPeer
 {
-    public static List doSelectAll() throws Exception
-    {
-        Criteria crit = new Criteria();
-        return doSelect(crit);
-    }
+  public static List doSelectAll() throws Exception
+  {
+    Criteria crit = new Criteria();
+    return doSelect(crit);
+  }
 }
 
 // AuthorPeer.java
 import org.apache.torque.util.*;
 
 public class AuthorPeer 
-    extends com.kazmier.om.BaseAuthorPeer
+  extends com.kazmier.om.BaseAuthorPeer
 {
-    public static List doSelectAll() throws Exception
-    {
-        Criteria crit = new Criteria();
-        return doSelect(crit);
-    }
+  public static List doSelectAll() throws Exception
+  {
+    Criteria crit = new Criteria();
+    return doSelect(crit);
+  }
 }
 
 // PublisherPeer.java
 import org.apache.torque.util.*;
 
 public class PublisherPeer 
-    extends com.kazmier.om.BasePublisherPeer
+  extends com.kazmier.om.BasePublisherPeer
 {
-    public static List doSelectAll() throws Exception
-    {
-        Criteria crit = new Criteria();
-        return doSelect(crit);
-    }
+  public static List doSelectAll() throws Exception
+  {
+    Criteria crit = new Criteria();
+    return doSelect(crit);
+  }
 }
-                ]]></source>
-                <p>
-                    In order to execute the full application presented
-                    at the end of this tutorial, you must make the above
-                    changes to your object model.  After you have made
-                    the changes, proceed to the next section.
-                </p>
-            </subsection>
+]]></source>
 
-            <subsection name="Full Application">
-                <p>
-                    The following is the sample bookstore application in
-                    its entirety.  It should look very familiar if
-                    you've been following this tutorial.  In fact, its
-                    almost identical with the exception that it utilizes
-                    the new functionality that was added to the object
-                    model in the previous section.
-                </p>
-                <source><![CDATA[
+<p>
+  In order to execute the full application presented
+  at the end of this tutorial, you must make the above
+  changes to your object model.  After you have made
+  the changes, proceed to the next section.
+</p>
+
+</subsection>
+
+<subsection name="Full Application">
+
+<p>
+  The following is the sample bookstore application in
+  its entirety.  It should look very familiar if
+  you've been following this tutorial.  In fact, its
+  almost identical with the exception that it utilizes
+  the new functionality that was added to the object
+  model in the previous section.
+</p>
+
+<source><![CDATA[
 package com.kazmier;
 
 import java.util.*;
@@ -1404,276 +1435,293 @@ import org.apache.torque.util.Criteria;
 
 public class Bookstore
 {
-    public static void main(String[] args)
+  public static void main(String[] args)
+  {
+    try
     {
-        try
-        {
-            /*
-             * Initializing Torque
-             */
-            Torque.init("Torque.properties");
+      /*
+       * Initializing Torque
+       */
+      Torque.init("Torque.properties");
 
-            /*
-             * Creating new objects.  These will be inserted
-             * into your database automatically when the
-             * save method is called.
-             */
-            Publisher addison = new Publisher();
-            addison.setName("Addison Wesley Professional");
-            addison.save();
+      /*
+       * Creating new objects.  These will be inserted
+       * into your database automatically when the
+       * save method is called.
+       */
+      Publisher addison = new Publisher();
+      addison.setName("Addison Wesley Professional");
+      addison.save();
 
-            Author bloch = new Author();
-            bloch.setFirstName("Joshua");
-            bloch.setLastName("Bloch");
-            bloch.save();
+      Author bloch = new Author();
+      bloch.setFirstName("Joshua");
+      bloch.setLastName("Bloch");
+      bloch.save();
 
-            /*
-             * An alternative method to inserting rows
-             * in your database.
-             */
-            Author stevens = new Author();
-            stevens.setFirstName("W.");
-            stevens.setLastName("Stevens");
-            AuthorPeer.doInsert(stevens);
+      /*
+       * An alternative method to inserting rows
+       * in your database.
+       */
+      Author stevens = new Author();
+      stevens.setFirstName("W.");
+      stevens.setLastName("Stevens");
+      AuthorPeer.doInsert(stevens);
 
-            /*
-             * Using the convenience methods to handle
-             * the foreign keys.
-             */
-            Book effective = new Book();
-            effective.setTitle("Effective Java");
-            effective.setISBN("0-618-12902-2");
-            effective.setPublisher(addison);
-            effective.setAuthor(bloch);
-            effective.save();
+      /*
+       * Using the convenience methods to handle
+       * the foreign keys.
+       */
+      Book effective = new Book();
+      effective.setTitle("Effective Java");
+      effective.setISBN("0-618-12902-2");
+      effective.setPublisher(addison);
+      effective.setAuthor(bloch);
+      effective.save();
 
-            /*
-             * Inserting the foreign-keys manually.
-             */
-            Book tcpip = new Book();
-            tcpip.setTitle("TCP/IP Illustrated, Volume 1");
-            tcpip.setISBN("0-201-63346-9");
-            tcpip.setPublisherId(addison.getPublisherId());
-            tcpip.setAuthorId(stevens.getAuthorId());
-            tcpip.save();
+      /*
+       * Inserting the foreign-keys manually.
+       */
+      Book tcpip = new Book();
+      tcpip.setTitle("TCP/IP Illustrated, Volume 1");
+      tcpip.setISBN("0-201-63346-9");
+      tcpip.setPublisherId(addison.getPublisherId());
+      tcpip.setAuthorId(stevens.getAuthorId());
+      tcpip.save();
 
-            /*
-             * Selecting all books from the database and
-             * printing the results to stdout using our
-             * helper method defined in BookPeer
-             * (doSelectAll).
-             */
-            System.out.println("Full booklist:\n"); 
-            List booklist = BookPeer.doSelectAll();
-            printBooklist(booklist);
+      /*
+       * Selecting all books from the database and
+       * printing the results to stdout using our
+       * helper method defined in BookPeer
+       * (doSelectAll).
+       */
+      System.out.println("Full booklist:\n"); 
+      List booklist = BookPeer.doSelectAll();
+      printBooklist(booklist);
 
-            /*
-             * Selecting specific objects.  Just search for
-             * objects that match this criteria (and print
-             * to stdout).
-             */
-            System.out.println("Booklist (specific ISBN):\n");
-            Criteria crit = new Criteria();
-            crit.add(BookPeer.ISBN, "0-201-63346-9");
-            booklist = BookPeer.doSelect(crit);
-            printBooklist(booklist);
+      /*
+       * Selecting specific objects.  Just search for
+       * objects that match this criteria (and print
+       * to stdout).
+       */
+      System.out.println("Booklist (specific ISBN):\n");
+      Criteria crit = new Criteria();
+      crit.add(BookPeer.ISBN, "0-201-63346-9");
+      booklist = BookPeer.doSelect(crit);
+      printBooklist(booklist);
 
-            /*
-             * Updating data.  These lines will swap the
-             * authors of the two books.  The booklist is
-             * printed to stdout to verify the results.
-             */
-            effective.setAuthor(stevens);
-            effective.save();
+      /*
+       * Updating data.  These lines will swap the
+       * authors of the two books.  The booklist is
+       * printed to stdout to verify the results.
+       */
+      effective.setAuthor(stevens);
+      effective.save();
 
-            tcpip.setAuthor(bloch);
-            BookPeer.doUpdate(tcpip);
+      tcpip.setAuthor(bloch);
+      BookPeer.doUpdate(tcpip);
 
-            System.out.println("Booklist (authors swapped):\n");
-            booklist = BookPeer.doSelectAll();
-            printBooklist(booklist);
+      System.out.println("Booklist (authors swapped):\n");
+      booklist = BookPeer.doSelectAll();
+      printBooklist(booklist);
 
-            /*
-             * Deleting data.  These lines will delete the
-             * data that matches the specified criteria.
-             */
-            crit = new Criteria();
-            crit.add(BookPeer.ISBN, "0-618-12902-2");
-            BookPeer.doDelete(crit);
+      /*
+       * Deleting data.  These lines will delete the
+       * data that matches the specified criteria.
+       */
+      crit = new Criteria();
+      crit.add(BookPeer.ISBN, "0-618-12902-2");
+      BookPeer.doDelete(crit);
 
-            crit = new Criteria();
-            crit.add(BookPeer.ISBN, "0-201-63346-9");
-            crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
-            BookPeer.doDelete(crit);
+      crit = new Criteria();
+      crit.add(BookPeer.ISBN, "0-201-63346-9");
+      crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+      BookPeer.doDelete(crit);
 
-            /*
-             * Deleting data by passing Data Objects instead of
-             * specifying criteria.
-             */
-            AuthorPeer.doDelete(bloch);
-            AuthorPeer.doDelete(stevens);
-            PublisherPeer.doDelete(addison);
+      /*
+       * Deleting data by passing Data Objects instead of
+       * specifying criteria.
+       */
+      AuthorPeer.doDelete(bloch);
+      AuthorPeer.doDelete(stevens);
+      PublisherPeer.doDelete(addison);
 
-            System.out.println("Booklist (should be empty):\n");
-            booklist = BookPeer.doSelectAll();
-            printBooklist(booklist);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+      System.out.println("Booklist (should be empty):\n");
+      booklist = BookPeer.doSelectAll();
+      printBooklist(booklist);
     }
-
-    /*
-     * Helper method to print a booklist to standard out.
-     */
-    private static void printBooklist(List booklist) 
-        throws Exception
+    catch (Exception e)
     {
-        Iterator i = booklist.iterator();
-        while (i.hasNext())
-        {
-            Book book = (Book) i.next();
-            System.out.println(book);
-        }
+      e.printStackTrace();
     }
+  }
+
+  /*
+   * Helper method to print a booklist to standard out.
+   */
+  private static void printBooklist(List booklist) 
+    throws Exception
+  {
+    Iterator i = booklist.iterator();
+    while (i.hasNext())
+    {
+      Book book = (Book) i.next();
+      System.out.println(book);
+    }
+  }
 }
-                    ]]></source>
-                <p>
-                    Save this code in the <em>torque/src/java</em>
-                    directory hierarchy with a filename of
-                    <em>Bookstore.java</em>.  The above example must be
-                    placed in <em>torque/src/java/com/kazmier</em>
-                    directory because of its package definition.  Your
-                    application might go elsewhere depending on the
-                    package that you've selected.
-                </p>
-            </subsection>
+  ]]></source>
 
-            <subsection name="Compiling and Running">
-                <p>
-                    Now that you've generated your object model with
-                    Torque, and created a sample application, you are
-                    now ready to compile everything.  Again, Ant is used
-                    to control the build process.  To compile, type the
-                    following in the Torque top-level directory:
-                </p>
-                <source><![CDATA[
-  ant -f build-torque.xml compile  
-                ]]></source>
-                <p>
-                    If you've done everything correctly, this should
-                    build without any errors.  All of the resulting Java
-                    class files are placed in the
-                    <em>torque/bin/classes</em> directory.  Should you
-                    encounter errors, go back and review your
-                    application code.
-                </p>
-                <p>
-                    Before you run the sample application, you must
-                    first set your classpath (this was done
-                    automatically for you via Ant's build file when you
-                    compiled).  The classpath must include: all of the
-                    jars in the <em>torque/lib</em> directory, the
-                    driver for your database, and all of your
-                    application and object model classes located in
-                    <em>torque/bin/classes</em>.
-                </p>
-                <p>
-                    An easy way to set your classpath (if you're using a
-                    bourne-shell or one of its derivatives on a
-                    un*x-based system) is to type the following in the
-                    top-level Torque directory (first add your database
-                    driver to the <em>torque/lib</em> directory if you
-                    haven't already):
-                </p>
-                <source><![CDATA[
+<p>
+  Save this code in the <em>torque/src/java</em>
+  directory hierarchy with a filename of
+  <em>Bookstore.java</em>.  The above example must be
+  placed in <em>torque/src/java/com/kazmier</em>
+  directory because of its package definition.  Your
+  application might go elsewhere depending on the
+  package that you've selected.
+</p>
+
+</subsection>
+
+<subsection name="Compiling and Running">
+
+<p>
+  Now that you've generated your object model with
+  Torque, and created a sample application, you are
+  now ready to compile everything.  Again, Ant is used
+  to control the build process.  To compile, type the
+  following in the Torque top-level directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml compile  
+]]></source>
+
+<p>
+  If you've done everything correctly, this should
+  build without any errors.  All of the resulting Java
+  class files are placed in the
+  <em>torque/bin/classes</em> directory.  Should you
+  encounter errors, go back and review your
+  application code.
+</p>
+
+<p>
+  Before you run the sample application, you must
+  first set your classpath (this was done
+  automatically for you via Ant's build file when you
+  compiled).  The classpath must include: all of the
+  jars in the <em>torque/lib</em> directory, the
+  driver for your database, and all of your
+  application and object model classes located in
+  <em>torque/bin/classes</em>.
+</p>
+
+<p>
+  An easy way to set your classpath (if you're using a
+  bourne-shell or one of its derivatives on a
+  un*x-based system) is to type the following in the
+  top-level Torque directory (first add your database
+  driver to the <em>torque/lib</em> directory if you
+  haven't already):
+</p>
+
+<source><![CDATA[
   [kaz@coco torque]$ CLASSPATH=bin/classes   
   [kaz@coco torque]$ for i in lib/*
   > do
   > CLASSPATH=$CLASSPATH:$i  
   > done
   [kaz@coco torque]$ export CLASSPATH
-                ]]></source>
-                <p>
-                    With your classpath set, you are now ready to
-                    finally run the application.  From the top-level
-                    directory with your Torque run-time properties, type
-                    the following, replacing the name of the class with
-                    your class:
-                </p>
-                <source><![CDATA[
+]]></source>
+
+<p>
+  With your classpath set, you are now ready to
+  finally run the application.  From the top-level
+  directory with your Torque run-time properties, type
+  the following, replacing the name of the class with
+  your class:
+</p>
+
+<source><![CDATA[
   java com.kazmier.Bookstore  
-                ]]></source>
-                <p>
-                    If all goes well, you should see the following
-                    output:
-                </p>
-                <source><![CDATA[
+]]></source>
+
+<p>
+  If all goes well, you should see the following
+  output:
+</p>
+
+<source><![CDATA[
   Full booklist:
   
-  Title:      Effective Java
-  ISBN:       0-618-12902-2
+  Title:    Effective Java
+  ISBN:     0-618-12902-2
   Publisher:  Addison Wesley Professional
-  Author:     Bloch, Joshua
+  Author:   Bloch, Joshua
   
-  Title:      TCP/IP Illustrated, Volume 1  
-  ISBN:       0-201-63346-9
+  Title:    TCP/IP Illustrated, Volume 1  
+  ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
-  Author:     Stevens, W.
+  Author:   Stevens, W.
   
   Booklist (specific ISBN):
   
-  Title:      TCP/IP Illustrated, Volume 1
-  ISBN:       0-201-63346-9
+  Title:    TCP/IP Illustrated, Volume 1
+  ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
-  Author:     Stevens, W.
+  Author:   Stevens, W.
   
   Booklist (authors swapped):
   
-  Title:      Effective Java
-  ISBN:       0-618-12902-2
+  Title:    Effective Java
+  ISBN:     0-618-12902-2
   Publisher:  Addison Wesley Professional
-  Author:     Stevens, W.
+  Author:   Stevens, W.
   
-  Title:      TCP/IP Illustrated, Volume 1
-  ISBN:       0-201-63346-9
+  Title:    TCP/IP Illustrated, Volume 1
+  ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
-  Author:     Bloch, Joshua
+  Author:   Bloch, Joshua
   
   Booklist (should be empty):
-                ]]></source>
-                <p>
-                    If your application throws an exception, it could be
-                    for one of many reasons, most of which are not very
-                    descriptive unfortunately.  For example, mistyping
-                    the username or password in your Torque run-time
-                    properties file results in a
-                    <em>NullPointerException</em>, as do many other
-                    types of errors.  Do not be discouraged if your
-                    application does not run the first time.  Carefully
-                    retrace all of the steps outlined in this tutorial.
-                    If you are still not able to get your application to
-                    run, use the Turbine 
-                    <a href="/site/mail.html">mailing list</a> to your
-                    advantage.
-                </p>
-            </subsection>
-        </section>
+  ]]></source>
+  <p>
+    If your application throws an exception, it could be
+    for one of many reasons, most of which are not very
+    descriptive unfortunately.  For example, mistyping
+    the username or password in your Torque run-time
+    properties file results in a
+    <em>NullPointerException</em>, as do many other
+    types of errors.  Do not be discouraged if your
+    application does not run the first time.  Carefully
+    retrace all of the steps outlined in this tutorial.
+    If you are still not able to get your application to
+    run, use the Turbine 
+    <a href="/site/mail.html">mailing list</a> to your
+    advantage.
+  </p>
 
-        <section name="Where to Go From Here">
-            <p>
-                Congratulations!  You have completed the Torque
-                tutorial.  Although this has only been an introduction
-                to Torque, it should be sufficient to get you started
-                with Torque in your applications.  For those of you
-                seeking additional information, there are several other
-                documents on this site that can provide details on
-                various subjects.  Lastly, the source code is an
-                invaluable resource when all else fails to provide
-                answers!
-            </p>
-        </section>
-    </body> 
+</subsection>
+
+</section>
+
+<section name="Where to Go From Here">
+
+<p>
+  Congratulations!  You have completed the Torque
+  tutorial.  Although this has only been an introduction
+  to Torque, it should be sufficient to get you started
+  with Torque in your applications.  For those of you
+  seeking additional information, there are several other
+  documents on this site that can provide details on
+  various subjects.  Lastly, the source code is an
+  invaluable resource when all else fails to provide
+  answers!
+</p>
+
+</section>
+
+  </body> 
 </document>
 
