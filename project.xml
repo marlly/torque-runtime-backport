@@ -145,8 +145,24 @@
         <role>Java Developer</role>
       </roles>
     </developer>
-
   </developers>
+
+  <contributors>
+    <contributor>
+      <name>James Hillyerd</name>
+      <email>james@hillyerd.com</email>
+    </contributor>
+
+    <contributor>
+      <name>J. Russell Smyth</name>
+      <email>drfish@cox.net</email>
+    </contributor>
+
+    <contributor>
+      <name>Scott Eade</name>
+      <email>seade@backstagetech.com.au</email>
+    </contributor>
+  </contributors>
 
   <dependencies>
     <dependency>
