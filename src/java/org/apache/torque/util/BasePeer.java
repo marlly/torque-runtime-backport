@@ -1919,8 +1919,17 @@ public abstract class BasePeer
             // Have to catch possible exceptions because method is
             // used in initialization of Peers.  Torque.getCategory() the exception and
             // return null.
-            category.error("BasePeer.MapBuilder failed trying to instantiate: " +
-                name, e);
+            String message = "BasePeer.MapBuilder failed trying to instantiate: " +
+                    name;
+            if (category == null)
+            {
+                System.out.println (message);
+                e.printStackTrace();
+            }
+            else
+            {
+                category.error(message, e);
+            }
         }
         return null;
     }
