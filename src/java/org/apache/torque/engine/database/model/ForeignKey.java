@@ -241,23 +241,11 @@ public class ForeignKey
     }
 
     /**
-     * Creates a list of columns delimited by commas
-     */
-    private String makeColumnList(List cols)
-    {
-        StringBuffer res = new StringBuffer(cols.get(0).toString());
-        for (int i=1; i < cols.size(); i++)
-            res.append(", ")
-                .append(cols.get(i).toString());
-        return res.toString();
-    }
-
-    /**
      * Return a comma delimited string of local column names
      */
     public String getLocalColumnNames()
     {
-        return makeColumnList(localColumns);
+        return Column.makeList(getLocalColumns());
     }
 
     /**
@@ -265,7 +253,7 @@ public class ForeignKey
      */
     public String getForeignColumnNames()
     {
-        return makeColumnList(foreignColumns);
+        return Column.makeList(getForeignColumns());
     }
 
     /**
@@ -310,7 +298,7 @@ public class ForeignKey
     {
         Hashtable h = new Hashtable();
 
-        for (int i=0; i<localColumns.size(); i++)
+        for (int i = 0; i < localColumns.size(); i++)
         {
             h.put (foreignColumns.get(i),localColumns.get(i));
         }
