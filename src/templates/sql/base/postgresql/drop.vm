@@ -1,4 +1,4 @@
-drop table $table.Name;
+DROP TABLE $table.Name;
 #if ($table.IdMethod == "native")
-drop sequence $table.SequenceName;
+DROP SEQUENCE $table.SequenceName;
 #end

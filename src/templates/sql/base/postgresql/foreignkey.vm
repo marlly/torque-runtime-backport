@@ -6,12 +6,13 @@
 ##
 #foreach ($fk in $table.ForeignKeys)
 ALTER TABLE $table.Name
-ADD FOREIGN KEY ($fk.LocalColumnNames) REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
+    ADD CONSTRAINT $fk.Name FOREIGN KEY ($fk.LocalColumnNames)
+    REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
 #if ($fk.hasOnUpdate())
-ON UPDATE $fk.OnUpdate
+    ON UPDATE $fk.OnUpdate
 #end
 #if ($fk.hasOnDelete())
-ON DELETE $fk.OnDelete 
+    ON DELETE $fk.OnDelete 
 #end
 ;
 #end
