@@ -57,7 +57,7 @@
 
   <target
     name="test"
-    depends="dist"
+    depends="jar"
     description="==> runtime tests (set torque.testProfile in your build.properties)">
 
     <ant antfile="build-test.xml"/>

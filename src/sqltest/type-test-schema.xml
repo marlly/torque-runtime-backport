@@ -13,7 +13,7 @@
   <table name="TYPES">
 
     <column name="CHAR_TYPE" type="CHAR"/>
-    <column name="VARCHAR_TYPE" type="VARCHAR"/>
+    <column name="VARCHAR_TYPE" size="100" type="VARCHAR"/>
     <column name="INTEGER_TYPE" type="INTEGER"/>
     <column name="DATE_TYPE" type="DATE"/>
     <column name="TIME_TYPE" type="TIME"/>

@@ -1,28 +1,16 @@
-
 <project name="Torque" default="main" basedir=".">
 
   <property name="torque.home" value="."/>
-
-  <!-- Override this property if you build a "lite" distribution. -->
+  <property name="build.properties" value="build.properties"/>
+  <property file="${build.properties}"/>
   <property name="lib.dir" value="lib"/>
-
+  
   <!-- Build classpath -->
-  <path id="classpath">
+  <path id="torque-classpath">
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
-    <fileset dir="lib">
-      <include name="**/torque*.jar"/>
-    </fileset>
   </path>
-
-  <!--
-    Load the build.properties file. All the targets use the
-    information stored in the properties file.
-  -->
-
-  <property name="build.properties" value="build.properties"/>
-  <property file="${build.properties}"/>
 
   <!-- ================================================================ -->
   <!-- M A I N  T A R G E T                                             -->
@@ -71,7 +59,7 @@
     <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-sql
@@ -104,7 +92,7 @@
     <taskdef
       name="torque-create-db"
       classname="org.apache.torque.task.TorqueCreateDatabase">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-create-db
@@ -130,7 +118,7 @@
       src="${torque.home}/${outputDirectory}/sql/create-db.sql"
       autocommit="true"
       onerror="continue">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </sql>
 
   </target>
@@ -145,7 +133,7 @@
     <taskdef
       name="torque-insert-sql"
       classname="org.apache.torque.task.TorqueSQLExec">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-insert-sql
@@ -157,7 +145,7 @@
       onerror="continue"
       sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
       srcDir="${basedir}/${outputDirectory}/sql">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </torque-insert-sql>
   </target>
 
@@ -175,7 +163,7 @@
     <taskdef
       name="torque-jdbc"
       classname="org.apache.torque.task.TorqueJDBCTransformTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-jdbc
@@ -208,7 +196,7 @@
     <taskdef
       name="torque-datasql"
       classname="org.apache.torque.task.TorqueDataSQLTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-datasql
@@ -242,7 +230,7 @@
     <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-sql
@@ -254,10 +242,11 @@
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       outputFile="${database}-id-table-init.sql"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
-    />
-
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-sql>      
   </target>
 
   <!-- ================================================================ -->
@@ -279,7 +268,7 @@
     <taskdef
       name="torque-datadump"
       classname="org.apache.torque.task.TorqueDataDumpTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-datadump
@@ -318,7 +307,7 @@
     <taskdef
       name="torque-datadtd"
       classname="org.apache.torque.task.TorqueDataDTDTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-datadtd
@@ -354,7 +343,7 @@
     <taskdef
       name="torque-om"
       classname="org.apache.torque.task.TorqueObjectModelTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-om
@@ -364,9 +353,12 @@
       templatePath="${templatePath}"
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
-    />
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+        <exclude name="id-table-schema.xml"/>
+      </fileset>
+    </torque-om>
 
   </target>
 
@@ -391,7 +383,7 @@
     <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-sql
@@ -426,7 +418,7 @@
     <taskdef
       name="torque-om"
       classname="org.apache.torque.task.TorqueObjectModelTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <torque-om
@@ -468,7 +460,7 @@
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </javac>
   </target>
 
@@ -489,7 +481,7 @@
     <taskdef
       name="sql-xml"
       classname="org.apache.torque.task.TorqueSQLTransformTask">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </taskdef>
 
     <sql-xml
@@ -516,7 +508,7 @@
       private="true"
       version="true"
       use="true">
-      <classpath refid="classpath"/>
+      <classpath refid="torque-classpath"/>
     </javadoc>
   </target>
 

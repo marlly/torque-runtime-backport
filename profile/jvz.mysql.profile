@@ -6,6 +6,11 @@ torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 torque.databaseAdapter = DBMM
 
+torque.sqlTest.defaultDatabase = sqltest
+torque.sqlTest.databaseUrl = jdbc:mysql://localhost:3306/sqltest
+
+lib.dir = ../lib
+
 # -------------------------------------------------------------------
 # 
 # T O R Q U E  C O N F I G U R A T I O N  F I L E
@@ -41,7 +46,7 @@ database = mysql
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
 
-targetPackage=org.apache.torque
+targetPackage=org.apache.torque.test
 basePrefix=Base
 addSaveMethod=true
 addGetByNameMethod=true
@@ -81,7 +86,7 @@ sameJavaName=false
 #
 # -------------------------------------------------------------------
 
-templatePath = templates
+templatePath = ../templates
 
 # -------------------------------------------------------------------
 # 

@@ -20,12 +20,7 @@
 
   <target
     name="test"
-    depends="filterTokens">
-
-    <copy
-      todir="${torque.distDir}/lib"
-      file="${torque.testDatabaseJar}"
-    />
+    depends="filterTokens,test-libs,test-templates">
 
     <!-- Use the profile as the build.properties file
          in the dist directory so that it is customizable
@@ -53,6 +48,12 @@
     <copy todir="${torque.distDir}/src/java">
       <fileset dir="${rttest.dir}"/>
     </copy>
+
+    <copy
+      tofile="${build.test}/rttest/build-torque.xml"
+      file="${src.dir}/conf/build-torque.xml"
+      overwrite="yes"
+    />
 
     <antcall target="test-pre-runtime"/>
     <antcall target="test-runtime"/>
@@ -118,8 +119,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-sql"
-      inheritAll="false">
+      target="project-sql">
     </ant>
   </target>
 
@@ -128,8 +128,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="id-table-init-sql"
-      inheritAll="false">
+      target="id-table-init-sql">
     </ant>
   </target>
 
@@ -138,8 +137,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-create-db"
-      inheritAll="false">
+      target="project-create-db">
     </ant>
   </target>
 
@@ -148,8 +146,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-insert-sql"
-      inheritAll="false">
+      target="project-insert-sql">
     </ant>
   </target>
 
@@ -158,8 +155,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-om"
-      inheritAll="false">
+      target="project-om">
     </ant>
 
     <!-- Compile the classes -->
@@ -172,6 +168,7 @@
     </ant>
   </target>
 
+  <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datadtd">
     <ant
@@ -182,6 +179,7 @@
     </ant>
   </target>
 
+  <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datadump">
     <ant
@@ -192,6 +190,7 @@
     </ant>
   </target>
 
+  <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datasql">
     <ant
@@ -207,8 +206,7 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-jdbc"
-      inheritAll="false">
+      target="project-jdbc">
       <property name="torque.home" value="${torque.distDir}"/>
     </ant>
   </target>
@@ -268,17 +266,101 @@
 
     <!-- Copy test Torque.properties -->
     <copy
-      todir="bin/torque/torque"
+      todir="${build.test}/rttest"
       file="src/rttest/Torque.properties"
       filtering="yes"
     />
 
     <java
-      classname="org.apache.torque.TorqueRunner"
+      classname="org.apache.torque.test.TorqueRunner"
       fork="true">
-      <arg value="bin/torque/torque/Torque.properties"/>
+      <arg value="${build.test}/rttest/Torque.properties"/>
       <classpath refid="classpath"/>
     </java>
+  </target>
+
+  <target
+    name="test-libs">
+
+    <mkdir dir="${test.libDir}"/>
+
+    <copy file="${velocity.jar}" todir="${test.libDir}"/>
+    <copy file="${logkit.jar}" todir="${test.libDir}"/>
+    <copy file="${xerces.jar}" todir="${test.libDir}"/>
+    <copy file="${village.jar}" todir="${test.libDir}"/>
+    <copy file="${log4j.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-collections.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-util.jar}" todir="${test.libDir}"/>
+    <copy file="${jdbc.jar}" todir="${test.libDir}"/>
+    <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
+    <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
+  
+  </target>
+  
+  <target
+    name="test-templates">
+    
+    <copy todir="${test.templateDir}">
+      <fileset dir="${src.dir}/templates"/>
+    </copy>
+
+  </target>
+  
+  <!-- ============================================================== -->
+  <!-- S Q L  T E S T S                                               -->
+  <!-- ============================================================== -->
+    
+  <target
+    name="test-sql"
+    depends="test-libs,test-templates">
+    
+    <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
+    <filter token="DATABASE_URL" value="${torqe.sqlTest.databaseUrl}"/>
+    <filter token="DATABASE_USER" value="${databaseUser}"/>
+    <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
+    <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
+    <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
+    <filter token="DATABASE_ADAPTER" value="${torque.databaseAdapter}"/>
+    
+    <mkdir dir="${build.test}/sqltest"/>
+    
+    <copy
+      tofile="${build.test}/sqltest/build.properties"
+      file="${torque.testProfile}"
+      overwrite="yes"
+    />
+
+    <copy
+      tofile="${build.test}/sqltest/build-torque.xml"
+      file="${src.dir}/conf/build-torque.xml"
+      overwrite="yes"
+    />
+
+    <copy
+      todir="${build.test}/sqltest/schema"
+      file="${src.dir}/sqltest/type-test-schema.xml"
+      filtering="yes"
+      overwrite="yes"
+    />
+
+    <ant
+      dir="${build.test}/sqltest"
+      antfile="${torque.buildFile}"
+      target="project-create-db">
+    </ant>
+
+    <ant
+      dir="${build.test}/sqltest"
+      antfile="${torque.buildFile}"
+      target="project-sql">
+    </ant>
+
+    <ant
+      dir="${build.test}/sqltest"
+      antfile="${torque.buildFile}"
+      target="project-insert-sql">
+    </ant>
+
   </target>
 
 </project>
