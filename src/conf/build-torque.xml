@@ -71,8 +71,8 @@
       basePathToDbProps="sql/base/"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
-      targetDatabase="${database}">
-      idTableXMLFile="${idTableXMLFile}"
+      targetDatabase="${database}"
+      idTableXMLFile="${idTableXMLFile}">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>
