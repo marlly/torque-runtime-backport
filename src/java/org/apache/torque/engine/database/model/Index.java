@@ -119,10 +119,8 @@ public class Index
         }
         else
         {
-            // FIXME: This should be an exception, but I'm too lazy to
-            // propagate it today.
-            System.err.println("Cannot create a new Index using an " +
-                               "empty list Column object");
+            throw new TorqueException("Cannot create a new Index using an " +
+                                      "empty list Column object");
         }
     }
 
