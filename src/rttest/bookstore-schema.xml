@@ -199,4 +199,17 @@
     />
   </table>
 
+  <table name="MULTIPK_SELF_REFTABLE">
+    <column name="COL1" primaryKey="true" required="true" type="DECIMAL"/>
+    <column name="COL2" primaryKey="true" required="true" type="DECIMAL"/>
+            
+    <column name="PARENT_COL1" required="true" type="DECIMAL"/>
+    <column name="PARENT_COL2" required="true" type="DECIMAL"/>
+            
+    <foreign-key foreignTable="MULTIPK_SELF_REFTABLE">
+      <reference foreign="COL1" local="PARENT_COL1"/>
+      <reference foreign="COL2" local="PARENT_COL2"/>
+    </foreign-key>
+  </table>
+
 </database>

@@ -175,7 +175,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #end    
             #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
             #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
-              #set ( $varName = "a${interfaceName}RelatedBy$col.JavaName" )
+                #set ( $relCol = "" )
+                  #foreach ($columnName in $col.foreignKey.LocalColumns)  
+                      #set ( $column = $table.getColumn($columnName) )
+                      #set ( $relCol = "$relCol$column.JavaName" )
+                  #end
+                 #if ($relCol != "")
+                     #set ( $relCol = "RelatedBy$relCol" )
+                 #end
+                 #set ( $varName = "a${interfaceName}$relCol" )
             #else
               #set ( $varName = "a$interfaceName" )
             #end
