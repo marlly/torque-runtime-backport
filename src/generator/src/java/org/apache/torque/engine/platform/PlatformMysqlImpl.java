@@ -3,7 +3,7 @@ package org.apache.torque.engine.platform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -97,4 +97,12 @@ public class PlatformMysqlImpl extends PlatformDefaultImpl
         return "AUTO_INCREMENT";
     }
 
+    /**
+     * @see Platform#hasSize(String)
+     */
+    public boolean hasSize(String sqlType) {
+        return !("MEDIUMTEXT".equals(sqlType) || "LONGTEXT".equals(sqlType) 
+                || "BLOB".equals(sqlType) || "MEDIUMBLOB".equals(sqlType)
+                || "LONGBLOB".equals(sqlType));
+    }
 }

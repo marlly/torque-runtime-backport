@@ -106,16 +106,16 @@ public interface Platform
     /**
      * Returns if the RDBMS-specific SQL type has a size attribute.
      * 
-     * @param type the SchemaType
+     * @param sqlType the SQL type
      * @return true if the type has a size attribute
      */
-    boolean hasSize(SchemaType type);
+    boolean hasSize(String sqlType);
     
     /**
      * Returns if the RDBMS-specific SQL type has a scale attribute.
      * 
-     * @param type the SchemaType
+     * @param sqlType the SQL type
      * @return true if the type has a scale attribute
      */
-    boolean hasScale(SchemaType type);
+    boolean hasScale(String sqlType);
 }

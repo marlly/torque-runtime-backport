@@ -3,7 +3,7 @@ package org.apache.torque.engine.platform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -148,7 +148,7 @@ public class PlatformDefaultImpl implements Platform
      * @see Platform#hasScale(String)
      * TODO collect info for all platforms
      */
-    public boolean hasScale(SchemaType type)
+    public boolean hasScale(String sqlType)
     {
         return true;
     }
@@ -157,7 +157,7 @@ public class PlatformDefaultImpl implements Platform
      * @see Platform#hasSize(String)
      * TODO collect info for all platforms
      */
-    public boolean hasSize(SchemaType type)
+    public boolean hasSize(String sqlType)
     {
         return true;
     }
