@@ -181,26 +181,28 @@ public class Transaction
                     + "DataSourceFactory. Check the logs and Torque.properties "
                     + "to better determine the cause.");
         }
-
-        try
+        else
         {
-            if (con.getMetaData().supportsTransactions()
-                && con.getAutoCommit() == false)
+            try
             {
-                con.rollback();
-                con.setAutoCommit(true);
+                if (con.getMetaData().supportsTransactions()
+                    && con.getAutoCommit() == false)
+                {
+                    con.rollback();
+                    con.setAutoCommit(true);
+                }
             }
-        }
-        catch (SQLException e)
-        {
-            category.error("An attempt was made to rollback a transaction "
-                    + "but the database did not allow the operation to be "
-                    + "rolled back.", e);
-            throw new TorqueException(e);
-        }
-        finally
-        {
-            Torque.closeConnection(con);
+            catch (SQLException e)
+            {
+                category.error("An attempt was made to rollback a transaction "
+                               + "but the database did not allow the operation to be "
+                               + "rolled back.", e);
+                throw new TorqueException(e);
+            }
+            finally
+            {
+                Torque.closeConnection(con);
+            }
         }
     }
 
