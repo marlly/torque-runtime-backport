@@ -22,22 +22,22 @@
 ## the following works if you want to inline your foreign keys
 ## if you turn it on, be sure to comment out foreignkey.vm
 #if (false)
+  #if ($col.isForeignKey())
+    #set ($fk = $col.ForeignKey)
+    #set ($entry = "$entry REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)")
+    #if ($fk.hasOnUpdate())
+      #set ($entry = "$entry ON UPDATE $fk.OnUpdate ")
+    #end
+    #if ($fk.hasOnDelete())
+      #set ($entry = "$entry ON DELETE $fk.OnDelete ")
+    #end
+  #end
+#end
+## add a nice comment
 #if ($col.isForeignKey())
-#set ($fk = $col.ForeignKey)
-#set ($entry = "$entry REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)")
-#if ($fk.hasOnUpdate())
-#set ($entry = "$entry ON UPDATE $fk.OnUpdate ")
-#end
-#if ($fk.hasOnDelete())
-#set ($entry = "$entry ON DELETE $fk.OnDelete ")
-#end
-#end
+  #set ($fk = $col.ForeignKey)
+      -- REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
 #end
 #set ( $entry = $strings.collapseSpaces("$entry,") )
     $strings.sub($entry," ,",",")
-## add a nice comment
-#if ($col.isForeignKey())
-#set ($fk = $col.ForeignKey)
-      -- REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
-#end
 #end

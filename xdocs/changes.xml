@@ -61,6 +61,9 @@
       TRQS75: Object.vm generates files which will not compile.
     </li>
     <li>
+      TRQS77: postgres - Incosistent generation errors
+    </li>
+    <li>
       When generating an XML schema from a SQL Schema, the output xml
       contains a javaname attribute (notice the lowercase "n" in javaname)
     </li>

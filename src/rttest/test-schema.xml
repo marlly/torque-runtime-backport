@@ -28,6 +28,32 @@
     <column name="col_b" type="BOOLEANINT" javaType="object" />
   </table>
 
+  <!-- TRQS77 -->
+  <table name="course">
+    <column name="id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+  </table>
+
+  <table name="course_number" description="Number for a course">
+    <column name="course_id" required="true" type="INTEGER"/>
+    <column name="number" required="true" type="INTEGER"/>
+
+    <foreign-key foreignTable="course"
+     onDelete="cascade" onUpdate="cascade">
+      <reference local="course_id" foreign="id"/>
+    </foreign-key>
+  </table>
+
+  <table name="course_number1" description="Number for a course">
+    <column name="number" required="true" type="INTEGER"/>
+    <column name="course_id" required="true" type="INTEGER"/>
+
+    <foreign-key foreignTable="course"
+     onDelete="cascade" onUpdate="cascade">
+      <reference local="course_id" foreign="id"/>
+    </foreign-key>
+  </table>
+
 
 </database>
 
