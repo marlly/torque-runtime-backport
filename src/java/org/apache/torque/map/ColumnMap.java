@@ -93,8 +93,7 @@ public class ColumnMap implements java.io.Serializable
      * @param name The name of the column.
      * @param containingTable TableMap of the table this column is in.
      */
-    public ColumnMap( String name,
-                      TableMap containingTable )
+    public ColumnMap(String name, TableMap containingTable)
     {
         this.columnName = name;
         table = containingTable;
@@ -135,7 +134,7 @@ public class ColumnMap implements java.io.Serializable
      *
      * @param type An Object specifying the type.
      */
-    public void setType ( Object type )
+    public void setType (Object type)
     {
         this.type = type;
     }
@@ -145,7 +144,7 @@ public class ColumnMap implements java.io.Serializable
      *
      * @param size An int specifying the size.
      */
-    public void setSize( int size )
+    public void setSize(int size)
     {
         this.size = size;
     }
@@ -155,7 +154,7 @@ public class ColumnMap implements java.io.Serializable
      *
      * @param pk True if column is a primary key.
      */
-    public void setPrimaryKey( boolean pk )
+    public void setPrimaryKey(boolean pk)
     {
         this.pk = pk;
     }
@@ -165,7 +164,7 @@ public class ColumnMap implements java.io.Serializable
      *
      * @param nn True if column may be null.
      */
-    public void setNotNull( boolean nn )
+    public void setNotNull(boolean nn)
     {
         this.notNull = nn;
     }
@@ -176,9 +175,9 @@ public class ColumnMap implements java.io.Serializable
      * @param fullyQualifiedName The name of the table.column that is
      * foreign.
      */
-    public void setForeignKey(String fullyQualifiedName )
+    public void setForeignKey(String fullyQualifiedName)
     {
-        if ( fullyQualifiedName != null &&
+        if (fullyQualifiedName != null &&
              fullyQualifiedName.length() > 0)
         {
             relatedTableName = fullyQualifiedName.substring(
@@ -201,8 +200,8 @@ public class ColumnMap implements java.io.Serializable
      */
     public void setForeignKey(String tableName, String columnName)
     {
-        if ( tableName != null && tableName.length() > 0 && columnName != null
-                && columnName.length() > 0 )
+        if (tableName != null && tableName.length() > 0 && columnName != null
+                && columnName.length() > 0)
         {
             relatedTableName = tableName;
             relatedColumnName = columnName;
@@ -261,7 +260,7 @@ public class ColumnMap implements java.io.Serializable
      */
     public boolean isForeignKey()
     {
-        if ( relatedTableName != null && relatedTableName.length() > 0)
+        if (relatedTableName != null && relatedTableName.length() > 0)
         {
             return true;
         }

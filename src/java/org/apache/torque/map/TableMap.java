@@ -117,11 +117,11 @@ public class TableMap implements IDMethod, java.io.Serializable
      */
     public TableMap(String tableName,
                     int numberOfColumns,
-                    DatabaseMap containingDB )
+                    DatabaseMap containingDB)
     {
         this.tableName = tableName;
         dbMap = containingDB;
-        columns = new Hashtable( (int) (1.25 * numberOfColumns) + 1 );
+        columns = new Hashtable((int) (1.25 * numberOfColumns) + 1);
     }
 
     /**
@@ -130,12 +130,11 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param tableName The name of the table.
      * @param containingDB A DatabaseMap that this table belongs to.
      */
-    public TableMap(String tableName,
-                    DatabaseMap containingDB )
+    public TableMap(String tableName, DatabaseMap containingDB)
     {
         this.tableName = tableName;
         dbMap = containingDB;
-        columns = new Hashtable( 20 );
+        columns = new Hashtable(20);
     }
 
     /**
@@ -148,12 +147,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      */
     public TableMap(String tableName,
                     String prefix,
-                    DatabaseMap containingDB )
+                    DatabaseMap containingDB)
     {
         this.tableName = tableName;
         this.prefix = prefix;
         dbMap = containingDB;
-        columns = new Hashtable( 20 );
+        columns = new Hashtable(20);
     }
 
     /**
@@ -162,9 +161,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param column A ColumnMap.
      * @return True if the table contains the column.
      */
-    public boolean containsColumn( ColumnMap column )
+    public boolean containsColumn(ColumnMap column)
     {
-        return containsColumn( column.getColumnName() );
+        return containsColumn(column.getColumnName());
     }
 
     /**
@@ -173,11 +172,11 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param name A String with the name of the column.
      * @return True if the table contains the column.
      */
-    public boolean containsColumn( String name )
+    public boolean containsColumn(String name)
     {
-        if ( name.indexOf('.') > 0 )
+        if (name.indexOf('.') > 0)
         {
-            name = name.substring( name.indexOf('.') + 1 );
+            name = name.substring(name.indexOf('.') + 1);
         }
         return columns.containsKey(name);
     }
@@ -206,7 +205,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         {
             Object theType = ((ColumnMap) it.next()).getType();
             if (!(theType instanceof String || theType instanceof Number
-                    || theType instanceof java.util.Date ) )
+                    || theType instanceof java.util.Date))
             {
                 return true;
             }
@@ -277,6 +276,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     /**
      * Get the information used to generate a primary key using a sequence.
      *
+     * @return information used to generate a primary key
      * @deprecated Use getPrimaryKeyMethodInfo
      */
     public Object getSequenceInfo()
@@ -307,11 +307,11 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param name A String with the name of the table.
      * @return A ColumnMap.
      */
-    public ColumnMap getColumn( String name )
+    public ColumnMap getColumn(String name)
     {
         try
         {
-            return (ColumnMap) columns.get( name );
+            return (ColumnMap) columns.get(name);
         }
         catch (Exception e)
         {
@@ -325,9 +325,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      *
      * @param cmap A ColumnMap.
      */
-    public void addColumn ( ColumnMap cmap )
+    public void addColumn (ColumnMap cmap)
     {
-        columns.put ( cmap.getColumnName(), cmap );
+        columns.put (cmap.getColumnName(), cmap);
     }
 
     /**
@@ -336,10 +336,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
      */
-    public void addColumn( String columnName,
-                           Object type )
+    public void addColumn(String columnName, Object type)
     {
-        addColumn( columnName, type, false, null, null, 0 );
+        addColumn(columnName, type, false, null, null, 0);
     }
 
     /**
@@ -349,11 +348,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param type An Object specifying the type.
      * @param size An int specifying the size.
      */
-    public void addColumn( String columnName,
-                           Object type,
-                           int size )
+    public void addColumn(String columnName, Object type, int size)
     {
-        addColumn( columnName, type, false, null, null, size );
+        addColumn(columnName, type, false, null, null, size);
     }
 
     /**
@@ -362,10 +359,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
      */
-    public void addPrimaryKey( String columnName,
-                               Object type )
+    public void addPrimaryKey(String columnName, Object type)
     {
-        addColumn( columnName, type, true, null, null, 0 );
+        addColumn(columnName, type, true, null, null, 0);
     }
 
     /**
@@ -375,11 +371,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param type An Object specifying the type.
      * @param size An int specifying the size.
      */
-    public void addPrimaryKey( String columnName,
-                               Object type,
-                               int size )
+    public void addPrimaryKey(String columnName, Object type, int size)
     {
-        addColumn( columnName, type, true, null, null, size );
+        addColumn(columnName, type, true, null, null, size);
     }
 
     /**
@@ -390,12 +384,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
      */
-    public void addForeignKey( String columnName,
-                               Object type,
-                               String fkTable,
-                               String fkColumn )
+    public void addForeignKey(String columnName,
+                              Object type,
+                              String fkTable,
+                              String fkColumn)
     {
-        addColumn( columnName, type, false, fkTable, fkColumn, 0 );
+        addColumn(columnName, type, false, fkTable, fkColumn, 0);
     }
 
     /**
@@ -407,13 +401,13 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
      */
-    public void addForeignKey( String columnName,
-                               Object type,
-                               String fkTable,
-                               String fkColumn,
-                               int size )
+    public void addForeignKey(String columnName,
+                              Object type,
+                              String fkTable,
+                              String fkColumn,
+                              int size)
     {
-        addColumn( columnName, type, false, fkTable, fkColumn, size );
+        addColumn(columnName, type, false, fkTable, fkColumn, size);
     }
 
     /**
@@ -424,12 +418,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
      */
-    public void addForeignPrimaryKey( String columnName,
-                                      Object type,
-                                      String fkTable,
-                                      String fkColumn )
+    public void addForeignPrimaryKey(String columnName,
+                                     Object type,
+                                     String fkTable,
+                                     String fkColumn)
     {
-        addColumn( columnName, type, true, fkTable, fkColumn, 0 );
+        addColumn(columnName, type, true, fkTable, fkColumn, 0);
     }
 
     /**
@@ -441,13 +435,13 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
      */
-    public void addForeignPrimaryKey( String columnName,
-                                      Object type,
-                                      String fkTable,
-                                      String fkColumn,
-                                      int size )
+    public void addForeignPrimaryKey(String columnName,
+                                     Object type,
+                                     String fkTable,
+                                     String fkColumn,
+                                     int size)
     {
-        addColumn( columnName, type, true, fkTable, fkColumn, size );
+        addColumn(columnName, type, true, fkTable, fkColumn, size);
     }
 
     /**
@@ -460,12 +454,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
      */
-    private void addColumn( String name,
-                            Object type,
-                            boolean pk,
-                            String fkTable,
-                            String fkColumn,
-                            int size )
+    private void addColumn(String name,
+                           Object type,
+                           boolean pk,
+                           String fkTable,
+                           String fkColumn,
+                           int size)
     {
         // If the tablename is prefixed with the name of the column,
         // remove it ie: SCARAB_PROJECT.PROJECT_ID remove the
@@ -474,13 +468,10 @@ public class TableMap implements IDMethod, java.io.Serializable
         {
             name = name.substring(getName().length() + 1);
         }
-        if ( fkTable != null &&
-             fkTable.length() > 0 &&
-             fkColumn != null &&
-             fkColumn.length() > 0 )
+        if (fkTable != null && fkTable.length() > 0 && fkColumn != null
+                && fkColumn.length() > 0)
         {
-            if (fkColumn.indexOf('.') > 0 &&
-                fkColumn.indexOf(fkTable) != -1)
+            if (fkColumn.indexOf('.') > 0 && fkColumn.indexOf(fkTable) != -1)
             {
                 fkColumn = fkColumn.substring(fkTable.length() + 1);
             }
@@ -490,7 +481,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         col.setPrimaryKey(pk);
         col.setForeignKey(fkTable, fkColumn);
         col.setSize(size);
-        columns.put( name, col );
+        columns.put(name, col);
     }
 
     /**
@@ -518,6 +509,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     /**
      * Sets the sequence information needed to generate a key
      *
+     * @param pkInfo information needed to generate a key
      * @deprecated  Use setPrimaryKeyMethodInfo
      */
     public void setSequenceInfo(Object pkInfo)
@@ -535,9 +527,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         this.pkInfo = pkInfo;
     }
 
-
     //---Utility methods for doing intelligent lookup of table names
-
 
     /**
      * Tell me if i have PREFIX in my string.
@@ -545,9 +535,9 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return True if prefix is contained in data.
      */
-    private final boolean hasPrefix ( String data )
+    private final boolean hasPrefix(String data)
     {
-        return ( data.indexOf(getPrefix()) != -1 );
+        return (data.indexOf(getPrefix()) != -1);
     }
 
     /**
@@ -556,7 +546,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return A String with data, but with prefix removed.
      */
-    private final String removePrefix ( String data )
+    private final String removePrefix(String data)
     {
         return data.substring(getPrefix().length());
     }
@@ -570,7 +560,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return A String with data processed.
      */
-    public final String removeUnderScores (String data)
+    public final String removeUnderScores(String data)
     {
         String tmp = null;
         StringBuffer out = new StringBuffer();
@@ -587,7 +577,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         while (st.hasMoreTokens())
         {
             String element = (String) st.nextElement();
-            out.append ( firstLetterCaps(element));
+            out.append (firstLetterCaps(element));
         }
         return out.toString();
     }
@@ -598,7 +588,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return A String with data processed.
      */
-    private final String firstLetterCaps ( String data )
+    private final String firstLetterCaps(String data)
     {
         String firstLetter = data.substring(0, 1).toUpperCase();
         String restLetters = data.substring(1).toLowerCase();

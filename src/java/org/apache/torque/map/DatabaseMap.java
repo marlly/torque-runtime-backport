@@ -126,9 +126,9 @@ public class DatabaseMap implements java.io.Serializable
      * @param table The TableMap representation of the table.
      * @return True if the database contains the table.
      */
-    public boolean containsTable( TableMap table )
+    public boolean containsTable(TableMap table)
     {
-        return containsTable( table.getName() );
+        return containsTable(table.getName());
     }
 
     /**
@@ -137,11 +137,11 @@ public class DatabaseMap implements java.io.Serializable
      * @param name The String representation of the table.
      * @return True if the database contains the table.
      */
-    public boolean containsTable( String name )
+    public boolean containsTable(String name)
     {
-        if ( name.indexOf('.') > 0 )
+        if (name.indexOf('.') > 0)
         {
-            name = name.substring( 0, name.indexOf('.') );
+            name = name.substring(0, name.indexOf('.'));
         }
         return tables.containsKey(name);
     }
@@ -182,7 +182,7 @@ public class DatabaseMap implements java.io.Serializable
      * @param name Name of the table.
      * @return A TableMap, null if the table was not found.
      */
-    public TableMap getTable( String name )
+    public TableMap getTable(String name)
     {
         return (TableMap) tables.get(name);
     }
@@ -210,10 +210,10 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param tableName The name of the table.
      */
-    public void addTable( String tableName )
+    public void addTable(String tableName)
     {
-        TableMap tmap = new TableMap( tableName, this );
-        tables.put( tableName, tmap );
+        TableMap tmap = new TableMap(tableName, this);
+        tables.put(tableName, tmap);
     }
 
     /**
@@ -223,11 +223,10 @@ public class DatabaseMap implements java.io.Serializable
      * @param tableName The name of the table.
      * @param numberOfColumns The number of columns in the table.
      */
-    public void addTable( String tableName,
-                          int numberOfColumns )
+    public void addTable(String tableName, int numberOfColumns)
     {
-        TableMap tmap = new TableMap( tableName, numberOfColumns, this );
-        tables.put( tableName, tmap );
+        TableMap tmap = new TableMap(tableName, numberOfColumns, this);
+        tables.put(tableName, tmap);
     }
 
     /**
@@ -235,18 +234,17 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param map The TableMap representation.
      */
-    public void addTable( TableMap map )
+    public void addTable(TableMap map)
     {
-        tables.put( map.getName(), map );
+        tables.put(map.getName(), map);
     }
-
 
     /**
      * Set the ID table for this database.
      *
      * @param idTable The TableMap representation for the ID table.
      */
-    public void setIdTable( TableMap idTable )
+    public void setIdTable(TableMap idTable)
     {
         this.idTable = idTable;
         addTable(idTable);
@@ -259,10 +257,10 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param tableName The name for the ID table.
      */
-    public void setIdTable( String tableName )
+    public void setIdTable(String tableName)
     {
-        TableMap tmap = new TableMap( tableName, this );
-        setIdTable( tmap );
+        TableMap tmap = new TableMap(tableName, this);
+        setIdTable(tmap);
     }
 
     /**
