@@ -176,13 +176,20 @@ public class Torque
      */
     private static List mapBuilders = null;
 
-    //
-    // Static initializer
-    //
+    /**
+     * Make sure that the map Builders List is always 
+     * populated by fetching through a getter
+     *
+     * @return A List for the mapBuilders
+     */
+    private static List getMapBuilders()
     {
-        mapBuilders = Collections.synchronizedList(new ArrayList());
+        if (mapBuilders == null)
+        {
+            mapBuilders = Collections.synchronizedList(new ArrayList());
+        }
+        return mapBuilders;
     }
-
 
     /**
      * initialize Torque
@@ -235,7 +242,7 @@ public class Torque
         initDataSourceFactories(configuration);
 
         isInit = true;
-        for (Iterator i = mapBuilders.iterator(); i.hasNext();)
+        for (Iterator i = getMapBuilders().iterator(); i.hasNext();)
         {
             //this will add any maps in this builder to the proper database map
             BasePeer.getMapBuilder((String) i.next());
@@ -713,7 +720,7 @@ public class Torque
      */
     public static void registerMapBuilder(String className)
     {
-        mapBuilders.add(className);
+        getMapBuilders().add(className);
     }
 
     /**
