@@ -203,13 +203,13 @@ public class IDBroker
 
     private static final String DB_IDBROKER_PREFETCH =
         "idbroker.prefetch";
-    
+
     /**
      * Category used for logging.
      */
-    Category category = 
+    Category category =
         Category.getInstance(IDBroker.class.getName());
-    
+
     /**
      * Creates an IDBroker for the ID table.
      *
@@ -460,7 +460,7 @@ public class IDBroker
         try
         {
             String databaseName = tableMap.getDatabaseMap().getName();
-            
+
             // Get a connection to the db
             dbCon = Torque.getConnection(databaseName);
             Connection connection = dbCon.getConnection();
@@ -482,7 +482,7 @@ public class IDBroker
                 category.error("Release of connection failed.", e);
             }
         }
-        
+
         return exists;
     }
 
@@ -789,7 +789,7 @@ public class IDBroker
         StringBuffer stmt = new StringBuffer();
         stmt.append( "SELECT " + NEXT_ID + ", " + QUANTITY)
             .append( " FROM " + ID_TABLE )
-            .append( " WHERE " + TABLE_NAME + " = '" )
+            .append( " WHERE TABLE_NAME = '" )
             .append( tableName )
             .append( '\'' );
 
@@ -837,21 +837,21 @@ public class IDBroker
                            String id)
         throws Exception
     {
-        
-    
+
+
         StringBuffer stmt =
             new StringBuffer(id.length() + tableName.length() + 50);
             stmt.append( "UPDATE " + ID_TABLE )
-            .append( " SET " + NEXT_ID + " = " )
+            .append( " SET NEXT_ID = " )
             .append( id )
-            .append( " WHERE " + TABLE_NAME + " = '" )
+            .append( " WHERE TABLE_NAME = '" )
             .append( tableName )
             .append( '\'' );
 
         Statement statement = null;
-        
+
         category.debug("updateRow: " + stmt.toString());
-        
+
         try
         {
             statement = con.createStatement();
