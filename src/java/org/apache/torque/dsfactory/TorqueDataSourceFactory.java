@@ -59,8 +59,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
 
-import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -111,28 +109,6 @@ public class TorqueDataSourceFactory
         TorqueClassicDataSource tcds = initTorqueClassic(configuration);
         tcds.setConnectionPoolDataSource(cpds);
         ds = tcds;
-    }
-
-    /**
-     * Initializes the ConnectionPoolDataSource.
-     *
-     * @param configuration where to read the settings from
-     * @throws TorqueException if a property set fails
-     * @return a configured <code>ConnectionPoolDataSource</code>
-     */
-    protected ConnectionPoolDataSource initCPDS(Configuration configuration)
-        throws TorqueException
-    {
-        log.debug("Starting initCPDS");
-        ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
-        Configuration c = null;
-
-        c = Torque.getConfiguration().subset(DEFAULT_CONNECTION_KEY);
-        applyConfiguration(c, cpds);
-
-        c = configuration.subset(CONNECTION_KEY);
-        applyConfiguration(c, cpds);
-        return cpds;
     }
 
     /**

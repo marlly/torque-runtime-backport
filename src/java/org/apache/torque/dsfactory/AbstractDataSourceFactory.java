@@ -56,15 +56,19 @@ package org.apache.torque.dsfactory;
 
 import java.util.Iterator;
 
+import javax.sql.ConnectionPoolDataSource;
+
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
 /**
@@ -89,9 +93,7 @@ public abstract class AbstractDataSourceFactory
     /** "default.connection" Key for the configuration */
     public static final String DEFAULT_CONNECTION_KEY = "defaults.connection";
 
-    /**
-     * The logging logger.
-     */
+    /** The log */
     private static Log log = LogFactory.getLog(AbstractDataSourceFactory.class);
 
     /**
@@ -200,5 +202,36 @@ public abstract class AbstractDataSourceFactory
                 throw new TorqueException(e);
             }
         }
+    }
+    
+    /**
+     * Initializes the ConnectionPoolDataSource.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     * @return a configured <code>ConnectionPoolDataSource</code>
+     */
+    protected ConnectionPoolDataSource initCPDS(Configuration configuration)
+        throws TorqueException
+    {
+        log.debug("Starting initCPDS");
+        ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
+        Configuration c = Torque.getConfiguration();
+
+        if (c == null)
+        {
+            log.warn("Global Configuration not set,"
+                    + " no Default connection pool data source configured!");
+        }
+        else
+        {
+            Configuration conf = c.subset(DEFAULT_CONNECTION_KEY);
+            applyConfiguration(conf, cpds);
+        }
+            
+        Configuration conf = configuration.subset(CONNECTION_KEY);
+        applyConfiguration(conf, cpds);
+        
+        return cpds;
     }
 }

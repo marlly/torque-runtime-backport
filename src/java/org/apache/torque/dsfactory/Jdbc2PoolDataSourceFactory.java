@@ -59,7 +59,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
 
-import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
 
 import org.apache.commons.logging.Log;
@@ -111,37 +110,6 @@ public class Jdbc2PoolDataSourceFactory
         Jdbc2PoolDataSource ds = initJdbc2Pool(configuration);
         ds.setConnectionPoolDataSource(cpds);
         this.ds = ds;
-    }
-
-    /**
-     * Initializes the ConnectionPoolDataSource.
-     *
-     * @param configuration where to read the settings from
-     * @throws TorqueException if a property set fails
-     * @return a configured <code>ConnectionPoolDataSource</code>
-     */
-    private ConnectionPoolDataSource initCPDS(Configuration configuration)
-        throws TorqueException
-    {
-        log.debug("Starting initCPDS");
-        ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
-        Configuration c = Torque.getConfiguration();
-
-        if (c == null)
-        {
-            log.warn("Global Configuration not set,"
-                    + " no Default connection pool data source configured!");
-        }
-        else
-        {
-            Configuration conf = c.subset(DEFAULT_CONNECTION_KEY);
-            applyConfiguration(conf, cpds);
-        }
-            
-        Configuration conf = configuration.subset(CONNECTION_KEY);
-        applyConfiguration(conf, cpds);
-        
-        return cpds;
     }
 
     /**
