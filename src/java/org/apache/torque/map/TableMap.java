@@ -502,20 +502,16 @@ public class TableMap implements IDMethod, java.io.Serializable
      */
     public void setPrimaryKeyMethod(String method)
     {
+        primaryKeyMethod = NO_ID_METHOD;
+
         // Validate ID generation method.
         for (int i = 0; i < VALID_ID_METHODS.length; i++)
         {
-            if (VALID_ID_METHODS[i].equals(method))
+            if (VALID_ID_METHODS[i].equalsIgnoreCase(method))
             {
                 primaryKeyMethod = method;
                 break;
             }
-        }
-
-        // Default to no ID generation method.
-        if (primaryKeyMethod != method)
-        {
-            primaryKeyMethod = NO_ID_METHOD;
         }
     }
 
