@@ -57,6 +57,8 @@ package org.apache.torque.adapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * This is used to connect to a Sybase database using Sybase's
@@ -71,6 +73,9 @@ import java.sql.Statement;
  */
 public class DBSybase extends DB
 {
+    /** date format */
+    private static final String DATE_FORMAT = "yyyyMMdd HH:mm:ss";
+
     /**
      * Empty constructor.
      */
@@ -173,5 +178,19 @@ public class DBSybase extends DB
     public int getLimitStyle()
     {
         return DB.LIMIT_STYLE_SYBASE;
+    }
+
+    /**
+     * This method overrides the JDBC escapes used to format dates
+     * using a <code>DateFormat</code>.  As of version 11, the Sybase
+     * JDBC driver does not implement JDBC 3.0 escapes.
+     *
+     * @param date the date to format
+     * @return The properly formatted date String.
+     */
+    public String getDateString(Date date)
+    {
+        char delim = getStringDelimiter();
+        return (delim + new SimpleDateFormat(DATE_FORMAT).format(date) + delim);
     }
 }
