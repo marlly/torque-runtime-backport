@@ -30,11 +30,12 @@ public class $table.JavaName $extendsBaseClass
 {
 
     #foreach ($col in $table.Columns)
-    private $col.JavaPrimitive $col.Name.toLowerCase() = null;
+    protected $col.JavaPrimitive $col.Name.toLowerCase() = null;
     #end
 
     #foreach ($col in $table.Columns)
         #set ( $cfc=$col.JavaName )
+        #set ( $cfc=$cfc.replaceFirst(".", $cfc.substring(0,1).toUpperCase()) )
         #set ( $clo=$col.Name.toLowerCase() )
         #set ( $cjtype = $col.JavaPrimitive )
 

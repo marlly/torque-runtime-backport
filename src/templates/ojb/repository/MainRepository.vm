@@ -3,29 +3,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- defining entities for include-files -->
-<!DOCTYPE MappingRepository SYSTEM "repository.dtd" [
+<!DOCTYPE descriptor-repository SYSTEM "repository.dtd" [
+<!ENTITY internal SYSTEM "repository_internal.xml">
 #foreach ($dataModel in $dataModels)
 <!ENTITY $dataModel.shortName SYSTEM "repository_${dataModel.shortName}.xml">
 #end
 ]>
 
-<MappingRepository>
+<descriptor-repository isolation-level="read-uncommitted">
 <!-- The Default JDBC Connection. If a Class does not specify its own JDBC Connection,
      the Connection specified here will be used. -->
 
-  <JdbcConnectionDescriptor id="default">
-    <dbms.name>Hsqldb</dbms.name>
-    <driver.name>${databaseDriver}</driver.name>
-    <url.protocol>jdbc</url.protocol>
-    <url.subprotocol>hsqldb</url.subprotocol>
-    <url.dbalias>../OJB</url.dbalias>
-    <!--url.dbalias>ojb-1-0/build/test/OJB</url.dbalias-->
-    <user.name>${databaseUser}</user.name>
-    <user.passwd>$!{databasePassword}</user.passwd>
-  </JdbcConnectionDescriptor>
+  <jdbc-connection-descriptor id="default"
+    platform="${ojb.platform}"
+    jdbc-level="${jdbcLevel}"
+  #if (${ojb.useJNDI} == "true")
+    jndi-datasource-name="${ojb.JNDISource}"
+  #else
+    driver="${databaseDriver}"
+    protocol="jdbc"
+    subprotocol="${database}"
+    dbalias="${databaseName}"
+  #end
+    username="${databaseUser}"
+    password="$!{databasePassword}"
+  >
+
 
   <!-- include mappings here -->
 #foreach ($dataModel in $dataModels)
-  ${dataModel.shortName};
+  &${dataModel.shortName};
 #end
-</MappingRepository>
+
+  <!-- include internal mappings here -->
+  &internal;
+</descriptor-repository>
+
+
