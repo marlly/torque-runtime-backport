@@ -64,6 +64,9 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+
+import org.apache.commons.collections.ExtendedProperties;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -71,8 +74,6 @@ import org.apache.torque.map.TableMap;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
-//!! these two have to be removed.
-import org.apache.velocity.runtime.configuration.Configuration;
 
 //!!
 // NOTE:
@@ -189,7 +190,7 @@ public class IDBroker
      */
     private static final BigDecimal ONE = new BigDecimal("1");
 
-    private Configuration configuration;
+    private ExtendedProperties configuration;
 
     private static final String DB_IDBROKER_CLEVERQUANTITY =
         "idbroker.clever.quantity";
@@ -254,7 +255,7 @@ public class IDBroker
         }
     }
 
-    public void setConfiguration(Configuration configuration)
+    public void setConfiguration(ExtendedProperties configuration)
     {
         this.configuration = configuration;
     }
