@@ -553,8 +553,10 @@ public class TorqueClassicDataSource
             }
 
             ConnectionPool pool = new ConnectionPool(cpds, username, password,
-                maxConnections, maxExpiryTime, connectionWaitTimeout,
-                logInterval);
+                maxConnections, 
+                getMaxExpiryTime(),
+                getConnectionWaitTimeout(),
+                getLogInterval());
 
             // avoid ConcurrentModificationException
             Map newPools = new HashMap(pools);
