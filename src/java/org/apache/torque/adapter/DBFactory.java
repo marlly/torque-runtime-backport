@@ -229,7 +229,7 @@ public class DBFactory
         else
         {
             throw new InstantiationException
-                ("Uknown JDBC driver: " + driver + ": Check your " +
+                ("Unknown JDBC driver: " + driver + ": Check your " +
                  "configuration file");
         }
     }
