@@ -54,6 +54,8 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.apache.torque.engine.database.transform.XmlToAppData;
@@ -77,6 +79,9 @@ public class TableTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
+        xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
+        appData = xmlToAppData.parseFile(
+            "src/test/org/apache/torque/engine/database/model/tabletest-schema.xml");
     }
 
     protected void tearDown() throws Exception
@@ -88,17 +93,57 @@ public class TableTest extends TestCase
     /**
      * test if the tables get the package name from the properties file
      */
-    public void testIdMethodHandling()
-            throws Exception
+    public void testIdMethodHandling() throws Exception
     {
-        xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
-        appData = xmlToAppData.parseFile(
-            "src/test/org/apache/torque/engine/database/model/tabletest-schema.xml");
         Database db = appData.getDatabase("iddb");
         assertEquals(IDMethod.ID_BROKER, db.getDefaultIdMethod());
         Table table = db.getTable("table_idbroker");
         assertEquals(IDMethod.ID_BROKER, table.getIdMethod());
 		Table table2 = db.getTable("table_native");
 		assertEquals(IDMethod.NATIVE, table2.getIdMethod());
+    }
+    
+    public void testSinglePk() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("singlepk");
+        List pks = table.getPrimaryKey();
+        assertTrue(pks.size() == 1);
+        Column col = (Column) pks.get(0);
+        assertEquals(col.getName(), "singlepk_id");        
+    }
+    
+    public void testMultiPk() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("multipk");
+        List pks = table.getPrimaryKey();
+        assertTrue(pks.size() == 2);
+        Column cola = (Column) pks.get(0);
+        assertEquals(cola.getName(), "multipk_a");        
+        Column colb = (Column) pks.get(1);
+        assertEquals(colb.getName(), "multipk_b");        
+    }
+ 
+    public void testSingleFk() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("singlefk");
+        ForeignKey[] fks = table.getForeignKeys();
+        assertTrue(fks.length == 1);
+        ForeignKey fk = fks[0];
+        assertEquals(fk.getForeignTableName(), "singlepk");
+        assertTrue(fk.getForeignColumns().size() == 1);
+    }
+
+    public void testMultiFk() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("multifk");
+        ForeignKey[] fks = table.getForeignKeys();
+        assertTrue(fks.length == 1);
+        ForeignKey fk = fks[0];
+        assertEquals(fk.getForeignTableName(), "multipk");
+        assertTrue(fk.getForeignColumns().size() == 2);
     }
 }

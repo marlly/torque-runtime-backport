@@ -12,6 +12,37 @@
     <column name="table_a_id" required="true" primaryKey="true" type="INTEGER" />
     <column name="col_a" type="CHAR" size="5" />
   </table>
+
+  <table name="singlepk">
+    <column name="singlepk_id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+  </table>
+
+  <table name="multipk">
+    <column name="multipk_a" required="true" primaryKey="true" type="INTEGER" />
+    <column name="multipk_b" required="true" primaryKey="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+  </table>
+
+  <table name="singlefk">
+    <column name="id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="singlepk_id" required="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+    <foreign-key foreignTable="singlepk">
+      <reference local="singlepk_id" foreign="singlepk_id"/>
+    </foreign-key>
+  </table>
+  
+  <table name="multifk">
+    <column name="id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="multipk_a" required="true" type="INTEGER" />
+    <column name="multipk_b" required="true" type="INTEGER" />
+    <column name="col_a" type="CHAR" size="5" />
+    <foreign-key foreignTable="multipk">
+      <reference local="multipk_a" foreign="multipk_a"/>
+      <reference local="multipk_b" foreign="multipk_b"/>
+    </foreign-key>
+  </table>
   
 </database>
 
