@@ -66,4 +66,120 @@
 
   </table>
 
+
+
+  <!-- =================================================== -->
+  <!-- A  T A B L E                                        -->
+  <!-- =================================================== -->
+
+  <table name="a" description="A table">
+    <column
+      name="a_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="50"
+    />
+
+  </table>
+
+  <!-- =================================================== -->
+  <!-- B  T A B L E                                        -->
+  <!-- =================================================== -->
+
+  <table name="b" description="B table">
+    <column
+      name="b_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="50"
+    />
+
+  </table>
+
+
+  <!-- =================================================== -->
+  <!-- AB  T A B L E                                       -->
+  <!-- =================================================== -->
+
+  <table name="r_ab" description="r_ab table" idMethod="none">
+    <column
+      name="a_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="b_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="50"
+    />
+
+    <foreign-key foreignTable="a">
+      <reference local="a_id" foreign="a_id"/>
+    </foreign-key>
+
+    <foreign-key foreignTable="b">
+      <reference local="b_id" foreign="b_id"/>
+    </foreign-key>
+
+  </table>
+
+  <!-- =================================================== -->
+  <!-- C  T A B L E                                       -->
+  <!-- =================================================== -->
+
+  <table name="c" description="c table contains fk to r_ab">
+    <column
+      name="c_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="a_id"
+      required="true"
+      type="INTEGER"
+    />
+    <column
+      name="b_id"
+      required="true"
+      type="INTEGER"
+    />
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="50"
+    />
+
+    <foreign-key foreignTable="r_ab">
+      <reference local="a_id" foreign="a_id"/>
+      <reference local="b_id" foreign="b_id"/>
+    </foreign-key>
+
+    <foreign-key foreignTable="b">
+      <reference local="b_id" foreign="b_id"/>
+    </foreign-key>
+
+  </table>
+
 </database>
