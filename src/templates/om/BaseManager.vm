@@ -52,7 +52,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * Static accessor for the @see #getInstanceImpl().
      *
      * @return a <code>${table.JavaName}</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     public static ${table.JavaName} getInstance()
         throws TorqueException
@@ -65,7 +65,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param id an <code>ObjectKey</code> value
      * @return a <code>${table.JavaName}</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     public static ${table.JavaName} getInstance(ObjectKey id)
         throws TorqueException
@@ -78,7 +78,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param id an <code>ObjectKey</code> value
      * @return a <code>${table.JavaName}</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     public static ${table.JavaName} getInstance(ObjectKey id, boolean fromCache)
         throws TorqueException
@@ -91,7 +91,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param ids a <code>List</code> value
      * @return a <code>List</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     public static List getInstances(List ids)
         throws TorqueException
@@ -104,7 +104,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param ids a <code>List</code> value
      * @return a <code>List</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     public static List getInstances(List ids, boolean fromCache)
         throws TorqueException
@@ -191,7 +191,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param ids a List of <code>ObjectKeys</code> value
      * @return a <code>List</code> of ${table.JavaName}s
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     protected List getInstancesImpl(List ids) 
         throws TorqueException
@@ -206,7 +206,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @param fromCache if true, look for cached ${table.JavaName}s before loading
      * from storage.
      * @return a <code>List</code> of ${table.JavaName}s
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     protected List getInstancesImpl(List ids, boolean fromCache) 
         throws TorqueException
@@ -242,7 +242,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      *
      * @param moduleIds a <code>NumberKey[]</code> value
      * @return a <code>List</code> value
-     * @exception Exception if an error occurs
+     * @exception TorqueException if an error occurs
      */
     protected List retrieveStoredOMs(List ids) 
         throws TorqueException
