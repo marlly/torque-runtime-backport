@@ -4,8 +4,6 @@
 
   <properties>
     <title>Torque - Example Configuration for a Mavenized Project</title>
-    <author email="stephenh@chase3000.com">Stephen Haberman</author>
-    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
@@ -53,9 +51,16 @@
   <p>
     Currently you must manually build the plugin by checking out Torque from CVS
     and running <code>maven plugin:install</code> from the
-    <code>src/generator/src/maven-plugin</code> directory. This will jar together 
+    <code>src/maven-plugin</code> directory. This will jar together 
     the various plugin files copy it into your <code>${maven.home}/plugins</code>
     directory.  
+  </p>
+
+  <p>
+    For consistency you should probably also install the corresponding 
+    generator and runtime jars in your local maven repository by running
+    <code>maven jar:install</code> from the <code>src/generator</code> 
+    and <code>src</code> directories respectively.
   </p>
 
 </section>
