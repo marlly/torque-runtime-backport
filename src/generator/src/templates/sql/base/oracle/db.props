@@ -46,4 +46,4 @@ suppressDefaults = false
 
 maxColumnNameLength = 30
 
-idMethod=sequence
+idMethod = sequence
