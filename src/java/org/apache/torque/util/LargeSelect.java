@@ -185,8 +185,6 @@ public class LargeSelect implements Runnable
     private String query;
     /** The database name to get from Torque. */
     private String dbName;
-    /** The connection to the database. */
-    private Connection db = null;
     /** Used to retrieve query results from Village. */
     private QueryDataSet qds = null;
 
@@ -672,6 +670,9 @@ public class LargeSelect implements Runnable
     public void run()
     {
         int size = pageSize;
+        /* The connection to the database. */
+        Connection conn = null;
+
         try
         {
             // Add 1 to memory limit to check if the query ends on a page break.
@@ -685,14 +686,14 @@ public class LargeSelect implements Runnable
             query = BasePeer.createQueryString(criteria);
 
             // Get a connection to the db.
-            db = Torque.getConnection(dbName);
+            conn = Torque.getConnection(dbName);
 
             // Execute the query.
             log.debug("run(): query = " + query);
             log.debug("run(): memoryLimit = " + memoryLimit);
             log.debug("run(): blockBegin = " + blockBegin);
             log.debug("run(): blockEnd = " + blockEnd);
-            qds = new QueryDataSet(db, query);
+            qds = new QueryDataSet(conn, query);
 
             // Continue getting rows one page at a time until the memory limit
             // is reached, all results have been retrieved, or the rest
@@ -784,7 +785,7 @@ public class LargeSelect implements Runnable
                 {
                     qds.close();
                 }
-                db.close();
+                Torque.closeConnection(conn);
             }
             catch (SQLException e)
             {
@@ -932,7 +933,7 @@ public class LargeSelect implements Runnable
      *
      * @param moreIndicator the indicator to use in place of the default
      * ("&gt;").
-      */
+     */
     public static void setMoreIndicator(String moreIndicator)
     {
         LargeSelect.moreIndicator = moreIndicator;
@@ -940,7 +941,7 @@ public class LargeSelect implements Runnable
 
     /**
      * Retrieve the more pages/records indicator.
-      */
+     */
     public static String getMoreIndicator()
     {
         return LargeSelect.moreIndicator;
@@ -1115,7 +1116,8 @@ public class LargeSelect implements Runnable
         totalPages = -1;
         totalRecords = 0;
         // todo Perhaps store the oldPageNumber and immediately restart the
-        // query. oldPageNumber = currentPageNumber;
+        // query. 
+        // oldPageNumber = currentPageNumber;
         currentPageNumber = 0;
         queryCompleted = false;
         totalsFinalized = false;
@@ -1157,6 +1159,17 @@ public class LargeSelect implements Runnable
         {
             params.put(name, value);
         }
+    }
+
+    /**
+     * Provide something useful for debugging purposes.
+     * 
+     * @return some basic information about this instance of LargeSelect.
+     */
+    public String toString()
+    {
+        return "LargeSelect - TotalRecords: " + getTotalRecords() 
+                + " TotalsFinalised: " + getTotalsFinalized();
     }
 
 }
