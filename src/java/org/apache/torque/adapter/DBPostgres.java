@@ -171,19 +171,6 @@ public class DBPostgres
     }
 
     /**
-     * This method is used to chek whether writing large objects to
-     * the DB requires a transaction.  Since this is only true for
-     * Postgres, only the DBPostgres needs to override this method and
-     * return true.
-     *
-     * @return True.
-     */
-    public boolean objectDataNeedsTrans()
-    {
-        return true;
-    }
-
-    /**
      * This method is used to chek whether the database natively
      * supports limiting the size of the resultset.
      *
