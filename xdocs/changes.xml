@@ -9,6 +9,12 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='add'>
+        Changed ojb-model task to generate Object + BaseObject (like for the torque om).
+      </action>
+      <action dev='mpoeschl' type='add'>
+        Fix package name for TorqueComponent in roleConfiguration.xml
+      </action>
       <action dev='mpoeschl' type='remove'>
         Removed PasePeer.DEFAULT_MAP_BUILDER and BasePeer.getMapBuilder()
       </action>

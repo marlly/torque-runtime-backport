@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  *
 #end
  */
-public class ${table.JavaName}
+public class ${basePrefix}${table.JavaName}
 {
   #foreach ($col in $table.Columns)
     private $col.JavaPrimitive $col.UncapitalisedJavaName;
