@@ -37,8 +37,9 @@
 
     <section name="Building">
         <p>
-          Please refer to <a href="http://jakarta.apache.org/turbine/maven/">
-          Maven</a> for instructions on building.
+          Torque has been Maven-enabled.  Please refer to the Maven
+          <a href="http://jakarta.apache.org/turbine/maven/getting-started.html">
+          Getting Started</a> document for instructions on building.
         </p>
     </section>
 
