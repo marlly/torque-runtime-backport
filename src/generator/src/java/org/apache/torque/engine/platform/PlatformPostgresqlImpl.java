@@ -109,7 +109,7 @@ public class PlatformPostgresqlImpl extends PlatformDefaultImpl
      */
     public String getAutoIncrement()
     {
-        return "SERIAL";
+        return "";
     }
     
 }

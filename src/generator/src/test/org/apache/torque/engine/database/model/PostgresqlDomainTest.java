@@ -150,9 +150,8 @@ public class PostgresqlDomainTest extends TestCase
     {
         Table table = db.getTable("native");
         Column col = table.getColumn("native_id");
-        assertEquals("SERIAL", col.getAutoIncrementString());
-        // TODO sequence or identity??
-//        assertEquals("native_id SERIAL", col.getSqlString());
+        assertEquals("", col.getAutoIncrementString());
+        assertEquals("native_id INTEGER NOT NULL ", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
