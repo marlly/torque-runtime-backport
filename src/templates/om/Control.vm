@@ -1,7 +1,7 @@
 #set ($basePath = $generator.OutputPath)
 
 #if ($targetDatabase)
-   #set ( $dbprops = $properties.load("$generator.TemplatePath/sql/base/$targetDatabase/db.props") )
+   #set ( $dbprops = $properties.load("sql/base/$targetDatabase/db.props") )
 #end
 #foreach ($dataModel in $dataModels)
 #foreach ($database in $dataModel.Databases)

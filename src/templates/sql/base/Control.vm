@@ -1,5 +1,5 @@
 #set ( $basepath = "sql/base/$targetDatabase" )
-#set ( $dbprops = $properties.load("$generator.TemplatePath/sql/base/$targetDatabase/db.props") )
+#set ( $dbprops = $properties.load("sql/base/$targetDatabase/db.props") )
 #set ( $fname= "sql/base/$targetDatabase/table.vm" )
 #set ( $fnamekeys= "sql/base/$targetDatabase/tablefk.vm" )
 #set ( $idname = "sql/id-table/idtable.$targetDatabase" )
