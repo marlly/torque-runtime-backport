@@ -28,6 +28,10 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="fix" dev="tfischer">
+      Added missing templates for msaccess. I did not test it,
+      so no idea whether msaccess is actually supported.
+    </action>
     <action type="add" dev="tfischer">
       It is now possible to generate simple Beans for Torque data objects.
       Methods are supplied to create Beans from Data object and vice versa.
