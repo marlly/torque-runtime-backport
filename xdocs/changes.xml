@@ -18,6 +18,8 @@
 <p>
   <ul>
     <li>
+      TRQ41: make getPrimaryKey return ObjectKey but getPkField return the type
+      it is.
     </li>
   </ul>
 </p>
@@ -28,6 +30,12 @@
   <ul>
     <li>
       TRQ45: Added static factory methods to create instances of SimpleKey
+    </li>
+    <li>
+      TRQS7: minor corrections for OJB template
+    </li>
+    <li>
+      TRQS13: torque.overloadKeySetters obsoleted
     </li>
     <li>
       added support for the new com.mysql.jdbc.Driver
