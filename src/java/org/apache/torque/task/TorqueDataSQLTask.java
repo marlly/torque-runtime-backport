@@ -65,8 +65,7 @@ import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToData;
 
 /**
- *  An extended Texen task used for generating SQL source from
- *  an XML data file
+ * An extended Texen task used for generating SQL source from an XML data file
  *
  * @author <a href="mailto:jvanzyl@periapt.com"> Jason van Zyl </a>
  * @author <a href="mailto:jmcnally@collab.net"> John McNally </a>
@@ -78,7 +77,7 @@ public class TorqueDataSQLTask
 {
     private String dataXmlFile;
     private String dataDTD;
-    
+
     /**
      *  The target database(s) we are generating SQL
      *  for. Right now we can only deal with a single
@@ -147,7 +146,7 @@ public class TorqueDataSQLTask
     {
         dataDTD = v;
     }
-    
+
     /**
      *  Set up the initialial context for generating the
      *  SQL from the XML schema.
@@ -158,28 +157,35 @@ public class TorqueDataSQLTask
         throws Exception
     {
         super.initControlContext();
-        
+
         AppData app = (AppData) getDataModels().elementAt(0);
         Database db = app.getDatabase();
-        
-        XmlToData dataXmlParser = new XmlToData(db, dataDTD);
-        List data = dataXmlParser.parseFile(dataXmlFile);
-        context.put("data", data);
-        
+
+        try
+        {
+            XmlToData dataXmlParser = new XmlToData(db, dataDTD);
+            List data = dataXmlParser.parseFile(dataXmlFile);
+            context.put("data", data);
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Exception parsing data XML:");
+        }
+
         // Place our model in the context.
         context.put("appData", app);
 
         // Place the target database in the context.
         context.put("targetDatabase", targetDatabase);
-        
+
         Properties p = new Properties();
         FileInputStream fis = new FileInputStream(getSqlDbMap());
         p.load(fis);
         fis.close();
-        
+
         p.setProperty(getOutputFile(), db.getName());
         p.store(new FileOutputStream(getSqlDbMap()),"Sqlfile -> Database map");
-        
+
         return context;
     }
 }
