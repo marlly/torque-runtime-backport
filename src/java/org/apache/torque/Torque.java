@@ -116,7 +116,7 @@ public class Torque
      * The default log4j category to use if the
      * the log4j.category property isn't set.
      */
-    private static final String DEFAULT_CATEGORY = "sql";
+    private static String DEFAULT_CATEGORY;
 
     /**
      * The logging category.
@@ -132,6 +132,13 @@ public class Torque
      * The connection pool monitor.
      */
     private static Monitor monitor;
+
+    static
+    {
+        String className = Torque.class.getName();
+        int i = className.lastIndexOf('.');
+        DEFAULT_CATEGORY = (i == -1 ? "default" : className.substring(0, i));
+    }
 
     /**
      * Initializes Torque.
@@ -171,7 +178,7 @@ public class Torque
         PropertyConfigurator.configure(p);
 
         Torque.setConfiguration(c);
-        Torque.setCategory(Category.getInstance("ALL"));
+        Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
         Torque.init();
     }
 
