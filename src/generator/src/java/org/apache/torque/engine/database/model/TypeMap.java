@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,7 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.sql.Types;
 
 // I don't know if the peer system deals
@@ -104,36 +105,16 @@ import java.sql.Types;
  * </pre>
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @version $Id$
  */
 public class TypeMap
 {
-    public static final String CHAR = "CHAR";
-    public static final String VARCHAR = "VARCHAR";
-    public static final String LONGVARCHAR = "LONGVARCHAR";
-    public static final String CLOB = "CLOB";
-    public static final String NUMERIC = "NUMERIC";
-    public static final String DECIMAL = "DECIMAL";
-    public static final String BIT = "BIT";
-    public static final String TINYINT = "TINYINT";
-    public static final String SMALLINT = "SMALLINT";
-    public static final String INTEGER = "INTEGER";
-    public static final String BIGINT = "BIGINT";
-    public static final String REAL = "REAL";
-    public static final String FLOAT = "FLOAT";
-    public static final String DOUBLE = "DOUBLE";
-    public static final String BINARY = "BINARY";
-    public static final String VARBINARY = "VARBINARY";
-    public static final String LONGVARBINARY = "LONGVARBINARY";
-    public static final String BLOB = "BLOB";
-    public static final String DATE = "DATE";
-    public static final String TIME = "TIME";
-    public static final String TIMESTAMP = "TIMESTAMP";
-    public static final String BOOLEANCHAR = "BOOLEANCHAR";
-    public static final String BOOLEANINT = "BOOLEANINT";
-    private static final String[] TEXT_TYPES =
+    private static final SchemaType[] TEXT_TYPES =
     {
-        CHAR, VARCHAR, LONGVARCHAR, CLOB, DATE, TIME, TIMESTAMP, BOOLEANCHAR
+        SchemaType.CHAR, SchemaType.VARCHAR, SchemaType.LONGVARCHAR, 
+        SchemaType.CLOB, SchemaType.DATE, SchemaType.TIME, 
+        SchemaType.TIMESTAMP, SchemaType.BOOLEANCHAR
     };
 
     public static final String CHAR_OBJECT_TYPE = "new String()";
@@ -270,214 +251,182 @@ public class TypeMap
     {
         if (!isInitialized)
         {
-            /*
-             * Create JDBC -> Java object mappings.
-             */
-
+            // Create JDBC -> Java object mappings.
             jdbcToJavaObjectMap = new Hashtable();
 
-            jdbcToJavaObjectMap.put(CHAR, CHAR_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(VARCHAR, VARCHAR_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(LONGVARCHAR, LONGVARCHAR_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(CLOB, CLOB_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(NUMERIC, NUMERIC_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(DECIMAL, DECIMAL_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BIT, BIT_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(TINYINT, TINYINT_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(SMALLINT, SMALLINT_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(INTEGER, INTEGER_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BIGINT, BIGINT_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(REAL, REAL_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(FLOAT, FLOAT_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(DOUBLE, DOUBLE_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BINARY, BINARY_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(VARBINARY, VARBINARY_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(LONGVARBINARY, LONGVARBINARY_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BLOB, BLOB_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(DATE, DATE_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(TIME, TIME_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(TIMESTAMP, TIMESTAMP_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BOOLEANCHAR, BOOLEANCHAR_OBJECT_TYPE);
-            jdbcToJavaObjectMap.put(BOOLEANINT, BOOLEANINT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.CHAR, CHAR_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.VARCHAR, VARCHAR_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.LONGVARCHAR, LONGVARCHAR_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.CLOB, CLOB_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.NUMERIC, NUMERIC_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.DECIMAL, DECIMAL_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BIT, BIT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.TINYINT, TINYINT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.SMALLINT, SMALLINT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.INTEGER, INTEGER_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BIGINT, BIGINT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.REAL, REAL_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.FLOAT, FLOAT_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.DOUBLE, DOUBLE_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BINARY, BINARY_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.VARBINARY, VARBINARY_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.LONGVARBINARY, LONGVARBINARY_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BLOB, BLOB_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.DATE, DATE_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.TIME, TIME_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.TIMESTAMP, TIMESTAMP_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BOOLEANCHAR, BOOLEANCHAR_OBJECT_TYPE);
+            jdbcToJavaObjectMap.put(SchemaType.BOOLEANINT, BOOLEANINT_OBJECT_TYPE);
 
-            /*
-             * Create JDBC -> native Java type mappings.
-             */
-
+            // Create JDBC -> native Java type mappings.
             jdbcToJavaNativeMap = new Hashtable();
 
-            jdbcToJavaNativeMap.put(CHAR, CHAR_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(VARCHAR, VARCHAR_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(LONGVARCHAR, LONGVARCHAR_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(CLOB, CLOB_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(NUMERIC, NUMERIC_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(DECIMAL, DECIMAL_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BIT, BIT_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(TINYINT, TINYINT_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(SMALLINT, SMALLINT_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(INTEGER, INTEGER_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BIGINT, BIGINT_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(REAL, REAL_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(FLOAT, FLOAT_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(DOUBLE, DOUBLE_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BINARY, BINARY_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(VARBINARY, VARBINARY_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(LONGVARBINARY, LONGVARBINARY_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BLOB, BLOB_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(DATE, DATE_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(TIME, TIME_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(TIMESTAMP, TIMESTAMP_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BOOLEANCHAR, BOOLEANCHAR_NATIVE_TYPE);
-            jdbcToJavaNativeMap.put(BOOLEANINT, BOOLEANINT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.CHAR, CHAR_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.VARCHAR, VARCHAR_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.LONGVARCHAR, LONGVARCHAR_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.CLOB, CLOB_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.NUMERIC, NUMERIC_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.DECIMAL, DECIMAL_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BIT, BIT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.TINYINT, TINYINT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.SMALLINT, SMALLINT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.INTEGER, INTEGER_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BIGINT, BIGINT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.REAL, REAL_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.FLOAT, FLOAT_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.DOUBLE, DOUBLE_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BINARY, BINARY_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.VARBINARY, VARBINARY_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.LONGVARBINARY, LONGVARBINARY_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BLOB, BLOB_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.DATE, DATE_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.TIME, TIME_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.TIMESTAMP, TIMESTAMP_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BOOLEANCHAR, BOOLEANCHAR_NATIVE_TYPE);
+            jdbcToJavaNativeMap.put(SchemaType.BOOLEANINT, BOOLEANINT_NATIVE_TYPE);
 
             jdbcToJavaNativeObjectMap = new Hashtable();
-            jdbcToJavaNativeObjectMap.put(BIT, BIT_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(TINYINT, TINYINT_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(SMALLINT, SMALLINT_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(INTEGER, INTEGER_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(BIGINT, BIGINT_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(REAL, REAL_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(FLOAT, FLOAT_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(DOUBLE, DOUBLE_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(BOOLEANCHAR,
+            jdbcToJavaNativeObjectMap.put(SchemaType.BIT, BIT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.TINYINT, TINYINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.SMALLINT, SMALLINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.INTEGER, INTEGER_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.BIGINT, BIGINT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.REAL, REAL_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.FLOAT, FLOAT_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.DOUBLE, DOUBLE_NATIVE_OBJECT_TYPE);
+            jdbcToJavaNativeObjectMap.put(SchemaType.BOOLEANCHAR,
                                           BOOLEANCHAR_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(BOOLEANINT,
+            jdbcToJavaNativeObjectMap.put(SchemaType.BOOLEANINT,
                                           BOOLEANINT_NATIVE_OBJECT_TYPE);
 
-            /*
-             * Create JDBC -> Village asX() mappings.
-             */
-
+            // Create JDBC -> Village asX() mappings.
             jdbcToVillageMethodMap = new Hashtable();
 
-            jdbcToVillageMethodMap.put(CHAR, CHAR_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(VARCHAR, VARCHAR_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(LONGVARCHAR, LONGVARCHAR_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(CLOB, CLOB_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(NUMERIC, NUMERIC_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(DECIMAL, DECIMAL_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BIT, BIT_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(TINYINT, TINYINT_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(SMALLINT, SMALLINT_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(INTEGER, INTEGER_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BIGINT, BIGINT_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(REAL, REAL_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(FLOAT, FLOAT_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(DOUBLE, DOUBLE_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BINARY, BINARY_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(VARBINARY, VARBINARY_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(LONGVARBINARY, LONGVARBINARY_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BLOB, BLOB_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(DATE, DATE_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(TIME, TIME_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(TIMESTAMP, TIMESTAMP_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BOOLEANCHAR, BOOLEANCHAR_VILLAGE_METHOD);
-            jdbcToVillageMethodMap.put(BOOLEANINT, BOOLEANINT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.CHAR, CHAR_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.VARCHAR, VARCHAR_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.LONGVARCHAR, LONGVARCHAR_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.CLOB, CLOB_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.NUMERIC, NUMERIC_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.DECIMAL, DECIMAL_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BIT, BIT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.TINYINT, TINYINT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.SMALLINT, SMALLINT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.INTEGER, INTEGER_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BIGINT, BIGINT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.REAL, REAL_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.FLOAT, FLOAT_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.DOUBLE, DOUBLE_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BINARY, BINARY_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.VARBINARY, VARBINARY_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.LONGVARBINARY, LONGVARBINARY_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BLOB, BLOB_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.DATE, DATE_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.TIME, TIME_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.TIMESTAMP, TIMESTAMP_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BOOLEANCHAR, BOOLEANCHAR_VILLAGE_METHOD);
+            jdbcToVillageMethodMap.put(SchemaType.BOOLEANINT, BOOLEANINT_VILLAGE_METHOD);
 
 
             jdbcToVillageObjectMethodMap = new Hashtable();
-            jdbcToVillageObjectMethodMap.put(BIT, BIT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(TINYINT,
+            jdbcToVillageObjectMethodMap.put(SchemaType.BIT, BIT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(SchemaType.TINYINT,
                                              TINYINT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(SMALLINT,
+            jdbcToVillageObjectMethodMap.put(SchemaType.SMALLINT,
                                              SMALLINT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(INTEGER,
+            jdbcToVillageObjectMethodMap.put(SchemaType.INTEGER,
                                              INTEGER_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(BIGINT,
+            jdbcToVillageObjectMethodMap.put(SchemaType.BIGINT,
                                              BIGINT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(REAL, REAL_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(FLOAT, FLOAT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(DOUBLE,
+            jdbcToVillageObjectMethodMap.put(SchemaType.REAL, REAL_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(SchemaType.FLOAT, FLOAT_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(SchemaType.DOUBLE,
                                              DOUBLE_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(BOOLEANCHAR,
+            jdbcToVillageObjectMethodMap.put(SchemaType.BOOLEANCHAR,
                                              BOOLEANCHAR_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(BOOLEANINT,
+            jdbcToVillageObjectMethodMap.put(SchemaType.BOOLEANINT,
                                              BOOLEANINT_VILLAGE_OBJECT_METHOD);
 
-            /*
-             * Create JDBC -> ParameterParser getX() mappings.
-             */
-
+            // Create JDBC -> ParameterParser getX() mappings.
             jdbcToPPMethodMap = new Hashtable();
 
-            jdbcToPPMethodMap.put(CHAR, CHAR_PP_METHOD);
-            jdbcToPPMethodMap.put(VARCHAR, VARCHAR_PP_METHOD);
-            jdbcToPPMethodMap.put(LONGVARCHAR, LONGVARCHAR_PP_METHOD);
-            jdbcToPPMethodMap.put(NUMERIC, NUMERIC_PP_METHOD);
-            jdbcToPPMethodMap.put(DECIMAL, DECIMAL_PP_METHOD);
-            jdbcToPPMethodMap.put(BIT, BIT_PP_METHOD);
-            jdbcToPPMethodMap.put(TINYINT, TINYINT_PP_METHOD);
-            jdbcToPPMethodMap.put(SMALLINT, SMALLINT_PP_METHOD);
-            jdbcToPPMethodMap.put(INTEGER, INTEGER_PP_METHOD);
-            jdbcToPPMethodMap.put(BIGINT, BIGINT_PP_METHOD);
-            jdbcToPPMethodMap.put(REAL, REAL_PP_METHOD);
-            jdbcToPPMethodMap.put(FLOAT, FLOAT_PP_METHOD);
-            jdbcToPPMethodMap.put(DOUBLE, DOUBLE_PP_METHOD);
-            jdbcToPPMethodMap.put(BINARY, BINARY_PP_METHOD);
-            jdbcToPPMethodMap.put(VARBINARY, VARBINARY_PP_METHOD);
-            jdbcToPPMethodMap.put(LONGVARBINARY, LONGVARBINARY_PP_METHOD);
-            jdbcToPPMethodMap.put(DATE, DATE_PP_METHOD);
-            jdbcToPPMethodMap.put(TIME, TIME_PP_METHOD);
-            jdbcToPPMethodMap.put(TIMESTAMP, TIMESTAMP_PP_METHOD);
-            jdbcToPPMethodMap.put(BOOLEANCHAR, BOOLEANCHAR_PP_METHOD);
-            jdbcToPPMethodMap.put(BOOLEANINT, BOOLEANINT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.CHAR, CHAR_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.VARCHAR, VARCHAR_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.LONGVARCHAR, LONGVARCHAR_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.NUMERIC, NUMERIC_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.DECIMAL, DECIMAL_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.BIT, BIT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.TINYINT, TINYINT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.SMALLINT, SMALLINT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.INTEGER, INTEGER_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.BIGINT, BIGINT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.REAL, REAL_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.FLOAT, FLOAT_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.DOUBLE, DOUBLE_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.BINARY, BINARY_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.VARBINARY, VARBINARY_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.LONGVARBINARY, LONGVARBINARY_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.DATE, DATE_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.TIME, TIME_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.TIMESTAMP, TIMESTAMP_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.BOOLEANCHAR, BOOLEANCHAR_PP_METHOD);
+            jdbcToPPMethodMap.put(SchemaType.BOOLEANINT, BOOLEANINT_PP_METHOD);
 
-            /*
-             * Create JDBC -> Java object mappings.
-             */
-
+            // Create JDBC -> Java object mappings.
             torqueTypeToJdbcTypeMap = new Hashtable();
 
-            torqueTypeToJdbcTypeMap.put(CHAR, CHAR);
-            torqueTypeToJdbcTypeMap.put(VARCHAR, VARCHAR);
-            torqueTypeToJdbcTypeMap.put(LONGVARCHAR, LONGVARCHAR);
-            torqueTypeToJdbcTypeMap.put(CLOB, CLOB);
-            torqueTypeToJdbcTypeMap.put(NUMERIC, NUMERIC);
-            torqueTypeToJdbcTypeMap.put(DECIMAL, DECIMAL);
-            torqueTypeToJdbcTypeMap.put(BIT, BIT);
-            torqueTypeToJdbcTypeMap.put(TINYINT, TINYINT);
-            torqueTypeToJdbcTypeMap.put(SMALLINT, SMALLINT);
-            torqueTypeToJdbcTypeMap.put(INTEGER, INTEGER);
-            torqueTypeToJdbcTypeMap.put(BIGINT, BIGINT);
-            torqueTypeToJdbcTypeMap.put(REAL, REAL);
-            torqueTypeToJdbcTypeMap.put(FLOAT, FLOAT);
-            torqueTypeToJdbcTypeMap.put(DOUBLE, DOUBLE);
-            torqueTypeToJdbcTypeMap.put(BINARY, BINARY);
-            torqueTypeToJdbcTypeMap.put(VARBINARY, VARBINARY);
-            torqueTypeToJdbcTypeMap.put(LONGVARBINARY, LONGVARBINARY);
-            torqueTypeToJdbcTypeMap.put(BLOB, BLOB);
-            torqueTypeToJdbcTypeMap.put(DATE, DATE);
-            torqueTypeToJdbcTypeMap.put(TIME, TIME);
-            torqueTypeToJdbcTypeMap.put(TIMESTAMP, TIMESTAMP);
-            torqueTypeToJdbcTypeMap.put(BOOLEANCHAR, CHAR);
-            torqueTypeToJdbcTypeMap.put(BOOLEANINT, INTEGER);
+            Iterator iter = SchemaType.iterator();
+            while (iter.hasNext()) 
+            {
+                SchemaType type = (SchemaType) iter.next();
+                torqueTypeToJdbcTypeMap.put(type, type);
+            }
+            torqueTypeToJdbcTypeMap.put(SchemaType.BOOLEANCHAR, SchemaType.CHAR);
+            torqueTypeToJdbcTypeMap.put(SchemaType.BOOLEANINT, SchemaType.INTEGER);
 
-            /*
-             * Create JDBC type code to torque type map.
-             */
+            // Create JDBC type code to torque type map.
             jdbcToTorqueTypeMap = new Hashtable();
 
-            jdbcToTorqueTypeMap.put(new Integer(Types.CHAR), CHAR);
-            jdbcToTorqueTypeMap.put(new Integer(Types.VARCHAR), VARCHAR);
-            jdbcToTorqueTypeMap.put(new Integer(Types.LONGVARCHAR), LONGVARCHAR);
-            jdbcToTorqueTypeMap.put(new Integer(Types.CLOB), CLOB);
-            jdbcToTorqueTypeMap.put(new Integer(Types.NUMERIC), NUMERIC);
-            jdbcToTorqueTypeMap.put(new Integer(Types.DECIMAL), DECIMAL);
-            jdbcToTorqueTypeMap.put(new Integer(Types.BIT), BIT);
-            jdbcToTorqueTypeMap.put(new Integer(Types.TINYINT), TINYINT);
-            jdbcToTorqueTypeMap.put(new Integer(Types.SMALLINT), SMALLINT);
-            jdbcToTorqueTypeMap.put(new Integer(Types.INTEGER), INTEGER);
-            jdbcToTorqueTypeMap.put(new Integer(Types.BIGINT), BIGINT);
-            jdbcToTorqueTypeMap.put(new Integer(Types.REAL), REAL);
-            jdbcToTorqueTypeMap.put(new Integer(Types.FLOAT), FLOAT);
-            jdbcToTorqueTypeMap.put(new Integer(Types.DOUBLE), DOUBLE);
-            jdbcToTorqueTypeMap.put(new Integer(Types.BINARY), BINARY);
-            jdbcToTorqueTypeMap.put(new Integer(Types.VARBINARY), VARBINARY);
-            jdbcToTorqueTypeMap.put(new Integer(Types.LONGVARBINARY), LONGVARBINARY);
-            jdbcToTorqueTypeMap.put(new Integer(Types.BLOB), BLOB);
-            jdbcToTorqueTypeMap.put(new Integer(Types.DATE), DATE);
-            jdbcToTorqueTypeMap.put(new Integer(Types.TIME), TIME);
-            jdbcToTorqueTypeMap.put(new Integer(Types.TIMESTAMP), TIMESTAMP);
+            jdbcToTorqueTypeMap.put(new Integer(Types.CHAR), SchemaType.CHAR);
+            jdbcToTorqueTypeMap.put(new Integer(Types.VARCHAR), SchemaType.VARCHAR);
+            jdbcToTorqueTypeMap.put(new Integer(Types.LONGVARCHAR), SchemaType.LONGVARCHAR);
+            jdbcToTorqueTypeMap.put(new Integer(Types.CLOB), SchemaType.CLOB);
+            jdbcToTorqueTypeMap.put(new Integer(Types.NUMERIC), SchemaType.NUMERIC);
+            jdbcToTorqueTypeMap.put(new Integer(Types.DECIMAL), SchemaType.DECIMAL);
+            jdbcToTorqueTypeMap.put(new Integer(Types.BIT), SchemaType.BIT);
+            jdbcToTorqueTypeMap.put(new Integer(Types.TINYINT), SchemaType.TINYINT);
+            jdbcToTorqueTypeMap.put(new Integer(Types.SMALLINT), SchemaType.SMALLINT);
+            jdbcToTorqueTypeMap.put(new Integer(Types.INTEGER), SchemaType.INTEGER);
+            jdbcToTorqueTypeMap.put(new Integer(Types.BIGINT), SchemaType.BIGINT);
+            jdbcToTorqueTypeMap.put(new Integer(Types.REAL), SchemaType.REAL);
+            jdbcToTorqueTypeMap.put(new Integer(Types.FLOAT), SchemaType.FLOAT);
+            jdbcToTorqueTypeMap.put(new Integer(Types.DOUBLE), SchemaType.DOUBLE);
+            jdbcToTorqueTypeMap.put(new Integer(Types.BINARY), SchemaType.BINARY);
+            jdbcToTorqueTypeMap.put(new Integer(Types.VARBINARY), SchemaType.VARBINARY);
+            jdbcToTorqueTypeMap.put(new Integer(Types.LONGVARBINARY), SchemaType.LONGVARBINARY);
+            jdbcToTorqueTypeMap.put(new Integer(Types.BLOB), SchemaType.BLOB);
+            jdbcToTorqueTypeMap.put(new Integer(Types.DATE), SchemaType.DATE);
+            jdbcToTorqueTypeMap.put(new Integer(Types.TIME), SchemaType.TIME);
+            jdbcToTorqueTypeMap.put(new Integer(Types.TIMESTAMP), SchemaType.TIMESTAMP);
 
             isInitialized = true;
         }
@@ -500,7 +449,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the Object
      */
-    public static String getJavaObject(String jdbcType)
+    public static String getJavaObject(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -517,7 +466,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the native java type
      */
-    public static String getJavaNative(String jdbcType)
+    public static String getJavaNative(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -534,7 +483,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the Object
      */
-    public static String getJavaNativeObject(String jdbcType)
+    public static String getJavaNativeObject(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -556,7 +505,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the Village asX() method
      */
-    public static String getVillageMethod(String jdbcType)
+    public static String getVillageMethod(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -573,7 +522,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the Village asX() method
      */
-    public static String getVillageObjectMethod(String jdbcType)
+    public static String getVillageObjectMethod(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -595,7 +544,7 @@ public class TypeMap
      * @param jdbcType the JDBC type
      * @return name of the ParameterParser getX() method
      */
-    public static String getPPMethod(String jdbcType)
+    public static String getPPMethod(SchemaType jdbcType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
@@ -611,14 +560,14 @@ public class TypeMap
      * @param type the torque added type
      * @return name of the the correct jdbc type
      */
-    public static String getJdbcType(String type)
+    public static SchemaType getJdbcType(SchemaType type)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
         {
             initialize();
         }
-        return (String) torqueTypeToJdbcTypeMap.get(type);
+        return (SchemaType) torqueTypeToJdbcTypeMap.get(type);
     }
 
     /**
@@ -628,14 +577,14 @@ public class TypeMap
      * @param sqlType the SQL type
      * @return Torque type constant
      */
-    public static String getTorqueType(Integer sqlType)
+    public static SchemaType getTorqueType(Integer sqlType)
     {
         // Make sure the we are initialized.
         if (!isInitialized)
         {
             initialize();
         }
-        return (String) jdbcToTorqueTypeMap.get(sqlType);
+        return (SchemaType) jdbcToTorqueTypeMap.get(sqlType);
     }
 
     /**
@@ -645,9 +594,9 @@ public class TypeMap
      * @param type The type to check.
      * @return true if the type is BOOLEANINT
      */
-    public static boolean isBooleanInt(String type)
+    public static boolean isBooleanInt(SchemaType type)
     {
-        return BOOLEANINT.equals(type);
+        return SchemaType.BOOLEANINT.equals(type);
     }
 
     /**
@@ -657,9 +606,9 @@ public class TypeMap
      * @param type The type to check.
      * @return true if the type is BOOLEANCHAR
      */
-    public static boolean isBooleanChar(String type)
+    public static boolean isBooleanChar(SchemaType type)
     {
-        return BOOLEANCHAR.equals(type);
+        return SchemaType.BOOLEANCHAR.equals(type);
     }
 
     /**
@@ -668,7 +617,7 @@ public class TypeMap
      * @param type The type to check.
      * @return true if values for the type need to be quoted.
      */
-    public static final boolean isTextType(String type)
+    public static final boolean isTextType(SchemaType type)
     {
         for (int i = 0; i < TEXT_TYPES.length; i++)
         {

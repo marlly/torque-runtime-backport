@@ -54,6 +54,7 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.xml.sax.Attributes;
 
 /**
@@ -135,6 +136,17 @@ public class Domain
         this.size = size;
     }
     
+    public Domain(Domain domain)
+    {
+        this.defaultValue = domain.getDefaultValue();
+        this.description = domain.getDescription();
+        this.name = domain.getName();
+        this.scale = domain.getScale();
+        this.size = domain.getSize();
+        this.sqlType = domain.getSqlType();
+        this.torqueType = domain.getType();
+    }
+    
     /**
      * Imports a column from an XML specification
      */
@@ -199,6 +211,16 @@ public class Domain
     {
         this.scale = scale;
     }
+    
+    /**
+     * Replaces the size if the new value is not null.
+     * 
+     * @param value The size to set.
+     */
+    public void replaceScale(String value)
+    {
+        this.scale = StringUtils.defaultString(value, getScale());
+    }
 
     /**
      * @return Returns the size.
@@ -214,6 +236,16 @@ public class Domain
     public void setSize(String size)
     {
         this.size = size;
+    }
+    
+    /**
+     * Replaces the size if the new value is not null.
+     * 
+     * @param value The size to set.
+     */
+    public void replaceSize(String value)
+    {
+        this.size = StringUtils.defaultString(value, getSize());
     }
 
     /**
@@ -241,6 +273,17 @@ public class Domain
     }
     
     /**
+     * Replaces the default value if the new value is not null.
+     * 
+     * @param value The defaultValue to set.
+     */
+    public void replaceType(String value)
+    {
+        this.torqueType = SchemaType.getEnum(
+                StringUtils.defaultString(value, getType().getName()));
+    }
+    
+    /**
      * @return Returns the defaultValue.
      */
     public String getDefaultValue()
@@ -254,6 +297,16 @@ public class Domain
     public void setDefaultValue(String defaultValue)
     {
         this.defaultValue = defaultValue;
+    }
+    
+    /**
+     * Replaces the default value if the new value is not null.
+     * 
+     * @param value The defaultValue to set.
+     */
+    public void replaceDefaultValue(String value)
+    {
+        this.defaultValue = StringUtils.defaultString(value, getDefaultValue());
     }
 
     /**
@@ -272,4 +325,26 @@ public class Domain
         this.sqlType = sqlType;
     }
 
+    /**
+     * Return the size and scale in brackets for use in an sql schema.
+     * 
+     * @return size and scale or an empty String if there are no values 
+     *         available.
+     */
+    public String printSize()
+    {
+        if (size != null && scale != null) 
+        {
+            return '(' + size + ',' + scale + ')';
+        }
+        else if (size != null) 
+        {
+            return '(' + size + ')';
+        }
+        else
+        {
+            return "";
+        }
+    }
+    
 }

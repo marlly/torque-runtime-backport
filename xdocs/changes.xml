@@ -9,6 +9,9 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='remove'>
+        Remove support for idMethod=sequence and autoincrement.
+      </action>
       <action dev='mpoeschl' type='add'>
         TRQS146: Support for scale.
       </action>

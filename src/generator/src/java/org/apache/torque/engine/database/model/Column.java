@@ -84,20 +84,16 @@ public class Column
     private static Log log = LogFactory.getLog(Column.class);
     private String name;
     private String description;
+    private Domain domain = new Domain();
     private String javaName = null;
     private String javaNamingMethod;
     private boolean isNotNull = false;
-    private String size;
-    private String scale;
-    /** type as defined in schema.xml */
-    private String torqueType;
     private String javaType;
     private Table parentTable;
     private int position;
     private boolean isPrimaryKey = false;
     private boolean isUnique = false;
     private boolean isAutoIncrement = false;
-    private String defaultValue;
     private List referrers;
     // only one type is supported currently, which assumes the
     // column either contains the classnames or a key to
@@ -165,15 +161,12 @@ public class Column
         String dom = attrib.getValue("domain");
         if (StringUtils.isNotEmpty(dom)) 
         {
-            Domain domain = getTable().getDatabase().getDomain(dom);
-            size = domain.getSize();
-            scale = domain.getScale();
-            setType(domain.getType().getName());
-            defaultValue = domain.getDefaultValue();
+            domain = new Domain(getTable().getDatabase().getDomain(dom));
         } 
         else
         {
-            setType(DEFAULT_TYPE);
+            domain = new Domain();
+            domain.setType(DEFAULT_TYPE);
         }
         //Name
         name = attrib.getValue("name");
@@ -197,10 +190,10 @@ public class Column
         //Primary Key
         String primaryKey = attrib.getValue("primaryKey");
         //Avoid NullPointerExceptions on string comparisons.
-        isPrimaryKey = ("true".equals (primaryKey));
+        isPrimaryKey = ("true".equals(primaryKey));
 
         // If this column is a primary key then it can't be null.
-        if ("true".equals (primaryKey))
+        if ("true".equals(primaryKey))
         {
             isNotNull = true;
         }
@@ -215,13 +208,12 @@ public class Column
         isAutoIncrement = ("true".equals(autoIncrement));
 
         //Default column value.
-        defaultValue = StringUtils.defaultString(
-                attrib.getValue("default"), defaultValue);
+        domain.replaceDefaultValue(attrib.getValue("default"));
 
-        size = StringUtils.defaultString(attrib.getValue("size"), size);
-        scale = StringUtils.defaultString(attrib.getValue("scale"), scale);
+        domain.replaceSize(attrib.getValue("size"));
+        domain.replaceScale(attrib.getValue("scale"));
 
-        setType(StringUtils.defaultString(attrib.getValue("type"), torqueType));
+        domain.replaceType(attrib.getValue("type"));
 
         inheritanceType = attrib.getValue("inheritance");
         isInheritance = (inheritanceType != null
@@ -523,7 +515,7 @@ public class Column
      */
     public ForeignKey getForeignKey()
     {
-        return parentTable.getForeignKey (this.name);
+        return parentTable.getForeignKey(this.name);
     }
 
     /**
@@ -535,7 +527,6 @@ public class Column
         ForeignKey fk = getForeignKey();
         return (fk == null ? null : fk.getForeignTableName());
     }
-
 
     /**
      * Utility method to get the related column of this local column if this
@@ -583,7 +574,7 @@ public class Column
      */
     public void setType(String torqueType)
     {
-        this.torqueType = torqueType;
+        domain.setType(torqueType);
         if (torqueType.equals("VARBINARY") || torqueType.equals("BLOB"))
         {
             needsTransactionInPostgres = true;
@@ -595,7 +586,7 @@ public class Column
      */
     public Object getType()
     {
-        return TypeMap.getJdbcType(torqueType);
+        return TypeMap.getJdbcType(domain.getType()).getName();
     }
 
     /**
@@ -603,7 +594,7 @@ public class Column
      */
     public Object getTorqueType()
     {
-        return torqueType;
+        return domain.getType().getName();
     }
 
     /**
@@ -613,7 +604,7 @@ public class Column
      */
     public boolean isString()
     {
-        return (torqueType.indexOf ("CHAR") != -1);
+        return (domain.getType().getName().indexOf ("CHAR") != -1);
     }
 
     /**
@@ -622,6 +613,7 @@ public class Column
      */
     public boolean needEscapedValue()
     {
+        String torqueType = domain.getType().getName();
         return (torqueType != null) &&
                 ( torqueType.equals("VARCHAR")
                         || torqueType.equals("LONGVARCHAR")
@@ -661,21 +653,21 @@ public class Column
             result.append(" required=\"false\"");
         }
 
-        result.append(" type=\"").append(torqueType).append('"');
+        result.append(" type=\"").append(domain.getType().getName()).append('"');
 
-        if (size != null)
+        if (domain.getSize() != null)
         {
-            result.append(" size=\"").append(size).append('"');
+            result.append(" size=\"").append(domain.getSize()).append('"');
         }
 
-        if (scale != null)
+        if (domain.getScale() != null)
         {
-            result.append(" scale=\"").append(scale).append('"');
+            result.append(" scale=\"").append(domain.getScale()).append('"');
         }
         
-        if (defaultValue != null)
+        if (domain.getDefaultValue() != null)
         {
-            result.append(" default=\"").append(defaultValue).append('"');
+            result.append(" default=\"").append(domain.getDefaultValue()).append('"');
         }
 
         if (isInheritance())
@@ -695,7 +687,7 @@ public class Column
      */
     public String getSize()
     {
-        return size;
+        return domain.getSize();
     }
 
     /**
@@ -703,7 +695,7 @@ public class Column
      */
     public void setSize(String newSize)
     {
-        size = newSize;
+        domain.setSize(newSize);
     }
 
     /**
@@ -711,7 +703,7 @@ public class Column
      */
     public String getScale()
     {
-        return scale;
+        return domain.getScale();
     }
 
     /**
@@ -719,7 +711,7 @@ public class Column
      */
     public void setScale(String newScale)
     {
-        scale = newScale;
+        domain.setScale(newScale);
     }
     
     /**
@@ -730,18 +722,7 @@ public class Column
      */
     public String printSize()
     {
-        if (size != null && scale != null) 
-        {
-            return '(' + size + ',' + scale + ')';
-        }
-        else if (size != null) 
-        {
-            return '(' + size + ')';
-        }
-        else
-        {
-            return "";
-        }
+        return domain.printSize();
     }
 
     /**
@@ -752,17 +733,17 @@ public class Column
      public String getDefaultSetting()
      {
          StringBuffer dflt = new StringBuffer(0);
-         if (defaultValue != null)
+         if (domain.getDefaultValue() != null)
          {
              dflt.append("default ");
-             if (TypeMap.isTextType(torqueType))
+             if (TypeMap.isTextType(domain.getType()))
              {
                  // TODO: Properly SQL-escape the text.
-                 dflt.append('\'').append(defaultValue).append('\'');
+                 dflt.append('\'').append(domain.getDefaultValue()).append('\'');
              }
              else
              {
-                 dflt.append(defaultValue);
+                 dflt.append(domain.getDefaultValue());
              }
          }
          return dflt.toString();
@@ -773,7 +754,7 @@ public class Column
      */
     public void setDefaultValue(String def)
     {
-        defaultValue = def;
+        domain.setDefaultValue(def);
     }
 
     /**
@@ -781,7 +762,7 @@ public class Column
      */
     public String getDefaultValue()
     {
-        return defaultValue;
+        return domain.getDefaultValue();
     }
 
     /**
@@ -821,36 +802,36 @@ public class Column
 
         if (size != null)
         {
-            this.size = size;
+            domain.setSize(size);
         }
 
         if (tn.indexOf ("CHAR") != -1)
         {
-            torqueType = "VARCHAR";
+            domain.setType(SchemaType.VARCHAR);
         }
         else if (tn.indexOf ("INT") != -1)
         {
-            torqueType = "INTEGER";
+            domain.setType(SchemaType.INTEGER);
         }
         else if (tn.indexOf ("FLOAT") != -1)
         {
-            torqueType = "FLOAT";
+            domain.setType(SchemaType.FLOAT);
         }
         else if (tn.indexOf ("DATE") != -1)
         {
-            torqueType = "DATE";
+            domain.setType(SchemaType.DATE);
         }
         else if (tn.indexOf ("TIME") != -1)
         {
-            torqueType = "TIMESTAMP";
+            domain.setType(SchemaType.TIMESTAMP);
         }
         else if (tn.indexOf ("BINARY") != -1)
         {
-            torqueType = "LONGVARBINARY";
+            domain.setType(SchemaType.LONGVARBINARY);
         }
         else
         {
-            torqueType = "VARCHAR";
+            domain.setType(SchemaType.VARCHAR);
         }
     }
 
@@ -862,7 +843,7 @@ public class Column
      */
     public String getJavaObject()
     {
-        return TypeMap.getJavaObject(torqueType);
+        return TypeMap.getJavaObject(domain.getType());
     }
 
     /**
@@ -873,7 +854,7 @@ public class Column
      */
     public String getJavaPrimitive()
     {
-        return TypeMap.getJavaNative(torqueType);
+        return TypeMap.getJavaNative(domain.getType());
     }
 
     /**
@@ -886,10 +867,10 @@ public class Column
      */
     public String getJavaNative()
     {
-        String jtype = TypeMap.getJavaNativeObject(torqueType);
+        String jtype = TypeMap.getJavaNativeObject(domain.getType());
         if (isUsePrimitive())
         {
-            jtype = TypeMap.getJavaNative(torqueType);
+            jtype = TypeMap.getJavaNative(domain.getType());
         }
 
         return jtype;
@@ -901,10 +882,10 @@ public class Column
      */
     public String getVillageMethod()
     {
-        String vmethod = TypeMap.getVillageObjectMethod(torqueType);
+        String vmethod = TypeMap.getVillageObjectMethod(domain.getType());
         if (isUsePrimitive())
         {
-            vmethod = TypeMap.getVillageMethod(torqueType);
+            vmethod = TypeMap.getVillageMethod(domain.getType());
         }
 
         return vmethod;
@@ -916,7 +897,7 @@ public class Column
      */
     public String getParameterParserMethod()
     {
-        return TypeMap.getPPMethod(torqueType);
+        return TypeMap.getPPMethod(domain.getType());
     }
 
     /**
@@ -925,7 +906,7 @@ public class Column
      */
     public boolean isBooleanInt()
     {
-        return TypeMap.isBooleanInt(torqueType);
+        return TypeMap.isBooleanInt(domain.getType());
     }
 
     /**
@@ -934,7 +915,7 @@ public class Column
      */
     public boolean isBooleanChar()
     {
-        return TypeMap.isBooleanChar(torqueType);
+        return TypeMap.isBooleanChar(domain.getType());
     }
 
     /**
