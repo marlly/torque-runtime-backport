@@ -3,7 +3,7 @@ package org.apache.torque.task;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -126,13 +126,6 @@ public class TorqueDataModelTask extends TexenTask
      */
     protected String sqldbmap;
 
-    /**
-     * The path to properties file containing db idiosyncrasies is
-     * constructed by appending the "getTargetDatabase()/db.props to this path.
-     * @deprecated replaced by the platform package
-     */
-    private String basePathToDbProps;
-
     /** The target database(s) we are generating SQL for. */
     private String targetDatabase;
 
@@ -250,31 +243,6 @@ public class TorqueDataModelTask extends TexenTask
     public void setTargetPackage(String v)
     {
         targetPackage = v;
-    }
-
-    /**
-     * The path to properties file containing db idiosyncrasies is
-     * constructed by appending the "getTargetDatabase()/db.props to this path.
-     *
-     * @return basepath to db.props
-     * @deprecated replaced by the platform package
-     */
-    public String getBasePathToDbProps()
-    {
-        return basePathToDbProps;
-    }
-
-    /**
-     * The path to properties file containing db idiosyncrasies is
-     * constructed by appending the "getTargetDatabase()/db.props
-     * to this path.
-     *
-     * @param v basepath to db.props
-     * @deprecated replaced by the platform package
-     */
-    public void setBasePathToDbProps(String  v)
-    {
-        this.basePathToDbProps = v;
     }
 
     /**

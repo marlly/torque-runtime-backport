@@ -134,7 +134,6 @@
     <j:choose>
       <j:when test="${torque.useClasspath}">
         <torque-sql
-          basePathToDbProps="sql/base/"
           contextProperties="${torque.contextProperties}"
           controlTemplate="${torque.template.sql}"
           idTableXMLFile="${torque.idTableXMLFile}"
@@ -151,7 +150,6 @@
       </j:when>
       <j:otherwise>
         <torque-sql
-          basePathToDbProps="sql/base/"
           contextProperties="${torque.contextProperties}"
           controlTemplate="${torque.template.sql}"
           idTableXMLFile="${torque.idTableXMLFile}"

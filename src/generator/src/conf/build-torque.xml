@@ -177,7 +177,6 @@
   <target name="sql-classpath" if="torque.internal.useClasspath">
     <echo message="loading templates from classpath"/>
     <torque-sql
-      basePathToDbProps="sql/base/"
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.sql}"
       idTableXMLFile="${torque.idTableXMLFile}"
@@ -196,7 +195,6 @@
   <target name="sql-template" unless="torque.internal.useClasspath">
     <echo message="loading templates from ${torque.templatePath}"/>
     <torque-sql
-      basePathToDbProps="sql/base/"
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.sql}"
       idTableXMLFile="${torque.idTableXMLFile}"
