@@ -879,10 +879,10 @@ public abstract class BasePeer implements java.io.Serializable
                     rec.setValue( colMap.getColumnName(),
                                   (BigDecimal)obj );
                 }
-                else if ( obj instanceof Long)
+                else if ( obj instanceof Boolean)
                 {
                     rec.setValue( colMap.getColumnName(),
-                                  criteria.getLong(key) );
+                                   criteria.getBoolean(key) ? 1 : 0);
                 }
                 else if ( obj instanceof java.util.Date)
                 {
@@ -899,6 +899,16 @@ public abstract class BasePeer implements java.io.Serializable
                     rec.setValue( colMap.getColumnName(),
                                   criteria.getDouble(key) );
                 }
+                else if ( obj instanceof Byte)
+                {
+                    rec.setValue( colMap.getColumnName(),
+                                  ((Byte) obj).byteValue() );
+                }
+                else if ( obj instanceof Long)
+                {
+                    rec.setValue( colMap.getColumnName(),
+                                  criteria.getLong(key) );
+                }
                 else if ( obj instanceof Hashtable )
                 {
                     rec.setValue( colMap.getColumnName(),
@@ -908,11 +918,6 @@ public abstract class BasePeer implements java.io.Serializable
                 {
                     rec.setValue( colMap.getColumnName(),
                                   (byte[])obj);
-                }
-                else if ( obj instanceof Boolean)
-                {
-                    rec.setValue( colMap.getColumnName(),
-                                   criteria.getBoolean(key) ? 1 : 0);
                 }
                 shouldSave = true;
              }
