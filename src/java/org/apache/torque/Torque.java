@@ -556,12 +556,12 @@ public class Torque
      *
      * @return The default pool.
      * @exception Exception A generic exception.
+     * @see #getPool(String name)
      */
     private static ConnectionPool getPool()
         throws Exception
     {
-        return getPool(configuration.getString(DATABASE_DEFAULT,
-                                               DEFAULT_NAME));
+        return getPool(getDefaultDB());
     }
 
     /**
