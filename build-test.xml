@@ -54,33 +54,26 @@
       <fileset dir="${rttest.dir}"/>
     </copy>
 
-    <antcall target="test-generative"/>
+    <antcall target="test-pre-runtime"/>
     <antcall target="test-runtime"/>
+    <antcall target="test-post-runtime"/>
 
   </target>
 
   <!-- ============================================================== -->
-  <!-- G E N E R A T I V E  T E S T S                                 -->
+  <!-- P R E   R U N T I M E   T E S T S                              -->
   <!-- ============================================================== -->
   <!-- These are the tests for the torque tests which are             -->
   <!-- primarily generative in nature.                                -->
   <!--                                                                -->
   <!-- The tests will be run from the distribution that is            -->
   <!-- produced by the build process. This is a test of Torque's      -->
-  <!-- generative abilities. We still need tests for Torque's         -->
-  <!-- runtime abilities.                                             -->
+  <!-- generative abilities.                                          -->
   <!--                                                                -->
   <!-- These are the tasks that we will be testing:                   -->
   <!--                                                                -->
   <!-- project-sql                                                    -->
   <!-- project-om                                                     -->
-  <!-- project-datadtd                                                -->
-  <!-- project-datadump                                               -->
-  <!-- project-datasql                                                -->
-  <!-- project-jdbc                                                   -->
-  <!-- project-sql-classpath                                          -->
-  <!-- project-om-classpath	                                          -->
-  <!-- project-sql2xml                                                -->
   <!--                                                                -->
   <!-- The project-sql is also another complete set of tests:         -->
   <!-- we need to run the task for each of the supported databases    -->
@@ -89,20 +82,26 @@
   <!-- ============================================================== -->
 
   <target
-    name="test-generative">
+    name="test-pre-runtime">
 
     <antcall target="test-create-db"/>
     <antcall target="test-project-sql"/>
     <antcall target="test-id-table-init-sql"/>
     <antcall target="test-project-insert-sql"/>
     <antcall target="test-project-om"/>
+  </target>
 
-    <!--
+  <!-- ============================================================== -->
+  <!-- P O S T   R U N T I M E   T E S T S                            -->
+  <!-- ============================================================== -->
+
+  <target
+    name="test-post-runtime">
+
     <antcall target="test-project-datadtd"/>
     <antcall target="test-project-datadump"/>
     <antcall target="test-project-datasql"/>
     <antcall target="test-project-jdbc"/>
-    -->
 
     <!--
     <antcall target="test-project-sql-classpath"/>
@@ -173,18 +172,42 @@
 
   <target
     name="test-project-datadtd">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-datadtd"
+      inheritAll="false">
+    </ant>
   </target>
 
   <target
     name="test-project-datadump">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-datadump"
+      inheritAll="false">
+    </ant>
   </target>
 
   <target
     name="test-project-datasql">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-datasql"
+      inheritAll="false">
+    </ant>
   </target>
 
   <target
     name="test-project-jdbc">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-jdbc"
+      inheritAll="false">
+    </ant>
   </target>
 
   <target

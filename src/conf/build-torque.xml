@@ -32,18 +32,18 @@
   <!-- when you change your XML schema.                                 -->
   <!-- ================================================================ -->
 
-  <target 
-    name="main" 
+  <target
+    name="main"
     description="==> generates sql + om classes">
-    
+
     <antcall target="project-sql"/>
     <antcall target="project-om"/>
   </target>
 
-  <target 
-    name="main-classpath" 
+  <target
+    name="main-classpath"
     description="==> generates sql + om classes">
-    
+
     <antcall target="project-sql-classpath"/>
     <antcall target="project-om-classpath"/>
   </target>
@@ -56,8 +56,8 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target 
-    name="project-sql" 
+  <target
+    name="project-sql"
     description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -67,7 +67,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef 
+    <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
       <classpath refid="classpath"/>
@@ -219,7 +219,6 @@
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
       dataXmlFile="${torque.home}/${schemaDirectory}/${project}-data.xml"
       dataDTD="${torque.home}/${schemaDirectory}/${project}-data.dtd"
-      databaseName="${databaseName}"
       targetDatabase="${database}"
     />
 
@@ -305,8 +304,8 @@
   <!-- ================================================================ -->
 
 
-  <target 
-    name="project-om" 
+  <target
+    name="project-om"
     description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -316,7 +315,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef 
+    <taskdef
       name="torque-om"
       classname="org.apache.torque.task.TorqueObjectModelTask">
       <classpath refid="classpath"/>
@@ -423,7 +422,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef 
+    <taskdef
       name="torque-om"
       classname="org.apache.torque.task.TorqueObjectModelTask">
       <classpath refid="classpath"/>
@@ -439,15 +438,15 @@
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
       targetDatabase="${database}"
     />
-  
+
   </target>
 
   <!-- =================================================================== -->
   <!-- C O M P I L E  O M                                                  -->
   <!-- =================================================================== -->
-  
-  <target 
-    name="compile" 
+
+  <target
+    name="compile"
     description="==> compiles the OM classes">
 
     <!--
@@ -482,11 +481,11 @@
   <!-- outputFile: The file where the xml schema will be written           -->
   <!-- =================================================================== -->
 
-  <target 
-    name="project-sql2xml" 
+  <target
+    name="project-sql2xml"
     description="==> creates an xml schema from an sql schema">
 
-    <taskdef 
+    <taskdef
       name="sql-xml"
       classname="org.apache.torque.task.TorqueSQLTransformTask">
       <classpath refid="classpath"/>
@@ -501,14 +500,14 @@
   <!-- ================================================================== -->
   <!-- J A V A D O C                                                      -->
   <!-- ================================================================== -->
-  
-  <target 
+
+  <target
     name="javadocs"
     description="==> generates the API documentation">
-    
+
     <mkdir dir="${torque.home}/${outputDirectory}/javadoc"/>
-    
-    <javadoc 
+
+    <javadoc
       sourcepath="${torque.home}/${outputDirectory}"
       packagenames="${targetPackage}.*"
       destdir="${outputDirectory}/javadoc"
