@@ -14,7 +14,7 @@ REAL = float
 BOOLEANCHAR = char
 BOOLEANINT = int2
 
-DOUBLE = double
+DOUBLE = double precision
 # numeric(precision, scale) / decimal(precision, scale)
 NUMERIC = numeric
 DECIMAL = decimal
