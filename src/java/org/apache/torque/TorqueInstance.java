@@ -328,7 +328,7 @@ public class TorqueInstance
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error reading adapter configuration", e);
                 throw new TorqueException(e);
             }
         }
