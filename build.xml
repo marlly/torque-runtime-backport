@@ -27,7 +27,7 @@
   <target
     name="test-classpath"
     depends="maven:jar"
-    description="==> runtime tests using the -classpath tasks (set torque.testProfile in your build.properties)">
+    description="==> runtime tests using useClasspath property (set torque.testProfile in your build.properties)">
 
     <ant antfile="build-test.xml"
          target="test-classpath"/>

@@ -58,8 +58,8 @@
 
   <target
     name="test"
-    depends="test-prepare"
     description="run the testbed">
+    <antcall target="test-prepare"/>
     <antcall target="test-pre-runtime"/>
     <antcall target="test-runtime"/>
     <antcall target="test-post-runtime"/>
@@ -67,11 +67,9 @@
 
   <target
     name="test-classpath"
-    depends="test-prepare"
-    description="run the testbed using the -classpath tasks">
-    <antcall target="test-pre-runtime-classpath"/>
-    <antcall target="test-runtime"/>
-    <antcall target="test-post-runtime-classpath"/>
+    description="run the testbed using the useClasspath property">
+    <property name="useClasspath" value="true"/>
+    <antcall target="test"/>
   </target>
 
   <!-- ============================================================== -->
@@ -106,17 +104,6 @@
     <antcall target="test-project-om"/>
   </target>
 
-  <target
-    name="test-pre-runtime-classpath">
-
-    <antcall target="test-project-doc-classpath"/>
-    <antcall target="test-create-db-classpath"/>
-    <antcall target="test-project-sql-classpath"/>
-    <antcall target="test-id-table-init-sql-classpath"/>
-    <antcall target="test-project-insert-sql"/>
-    <antcall target="test-project-om-classpath"/>
-  </target>
-
   <!-- ============================================================== -->
   <!-- P O S T   R U N T I M E   T E S T S                            -->
   <!-- ============================================================== -->
@@ -138,36 +125,11 @@
   </target>
 
   <target
-    name="test-post-runtime-classpath">
-
-    <antcall target="test-project-datadtd-classpath"/>
-    <antcall target="test-project-datadump-classpath"/>
-    <antcall target="test-project-datasql-classpath"/>
-    <antcall target="test-project-jdbc"/>
-
-    <!--
-    <antcall target="test-project-sql-classpath"/>
-    <antcall target="test-project-om-classpath"/>
-    <antcall target="test-project-sql2xml"/>
-    -->
-
-  </target>
-
-  <target
     name="test-project-sql">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-sql">
-    </ant>
-  </target>
-
-  <target
-    name="test-project-sql-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-sql-classpath">
     </ant>
   </target>
 
@@ -181,15 +143,6 @@
   </target>
 
   <target
-    name="test-id-table-init-sql-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="id-table-init-sql-classpath">
-    </ant>
-  </target>
-
-  <target
     name="test-project-doc">
     <ant
       dir="${torque.buildFileDir}"
@@ -199,29 +152,11 @@
   </target>
 
   <target
-    name="test-project-doc-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-doc-classpath">
-    </ant>
-  </target>
-
-  <target
     name="test-create-db">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-create-db">
-    </ant>
-  </target>
-
-  <target
-    name="test-create-db-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-create-db-classpath">
     </ant>
   </target>
 
@@ -250,22 +185,6 @@
     </ant>
   </target>
 
-  <target
-    name="test-project-om-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-om-classpath">
-    </ant>
-    <!-- Compile the classes -->
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="compile"
-      inheritAll="false">
-    </ant>
-  </target>
-
   <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datadtd">
@@ -277,16 +196,6 @@
     </ant>
   </target>
 
-  <target
-    name="test-project-datadtd-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-datadtd-classpath"
-      inheritAll="false">
-    </ant>
-  </target>
-
   <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datadump">
@@ -294,16 +203,6 @@
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-datadump"
-      inheritAll="false">
-    </ant>
-  </target>
-
-  <target
-    name="test-project-datadump-classpath">
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-datadump-classpath"
       inheritAll="false">
     </ant>
   </target>
@@ -321,22 +220,6 @@
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-datasql"
-      inheritAll="false">
-    </ant>
-  </target>
-
-  <target
-    name="test-project-datasql-classpath">
-    <copy
-      todir="${torque.distDir}/schema/"
-      file="${torque.distDir}/src/bookstore-data.dtd"/>
-    <copy
-      tofile="${torque.distDir}/schema/bookstore-data.xml"
-      file="${torque.distDir}/src/bookstore-bookstore-all-data.xml"/>
-    <ant
-      dir="${torque.buildFileDir}"
-      antfile="${torque.buildFile}"
-      target="project-datasql-classpath"
       inheritAll="false">
     </ant>
   </target>
@@ -398,7 +281,7 @@
       ${commons-collections.jar}
       ${commons-configuration.jar}
       ${commons-jdbc2pool.jar}
-      ${commons-lang.jar} 
+      ${commons-lang.jar}
       ${commons-logging.jar}
       ${commons-pool.jar}
       ${jcs.jar}
@@ -454,9 +337,16 @@
     <copy file="${xmlParserAPIs.jar}" todir="${test.libDir}"/>
   </target>
 
+  <!-- copy templates if they are not loaded from the classpath -->
   <target
     name="test-templates">
+<!--
+    FIXME!!
+    the id-table-init-sql loads ${templatePath}/sql/id-table/project.props
+    so the templates must be copied for now
 
+    unless="useClasspath">
+-->
     <copy todir="${test.templateDir}">
       <fileset dir="${src.dir}/templates"/>
     </copy>
