@@ -101,7 +101,7 @@ public class ForeignKey
     }
 
     /**
-     * normailizes the input of onDelete, onUpdate attributes
+     * normalizes the input of onDelete, onUpdate attributes
      */
     private String normalizeFKey(String attrib)
     {
