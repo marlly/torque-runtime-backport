@@ -136,8 +136,10 @@ public class DTDResolver implements EntityResolver
         }
         catch (IOException ex)
         {
-            ex.printStackTrace();
+            System.err.println("Couldn't read DTD specified in XML schema: " +
+                               ex.getMessage());
+            //ex.printStackTrace();
+            return new InputSource();
         }
-        return new InputSource();
     }
 }
