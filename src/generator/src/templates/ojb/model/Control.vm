@@ -20,12 +20,22 @@
         #set ( $fname = "${firstcap}.java" )
         #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
         #if (!$files.file($basePath,$path).exists())
-          $generator.parse("ojb/model/ExtensionObject.vm",$path,"table",$tbl)
+          $generator.parse("ojb/model/Object.vm",$path,"table",$tbl)
         #end
 
         #set ( $fname = "${basePrefix}${firstcap}.java" )
         #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
-        $generator.parse("ojb/model/Object.vm",$path,"table",$tbl)
+        $generator.parse("ojb/model/BaseObject.vm",$path,"table",$tbl)
+        
+        #set ( $fname = "${firstcap}Manager.java" )
+        #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
+        #if (!$files.file($basePath,$path).exists())
+          $generator.parse("ojb/model/Manager.vm",$path,"table",$tbl)
+        #end
+        
+        #set ( $fname = "${basePrefix}${firstcap}Manager.java" )
+        #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
+        $generator.parse("ojb/model/BaseManager.vm",$path,"table",$tbl)
       #end
     #end
   #end
