@@ -644,21 +644,21 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 ## getByName code
 ##
 #if (!$table.isAlias() && $addGetByNameMethod)
-    private static List fieldNames_ = null;
+    private static List fieldNames = null;
 
     /**
      * Generate a list of field names.
      */
     public static synchronized List getFieldNames()
     {
-      if (fieldNames_ == null)
+      if (fieldNames == null)
       {
-        fieldNames_ = new ArrayList();
+        fieldNames = new ArrayList();
     #foreach ($col in $table.Columns)
-        fieldNames_.add("${col.JavaName}");
+        fieldNames.add("${col.JavaName}");
     #end
       }
-      return fieldNames_;
+      return fieldNames;
     }
 
     /**
