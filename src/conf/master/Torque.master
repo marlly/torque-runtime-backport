@@ -43,7 +43,7 @@ log4j.appender.org.apache.torque.append = false
 # -------------------------------------------------------------------
 
 torque.database.default=@DATABASE_DEFAULT@
-torque.database.@DATABASE_DEFAULT@.adapter=mysql
+torque.database.@DATABASE_DEFAULT@.adapter=@DATABASE@
 
 ## Using torque's old pool
 torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.TorqueDataSourceFactory

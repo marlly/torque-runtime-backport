@@ -37,6 +37,7 @@
 
   <target name="configure">
 
+    <filter token="DATABASE" value="${torque.database.type}"/>
     <filter token="DATABASE_DRIVER" value="${torque.database.driver}"/>
     <filter token="DATABASE_URL" value="${torque.database.url}"/>
     <filter token="DATABASE_ADAPTOR" value="${torque.database.adaptor}"/>
