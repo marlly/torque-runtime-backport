@@ -21,13 +21,6 @@ o Use the digester to turn the datamodel into an object and
   use the digester with MinML so that the distribution can
   be tiny
 
-o Get rid of the Log wrapper in all the code and use the log4j
-  Category c = Category.getInstance(classname) method so
-  that torque can easily be integrated into other apps. Either
-  log4j or the logging API will dominate and I'm going to take
-  log4j. But as Ceki has noted they are so similar it is very
-  easy to change from one to the other
-
 o Some analysis on what we actually have would be prudent. Torque
   is somewhat based on the work of Scott Ambler and I would like
   to know where it is the same and where it diverges so we know
@@ -45,6 +38,9 @@ o using cursors to allow controlled access to a large set
   
   [JSS] Not really database agnostic though. Must be implemented
   conditionally.
+  
+  [JVZ] But it has to be made to work transparently. The specifics
+  should be in the RDB specific object. The adapter probably.
   
 o using proxies for large objects. if you had a user object
   that had 50 attributes it would more efficient to create
