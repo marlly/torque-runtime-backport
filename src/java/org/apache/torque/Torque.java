@@ -64,7 +64,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
-import org.apache.commons.lang.exception.NestableException;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -228,14 +227,14 @@ public class Torque implements Initializable, Configurable
         for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
         {
             //this will add any maps in this builder to the proper database map
-            BasePeer.getMapBuilder((String)i.next());
+            BasePeer.getMapBuilder((String) i.next());
         }
         // any further mapBuilders will be called/built on demand
         mapBuilders = null;
 
         // setup manager mappings
         initManagerMappings(configuration);
- 
+
         // Create monitor thread
         monitor = new Monitor();
         // Indicate that this is a system thread. JVM will quit only when there
@@ -271,7 +270,8 @@ public class Torque implements Initializable, Configurable
     {
         try
         {
-            Configuration c = (Configuration)new PropertiesConfiguration(configFile);
+            Configuration c = (Configuration)
+                    new PropertiesConfiguration(configFile);
             init(c);
         }
         catch (IOException e)
@@ -324,17 +324,18 @@ public class Torque implements Initializable, Configurable
 
         Iterator keys = configuration.getKeys();
 
-        while(keys.hasNext())
+        while (keys.hasNext())
         {
-            String key = (String)keys.next();
+            String key = (String) keys.next();
 
-            if(key.startsWith(MANAGER_PREFIX) && key.endsWith(CLASSNAME_SUFFIX))
+            if (key.startsWith(MANAGER_PREFIX)
+                    && key.endsWith(CLASSNAME_SUFFIX))
             {
                 String managerKey = key.substring(pref, key.length() - suff);
-                if (! managers.containsKey(managerKey))
+                if (!managers.containsKey(managerKey))
                 {
                     String managerClass = configuration.getString(key);
-                    category.info("Added Mapping for Manager: " + managerKey 
+                    category.info("Added Mapping for Manager: " + managerKey
                                   + " -> " + managerClass);
                     try
                     {
@@ -344,7 +345,7 @@ public class Torque implements Initializable, Configurable
                     {
                         // the exception thrown here seems to disappear.
                         // At least when initialized by Turbine, should find
-                        // out why, but for now make sure it is noticed. 
+                        // out why, but for now make sure it is noticed.
                         category.error(e);
                         e.printStackTrace();
                         throw e;
@@ -507,8 +508,8 @@ public class Torque implements Initializable, Configurable
         }
         else
         {
-            Enumeration cats =  Category.getCurrentCategories();
-            while(cats.hasMoreElements())
+            Enumeration cats = Category.getCurrentCategories();
+            while (cats.hasMoreElements())
             {
                 Category c = (Category) cats.nextElement();
                 if (!(c.getAllAppenders() instanceof NullEnumeration))
@@ -517,7 +518,6 @@ public class Torque implements Initializable, Configurable
                 }
             }
         }
-
         return false;
     }
 
@@ -529,7 +529,7 @@ public class Torque implements Initializable, Configurable
      */
     public static AbstractBaseManager getManager(String name)
     {
-        return (AbstractBaseManager)managers.get(name);
+        return (AbstractBaseManager) managers.get(name);
     }
 
     /**
@@ -562,7 +562,7 @@ public class Torque implements Initializable, Configurable
             {
                 try
                 {
-                    ((ConnectionPool)pool.next()).shutdown();
+                    ((ConnectionPool) pool.next()).shutdown();
                 }
                 catch (Exception ignored)
                 {
@@ -570,7 +570,6 @@ public class Torque implements Initializable, Configurable
                 }
             }
         }
-
         // shutdown the thread
         monitor = null;
     }
@@ -978,7 +977,7 @@ public class Torque implements Initializable, Configurable
      * {@link #registerPool(String,String,String,String,String)} method, or be
      * specified in the TurbineResources properties.  This method is used
      * internally by the service.  Under normal usage it would not be used
-     * in application code, but is public in the event the pool must be 
+     * in application code, but is public in the event the pool must be
      * accessed directly, such as to shutdown an individual pool.
      *
      * @param name The name of the pool to get.
@@ -1057,7 +1056,7 @@ public class Torque implements Initializable, Configurable
     {
         public void run()
         {
-            int logInterval = configuration.getInt("database.logInterval",0);
+            int logInterval = configuration.getInt("database.logInterval", 0);
             StringBuffer buf = new StringBuffer();
             while (logInterval > 0)
             {
