@@ -1,0 +1,26 @@
+This is a simple patch for the Torque generator which allows Torque to
+build an additional per-Schema class. This class has only one static
+method, init() which adds all the mapbuilders from the schema to the
+Torque core.
+
+I needed this to have a defined way to find all the tables defined in
+a schema from a database. As normally, the map builders are registered
+when a peer is used for the first time, I could not see a way to get a
+list of all defined peers without this.
+
+After you applied the patch to torque and rebuilt your schema, you
+will get an additional package, called db with a single class called
+<your database name capitalised>Init. If your database is called
+"petshop", your class will be called PetshopInit.
+
+After invoking PetShopInit.init(), all your peers will have their map
+builders registered with Torque.
+
+If you have questions, feel free to contact me:
+
+			Henning Schmiedehausen
+			INTERMETA Gesellschaft fuer Mehrwertdienste mbH
+
+			Mail: hps@intermeta.de
+
+

@@ -1,0 +1,86 @@
+diff --exclude=CVS -Nurb db-torque-BRANCH31/src/generator/src/java/org/apache/torque/engine/database/model/Database.java db-torque-BRANCH31.p/src/generator/src/java/org/apache/torque/engine/database/model/Database.java
+--- db-torque-BRANCH31/src/generator/src/java/org/apache/torque/engine/database/model/Database.java	2003-08-04 07:30:29.000000000 +0200
++++ db-torque-BRANCH31.p/src/generator/src/java/org/apache/torque/engine/database/model/Database.java	2003-10-13 00:14:41.000000000 +0200
+@@ -60,6 +60,8 @@
+ import java.util.List;
+ import java.util.Properties;
+ 
++import org.apache.commons.lang.StringUtils;
++
+ import org.apache.torque.engine.EngineException;
+ 
+ import org.xml.sax.Attributes;
+@@ -122,6 +124,11 @@
+         return name;
+     }
+ 
++    public String getJavaName()
++    {
++        return StringUtils.capitalise(name);
++    }
++
+     /**
+      * Set the name of the Database
+      *
+diff --exclude=CVS -Nurb db-torque-BRANCH31/src/generator/src/templates/om/Control.vm db-torque-BRANCH31.p/src/generator/src/templates/om/Control.vm
+--- db-torque-BRANCH31/src/generator/src/templates/om/Control.vm	2003-08-07 15:13:00.000000000 +0200
++++ db-torque-BRANCH31.p/src/generator/src/templates/om/Control.vm	2003-10-13 00:12:20.000000000 +0200
+@@ -17,10 +17,12 @@
+     #set ( $pkbase = "${package}" )
+     #set ( $pkpeer = "${package}" )
+     #set ( $pkmap = "${package}.map" )
++    #set ( $pkdb   = "${package}.db" )
+ 
+     $pkbase
+     $pkpeer
+     $pkmap
++    $pkdb
+ 
+     #set ( $path = $strings.getPackageAsPath($pkpeer) )
+     $files.mkdir("$outputDirectory/$path")
+@@ -28,9 +30,16 @@
+     #set ( $path = $strings.getPackageAsPath($pkmap) )
+     $files.mkdir("$outputDirectory/$path")
+ 
++    #set ( $path = $strings.getPackageAsPath($pkdb) )
++    $files.mkdir("$outputDirectory/$path")
++
+     #set ( $path = $strings.getPackageAsPath($pkbase) )
+     $files.mkdir("$outputDirectory/$path")
+ 
++    #set ( $fname = "${database.JavaName}Init.java" )
++    #set ( $path = "${strings.getPackageAsPath($pkdb)}$fname" )
++    $generator.parse("om/Database.vm", $path, "database", $database)
++
+     #foreach ($tbl in $database.Tables)
+       #if (!$tbl.isForReferenceOnly())
+         $tbl.Name
+diff --exclude=CVS -Nurb db-torque-BRANCH31/src/generator/src/templates/om/Database.vm db-torque-BRANCH31.p/src/generator/src/templates/om/Database.vm
+--- db-torque-BRANCH31/src/generator/src/templates/om/Database.vm	1970-01-01 01:00:00.000000000 +0100
++++ db-torque-BRANCH31.p/src/generator/src/templates/om/Database.vm	2003-10-13 00:18:52.000000000 +0200
+@@ -0,0 +1,25 @@
++package ${package}.db;
++
++#foreach ($tbl in $database.Tables)
++    #if (!$tbl.isForReferenceOnly())
++        #set ( $firstcap=$tbl.JavaName )
++import ${package}.${firstcap}Peer;
++    #end
++#end
++
++import org.apache.torque.TorqueException;
++
++public class ${database.JavaName}Init
++{
++	public static final void init()
++		throws TorqueException
++	{
++#foreach ($tbl in $database.Tables)
++    #if (!$tbl.isForReferenceOnly())
++        #set ( $firstcap=$tbl.JavaName )
++        ${firstcap}Peer.getMapBuilder();
++    #end
++#end
++        }
++}
++
