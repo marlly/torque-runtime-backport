@@ -10,12 +10,12 @@
     name="jar">
     
     <property name="build.dir" value="target"/>
-    <property name="build.dest" value="${build.dir}/classes"/>
+    <property name="build.dest" value="${maven.build.dir}/classes"/>
     
-    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${maven.build.dest}"/>
     
     <javac
-      destdir="${build.dest}"
+      destdir="${maven.build.dest}"
       excludes="**/package.html"
       debug="false"
       deprecation="false"
@@ -26,15 +26,11 @@
     </javac>
 
     <jar
-      jarfile="${build.dir}/${final.name}.jar"
-      basedir="${build.dest}"
+      jarfile="${maven.build.dir}/${maven.final.name}.jar"
+      basedir="${maven.build.dest}"
       excludes="**/package.html"
     />
-
+    
   </target>
 
-  
-  <nag from="turbine-torque-dev@jakarta.apache.org" to="turbine-torque-dev@jakarta.apache.org"/>
-
-  
 </project>

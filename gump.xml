@@ -23,11 +23,13 @@
     <depend project="xml-xerces"/>
 
     <depend project="commons-collections"/>
+    <depend project="commons-configuration"/>
     <depend project="commons-lang"/>
     <depend project="commons-pool"/>
     <depend project="jdbc"/>
     <depend project="jakarta-log4j"/>
     <depend project="jakarta-turbine-stratum"/>
+    <depend project="jakarta-turbine-jcs"/>
     <depend project="jakarta-velocity"/>
     <depend project="village"/>
     <depend project="xml-xerces"/>
@@ -40,14 +42,11 @@
     <home nested="target"/>
     <jar name="torque-@@DATE@@.jar"/>
     <javadoc nested="docs/apidocs"/>
+
+    <nag from="turbine-torque-dev@jakarta.apache.org"
+         to="turbine-torque-dev@jakarta.apache.org"/>
+
     
   </project>
   
-  <!-- Transform the Maven project descriptor into a form -->
-  <!-- that can be digested by Gump.                      -->
-  
-  <project name="jakarta-turbine-torque-gump-descriptor">
-    <ant buildfile="build-maven.xml" target="gump-descriptor"/>
-  </project>
-
 </module>
