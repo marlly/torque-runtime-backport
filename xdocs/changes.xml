@@ -4,26 +4,222 @@
 
   <properties>
     <title>Torque</title>
-    <author email="jvanzyl@apache.com">Jason van Zyl</author>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
   </properties>
 
   <body>
 
+<section name="Torque 3.0-b3">
+
+<p>
+  Changes between Torque 2.1 (old version from turbine-2 repo) and 3.0-b3.
+</p>
+
+<p>
+  This list should help to move your application from Torque 2.1 to 3.0.
+  If you find any other issues, please send an email to the developer list.
+</p>
+
+
+<subsection name="new package names">
+<table>
+  <tr>
+    <th>old name</th>
+    <th>new name</th>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.torque.*</td>
+    <td>org.apache.torque.*</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.adapter.*</td>
+    <td>org.apache.torque.adapter.*</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.services.db.TurbineDB</td>
+    <td>org.apache.torque.Torque</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.map.IDMethod</td>
+    <td>org.apache.torque.adapter.IDMethod</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.map.MapBuilder</td>
+    <td>org.apache.torque.map.MapBuilder</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.map.ColumnMap</td>
+    <td>org.apache.torque.map.ColumnMap</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.map.DatabaseMap</td>
+    <td>org.apache.torque.map.DatabaseMap</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.map.TableMap</td>
+    <td>org.apache.torque.map.TableMap</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.Persistent</td>
+    <td>org.apache.torque.om.Persistent</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.Retrievable</td>
+    <td><i>removed</i></td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.Retriever</td>
+    <td><i>removed</i></td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.RetrieverFactory</td>
+    <td><i>removed</i></td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.BaseObject</td>
+    <td>org.apache.torque.om.</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.ComboKey</td>
+    <td>org.apache.torque.om.ComboKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.DateKey</td>
+    <td>org.apache.torque.om.DateKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.NumberKey</td>
+    <td>org.apache.torque.om.NumberKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.ObjectKey</td>
+    <td>org.apache.torque.om.ObjectKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.SimpleKey</td>
+    <td>org.apache.torque.om.SimpleKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.StringKey</td>
+    <td>org.apache.torque.om.StringKey</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.om.peer.BasePeer</td>
+    <td>org.apache.torque.util.BasePeer</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.IdGenerator</td>
+    <td>org.apache.torque.oid.IdGenerator</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.AutoIncrementIdGenerator</td>
+    <td>org.apache.torque.oid.AutoIncrementIdGenerator</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.Criteria</td>
+    <td>org.apache.torque.util.Criteria</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.IDBroker</td>
+    <td>org.apache.torque.oid.IDBroker</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.IDGeneratorFactory</td>
+    <td>org.apache.torque.oid.IDGeneratorFactory</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.LargeSelect</td>
+    <td>org.apache.torque.util.LargeSelect</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.Query</td>
+    <td>org.apache.torque.util.Query</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.SequenceIdGenerator</td>
+    <td>org.apache.torque.oid.SequenceIdGenerator</td>
+  </tr>
+  <tr>
+    <td>org.apache.turbine.util.db.SqlExpression</td>
+    <td>org.apache.torque.util.SqlExpression</td>
+  </tr>
+</table>
+</subsection>
+
+<subsection name="Changes that could (will) break older environments">
+<p>
+  <ul>
+    <li>
+      API changed: Torque uses List instead of Vector. <br/>
+      e.g. BasePeer.doSelect() returns a List now
+    </li>
+    <li>
+      the pool packages has been removed <br/>
+      commons-jdbc2pool is used instead.
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+
+<subsection name="Other changes">
+<p>
+  <ul>
+    <li>
+      new idMethod NATIVE. this replaces SEQUENCE and AUTOINCREMENT
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      fixed logging when category is null.
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+</section>
+
+<!--
+</section>
     <section name="Changes">
       <p>
         <ul>
 
-          <!-- template
-          <li>
-            <strong></strong>
-            <ul>
-              <li>
-                <a href="">Reference</a>.
-              </li>
-            </ul>
-          </li>
-          -->
           <li>
             <strong>16 Apr 2002</strong>
             <ul>
@@ -51,7 +247,7 @@
               <li>
                 Modified the Oracle db.props to set the VARBINARY type
                 to BLOB because Oracle requires a length limit for RAW.
-                Suggestion by: thierry.lach NOSPAM pentamark.com on the 
+                Suggestion by: thierry.lach NOSPAM pentamark.com on the
                 Scarab mailing list.
               </li>
             </ul>
@@ -179,14 +375,14 @@
             <strong>14 Dec 2001</strong>
             <ul>
               <li>
-	        From patch submitted by Byron Foster:  Updated DBFactory to know about the other Sybase jdbc driver name.
-	        <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.18&amp;r2=1.19&amp;sortby=date&amp;diff_format=h">Reference</a>.
+            From patch submitted by Byron Foster:  Updated DBFactory to know about the other Sybase jdbc driver name.
+            <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.18&amp;r2=1.19&amp;sortby=date&amp;diff_format=h">Reference</a>.
               </li>
               <li>
-	        From patch submitted by Byron Foster:  Sybase is not fully jdbc 2.0 compliant, so the TorqueDataDumpTask.TableTool needed to be reimplemented using Village.
+            From patch submitted by Byron Foster:  Sybase is not fully jdbc 2.0 compliant, so the TorqueDataDumpTask.TableTool needed to be reimplemented using Village.
                 This provided support for any jdbc driver that Village supports ( and Torque since it is currently implemented with Village ).  The downside to this implementation is QueryDataSet
                 loads the entire result set into memory, so for large tables this may prove to be trouble.
-	        <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/task/TorqueDataDumpTask.java.diff?r1=1.5&amp;r2=1.6&amp;sortby=date&amp;diff_format=h">Reference</a>.
+            <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/task/TorqueDataDumpTask.java.diff?r1=1.5&amp;r2=1.6&amp;sortby=date&amp;diff_format=h">Reference</a>.
               </li>
               <li>
                 From patch submitted by Byron Foster:  Added missing pieces of sybase support to the repository and created a sybase-status document in notes.
@@ -376,5 +572,6 @@
         </ul>
       </p>
     </section>
+-->
   </body>
 </document>
