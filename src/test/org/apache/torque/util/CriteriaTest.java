@@ -282,7 +282,7 @@ public class CriteriaTest extends BaseTestCase
             fail("Exception thrown in DBFactory");
         }
 
-        assertEquals("TABLE.COLUMN=true", cc.toString());
+        assertEquals("TABLE.COLUMN=1", cc.toString());
     }
 }
 
