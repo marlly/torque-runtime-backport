@@ -216,7 +216,7 @@ public abstract class AbstractBaseManager
         }
     }
 
-    protected void putInstanceImpl(Persistent om)
+    protected Persistent putInstanceImpl(Persistent om)
         throws TorqueException
     {
         if (getOMClass() != null && !getOMClass().isInstance(om))
@@ -226,6 +226,7 @@ public abstract class AbstractBaseManager
                 getOMClass().getName() + " objects");
         }
 
+        Persistent oldOm = null;
         if (cache != null)
         {
             synchronized (this)
@@ -233,7 +234,9 @@ public abstract class AbstractBaseManager
                 lockCache = true;
                 try
                 {
-                    cache.put(om.getPrimaryKey().toString(), om);
+                    String key = om.getPrimaryKey().toString();
+                    oldOm = (Persistent)cache.get(key);
+                    cache.put(key, om);
                 }
                 catch (CacheException ce)
                 {
@@ -247,6 +250,7 @@ public abstract class AbstractBaseManager
                 }
             }
         }
+        return oldOm;
     }
 
     protected abstract Persistent retrieveStoredOM(ObjectKey id)
