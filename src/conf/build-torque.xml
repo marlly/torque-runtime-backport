@@ -168,9 +168,10 @@
       sqldbmap="${torque.sql.dir}/sqldb.map"
       targetDatabase="${torque.database}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.sql.includes}"
+        excludes="${torque.schema.sql.excludes}"
+      />
     </torque-sql>
   </target>
 
@@ -185,9 +186,10 @@
       sqldbmap="${torque.sql.dir}/sqldb.map"
       targetDatabase="${torque.database}"
       templatePath="${torque.templatePath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.sql.includes}"
+        excludes="${torque.schema.sql.excludes}"
+      />
     </torque-sql>
   </target>
 
@@ -219,9 +221,10 @@
       sqldbmap="${torque.sql.dir}/sqldb.map"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.doc.includes}"
+        excludes="${torque.schema.doc.excludes}"
+      />
     </torque-doc>
   </target>
 
@@ -251,9 +254,10 @@
       targetDatabase="${torque.database}"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.create-db.includes}"
+        excludes="${torque.schema.create-db.excludes}"
+      />
     </torque-data-model>
 
     <echo>
@@ -372,10 +376,10 @@
       targetDatabase="${torque.database}"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-        <exclude name="id-table-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.init-sql.includes}"
+        excludes="${torque.schema.init-sql.excludes}"
+      />
     </torque-sql>
   </target>
 
@@ -471,10 +475,10 @@
       targetDatabase="${torque.database}"
       targetPackage="${torque.targetPackage}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-        <exclude name="id-table-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.om.includes}"
+        excludes="${torque.schema.om.excludes}"
+      />
     </torque-data-model>
   </target>
 
@@ -487,10 +491,10 @@
       targetDatabase="${torque.database}"
       targetPackage="${torque.targetPackage}"
       templatePath="${torque.templatePath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-        <exclude name="id-table-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.om.includes}"
+        excludes="${torque.schema.om.excludes}"
+      />
     </torque-data-model>
   </target>
 
@@ -514,8 +518,8 @@
     <condition property="torque.internal.omzip.bin.extension">
       <equals arg1="${torque.omzip.bin.extension}" arg2="true"/>
     </condition>
-    <condition property="torque.internal.omzip.delete">
-      <equals arg1="${torque.omzip.delete}" arg2="true"/>
+    <condition property="torque.internal.omzip.deleteFiles">
+      <equals arg1="${torque.omzip.deleteFiles}" arg2="true"/>
     </condition>
   </target>
 
@@ -593,7 +597,7 @@
 
   <target 
     name="om-zip-worker-delete"
-    if="torque.internal.omzip.delete">
+    if="torque.internal.omzip.deleteFiles">
 
     <!-- Base files that typically aren't modified. -->
     <patternset id="torque.internal.omzip.pattern.base">
@@ -698,9 +702,10 @@
       sqldbmap="${torque.sql.dir}/sqldb.map"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.ojb.includes}"
+        excludes="${torque.schema.ojb.excludes}"
+      />
     </torque-data-model>
   </target>
 
@@ -723,9 +728,10 @@
       sqldbmap="${torque.sql.dir}/sqldb.map"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}">
-      <fileset dir="${torque.schema.dir}">
-        <include name="*-schema.xml"/>
-      </fileset>
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.ojb.includes}"
+        excludes="${torque.schema.ojb.excludes}"
+      />
     </torque-data-model>
   </target>
 
