@@ -9,8 +9,13 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='remove'>
+        Removed the deprecated connection pool (commons-dbcp is used as
+        default since 3.1)
+      </action>
       <action dev='mpoeschl' type='add'>
-        Changed ojb-model task to generate Object + BaseObject (like for the torque om).
+        Changed ojb-model task to generate Object + BaseObject (like for the 
+        torque om).
       </action>
       <action dev='mpoeschl' type='add'>
         Fix package name for TorqueComponent in roleConfiguration.xml

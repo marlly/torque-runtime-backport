@@ -43,7 +43,8 @@ of adapter classes which are used to account for differences among databases.
 This arrangement is no longer possible using <code>DataSource</code>, so
 the adapter must be given in the configuration.  In all examples that follow we
 will use the handle, bookstore.  This is the name attribute that is used in the
-&lt;database&gt; tag in the schema.xml.  If the name attribute is not used, then the handle would be 'default'.
+&lt;database&gt; tag in the schema.xml.  If the name attribute is not used, then
+ the handle would be 'default'.
 The adapter property is given as:
 </p>
 
@@ -89,47 +90,6 @@ The valid values are:
 
 </section>
 
-
-<section name="TorqueDataSourceFactory">
-
-<p>
-This factory gives a DataSource version of the old deprecated built-in pool.
-TorqueDataSourceFactory provides an easy way to configure this
-pool and it assumes you will have a jdbc Driver class providing the physical
-database connections.  First you must let torque know you are using this
-factory.
-</p>
-
-<source><![CDATA[
-torque.dsfactory.bookstore.factory=org.apache.torque.dsfactory.TorqueDataSourceFactory
-]]></source>
-
-<p>
-Then there are two sets of properties related to the pool configuration and 
-settings for making the connection to the database.
-</p>
-
-<source><![CDATA[
-torque.dsfactory.bookstore.pool.defaultMaxConnections=10
-torque.dsfactory.bookstore.pool.maxExpiryTime=3600
-torque.dsfactory.bookstore.pool.connectionWaitTimeout=10
-]]></source>
-
-<source><![CDATA[
-torque.dsfactory.bookstore.connection.driver = org.gjt.mm.mysql.Driver
-torque.dsfactory.bookstore.connection.url = jdbc:mysql://localhost:3306/bookstore
-torque.dsfactory.bookstore.connection.user = root
-torque.dsfactory.bookstore.connection.password = 1234
-]]></source>
-
-<p>
-The TorqueClassicDataSource used with this factory has a few other 
-configuration options which could be set above in the "pool" section, but
-the three shown are enough for most cases.  Please see the javadoc for the
-class for more information.
-</p>
-
-</section>
 
 <section name="SharedPoolDataSourceFactory">
 
