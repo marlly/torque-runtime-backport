@@ -9,9 +9,9 @@
 
   <body>
 
-<section name="Torque HEAD">
+<section name="Torque 3.0-rc1">
 <p>
-  Changes between Torque 3.0-b4 and 3.0-b5. <br/>
+  Changes between Torque 3.0-b4 and 3.0-rc1. <br/>
 </p>
 
 <subsection name="Changes that could (will) break older environments">
