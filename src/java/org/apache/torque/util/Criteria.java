@@ -1157,7 +1157,7 @@ public class Criteria extends Hashtable
     public Criteria add( String column,
                           boolean value )
     {
-        add(column, new Boolean(value) );
+        add(column, (value ? Boolean.TRUE : Boolean.FALSE));
         return this;
     }
 
