@@ -83,4 +83,21 @@
     <column name="test_key" required="true" primaryKey="true" type="FLOAT" />
   </table>
 
+  <!-- TRQS143 Generated OM will not compile if table name is Base --> 
+  <table name="BASE" javaName="BaseTable">
+    <column name="BASE_ID_CODE" primaryKey="true" required="true"
+            size="22" type="DECIMAL" javaName="Id"/>
+    <column name="BASE_NAME" size="100" type="VARCHAR" javaName="Title"/>
+    <column name="BASE_STATE_CODE" size="2" type="VARCHAR"/>
+    <column name="BASE_ZIP_CODE" size="10" type="VARCHAR"/>
+    <column name="DATA_MODIFIED_ID_CODE" size="22" type="DECIMAL"/>
+    <column name="DATA_MODIFIED_DATE" type="TIMESTAMP"/>
+    <column name="DATA_CREATOR_ID_CODE" size="22" type="DECIMAL"/>
+    <column name="DATA_CREATOR_DATE" type="TIMESTAMP"/>
+    <column name="DATA_TRANSFER_CODE" size="1" type="VARCHAR"/>
+    <column name="BASE_ADDRESS_TEXT" size="2000" type="VARCHAR"/>
+    <column name="BASE_TYPE_TEXT" size="100" type="VARCHAR"/>
+    <column name="START_DATE" type="TIMESTAMP"/>
+    <column name="END_DATE" type="TIMESTAMP"/>
+  </table>
 </database>
