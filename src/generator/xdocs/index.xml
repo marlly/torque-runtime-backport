@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque generator</title>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  </properties>
+
+  <body>
+    <section name="Torque's generation tasks">
+      <p>
+        Torque uses a single XML database schema to generate the SQL for
+        your target database and Torque's Peer-based object relation model
+        representing your XML database schema. Additionally, an HTML document
+        describing the database can be generated if you wish to make a
+        browseable version of the database schema.
+      </p>
+
+      <p>
+        Torque offers an <a href="http://jakarta.apache.org/ant">Ant</a> build
+        file (<code>build-torque.xml</code>) which could be added to your
+        project. It defines the following targets:
+        <ul>
+          <li>
+            <strong>sql</strong><br/>
+            generates SQL source from an XML schema describing a database
+            structure
+          </li>
+          <p/>
+          <li>
+            <strong>doc</strong><br/>
+            generates html or xml documentation for xml schemas
+          </li>
+          <p/>
+          <li>
+            <strong>create-db</strong><br/>
+            generates simple scripts for creating databases on various
+            platforms.
+          </li>
+          <p/>
+          <li>
+            <strong>datadtd</strong><br/>
+            generates data DTD from an XML schema describing a database
+            structure
+          </li>
+          <p/>
+          <li>
+            <strong>datadump</strong><br/>
+            dumping data from db into XML
+          </li>
+          <p/>
+          <li>
+            <strong>datasql</strong><br/>
+            generates SQL source from an XML data file
+          </li>
+          <p/>
+          <li>
+            <strong>jdbc</strong><br/>
+            generates an XML schema of an existing database from JDBC metadata
+          </li>
+          <p/>
+          <li>
+            <strong>om</strong><br/>
+            generates output by using Velocity
+          </li>
+          <p/>
+          <li>
+            <strong>insert-sql</strong><br/>
+            inserts a SQL file into its designated database
+          </li>
+          <p/>
+          <li>
+            <strong>sql2xml</strong><br/>
+            generates an xml schema from an sql schema
+          </li>
+          <p/>
+          <li>
+            <strong>id-table-init-sql</strong><br/>
+            generates the initialization sql for the id table
+          </li>
+          <p/>
+          <li>
+            <strong>ojb-model</strong><br/>
+            generates an object model for ojb (experimental)
+          </li>
+          <p/>
+          <li>
+            <strong>ojb-repository</strong><br/>
+            generates the repository for ojb (experimental)
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        Torque also offers a plugin for
+        <a href="http://jakarta.apache.org/turbine/maven">Maven</a>. See the
+        <a href="../maven-howto.html">Maven-Howto</a> for more information.
+      </p>
+    </section>
+  </body>
+</document>
