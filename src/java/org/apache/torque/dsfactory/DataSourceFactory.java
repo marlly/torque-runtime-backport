@@ -66,18 +66,20 @@ import org.apache.torque.TorqueException;
  */
 public interface DataSourceFactory
 {
+    
     /**
-     *
+     * @return the <code>DataSource</code> configured by the factory.
+     * @throws TorqueException if the source can't be returned
      */
-    public DataSource getDataSource()
-        throws TorqueException;
+    DataSource getDataSource() throws TorqueException;
 
     /**
-     * initialize
+     * Initialize the factory.
      *
+     * @param configuration where to load the factory settings from
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public void initialize(Configuration configuration) 
+    void initialize(Configuration configuration) 
         throws TorqueException;
 }

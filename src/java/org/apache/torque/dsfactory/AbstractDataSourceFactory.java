@@ -73,9 +73,18 @@ public abstract class AbstractDataSourceFactory
     /**
      * The logging category.
      */
-    protected static Category category =
-        Category.getInstance("org.apache.torque");
+    private static Category category =
+        Category.getInstance(AbstractDataSourceFactory.class);
 
+    /**
+     * Encapsulates setting configuration properties on 
+     * <code>DataSource</code> objects.
+     * 
+     * @param property the property to read from the configuration
+     * @param c the configuration to read the property from
+     * @param ds the <code>DataSource</code> instance to write the property to
+     * @throws Exception if anything goes wrong
+     */
     protected void setProperty(String property, Configuration c, Object ds)
         throws Exception
     {
@@ -114,10 +123,13 @@ public abstract class AbstractDataSourceFactory
         }
         catch (Exception e)
         {
-            category.error("Property: " + property + " value: "
-                           + c.getString(key) +
-                           " is not supported by DataSource: " +
-                           ds.getClass().getName());
+            category.error(
+                "Property: "
+                + property
+                + " value: "
+                + c.getString(key)
+                + " is not supported by DataSource: "
+                + ds.getClass().getName());
             throw e;
         }
     }

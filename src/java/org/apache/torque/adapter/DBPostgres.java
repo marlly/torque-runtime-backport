@@ -122,7 +122,7 @@ public class DBPostgres extends DB
      * which support this feature will return a result, others will
      * return null.
      *
-     * @return The most recently inserted database key.
+     * @see org.apache.torque.adapters.DB#getSequenceSql
      */
     public String getSequenceSql(Object obj)
     {
@@ -185,8 +185,14 @@ public class DBPostgres extends DB
         return DB.LIMIT_STYLE_POSTGRES;
     }
 
+    /**
+     * Override the default behavior to associate b with null?
+     * 
+     * @see org.apache.torque.adapters.DB#getBooleanString
+     */
     public String getBooleanString(Boolean b)
     {
         return (b == null) ? "0" : "1";
     }
+
 }

@@ -54,16 +54,19 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import javax.sql.DataSource;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Hashtable;
 import java.util.StringTokenizer;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.commons.configuration.Configuration;
+import org.apache.log4j.Category;
 import org.apache.torque.TorqueException;
 
 /**
@@ -78,14 +81,20 @@ public class JndiDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
+
+    /** The log. */
+    private static Category category =
+        Category.getInstance(JndiDataSourceFactory.class);
+
+    /** The path to get the resource from. */
     private String path;
+    /** The context to get the resource from. */
     private Context ctx;
 
     /**
-     *
+     * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
      */
-    public DataSource getDataSource()
-        throws TorqueException
+    public DataSource getDataSource() throws TorqueException
     {
         DataSource ds = null;
         try
@@ -100,35 +109,31 @@ public class JndiDataSourceFactory
     }
 
     /**
-     * initialize
-     *
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @see org.apache.torque.dsfactory.DataSourceFactory#initialize
      */
-    public void initialize(Configuration configuration)
-        throws TorqueException
+    public void initialize(Configuration configuration) throws TorqueException
     {
         if (configuration == null)
         {
-            throw new TorqueException("Torque cannot be initialized without " +
-                "a valid configuration. Please check the log files " +
-                    "for further details.");
+            throw new TorqueException(
+                "Torque cannot be initialized without "
+                    + "a valid configuration. Please check the log files "
+                    + "for further details.");
         }
         initJNDI(configuration);
         initDataSource(configuration);
     }
 
-
-    private void initJNDI(Configuration configuration)
-        throws TorqueException
+    private void initJNDI(Configuration configuration) throws TorqueException
     {
         category.debug("Starting initJNDI");
         Hashtable env = null;
         Configuration c = configuration.subset("jndi");
         if (c == null)
         {
-            throw new TorqueException("JndiDataSourceFactory requires a jndi "
-                + "path property to lookup the DataSource in JNDI.");
+            throw new TorqueException(
+                "JndiDataSourceFactory requires a jndi "
+                    + "path property to lookup the DataSource in JNDI.");
         }
         try
         {
@@ -209,14 +214,13 @@ public class JndiDataSourceFactory
         }
     }
 
-    private void debugCtx(Context ctx)
-        throws NamingException
+    private void debugCtx(Context ctx) throws NamingException
     {
         category.debug("InitialContext -------------------------------");
         Map env = ctx.getEnvironment();
         Iterator qw = env.keySet().iterator();
         category.debug("Environment properties:" + env.size());
-        while ( qw.hasNext() )
+        while (qw.hasNext())
         {
             Object prop = qw.next();
             category.debug("    " + prop + ": " + env.get(prop));
@@ -231,15 +235,15 @@ public class JndiDataSourceFactory
 
         // add subcontexts, if not added already
         int start = path.indexOf(':') + 1;
-        if ( start > 0 )
+        if (start > 0)
         {
             path = path.substring(start);
         }
         StringTokenizer st = new StringTokenizer(path, "/");
-        while ( st.hasMoreTokens() )
+        while (st.hasMoreTokens())
         {
             String subctx = st.nextToken();
-            if ( st.hasMoreTokens() )
+            if (st.hasMoreTokens())
             {
                 try
                 {

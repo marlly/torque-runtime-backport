@@ -72,6 +72,8 @@ import org.xml.sax.InputSource;
  */
 public class DTDResolver implements EntityResolver
 {
+
+    /** Where the DTD is located on the web. */
     private static final String WEB_SITE_DTD =
         "http://jakarta.apache.org/turbine/dtd/database.dtd";
 
@@ -111,10 +113,12 @@ public class DTDResolver implements EntityResolver
     {
         if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
-            String pkg = getClass().getName()
-                .substring(0, getClass().getName().lastIndexOf("."));
-            System.out.println("Resolver: used database.dtd from " +
-                 pkg + " package ");
+            String pkg =
+                getClass().getName().substring(
+                    0,
+                    getClass().getName().lastIndexOf("."));
+            System.out.println(
+                "Resolver: used database.dtd from " + pkg + " package ");
             return databaseDTD;
         }
         else if (systemId == null)
@@ -144,8 +148,9 @@ public class DTDResolver implements EntityResolver
         }
         catch (IOException ex)
         {
-            System.err.println("Couldn't read DTD specified in XML schema: " +
-                               ex.getMessage());
+            System.err.println(
+                "Couldn't read DTD specified in XML schema: "
+                    + ex.getMessage());
             //ex.printStackTrace();
             return new InputSource();
         }

@@ -54,14 +54,16 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import javax.sql.DataSource;
-import javax.sql.ConnectionPoolDataSource;
-
 import java.util.Iterator;
+
+import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
+
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
+import org.apache.log4j.Category;
 import org.apache.torque.TorqueException;
 import org.apache.torque.pool.TorqueClassicDataSource;
-import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able
@@ -71,14 +73,20 @@ import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
-public class TorqueDataSourceFactory 
+public class TorqueDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
+
+    /** The log. */
+    private static Category category =
+        Category.getInstance(TorqueDataSourceFactory.class);
+
+    /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
 
     /**
-     *
+     * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
      */
     public DataSource getDataSource()
     {
@@ -86,20 +94,17 @@ public class TorqueDataSourceFactory
     }
 
     /**
-     * initialize
-     *
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @see org.apache.torque.dsfactory.DataSourceFactory#initialize
      */
-    public void initialize(Configuration configuration) 
-        throws TorqueException
+    public void initialize(Configuration configuration) throws TorqueException
     {
         if (configuration == null)
         {
-            throw new TorqueException("Torque cannot be initialized without " +
-                "a valid configuration. Please check the log files " +
-                    "for further details.");
-        }        
+            throw new TorqueException(
+                "Torque cannot be initialized without "
+                    + "a valid configuration. Please check the log files "
+                    + "for further details.");
+        }
         ConnectionPoolDataSource cpds = initCPDS(configuration);
         TorqueClassicDataSource tcds = initTorqueClassic(configuration);
         tcds.setConnectionPoolDataSource(cpds);
@@ -109,7 +114,7 @@ public class TorqueDataSourceFactory
     protected ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initCPDS"); 
+        category.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = configuration.subset("connection");
         try
@@ -117,12 +122,11 @@ public class TorqueDataSourceFactory
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();
-                category.debug("Setting datasource property: " 
-                               + key);
+                String key = (String) i.next();
+                category.debug("Setting datasource property: " + key);
                 setProperty(key, c, cpds);
             }
-        }            
+        }
         catch (Exception e)
         {
             category.error("", e);
@@ -131,11 +135,11 @@ public class TorqueDataSourceFactory
         return cpds;
     }
 
-    protected TorqueClassicDataSource 
-        initTorqueClassic(Configuration configuration)
+    protected TorqueClassicDataSource initTorqueClassic(
+        Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initTorqueClassic"); 
+        category.debug("Starting initTorqueClassic");
         TorqueClassicDataSource ds = new TorqueClassicDataSource();
         Configuration c = configuration.subset("pool");
         try
@@ -143,12 +147,11 @@ public class TorqueDataSourceFactory
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();
-                category.debug("Setting datasource property: " 
-                               + key);
+                String key = (String) i.next();
+                category.debug("Setting datasource property: " + key);
                 setProperty(key, c, ds);
             }
-        }            
+        }
         catch (Exception e)
         {
             category.error("", e);

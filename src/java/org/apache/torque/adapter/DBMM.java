@@ -78,10 +78,12 @@ import java.text.SimpleDateFormat;
  */
 public class DBMM extends DB
 {
+    
+    /** A specialized date format for MySQL. */
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
     /**
-     * Empty constructor.
+     * Empty protected constructor.
      */
     protected DBMM()
     {
@@ -198,6 +200,7 @@ public class DBMM extends DB
      * using a <code>DateFormat</code>.  As of version 2.0.11, the MM
      * JDBC driver does not implement JDBC 3.0 escapes.
      *
+     * @param date the date to format
      * @return The properly formatted date String.
      */
     public String getDateString(Date date)

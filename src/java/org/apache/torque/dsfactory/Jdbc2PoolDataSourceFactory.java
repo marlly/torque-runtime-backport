@@ -54,14 +54,16 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import javax.sql.DataSource;
-import javax.sql.ConnectionPoolDataSource;
-
 import java.util.Iterator;
+
+import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
+
 import org.apache.commons.configuration.Configuration;
-import org.apache.torque.TorqueException;
-import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
+import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
+import org.apache.log4j.Category;
+import org.apache.torque.TorqueException;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able
@@ -75,10 +77,16 @@ public class Jdbc2PoolDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
+    
+    /** The log. */
+    private static Category category =
+        Category.getInstance(Jdbc2PoolDataSourceFactory.class);
+        
+    /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
 
     /**
-     *
+     * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
      */
     public DataSource getDataSource()
     {
@@ -86,26 +94,30 @@ public class Jdbc2PoolDataSourceFactory
     }
 
     /**
-     * initialize
-     *
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @see org.apache.torque.dsfactory.DataSourceFactory#initialize
      */
-    public void initialize(Configuration configuration) 
-        throws TorqueException
+    public void initialize(Configuration configuration) throws TorqueException
     {
         if (configuration == null)
         {
-            throw new TorqueException("Torque cannot be initialized without " +
-                "a valid configuration. Please check the log files " +
-                    "for further details.");
-        }        
+            throw new TorqueException(
+                "Torque cannot be initialized without a valid configuration. "
+                + "Please check the log files for further details.");
+        }
+        
         ConnectionPoolDataSource cpds = initCPDS(configuration);
         Jdbc2PoolDataSource ds = initJdbc2Pool(configuration);
         ds.setConnectionPoolDataSource(cpds);
         this.ds = ds;
     }
 
+    /**
+     * Initializes the ConnectionPoolDataSource.
+     * 
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     * @return a configured <code>ConnectionPoolDataSource</code>
+     */
     private ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
@@ -117,9 +129,8 @@ public class Jdbc2PoolDataSourceFactory
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();
-                category.debug("Setting datasource property: " 
-                               + key);
+                String key = (String) i.next();
+                category.debug("Setting datasource property: " + key);
                 setProperty(key, c, cpds);
             }
         }            
@@ -131,8 +142,7 @@ public class Jdbc2PoolDataSourceFactory
         return cpds;
     }
 
-    private Jdbc2PoolDataSource 
-        initJdbc2Pool(Configuration configuration)
+    private Jdbc2PoolDataSource initJdbc2Pool(Configuration configuration)
         throws TorqueException
     {
         category.debug("Starting initTorqueClassic"); 
@@ -143,7 +153,7 @@ public class Jdbc2PoolDataSourceFactory
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();
+                String key = (String) i.next();
                 category.debug("Setting datasource property: " 
                                + key);
                 setProperty(key, c, ds);

@@ -65,42 +65,28 @@ import java.sql.SQLException;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public class DBNone
-    extends DB
+public class DBNone extends DB
 {
+
     /**
-     * Empty constructor.
+     * Empty protected constructor.
      */
     protected DBNone()
     {
     }
 
     /**
-     * Returns a JDBC <code>Connection</code> from the
-     * <code>DriverManager</code>.
-     *
-     * @return null.
-     * @exception SQLException
+     * @return null
      */
-    public Connection getConnection() throws SQLException
+    public Connection getConnection()
     {
         return null;
     }
 
     /**
-     * Performs basic initialization.  Calls Class.forName() to assure
-     * that the JDBC driver for this adapter can be loaded.
-     *
-     * @param url The URL of the database to connect to.
-     * @param username The name of the user to use when connecting.
-     * @param password The user's password.
-     * @exception Exception The JDBC driver could not be loaded or
-     * instantiated.
+     * @see org.apache.torque.adapters.DB#init
      */
-    public void init(String url,
-                     String username,
-                     String password)
-        throws Exception
+    public void init(String url, String username, String password)
     {
     }
 
