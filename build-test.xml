@@ -34,6 +34,15 @@
     <property name="templatePath" value="no_templatePath"/>
     <antcall target="test"/>
   </target>
+  
+  <target
+    name="test-ojb"
+    description="run the testbed using ojb">
+    <antcall target="test-libs"/>
+    <antcall target="test-ojb-prepare"/>
+    <antcall target="test-ojb-generate"/>
+    <antcall target="test-ojb-compile"/>
+  </target>
 
   <!-- ============================================================== -->
   <!-- P R E   R U N T I M E   T E S T S                              -->
@@ -65,7 +74,6 @@
     <antcall target="test-id-table-init-sql"/>
     <antcall target="test-insert-sql"/>
     <antcall target="test-om"/>
-    <antcall target="test-ojb"/>
   </target>
 
   <!-- ============================================================== -->
@@ -199,13 +207,48 @@
   </target>
 
   <target
-    name="test-ojb">
+    name="test-ojb-prepare">
+    <delete>
+      <fileset dir="${torque.distDir}/schema/">
+        <include name="*"/>
+      </fileset>
+    </delete>
+    <copy
+      todir="${torque.distDir}/schema"
+      overwrite="yes">
+      <fileset dir="src/ojbtest">
+        <include name="**/*.xml"/>
+      </fileset>
+    </copy>
+    <antcall target="test-create-db"/>
+    <antcall target="test-sql"/>
+    <antcall target="test-insert-sql"/>
+  </target>
+
+  <target
+    name="test-ojb-generate">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="ojb">
     </ant>
   </target>
+  
+  <target
+    name="test-ojb-compile">
+    <mkdir dir="${torque.distDir}/bin/ojb"/>
+
+    <javac
+      debug="${torque.compile.debug}"
+      deprecation="${torque.compile.deprecation}"
+      destdir="${torque.distDir}/bin/ojb"
+      optimize="${torque.compile.optimize}"
+      srcdir="${torque.distDir}/src/ojb">
+      <classpath refid="classpath"/>
+    </javac>
+    
+  </target>
+  
 
   <!-- ============================================================== -->
   <!-- R U N T I M E  T E S T S                                       -->

@@ -104,6 +104,16 @@
   </goal>
 
   <goal
+    name="runtime:test-ojb"
+    prereqs="runtime:prepare"
+    description="runtime tests for ojb tasksusing (set torque.testProfile in your build.properties)">
+
+    <ant antfile="build-test.xml"
+         target="test-ojb"
+         inheritAll="false"/>
+  </goal>
+
+  <goal
     name="runtime:prepare"
     prereqs="java:jar">
 
