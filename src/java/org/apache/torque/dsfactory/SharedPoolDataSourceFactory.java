@@ -59,7 +59,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
 
-import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
+import org.apache.commons.dbcp.datasources.SharedPoolDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,14 +74,14 @@ import org.apache.torque.TorqueException;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class Jdbc2PoolDataSourceFactory
+public class SharedPoolDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
 
     /** The log. */
     private static Log log 
-            = LogFactory.getLog(Jdbc2PoolDataSourceFactory.class);
+            = LogFactory.getLog(SharedPoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
@@ -107,7 +107,7 @@ public class Jdbc2PoolDataSourceFactory
         }
 
         ConnectionPoolDataSource cpds = initCPDS(configuration);
-        Jdbc2PoolDataSource ds = initJdbc2Pool(configuration);
+        SharedPoolDataSource ds = initJdbc2Pool(configuration);
         ds.setConnectionPoolDataSource(cpds);
         this.ds = ds;
     }
@@ -119,11 +119,11 @@ public class Jdbc2PoolDataSourceFactory
      * @throws TorqueException if a property set fails
      * @return a configured <code>Jdbc2PoolDataSource</code>
      */
-    private Jdbc2PoolDataSource initJdbc2Pool(Configuration configuration)
+    private SharedPoolDataSource initJdbc2Pool(Configuration configuration)
         throws TorqueException
     {
         log.debug("Starting initJdbc2Pool");
-        Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
+        SharedPoolDataSource ds = new SharedPoolDataSource();
         Configuration c = Torque.getConfiguration();
 
         if (c == null)
