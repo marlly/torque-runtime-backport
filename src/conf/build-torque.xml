@@ -228,9 +228,16 @@
   <!-- that is capable of performing the task.                          -->
   <!-- ================================================================ -->
 
+  <target name="create-db-check">
+    <condition property="torque.internal.manualCreation">
+      <equals arg1="${torque.database.manualCreation}" arg2="true"/>
+    </condition>
+  </target>
+
   <target
     name="create-db"
-    unless="database.manual.creation"
+    unless="torque.internal.manualCreation"
+    depends="create-db-check"
     description="==> generates the target database">
 
     <torque-data-model
@@ -299,11 +306,11 @@
     <torque-jdbc-transform
       dbDriver="${torque.database.driver}"
       dbPassword="${torque.database.password}"
-      dbSchema="${databaseSchema}"
+      dbSchema="${torque.database.schema}"
       dbUrl="${torque.database.url}"
       dbUser="${torque.database.user}"
       outputFile="${torque.schema.dir}/schema.xml"
-      sameJavaName="${sameJavaName}"
+      sameJavaName="${torque.sameJavaName}"
     />
   </target>
 
@@ -387,7 +394,7 @@
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.dataDump}"
       databaseDriver="${torque.database.driver}"
-      databaseName="${databaseName}"
+      databaseName="${torque.database.name}"
       databaseUrl="${torque.database.url}"
       databaseUser="${torque.database.user}"
       databasePassword="${torque.database.password}"
@@ -498,13 +505,13 @@
     <jar
       jarfile="${torque.basezip.dir}/${torque.project}-om-base.jar"
       basedir="${torque.java.dir}"
-      includes="${targetPackage}/${basePrefix}*.java"
+      includes="${torque.targetPackage}/${torque.basePrefix}*.java"
     />
 
     <delete>
       <fileset
         dir="${torque.java.dir}"
-        includes="${targetPackage}/${basePrefix}*.java"
+        includes="${torque.targetPackage}/${torque.basePrefix}*.java"
       />
     </delete>
   </target>
