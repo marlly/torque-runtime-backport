@@ -40,22 +40,9 @@
         <section name="Step 1: Obtaining the Torque Distribution">
             <p>
                 First, you need to obtain the Torque distribution.  As
-                of this writing, the decoupled version of Torque has not
-                been released; however, building Torque from the latest
-                sources in CVS is straightforward (as long as you have
-                all of the dependent jar files).  Until a distribution
-                is available, you can do one of two things: either <a
-                href="developer-guide.html">build</a> it yourself
-                (that document is a bit out of date - I'll update it
-                when I'm done this document.  In the meantime, to build:
-                download source, define <em>lib.repo</em> in your
-                <em>${home}/build.properties</em>, type &#145;ant
-                update-jars&#146;, then &#145;ant dist&#146;), or
-                download the distribution from another project already
-                using the decoupled version of Torque (<a
-                href="http://scarab.tigris.org">Scarab</a>).
-            </p>
-            <p>
+                of this writing, the standalone version of Torque has
+                not been released; however, there is a beta version <a
+                href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b1/torque-3.0-b1.zip">available</a>.
                 After you have obtained your copy of the Torque
                 distribution, you need to unpack it to a directory where
                 you want to develop your application.  This will create
