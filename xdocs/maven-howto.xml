@@ -14,153 +14,101 @@
 <p>
   <ol>
     <li>
-      <a href="#About this Example">About this Example</a>
+      <a href="#Introduction">Introduction</a>
     </li>
     <li>
-      <a href="#build.xml">build.xml</a>
+      <a href="#Installation">Installation</a>
     </li>
     <li>
-      <a href="#build-torque.xml">build-torque.xml</a>
+      <a href="#Configuration">Configuration</a>
+      <ul>
+        <li>
+          <a href="#project.properties">project.properties</a>
+        </li>
+        <li>
+          <a href="#project.xml">project.xml</a>
+        </li>
+      </ul>
     </li>
     <li>
-      <a href="#project.properties">project.properties</a>
-    </li>
-    <li>
-      <a href="#project.xml">project.xml</a>
+      <a href="#Other Tips">Other Tips</a>
     </li>
   </ol>
 </p>
 
 </section>
 
-<section name="About this Example">
+<section name="Introduction">
 
-<p>
-  This example shows an example configuration for using Torque from it's jar
-  and not having it extracted into the source tree. It also illustrates how to
-  tie in to Maven's callback functionality.
-</p>
+  <p>
+    Torque projects used to be built with all of the Torque elements (templates,
+    property files, <code>build-torque.xml</code>, etc.) locally installed in
+    each project's source tree.
+  </p>
 
-<p>
-  Due note that currently this is setup to run Torque on every build. This will
-  get very slow, but in the short future, the <code>build-torque.xml</code>
-  will be updated to check that the XML schema has changed from the last time
-  the SQL/om code was generated so as to save reduplicating the work and greatly
-  improving build time.
-</p>
+  <p>
+    The advent of Maven allows Torque to be used in a much simpler manor. With
+    the Maven plugin, absolutely no Torque-related resources are required to be
+    locally installed in each project. Instead, Maven goals like "torque:om" are
+    mapped to their respective build-torque.xml commands like "om".
+  </p>
+</section>
+
+<section name="Installation">
+
+  <p>
+    Currently you must manually build the plugin by checking out Torque from CVS
+    and running <code>maven plugin:deploy</code> from the
+    <code>src/maven-plugin</code> directory. This will jar together the various
+    plugin styles and extract it into your <code>${maven.home}/plugins</code>
+    directory.
+  </p>
+
+  <p>
+    In future releases, a jar will be available that you can simply drop in
+    <code>${maven.home}/plugins</code>.
+  </p>
 
 </section>
 
-<section name="build.xml">
+<section name="Configuration">
 
-<p>
-  The <code>build.xml</code> file is based on Maven's delegator style of
-  operation. Basically, we had simple targets that forward on to the
-  <code>build-torque.xml</code>.
-</p>
+  <p>
+    The Torque Maven plugin is configured via two standard Maven files:
 
-<source><![CDATA[
-<?xml version="1.0"?>
-<project name="yourproject" default="maven:war" basedir=".">
-  <property file="${user.home}/build.properties"/>
-  <property file="build.properties"/>
-  <property file="project.properties"/>
+    <ul>
+      <li><code>project.properties</code></li>
+      <li><code>project.xml</code></li>
+    </ul>
+  </p>
 
-  <!-- Tie Torque into Maven -->
-  <property name="maven.core.callback.pre-compile.buildFile" value="build.xml"/>
-  <property name="maven.core.callback.pre-compile.buildTarget" value="torque:main"/>
-  
-  ...
+<subsection name="project.properties">
 
-  <!-- Maven Delegators -->
+  <p>
+    Instead of relying on the typical <code>build.properties</code>, the Maven
+    plugin uses the project-wide settings in the <code>project.properties</code>
+    file.
+  </p>
 
-  ...
+  <p>
+    The Torque settings in <code>project.properties</code> follow the same
+    format as they would in the old <code>build.properties</code> except for two
+    things:
+    <ul>
+      <li>
+        Torque should use the <code>project.properties</code> file for loading
+        its settings instead of <code>build.properties</code>. This is done via
+        the <code>torque.contextProperties</code> property.
+      </li>
+      <li>
+        The various <code>torque.*.dir</code> properties are set to have Torque
+        fit into the Mavenized directory structure.
+      </li>
+    </ul>
+  </p>
 
-  <!-- torque:start -->
-
-  <target name="torque:main">
-    <ant antfile="build-torque.xml" target="main"/>
-  </target>
-
-  <target name="torque:sql">
-    <ant antfile="build-torque.xml" target="sql"/>
-  </target>
-
-  <target name="torque:doc">
-    <ant antfile="build-torque.xml" target="doc"/>
-  </target>
-
-  <target name="torque:create-db">
-    <ant antfile="build-torque.xml" target="create-db"/>
-  </target>
-
-  <target name="torque:insert-sql">
-    <ant antfile="build-torque.xml" target="insert-sql"/>
-  </target>
-
-  <target name="torque:jdbc">
-    <ant antfile="build-torque.xml" target="jdbc"/>
-  </target>
-
-  <target name="torque:datasql">
-    <ant antfile="build-torque.xml" target="datasql"/>
-  </target>
-
-  <target name="torque:id-table-init-sql">
-    <ant antfile="build-torque.xml" target="id-table-init-sql"/>
-  </target>
-
-  <target name="torque:datadump">
-    <ant antfile="build-torque.xml" target="datadump"/>
-  </target>
-
-  <target name="torque:datadtd">
-    <ant antfile="build-torque.xml" target="datadtd"/>
-  </target>
-
-  <target name="torque:om">
-    <ant antfile="build-torque.xml" target="om"/>
-  </target>
-
-  <target name="torque:sql2xml">
-    <ant antfile="build-torque.xml" target="sql2xml"/>
-  </target>
-
-  <target name="torque:ojb-repository">
-    <ant antfile="build-torque.xml" target="ojb-repository"/>
-  </target>
-
-  <target name="torque:ojb-model">
-    <ant antfile="build-torque.xml" target="ojb-model"/>
-  </target>
-
-  <!-- torque:end -->
-]]></source>
-
-</section>
-
-<section name="build-torque.xml">
-
-<p>
-  <code>build-torque.xml</code> actually requires no editting. You merely
-  have to extract it from the Torque jar and put it in the project directory.
-  All of the other jar contents can be ignored as they'll be read from
-  the jar in the <code>${lib.repo}</code>.
-</p>
-
-</section>
-
-<section name="project.properties">
-
-<p>
-  Instead of relying on the typical <code>build.properties</code>, it works
-  well in Maven to store project-wide settings in the <code>project.properties</code>.
-  Maven will handle loading these properties for us, so all that has to be done
-  is over-ride any default Torque behavior and also tell Torque to use this
-  <code>project.properties</code> file instead of it's usual 
-  <code>build.properties</code> file via the <code>torque.contextProperties</code>
-  property.
-</p>
+  <p>
+    Here is a sample configuration from <code>project.properties</code>:
 
 <source><![CDATA[
 ... other project settings...
@@ -174,12 +122,13 @@
 torque.project = yourproject
 torque.database = mysql
 torque.contextProperties = project.properties
+torque.runOnlyOnSchemaChange = true
 
 torque.schema.dir = src/schema
 torque.sql.dir = target/sql
 torque.java.dir = src/java
 torque.doc.dir = target/sql
-torque.lib.dir = ${lib.repo}
+torque.lib.dir = ${maven.repo.local}
 torque.doc.format = html
 
 # Hypothetical configuration...only need to set properties
@@ -202,25 +151,27 @@ torque.database.host = localhost
 torque.initialID = 1001
 ]]></source>
 
-</section>
+  </p>
 
-<section name="project.xml">
+</subsection>
 
-<p>
-  Currently in Maven b4, you have to list all of the Torque dependencies
-  within your <code>project.xml</code> for the jars to be included in the
-  classpath. Currently this list is:
-</p>
+<subsection name="project.xml">
+
+  <p>
+    Currently in Maven b7, you have to list all of the Torque dependencies
+    within your own <code>project.xml</code> for the jars to be included in your
+    project's classpath. Currently the list of Torque dependencies is:
+  </p>
 
 <source><![CDATA[
 <dependencies>
   <dependency>
     <id>ant</id>
-    <version>1.4.1</version>
+    <version>1.5</version>
   </dependency>
   <dependency>
     <id>commons-beanutils</id>
-    <version>1.4-dev-20020724</version>
+    <version>1.4.1</version>
   </dependency>
   <dependency>
     <id>commons-collections</id>
@@ -239,12 +190,12 @@ torque.initialID = 1001
   </dependency>
   <dependency>
     <id>commons-lang</id>
-    <version>1.0-dev-20020716</version>
+    <version>1.0</version>
     <url>http://jakarta.apache.org/commons/</url>
   </dependency>
   <dependency>
     <id>commons-logging</id>
-    <version>1.0</version>
+    <version>1.0.2</version>
     <url>http://jakarta.apache.org/commons/</url>
   </dependency>
   <dependency>
@@ -269,7 +220,7 @@ torque.initialID = 1001
   </dependency>
   <dependency>
     <id>log4j</id>
-    <version>1.1.3</version>
+    <version>1.2.6</version>
     <url>http://jakarta.apache.org/log4j/</url>
   </dependency>
   <dependency>
@@ -294,14 +245,12 @@ torque.initialID = 1001
   </dependency>
   <dependency>
     <id>xerces</id>
-    <type>required</type>
     <version>2.0.2</version>
     <jar>xercesImpl-2.0.2.jar</jar>
     <url>http://xml.apache.org/xerces2-j/</url>
   </dependency>
   <dependency>
     <id>xml-apis</id>
-    <type>required</type>
     <version>2.0.2</version>
     <jar>xmlParserAPIs-2.0.2.jar</jar>
     <url>http://xml.apache.org/xerces2-j/</url>
@@ -309,6 +258,29 @@ torque.initialID = 1001
 </dependencies>
 ]]></source>
 
+</subsection>
+
+</section>
+
+<section name="Other Tips">
+
+  <p>
+    If you run into problems, try the following tips:
+
+    <ul>
+      <li>
+        Make sure that you set the <code>torque.jar</code> property to the
+        version of Torque that you are using (and hence will be in the
+        <code>${maven.home}/repository/torque/jars</code> directory for the
+        plugin to find).
+      </li>
+      <li>
+        Don't place your <code>project-schema.xml</code> file in a directory
+        with other files. This can lead to various DTD errors.
+      </li>
+    </ul>
+
+  </p>
 </section>
 
   </body>
