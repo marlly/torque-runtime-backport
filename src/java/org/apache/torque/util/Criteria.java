@@ -225,7 +225,7 @@ public class Criteria extends Hashtable
     /**
      * Log4j category used for logging.
      */
-    private Category category = 
+    private static Category category = 
         Category.getInstance(Criteria.class.getName());
 
     /**
