@@ -57,6 +57,7 @@ package org.apache.torque.map;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import org.apache.torque.adapter.IDMethod;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.oid.IdGenerator;
 
@@ -64,6 +65,7 @@ import org.apache.torque.oid.IdGenerator;
  * DatabaseMap is used to model a database.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id$
  */
 public class DatabaseMap
@@ -82,6 +84,8 @@ public class DatabaseMap
 
     /** The IDBroker that goes with the idTable. */
     private IDBroker idBroker = null;
+
+    /** The IdGenerators, keyed by type of idMethod. */
     private HashMap idGenerators;
 
     /**
@@ -97,8 +101,7 @@ public class DatabaseMap
      * @param name Name of the database.
      * @param numberOfTables Number of tables in the database.
      */
-    public DatabaseMap( String name,
-                        int numberOfTables )
+    public DatabaseMap(String name, int numberOfTables)
     {
         this.name = name;
         tables = new Hashtable( (int)(1.25*numberOfTables) + 1 );
@@ -248,7 +251,7 @@ public class DatabaseMap
         this.idTable = idTable;
         addTable(idTable);
         idBroker = new IDBroker(idTable);
-        addIdGenerator(TableMap.IDBROKERTABLE, idBroker);
+        addIdGenerator(IDMethod.ID_BROKER, idBroker);
     }
 
     /**
@@ -274,8 +277,8 @@ public class DatabaseMap
     }
 
     /**
-     * Get a type of id generator. Example valid values are:
-     * TableMap.IDBROKERTABLE, TableMap.AUTOINCREMENT, TableMap.SEQUENCE
+     * Get a type of id generator.  Valid values are listed in the
+     * {@link org.apache.torque.adapter.IDMethod} interface.
      *
      * @param type a <code>String</code> value
      * @return an <code>IdGenerator</code> value
