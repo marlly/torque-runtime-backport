@@ -299,17 +299,19 @@ public class DBConnection
         if ( pooledConnection != null )
         {
             if ( connection != null )
-            try
             {
-                //this will not close the physical connection, just the
-                //logical connection
-                connection.close();
+                try
+                {
+                    //this will not close the physical connection, just the
+                    //logical connection
+                    connection.close();
+                }
+                catch (Exception ex)
+                {
+                    //ignore this exception
+                }
+                connection = null;
             }
-            catch (Exception ex)
-            {
-                //ignore this exception
-            }
-            connection = null;
         }
     }
 
