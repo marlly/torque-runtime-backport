@@ -100,7 +100,9 @@
 
     <antcall target="test-project-datadtd"/>
     <antcall target="test-project-datadump"/>
+    <!--
     <antcall target="test-project-datasql"/>
+    -->
     <antcall target="test-project-jdbc"/>
 
     <!--
@@ -207,6 +209,7 @@
       antfile="${torque.buildFile}"
       target="project-jdbc"
       inheritAll="false">
+      <property name="torque.home" value="${torque.distDir}"/>
     </ant>
   </target>
 

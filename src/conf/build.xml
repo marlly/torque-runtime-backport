@@ -183,7 +183,7 @@
       dbDriver="${databaseDriver}"
       dbUser="${databaseUser}"
       dbPassword="${databasePassword}"
-      outputFile="schema/schema.xml"
+      outputFile="${torque.home}/${outputDirectory}/schema.xml"
       sameJavaName="${sameJavaName}"
     />
 
