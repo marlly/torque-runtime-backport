@@ -465,7 +465,7 @@
       outputDirectory="${torque.java.dir}"
       outputFile="report.${torque.project}.om.generation"
       targetDatabase="${torque.database}"
-      targetPackage="${targetPackage}"
+      targetPackage="${torque.targetPackage}"
       useClasspath="${torque.useClasspath}">
       <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
@@ -481,7 +481,7 @@
       outputDirectory="${torque.java.dir}"
       outputFile="report.${torque.project}.om.generation"
       targetDatabase="${torque.database}"
-      targetPackage="${targetPackage}"
+      targetPackage="${torque.targetPackage}"
       templatePath="${torque.templatePath}">
       <fileset dir="${torque.schema.dir}">
         <include name="*-schema.xml"/>
@@ -569,7 +569,7 @@
     <javadoc
       author="true"
       destdir="${torque.javadoc.dir}"
-      packagenames="${targetPackage}.*"
+      packagenames="${torque.targetPackage}.*"
       private="true"
       sourcepath="${torque.java.dir}"
       use="true"
@@ -595,7 +595,7 @@
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.ojb}"
       targetDatabase="${torque.database}"
-      targetPackage="${targetPackage}"
+      targetPackage="${torque.targetPackage}"
       outputDirectory="${torque.ojb.dir}"
       outputFile="report.${torque.project}.ojb.generation"
       sqldbmap="${torque.sql.dir}/sqldb.map"
@@ -620,7 +620,7 @@
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.ojbModel}"
       targetDatabase="${torque.database}"
-      targetPackage="${targetPackage}"
+      targetPackage="${torque.targetPackage}"
       outputDirectory="${torque.ojb.dir}"
       outputFile="report.${torque.project}.ojb.generation"
       sqldbmap="${torque.sql.dir}/sqldb.map"
