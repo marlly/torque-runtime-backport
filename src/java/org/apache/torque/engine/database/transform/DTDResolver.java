@@ -72,8 +72,11 @@ import org.xml.sax.InputSource;
  */
 public class DTDResolver implements EntityResolver
 {
-    /** InputSource for database.dtd */
-    InputSource databaseDTD = null;
+    private static final String WEB_SITE_DTD =
+        "http://jakarta.apache.org/turbine/dtd/database.dtd";
+
+    /** InputSource for <code>database.dtd</code>. */
+    private InputSource databaseDTD = null;
 
     /**
      * constructor
@@ -106,9 +109,7 @@ public class DTDResolver implements EntityResolver
      */
     public InputSource resolveEntity(String publicId, String systemId)
     {
-        if (databaseDTD != null &&
-            "http://jakarta.apache.org/turbine/dtd/database.dtd"
-            .equals(systemId))
+        if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
             System.out.println("Resolver: used database.dtd");
             return databaseDTD;
@@ -118,13 +119,13 @@ public class DTDResolver implements EntityResolver
             System.out.println("Resolver: used " + systemId);
             return getInputSource(systemId);
         }
-    } // resolveEntity(String, String)
+    }
 
     /**
-     * get an InputSource for an URL String
+     * Retrieves a XML input source for the specified URL.
      *
-     * @param urlString
-     * @return an InputSource for the URL String
+     * @param urlString The URL of the input source.
+     * @return <code>InputSource</code> for the URL.
      */
     public InputSource getInputSource(String urlString)
     {
@@ -138,11 +139,5 @@ public class DTDResolver implements EntityResolver
             ex.printStackTrace();
         }
         return new InputSource();
-    } // getInputSource(String)
+    }
 }
-
-
-
-
-
-
