@@ -62,7 +62,7 @@ import java.util.ArrayList;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-class UniqueList extends ArrayList
+public class UniqueList extends ArrayList
 {
     /**
      * Adds an Object to the list.
