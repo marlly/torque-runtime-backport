@@ -56,6 +56,8 @@ package org.apache.torque.engine.database.model;
 
 import java.util.List;
 
+import org.apache.torque.TorqueException;
+
 /**
  * The generic interface to a name generation algorithm.
  *
@@ -65,11 +67,18 @@ import java.util.List;
 public interface NameGenerator
 {
     /**
+     * The character used by most implementations as the separator
+     * between name elements.
+     */
+    public static final char STD_SEPARATOR_CHAR = '_';
+
+    /**
      * Given a list of <code>String</code> objects, implements an
      * algorithm which produces a name.
      *
-     * @param components Inputs used to generate a name.
+     * @param inputs Inputs used to generate a name.
      * @return The generated name.
      */
-    public String generateName(List components);
+    public String generateName(List inputs)
+        throws TorqueException;
 }
