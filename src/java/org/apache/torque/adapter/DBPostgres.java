@@ -187,6 +187,6 @@ public class DBPostgres extends DB
 
     public String getBooleanString(Boolean b)
     {
-        return (b == null) ? "false" : b.toString();
+        return (b == null) ? "0" : "1";
     }
 }
