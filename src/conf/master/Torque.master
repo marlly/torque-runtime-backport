@@ -92,7 +92,7 @@ torque.database.@DATABASE_DEFAULT@.adapter=@DATABASE@
 ## Using commons-dbcp 
 torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.SharedPoolDataSourceFactory
 #torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.PerUserPoolDataSourceFactory
-torque.dsfactory.@DATABASE_DEFAULT@.pool.defaultMaxActive=10
+torque.dsfactory.@DATABASE_DEFAULT@.pool.maxActive=10
 torque.dsfactory.@DATABASE_DEFAULT@.pool.testOnBorrow=true
 torque.dsfactory.@DATABASE_DEFAULT@.pool.validationQuery=@VALIDATION_QUERY@
 torque.dsfactory.@DATABASE_DEFAULT@.connection.driver = @DATABASE_DRIVER@
