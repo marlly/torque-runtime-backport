@@ -6,9 +6,9 @@ import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
 
 #if ($child.Ancestor)
-    #set ($parent = $child.Ancestor)
+  #set ($parent = $child.Ancestor)
 #else
-    #set ($parent = $table.JavaName)
+  #set ($parent = $table.JavaName)
 #end
 
 /**
@@ -26,9 +26,9 @@ public class $child.ClassName extends $parent
 {
     public ${child.ClassName}()
     {
-        #set ($col = $child.Column)
-        #set ( $cfc=$col.JavaName )
-        #set ($table = $col.Table)
+#set ($col = $child.Column)
+#set ( $cfc=$col.JavaName )
+#set ($table = $col.Table)
         set${cfc}(${table.JavaName}Peer.CLASSKEY_$child.Key.toUpperCase());
     }
 }

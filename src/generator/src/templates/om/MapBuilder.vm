@@ -35,7 +35,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         return "$table.Name";
     }
 
-    #foreach ($col in $table.Columns)
+  #foreach ($col in $table.Columns)
     #set ( $tfc=$table.JavaName )
     #set ( $cfc=$col.JavaName )
     #set ( $cup=$col.Name.toUpperCase() )
@@ -49,7 +49,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     {
         return "${table.Name}.$cup";
     }
-    #end
+  #end
 #end
 
     /**
@@ -90,52 +90,52 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         dbMap.addTable("$table.Name");
         TableMap tMap = dbMap.getTable("$table.Name");
 
-        #if ($table.IdMethod == "native")
+#if ($table.IdMethod == "native")
         tMap.setPrimaryKeyMethod(TableMap.NATIVE);
-        #elseif ($table.IdMethod == "autoincrement")
+#elseif ($table.IdMethod == "autoincrement")
         tMap.setPrimaryKeyMethod(TableMap.AUTO_INCREMENT);
-        #elseif ($table.IdMethod == "sequence")
+#elseif ($table.IdMethod == "sequence")
         tMap.setPrimaryKeyMethod(TableMap.SEQUENCE);
-        #elseif ($table.IdMethod == "idbroker")
+#elseif ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethod(TableMap.ID_BROKER);
-        #else
+#else
         tMap.setPrimaryKeyMethod("$table.IdMethod");
-        #end
+#end
 
-        #if ($table.IdMethodParameters)
-          // this might need upgrading based on what all the databases
-          // need, but for now assume one parameter.
-          #set ($imp = $table.IdMethodParameters.get(0) )
-          tMap.setPrimaryKeyMethodInfo("$imp.Value");
-        #elseif ($table.IdMethod == "idbroker")
+#if ($table.IdMethodParameters)
+        // this might need upgrading based on what all the databases
+        // need, but for now assume one parameter.
+  #set ($imp = $table.IdMethodParameters.get(0) )
+        tMap.setPrimaryKeyMethodInfo("$imp.Value");
+#elseif ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
-        #elseif ($table.IdMethod == "sequence" ||  ($table.IdMethod == "native" && $dbprops.get("idMethod") == "sequence"))
+#elseif ($table.IdMethod == "sequence" ||  ($table.IdMethod == "native" && $dbprops.get("idMethod") == "sequence"))
         tMap.setPrimaryKeyMethodInfo("$table.SequenceName");
-        #elseif ($table.IdMethod == "native" && $dbprops.get("idMethod") == "identity")
+#elseif ($table.IdMethod == "native" && $dbprops.get("idMethod") == "identity")
         tMap.setPrimaryKeyMethodInfo("$table.Name");
-        #end
+#end
 
-        #foreach ($col in $table.Columns)
-        #set ( $tfc=$table.JavaName )
-        #set ( $cfc=$col.JavaName )
-        #set ( $cup=$col.Name.toUpperCase() )
-        #if($col.isPrimaryKey())
-          #if($col.isForeignKey())
-            tMap.addForeignPrimaryKey(
+#foreach ($col in $table.Columns)
+  #set ( $tfc=$table.JavaName )
+  #set ( $cfc=$col.JavaName )
+  #set ( $cup=$col.Name.toUpperCase() )
+  #if($col.isPrimaryKey())
+    #if($col.isForeignKey())
+        tMap.addForeignPrimaryKey(
                 "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" ,
-                    "$col.RelatedColumnName");
-          #else
-            tMap.addPrimaryKey("${table.Name}.$cup", $col.JavaObject);
-          #end
-        #else
-          #if($col.isForeignKey())
-            tMap.addForeignKey(
+                "$col.RelatedColumnName");
+    #else
+        tMap.addPrimaryKey("${table.Name}.$cup", $col.JavaObject);
+    #end
+  #else
+    #if($col.isForeignKey())
+        tMap.addForeignKey(
                 "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" ,
-                    "$col.RelatedColumnName");
-          #else
-            tMap.addColumn("${table.Name}.$cup", $col.JavaObject);
-          #end
-        #end
-        #end
+                "$col.RelatedColumnName");
+    #else
+        tMap.addColumn("${table.Name}.$cup", $col.JavaObject);
+    #end
+  #end
+#end
     }
 }

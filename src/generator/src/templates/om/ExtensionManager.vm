@@ -4,7 +4,7 @@
  *#
 #set ($interfaceName = $table.JavaName)
 #if ($table.Interface)
-   #set ($interfaceName = $table.Interface)
+  #set ($interfaceName = $table.Interface)
 #end
 
 package $package;

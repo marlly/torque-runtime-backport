@@ -31,12 +31,12 @@ import com.workingdogs.village.Record;
 import ${package}.map.*;
 
 #foreach ($fk in $table.ForeignKeys)
-   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+  #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
 
-   #if ($tblFK.Package != $package)
+  #if ($tblFK.Package != $package)
 import ${tblFK.Package}.${tblFK.JavaName};
 import ${tblFK.Package}.${tblFK.JavaName}Peer;
-   #end
+  #end
 #end
 
 /**
@@ -69,23 +69,22 @@ public abstract class $basePrefix${table.JavaName}Peer
         return getMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
     }
 
-#foreach ($col in $table.Columns)
+  #foreach ($col in $table.Columns)
     #set ( $tfc=$table.JavaName )
     #set ( $cfc=$col.JavaName )
     #set ( $cup=$col.Name.toUpperCase() )
     /** the column name for the $cup field */
     public static final String $cup;
-#end
+  #end
 
     static
     {
-#foreach ($col in $table.Columns)
+  #foreach ($col in $table.Columns)
     #set ( $tfc=$table.JavaName )
     #set ( $cfc=$col.JavaName )
     #set ( $cup=$col.Name.toUpperCase() )
-    $cup = "${table.Name}.$cup";
-#end
-
+        $cup = "${table.Name}.$cup";
+  #end
         if (Torque.isInit())
         {
             try
@@ -102,7 +101,6 @@ public abstract class $basePrefix${table.JavaName}Peer
             Torque.registerMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
         }
     }
-
 #end ## ends if (!$table.isAlias())
 
     /** number of columns for this peer */
@@ -146,7 +144,6 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
 #if (!$table.isAlias())
-
     /**
      * Get the list of objects for a ResultSet.  Please not that your
      * resultset MUST return columns in the right order.  You can use
@@ -190,7 +187,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
 
-#if ($table.ChildrenColumn)
+  #if ($table.ChildrenColumn)
 
     #set ($col = $table.ChildrenColumn)
     #set ( $tfc=$table.JavaName )
@@ -198,15 +195,15 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $cup=$col.Name.toUpperCase() )
 
     #if ($col.isEnumeratedClasses())
-        ## NOTE: this hack requires a class type definition column to
-        ## be a primitive type or a String. Should not be a bad assumption
-        #if ($col.isPrimitive())
-            #set ($quote = "")
-        #else
-            #set ($quote = '"')
-        #end
+      ## NOTE: this hack requires a class type definition column to
+      ## be a primitive type or a String. Should not be a bad assumption
+      #if ($col.isPrimitive())
+        #set ($quote = "")
+      #else
+        #set ($quote = '"')
+      #end
 
-        #foreach ($child in $col.Children)
+      #foreach ($child in $col.Children)
     /** A key representing a particular subclass */
     public static final $col.JavaNative CLASSKEY_$child.Key.toUpperCase() =
         $quote$child.Key$quote;
@@ -218,9 +215,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     /** A class that can be returned by this peer. */
     public static final Class CLASS_$child.Key.toUpperCase() =
         initClass(CLASSNAME_$child.Key.toUpperCase());
-        #end
+      #end
     #end
-#end
+  #end
 
     /**
      * Method to do inserts.
@@ -249,9 +246,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static ObjectKey doInsert(Criteria criteria, Connection con)
         throws TorqueException
     {
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+  #foreach ($col in $table.Columns)
+    #set ( $cup=$col.Name.toUpperCase() )
+    #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (criteria.containsKey($cup))
         {
@@ -268,7 +265,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+    #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if (criteria.containsKey($cup))
         {
@@ -285,8 +282,8 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-     #end
+    #end
+  #end
 
         // Set the correct dbName if it has not been overridden
         // criteria.getDbName will return the same object if not set to
@@ -315,10 +312,10 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void addSelectColumns(Criteria criteria)
             throws TorqueException
     {
-    #foreach ($col in $table.Columns)
-        #set ( $cup=$col.Name.toUpperCase() )
+  #foreach ($col in $table.Columns)
+    #set ( $cup=$col.Name.toUpperCase() )
         criteria.addSelectColumn($cup);
-    #end
+  #end
     }
 
     /**
@@ -339,9 +336,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             $table.JavaName obj = ($table.JavaName) cls.newInstance();
             ${table.JavaName}Peer.populateObject(row, offset, obj);
-            #if ($addSaveMethod)
+  #if ($addSaveMethod)
                 obj.setModified(false);
-            #end
+  #end
             obj.setNew(false);
 
             return obj;
@@ -372,11 +369,11 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         try
         {
-        #set ( $n=0 )
-        #foreach ($col in $table.Columns)
+  #set ( $n=0 )
+  #foreach ($col in $table.Columns)
             obj.set${col.JavaName}(row.getValue(offset + $n).$col.VillageMethod);
-            #set ( $n = $n + 1 )
-        #end
+    #set ( $n = $n + 1 )
+  #end
         }
         catch (DataSetException e)
         {
@@ -440,19 +437,19 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static List doSelectVillageRecords(Criteria criteria, Connection con)
         throws TorqueException
     {
-    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
+  #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          criteria.setBlobFlag(true);
-    #end
+  #end
 
         if (criteria.getSelectColumns().size() == 0)
         {
             addSelectColumns(criteria);
         }
 
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+  #foreach ($col in $table.Columns)
+    #set ( $cup=$col.Name.toUpperCase() )
+    #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (criteria.containsKey($cup))
         {
@@ -469,7 +466,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+    #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if (criteria.containsKey($cup))
         {
@@ -486,8 +483,8 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-     #end
+    #end
+  #end
 
         // Set the correct dbName if it has not been overridden
         // criteria.getDbName will return the same object if not set to
@@ -524,21 +521,20 @@ public abstract class $basePrefix${table.JavaName}Peer
         for (int i = 0; i < records.size(); i++)
         {
             Record row = (Record) records.get(i);
-#if ($table.ChildrenColumn)
+  #if ($table.ChildrenColumn)
             results.add(${table.JavaName}Peer.row2Object(row, 1,
                 ${table.JavaName}Peer.getOMClass(row, 1)));
-#else
+  #else
             results.add(${table.JavaName}Peer.row2Object(row, 1,
                 ${table.JavaName}Peer.getOMClass()));
-#end
+  #end
         }
         return results;
     }
 #end ## ends if(!$table.isAlias())
 
 #if ($table.ChildrenColumn)
-
-    #set ($col = $table.ChildrenColumn)
+  #set ($col = $table.ChildrenColumn)
     /**
      * The returned Class will contain objects of the default type or
      * objects that inherit from the default.
@@ -552,32 +548,32 @@ public abstract class $basePrefix${table.JavaName}Peer
         Class c = null;
         try
         {
-    #if ($col.isEnumeratedClasses())
+  #if ($col.isEnumeratedClasses())
             Class omClass = null;
             $col.JavaNative classKey =
                 record.getValue(offset - 1 + $col.Position)
                 .$col.VillageMethod;
-        #set ($if = "if")
-        #foreach ($child in $col.Children)
-            #if ($col.isPrimitive())
+    #set ($if = "if")
+    #foreach ($child in $col.Children)
+      #if ($col.isPrimitive())
             $if (classKey == CLASSKEY_$child.Key.toUpperCase())
-            #else
+      #else
             $if (CLASSKEY_${child.Key.toUpperCase()}.equals(classKey))
-            #end
+      #end
             {
                 omClass = CLASS_$child.Key.toUpperCase();
             }
-            #set ($if = "else if")
-        #end
+      #set ($if = "else if")
+    #end
             else
             {
                 omClass = getOMClass();
             }
             c = omClass;
-    #else
+  #else
             c = Class.forName(
                 record.getValue(offset - 1 + $col.Position).asString());
-    #end
+  #end
         }
         catch (Exception e)
         {
@@ -585,7 +581,6 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         return c;
     }
-
 #end
 
     /**
@@ -599,19 +594,18 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static Class getOMClass()
         throws TorqueException
     {
-    #if ($table.isAbstract())
+#if ($table.isAbstract())
         String error = "You must implement the getOMClass method in your";
                error += " Peer object in order for things to work properly.";
                error += " This method should return the proper Class that";
                error += " represents the Peer's Business Object.";
         throw new TorqueException (error);
-    #else
+#else
         return CLASS_DEFAULT;
-    #end
+#end
     }
 
 #if (!$table.isAlias())
-
     /**
      * Method to do updates.
      *
@@ -641,9 +635,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         throws TorqueException
     {
         Criteria selectCriteria = new Criteria(DATABASE_NAME, 2);
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+  #foreach ($col in $table.Columns)
+    #set ( $cup=$col.Name.toUpperCase() )
+    #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (criteria.containsKey($cup))
         {
@@ -660,7 +654,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+    #elseif ($col.isBooleanChar())
         // check for conversion from boolean to int
         if (criteria.containsKey($cup))
         {
@@ -677,11 +671,11 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-         #if($col.isPrimaryKey())
+    #end
+    #if($col.isPrimaryKey())
          selectCriteria.put($cup, criteria.remove($cup));
-         #end
-     #end
+    #end
+  #end
 
         // Set the correct dbName if it has not been overridden
         // criteria.getDbName will return the same object if not set to
@@ -726,9 +720,9 @@ public abstract class $basePrefix${table.JavaName}Peer
      public static void doDelete(Criteria criteria, Connection con)
         throws TorqueException
      {
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+  #foreach ($col in $table.Columns)
+    #set ( $cup=$col.Name.toUpperCase() )
+    #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (criteria.containsKey($cup))
         {
@@ -745,7 +739,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+    #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if (criteria.containsKey($cup))
         {
@@ -762,8 +756,8 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-     #end
+    #end
+  #end
 
         // Set the correct dbName if it has not been overridden
         // criteria.getDbName will return the same object if not set to
@@ -801,11 +795,11 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
     public static void doInsert($table.JavaName obj) throws TorqueException
     {
-        #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
+  #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
         doInsert(buildCriteria(obj));
-        #else
+  #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj)));
-        #end
+  #end
         obj.setNew(false);
         obj.setModified(false);
     }
@@ -844,11 +838,11 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doInsert($table.JavaName obj, Connection con)
         throws TorqueException
     {
-        #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
+  #if ($table.IdMethod.equals("none") || $table.PrimaryKey.size() == 0)
         doInsert(buildCriteria(obj), con);
-        #else
+  #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj), con));
-        #end
+  #end
         obj.setNew(false);
         obj.setModified(false);
     }
@@ -925,9 +919,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         SimpleKey[] keys = (SimpleKey[])pk.getValue();
     #set ( $i = 0 )
     #foreach ($col in $table.PrimaryKey)
-        #set ( $cup=$col.Name.toUpperCase() )
+      #set ( $cup=$col.Name.toUpperCase() )
             criteria.add($cup, keys[$i]);
-        #set ( $i = $i + 1 )
+      #set ( $i = $i + 1 )
     #end
   #end
         return criteria;
@@ -937,30 +931,28 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static Criteria buildCriteria( $table.JavaName obj )
     {
         Criteria criteria = new Criteria(DATABASE_NAME);
-        #foreach ($col in $table.Columns)
-            #set ( $cfc=$col.JavaName )
-            #set ( $cup=$col.Name.toUpperCase() )
-            #if ($col.isPrimaryKey() && !$table.IdMethod.equals("none"))
+  #foreach ($col in $table.Columns)
+    #set ( $cfc=$col.JavaName )
+    #set ( $cup=$col.Name.toUpperCase() )
+    #if ($col.isPrimaryKey() && !$table.IdMethod.equals("none"))
         if (!obj.isNew())
-           #end
+    #end
             criteria.add($cup, obj.get${cfc}());
-        #end
+  #end
         return criteria;
     }
-
 #end ## ends if (!$table.isAlias())
 
 #if ($table.PrimaryKey.size() > 0)
-
   #if ($table.isAlias())
     #set ($retrieveMethod = "retrieve${table.JavaName}ByPK")
   #else
     #set ($retrieveMethod = "retrieveByPK")
   #end
 
-#set ($pks = $table.PrimaryKey)
-#if ($pks.size() == 1)
-  #set ($pk = $pks.get(0))
+  #set ($pks = $table.PrimaryKey)
+  #if ($pks.size() == 1)
+    #set ($pk = $pks.get(0))
     /**
      * Retrieve a single object by pk
      *
@@ -975,7 +967,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         return ${retrieveMethod}(SimpleKey.keyFor(pk));
     }
-#end
+  #end
 
     /**
      * Retrieve a single object by pk
@@ -1083,17 +1075,17 @@ public abstract class $basePrefix${table.JavaName}Peer
             {
                 ObjectKey pk = (ObjectKey)iter.next();
                 SimpleKey[] keys = (SimpleKey[])pk.getValue();
-                #set ( $i = 0 )
-                #foreach ($col in $table.PrimaryKey)
-                    #set ( $cup=$col.Name.toUpperCase() )
+    #set ( $i = 0 )
+    #foreach ($col in $table.PrimaryKey)
+      #set ( $cup=$col.Name.toUpperCase() )
                     Criteria.Criterion c$i = criteria.getNewCriterion(
                         $cup, keys[$i], Criteria.EQUAL);
-                    #set ( $j = $i - 1 )
-                    #if ($i > 0)
+      #set ( $j = $i - 1 )
+      #if ($i > 0)
                         c${j}.and(c${i});
-                    #end
-                    #set ( $i = $i + 1 )
-                #end
+      #end
+      #set ( $i = $i + 1 )
+    #end
                 criteria.or(c0);
             }
   #end
@@ -1105,23 +1097,23 @@ public abstract class $basePrefix${table.JavaName}Peer
 #end ## ends if($table.PrimaryKey.size() > 0)
 
 #if ($table.PrimaryKey.size() > 1)
-#set ( $comma = false )
+  #set ( $comma = false )
     /**
      * retrieve object using using pk values.
      *
-#foreach ($col in $table.PrimaryKey)
+  #foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
-#end
+  #end
      */
     public static $table.JavaName ${retrieveMethod}(
-#foreach ($col in $table.PrimaryKey)
+  #foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype = $col.JavaNative )
     #if ($comma),#end $cjtype $clo
-        #set ( $comma = true )
-#end
+    #set ( $comma = true )
+  #end
         ) throws TorqueException
     {
         Connection db = null;
@@ -1130,12 +1122,12 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
            db = Torque.getConnection(DATABASE_NAME);
            retVal = retrieveByPK(
-           #set ( $comma = false )
-           #foreach ($col in $table.PrimaryKey)
-               #set ( $clo=$col.Name.toLowerCase() )
-               #if ($comma),#end $clo
-               #set ( $comma = true )
-           #end
+  #set ( $comma = false )
+  #foreach ($col in $table.PrimaryKey)
+    #set ( $clo=$col.Name.toLowerCase() )
+    #if ($comma),#end $clo
+    #set ( $comma = true )
+  #end
                , db);
         }
         finally
@@ -1145,33 +1137,33 @@ public abstract class $basePrefix${table.JavaName}Peer
         return(retVal);
     }
 
-#set ( $comma = false )
+  #set ( $comma = false )
     /**
      * retrieve object using using pk values.
      *
-#foreach ($col in $table.PrimaryKey)
+  #foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
-#end
+  #end
      * @param Connection con
      */
     public static $table.JavaName ${retrieveMethod}(
-#foreach ($col in $table.PrimaryKey)
+  #foreach ($col in $table.PrimaryKey)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype = $col.JavaNative )
     #if ($comma),#end $cjtype $clo
-        #set ( $comma = true )
-#end
+    #set ( $comma = true )
+  #end
        ,Connection con) throws TorqueException
     {
 
         Criteria criteria = new Criteria(5);
-#foreach ($col in $table.PrimaryKey)
+  #foreach ($col in $table.PrimaryKey)
     #set ( $cup=$col.Name.toUpperCase() )
     #set ( $clo=$col.Name.toLowerCase() )
         criteria.add($cup, $clo);
-#end
+  #end
         List v = doSelect(criteria, con);
         if (v.size() != 1)
         {
@@ -1187,49 +1179,47 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 #if ($complexObjectModel)
 
- ##
- ## setup joins
- ##
- #set ( $className = $table.JavaName )
- #set ( $countFK = 0 )
- #foreach ($dummyFK in $table.ForeignKeys)
-      #set ( $countFK = $countFK + 1 )
- #end
+  ##
+  ## setup joins
+  ##
+  #set ( $className = $table.JavaName )
+  #set ( $countFK = 0 )
+  #foreach ($dummyFK in $table.ForeignKeys)
+    #set ( $countFK = $countFK + 1 )
+  #end
 
- #if ($countFK >= 1)
- #foreach ($fk in $table.ForeignKeys)
-  #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-  #if (!$tblFK.isForReferenceOnly())
-   ## want to cover this case, but the code is not there yet.
-   #if ( !($fk.ForeignTableName.equals($table.Name)) )
-
-     #set ( $partJoinName = "" )
-     #foreach ($columnName in $fk.LocalColumns)
-        #set ( $column = $table.getColumn($columnName) )
-        #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.Name))
+  #if ($countFK >= 1)
+  #foreach ($fk in $table.ForeignKeys)
+    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+    #if (!$tblFK.isForReferenceOnly())
+      ## want to cover this case, but the code is not there yet.
+      #if ( !($fk.ForeignTableName.equals($table.Name)) )
+        #set ( $partJoinName = "" )
+        #foreach ($columnName in $fk.LocalColumns)
+          #set ( $column = $table.getColumn($columnName) )
+          #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.Name))
             #set ( $partJoinName = "$partJoinName$column.JavaName" )
+          #end
         #end
-     #end
 
-     #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
-     #set ( $joinClassName = $joinTable.JavaName )
-     #set ($interfaceName = $joinTable.JavaName)
-     #if ($joinTable.Interface)
-       #set ($interfaceName = $joinTable.Interface)
-     #end
+        #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
+        #set ( $joinClassName = $joinTable.JavaName )
+        #set ($interfaceName = $joinTable.JavaName)
+        #if ($joinTable.Interface)
+          #set ($interfaceName = $joinTable.Interface)
+        #end
 
-     #if ($partJoinName == "")
-        #set ( $joinColumnId = $joinClassName )
-        #set ( $joinInterface = $interfaceName )
-        #set ( $collThisTable = "${className}s" )
-        #set ( $collThisTableMs = $className )
-     #else
-        #set ( $joinColumnId= "${joinClassName}RelatedBy$partJoinName" )
-        #set ( $joinInterface= "${interfaceName}RelatedBy$partJoinName" )
-        #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
-        #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
-     #end
-
+        #if ($partJoinName == "")
+          #set ( $joinColumnId = $joinClassName )
+          #set ( $joinInterface = $interfaceName )
+          #set ( $collThisTable = "${className}s" )
+          #set ( $collThisTableMs = $className )
+        #else
+          #set ( $joinColumnId= "${joinClassName}RelatedBy$partJoinName" )
+          #set ( $joinInterface= "${interfaceName}RelatedBy$partJoinName" )
+          #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
+          #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
+        #end
 
 ## ------------------------------------------------------------
 
@@ -1247,10 +1237,10 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static List doSelectJoin${joinColumnId}(Criteria c)
         throws TorqueException
     {
-    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
+        #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag(true);
-    #end
+        #end
 
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to
@@ -1265,18 +1255,18 @@ public abstract class $basePrefix${table.JavaName}Peer
         ${joinClassName}Peer.addSelectColumns(c);
 
 
-     #set ( $lfMap = $fk.LocalForeignMapping )
-     #foreach ($columnName in $fk.LocalColumns)
-        #set ( $column = $table.getColumn($columnName) )
-        #set ( $columnFk = $joinTable.getColumn( $lfMap.get($columnName) ) )
+        #set ( $lfMap = $fk.LocalForeignMapping )
+        #foreach ($columnName in $fk.LocalColumns)
+          #set ( $column = $table.getColumn($columnName) )
+          #set ( $columnFk = $joinTable.getColumn( $lfMap.get($columnName) ) )
         c.addJoin(${table.JavaName}Peer.$column.Name.toUpperCase(),
             ${joinClassName}Peer.$columnFk.Name.toUpperCase());
-     #end
+        #end
 
 
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+        #foreach ($col in $table.Columns)
+          #set ( $cup=$col.Name.toUpperCase() )
+          #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (c.containsKey($cup))
         {
@@ -1293,7 +1283,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if ( c.containsKey($cup) )
         {
@@ -1310,8 +1300,8 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-     #end
+          #end
+        #end
 
         List rows = BasePeer.doSelect(c);
         List results = new ArrayList();
@@ -1320,24 +1310,21 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             Record row = (Record) rows.get(i);
 
-#set ($classDecl = "Class")
-#if ($table.ChildrenColumn)
+        #set ($classDecl = "Class")
+        #if ($table.ChildrenColumn)
             $classDecl omClass = ${table.JavaName}Peer.getOMClass(row, 1);
-#else
+        #else
             $classDecl omClass = ${table.JavaName}Peer.getOMClass();
-#end
-#set ($classDecl = "")
-
+        #end
+        #set ($classDecl = "")
             $className obj1 = ($className) ${table.JavaName}Peer
                 .row2Object(row, 1, omClass);
-
-
-#if ($joinTable.ChildrenColumn)
+        #if ($joinTable.ChildrenColumn)
             $classDecl omClass = ${joinClassName}Peer.getOMClass(row, offset);
-#else
+        #else
             $classDecl omClass = ${joinClassName}Peer.getOMClass();
-#end
-#set ($classDecl = "")
+        #end
+        #set ($classDecl = "")
             $joinClassName obj2 = ($joinClassName)${joinClassName}Peer
                 .row2Object(row, offset, omClass);
 
@@ -1362,47 +1349,46 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         return results;
     }
+        #end
+      #end
+    #end
   #end
- #end
- #end
- #end
 
-## ===========================================================
+  ## ===========================================================
 
   #if ($countFK > 2)
+    #set ($includeJoinAll = true)
+    #foreach ($fk in $table.ForeignKeys)
+      #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+      #if ($tblFK.isForReferenceOnly())
+        #set ($includeJoinAll = false)
+      #end
+    #end
 
-  #set ($includeJoinAll = true)
-  #foreach ($fk in $table.ForeignKeys)
-   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-   #if ($tblFK.isForReferenceOnly())
-       #set ($includeJoinAll = false)
-   #end
-  #end
+    #if ($includeJoinAll)
+      #foreach ($fk in $table.ForeignKeys)
+        #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
 
-  #if ($includeJoinAll)
-  #foreach ($fk in $table.ForeignKeys)
-   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+        #set ( $excludeTable = $table.Database.getTable($fk.ForeignTableName) )
+        #set ( $excludeClassName = $excludeTable.JavaName )
 
-     #set ( $excludeTable = $table.Database.getTable($fk.ForeignTableName) )
-     #set ( $excludeClassName = $excludeTable.JavaName )
-
-     #set ( $relatedByCol = "" )
-     #foreach ($columnName in $fk.LocalColumns)
-        #set ( $column = $table.getColumn($columnName) )
-        #if ($column.isMultipleFK())
+        #set ( $relatedByCol = "" )
+        #foreach ($columnName in $fk.LocalColumns)
+          #set ( $column = $table.getColumn($columnName) )
+          #if ($column.isMultipleFK())
             #set ($relatedByCol = "$relatedByCol$column.JavaName")
+          #end
         #end
-     #end
 
-     #if ($relatedByCol == "")
-        #set ( $excludeString = $excludeClassName )
-        #set ( $collThisTable = "${className}s" )
-        #set ( $collThisTableMs = $className )
-     #else
-        #set ( $excludeString="${excludeClassName}RelatedBy$relatedByCol" )
-        #set ( $collThisTable="${className}sRelatedBy$relatedByCol" )
-        #set ( $collThisTableMs="${className}RelatedBy$relatedByCol" )
-     #end
+        #if ($relatedByCol == "")
+          #set ( $excludeString = $excludeClassName )
+          #set ( $collThisTable = "${className}s" )
+          #set ( $collThisTableMs = $className )
+        #else
+          #set ( $excludeString="${excludeClassName}RelatedBy$relatedByCol" )
+          #set ( $collThisTable="${className}sRelatedBy$relatedByCol" )
+          #set ( $collThisTableMs="${className}RelatedBy$relatedByCol" )
+        #end
 
 
     /**
@@ -1419,10 +1405,10 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static List doSelectJoinAllExcept${excludeString}(Criteria c)
         throws TorqueException
     {
-    #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
+        #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag(true);
-    #end
+        #end
 
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to another value
@@ -1434,24 +1420,24 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         addSelectColumns(c);
         int offset2 = numColumns + 1;
-    #set ( $index = 2 )
-    #foreach ($fk in $table.ForeignKeys)
-      ## want to cover this case, but the code is not there yet.
-      #if ( !($fk.ForeignTableName.equals($table.Name)) )
-        #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
-        #set ( $joinClassName = $joinTable.JavaName )
+        #set ( $index = 2 )
+        #foreach ($fk in $table.ForeignKeys)
+          ## want to cover this case, but the code is not there yet.
+          #if ( !($fk.ForeignTableName.equals($table.Name)) )
+            #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
+            #set ( $joinClassName = $joinTable.JavaName )
 
-        #if (!$joinClassName.equals($excludeClassName))
-            #set ( $new_index = $index + 1 )
+            #if (!$joinClassName.equals($excludeClassName))
+              #set ( $new_index = $index + 1 )
         ${joinClassName}Peer.addSelectColumns(c);
         int offset$new_index = offset$index + ${joinClassName}Peer.numColumns;
-            #set ( $index = $new_index )
+              #set ( $index = $new_index )
+            #end
+          #end
         #end
-      #end
-    #end
-     #foreach ($col in $table.Columns)
-         #set ( $cup=$col.Name.toUpperCase() )
-         #if($col.isBooleanInt())
+        #foreach ($col in $table.Columns)
+          #set ( $cup=$col.Name.toUpperCase() )
+          #if($col.isBooleanInt())
         // check for conversion from boolean to int
         if (c.containsKey($cup))
         {
@@ -1468,7 +1454,7 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #elseif ($col.isBooleanChar())
+          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if ( c.containsKey($cup) )
         {
@@ -1485,8 +1471,8 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
-         #end
-     #end
+          #end
+        #end
 
         List rows = BasePeer.doSelect(c);
         List results = new ArrayList();
@@ -1495,60 +1481,57 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             Record row = (Record)rows.get(i);
 
-      #set ($classDecl = "Class")
-      #if ($table.ChildrenColumn)
+        #set ($classDecl = "Class")
+        #if ($table.ChildrenColumn)
             $classDecl omClass = ${table.JavaName}Peer.getOMClass(row, 1);
-      #else
+        #else
             $classDecl omClass = ${table.JavaName}Peer.getOMClass();
-      #end
-      #set ($classDecl = "")
-
+        #end
+        #set ($classDecl = "")
             $className obj1 = ($className)${table.JavaName}Peer
                 .row2Object(row, 1, omClass);
-
-
-    #set ( $index = 1 )
-    #foreach ($fk in $table.ForeignKeys)
-      ## want to cover this case, but the code is not there yet.
-      #if ( !($fk.ForeignTableName.equals($table.Name)) )
-        #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
-        #set ( $joinClassName = $joinTable.JavaName )
-        #set ($interfaceName = $joinTable.JavaName)
-        #if ($joinTable.Interface)
-            #set ($interfaceName = $joinTable.Interface)
-        #end
-
-        #if (!$joinClassName.equals($excludeClassName))
-            #set ( $partJoinName = "" )
-            #foreach ($columnName in $fk.LocalColumns)
-                #set ( $column = $table.getColumn($columnName) )
-                #if ($column.isMultipleFK())
-                    #set ( $partJoinName = "$partJoinName$column.JavaName" )
-                #end
+        #set ( $index = 1 )
+        #foreach ($fk in $table.ForeignKeys)
+          ## want to cover this case, but the code is not there yet.
+          #if ( !($fk.ForeignTableName.equals($table.Name)) )
+            #set ( $joinTable = $table.Database.getTable($fk.ForeignTableName) )
+            #set ( $joinClassName = $joinTable.JavaName )
+            #set ($interfaceName = $joinTable.JavaName)
+            #if ($joinTable.Interface)
+              #set ($interfaceName = $joinTable.Interface)
             #end
 
-            #if ($partJoinName == "")
+            #if (!$joinClassName.equals($excludeClassName))
+              #set ( $partJoinName = "" )
+              #foreach ($columnName in $fk.LocalColumns)
+                #set ( $column = $table.getColumn($columnName) )
+                #if ($column.isMultipleFK())
+                  #set ( $partJoinName = "$partJoinName$column.JavaName" )
+                #end
+              #end
+
+              #if ($partJoinName == "")
                 #set ( $joinString = $interfaceName )
                 #set ( $collThisTable = "${className}s" )
                 #set ( $collThisTableMs = $className )
-            #else
+              #else
                 #set ( $joinString="${interfaceName}RelatedBy$partJoinName" )
                 #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
                 #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
-            #end
+              #end
 
-            #set ( $index = $index + 1 )
+              #set ( $index = $index + 1 )
 
-    #if ($joinTable.ChildrenColumn)
+              #if ($joinTable.ChildrenColumn)
             $classDecl omClass = ${joinClassName}Peer.getOMClass(row, offset$index);
-    #else
+              #else
             $classDecl omClass = ${joinClassName}Peer.getOMClass();
-    #end
-    #set ($classDecl = "")
+              #end
+              #set ($classDecl = "")
             $joinClassName obj$index = ($joinClassName)${joinClassName}Peer
                 .row2Object( row, offset$index, omClass);
 
-            #if ($index == 2) boolean #end newObject = true;
+              #if ($index == 2) boolean #end newObject = true;
             for (int j = 0; j < results.size(); j++)
             {
                 $className temp_obj1 = ($className)results.get(j);
@@ -1565,21 +1548,21 @@ public abstract class $basePrefix${table.JavaName}Peer
                 obj${index}.init${collThisTable}();
                 obj${index}.add${collThisTableMs}(obj1);
             }
-      #end
-    #end
-  #end
+              #end
+            #end
+          #end
             results.add(obj1);
         }
         return results;
     }
+        #end
+      #end
+    #end
   #end
- #end
- #end
-#end
 
-## ------------------------------------------------------------
+  ## ------------------------------------------------------------
 
-#if (!$table.isAlias())
+  #if (!$table.isAlias())
     /**
      * Returns the TableMap related to this peer.  This method is not
      * needed for general use but a specific application could have a need.
@@ -1592,5 +1575,5 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         return Torque.getDatabaseMap(DATABASE_NAME).getTable(TABLE_NAME);
     }
-#end ## ends if (!$table.isAlias())
+  #end ## ends if (!$table.isAlias())
 }

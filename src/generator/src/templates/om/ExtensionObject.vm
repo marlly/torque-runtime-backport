@@ -1,12 +1,12 @@
 #set ($interface = "")
 #if ($table.Interface)
-    #set ($interface = ", $table.Interface")
+  #set ($interface = ", $table.Interface")
 #end
 
 package $package;
 
 #if ($table.isAbstract())
-    #set ($abstract = "abstract")
+  #set ($abstract = "abstract")
 #end
 
 import org.apache.torque.om.Persistent;

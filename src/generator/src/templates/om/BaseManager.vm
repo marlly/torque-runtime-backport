@@ -4,7 +4,7 @@
  *#
 #set ($interfaceName = $table.JavaName)
 #if ($table.Interface)
-   #set ($interfaceName = $table.Interface)
+  #set ($interfaceName = $table.Interface)
 #end
 
 package ${package};
@@ -273,11 +273,10 @@ public abstract class $basePrefix${interfaceName}Manager
     }
 
 #if ($table.isAlias())
-    #set ($retrieveMethod = "retrieve${table.JavaName}ByPK")
+  #set ($retrieveMethod = "retrieve${table.JavaName}ByPK")
 #else
-    #set ($retrieveMethod = "retrieveByPK")
+  #set ($retrieveMethod = "retrieveByPK")
 #end
-
 
     protected Persistent retrieveStoredOM(ObjectKey id)
         throws TorqueException
