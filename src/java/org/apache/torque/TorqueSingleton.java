@@ -205,24 +205,7 @@ public class TorqueSingleton
 
         if (conf == null || conf.isEmpty())
         {
-            // If there are no properties in the "torque" namespace
-            // then try the "services.DatabaseService" namespace. This
-            // is deprecated and will be removed t
-            conf = originalConf.subset("services.DatabaseService");
-            if (conf != null && !conf.isEmpty())
-            {
-                /*
-                  logger.warn("Torque's 'services.DatabaseService.' " +
-                  "configuration prefix has been deprecated in " +
-                  "favor of the 'torque.' prefix");
-                */
-            }
-            else
-            {
-                // Assume the original configuration already had any
-                // prefixes stripped.
-                conf = originalConf;
-            }
+            conf = originalConf;
         }
 
         dbMaps = new HashMap();
