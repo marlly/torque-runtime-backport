@@ -816,6 +816,48 @@ public abstract class $basePrefix${table.JavaName}Peer
         doDelete(buildCriteria(obj), con);
     }
 
+    /**
+     * Method to do deletes.
+     *
+     * @param pk ObjectKey that is used DELETE from database.
+     */
+    public static void doDelete(ObjectKey pk) throws TorqueException
+    {
+        $basePrefix${table.JavaName}Peer
+           .doDelete(pk, (Connection) null);
+    }
+
+    /**
+     * Method to delete.  This method is to be used during a transaction,
+     * otherwise use the doDelete(ObjectKey) method.  It will take
+     * care of the connection details internally.
+     *
+     * @param pk the primary key for the object to delete in the database.
+     */
+    public static void doDelete(ObjectKey pk, Connection con)
+        throws TorqueException
+    {
+        doDelete(buildCriteria(pk), con);
+    }
+
+    /** Build a Criteria object from an ObjectKey */
+    public static Criteria buildCriteria( ObjectKey pk )
+    {
+        Criteria criteria = new Criteria();
+  #if ($table.PrimaryKeys.size() == 1)
+            criteria.add($table.PrimaryKeys.get(0).Name.toUpperCase(), pk);
+  #else
+        SimpleKey[] keys = (SimpleKey[])pk.getValue();
+    #set ( $i = 0 )
+    #foreach ($col in $table.PrimaryKeys)
+        #set ( $cup=$col.Name.toUpperCase() )
+            criteria.add($cup, keys[$i]);
+        #set ( $i = $i + 1 )
+    #end
+  #end
+        return criteria;
+     }
+    
     /** Build a Criteria object from the data object for this peer */
     public static Criteria buildCriteria( $table.JavaName obj )
     {
@@ -887,19 +929,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static $table.JavaName ${retrieveMethod}(ObjectKey pk, Connection con)
         throws TorqueException
     {
-
-        Criteria criteria = new Criteria();
-  #if ($table.PrimaryKeys.size() == 1)
-            criteria.add($table.PrimaryKeys.get(0).Name.toUpperCase(), pk);
-  #else
-        SimpleKey[] keys = (SimpleKey[])pk.getValue();
-    #set ( $i = 0 )
-    #foreach ($col in $table.PrimaryKeys)
-        #set ( $cup=$col.Name.toUpperCase() )
-            criteria.add($cup, keys[$i]);
-        #set ( $i = $i + 1 )
-    #end
-  #end
+        Criteria criteria = buildCriteria(pk);
         List v = doSelect(criteria, con);
         if (v.size() != 1)
         {
