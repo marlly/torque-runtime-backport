@@ -73,6 +73,7 @@ import java.text.SimpleDateFormat;
  *
  * @author <a href="mailto:jon@clearink.com">Jon S. Stevens</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class DBMM
@@ -107,16 +108,6 @@ public class DBMM
     public String ignoreCase(String in)
     {
         return in;
-    }
-
-    /**
-     * Gets the string delimiter (usually '\'').
-     *
-     * @return The delimeter.
-     */
-    public char getStringDelimiter()
-    {
-        return '\'';
     }
 
     /**
@@ -208,13 +199,14 @@ public class DBMM
     }
 
     /**
-     * This method is used to format any date string.
-     * Database can use different default date formats.
+     * This method overrides the JDBC escapes used to format dates
+     * using a <code>DateFormat</code>.  As of version 2.0.11, the MM
+     * JDBC driver does not implement JDBC 3.0 escapes.
      *
-     * @return The proper date formatted String.
+     * @return The properly formatted date String.
      */
     public String getDateString(Date date)
     {
-       return '\'' + new SimpleDateFormat(DATE_FORMAT).format(date) + '\'';
+        return getDateString(new SimpleDateFormat(DATE_FORMAT).format(date));
     }
 }

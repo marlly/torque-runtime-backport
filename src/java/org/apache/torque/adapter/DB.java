@@ -207,11 +207,16 @@ public abstract class DB implements Serializable, IDMethod
     public abstract String toUpperCase(String in);
 
     /**
-     * Gets the string delimiter (usually '\'').
+     * Returns the character used to indicate the beginning and end of
+     * a piece of text used in a SQL statement (generally a single
+     * quote).
      *
-     * @return The delimeter.
+     * @return The text delimeter.
      */
-    public abstract char getStringDelimiter();
+    public char getStringDelimiter()
+    {
+        return '\'';
+    }
 
     /**
      * Returns the constant from the {@link
@@ -387,7 +392,7 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getDateString(String dateString)
     {
-       return '\'' + dateString + '\'';
+        return getStringDelimiter () + dateString + getStringDelimiter();
     }
 
     /**

@@ -102,16 +102,6 @@ public class DBSapDB
     }
 
     /**
-     * Gets the string delimiter (usually '\'').
-     *
-     * @return The delimeter.
-     */
-    public char getStringDelimiter()
-    {
-        return '\'';
-    }
-
-    /**
      * @see org.apache.torque.adapter.DB#getIDMethodType()
      */
     public String getIDMethodType()
