@@ -456,6 +456,7 @@
     description="==> cleans up the build directory">
 
     <delete dir="${build.dir}"/>
+    <delete dir="${docs.dest}"/>
   </target>
 
   <!-- ================================================================== -->
