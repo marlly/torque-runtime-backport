@@ -56,19 +56,22 @@
       </p>
 
       <p>
-        Torque uses Velocity to generate the OM sources, and Torque XML schema
-        parsing requires Xerces. We will soon move to using the Digester to
-        parse the XML schema, and at that point any SAX parser will be
-        sufficient.
+        Torque uses <a href="http://jakarta.apache.org/velocity">Velocity</a> to
+        generate the OM sources, and Torque XML schema parsing requires
+        <a href="http://xml.apache.org/xerces-j">Xerces</a>. We will soon move
+        to using the Digester to parse the XML schema, and at that point any SAX
+        parser will be sufficient.
       </p>
 
       <p>
-        Village is required to build the distribution. Village isn't needed for
+        <a href="http://share.whichever.com/index.php?SCREEN=village">Village
+        </a> is required to build the distribution. Village isn't needed for
         building, but the generated classes are dependent on Village.
       </p>
 
       <p>
-        Log4j is required for logging in Torque.
+        <a href="http://jakarta.apache.org/log4j">Log4j</a> is required for
+        logging in Torque.
       </p>
 
     </section>

@@ -14,9 +14,10 @@
       <item name="Developer Guide"       href="/developer-guide.html"/>
     </menu>
     <menu name="Howto Guides">
+      <item name="Peers Howto"           href="/peers-howto.html"/>
+      <item name="Criteria Howto"        href="/criteria-howto.html"/>
       <item name="MS SQL Server Howto"   href="/mssql-howto.html"/>
       <item name="Oracle 8i Howto"       href="/oracle-howto.html"/>
-      <item name="Peers Howto"           href="/peers-howto.html"/>
       <item name="Postgres Howto"        href="/postgres-howto.html"/>
       <item name="Sybase Howto"          href="/sybase-howto.html"/>
     </menu>

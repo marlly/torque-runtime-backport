@@ -27,25 +27,25 @@
       </p>
     </section>
 
-<section name="Torque Directory Structure">
+    <section name="Torque Directory Structure">
 
-<p>
-  Here is what the Torque directory structure looks like. There are slight
-  differences between the stand-alone and TDK versions but nothing significant:
-</p>
+      <p>
+        Here is what the Torque directory structure looks like. There are slight
+        differences between the stand-alone and TDK versions but nothing
+        significant:
+      </p>
 
-<source><![CDATA[
+      <source><![CDATA[
 torque/
     lib/              <--  Jar files required by Torque (stand-alone version)
     dtd/              <--- DTD for Torque XML database descriptors.
     schema/           <--- Project specific XML database descriptor.
     templates/        <--- Velocity templates used for source generation.
-    xsl/              <--- XSLT stylesheets use for HTML generation.
-    output/           <--- Target location for output (stand-alone version).
+    src/              <--- Target location for output (stand-alone version).
 
     build.xml         <--- Ant build file that controls Torque.
     build.properties  <--- Properties file that controls Torque behaviour.
-]]></source>
+      ]]></source>
 
 <p>
   A typical user of Torque would really only ever need to edit the
@@ -240,7 +240,7 @@ user system:
 ]]></source>
 
 <p>
-Please refer to <a href="torque-schema-ref.html">Torque Schema Reference</a>
+Please refer to <a href="schema-reference.html">Torque Schema Reference</a>
 to find out more about the the different elements and attributes.
 </p>
 

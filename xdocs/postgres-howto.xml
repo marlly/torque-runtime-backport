@@ -30,7 +30,7 @@ to store data relevant to the user.  Any data in this hashtable which does
 not map to one of the columns in the visitor table is written to a large
 object field in the database.  Database actions in the TurbineUserPeer and
 BasePeer classes are done through the
-<a href="http://www.working-dogs.com/village/">Village API</a>.
+<a href="http://share.whichever.com/index.php?SCREEN=village">Village API</a>.
 The village API uses the ResultSetMetaData returned by your JDBC driver to
 determine the types of the columns in a SQL result set.  Unfortunately,
 in PostgreSQL large objects are referenced using an OID column (which is a

@@ -426,12 +426,6 @@ ItemPeer.doDelete (crit);
      It is just some ideas that I have found to work well.
    </p>
 
-  <p>
-   <strong>Note:</strong> The <a href="../classhierarchy.html">Class
-   Hierarchy</a> document provides more information regarding mapping a
-   hierarchy in the OM/Peer system.
-  </p>
-
   </section>
 
   <section name="Subclassing">
