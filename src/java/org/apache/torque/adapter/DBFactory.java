@@ -54,10 +54,10 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Category;
-import org.apache.commons.configuration.Configuration;
 
 
 /**
@@ -74,13 +74,6 @@ import org.apache.commons.configuration.Configuration;
 public class DBFactory
 {
     /**
-     * A table of <code>Class</code> objects for registered adapters,
-     * keyed by the fully qualified class name of their associated
-     * JDBC driver.
-     */
-    private static Hashtable adapters;
-
-    /**
      * The package name in which known adapters are stored.
      */
     private static String adapterPackage = "org.apache.torque.adapter";
@@ -94,123 +87,53 @@ public class DBFactory
     /**
      * JDBC driver to Torque Adapter map.
      */
-    private static Hashtable driverToAdapterMap;
-
-    /**
-     * This static code creates the list of possible adapters and adds
-     * the "NO DATABASE" adapter to this list.  After all the
-     * configuration is queried to get a list of JDBC drivers and
-     * their associated adapters.
-     *
-     * @param configuration the configuration
-     */
-    public static void init(Configuration configuration)
-    {
-        adapters = new Hashtable();
-        initializeDriverToAdapterMap();
-
-        // Add the null database adapter.
-        registerAdapter("", DBNone.class);
-        Iterator i = configuration.getKeys();
-
-        while (i.hasNext())
-        {
-            String key = (String) i.next();
-            if (key.endsWith("driver") || key.endsWith("adapter"))
-            {
-                String mapKey = configuration.getString(key);
-                Class adapterClass = null;
-                String adapterClassName = (String) adapterPackage + "." +
-                    driverToAdapterMap.get(mapKey);
-
-                category.debug("Using " + adapterClassName);
-
-                try
-                {
-                    adapterClass = Class.forName(adapterClassName);
-                }
-                catch (ClassNotFoundException e)
-                {
-                    category.error(e);
-                }
-
-                if (adapterClass != null && mapKey != null)
-                {
-                    registerAdapter(mapKey, adapterClass);
-                }
-            }
-        }
-    }
+    private static Map adapters = new HashMap(40);
 
     /**
      * Initialize the JDBC driver to Torque Adapter map.
      */
-    private static void initializeDriverToAdapterMap()
+    static
     {
-        driverToAdapterMap = new Hashtable();
-
-        driverToAdapterMap.put("com.ibm.as400.access.AS400JDBCDriver",
-                               "DBDB2400");
-        driverToAdapterMap.put("COM.ibm.db2.jdbc.app.DB2Driver", "DBDB2App");
-        driverToAdapterMap.put("COM.ibm.db2.jdbc.net.DB2Driver", "DBDB2Net");
-        driverToAdapterMap.put("COM.cloudscape.core.JDBCDriver",
-                               "DBCloudscape");
-        driverToAdapterMap.put("org.hsql.jdbcDriver", "DBHypersonicSQL");
-        driverToAdapterMap.put("org.hsqldb.jdbcDriver", "DBHypersonicSQL");
-        driverToAdapterMap.put("interbase.interclient.Driver", "DBInterbase");
-        driverToAdapterMap.put("org.enhydra.instantdb.jdbc.idbDriver",
-                               "DBInstantDB");
-        driverToAdapterMap.put("com.microsoft.jdbc.sqlserver.SQLServerDriver",
-                               "DBMSSQL");
-        driverToAdapterMap.put("com.jnetdirect.jsql.JSQLDriver", "DBMSSQL");
-        driverToAdapterMap.put("org.gjt.mm.mysql.Driver", "DBMM");
-        driverToAdapterMap.put("com.mysql.jdbc.Driver", "DBMM");
-        driverToAdapterMap.put("oracle.jdbc.driver.OracleDriver", "DBOracle");
-        driverToAdapterMap.put("org.postgresql.Driver", "DBPostgres");
-        driverToAdapterMap.put("com.sap.dbtech.jdbc.DriverSapDB", "DBSapDB");
-        driverToAdapterMap.put("com.sybase.jdbc.SybDriver", "DBSybase");
-        driverToAdapterMap.put("com.sybase.jdbc2.jdbc.SybDriver", "DBSybase");
-        driverToAdapterMap.put("weblogic.jdbc.pool.Driver", "DBWeblogic");
-        driverToAdapterMap.put("org.axiondb.jdbc.AxionDriver", "DBAxion");
-        driverToAdapterMap.put("com.informix.jdbc.IfxDriver", "DBInformix");
+        adapters.put("com.ibm.as400.access.AS400JDBCDriver", DBDB2400.class);
+        adapters.put("COM.ibm.db2.jdbc.app.DB2Driver", DBDB2App.class);
+        adapters.put("COM.ibm.db2.jdbc.net.DB2Driver", DBDB2Net.class);
+        adapters.put("COM.cloudscape.core.JDBCDriver", DBCloudscape.class);
+        adapters.put("org.hsql.jdbcDriver", DBHypersonicSQL.class);
+        adapters.put("org.hsqldb.jdbcDriver", DBHypersonicSQL.class);
+        adapters.put("interbase.interclient.Driver", DBInterbase.class);
+        adapters.put("org.enhydra.instantdb.jdbc.idbDriver", DBInstantDB.class);
+        adapters.put("com.microsoft.jdbc.sqlserver.SQLServerDriver",
+            DBMSSQL.class);
+        adapters.put("com.jnetdirect.jsql.JSQLDriver", DBMSSQL.class);
+        adapters.put("org.gjt.mm.mysql.Driver", DBMM.class);
+        adapters.put("oracle.jdbc.driver.OracleDriver", DBOracle.class);
+        adapters.put("org.postgresql.Driver", DBPostgres.class);
+        adapters.put("com.sap.dbtech.jdbc.DriverSapDB", DBSapDB.class);
+        adapters.put("com.sybase.jdbc.SybDriver", DBSybase.class);
+        adapters.put("com.sybase.jdbc2.jdbc.SybDriver", DBSybase.class);
+        adapters.put("weblogic.jdbc.pool.Driver", DBWeblogic.class);
+        adapters.put("org.axiondb.jdbc.AxionDriver", DBAxion.class);
+        adapters.put("com.informix.jdbc.IfxDriver", DBInformix.class);
 
         // add some short names to be used when drivers are not used
-        driverToAdapterMap.put("as400", "DBDB2400");
-        driverToAdapterMap.put("db2app", "DBDB2App");
-        driverToAdapterMap.put("db2net", "DBDB2Net");
-        driverToAdapterMap.put("cloudscape", "DBCloudscape");
-        driverToAdapterMap.put("hypersonic", "DBHypersonicSQL");
-        driverToAdapterMap.put("interbase", "DBInterbase");
-        driverToAdapterMap.put("instantdb", "DBInstantDB");
-        driverToAdapterMap.put("mssql", "DBMSSQL");
-        driverToAdapterMap.put("mysql", "DBMM");
-        driverToAdapterMap.put("oracle", "DBOracle");
-        driverToAdapterMap.put("postgresql", "DBPostgres");
-        driverToAdapterMap.put("sapdb", "DBSapDB");
-        driverToAdapterMap.put("sybase", "DBSybase");
-        driverToAdapterMap.put("weblogic", "DBWeblogic");
-        driverToAdapterMap.put("axion", "DBAxion");
-        driverToAdapterMap.put("informix", "DBInformix");
-    }
-
-    /**
-     * Registers the <code>Class</code> of a database adapter at the
-     * factory.  This concept allows for dynamically adding new
-     * database adapters using the configuration files instead of
-     * changing the codebase.
-     *
-     * @param driver The fully-qualified class name of the JDBC driver
-     * to associate with an adapter.
-     * @param adapterClass The <code>Class</code> of the database
-     * adapter associated with <code>driver</code>.
-     */
-    private static void registerAdapter(String driver, Class adapterClass)
-    {
-        if (!adapters.containsKey(driver))
-        {
-            // Add this new adapter class to the list of known adapters.
-            adapters.put(driver, adapterClass);
-        }
+        adapters.put("as400", DBDB2400.class);
+        adapters.put("db2app", DBDB2App.class);
+        adapters.put("db2net", DBDB2Net.class);
+        adapters.put("cloudscape", DBCloudscape.class);
+        adapters.put("hypersonic", DBHypersonicSQL.class);
+        adapters.put("interbase", DBInterbase.class);
+        adapters.put("instantdb", DBInstantDB.class);
+        adapters.put("mssql", DBMSSQL.class);
+        adapters.put("mysql", DBMM.class);
+        adapters.put("oracle", DBOracle.class);
+        adapters.put("postgresql", DBPostgres.class);
+        adapters.put("sapdb", DBSapDB.class);
+        adapters.put("sybase", DBSybase.class);
+        adapters.put("weblogic", DBWeblogic.class);
+        adapters.put("axion", DBAxion.class);
+        adapters.put("informix", DBInformix.class);
+        
+        adapters.put("", DBNone.class);
     }
 
     /**
@@ -238,17 +161,18 @@ public class DBFactory
             }
             catch (IllegalAccessException e)
             {
-                throw new InstantiationException
-                    ("Could not instantiate adapter for JDBC driver: " +
-                     driver + ": Assure that adapter bytecodes are in your " +
-                     "classpath");
+                throw new InstantiationException(
+                    "Could not instantiate adapter for JDBC driver: " 
+                    + driver 
+                    + ": Assure that adapter bytecodes are in your classpath");
             }
         }
         else
         {
-            throw new InstantiationException
-                ("Unknown JDBC driver: " + driver + ": Check your " +
-                 "configuration file");
+            throw new InstantiationException(
+                "Unknown JDBC driver: "
+                + driver 
+                + ": Check your configuration file");
         }
     }
 }

@@ -237,7 +237,6 @@ public class Torque
         }
 
         dbMaps = new HashMap();
-        DBFactory.init(configuration);
         initAdapters(configuration);
         initDataSourceFactories(configuration);
 

@@ -272,7 +272,6 @@ public class CriteriaTest extends BaseTestCase
 
         Configuration conf = new BaseConfiguration();
         conf.addProperty("driver", "org.postgresql.Driver");
-        DBFactory.init(conf);
         try
         {
             cc.setDB(DBFactory.create("org.postgresql.Driver"));
