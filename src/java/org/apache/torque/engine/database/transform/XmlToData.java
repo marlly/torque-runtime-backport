@@ -169,7 +169,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     {
         try
         {
-            System.out.println("start: " + rawName);
             if (rawName.equals("dataset"))
             {
                 //ignore <dataset> for now.
