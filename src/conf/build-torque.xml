@@ -4,7 +4,7 @@
   <property name="build.properties" value="build.properties"/>
   <property file="${build.properties}"/>
   <property name="lib.dir" value="lib"/>
-  
+
   <!-- Build classpath -->
   <path id="torque-classpath">
     <fileset dir="${lib.dir}">
@@ -158,7 +158,13 @@
     name="project-jdbc"
     description="==> jdbc to xml">
 
-    <echo message="JDBC transform"/>
+    <echo message="+-----------------------------------------------+"/>
+    <echo message="|                                               |"/>
+    <echo message="| Generating XML from JDBC connection !         |"/>
+    <echo message="| Woo hoo!                                      |"/>
+    <echo message="|                                               |"/>
+    <echo message="+-----------------------------------------------+"/>
+    <echo message=" taking build.properties from: ${build.properties}"/>
 
     <taskdef
       name="torque-jdbc"
@@ -171,6 +177,7 @@
       dbDriver="${databaseDriver}"
       dbUser="${databaseUser}"
       dbPassword="${databasePassword}"
+      dbSchema="${databaseSchema}"
       outputFile="${torque.home}/${outputDirectory}/schema.xml"
       sameJavaName="${sameJavaName}"
     />
@@ -247,7 +254,7 @@
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
-    </torque-sql>      
+    </torque-sql>
   </target>
 
   <!-- ================================================================ -->
