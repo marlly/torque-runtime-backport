@@ -2138,6 +2138,7 @@ public abstract class BasePeer implements java.io.Serializable
 
     /**
      * Performs a SQL <code>select</code> using a PreparedStatement.
+     * Note: this method does not handle null criteria values.
      *
      * @exception TorqueException Error performing database query.
      */
@@ -2162,6 +2163,10 @@ public abstract class BasePeer implements java.io.Serializable
                 if (param instanceof java.sql.Date)
                 {
                     stmt.setDate(i + 1, (java.sql.Date) param);
+                }
+                else if (param instanceof NumberKey)
+                {
+                    stmt.setBigDecimal(i+1, ((NumberKey)param).getBigDecimal());
                 }
                 else
                 {
@@ -2256,11 +2261,6 @@ public abstract class BasePeer implements java.io.Serializable
             selectModifiers.add( modifiers.get(i) );
         }
 
-        for (int i = 0; i < modifiers.size(); i++)
-        {
-            selectModifiers.add( modifiers.get(i) );
-        }
-
         for (int i = 0; i < select.size(); i++)
         {
             String columnName = select.get(i);
@@ -2279,6 +2279,13 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 tableName = columnName.substring(parenPos + 1,
                                                  columnName.indexOf('.') );
+                // functions may contain qualifiers so only take the last
+                // word as the table name.
+                int lastSpace = tableName.lastIndexOf(' ');
+                if ( lastSpace != -1 )
+                {
+                    tableName = tableName.substring(lastSpace + 1);
+                }
             }
             String tableName2 = criteria.getTableForAlias(tableName);
             if ( tableName2 != null )
