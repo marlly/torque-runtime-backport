@@ -288,19 +288,13 @@ public class Database
     }
 
     /**
-     * Return an array of all tables
+     * Return an List of all tables
      *
-     * @return array of all tables
+     * @return List of all tables
      */
-    public Table[] getTables()
+    public List getTables()
     {
-        int size = tableList.size();
-        Table[] tbls = new Table[size];
-        for (int i = 0; i < size; i++)
-        {
-            tbls[i] = (Table) tableList.get(i);
-        }
-        return tbls;
+        return tableList;
     }
 
     /**
@@ -392,10 +386,11 @@ public class Database
      */
     public boolean requiresIdTable()
     {
-        Table table[] = getTables();
-        for (int i = 0; i < table.length; i++)
+        Iterator iter = getTables().iterator();
+        while (iter.hasNext())
         {
-            if (table[i].getIdMethod().equals(IDMethod.ID_BROKER))
+            Table table = (Table) iter.next();
+            if (table.getIdMethod().equals(IDMethod.ID_BROKER))
             {
                 return true;
             }
@@ -403,13 +398,17 @@ public class Database
         return false;
     }
 
-    public void doFinalInitialization()
-            throws EngineException
+    /**
+     * Initializes the model.
+     * 
+     * @throws EngineException
+     */
+    public void doFinalInitialization() throws EngineException
     {
-        Table[] tables = getTables();
-        for (int i = 0; i < tables.length; i++)
+        Iterator iter = getTables().iterator();
+        while (iter.hasNext())
         {
-            Table currTable = tables[i];
+            Table currTable = (Table) iter.next();
 
             // check schema integrity
             // if idMethod="autoincrement", make sure a column is
@@ -418,11 +417,11 @@ public class Database
             // TODO autoincrement is no longer supported!!!
             if (currTable.getIdMethod().equals("autoincrement"))
             {
-                Column[] columns = currTable.getColumns();
                 boolean foundOne = false;
-                for (int j = 0; j < columns.length && !foundOne; j++)
+                Iterator colIter = currTable.getColumns().iterator();
+                while (colIter.hasNext() && !foundOne)
                 {
-                    foundOne = columns[j].isAutoIncrement();
+                    foundOne = ((Column) colIter.next()).isAutoIncrement();
                 }
 
                 if (!foundOne)
@@ -438,10 +437,10 @@ public class Database
             currTable.doFinalInitialization();
 
             // setup reverse fk relations
-            ForeignKey[] fks = currTable.getForeignKeys();
-            for (int j = 0; j < fks.length; j++)
+            Iterator fks = currTable.getForeignKeys().iterator();
+            while (fks.hasNext())
             {
-                ForeignKey currFK = fks[j];
+                ForeignKey currFK = (ForeignKey) fks.next();
                 Table foreignTable = getTable(currFK.getForeignTableName());
                 if (foreignTable == null)
                 {

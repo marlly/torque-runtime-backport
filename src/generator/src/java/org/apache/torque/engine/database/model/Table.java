@@ -814,17 +814,13 @@ public class Table implements IDMethod
     }
 
     /**
-     * Returns an Array containing all the columns in the table
+     * Returns a List containing all the columns in the table
+     * 
+     * @return a List containing all the columns
      */
-    public Column[] getColumns()
+    public List getColumns()
     {
-        int size = columnList.size();
-        Column[] tbls = new Column[size];
-        for (int i = 0; i < size; i++)
-        {
-            tbls[i] = (Column) columnList.get(i);
-        }
-        return tbls;
+        return columnList;
     }
 
     /**
@@ -836,17 +832,13 @@ public class Table implements IDMethod
     }
 
     /**
-     * Returns an Array containing all the FKs in the table
+     * Returns a List containing all the FKs in the table
+     * 
+     * @return a List containing all the FKs
      */
-    public ForeignKey[] getForeignKeys()
+    public List getForeignKeys()
     {
-        int size = foreignKeys.size();
-        ForeignKey[] tbls = new ForeignKey[size];
-        for (int i = 0; i < size; i++)
-        {
-            tbls[i] = (ForeignKey) foreignKeys.get(i);
-        }
-        return tbls;
+        return foreignKeys;
     }
 
     /**
@@ -882,35 +874,23 @@ public class Table implements IDMethod
     }
 
     /**
-     * Returns an Array containing all the indices in the table
+     * Returns a List containing all the indices in the table
      *
-     * @return An array containing all the indices
+     * @return A List containing all the indices
      */
-    public Index[] getIndices()
+    public List getIndices()
     {
-        int size = indices.size();
-        Index[] tbls = new Index[size];
-        for (int i = 0; i < size; i++)
-        {
-            tbls[i] = (Index) indices.get(i);
-        }
-        return tbls;
+        return indices;
     }
 
     /**
-     * Returns an Array containing all the UKs in the table
+     * Returns a List containing all the UKs in the table
      *
-     * @return An array containing all the UKs
+     * @return A List containing all the UKs
      */
-    public Unique[] getUnices()
+    public List getUnices()
     {
-        int size = unices.size();
-        Unique[] tbls = new Unique[size];
-        for (int i = 0; i < size; i++)
-        {
-            tbls[i] = (Unique) unices.get(i);
-        }
-        return tbls;
+        return unices;
     }
 
     /**

@@ -146,7 +146,7 @@ public class Index
             inputs.add("I");
         }
         // ASSUMPTION: This Index not yet added to the list.
-        inputs.add(new Integer(table.getIndices().length + 1));
+        inputs.add(new Integer(table.getIndices().size() + 1));
         indexName = NameFactory.generateName(
                 NameFactory.CONSTRAINT_GENERATOR, inputs);
     }

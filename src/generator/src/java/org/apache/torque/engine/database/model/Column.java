@@ -55,6 +55,7 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -493,12 +494,12 @@ public class Column
         ForeignKey fk = getForeignKey();
         if (fk != null)
         {
-            ForeignKey[] fks = parentTable.getForeignKeys();
-            for (int i = 0; i < fks.length; i++)
+            Iterator fks = parentTable.getForeignKeys().iterator();
+            while (fks.hasNext())
             {
-                if (fks[i].getForeignTableName()
-                        .equals(fk.getForeignTableName())
-                        && !fks[i].getLocalColumns().contains(this.name))
+                ForeignKey key = (ForeignKey) fks.next();
+                if (key.getForeignTableName().equals(fk.getForeignTableName())
+                        && !key.getLocalColumns().contains(this.name))
                 {
                     return true;
                 }

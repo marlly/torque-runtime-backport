@@ -136,9 +136,9 @@ public class TableTest extends TestCase
     public void testSingleFk() throws Exception
     {
         Table table = db.getTable("singlefk");
-        ForeignKey[] fks = table.getForeignKeys();
-        assertTrue(fks.length == 1);
-        ForeignKey fk = fks[0];
+        List fks = table.getForeignKeys();
+        assertTrue(fks.size() == 1);
+        ForeignKey fk = (ForeignKey) fks.get(0);
         assertEquals(fk.getForeignTableName(), "singlepk");
         assertTrue(fk.getForeignColumns().size() == 1);
     }
@@ -146,9 +146,9 @@ public class TableTest extends TestCase
     public void testMultiFk() throws Exception
     {
         Table table = db.getTable("multifk");
-        ForeignKey[] fks = table.getForeignKeys();
-        assertTrue(fks.length == 1);
-        ForeignKey fk = fks[0];
+        List fks = table.getForeignKeys();
+        assertTrue(fks.size() == 1);
+        ForeignKey fk = (ForeignKey) fks.get(0);
         assertEquals(fk.getForeignTableName(), "multipk");
         assertTrue(fk.getForeignColumns().size() == 2);
     }
@@ -165,9 +165,9 @@ public class TableTest extends TestCase
     public void testUnique() throws Exception
     {
         Table table = db.getTable("unique_test");
-        Unique[] unices = table.getUnices();
-        assertTrue(unices.length == 1);
-        Unique unique = unices[0];
+        List unices = table.getUnices();
+        assertTrue(unices.size() == 1);
+        Unique unique = (Unique) unices.get(0);
         assertEquals(unique.getName(), "unique_name");   
         assertTrue(unique.getColumns().size() == 2);     
     }
