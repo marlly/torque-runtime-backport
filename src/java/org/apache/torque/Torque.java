@@ -263,18 +263,18 @@ public class Torque
     public static DatabaseMap getDatabaseMap()
         throws TorqueException
     {
-        return getDatabaseMap(getDefaultMap());
+        return getDatabaseMap(getDefaultDB());
     }
 
     /**
      * Returns the database map information. Name relates to the name
      * of the connection pool to associate with the map.
      *
-     * @param name The name of the <code>DatabaseMap</code> to
-     * retrieve.
+     * @param name The name of the database corresponding to the
+     * <code>DatabaseMap</code> to retrieve.
      * @return The named <code>DatabaseMap</code>.
-     * @throws TorqueException Any exceptions caught during procssing will be
-     *         rethrown wrapped into a TorqueException.
+     * @throws TorqueException Any exceptions caught during procssing
+     * will be rethrown wrapped into a <code>TorqueException</code>.
      */
     public static DatabaseMap getDatabaseMap(String name)
         throws TorqueException
@@ -721,18 +721,6 @@ public class Torque
      * Returns the name of the default database.
      */
     public static String getDefaultDB()
-    {
-        if (configuration == null)
-        {
-            return DEFAULT_NAME;
-        }
-        return configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
-    }
-
-    /**
-     * Returns the name of the default database map.
-     */
-    public static String getDefaultMap()
     {
         if (configuration == null)
         {
