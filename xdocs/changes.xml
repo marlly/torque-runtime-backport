@@ -29,6 +29,10 @@
 
   <release version="3.2-dev" date="in CVS">
     <action type="add" dev="tfischer">
+      TRQS289: Added Thomas Vandahl's Patch to synchronize Object.vm
+      to ObjectWithManager.vm.
+    </action>
+    <action type="add" dev="tfischer">
       TRQS263: Add support for oracle datatype timestamp; 
       limit number of digits for saving integers in oracle to 10
     </action>
