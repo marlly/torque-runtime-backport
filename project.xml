@@ -39,7 +39,14 @@
 
   <developers>
 
-     <developer>
+    <developer>
+      <name>Eric Dobbs</name>
+      <id>dobbs</id>
+      <email>dobbs@apache.org</email>
+      <organization/>
+    </developer>
+
+    <developer>
       <name>Fedor Karpelevitch</name>
       <id>fedor</id>
       <email>fedor@karpelevitch.net</email>
@@ -171,7 +178,7 @@
       <version>2.0.0</version>
       <jar>xmlParserAPIs-2.0.0.jar</jar>
     </dependency>
-    
+
     <!-- These are need in order to generate the gump descriptor.
          Maven needs to be fixed so these don't have to be explicity set.-->
     <dependency>
@@ -203,7 +210,7 @@
     </sourceDirectories>
 
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    
+
     <aspectSourceDirectories>
     </aspectSourceDirectories>
 
