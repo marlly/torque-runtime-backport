@@ -57,6 +57,8 @@ package org.apache.torque.adapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * This is used in order to connect to a MySQL database using the MM
@@ -76,6 +78,9 @@ import java.sql.Statement;
 public class DBMM
     extends DB
 {
+    private static final SimpleDateFormat DATE_FORMATTER = 
+        new SimpleDateFormat("yyyyMMddHHmmss");
+
     /**
      * Empty constructor.
      */
@@ -209,5 +214,16 @@ public class DBMM
     public int getLimitStyle()
     {
         return DB.LIMIT_STYLE_MYSQL;
+    }
+
+    /**
+     * This method is used to format any date string.
+     * Database can use different default date formats.
+     *
+     * @return The proper date formatted String.
+     */
+    public String getDateString(Date date)
+    {
+       return '\'' + DATE_FORMATTER.format(date) + '\'';
     }
 }

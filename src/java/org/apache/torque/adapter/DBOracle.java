@@ -54,6 +54,7 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
+import java.util.Date;
 import java.lang.reflect.Method;
 
 import java.sql.Connection;
@@ -225,9 +226,21 @@ public class DBOracle
      * Database can use different default date formats.
      *
      * @return The proper date formated String.
+     * @deprecated use getDateString(java.util.Date)
      */
   public String getDateString(String dateString)
   {
     return "TO_DATE('" + dateString + "', 'yyyy-mm-dd hh24:mi:ss..' )";
+  }
+
+    /**
+     * This method is used to format any date string.
+     * Database can use different default date formats.
+     *
+     * @return The proper date formated String.
+     */
+  public String getDateString(Date date)
+  {
+      return "TO_DATE('" + date.toString() + "', 'yyyy-mm-dd hh24:mi:ss..' )";
   }
 }

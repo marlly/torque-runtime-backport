@@ -54,6 +54,7 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
+import java.util.Date;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -406,9 +407,22 @@ public abstract class DB implements Serializable, IDMethod
      * Database can use different default date formats.
      *
      * @return The proper date formated String.
+     * @deprecated use getDateString(java.util.Date)
      */
     public String getDateString(String dateString)
     {
-       return '\'' + dateString + '\'';
+       return "\'" + dateString + "\'";
+    }
+
+
+    /**
+     * This method is used to format any date string.
+     * Database can use different default date formats.
+     *
+     * @return The proper date formatted String.
+     */
+    public String getDateString(Date date)
+    {
+       return '\'' + date.toString() + '\'';
     }
 }

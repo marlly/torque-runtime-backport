@@ -284,10 +284,14 @@ public class SqlExpression
            {
                criteria = quoteAndEscapeText(criteria.toString(), db);
            }
-           else if( criteria instanceof java.util.Date ||
-                    criteria instanceof DateKey)
+           else if( criteria instanceof java.util.Date )
            {
-               criteria = db.getDateString(criteria.toString());
+               criteria = db.getDateString((Date)criteria);
+           }
+           else if ( criteria instanceof DateKey ) 
+           {
+               criteria = db
+                   .getDateString((Date)((DateKey)criteria).getValue()); 
            }
            else if( criteria instanceof Boolean )
            {
