@@ -88,22 +88,29 @@ public abstract class BaseTestCase extends TestCase
     public BaseTestCase(String name)
     {
         super(name);
-        if (!hasInitialized)
+    }
+
+    /**
+     * Initialize Torque on the first setUp().  Subclasses which
+     * override setUp() must call super.setUp() as their first action.
+     */
+    public void setUp()
+    {
+        synchronized (BaseTestCase.class)
         {
-            synchronized (BaseTestCase.class)
+            if (!hasInitialized)
             {
-                if (!hasInitialized)
+                try
                 {
-                    try
-                    {
-                        Torque.init(CONFIG_FILE);
-                    }
-                    catch (Exception e)
-                    {
-                        fail("Couldn't initialize Torque: " + e.getMessage());
-                    }
+                    Torque.init(CONFIG_FILE);
+                    hasInitialized = true;
+                }
+                catch (Exception e)
+                {
+                    fail("Couldn't initialize Torque: " + e.getMessage());
                 }
             }
         }
     }
+
 }
