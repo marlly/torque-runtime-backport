@@ -220,15 +220,6 @@ public class MethodResultCache
                         Thread.yield();
                     }
                     jcsCache.remove(key, key.getGroupKey());
-                    try
-                    {
-                        pool.returnObject(key);
-                    }
-                    catch (Exception e)
-                    {
-                        log.warn(
-                            "Nonfatal error. Could not return key to pool", e);
-                    }
                 }
                 // jcs does not throw an exception here, might remove this
                 catch (Exception ce) 
@@ -484,7 +475,9 @@ public class MethodResultCache
                 MethodCacheKey key = 
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
-                jcsCache.invalidateGroup(key.getGroupKey());
+                String groupName = key.getGroupKey();
+                jcsCache.invalidateGroup(groupName);
+                groups.remove(groupName);
                 try
                 {
                     pool.returnObject(key);
