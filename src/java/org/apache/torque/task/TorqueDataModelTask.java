@@ -354,7 +354,7 @@ public class TorqueDataModelTask extends TexenTask
         }
 
         // Create a new Velocity context.
-        context = new VelocityContext();
+        context = new VelocityContext(this.getProject().getProperties());
 
         // Place our set of data models into the context along
         // with the names of the databases as a convenience for now.
@@ -379,7 +379,7 @@ public class TorqueDataModelTask extends TexenTask
         
         // Save the keys during iteration to avoid a ConcurrentModificationException
         List keys = new ArrayList();
-        for (Iterator i = contextProperties.getKeys(); i.hasNext(); )
+        for (Iterator i = contextProperties.keySet().iterator(); i.hasNext(); )
         {
             String key = (String) i.next();
             if (key.startsWith("torque."))
@@ -391,7 +391,7 @@ public class TorqueDataModelTask extends TexenTask
         for (Iterator i = keys.iterator(); i.hasNext(); )
         {
             String key = (String) i.next();
-            contextProperties.setProperty(
+            contextProperties.put(
                 key.substring("torque.".length()),
                 contextProperties.get(key));
         }
