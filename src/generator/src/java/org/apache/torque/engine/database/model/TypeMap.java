@@ -580,7 +580,7 @@ public class TypeMap
 
     /**
      * Returns Torque type constant corresponding to JDBC type code.
-     * Used but Torque JDBC task.
+     * Used by the Torque JDBC task.
      *
      * @param sqlType the SQL type
      * @return Torque type constant
@@ -595,8 +595,9 @@ public class TypeMap
         SchemaType st = (SchemaType) jdbcToTorqueTypeMap.get(sqlType);
         if (st == null)
         {
-            log.warn("SchemaType for JdbcType " + sqlType + " is not defined");
             st = SchemaType.VARCHAR;
+            log.warn("SchemaType for JdbcType '" + sqlType +
+                     "' is not defined: Defaulting to '" + st + '\'');
         }
         return st;
     }
