@@ -2,13 +2,13 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 
-<database name="bookstore">
+<database name="bookstore" defaultIdMethod="native">
 
   <!-- =================================================== -->
   <!-- B O O K  T A B L E                                  -->
   <!-- =================================================== -->
 
-  <table name="book" idMethod="idbroker">
+  <table name="book">
     <column
       name="book_id"
       required="true"
@@ -44,7 +44,7 @@
   <!-- A U T H O R  T A B L E                              -->
   <!-- =================================================== -->
 
-  <table name="author" idMethod="idbroker">
+  <table name="author">
     <column
       name="author_id"
       required="true"
