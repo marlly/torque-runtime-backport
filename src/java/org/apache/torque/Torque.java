@@ -633,18 +633,13 @@ public class Torque
     /**
      * Returns the string for the specified property of the given database.
      *
-     * @param db   The name of the database whose property to get.
+     * @param dbName The name of the database whose property to get.
      * @param prop The name of the property to get.
-     * @return     The string of the property.
+     * @return The string of the property.
      */
-    private static String getProperty(String db, String prop)
+    private static final String getProperty(String dbName, String prop)
     {
-        return
-            new StringBuffer("database.")
-            .append(db)
-            .append('.')
-            .append(prop)
-            .toString();
+        return ("database." + dbName + '.' + prop);
     }
 
     ///////////////////////////////////////////////////////////////////////////
