@@ -136,7 +136,6 @@ public class TypeMap
         CHAR, VARCHAR, LONGVARCHAR, CLOB, DATE, TIME, TIMESTAMP, BOOLEANCHAR
     };
 
-
     public static final String CHAR_OBJECT_TYPE = "new String()";
     public static final String VARCHAR_OBJECT_TYPE = "new String()";
     public static final String LONGVARCHAR_OBJECT_TYPE = "new String()";
@@ -486,6 +485,8 @@ public class TypeMap
 
     /**
      * Report whether this object has been initialized.
+     *
+     * @return true if this object has been initialized
      */
     public static boolean isInitialized()
     {
@@ -495,6 +496,9 @@ public class TypeMap
     /**
      * Return a Java object which corresponds to the
      * JDBC type provided. Use in MapBuilder generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the Object
      */
     public static String getJavaObject(String jdbcType)
     {
@@ -503,12 +507,15 @@ public class TypeMap
         {
             initialize();
         }
-        return (String)jdbcToJavaObjectMap.get(jdbcType);
+        return (String) jdbcToJavaObjectMap.get(jdbcType);
     }
 
     /**
      * Return native java type which corresponds to the
      * JDBC type provided. Use in the base object class generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the native java type
      */
     public static String getJavaNative(String jdbcType)
     {
@@ -523,6 +530,9 @@ public class TypeMap
     /**
      * Return native java type which corresponds to the
      * JDBC type provided. Use in the base object class generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the Object
      */
     public static String getJavaNativeObject(String jdbcType)
     {
@@ -531,10 +541,10 @@ public class TypeMap
         {
             initialize();
         }
-        String s = (String)jdbcToJavaNativeObjectMap.get(jdbcType);
-        if ( s == null )
+        String s = (String) jdbcToJavaNativeObjectMap.get(jdbcType);
+        if (s == null)
         {
-            s = (String)jdbcToJavaNativeMap.get(jdbcType);
+            s = (String) jdbcToJavaNativeMap.get(jdbcType);
         }
         return s;
     }
@@ -542,6 +552,9 @@ public class TypeMap
     /**
      * Return Village asX() method which corresponds to the
      * JDBC type provided. Use in the Peer class generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the Village asX() method
      */
     public static String getVillageMethod(String jdbcType)
     {
@@ -556,6 +569,9 @@ public class TypeMap
     /**
      * Return Village asX() method which corresponds to the
      * JDBC type provided. Use in the Peer class generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the Village asX() method
      */
     public static String getVillageObjectMethod(String jdbcType)
     {
@@ -564,10 +580,10 @@ public class TypeMap
         {
             initialize();
         }
-        String s = (String)jdbcToVillageObjectMethodMap.get(jdbcType);
-        if ( s == null )
+        String s = (String) jdbcToVillageObjectMethodMap.get(jdbcType);
+        if (s == null)
         {
-            s = (String)jdbcToVillageMethodMap.get(jdbcType);
+            s = (String) jdbcToVillageMethodMap.get(jdbcType);
         }
         return s;
     }
@@ -575,6 +591,9 @@ public class TypeMap
     /**
      * Return ParameterParser getX() method which corresponds to the
      * JDBC type provided. Use in the Object class generation.
+     *
+     * @param jdbcType the JDBC type
+     * @return name of the ParameterParser getX() method
      */
     public static String getPPMethod(String jdbcType)
     {
@@ -588,6 +607,9 @@ public class TypeMap
 
     /**
      * Returns the correct jdbc type for torque added types
+     *
+     * @param type the torque added type
+     * @return name of the the correct jdbc type
      */
     public static String getJdbcType(String type)
     {
@@ -602,6 +624,9 @@ public class TypeMap
     /**
      * Returns Torque type constant corresponding to JDBC type code.
      * Used but Torque JDBC task.
+     *
+     * @param sqlType the SQL type
+     * @return Torque type constant
      */
     public static String getTorqueType(Integer sqlType)
     {
@@ -618,6 +643,7 @@ public class TypeMap
      * object and a numeric (1 or 0) in the db.
      *
      * @param type The type to check.
+     * @return true if the type is BOOLEANINT
      */
     public static boolean isBooleanInt(String type)
     {
@@ -629,6 +655,7 @@ public class TypeMap
      * java object and a String "Y" or "N" in the db.
      *
      * @param type The type to check.
+     * @return true if the type is BOOLEANCHAR
      */
     public static boolean isBooleanChar(String type)
     {
@@ -639,6 +666,7 @@ public class TypeMap
      * Returns true if values for the type need to be quoted.
      *
      * @param type The type to check.
+     * @return true if values for the type need to be quoted.
      */
     public static final boolean isTextType(String type)
     {
