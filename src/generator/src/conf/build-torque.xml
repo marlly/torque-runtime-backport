@@ -450,7 +450,7 @@
     <torque-data-model
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.dataDtd}"
-      outputDirectory="${torque.output.dir}"
+      outputDirectory="${torque.schema.dir}"
       outputFile="report.${torque.project}.datadtd.generation"
       templatePath="${torque.templatePath}"
       useClasspath="${torque.useClasspath}"
