@@ -186,16 +186,6 @@
       </roles>
     </developer>
 
-    <developer>
-      <name>Jason van Zyl</name>
-      <id>jvanzyl</id>
-      <email>jason@zenplex.com</email>
-      <organization>Zenplex</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-
   </developers>
 
   <contributors>
