@@ -384,7 +384,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
-         criteria.setBlobFlag();
+         criteria.setBlobFlag(true);
     #end
 
         if (criteria.getSelectColumns().size() == 0)
@@ -1077,7 +1077,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
-         c.setBlobFlag();
+         c.setBlobFlag(true);
     #end
 
         // Set the correct dbName if it has not been overridden
@@ -1237,7 +1237,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
-         c.setBlobFlag();
+         c.setBlobFlag(true);
     #end
 
         // Set the correct dbName if it has not been overridden
