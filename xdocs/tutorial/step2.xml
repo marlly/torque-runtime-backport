@@ -137,7 +137,7 @@
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM
- "http://jakarta.apache.org/turbine/dtd/database_3_1.dtd">
+ "http://db.apache.org/torque/dtd/database_3_0_1.dtd">
 
 <database
   name="bookstore"
@@ -386,7 +386,7 @@
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM
- "http://jakarta.apache.org/turbine/dtd/database_3_1.dtd">
+ "http://db.apache.org/torque/dtd/database_3_0_1.dtd">
 
 <database name="bookstore">
   <table name="ID_TABLE" idMethod="idbroker">
