@@ -140,8 +140,8 @@
     <dependency>
       <name>village</name>
       <type>required</type>
-      <version>1.5.3-dev.jar</version>
-      <jar>village-1.5.3-dev.jar</jar>
+      <version>1.5.3</version>
+      <jar>village-1.5.3.jar</jar>
     </dependency>
 
     <dependency>
