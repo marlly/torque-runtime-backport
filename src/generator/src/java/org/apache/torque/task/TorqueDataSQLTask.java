@@ -57,14 +57,19 @@ package org.apache.torque.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
+
 import org.apache.velocity.context.Context;
+
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToData;
@@ -168,13 +173,13 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
                     + "a fileset of XML data files!");
         }
 
-        AppData app = (AppData) getDataModels().get(0);
-        Database db = app.getDatabase();
-                        
-        List data;
-
         try
         {
+            AppData app = (AppData) getDataModels().get(0);
+            Database db = app.getDatabase();
+            
+            List data;
+            
             if (dataXmlFile != null)
             {
                 XmlToData dataXmlParser = new XmlToData(db, dataDTD);
@@ -208,25 +213,25 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
                 }
             }
             context.put("data", data);
+
+            // Place our model in the context.
+            context.put("appData", app);
+
+            // Place the target database in the context.
+            context.put("targetDatabase", targetDatabase);
+
+            Properties p = new Properties();
+            FileInputStream fis = new FileInputStream(getSqlDbMap());
+            p.load(fis);
+            fis.close();
+            
+            p.setProperty(getOutputFile(), db.getName());
+            p.store(new FileOutputStream(getSqlDbMap()), "Sqlfile -> Database map");
         }
-        catch (Exception e)
+        catch (EngineException ee)
         {
-            throw new Exception("Exception parsing data XML:");
+            throw new BuildException(ee);
         }
-
-        // Place our model in the context.
-        context.put("appData", app);
-
-        // Place the target database in the context.
-        context.put("targetDatabase", targetDatabase);
-
-        Properties p = new Properties();
-        FileInputStream fis = new FileInputStream(getSqlDbMap());
-        p.load(fis);
-        fis.close();
-
-        p.setProperty(getOutputFile(), db.getName());
-        p.store(new FileOutputStream(getSqlDbMap()), "Sqlfile -> Database map");
 
         return context;
     }

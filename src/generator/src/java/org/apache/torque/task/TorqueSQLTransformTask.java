@@ -56,8 +56,10 @@ package org.apache.torque.task;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.transform.SQLToAppData;
 
@@ -128,27 +130,24 @@ public class TorqueSQLTransformTask extends Task
     {
         try
         {
-            System.out.println("Parsing SQL Schema");
+            log("Parsing SQL Schema", project.MSG_INFO);
 
             SQLToAppData sqlParser = new SQLToAppData(inputFile);
             AppData app = sqlParser.execute();
 
-            System.out.println("Preparing to write xml schema");
+            log("Preparing to write xml schema", project.MSG_INFO);
             FileWriter fr = new FileWriter(outputFile);
             BufferedWriter br = new BufferedWriter (fr);
 
             br.write(app.toString());
 
-            System.out.println("Writing xml schema");
+            log("Writing xml schema", project.MSG_INFO);
 
             br.flush();
             br.close();
         }
-        catch (Throwable e)
+        catch (Exception e)
         {
-            // Propagate the error up the stack so that
-            // the stacktrace will appear in the standard
-            // ant output.
             throw new BuildException(e);
         }
     }

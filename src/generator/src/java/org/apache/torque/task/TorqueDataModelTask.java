@@ -55,18 +55,23 @@ package org.apache.torque.task;
  */
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
+
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToAppData;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.texen.ant.TexenTask;
@@ -303,53 +308,60 @@ public class TorqueDataModelTask extends TexenTask
                     + "fileset of XML schemas!");
         }
 
-        if (xmlFile != null)
+        try
         {
-            // Transform the XML database schema into
-            // data model object.
-            xmlParser = new XmlToAppData(getTargetDatabase(),
-                    getTargetPackage(), getBasePathToDbProps());
-            AppData ad = xmlParser.parseFile(xmlFile);
-            ad.setName(grokName(xmlFile));
-            dataModels.add(ad);
-        }
-        else
-        {
-            // Deal with the filesets.
-            for (int i = 0; i < filesets.size(); i++)
+            if (xmlFile != null)
             {
-                FileSet fs = (FileSet) filesets.get(i);
-                DirectoryScanner ds = fs.getDirectoryScanner(project);
-                File srcDir = fs.getDir(project);
-
-                String[] dataModelFiles = ds.getIncludedFiles();
-
-                // Make a transaction for each file
-                for (int j = 0; j < dataModelFiles.length; j++)
+                // Transform the XML database schema into
+                // data model object.
+                xmlParser = new XmlToAppData(getTargetDatabase(),
+                        getTargetPackage(), getBasePathToDbProps());
+                AppData ad = xmlParser.parseFile(xmlFile);
+                ad.setName(grokName(xmlFile));
+                dataModels.add(ad);
+            }
+            else
+            {
+                // Deal with the filesets.
+                for (int i = 0; i < filesets.size(); i++)
                 {
-                    File f = new File(srcDir, dataModelFiles[j]);
-                    xmlParser = new XmlToAppData(getTargetDatabase(),
-                                                 getTargetPackage(),
-                                                 getBasePathToDbProps());
-                    AppData ad = xmlParser.parseFile(f.toString());
-                    ad.setName(grokName(f.toString()));
-                    dataModels.add(ad);
+                    FileSet fs = (FileSet) filesets.get(i);
+                    DirectoryScanner ds = fs.getDirectoryScanner(project);
+                    File srcDir = fs.getDir(project);
+                    
+                    String[] dataModelFiles = ds.getIncludedFiles();
+                    
+                    // Make a transaction for each file
+                    for (int j = 0; j < dataModelFiles.length; j++)
+                    {
+                        File f = new File(srcDir, dataModelFiles[j]);
+                        xmlParser = new XmlToAppData(getTargetDatabase(),
+                                getTargetPackage(),
+                                getBasePathToDbProps());
+                        AppData ad = xmlParser.parseFile(f.toString());
+                        ad.setName(grokName(f.toString()));
+                        dataModels.add(ad);
+                    }
                 }
             }
+            
+            Iterator i = dataModels.iterator();
+            databaseNames = new Hashtable();
+            dataModelDbMap = new Hashtable();
+            
+            // Different datamodels may state the same database
+            // names, we just want the unique names of databases.
+            while (i.hasNext())
+            {
+                AppData ad = (AppData) i.next();
+                Database database = ad.getDatabase();
+                databaseNames.put(database.getName(), database.getName());
+                dataModelDbMap.put(ad.getName(), database.getName());
+            }
         }
-
-        Iterator i = dataModels.iterator();
-        databaseNames = new Hashtable();
-        dataModelDbMap = new Hashtable();
-
-        // Different datamodels may state the same database
-        // names, we just want the unique names of databases.
-        while (i.hasNext())
+        catch (EngineException ee)
         {
-            AppData ad = (AppData) i.next();
-            Database database = ad.getDatabase();
-            databaseNames.put(database.getName(), database.getName());
-            dataModelDbMap.put(ad.getName(), database.getName());
+            throw new BuildException(ee);
         }
 
         context = new VelocityContext();

@@ -56,12 +56,14 @@ package org.apache.torque.task;
 
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -180,12 +182,12 @@ public class TorqueJDBCTransformTask extends Task
      */
     public void execute() throws BuildException
     {
-        log("Torque - JDBCToXMLSchema starting\n");
+        log("Torque - JDBCToXMLSchema starting");
         log("Your DB settings are:");
         log("driver : " + dbDriver);
         log("URL : " + dbUrl);
         log("user : " + dbUser);
-//        log("password : " + dbPassword);
+        // log("password : " + dbPassword);
         log("schema : " + dbSchema);
 
         DocumentTypeImpl docType = new DocumentTypeImpl(null, "database", null,
@@ -206,10 +208,9 @@ public class TorqueJDBCTransformTask extends Task
         }
         catch (Exception e)
         {
-            log(e.toString());
-            e.printStackTrace();
+            throw new BuildException(e);
         }
-        log("\nTorque - JDBCToXMLSchema finished");
+        log("Torque - JDBCToXMLSchema finished");
     }
 
     /**

@@ -223,17 +223,17 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
 
         context.put("dataset", "all");
 
-        StringBuffer buf = new StringBuffer("Database settings:\n")
-            .append(" driver: ").append(databaseDriver).append('\n')
-            .append(" URL: ").append(databaseUrl).append('\n')
-            .append(" user: ").append(databaseUser).append('\n')
-            .append(" password: ").append(databasePassword).append('\n');
-        log(buf.toString(), Project.MSG_DEBUG);
+        log("Torque - TorqueDataDump starting");
+        log("Your DB settings are:");
+        log("driver: " + databaseDriver);
+        log("URL: " + databaseUrl);
+        log("user: " + databaseUser);
+        // log("password: " + databasePassword);
 
         try
         {
             Class.forName(databaseDriver);
-            log("DB driver instantiated sucessfuly", Project.MSG_DEBUG);
+            log("DB driver instantiated sucessfully", Project.MSG_DEBUG);
 
             conn = DriverManager.getConnection(
                     databaseUrl, databaseUser, databasePassword);

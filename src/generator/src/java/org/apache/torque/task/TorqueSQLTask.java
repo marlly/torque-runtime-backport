@@ -57,9 +57,15 @@ package org.apache.torque.task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Properties;
+
 import java.util.Iterator;
+import java.util.Properties;
+
+import org.apache.tools.ant.BuildException;
+
 import org.apache.velocity.context.Context;
+
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 import org.apache.torque.engine.database.model.AppData;
 
@@ -197,13 +203,14 @@ public class TorqueSQLTask extends TorqueDataModelTask
      * the model to the context under the name "idmodel".
      */
     public void loadIdBrokerModel()
+            throws EngineException
     {
         // Transform the XML database schema into
         // data model object.
         XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(), null,
                                                   getBasePathToDbProps());
         AppData ad = xmlParser.parseFile(getIdTableXMLFile());
-        xmlParser.parseFile(getIdTableXMLFile());
+
         ad.setName("idmodel");
         context.put("idmodel", ad);
     }
@@ -218,14 +225,21 @@ public class TorqueSQLTask extends TorqueDataModelTask
     public Context initControlContext() throws Exception
     {
         super.initControlContext();
-        createSqlDbMap();
-
-        // If the load path for the id broker table xml schema is
-        // defined then load it.
-        String f = getIdTableXMLFile();
-        if (f != null && f.length() > 0)
+        try
         {
-            loadIdBrokerModel();
+            createSqlDbMap();
+
+            // If the load path for the id broker table xml schema is
+            // defined then load it.
+            String f = getIdTableXMLFile();
+            if (f != null && f.length() > 0)
+            {
+                loadIdBrokerModel();
+            }
+        }
+        catch (EngineException ee)
+        {
+            throw new BuildException(ee);
         }
 
         return context;
