@@ -54,8 +54,6 @@ package org.apache.torque.dsfactory;
  * <http://www.apache.org/>.
  */
 
-import java.util.Iterator;
-
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 

@@ -91,9 +91,9 @@ public abstract class AbstractDataSourceFactory
         Logger.getLogger(AbstractDataSourceFactory.class);
 
     /**
-     * Encapsulates setting configuration properties on 
+     * Encapsulates setting configuration properties on
      * <code>DataSource</code> objects.
-     * 
+     *
      * @param property the property to read from the configuration
      * @param c the configuration to read the property from
      * @param ds the <code>DataSource</code> instance to write the property to
@@ -127,11 +127,11 @@ public abstract class AbstractDataSourceFactory
 
                     if (logger.isDebugEnabled())
                     {
-                        logger.debug("setMappedProperty(" 
+                        logger.debug("setMappedProperty("
                                        + ds + ", "
                                        + property + ", "
                                        + subProp + ", "
-                                       + value 
+                                       + value
                                        + ")");
                     }
                 }
@@ -146,10 +146,10 @@ public abstract class AbstractDataSourceFactory
 
                 if (logger.isDebugEnabled())
                 {
-                    logger.debug("setSimpleProperty(" 
+                    logger.debug("setSimpleProperty("
                                    + ds + ", "
                                    + property + ", "
-                                   + value 
+                                   + value
                                    + ")");
                 }
             }
@@ -180,8 +180,8 @@ public abstract class AbstractDataSourceFactory
         throws TorqueException
     {
         logger.debug("applyConfiguration(" + c + ", " + o + ")");
-        
-        if(c != null)
+
+        if (c != null)
         {
             try
             {
