@@ -62,6 +62,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.texen.ant.TexenTask;
@@ -74,6 +75,7 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
  *
  * @author <a href="mailto:fedor.karpelevitch@home.com">  Fedor Karpelevitch  </a>
  * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
+ * @author <a href="dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class TorqueDataDumpTask
@@ -103,6 +105,16 @@ public class TorqueDataDumpTask
      *  Database password used for JDBC connection.
      */
     private String databasePassword;
+
+    /**
+     * The database connection used to retrieve the data to dump.
+     */
+    private Connection conn;
+
+    /**
+     * The statement used to acquire the data to dump.
+     */
+    private Statement stmt;
 
     /**
      *  Get the database name to dump
@@ -216,6 +228,7 @@ public class TorqueDataDumpTask
         
         context.put("dataset", "all");
 
+        // FIXME: Use Ant log() method
         System.err.println("Your DB settings are:");
         System.err.println("driver : " + databaseDriver);
         System.err.println("URL : " + databaseUrl);
@@ -225,13 +238,13 @@ public class TorqueDataDumpTask
         try
         {
             Class.forName(databaseDriver);
+            // FIXME: Use Ant log() method
             System.err.println("DB driver sucessfuly instantiated");
 
-            // Attemtp to connect to a database.
-
-            Connection conn = DriverManager.getConnection(
+            conn = DriverManager.getConnection(
                     databaseUrl, databaseUser, databasePassword);
 
+            // FIXME: Use Ant log() method
             System.err.println("DB connection established");
             context.put("tableTool", new TableTool(conn));
         }
@@ -247,6 +260,26 @@ public class TorqueDataDumpTask
         }
 
         return context;
+    }
+
+    /**
+     * Closes <code>rs</code> and <code>conn</code>, overriding the
+     * <code>cleanup()</code> hook method in <code>TexenTask</code>.
+     *
+     * @exception Exception Database problem while closing resource.
+     */
+    protected void cleanup()
+        throws Exception
+    {
+        if (stmt != null)
+        {
+            stmt.close();
+        }
+
+        if (conn != null)
+        {
+            conn.close();
+        }
     }
 
     /**
@@ -291,7 +324,8 @@ public class TorqueDataDumpTask
 
 
         /**
-         *  Description of the Method
+         *  Fetches an <code>Iterator</code> for the data in the named
+         *  table.
          *
          * @param  tableName Description of Parameter
          * @return  Description of the Returned Value
@@ -301,9 +335,11 @@ public class TorqueDataDumpTask
         {
             System.err.println();
             System.err.print("fetching table " + tableName);
-            return
-                    new TableTool(conn.createStatement()
-                    .executeQuery("SELECT * FROM " + tableName));
+            // Set Statement object in associated TorqueDataDump
+            // instance
+            stmt = conn.createStatement();
+            return new TableTool
+                (stmt.executeQuery("SELECT * FROM " + tableName));
         }
 
 
@@ -382,4 +418,3 @@ public class TorqueDataDumpTask
         }
     }
 }
-
