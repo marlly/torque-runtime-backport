@@ -82,6 +82,8 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -136,29 +138,17 @@ public class XmlToAppData extends DefaultHandler
     }
 
     /**
-     * Parse and xml input file and returns a newly
-     * created and populated AppData structure
+     * Parses a XML input file and returns a newly created and
+     * populated AppData structure.
+     *
+     * @param xmlFile The input file to parse.
+     * @return AppData populated by <code>xmlFile</code>.
      */
     public AppData parseFile(String xmlFile)
     {
         try
         {
-            SAXParser parser = new SAXParser();
-
-            // set the Resolver for the database DTD
-            DTDResolver dtdResolver = new DTDResolver();
-            parser.setEntityResolver(dtdResolver);
-
-            // We don't use an external content handler - we use this object
-            parser.setContentHandler(this);
-
-            // Validate the input file
-            parser.setFeature
-                ("http://apache.org/xml/features/validation/dynamic", true);
-            parser.setFeature("http://xml.org/sax/features/validation", true);
-
-            parser.setErrorHandler(this);
-
+            SAXParser parser = createParser();
             FileReader fr = null;
             try
             {
@@ -182,7 +172,6 @@ public class XmlToAppData extends DefaultHandler
         }
         catch (Exception e)
         {
-            //System.out.println("Error : "+e);
             e.printStackTrace();
         }
         firstPass = false;
@@ -192,6 +181,33 @@ public class XmlToAppData extends DefaultHandler
         }
 
         return app;
+    }
+
+    /**
+     * Sets up the XML parser used by this SAX callback.
+     *
+     * @return A validating XML parser.
+     */
+    protected SAXParser createParser()
+        throws SAXNotRecognizedException, SAXNotSupportedException
+    {
+        SAXParser parser = new SAXParser();
+
+        // We don't use an external handlers, instead implementing
+        // handler interfaces ourself.
+        parser.setContentHandler(this);
+        parser.setErrorHandler(this);
+
+        // Set the Resolver for the Torque's DTD.
+        DTDResolver dtdResolver = new DTDResolver();
+        parser.setEntityResolver(dtdResolver);
+
+        // Validate the input file
+        parser.setFeature
+            ("http://apache.org/xml/features/validation/dynamic", true);
+        parser.setFeature("http://xml.org/sax/features/validation", true);
+
+        return parser;
     }
 
     /**
@@ -383,9 +399,7 @@ public class XmlToAppData extends DefaultHandler
      */
     public void warning(SAXParseException spe)
     {
-        System.out.println("Warning Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        printParseError("Warning", spe);
     }
 
     /**
@@ -396,9 +410,7 @@ public class XmlToAppData extends DefaultHandler
      */
     public void error(SAXParseException spe)
     {
-        System.out.println("Error Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        printParseError("Error", spe);
     }
 
     /**
@@ -409,8 +421,13 @@ public class XmlToAppData extends DefaultHandler
      */
     public void fatalError(SAXParseException spe)
     {
-        System.out.println("Fatal Error Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        printParseError("Fatal Error", spe);
+    }
+
+    private final void printParseError(String type, SAXParseException spe)
+    {
+        System.err.println(type + " [line " + spe.getLineNumber() +
+                           ", row " + spe.getColumnNumber() + "]: " +
+                           spe.getMessage());
     }
 }
