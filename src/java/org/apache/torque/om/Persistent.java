@@ -120,4 +120,24 @@ public interface Persistent
      * @param m The new modified state for the object.
      */
     void setModified(boolean m);
+
+    /**
+     * Saves the object.
+     */
+    void save() throws Exception;
+
+    /**
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.
+     */
+    void save(String dbName) throws Exception;
+
+    /**
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.  This method
+     * is meant to be used as part of a transaction, otherwise use
+     * the save() method and the connection details will be handled
+     * internally
+     */
+    void save(DBConnection dbCon) throws Exception;
 }
