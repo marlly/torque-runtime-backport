@@ -33,6 +33,8 @@ REF =
 AUTOINCREMENT = IDENTITY
 NOTNULL = NOT NULL
 
+idMethod=identity
+
 primaryKeyInsideTableDirective = true
 indexInsideTableDirective = false
 

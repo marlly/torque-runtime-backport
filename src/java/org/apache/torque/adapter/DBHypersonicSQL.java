@@ -102,7 +102,7 @@ public class DBHypersonicSQL
      */
     public String getIDMethodType()
     {
-        return NO_ID_METHOD;
+        return AUTO_INCREMENT;
     }
 
     /**
@@ -110,7 +110,10 @@ public class DBHypersonicSQL
      */
     public String getIDMethodSQL(Object obj)
     {
-        return null;
+        StringBuffer command = new StringBuffer("select IDENTITY() from ");
+        String qualifiedIdentifier = (String) obj;
+        command.append(qualifiedIdentifier);
+        return command.toString();
     }
 
     /**
