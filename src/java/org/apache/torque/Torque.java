@@ -133,13 +133,6 @@ public class Torque
      */
     private static Monitor monitor;
 
-    static
-    {
-        String className = Torque.class.getName();
-        int i = className.lastIndexOf('.');
-        DEFAULT_CATEGORY = (i == -1 ? "default" : className.substring(0, i));
-    }
-
     /**
      * Initializes Torque.
      */

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Torque: Todo</title>
+    <author email="jvanzyl@apache.com">Jason van Zyl</author>
+  </properties>
+
+  <body>
+
+    <section name="Items">
+      <p>
+        <ul>
+          <li>
+            Unify information about a particular database in one alocation
+            combine information in db.props and the adapter code. It could
+            probably combined into an XML document that fully describes
+            the properties and particular behaviour of a database.
+          </li>
+          <li>
+            Allow connection pools to be pluggable.
+          </li>
+          <li>
+            Complete User's Guide.
+          </li>
+          <li>
+            Complete Developer's Guide.
+          </li>
+          <li>
+            Allow the query model to be pluggable.
+          </li>
+        </ul>
+      </p>
+    </section>
+  </body>
+</document>
