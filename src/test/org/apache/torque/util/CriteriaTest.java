@@ -58,6 +58,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.torque.BaseTestCase;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.BasePeer;
+import org.apache.torque.util.Criteria;
 
 /**
  * Test class for Criteria.
@@ -75,18 +78,17 @@ public class CriteriaTest extends BaseTestCase
     public CriteriaTest(String name)
     {
         super(name);
+    }
 
+    public void setUp()
+    {
+        super.setUp();
         c = new Criteria();
     }
 
-    /**
-     * Creates a test suite for this class.
-     *
-     * @return A test suite for this class.
-     */
-    public static Test suite()
+    public void tearDown()
     {
-        return new TestSuite(CriteriaTest.class);
+        c = null;
     }
 
     /**
@@ -106,5 +108,60 @@ public class CriteriaTest extends BaseTestCase
 
         // Verify that what we get out is what we put in
         assertTrue(c.getString(table, column).equals(value));
+    }
+
+    public void testBetweenCriterion()
+    {
+        Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",
+                                                   new Integer(1000),
+                                                   Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn2 = c.getNewCriterion("INVOICE.COST",
+                                                   new Integer(5000),
+                                                   Criteria.LESS_EQUAL);
+        c.add(cn1.and(cn2));
+        String expect = "SELECT  FROM INVOICE WHERE (INVOICE.COST>=1000 AND INVOICE.COST<=5000)";
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect,result);
+    }
+
+    public void testPrecedence()
+    {
+        Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",
+                                                   "1000",
+                                                   Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn2 = c.getNewCriterion("INVOICE.COST",
+                                                   "2000",
+                                                   Criteria.LESS_EQUAL);
+        Criteria.Criterion cn3 = c.getNewCriterion("INVOICE.COST",
+                                                   "8000",
+                                                   Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn4 = c.getNewCriterion("INVOICE.COST",
+                                                   "9000",
+                                                   Criteria.LESS_EQUAL);
+        c.add(cn1.and(cn2));
+        c.or(cn3.and(cn4));
+
+        String expect = "SELECT  FROM INVOICE WHERE ((INVOICE.COST>='1000' AND INVOICE.COST<='2000') OR (INVOICE.COST>='8000' AND INVOICE.COST<='9000'))";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect,result);
     }
 }
