@@ -3,7 +3,7 @@ package org.apache.torque.dsfactory;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,8 +58,12 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
+
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.pool.TorqueClassicDataSource;
@@ -77,8 +81,7 @@ public class TorqueDataSourceFactory
 {
 
     /** The log. */
-    private static Logger logger =
-        Logger.getLogger(TorqueDataSourceFactory.class);
+    private static Log log = LogFactory.getLog(TorqueDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
@@ -119,7 +122,7 @@ public class TorqueDataSourceFactory
     protected ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initCPDS");
+        log.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = null;
 
@@ -142,7 +145,7 @@ public class TorqueDataSourceFactory
         Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initTorqueClassic");
+        log.debug("Starting initTorqueClassic");
         TorqueClassicDataSource ds = new TorqueClassicDataSource();
 
         Configuration c = null;

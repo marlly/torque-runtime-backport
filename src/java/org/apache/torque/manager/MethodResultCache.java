@@ -64,7 +64,8 @@ import org.apache.commons.pool.impl.StackObjectPool;
 import org.apache.jcs.access.GroupCacheAccess;
 import org.apache.jcs.access.exception.CacheException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.torque.TorqueException;
 
@@ -83,8 +84,7 @@ public class MethodResultCache
     private Map groups;
 
     /** Logging */
-    private static Logger log =
-        Logger.getLogger(MethodResultCache.class);
+    private static Log log = LogFactory.getLog(MethodResultCache.class);
 
     public MethodResultCache(GroupCacheAccess cache)
         throws TorqueException

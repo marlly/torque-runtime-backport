@@ -3,7 +3,7 @@ package org.apache.torque.dsfactory;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,11 +55,16 @@ package org.apache.torque.dsfactory;
  */
 
 import java.util.Iterator;
-import org.apache.log4j.Logger;
-import org.apache.commons.configuration.Configuration;
+
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
+import org.apache.commons.beanutils.PropertyUtils;
+
+import org.apache.commons.configuration.Configuration;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.TorqueException;
 
 /**
@@ -87,8 +92,7 @@ public abstract class AbstractDataSourceFactory
     /**
      * The logging logger.
      */
-    private static Logger logger =
-        Logger.getLogger(AbstractDataSourceFactory.class);
+    private static Log log = LogFactory.getLog(AbstractDataSourceFactory.class);
 
     /**
      * Encapsulates setting configuration properties on
@@ -125,9 +129,9 @@ public abstract class AbstractDataSourceFactory
                     PropertyUtils
                         .setMappedProperty(ds, property, subProp, value);
 
-                    if (logger.isDebugEnabled())
+                    if (log.isDebugEnabled())
                     {
-                        logger.debug("setMappedProperty("
+                        log.debug("setMappedProperty("
                                        + ds + ", "
                                        + property + ", "
                                        + subProp + ", "
@@ -144,9 +148,9 @@ public abstract class AbstractDataSourceFactory
                     ConvertUtils.convert(c.getString(property), propertyType);
                 PropertyUtils.setSimpleProperty(ds, property, value);
 
-                if (logger.isDebugEnabled())
+                if (log.isDebugEnabled())
                 {
-                    logger.debug("setSimpleProperty("
+                    log.debug("setSimpleProperty("
                                    + ds + ", "
                                    + property + ", "
                                    + value
@@ -156,7 +160,7 @@ public abstract class AbstractDataSourceFactory
         }
         catch (Exception e)
         {
-            logger.error(
+            log.error(
                 "Property: "
                 + property
                 + " value: "
@@ -179,7 +183,7 @@ public abstract class AbstractDataSourceFactory
     protected void applyConfiguration(Configuration c, Object o)
         throws TorqueException
     {
-        logger.debug("applyConfiguration(" + c + ", " + o + ")");
+        log.debug("applyConfiguration(" + c + ", " + o + ")");
 
         if (c != null)
         {
@@ -193,7 +197,7 @@ public abstract class AbstractDataSourceFactory
             }
             catch (Exception e)
             {
-                logger.error(e);
+                log.error(e);
                 throw new TorqueException(e);
             }
         }

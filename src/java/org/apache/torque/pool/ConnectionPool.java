@@ -3,7 +3,7 @@ package org.apache.torque.pool;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,11 +58,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class implements a simple connection pooling scheme.  Multiple
@@ -92,39 +95,25 @@ class ConnectionPool implements ConnectionEventListener
     /** Default Connect Wait Timeout: 10 Seconds */
     public static final int DEFAULT_CONNECTION_WAIT_TIMEOUT = 10 * 1000;
 
-    /**
-     * Pool containing database connections.
-     */
+    /** Pool containing database connections. */
     private Stack pool;
 
-    /**
-     * The url for this pool.
-     */
+    /** The url for this pool. */
     private String url;
 
-    /**
-     * The user name for this pool.
-     */
+    /** The user name for this pool. */
     private String username;
 
-    /**
-     * The password for this pool.
-     */
+    /** The password for this pool. */
     private String password;
 
-    /**
-     * The current number of database connections that have been created.
-     */
+    /** The current number of database connections that have been created. */
     private int totalConnections;
 
-    /**
-     * The maximum number of database connections that can be created.
-     */
+    /** The maximum number of database connections that can be created. */
     private int maxConnections = DEFAULT_MAX_CONNECTIONS;
 
-    /**
-     * The amount of time in milliseconds that a connection will be pooled.
-     */
+    /** The amount of time in milliseconds that a connection will be pooled. */
     private long expiryTime = DEFAULT_EXPIRY_TIME;
 
     /**
@@ -133,11 +122,8 @@ class ConnectionPool implements ConnectionEventListener
      */
     private int waitCount = 0;
 
-    /**
-     * The logging logger.
-     */
-    private static Logger logger
-        = Logger.getLogger(ConnectionPool.class);
+    /** The logging logger. */
+    private static Log log = LogFactory.getLog(ConnectionPool.class);
 
     /** Interval (in seconds) that the monitor thread reports the pool state */
     private int logInterval = 0;
@@ -199,7 +185,7 @@ class ConnectionPool implements ConnectionEventListener
 
         if (logInterval > 0)
         {
-            logger.debug("Starting Pool Monitor Thread with Log Interval "
+            log.debug("Starting Pool Monitor Thread with Log Interval "
                            + logInterval + " Milliseconds");
 
             // Create monitor thread
@@ -603,8 +589,7 @@ class ConnectionPool implements ConnectionEventListener
         }
         catch (Exception e)
         {
-            logger.error("Error occurred trying to close a "
-                           + "PooledConnection.", e);
+            log.error("Error occurred trying to close a PooledConnection.", e);
         }
         finally
         {
@@ -645,7 +630,7 @@ class ConnectionPool implements ConnectionEventListener
                 buf.append(" avail: ").append(getNbrAvailable());
                 buf.append(" in use: ").append(getNbrCheckedOut());
                 buf.append(" total: ").append(getTotalCount());
-                logger.info(buf.toString());
+                log.info(buf.toString());
 
                 // Wait for a bit.
                 try

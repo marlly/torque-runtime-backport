@@ -3,7 +3,7 @@ package org.apache.torque.manager;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -73,7 +73,9 @@ import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.Persistent;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class contains common functionality of a Manager for
@@ -86,8 +88,8 @@ public abstract class AbstractBaseManager
     implements Serializable
 {
     /** the log */
-    protected static final Logger logger =
-        Logger.getLogger(AbstractBaseManager.class);
+    protected static final Log log 
+            = LogFactory.getLog(AbstractBaseManager.class);
 
     /** used to cache the om objects. cache is set by the region property */
     protected transient GroupCacheAccess cache;
@@ -466,7 +468,7 @@ public abstract class AbstractBaseManager
         }
         if (cache == null)
         {
-            logger.info("Cache could not be initialized for region: " + v);
+            log.info("Cache could not be initialized for region: " + v);
         }
     }
 
@@ -611,8 +613,8 @@ public abstract class AbstractBaseManager
         }
         catch (Exception e)
         {
-            logger.error("Cache could not be initialized for region: "
-                           + region + "after deserialization");
+            log.error("Cache could not be initialized for region: "
+                    + region + "after deserialization");
         }
     }
 }

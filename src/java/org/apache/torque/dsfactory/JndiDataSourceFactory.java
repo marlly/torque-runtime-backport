@@ -3,7 +3,7 @@ package org.apache.torque.dsfactory;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,7 +66,10 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.TorqueException;
 
 /**
@@ -83,8 +86,7 @@ public class JndiDataSourceFactory
 {
 
     /** The log. */
-    private static Logger logger =
-        Logger.getLogger(JndiDataSourceFactory.class);
+    private static Log log = LogFactory.getLog(JndiDataSourceFactory.class);
 
     /** The path to get the resource from. */
     private String path;
@@ -132,7 +134,7 @@ public class JndiDataSourceFactory
      */
     private void initJNDI(Configuration configuration) throws TorqueException
     {
-        logger.debug("Starting initJNDI");
+        log.debug("Starting initJNDI");
         Hashtable env = null;
         Configuration c = configuration.subset("jndi");
         if (c == null)
@@ -150,7 +152,7 @@ public class JndiDataSourceFactory
                 if (key.equals("path"))
                 {
                     path = c.getString(key);
-                    logger.debug("JNDI path: " + path);
+                    log.debug("JNDI path: " + path);
                 }
                 else
                 {
@@ -160,7 +162,7 @@ public class JndiDataSourceFactory
                     }
                     String value = c.getString(key);
                     env.put(key, value);
-                    logger.debug("Set jndi property: " + key + "=" + value);
+                    log.debug("Set jndi property: " + key + "=" + value);
                 }
             }
             if (env == null)
@@ -171,12 +173,12 @@ public class JndiDataSourceFactory
             {
                 ctx = new InitialContext(env);
             }
-            logger.debug("Created new InitialContext");
+            log.debug("Created new InitialContext");
             debugCtx(ctx);
         }
         catch (Exception e)
         {
-            logger.error("", e);
+            log.error("", e);
             throw new TorqueException(e);
         }
     }
@@ -190,7 +192,7 @@ public class JndiDataSourceFactory
     private void initDataSource(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initDataSources");
+        log.debug("Starting initDataSources");
         Configuration c = configuration.subset("datasource");
         try
         {
@@ -204,14 +206,14 @@ public class JndiDataSourceFactory
                     if (key.equals("classname"))
                     {
                         String classname = c.getString(key);
-                        logger.debug("Datasource class: " + classname);
+                        log.debug("Datasource class: " + classname);
 
                         Class dsClass = Class.forName(classname);
                         ds = dsClass.newInstance();
                     }
                     else
                     {
-                        logger.debug("Setting datasource property: " + key);
+                        log.debug("Setting datasource property: " + key);
                         setProperty(key, c, ds);
                     }
                 }
@@ -221,7 +223,7 @@ public class JndiDataSourceFactory
         }
         catch (Exception e)
         {
-            logger.error("", e);
+            log.error("", e);
             throw new TorqueException(e);
         }
     }
@@ -233,16 +235,16 @@ public class JndiDataSourceFactory
      */
     private void debugCtx(Context ctx) throws NamingException
     {
-        logger.debug("InitialContext -------------------------------");
+        log.debug("InitialContext -------------------------------");
         Map env = ctx.getEnvironment();
         Iterator qw = env.keySet().iterator();
-        logger.debug("Environment properties:" + env.size());
+        log.debug("Environment properties:" + env.size());
         while (qw.hasNext())
         {
             Object prop = qw.next();
-            logger.debug("    " + prop + ": " + env.get(prop));
+            log.debug("    " + prop + ": " + env.get(prop));
         }
-        logger.debug("----------------------------------------------");
+        log.debug("----------------------------------------------");
     }
 
     /**
@@ -272,7 +274,7 @@ public class JndiDataSourceFactory
                 try
                 {
                     ctx.createSubcontext(subctx);
-                    logger.debug("Added sub context: " + subctx);
+                    log.debug("Added sub context: " + subctx);
                 }
                 catch (NameAlreadyBoundException nabe)
                 {

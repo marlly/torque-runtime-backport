@@ -3,7 +3,7 @@ package org.apache.torque.dsfactory;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,9 +58,13 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 
 import org.apache.commons.configuration.Configuration;
+
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
@@ -77,8 +81,8 @@ public class Jdbc2PoolDataSourceFactory
 {
 
     /** The log. */
-    private static Logger logger =
-        Logger.getLogger(Jdbc2PoolDataSourceFactory.class);
+    private static Log log 
+            = LogFactory.getLog(Jdbc2PoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
@@ -119,7 +123,7 @@ public class Jdbc2PoolDataSourceFactory
     private ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initCPDS");
+        log.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = null;
 
@@ -141,7 +145,7 @@ public class Jdbc2PoolDataSourceFactory
     private Jdbc2PoolDataSource initJdbc2Pool(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initJdbc2Pool");
+        log.debug("Starting initJdbc2Pool");
         Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
         Configuration c = null;
 

@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
@@ -256,8 +257,7 @@ public class LargeSelect implements Runnable
     private Hashtable params = null;
 
     /** Logging */
-    private static Logger log =
-        Logger.getLogger(LargeSelect.class);
+    private static Log log = LogFactory.getLog(LargeSelect.class);
 
     /**
      * Creates a LargeSelect whose results are returned as a <code>List</code>

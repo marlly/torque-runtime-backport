@@ -3,7 +3,7 @@ package org.apache.torque;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,26 +54,21 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.helpers.NullEnumeration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Disposable;
@@ -161,8 +156,7 @@ public class Torque
     /**
      * The logging logger.
      */
-    private static Logger logger
-            = Logger.getLogger(Torque.class);
+    private static Log log = LogFactory.getLog(Torque.class);
 
     /**
      * Torque-specific configuration.
@@ -199,10 +193,6 @@ public class Torque
                     + "a valid configuration. Please check the log files "
                     + "for further details.");
         }
-
-        // Setup log4j, I suppose we might want to deal with
-        // systems other than log4j ...
-        configureLogging();
 
         // Now that we have dealt with processing the log4j properties
         // that may be contained in the configuration we will make the
@@ -260,7 +250,7 @@ public class Torque
     private static final void initAdapters(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initAdapters");
+        log.debug("Starting initAdapters");
         adapterMap = new HashMap();
         Configuration c = configuration.subset("database");
         if (c != null)
@@ -283,13 +273,13 @@ public class Torque
             }
             catch (Exception e)
             {
-                logger.error("", e);
+                log.error("", e);
                 throw new TorqueException(e);
             }
         }
         else
         {
-            logger.warn("There were no adapters in the configuration.");
+            log.warn("There were no adapters in the configuration.");
         }
     }
 
@@ -302,7 +292,7 @@ public class Torque
     private static void initDataSourceFactories(Configuration configuration)
         throws TorqueException
     {
-        logger.debug("Starting initDSF");
+        log.debug("Starting initDSF");
         dsFactoryMap = new HashMap();
         Configuration c = configuration.subset("dsfactory");
         if (c != null)
@@ -317,7 +307,7 @@ public class Torque
                     {
                         String classname = c.getString(key);
                         String handle = key.substring(0, key.indexOf('.'));
-                        logger.debug("handle: " + handle
+                        log.debug("handle: " + handle
                                 + " DataSourceFactory: " + classname);
                         Class dsfClass = Class.forName(classname);
                         DataSourceFactory dsf =
@@ -329,7 +319,7 @@ public class Torque
             }
             catch (Exception e)
             {
-                logger.error("", e);
+                log.error("", e);
                 throw new TorqueException(e);
             }
         }
@@ -352,7 +342,7 @@ public class Torque
         if (dsFactoryMap.get(DEFAULT_NAME) == null
             && !defaultDB.equals(DEFAULT_NAME))
         {
-            logger.debug("Adding a dummy entry for "
+            log.debug("Adding a dummy entry for "
                            + DEFAULT_NAME + ", mapped onto " + defaultDB);
             dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
         }
@@ -451,7 +441,7 @@ public class Torque
                 if (!managers.containsKey(managedClassKey))
                 {
                     String managerClass = configuration.getString(key);
-                    logger.info("Added Manager for Class: " + managedClassKey
+                    log.info("Added Manager for Class: " + managedClassKey
                                   + " -> " + managerClass);
                     try
                     {
@@ -462,7 +452,7 @@ public class Torque
                         // the exception thrown here seems to disappear.
                         // At least when initialized by Turbine, should find
                         // out why, but for now make sure it is noticed.
-                        logger.error("", e);
+                        log.error("", e);
                         e.printStackTrace();
                         throw e;
                     }
@@ -535,109 +525,6 @@ public class Torque
     }
 
     /**
-     * Configure the logging for this subsystem.
-     */
-    protected static void configureLogging()
-    {
-        if (isLoggingConfigured() == false)
-        {
-            // Get the applicationRoot for use in the log4j
-            // properties.
-            String applicationRoot =
-                getConfiguration().getString("torque.applicationRoot", ".");
-
-            //!! Need a configurable log directory.
-            File logsDir = new File(applicationRoot, "logs");
-
-            if (logsDir.exists() == false)
-            {
-                if (logsDir.mkdirs() == false)
-                {
-                    System.err.println("Cannot create logs directory!");
-                }
-            }
-
-            // Extract the log4j values out of the configuration and
-            // place them in a Properties object so that we can
-            // use the log4j PropertyConfigurator.
-            Properties p = new Properties();
-            p.put("torque.applicationRoot", applicationRoot);
-
-            Iterator i = getConfiguration().getKeys();
-            while (i.hasNext())
-            {
-                String key = (String) i.next();
-
-                // We only want log4j properties.
-                if (key.startsWith("log4j") == false)
-                {
-                    continue;
-                }
-
-                // We have to deal with Configuration way
-                // of dealing with "," in properties which is to
-                // make them separate values. Log4j logger
-                // properties contain commas so we must stick them
-                // back together for log4j.
-                String[] values = getConfiguration().getStringArray(key);
-
-                String value;
-                if (values.length == 1)
-                {
-                    value = values[0];
-                }
-                else
-                {
-                    value = values[0] + "," + values[1];
-                }
-
-                p.put(key, value);
-            }
-
-            PropertyConfigurator.configure(p);
-            logger.info("Logging has been configured by Torque.");
-        }
-    }
-
-    /**
-     * Determine whether log4j has already been configured.
-     *
-     * @return boolean Whether log4j is configured.
-     */
-    protected static boolean isLoggingConfigured()
-    {
-        // This is a note from Ceki, taken from a message on the log4j
-        // user list:
-        //
-        // Having defined categories does not necessarily mean
-        // configuration. Remember that most categories are created
-        // outside the configuration file. What you want to check for
-        // is the existence of appenders. The correct procedure is to
-        // first check for appenders in the root logger and if that
-        // returns no appenders to check in other categories.
-
-        Enumeration enum = Logger.getRoot().getAllAppenders();
-
-        if (!(enum instanceof NullEnumeration))
-        {
-            return true;
-        }
-        else
-        {
-            Enumeration cats = LogManager.getCurrentLoggers();
-            while (cats.hasMoreElements())
-            {
-                Logger c = (Logger) cats.nextElement();
-                if (!(c.getAllAppenders() instanceof NullEnumeration))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * This method returns a Manager for the given name.
      *
      * @param name name of the manager
@@ -648,7 +535,7 @@ public class Torque
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
         {
-            logger.error("No configured manager for key " + name + ".");
+            log.error("No configured manager for key " + name + ".");
         }
         return m;
     }
@@ -667,7 +554,7 @@ public class Torque
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
         {
-            logger.debug("Added late Manager mapping for Class: "
+            log.debug("Added late Manager mapping for Class: "
                            + name + " -> " + defaultClassName);
 
             try
@@ -676,7 +563,7 @@ public class Torque
             }
             catch (TorqueException e)
             {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
 
             // Try again now that the default manager should be in the map
@@ -995,7 +882,7 @@ public class Torque
             }
             catch (SQLException e)
             {
-                logger.error("Error occured while closing connection.", e);
+                log.error("Error occured while closing connection.", e);
             }
         }
     }

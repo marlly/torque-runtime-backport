@@ -73,7 +73,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
@@ -133,7 +134,7 @@ public abstract class BasePeer implements java.io.Serializable
     private static Hashtable mapBuilders = new Hashtable(5);
 
     /** the log */
-    protected static Logger category = Logger.getLogger(BasePeer.class);
+    protected static Log log = LogFactory.getLog(BasePeer.class);
 
     /**
      * Converts a hashtable to a byte array for storage/serialization.
@@ -252,7 +253,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            category.error(e);
+            log.error(e);
             throw new Error("Error in BasePeer.initTableSchema("
                     + tableName
                     + "): "
@@ -285,7 +286,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            category.error(e);
+            log.error(e);
             throw new Error(
                 "Error in BasePeer.initTableColumns(): " + e.getMessage());
         }
@@ -546,7 +547,7 @@ public abstract class BasePeer implements java.io.Serializable
                 tds = new TableDataSet(con, tab, kd);
                 String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
 
-                category.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
+                log.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
 
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
@@ -979,7 +980,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             sql = query.toString();
         }
-        category.debug(sql);
+        log.debug(sql);
         return sql;
     }
 
@@ -1500,9 +1501,8 @@ public abstract class BasePeer implements java.io.Serializable
             // execute the query
             long startTime = System.currentTimeMillis();
             qds = new QueryDataSet(con, queryString);
-            category.debug("Elapsed time="
-                    + (System.currentTimeMillis() - startTime)
-                    + " ms");
+            log.debug("Elapsed time=" 
+                    + (System.currentTimeMillis() - startTime) + " ms");
             results = getSelectResults(
                     qds, start, numberOfResults, singleRecord);
         }
@@ -1885,7 +1885,7 @@ public abstract class BasePeer implements java.io.Serializable
                 // Get affected records.
                 tds = new TableDataSet(con, tab, kd);
                 String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
-                category.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
+                log.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
 
@@ -2100,14 +2100,14 @@ public abstract class BasePeer implements java.io.Serializable
             // return null.
             String message =
                 "BasePeer.MapBuilder failed trying to instantiate: " + name;
-            if (category == null)
+            if (log == null)
             {
                 System.out.println(message);
                 e.printStackTrace();
             }
             else
             {
-                category.error(message, e);
+                log.error(message, e);
             }
         }
         return null;
@@ -2562,7 +2562,7 @@ public abstract class BasePeer implements java.io.Serializable
             sql = query.toString();
         }
 
-        category.debug(sql);
+        log.debug(sql);
         queryString.append(sql);
     }
 

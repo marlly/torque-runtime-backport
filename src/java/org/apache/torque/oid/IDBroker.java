@@ -3,7 +3,7 @@ package org.apache.torque.oid;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -64,7 +64,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
-import org.apache.log4j.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -205,10 +208,8 @@ public class IDBroker implements Runnable, IdGenerator
     private static final String DB_IDBROKER_USENEWCONNECTION =
         "idbroker.usenewconnection";
 
-    /**
-     * Logger used for logging.
-     */
-    private Logger logger = Logger.getLogger(IDBroker.class);
+    /** the log */
+    private Log log = LogFactory.getLog(IDBroker.class);
 
     /**
      * Creates an IDBroker for the ID table.
@@ -259,7 +260,7 @@ public class IDBroker implements Runnable, IdGenerator
         }
         if (!transactionsSupported)
         {
-            logger.warn("IDBroker is being used with db '" + dbName
+            log.warn("IDBroker is being used with db '" + dbName
                     + "', which does not support transactions. IDBroker "
                     + "attempts to use transactions to limit the possibility "
                     + "of duplicate key generation.  Without transactions, "
@@ -438,11 +439,11 @@ public class IDBroker implements Runnable, IdGenerator
         {
             if (availableIds == null)
             {
-                logger.debug("Forced id retrieval - no available list");
+                log.debug("Forced id retrieval - no available list");
             }
             else
             {
-                logger.debug("Forced id retrieval - " + availableIds.size());
+                log.debug("Forced id retrieval - " + availableIds.size());
             }
             storeIDs(tableName, true, connection);
             availableIds = (List) ids.get(tableName);
@@ -508,7 +509,7 @@ public class IDBroker implements Runnable, IdGenerator
             }
             catch (Exception e)
             {
-                logger.error("Release of connection failed.", e);
+                log.error("Release of connection failed.", e);
             }
         }
         return exists;
@@ -521,7 +522,7 @@ public class IDBroker implements Runnable, IdGenerator
      */
     public void run()
     {
-        logger.debug("IDBroker thread was started.");
+        log.debug("IDBroker thread was started.");
 
         Thread thisThread = Thread.currentThread();
         while (houseKeeperThread == thisThread)
@@ -540,7 +541,7 @@ public class IDBroker implements Runnable, IdGenerator
             while (it.hasNext())
             {
                 String tableName = (String) it.next();
-                logger.debug("IDBroker thread checking for more keys "
+                log.debug("IDBroker thread checking for more keys "
                              + "on table: " + tableName);
                 List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
@@ -552,18 +553,17 @@ public class IDBroker implements Runnable, IdGenerator
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false, null);
-                        logger.debug("Retrieved more ids for table: "
-                                     + tableName);
+                        log.debug("Retrieved more ids for table: " + tableName);
                     }
                     catch (Exception exc)
                     {
-                        logger.error("There was a problem getting new IDs "
+                        log.error("There was a problem getting new IDs "
                                      + "for table: " + tableName, exc);
                     }
                 }
             }
         }
-        logger.debug("IDBroker thread finished.");
+        log.debug("IDBroker thread finished.");
     }
 
     /**
@@ -608,7 +608,7 @@ public class IDBroker implements Runnable, IdGenerator
             int timeLapse = (int) (nowLong - thenLong);
             if (timeLapse < SLEEP_PERIOD && timeLapse > 0)
             {
-                logger.debug("Unscheduled retrieval of more ids for table: "
+                log.debug("Unscheduled retrieval of more ids for table: "
                              + tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
@@ -762,7 +762,7 @@ public class IDBroker implements Runnable, IdGenerator
                 }
                 catch (Exception e)
                 {
-                    logger.error("Release of connection failed.", e);
+                    log.error("Release of connection failed.", e);
                 }
             }
         }
@@ -846,7 +846,7 @@ public class IDBroker implements Runnable, IdGenerator
 
         Statement statement = null;
 
-        logger.debug("updateNextId: " + stmt.toString());
+        log.debug("updateNextId: " + stmt.toString());
 
         try
         {
@@ -886,7 +886,7 @@ public class IDBroker implements Runnable, IdGenerator
 
         Statement statement = null;
 
-        logger.debug("updateQuantity: " + stmt.toString());
+        log.debug("updateQuantity: " + stmt.toString());
 
         try
         {

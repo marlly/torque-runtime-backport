@@ -3,7 +3,7 @@ package org.apache.torque.om;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,11 +55,12 @@ package org.apache.torque.om;
  */
 
 import java.io.Serializable;
-import org.apache.log4j.Category;
-import org.apache.log4j.Logger;
-import org.apache.torque.TorqueException;
-
 import java.sql.Connection;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.apache.torque.TorqueException;
 
 /**
  * This class contains attributes and methods that are used by all
@@ -71,9 +72,7 @@ import java.sql.Connection;
  */
 public abstract class BaseObject implements Persistent, Serializable
 {
-    /**
-     * The constant denoting an unset numeric database identifier.
-     */
+    /** The constant denoting an unset numeric database identifier. */
     public static final int NEW_ID = -1;
 
     /**
@@ -83,14 +82,10 @@ public abstract class BaseObject implements Persistent, Serializable
     private static final String NOT_IMPLEMENTED
             = "Not implemented: Method must be overridden if called";
 
-    /**
-     * attribute to determine if this object has previously been saved.
-     */
+    /** attribute to determine if this object has previously been saved. */
     private boolean isNew = true;
 
-    /**
-     * The unique id for the object which can be used for persistence.
-     */
+    /** The unique id for the object which can be used for persistence. */
     private ObjectKey primaryKey = null;
 
     /**
@@ -102,16 +97,8 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     private boolean modified = true;
 
-    /**
-     * Cache the logger to avoid looking it up every time its needed.
-     */
-    private transient Category log = null;
-
-
-    /**
-     * Cache the logger to avoid looking it up every time its needed.
-     */
-    private transient Logger logger = null;
+    /** Cache the log to avoid looking it up every time its needed. */
+    private transient Log log = null;
 
     /**
      * getter for the object primaryKey.
@@ -162,7 +149,6 @@ public abstract class BaseObject implements Persistent, Serializable
      * @param primaryKey The new PrimaryKey for the object.
      * @exception TorqueException This method will not throw any exceptions
      * but this allows for children to override the method more easily
-     *
      */
     public void setPrimaryKey(String primaryKey) throws TorqueException
     {
@@ -314,32 +300,28 @@ public abstract class BaseObject implements Persistent, Serializable
     }
 
     /**
-     * gets a log4j Category based on class name.
+     * gets a commons-logging Log based on class name.
      *
-     * @return a <code>Category</code> to write log to.
+     * @return a <code>Log</code> to write log to.
      * @deprecated Use getLog()
      */
-    protected Category log()
+    protected Log log()
     {
-        if (log == null)
-        {
-            log = Category.getInstance(getClass().getName());
-        }
-        return log;
+        return getLog();
     }
 
     /**
-     * gets a log4j Logger based on class name.
+     * gets a commons-logging Log based on class name.
      *
-     * @return a <code>Logger</code> to write log to.
+     * @return a <code>Log</code> to write log to.
      */
-    protected Logger getLog()
+    protected Log getLog()
     {
-        if (logger == null)
+        if (log == null)
         {
-            logger = Logger.getLogger(getClass());
+            log = LogFactory.getLog(getClass().getName());
         }
-        return logger;
+        return log;
     }
 
     /**

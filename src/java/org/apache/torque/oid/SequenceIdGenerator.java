@@ -3,7 +3,7 @@ package org.apache.torque.oid;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,9 @@ package org.apache.torque.oid;
 import java.math.BigDecimal;
 import java.sql.Connection;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.adapter.DB;
 
 import com.workingdogs.village.QueryDataSet;
@@ -74,8 +76,7 @@ import com.workingdogs.village.Value;
 public class SequenceIdGenerator implements IdGenerator
 {
     /** The log. */
-    private static Logger logger = Logger.getLogger(
-            SequenceIdGenerator.class);
+    private static Log log = LogFactory.getLog(SequenceIdGenerator.class);
 
     /** the adapter that knows the correct sql syntax */
     private DB dbAdapter;
@@ -189,7 +190,7 @@ public class SequenceIdGenerator implements IdGenerator
         throws Exception
     {
         String idSql = dbAdapter.getIDMethodSQL(keyInfo);
-        logger.debug(idSql);
+        log.debug(idSql);
 
         // Execute the query.
         QueryDataSet qds = new QueryDataSet(connection, idSql);

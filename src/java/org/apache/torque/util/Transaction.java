@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,9 @@ package org.apache.torque.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
@@ -81,7 +83,7 @@ public class Transaction
 {
 
     /** The log. */
-    private static Logger logger = Logger.getLogger(Transaction.class);
+    private static Log log = LogFactory.getLog(Transaction.class);
 
     /**
      * Begin a transaction.  This method will fallback gracefully to
@@ -176,10 +178,10 @@ public class Transaction
     {
         if (con == null)
         {
-            logger.error("Connection object was null. "
-                         + "This could be due to a misconfiguration of the "
-                         + "DataSourceFactory. Check the logs and Torque.properties "
-                         + "to better determine the cause.");
+            log.error("Connection object was null. "
+                    + "This could be due to a misconfiguration of the "
+                    + "DataSourceFactory. Check the logs and Torque.properties "
+                    + "to better determine the cause.");
         }
         else
         {
@@ -194,9 +196,9 @@ public class Transaction
             }
             catch (SQLException e)
             {
-                logger.error("An attempt was made to rollback a transaction "
-                             + "but the database did not allow the operation to be "
-                             + "rolled back.", e);
+                log.error("An attempt was made to rollback a transaction "
+                        + "but the database did not allow the operation to be "
+                        + "rolled back.", e);
                 throw new TorqueException(e);
             }
             finally
@@ -220,7 +222,7 @@ public class Transaction
         }
         catch (TorqueException e)
         {
-            logger.error("An error occured during rollback.", e);
+            log.error("An error occured during rollback.", e);
         }
     }
 }
