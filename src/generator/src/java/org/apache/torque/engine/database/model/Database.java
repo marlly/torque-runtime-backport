@@ -367,7 +367,7 @@ public class Database
      *
      * @return a Platform implementation
      */
-    protected Platform getPlatform()
+    public Platform getPlatform()
     {
         return PlatformFactory.getPlatformFor(databaseType);
     }
