@@ -19,13 +19,12 @@
 
       <source><![CDATA[
     jakarta-turbine-torque/
-      bin/            <--- directory for building the project
-      docs/           <--- directory where docs are generated
       examples/       <--- example schema and config files
       profile/        <--- testing profiles
       src/            <--- sources
         conf/         <--- runtime configuration
         dtd/          <--- DTD for schema.xml files
+        generator/    <--- home of torque-gen
         java/         <--- java sources
         rttest/       <--- sources for the runtime tests
         schema/       <--- needed schema files (IDBroker)
@@ -39,14 +38,14 @@
       <p>
         Building Torque from CVS is now very easy because it has been
         Maven-enabled.  Before you begin, you'll need to check out the
-        <code>jakarta-turbine-torque</code> CVS repository (if you are
-        not familiar with the Jakarta CVS repositories, please refer to
-        the <a href="/site/cvsindex.html">documentation</a>).
+        <code>db-torque</code> CVS repository (if you are not familiar with the
+        Apache CVS repositories, please refer to the
+        <a href="http://www.apache.org/foundation/cvs.html">documentation</a>).
       </p>
       <p>
         <code>maven java:jar</code> builds the jar. <br/>
         Please refer to the Maven
-        <a href="http://jakarta.apache.org/turbine/maven/getting-started.html">
+        <a href="http://maven.apache.org/start/index.html">
         Getting Started</a> document for instructions on how to build the
         project using Maven.
       </p>
