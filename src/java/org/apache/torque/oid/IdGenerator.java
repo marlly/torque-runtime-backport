@@ -56,7 +56,6 @@ package org.apache.torque.oid;
 
 import java.sql.Connection;
 import java.math.BigDecimal;
-import org.apache.torque.adapter.DB;
 
 /**
  * Interface to be implemented by id generators.  It is possible
@@ -104,8 +103,7 @@ public interface IdGenerator
      * @return A BigDecimal id.
      * @exception Exception Database error.
      */
-    BigDecimal getIdAsBigDecimal(Connection connection,
-                                 Object keyInfo)
+    BigDecimal getIdAsBigDecimal(Connection connection, Object keyInfo)
         throws Exception;
 
     /**

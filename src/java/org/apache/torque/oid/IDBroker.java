@@ -56,11 +56,9 @@ package org.apache.torque.oid;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.List;
@@ -72,7 +70,6 @@ import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
-import org.apache.torque.util.Criteria;
 
 //!!
 // NOTE:
@@ -283,10 +280,10 @@ public class IDBroker
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
      * To force the use of the passed in connection set the configuration
-     * property torque.idbroker.usenewconnection = false 
+     * property torque.idbroker.usenewconnection = false
      *
      * @param connection A Connection.
-     * @param tableName, an Object that contains additional info.
+     * @param tableName an Object that contains additional info.
      * @return An int with the value for the id.
      * @exception Exception Database error.
      */
@@ -302,10 +299,10 @@ public class IDBroker
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
      * To force the use of the passed in connection set the configuration
-     * property torque.idbroker.usenewconnection = false 
+     * property torque.idbroker.usenewconnection = false
      *
      * @param connection A Connection.
-     * @param tableName, a String that identifies a table.
+     * @param tableName a String that identifies a table.
      * @return A long with the value for the id.
      * @exception Exception Database error.
      */
@@ -320,10 +317,10 @@ public class IDBroker
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
      * To force the use of the passed in connection set the configuration
-     * property torque.idbroker.usenewconnection = false 
+     * property torque.idbroker.usenewconnection = false
      *
      * @param connection A Connection.
-     * @param tableName, a String that identifies a table..
+     * @param tableName a String that identifies a table..
      * @return A BigDecimal id.
      * @exception Exception Database error.
      */
@@ -331,7 +328,7 @@ public class IDBroker
                                         Object tableName)
         throws Exception
     {
-        BigDecimal[] id = getNextIds((String)tableName, 1, connection);
+        BigDecimal[] id = getNextIds((String) tableName, 1, connection);
         return id[0];
     }
 
@@ -340,10 +337,10 @@ public class IDBroker
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
      * To force the use of the passed in connection set the configuration
-     * property torque.idbroker.usenewconnection = false 
+     * property torque.idbroker.usenewconnection = false
      *
      * @param connection A Connection should be null.
-     * @param tableName, a String that identifies a table.
+     * @param tableName a String that identifies a table.
      * @return A String id
      * @exception Exception Database error.
      */
@@ -404,10 +401,11 @@ public class IDBroker
      * Note this method does not require a Connection.
      * If a Connection is needed one will be requested.
      * To force the use of the passed in connection set the configuration
-     * property torque.idbroker.usenewconnection = false 
+     * property torque.idbroker.usenewconnection = false
      *
      * @param tableName The name of the table for which we want an id.
      * @param numOfIdsToReturn The desired number of ids.
+     * @param connection A Connection.
      * @return A BigDecimal.
      * @exception Exception Database error.
      */
@@ -430,7 +428,7 @@ public class IDBroker
         // would be preferrable to avoid the synchronization on the
         // method
 
-        List availableIds = (List)ids.get(tableName);
+        List availableIds = (List) ids.get(tableName);
 
         if ( availableIds == null ||
              availableIds.size() < numOfIdsToReturn )
@@ -444,7 +442,7 @@ public class IDBroker
                 category.info ("Forced id retrieval - " + availableIds.size());
             }
             storeIDs(tableName, true, connection);
-            availableIds = (List)ids.get(tableName);
+            availableIds = (List) ids.get(tableName);
         }
 
         int size = availableIds.size() < numOfIdsToReturn ?
@@ -457,9 +455,9 @@ public class IDBroker
         // a specific table.
 //        synchronized (availableIds)
 //        {
-            for (int i=size-1; i>=0; i--)
+            for (int i = size - 1; i >= 0; i--)
             {
-                    results[i] = (BigDecimal)availableIds.get(i);
+                    results[i] = (BigDecimal) availableIds.get(i);
                     availableIds.remove(i);
             }
 //        }
@@ -474,6 +472,7 @@ public class IDBroker
      * the row
      * @return a <code>boolean</code> value
      * @exception TorqueException if an error occurs
+     * @exception Exception
      */
     public boolean exists(String tableName)
         throws TorqueException, Exception
@@ -541,10 +540,10 @@ public class IDBroker
             Iterator it = ids.keySet().iterator();
             while (it.hasNext())
             {
-                String tableName = (String)it.next();
-                category.info("IDBroker thread checking for more keys on table: " +
-                         tableName);
-                List availableIds = (List)ids.get(tableName);
+                String tableName = (String) it.next();
+                category.info("IDBroker thread checking for more keys "
+                        + "on table: " + tableName);
+                List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
                 if ( quantity > availableIds.size() )
                 {
@@ -554,13 +553,13 @@ public class IDBroker
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false, null);
-                        category.info("Retrieved more ids for table: " +
-                                 tableName);
+                        category.info("Retrieved more ids for table: "
+                                + tableName);
                     }
                     catch (Exception exc)
                     {
-                        category.error("There was a problem getting new IDs for table: " +
-                                  tableName, exc);
+                        category.error("There was a problem getting new IDs "
+                                + "for table: " + tableName, exc);
                     }
                 }
             }
@@ -601,14 +600,14 @@ public class IDBroker
 
         // Get the last id request for this table.
         java.util.Date lastTime =
-            (java.util.Date)lastQueryTime.get (tableName);
+            (java.util.Date) lastQueryTime.get(tableName);
         java.util.Date now = new java.util.Date();
 
         if ( lastTime != null)
         {
             long thenLong = lastTime.getTime();
             long nowLong = now.getTime();
-            int timeLapse = (int)(nowLong-thenLong);
+            int timeLapse = (int) (nowLong - thenLong);
             if ( timeLapse < sleepPeriod && timeLapse > 0 )
             {
                 category.info("Unscheduled retrieval of more ids for table: " +
@@ -616,12 +615,12 @@ public class IDBroker
                 // Increase quantity, so that hopefully this does not
                 // happen again.
                 float rate = getQuantity(tableName, null).floatValue()
-                    / (float)timeLapse;
-                quantityStore.put(tableName,
-                    new BigDecimal(Math.ceil(sleepPeriod*rate*safetyMargin)));
+                        / (float) timeLapse;
+                quantityStore.put(tableName, new BigDecimal(
+                        Math.ceil(sleepPeriod * rate * safetyMargin)));
             }
         }
-        lastQueryTime.put (tableName,now);
+        lastQueryTime.put(tableName, now);
     }
 
     /**
@@ -631,6 +630,7 @@ public class IDBroker
      *
      * @param tableName The name of the table for which we want an id.
      * @param adjustQuantity True if amount should be adjusted.
+     * @param connection a Connection
      * @exception Exception a generic exception.
      */
     private void storeIDs(String tableName,
@@ -656,7 +656,7 @@ public class IDBroker
             try
             {
                 if (connection == null || configuration
-                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true)) 
+                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
                 {
                     String databaseName = dbMap.getName();
                     // Get a connection to the db by starting a
@@ -669,9 +669,9 @@ public class IDBroker
                     {
                         dbCon = Torque.getConnection(databaseName);
                     }
-                    connection = dbCon.getConnection();    
+                    connection = dbCon.getConnection();
                 }
-                
+
                 // Write the current value of quantity of keys to grab
                 // to the database, primarily to obtain a write lock
                 // on the table/row, but this value will also be used
@@ -711,7 +711,7 @@ public class IDBroker
                 }
             }
 
-            List availableIds = (List)ids.get(tableName);
+            List availableIds = (List) ids.get(tableName);
             if ( availableIds == null )
             {
                 availableIds = new ArrayList();
@@ -720,7 +720,7 @@ public class IDBroker
 
             // Create the ids and store them in the list of available ids.
             int numId = quantity.intValue();
-            for (int i=0; i<numId; i++)
+            for (int i = 0; i < numId; i++)
             {
                 availableIds.add(nextId);
                 nextId = nextId.add(ONE);
@@ -739,6 +739,7 @@ public class IDBroker
      * only because it is going to be added to another BigDecimal.
      *
      * @param tableName The name of the table we want to query.
+     * @param connection a Connection
      * @return An int with the number of ids cached in memory.
      */
     private BigDecimal getQuantity(String tableName, Connection connection)
@@ -753,7 +754,7 @@ public class IDBroker
         // Initialize quantity, if necessary.
         else if (quantityStore.containsKey(tableName))
         {
-            quantity = (BigDecimal)quantityStore.get(tableName);
+            quantity = (BigDecimal) quantityStore.get(tableName);
         }
         else
         {
@@ -761,7 +762,7 @@ public class IDBroker
             try
             {
                 if (connection == null || configuration
-                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true)) 
+                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
                 {
                     String databaseName = tableMap.getDatabaseMap().getName();
                     // Get a connection to the db
@@ -785,9 +786,9 @@ public class IDBroker
                 // Return the connection to the pool.
                 try
                 {
-                    if (dbCon != null) 
+                    if (dbCon != null)
                     {
-                        Torque.releaseConnection(dbCon);        
+                        Torque.releaseConnection(dbCon);
                     }
                 }
                 catch (Exception e)
@@ -827,7 +828,7 @@ public class IDBroker
             statement = con.createStatement();
             ResultSet rs = statement.executeQuery( stmt.toString() );
 
-            if(rs.next())
+            if (rs.next())
             {
                 // work around for MySQL which appears to support
                 // getBigDecimal in the source code, but the binary
@@ -837,13 +838,16 @@ public class IDBroker
             }
             else
             {
-                throw new TorqueException("The table "+tableName+
+                throw new TorqueException("The table " + tableName +
                     " does not have a proper entry in the " + ID_TABLE);
             }
         }
         finally
         {
-            if (statement != null) statement.close();
+            if (statement != null)
+            {
+                statement.close();
+            }
         }
 
         return results;
@@ -885,10 +889,12 @@ public class IDBroker
         }
         finally
         {
-            if (statement != null) statement.close();
+            if (statement != null)
+            {
+                statement.close();
+            }
         }
     }
-
 
     /**
      * Helper method to update a row in the ID_TABLE.
@@ -902,10 +908,8 @@ public class IDBroker
     private void updateQuantity(Connection con,
                                 String tableName,
                                 BigDecimal quantity)
-        throws Exception
+            throws Exception
     {
-
-
         StringBuffer stmt =
             new StringBuffer(quantity.toString().length() + tableName.length()
                              + 50);
@@ -927,7 +931,10 @@ public class IDBroker
         }
         finally
         {
-            if (statement != null) statement.close();
+            if (statement != null)
+            {
+                statement.close();
+            }
         }
     }
 }

@@ -57,7 +57,6 @@ package org.apache.torque.oid;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import org.apache.torque.adapter.DB;
-import com.workingdogs.village.DataSet;
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 import com.workingdogs.village.Value;
@@ -77,7 +76,7 @@ public class SequenceIdGenerator
     /**
      * Creates an IdGenerator which will work with the specified database.
      *
-     * @param dbAdapter, the adapter that knows the correct sql syntax.
+     * @param adapter the adapter that knows the correct sql syntax.
      */
     public SequenceIdGenerator(DB adapter)
     {
@@ -88,7 +87,7 @@ public class SequenceIdGenerator
      * Retrieves an id as an int.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return An int with the value for the id.
      * @exception Exception Database error.
      */
@@ -102,7 +101,7 @@ public class SequenceIdGenerator
      * Retrieves an id as an long.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A long with the value for the id.
      * @exception Exception Database error.
      */
@@ -116,7 +115,7 @@ public class SequenceIdGenerator
      * Retrieves an id as a BigDecimal.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A BigDecimal id
      * @exception Exception Database error.
      */
@@ -130,7 +129,7 @@ public class SequenceIdGenerator
      * Retrieves an id as an String.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A String id
      * @exception Exception Database error.
      */
@@ -175,12 +174,11 @@ public class SequenceIdGenerator
      * Retrieves an id as a Village Value.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A Village Value id.
      * @exception Exception Database error.
      */
-    private Value getIdAsVillageValue(Connection connection,
-                                      Object keyInfo)
+    private Value getIdAsVillageValue(Connection connection, Object keyInfo)
         throws Exception
     {
         String idSql = dbAdapter.getIDMethodSQL(keyInfo);
@@ -195,11 +193,11 @@ public class SequenceIdGenerator
         }
         finally
         {
-            if (qds != null) qds.close();
+            if (qds != null)
+            {
+                qds.close();
+            }
         }
         return rec.getValue(1); // Values are 1 based.
     }
 }
-
-
-

@@ -57,7 +57,6 @@ package org.apache.torque.oid;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import org.apache.torque.adapter.DB;
-import com.workingdogs.village.DataSet;
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 import com.workingdogs.village.Value;
@@ -78,7 +77,7 @@ public class AutoIncrementIdGenerator
     /**
      * Creates an IdGenerator which will work with the specified database.
      *
-     * @param dbAdapter, the adapter that knows the correct sql syntax.
+     * @param adapter the adapter that knows the correct sql syntax.
      */
     public AutoIncrementIdGenerator(DB adapter)
     {
@@ -89,7 +88,7 @@ public class AutoIncrementIdGenerator
      * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return An int with the value for the id.
      * @exception Exception Database error.
      */
@@ -103,7 +102,7 @@ public class AutoIncrementIdGenerator
      * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A long with the value for the id.
      * @exception Exception Database error.
      */
@@ -117,7 +116,7 @@ public class AutoIncrementIdGenerator
      * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A BigDecimal with the last value auto-incremented as a
      * result of an insert.
      * @exception Exception Database error.
@@ -133,7 +132,7 @@ public class AutoIncrementIdGenerator
      * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A String with the last value auto-incremented as a
      * result of an insert.
      * @exception Exception Database error.
@@ -179,13 +178,12 @@ public class AutoIncrementIdGenerator
      * Returns the last ID used by this connection.
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param keyInfo an Object that contains additional info.
      * @return A Village Value with the last value auto-incremented as a
      * result of an insert.
      * @exception Exception Database error.
      */
-    private Value getIdAsVillageValue(Connection connection,
-                                      Object keyInfo)
+    private Value getIdAsVillageValue(Connection connection, Object keyInfo)
         throws Exception
     {
         String idSQL = dbAdapter.getIDMethodSQL(keyInfo);
