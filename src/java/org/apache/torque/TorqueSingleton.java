@@ -192,7 +192,7 @@ public class TorqueSingleton
 
         if (isInit)
         {
-            log.debug("Tried to initialize multiple times");
+            log.debug("Multiple initializations of Torque attempted");
             return;
         }
 
