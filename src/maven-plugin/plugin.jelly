@@ -553,7 +553,7 @@
     <j:set var="torque.internal.omzip.type" value="bin"/>
     <j:set var="torque.internal.omzip.pattern" value="base"/>
     <j:set var="torque.internal.omzip.files" value="class"/>
-    <j:set var="torque.internal.omzip.dir" value="${torque.compile.build.dir}"/>
+    <j:set var="torque.internal.omzip.dir" value="${torque.omzip.dir}"/>
     <attainGoal name="torque:om-zip-worker"/>
     <j:set var="torque.internal.omzip.pattern" value="extension"/>
     <attainGoal name="torque:om-zip-worker"/>
@@ -563,12 +563,13 @@
   <goal
     name="torque:om-zip-worker">
 
-    <j:if test="torque.internal.omzip.${torque.internal.omzip.type}.${torque.internal.omzip.pattern}">
+    <property name="torque_internal_omzipworker_guard_name" value="torque.internal.omzip.${torque.internal.omzip.type}.${torque.internal.omzip.pattern}"/>
+    <j:if test="${context.getVariable(torque_internal_omzipworker_guard_name) == 'true'}">
 
       <!-- Base files that typically aren't modified. -->
       <patternset id="torque.internal.omzip.pattern.base">
-        <include name="${torque.internal.omzip.packagePath}/${torque.basePrefix}*.${torque.internal.omzip.files}"/>
-        <include name="${torque.internal.omzip.packagePath}/map/*MapBuilder.${torque.internal.omzip.files}"/>
+        <include name="${torque.internal.omzip.packagePath}/**/${torque.basePrefix}*.${torque.internal.omzip.files}"/>
+        <include name="${torque.internal.omzip.packagePath}/map/**/*MapBuilder.${torque.internal.omzip.files}"/>
       </patternset>
 
       <!-- Extension files that typically are modified. -->

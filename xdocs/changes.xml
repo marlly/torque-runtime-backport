@@ -10,6 +10,10 @@
 
     <release version="3.2-alpha" date="in CVS">
       <action dev='seade' type='fix'>
+        TRQS220: Torque maven plugin om zip goal doesn't work.  Thanks to Dan
+        Price for the patch.
+      </action>
+      <action dev='seade' type='fix'>
         Changed the default property value for <code>torque.output.dir</code> 
         from <code>maven.build.dest</code> to <code>maven.build.dir</code>.
         This means many of the generated files will now appear in the 
