@@ -597,9 +597,9 @@ public class SqlExpression
     {
         StringBuffer buf = new StringBuffer( (int)(rawText.length() * 1.1) );
 
-        /* Some databases do not need escaping.  */
+        // Some databases do not need escaping.
         String escapeString = new String();
-        if (db != null && db.escapeText() == false)
+        if (db != null && !db.escapeText())
         {
             escapeString = String.valueOf(BACKSLASH);
         }
