@@ -905,6 +905,45 @@ public class Torque
     }
 
     /**
+     * This method returns a Connecton using the given parameters.
+     * You should only use this method if you need user based access to the
+     * database!
+     *
+     * @param name The database name.
+     * @param username The name of the database user.
+     * @param password The password of the database user.
+     * @return A Connection.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public static Connection getConnection(String name, String username,
+            String password)
+            throws TorqueException
+    {
+        Connection con = null;
+        DataSourceFactory dsf = null;
+        try
+        {
+            dsf = (DataSourceFactory) dsFactoryMap.get(name);
+            con = dsf.getDataSource().getConnection(username, password);
+        }
+        catch (Exception e)
+        {
+             if (dsf == null && e instanceof NullPointerException)
+             {
+                 throw new NullPointerException(
+                         "There was no DataSourceFactory "
+                         + "configured for the connection " + name);
+             }
+             else
+             {
+                 throw new TorqueException(e);
+             }
+        }
+        return con;
+    }
+
+    /**
      * Returns database adapter for a specific connection pool.
      *
      * @param name A pool name.
