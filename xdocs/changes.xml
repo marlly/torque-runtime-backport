@@ -53,6 +53,9 @@
       TRQS29, TRQS93: fix endless loop in Monitor
     </li>
     <li>
+      TRQS47: bug in torque generated copy() method
+    </li>
+    <li>
       TRQS90: SQLScanner reports wrong line numbers in Window platforms and
       behaves incorrectly when finding the minus sign
     </li>

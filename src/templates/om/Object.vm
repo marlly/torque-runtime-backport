@@ -1420,8 +1420,22 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         copyObj.set${col.JavaName}($col.Name.toLowerCase());
 #end
 
+#foreach ($col in $table.Columns)
+    #if ($col.isPrimaryKey())
+        #if($col.Primitive)
+          #set ($coldefval = "0")
+          #set ($coldefval = $col.DefaultValue)
+          copyObj.set${col.JavaName}($coldefval);
+        #else
+          #set ( $pkid = "null" )
+          #set ( $cjtype = $col.JavaNative )
+          copyObj.set${col.JavaName}((${cjtype})${pkid});
+        #end
+    #end
+#end
+
+
 #if ($complexObjectModel)
-  copyObj.setNew(false);
   #set ( $list = "List " )
   #foreach ($fk in $table.Referrers)
     #set ( $tblFK = $fk.Table )
@@ -1448,27 +1462,12 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         {
             $className obj = ($className) v.get(i);
             copyObj.add$pCollNameNoS(obj.copy());
-            ((Persistent) v.get(i)).setNew(true);
         }
         #set ( $list = "" )
     #end
   #end
-  copyObj.setNew(true);
 #end
 
-#foreach ($col in $table.Columns)
-    #if ($col.isPrimaryKey())
-        #if($col.Primitive)
-          #set ($coldefval = "0")
-          #set ($coldefval = $col.DefaultValue)
-          copyObj.set${col.JavaName}($coldefval);
-        #else
-          #set ( $pkid = "null" )
-          #set ( $cjtype = $col.JavaNative )
-          copyObj.set${col.JavaName}((${cjtype})${pkid});
-        #end
-    #end
-#end
         return copyObj;
     }
 #end
