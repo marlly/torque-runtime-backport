@@ -53,3 +53,12 @@ o using proxies for large objects. if you had a user object
 o would it be possible to support native connection methods
   for high efficiency. an easy to access C APIs, would it
   even be useful?
+
+o application programmers should be able to save, update, and
+  delete objects without any knowledge of the database schema.
+  if the attribute selection is based on columns in tables than
+  the object hierarchy and database schema cannot vary
+  independently. it is likely that the database schema may need
+  to change but you don't want this to affect application
+  programmers who may know little about databases. reasonably
+  so, the persistence layer should take care of everything.
