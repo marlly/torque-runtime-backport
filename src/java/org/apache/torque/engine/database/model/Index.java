@@ -93,9 +93,11 @@ public class Index
      * @param indexColumns The list of {@link
      * org.apache.torque.engine.database.model.Column} objects which
      * make up this index.  Cannot be empty.
+     * @exception TorqueException Error generating name.
      * @see #Index()
      */
     public Index(List indexColumns)
+        throws TorqueException
     {
         this();
         if (indexColumns.size() > 0)
@@ -104,7 +106,9 @@ public class Index
 
             List inputs = getColumnNames();
             inputs.add("I");
-            indexName = NameFactory.generateName(inputs);
+            inputs.add(0, getTable().getDatabase().getAppData());
+            indexName = NameFactory.generateName(NameFactory.GLOBAL_GENERATOR,
+                                                 inputs);
 
             if (DEBUG)
             {
