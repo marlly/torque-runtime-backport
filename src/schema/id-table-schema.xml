@@ -22,7 +22,7 @@
     <column name="QUANTITY" type="INTEGER"/>
     
     <unique>
-        <unique-column name="TABLE_NAME"/>
+      <unique-column name="TABLE_NAME"/>
     </unique>        
     
   </table>

@@ -240,6 +240,10 @@ public class Torque
     public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
+        
+        //  DBFactory and IDBroker need some configuration
+        // information.
+        
         DBFactory.setConfiguration(c);
     }
 

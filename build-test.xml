@@ -19,7 +19,8 @@
   <!-- ============================================================== -->
 
   <target
-    name="test">
+    name="test"
+    depends="filterTokens">
 
     <copy
       todir="${torque.distDir}/lib"
@@ -38,11 +39,15 @@
       overwrite="yes"
     />
 
-    <!-- copy test schema -->
+    <!-- copy test schemas -->
     <copy
       todir="${torque.distDir}/schema"
-      file="${torque.testSchema}"
-    />
+      filtering="yes"
+      overwrite="yes">
+      <fileset dir="${rttest.dir}">
+        <include name="**/*.xml"/>
+      </fileset>
+    </copy>
 
     <!-- copy test sources -->
     <copy todir="${torque.distDir}/src/java">
@@ -194,6 +199,16 @@
     name="test-project-sql2xml">
   </target>
 
+  <target name="filterTokens">
+    <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
+    <filter token="DATABASE_URL" value="${databaseUrl}"/>
+    <filter token="DATABASE_USER" value="${databaseUser}"/>
+    <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
+    <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
+    <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
+    <filter token="DATABASE_ADAPTER" value="${torque.databaseAdapter}"/>
+  </target>
+
   <!-- ============================================================== -->
   <!-- R U N T I M E  T E S T S                                       -->
   <!-- ============================================================== -->
@@ -211,12 +226,31 @@
   </path>
 
   <target
-    name="test-runtime">
+    name="test-runtime"
+    depends="filterTokens">
+
+    <echo>
+      ${log4j.jar}
+      ${jdbc.jar}
+      ${commons-collections.jar}
+      ${commons-util.jar}
+      ${village.jar}
+      ${build.dest}
+      ${torque.destDir}
+      ${torque.testDatabaseJar}
+    </echo>
+
+    <!-- Copy test Torque.properties -->
+    <copy
+      todir="bin/torque/torque"
+      file="src/rttest/Torque.properties"
+      filtering="yes"
+    />
 
     <java
       classname="org.apache.torque.TorqueRunner"
       fork="true">
-      <arg value="src/test/Torque.properties"/>
+      <arg value="bin/torque/torque/Torque.properties"/>
       <classpath refid="classpath"/>
     </java>
   </target>
