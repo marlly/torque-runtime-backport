@@ -19,9 +19,17 @@
         A list of changes can be found <a href="changes.html">here</a>.
       </p>
 
-      <subsection name="Current Status">
+      <subsection name="20 November 2002 - Torque 3.0 Release Candidate 2 is released!">
         <p>
-           We are currently working on Torque 3.0 Beta 5.
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-rc2/">
+          here</a>.
+        </p>
+      </subsection>
+
+      <subsection name="26 October 2002 - Torque 3.0 Release Candidate 1 is released!">
+        <p>
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-rc1/">
+          here</a>.
         </p>
       </subsection>
 

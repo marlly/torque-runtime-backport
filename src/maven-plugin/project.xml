@@ -3,7 +3,7 @@
   <pomVersion>3</pomVersion>
   <id>maven-torque-plugin</id>
   <name>Maven Torque Plug-in</name>
-  <currentVersion>3.0-rc2-dev</currentVersion>
+  <currentVersion>3.0-rc2</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
@@ -96,7 +96,7 @@
     </dependency>
     <dependency>
       <id>torque</id>
-      <version>3.0-rc2-dev</version>
+      <version>3.0-rc2</version>
       <properties>
         <classloader>root</classloader>
       </properties>

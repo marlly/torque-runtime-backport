@@ -4,7 +4,7 @@
   <pomVersion>3</pomVersion>
   <id>torque</id>
   <name>jakarta-turbine-torque</name>
-  <currentVersion>3.0-rc2-dev</currentVersion>
+  <currentVersion>3.0-rc2</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
@@ -23,7 +23,7 @@
   <issueTrackingUrl>http://nagoya.apache.org/scarab/issues</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/torque/</siteDirectory>
-  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine-torque/</distributionDirectory>
+  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine/torque/</distributionDirectory>
 
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-torque</connection>
