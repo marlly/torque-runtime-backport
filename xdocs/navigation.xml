@@ -28,7 +28,7 @@
     <menu name="Howto Guides">
       <item name="Caching Howto"         href="/managers-cache.html"/>
       <item name="Criteria Howto"        href="/criteria-howto.html"/>
-      <item name="JDBC2 Pool Howto"      href="/jdbc2pool-howto.html"/>
+      <item name="Pool-config Howto"     href="/configuration-howto.html"/>
       <item name="Maven Howto"           href="/maven-howto.html"/>
       <item name="Peers Howto"           href="/peers-howto.html"/>
     </menu>

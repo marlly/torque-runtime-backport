@@ -3,8 +3,9 @@
 <document>
 
  <properties>
-  <title>Jdbc2 Connection Pool</title>
+  <title>Pool Configuration</title>
   <author email="jmcnally@apache.org">John McNally</author>
+  <author email="mpoeschl@marmot.at">Martin Poeschl</author>
  </properties>
 
 <body>
@@ -12,28 +13,14 @@
 <section name="Introduction">
 
 <p>
-This document is only relevant for Torque-3.0b3 and higher versions.  For
-instructions on configuring torque's built-in connection pool in earlier
-versions see the runtime configuration section of 
-<a href="tutorial.html">the tutorial</a>.  If you are using Torque-3.0b3 or higher,
-make sure that you have commons-dbcp jar that is newer then commons-dbcp-1.0.dev.
-Otherwise you will have null connection objects.
-</p>
-
-<p>
-Starting with Torque-3.0b3, torque no longer requires use of a built-in pool.  
-Torque's old pool has been updated to be a <code>javax.sql.DataSource</code>
-implementation so that any connection pool implementing the 
-<code>DataSource</code> can be used in its place.
-Torque now expects a factory that can return a <code>DataSource</code> and can
+Torque can use any connection pool implementing the <code>DataSource</code>.
+Torque expects a factory that can return a <code>DataSource</code> and can
 be configured using torque's configuration file.
 </p>
 
 <p>
-Torque provides two special purpose factories as well as a general
-factory that uses jndi to retrieve the <code>DataSource</code>.  The first
-factory discussed below uses the updated version of torque's old pool and the
-second uses the more full featured pool available in the commons.dbcp package.
+Torque provides factories to use the commons-dbcp as well as a general
+factory that uses jndi to retrieve the <code>DataSource</code>.
 The jndi factory looks up a <code>DataSource</code> bound to jndi; it
 also provides a simple property file based way to configure and deploy most
 <code>DataSource</code>'s, though in many cases a pool may already be 
@@ -73,23 +60,24 @@ The valid values are:
 <td>
 <ul>
   <li>as400</li>
+  <li>axion</li>
   <li>db2app</li>
   <li>db2net</li>
   <li>cloudscape</li>
-  <li>hypersonic</li>
 </ul>
 </td>
 <td>
 <ul>
+  <li>hypersonic</li>
   <li>interbase</li>
   <li>instantdb</li>
   <li>mssql</li>
   <li>mysql</li>
-  <li>oracle</li>
 </ul>
 </td>
 <td>
 <ul>
+  <li>oracle</li>
   <li>postgresql</li>
   <li>sapdb</li>
   <li>sybase</li>
@@ -105,9 +93,8 @@ The valid values are:
 <section name="TorqueDataSourceFactory">
 
 <p>
-This factory gives a DataSource version of the old built-in pool.  The old
-pool was extracted and updated and is now part of the commons-jdbc2pool
-package.  TorqueDataSourceFactory provides an easy way to configure this
+This factory gives a DataSource version of the old deprecated built-in pool.
+TorqueDataSourceFactory provides an easy way to configure this
 pool and it assumes you will have a jdbc Driver class providing the physical
 database connections.  First you must let torque know you are using this
 factory.
@@ -144,11 +131,11 @@ class for more information.
 
 </section>
 
-<section name="Jdbc2PoolDataSourceFactory">
+<section name="SharedPoolDataSourceFactory">
 
 <p>
 This factory uses the more full featured DataSource available in the 
-commons-dbcp package.  Jdbc2PoolDataSourceFactory provides an easy way 
+commons-dbcp package. SharedPoolDataSourceFactory provides an easy way 
 to configure this pool and it assumes you will have a jdbc Driver class 
 providing the physical database connections.  Again, you must let torque know 
 you are using this factory.
@@ -156,7 +143,7 @@ you are using this factory.
 
 <source><![CDATA[
 torque.dsfactory.bookstore.factory= \
-  org.apache.torque.dsfactory.Jdbc2PoolDataSourceFactory
+  org.apache.torque.dsfactory.SharedPoolDataSourceFactory
 ]]></source>
 
 <p>
@@ -182,10 +169,9 @@ Comparing this with the torque's old pool, you can see that this pool does not
 rely on expirying connections periodically to maintain their validity.  The
 pool can be setup to test each connection before returning it to the 
 application, so the likelihood of the application receiving a bad connection
-is much smaller than using <code>TorqueClassicDataSource</code>.  
-<code>Jdbc2PoolDataSource</code> contains several other options, for example,
-the ability have several usernames sharing the same pool settings.  Please
-see the commons-dbcp javadoc for more info.
+is much smaller than using <code>TorqueClassicDataSource</code>. 
+Torque also includes a factory for the <code>PerUserPoolDataSource</code>.
+Please see the commons-dbcp javadoc for more info.
 </p>
 
 </section>
