@@ -5,7 +5,7 @@
   <!-- Allow any user specific values to override the defaults -->
   <property file="${user.home}/build.properties" />
   <!-- Allow user defaults for this project -->
-  <property file="build.properties" />
+  <property file="project.properties" />
   <!-- Set default values for the build -->
   <property file="default.properties" />
 
@@ -62,7 +62,7 @@
 
     <copy
       tofile="${build.test}/rttest/build-torque.xml"
-      file="${src.dir}/conf/build-torque.xml"
+      file="${torque.generator.home}/src/conf/build-torque.xml"
       overwrite="yes"
     />
   </target>
@@ -275,50 +275,16 @@
   <!-- Build classpath -->
   <path id="classpath">
     <pathelement location="${build.dest}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-configuration.jar}"/>
-    <pathelement location="${commons-dbcp.jar}"/>
-    <pathelement location="${commons-lang.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${commons-pool.jar}"/>
-    <pathelement location="${jcs.jar}"/>
-    <pathelement location="${jdbc.jar}"/>
-    <pathelement location="${jndi.jar}"/>
-    <pathelement location="${log4j.jar}"/>
-    <pathelement location="${stratum.jar}"/>
-    <pathelement location="${tomcat-naming.jar}"/>
     <pathelement location="${torque.destDir}"/>
     <pathelement location="${torque.testDatabaseJar}"/>
-    <pathelement location="${village.jar}"/>
-    <pathelement location="${xerces.jar}"/>
-    <pathelement location="${xmlParserAPIs.jar}"/>
+    <fileset dir="${build.test}/rttest/lib">
+      <include name="**/*.jar"/>
+    </fileset>
   </path>
 
   <target
     name="test-runtime"
     depends="filterTokens">
-
-    <echo>
-      ${build.dest}
-      ${commons-beanutils.jar}
-      ${commons-collections.jar}
-      ${commons-configuration.jar}
-      ${commons-dbcp.jar}
-      ${commons-lang.jar}
-      ${commons-logging.jar}
-      ${commons-pool.jar}
-      ${jcs.jar}
-      ${jdbc.jar}
-      ${jndi.jar}
-      ${log4j.jar}
-      ${stratum.jar}
-      ${tomcat-naming.jar}
-      ${torque.testDatabaseJar}
-      ${village.jar}
-      ${xerces.jar}
-      ${xmlParserAPIs.jar}
-    </echo>
 
     <!-- Copy test Torque.properties -->
     <copy
@@ -387,7 +353,7 @@
     unless="useClasspath">
 -->
     <copy todir="${test.templateDir}">
-      <fileset dir="${src.dir}/templates"/>
+      <fileset dir="${torque.generator.home}/src/templates"/>
     </copy>
 
   </target>
