@@ -3,7 +3,7 @@ package org.apache.torque.map;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,9 @@ package org.apache.torque.map;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.torque.adapter.IDMethod;
 import org.apache.torque.oid.IdGenerator;
 
@@ -69,9 +72,7 @@ import org.apache.torque.oid.IdGenerator;
  */
 public class TableMap implements IDMethod, java.io.Serializable
 {
-    /**
-     * The list of valid ID generation methods.
-     */
+    /** The list of valid ID generation methods. */
     protected static final String[] VALID_ID_METHODS =
     {
         NATIVE, AUTO_INCREMENT, SEQUENCE, ID_BROKER, NO_ID_METHOD
@@ -551,22 +552,9 @@ public class TableMap implements IDMethod, java.io.Serializable
         StringTokenizer st = new StringTokenizer(tmp, "_");
         while (st.hasMoreTokens())
         {
-            String element = (String) st.nextElement();
-            out.append (firstLetterCaps(element));
+            String element = ((String) st.nextElement()).toLowerCase();
+            out.append (StringUtils.capitalise(element));
         }
         return out.toString();
-    }
-
-    /**
-     * Makes the first letter caps and the rest lowercase.
-     *
-     * @param data A String.
-     * @return A String with data processed.
-     */
-    private final String firstLetterCaps(String data)
-    {
-        String firstLetter = data.substring(0, 1).toUpperCase();
-        String restLetters = data.substring(1).toLowerCase();
-        return firstLetter + restLetters;
     }
 }
