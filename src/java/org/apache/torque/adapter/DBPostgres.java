@@ -118,18 +118,6 @@ public class DBPostgres extends DB
     }
 
     /**
-     * Returns the last auto-increment key.  Databases like Oracle
-     * which support this feature will return a result, others will
-     * return null.
-     *
-     * @see org.apache.torque.adapters.DB#getSequenceSql
-     */
-    public String getSequenceSql(Object obj)
-    {
-        return "SELECT nextval('" + (String) obj + "')";
-    }
-
-    /**
      * Locks the specified table.
      *
      * @param con The JDBC connection to use.
@@ -187,7 +175,7 @@ public class DBPostgres extends DB
 
     /**
      * Override the default behavior to associate b with null?
-     * 
+     *
      * @see org.apache.torque.adapters.DB#getBooleanString
      */
     public String getBooleanString(Boolean b)

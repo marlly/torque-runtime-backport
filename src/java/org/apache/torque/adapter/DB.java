@@ -154,24 +154,6 @@ public abstract class DB implements Serializable, IDMethod
     public abstract String getIDMethodSQL(Object obj);
 
     /**
-     * @see #getIDMethodSQL(Object obj)
-     * @deprecated Use getIDMethodSQL(Object) instead.
-     */
-    public String getIdSqlForAutoIncrement(Object obj)
-    {
-        return getIDMethodSQL(obj);
-    }
-
-    /**
-     * @see #getIDMethodSQL(Object obj)
-     * @deprecated Use getIDMethodSQL(Object) instead.
-     */
-    public String getSequenceSql(Object obj)
-    {
-        return getIDMethodSQL(obj);
-    }
-
-    /**
      * Locks the specified table.
      *
      * @param con The JDBC connection to use.
@@ -211,34 +193,6 @@ public abstract class DB implements Serializable, IDMethod
     public String ignoreCaseInOrderBy(String in)
     {
         return ignoreCase(in);
-    }
-
-    /* *
-     * Sets the JDBC driver used by this adapter.
-     *
-     * @param newDriver The fully-qualified class name of the JDBC
-     * driver to use.
-     * /
-    public void setJDBCDriver(String newDriver)
-    {
-        JDBCDriver = newDriver;
-    }
-    */
-
-    /**
-     * This method is used to chek whether writing large objects to
-     * the DB requires a transaction.  Since this is only true for
-     * Postgres, only the DBPostgres needs to override this method and
-     * return true.
-     *
-     * @return True if writing large objects to the DB requires a transaction.
-     * @deprecated The hack involving an oid mapping for VARBINARY
-     * which necessitated use of this method for Postgres has been
-     * obviated by use of the Postgres bytea data type.
-     */
-    public boolean objectDataNeedsTrans()
-    {
-        return false;
     }
 
     /**
@@ -288,19 +242,6 @@ public abstract class DB implements Serializable, IDMethod
     public int getLimitStyle()
     {
         return LIMIT_STYLE_NONE;
-    }
-
-    /**
-     * This method is used to format any date string.
-     * Database can use different default date formats.
-     *
-     * @param dateString the date string to format
-     * @return The proper date formated String.
-     * @deprecated use getDateString(java.util.Date)
-     */
-    public String getDateString(String dateString)
-    {
-        return getStringDelimiter() + dateString + getStringDelimiter();
     }
 
     /**
