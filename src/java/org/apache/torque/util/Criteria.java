@@ -218,7 +218,7 @@ public class Criteria extends Hashtable
     private int offset = 0;
 
     // flag to note that the criteria involves a blob.
-    private boolean blobFlag = false;
+    private Boolean blobFlag = null;
 
     private HashMap aliases = null;
 
@@ -402,9 +402,9 @@ public class Criteria extends Hashtable
     {
         // Peer or application may have noted the existence of a blob
         // so we can save the lookup.
-        if ( blobFlag )
+        if ( blobFlag != null)
         {
-            return true;
+            return blobFlag.booleanValue();
         }
 
         DatabaseMap map = Torque.getDatabaseMap(databaseMapName);
@@ -413,6 +413,12 @@ public class Criteria extends Hashtable
         {
             Criterion co = (Criterion)e.nextElement();
             String tableName = co.getTable();
+            String tableName2 = getTableForAlias(tableName);
+            if (tableName2 != null) 
+            {
+                tableName = tableName2;
+            }
+            
             if (!tables.contains(tableName))
             {
                 if (map.getTable(tableName).containsObjectColumn())
@@ -3149,10 +3155,23 @@ public class Criteria extends Hashtable
      * in the Criteria contain Blobs, so that the operation can be placed
      * in a transaction if the db requires it.
      * This is primarily to support Postgresql.
+     * The flag is set to true by this method.
+     * @deprecated Use @see #setBlobFlag(boolean)
      */
     public void setBlobFlag()
     {
-        blobFlag = true;
+        blobFlag = Boolean.TRUE;
+    }
+
+    /**
+     * Peers can set this flag to notify BasePeer that the table(s) involved
+     * in the Criteria contain Blobs, so that the operation can be placed
+     * in a transaction if the db requires it.
+     * This is primarily to support Postgresql.
+     */
+    public void setBlobFlag(boolean b)
+    {
+        blobFlag = b ? Boolean.TRUE: Boolean.FALSE;
     }
 
     /**
