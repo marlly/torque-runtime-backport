@@ -24,13 +24,13 @@ public class $table.JavaName $extendsBaseClass
 {
 
     #foreach ($col in $table.Columns)
-    private $col.JavaNative $col.Name.toLowerCase() = null; 
+    private $col.JavaPrimitive $col.Name.toLowerCase() = null; 
     #end
 
     #foreach ($col in $table.Columns)
         #set ( $cfc=$col.JavaName )
         #set ( $clo=$col.Name.toLowerCase() )
-        #set ( $cjtype = $col.JavaNative )
+        #set ( $cjtype = $col.JavaPrimitive )
 
     /**
      * Get the $cfc
