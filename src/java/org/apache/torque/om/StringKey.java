@@ -86,7 +86,14 @@ public class StringKey extends SimpleKey
      */
     public StringKey(StringKey key)
     {
-        this.key = key.getValue();
+        if( key != null )
+        {
+            this.key = key.getValue();
+        }
+        else
+        {
+            this.key = null;
+        }
     }
 
     /**

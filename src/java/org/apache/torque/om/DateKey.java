@@ -96,7 +96,14 @@ public class DateKey extends SimpleKey
      */
     public DateKey(DateKey key)
     {
-        this.key = key.getValue();
+        if( key != null )
+        {
+            this.key = key.getValue();
+        }
+        else
+        {
+            this.key = null;
+        }
     }
 
     /**
