@@ -697,7 +697,7 @@ public class Column
         String tn = typeName.toUpperCase();
         setType(tn);
 
-        if (this.size != null)
+        if (size != null)
         {
             this.size = size;
         }
