@@ -441,7 +441,7 @@
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-collectiosn.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-util.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
 
