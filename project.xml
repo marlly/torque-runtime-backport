@@ -31,8 +31,8 @@
     </mailingList>
     <mailingList>
       <name>Torque Developer List</name>
-      <subscribe>mailto:turbine-torque-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>mailto:turbine-torque-dev-unsubscribe@jakarta.apache.org</unsubscribe>
+      <subscribe>turbine-torque-dev-subscribe@jakarta.apache.org</subscribe>
+      <unsubscribe>turbine-torque-dev-unsubscribe@jakarta.apache.org</unsubscribe>
       <archive>http://www.mail-archive.com/turbine-torque-dev@jakarta.apache.org/</archive>
     </mailingList>
   </mailingLists>
