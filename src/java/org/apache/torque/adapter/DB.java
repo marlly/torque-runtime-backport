@@ -416,7 +416,6 @@ public abstract class DB implements Serializable, IDMethod
             ts = new Timestamp(date.getTime());
         }
 
-        char delim = getStringDelimiter();
-        return ("{ts " + delim + ts + delim + '}');
+        return ("{ts '" + ts + "'}");
     }
 }
