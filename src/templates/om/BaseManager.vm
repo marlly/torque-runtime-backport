@@ -155,8 +155,7 @@ public abstract class $basePrefix${interfaceName}Manager
     public $basePrefix${interfaceName}Manager()
         throws TorqueException
     {
-        setRegion("org_tigris_scarab_om_${interfaceName}");
-        setClassName("org.tigris.scarab.om.${interfaceName}");
+        setClassName("${package}.${interfaceName}");
     }
 
 
