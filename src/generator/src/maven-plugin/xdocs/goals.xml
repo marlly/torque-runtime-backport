@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Maven Torque Plugin</title>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+  </properties>
+
+  <body>
+    <section name="Goals">
+      <table>
+      	<tr>
+      	  <td>Goal</td>
+      	  <td>Description</td>
+      	</tr>
+      	
+      	<tr>
+      	  <td>torque</td>
+      	  <td>
+      	    Calls the torque:sql and torque:om goals
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:sql</td>
+      	  <td>
+      	    Generates the SQL for your project
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:om</td>
+      	  <td>
+      	    Generate the Peer-based object model from *-schema.xml files
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:datadtd</td>
+      	  <td>
+      	    Generates the DATA DTD for your project
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:datadump</td>
+      	  <td>
+      	    Dump data from database into xml file
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:datasql</td>
+      	  <td>
+      	    Generates sql from data xml  
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:create-db</td>
+      	  <td>
+      	    Creates your database from you XMl schema file.  Warning:  This 
+      	    goal will drop all tables and recreate them.  Any existing data
+      	    will be lost!
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:doc</td>
+      	  <td>
+      	    Generates an HTML document from your XMl schema file.
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:jdbc</td>
+      	  <td>
+      	    Creates an XML schema file by reverse engineering your database.
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:insert-sql</td>
+      	  <td>
+      	    Inserts the generated sql
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:id-table-init-sql</td>
+      	  <td>
+      	    Generates initialization sql for ID Broker
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:om-zip</td>
+      	  <td>
+      	    Moves source om files to separate jar and out of 
+      	    the source tree
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:sql2xml</td>
+      	  <td>
+      	    Create an xml schema from an sql schema
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>torque:ojb</td>
+      	  <td>
+      	    Generates the repository and om for ojb (experimental)
+      	  </td>
+      	</tr>
+      </table>
+      
+    </section>
+ </body>
+</document>

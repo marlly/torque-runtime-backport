@@ -4,14 +4,27 @@
   <properties>
     <title>Maven Torque Plugin</title>
     <author email="stephenh@chase3000.com">Stephen Haberman</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
     <section name="Maven Torque Plugin">
       <p>
-        This plugin simply delegates to the <code>build-torque.xml</code> file
-        shipped with the plugin and will read the Torque templates from the
-        classpath instead of relying on copies of templates in your source tree.
+        This plugin provides easy intergration with 
+        <a href="/torque/">Torque</a> for your project.  This replaces using
+        the build-torque.xml ant script that previously provided the same
+        functionality.
+      </p>
+      <p>
+      	By default, the templates used for code generation are found in
+      	the torque-gen jar file.  You can override this behavior by
+      	setting the appropriate <a href="properties.html">property</a>.
+      </p>
+      <p>
+        For more information on the functionality provided by this plugin
+        see the <a href="goals.html">Goals</a> document.  The various 
+        properties used to configure the plugin are documented in the
+        <a href="properties.html">Properties</a> document.
       </p>
     </section>
  </body>
