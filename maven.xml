@@ -1,10 +1,12 @@
-<project default="java:jar">
+<project
+  default="java:jar"
+  xmlns:deploy="deploy">
 
   <postGoal name="java:compile">
 
     <!-- copy database.dtd to the right place -->
-    
-    <copy 
+
+    <copy
       file="${maven.src.dir}/dtd/database.dtd"
       todir="${maven.build.dest}/org/apache/torque/engine/database/transform"
     />
@@ -23,5 +25,38 @@
     </copy>
 
   </postGoal>
+
+  <preGoal name="dist:build-bin">
+
+    <!-- copy templates to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/templates">
+      <fileset dir="${maven.src.dir}/templates" />
+    </copy>
+
+    <!-- copy schema files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/schema">
+      <fileset dir="${maven.src.dir}/schema" />
+    </copy>
+
+    <!-- copy master files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/master">
+      <fileset dir="${maven.src.dir}/conf/master" />
+    </copy>
+
+    <!-- copy config files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}">
+      <fileset dir="${maven.src.dir}/conf" />
+    </copy>
+
+    <!-- include listed dependencies -->
+    <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
+
+    <!-- move torque.jar to /lib -->
+    <move
+      file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"
+      todir="${maven.dist.bin.assembly.dir}/lib"
+    />
+
+  </preGoal>
 
 </project>
