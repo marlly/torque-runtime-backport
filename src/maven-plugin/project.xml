@@ -31,27 +31,33 @@
   <dependencies>
     <dependency>
       <id>commons-collections</id>
-      <version>2.1</version>
+      <version>3.0</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     <dependency>
       <id>commons-configuration</id>
-      <version>1.0-dev-3.20030607.194155</version>
+      <version>1.0-rc1</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
       <version>1.1</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>commons-lang</id>
       <version>2.0</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>commons-logging</id>
-      <version>1.0.3</version>
+      <version>1.0.4</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>log4j</id>
       <version>1.2.8</version>
+      <url>http://logging.apache.org/log4j/</url>
     </dependency>
     <dependency>
       <groupId>torque</groupId>
