@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -576,7 +576,7 @@ public class Column
         if (type == null)
         {
             log.warn("SchemaType " + torqueType + " does not exist");
-            type = this.DEFAULT_TYPE;
+            type = Column.DEFAULT_TYPE;
         }
         setType(type);
     }
@@ -988,8 +988,11 @@ public class Column
         sb.append(getName());
         sb.append(" ");
         sb.append(getDomain().getSqlType());
-        sb.append(getDomain().printSize());
-        sb.append(" ");
+        if (getPlatform().hasSize(getDomain().getSqlType()))
+        {
+            sb.append(getDomain().printSize());
+            sb.append(" ");
+        }
         if (getDomain().getDefaultValue() != null)
         {
             sb.append("default ");

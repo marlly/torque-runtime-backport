@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003-2004 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -195,5 +195,15 @@ public class DomainTest extends TestCase
         assertEquals("INTEGER", col.getDomain().getSqlType());
         assertEquals("cbooleanint INTEGER  ", col.getSqlString());
     }    
-    
+
+    public void testBlob() throws Exception
+    {
+        Table table = db.getTable("types");
+        Column col = table.getColumn("cblob");
+        assertEquals("", col.getAutoIncrementString());
+        assertEquals("BLOB", col.getTorqueType());
+        assertEquals("LONGBLOB", col.getDomain().getSqlType());
+        assertEquals("cblob LONGBLOB ", col.getSqlString());
+    }    
+
 }
