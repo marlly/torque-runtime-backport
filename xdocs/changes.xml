@@ -20,6 +20,9 @@
     <li>
       JdbcTrasformTask: error fetching foreign keys using an ODBC source.
     </li>
+    <li>
+      TRQ4: Transaction mismanagement in IDBroker.
+    </li>
   </ul>
 </p>
 </subsection>

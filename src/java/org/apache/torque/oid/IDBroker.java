@@ -650,10 +650,11 @@ public class IDBroker implements Runnable, IdGenerator
             checkTiming(tableName);
         }
 
+        boolean useNewConnection = (connection == null) || (configuration
+                .getBoolean(DB_IDBROKER_USENEWCONNECTION, true));
         try
         {
-            if (connection == null || configuration
-                .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
+            if (useNewConnection)
             {
                 connection = Transaction.beginOptional(dbMap.getName(),
                     transactionsSupported);
@@ -676,11 +677,17 @@ public class IDBroker implements Runnable, IdGenerator
             BigDecimal newNextId = nextId.add(quantity);
             updateNextId(connection, tableName, newNextId.toString());
 
-            Transaction.commit(connection);
+            if (useNewConnection)
+            {
+                Transaction.commit(connection);
+            }
         }
         catch (Exception e)
         {
-            Transaction.rollback(connection);
+            if (useNewConnection)
+            {
+                Transaction.rollback(connection);
+            }
             throw e;
         }
 
