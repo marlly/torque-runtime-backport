@@ -34,6 +34,19 @@ public class ${basePrefix}${table.JavaName}Manager
         return object;
     }
 
+#set ($params = "")
+#foreach ($pk in $table.PrimaryKey)
+  #set ($params = "$params ${pk.JavaNative} ${pk.uncapitalisedJavaName}, ")
+#end
+    public ${table.JavaName} getObjectByPk($strings.chop($params,2))
+    {
+        Criteria crit = new Criteria();
+#foreach ($pk in $table.PrimaryKey)
+        crit.addEqualTo("${pk.uncapitalisedJavaName}", ${pk.uncapitalisedJavaName});
+#end
+        return (${table.JavaName}) getObjectByCriteria(crit);
+    }
+
     protected Collection getCollectionByCriteria(Criteria crit) {
         PersistenceBroker broker = getBroker();
         Query query = new QueryByCriteria(${table.JavaName}.class, crit);
