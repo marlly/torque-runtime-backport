@@ -80,6 +80,7 @@ public class PlatformMysqlImpl extends PlatformDefaultImpl
     private void initialize()
     {
         setSchemaDomainMapping(new Domain(SchemaType.NUMERIC, "DECIMAL"));
+        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "MEDIUMINT"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "MEDIUMTEXT"));
         setSchemaDomainMapping(new Domain(SchemaType.DATE, "DATETIME"));
         setSchemaDomainMapping(new Domain(SchemaType.BINARY, "BLOB"));
