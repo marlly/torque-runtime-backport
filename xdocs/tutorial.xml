@@ -42,7 +42,7 @@
                 First, you need to obtain the Torque distribution.  As
                 of this writing, the standalone version of Torque has
                 not been released; however, there is a beta version <a
-                href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b2/torque-3.0-b2.zip">available</a>.
+                href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">available</a>.
                 After you have obtained your copy of the Torque
                 distribution, you need to unpack it to a directory where
                 you want to develop your application.  This will create
