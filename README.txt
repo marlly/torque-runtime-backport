@@ -15,25 +15,40 @@ B U I L D I N G
 --------------------------------------------------------------------------
 You must have ant version 1.4 or newer installed.
 
-You must set the following properties in either your
-${user.home}/build.properties file, or a build.properties file added
-by you to the Torque top-level directory:
+Building the decoupled version of Torque from CVS is now very
+easy.  Recently, changes have been made to the Torque build
+process to simplify the acquisition of jar dependencies.  The
+entire build process is now a four-step process.
 
-velocity.jar
-xerces.jar
-village.jar
-log4j.jar
+The first step of the process is to obtain the source.  Checkout
+the jakarta-turbine-torque repository.  If you are unfamiliar
+with the Jakarta CVS repositories, please refer to the CVS
+Repositories document for assistance at: 
+http://jakarta.apache.org/site/cvsindex.html.
 
-Alternately, you can set the property lib.repo to the directory acting
-as a repository holding the JARs named by default.properties.
+Next, you must define the lib.repo property in your
+${user.home}/build.properties file.  If you do not have a
+${user.home}/build.properties file, create one in your home
+directory and add the following line:
 
-Torque uses Velocity to generate the OM sources, and Torque
-XML schema parsing requires Xerces. We will soon move to using
-the Digester to parse the XML schema, and at that point any
-SAX parser will be sufficient.
+  lib.repo = /path/to/some/directory  
 
-Village is required to build the distribution. Village isn't
-needed for building, but the generated classes are dependent
-on Village.
+The value of this property determines the location that the
+Torque dependencies will be stored after they have been
+downloaded.  Note: this directory must exist in the filesystem.
 
-Log4j is required for logging in Torque.
+Next, in the top-level directory of the Torque distribution, type
+the following command to download all of the dependencies
+required to build Torque:
+
+  ant update-jars  
+
+Lastly, after all of the jars have been downloaded to your
+lib.repo directory, building the Torque distribution is only a
+matter of typing the following command:
+
+  ant dist  
+
+The resulting jar file and zip distribution will be located in
+the bin directory.  For those interested in building applications
+with Torque, only the zip distribution is needed.

@@ -10,6 +10,7 @@
       <item name="Schema Reference"      href="/schema-reference.html"/>
     </menu>
     <menu name="Guides">
+      <item name="Tutorial"              href="/tutorial.html"/>
       <item name="User Guide"            href="/user-guide.html"/>
       <item name="Developer Guide"       href="/developer-guide.html"/>
     </menu>
