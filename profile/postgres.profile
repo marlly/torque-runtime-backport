@@ -4,7 +4,6 @@
 torque.testDatabaseJar = ${lib.repo}/postgres7.2dev.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
-torque.databaseAdapter = DBPostgres
 
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:postgresql://127.0.0.1:5432/sqltest

@@ -4,7 +4,6 @@
 torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.7-bin.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
-torque.databaseAdapter = DBMM
 
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:mysql://localhost:3306/sqltest

@@ -4,7 +4,6 @@
 torque.testDatabaseJar = ${lib.repo}/classes12.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
-torque.databaseAdapter = DBOracle
 
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
