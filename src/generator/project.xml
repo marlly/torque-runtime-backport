@@ -207,54 +207,14 @@
       <url>http://jakarta.apache.org/ant/</url>
     </dependency>
     <dependency>
-      <id>commons-beanutils</id>
-      <version>1.5</version>
-      <url>http://jakarta.apache.org/commons/beanutils.html</url>
-    </dependency>
-    <dependency>
       <id>commons-collections</id>
       <version>2.1</version>
       <url>http://jakarta.apache.org/commons/collections.html</url>
     </dependency>
     <dependency>
-      <id>commons-configuration</id>
-      <version>SNAPSHOT</version>
-      <url>http://jakarta.apache.org/commons/</url>
-    </dependency>
-    <dependency>
-      <id>commons-dbcp</id>
-      <version>SNAPSHOT</version>
-      <url>http://jakarta.apache.org/commons/</url>
-    </dependency>
-    <dependency>
       <id>commons-lang</id>
       <version>1.0.1</version>
       <url>http://jakarta.apache.org/commons/</url>
-    </dependency>
-    <dependency>
-      <id>commons-logging</id>
-      <version>1.0.2</version>
-      <url>http://jakarta.apache.org/commons/</url>
-    </dependency>
-    <dependency>
-      <id>commons-pool</id>
-      <version>1.0</version>
-      <url>http://jakarta.apache.org/commons/pool/</url>
-    </dependency>
-    <dependency>
-      <id>jcs</id>
-      <version>1.0-dev</version>
-      <url>http://jakarta.apache.org/turbine/jcs/</url>
-    </dependency>
-    <dependency>
-      <id>jdbc</id>
-      <version>2.0</version>
-      <url>http://java.sun.com/products/jdbc/download.html#spec</url>
-    </dependency>
-    <dependency>
-      <id>jndi</id>
-      <version>1.2.1</version>
-      <url>http://java.sun.com/products/jndi/</url>
     </dependency>
     <dependency>
       <id>log4j</id>
