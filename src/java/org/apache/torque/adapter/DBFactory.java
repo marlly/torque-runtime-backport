@@ -155,7 +155,7 @@ public class DBFactory
         driverToAdapterMap.put("COM.cloudscape.core.JDBCDriver",
                                "DBCloudscape");
         driverToAdapterMap.put("org.hsql.jdbcDriver", "DBHypersonicSQL");
-        driverToAdapterMap.put("org.hsqldb.jdbcDriver", "DBHsqldb");
+        driverToAdapterMap.put("org.hsqldb.jdbcDriver", "DBHypersonicSQL");
         driverToAdapterMap.put("interbase.interclient.Driver", "DBInterbase");
         driverToAdapterMap.put("org.enhydra.instantdb.jdbc.idbDriver",
                                "DBInstantDB");
