@@ -137,7 +137,7 @@ public class DBFactory
             Class c = null;
             try
             {
-                c = Class.forName(getAdapterPackageName() + adapter);
+                c = Class.forName(getAdapterPackageName() + '.' + adapter);
             }
             catch (ClassNotFoundException ignored)
             {
