@@ -314,7 +314,6 @@ public class Torque implements Initializable, Configurable
             }
         }
 
-        //
         // As there might be a default database configured
         // to map "default" onto an existing datasource, we
         // must check, whether there _is_ really an entry for
@@ -330,14 +329,14 @@ public class Torque implements Initializable, Configurable
         //
         String defaultDB = getDefaultDB();
 
-        if(dsFactoryMap.get(DEFAULT_NAME) == null 
-           && !defaultDB.equals(DEFAULT_NAME))
+        if (dsFactoryMap.get(DEFAULT_NAME) == null 
+            && !defaultDB.equals(DEFAULT_NAME))
         {
             category.debug("Adding a dummy entry for "
                            + DEFAULT_NAME + ", mapped onto " + defaultDB);
             dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
         }
-}
+    }
 
     /**
      * configure torque
@@ -935,10 +934,9 @@ public class Torque implements Initializable, Configurable
         {
             return DEFAULT_NAME;
         }
-        // save the property lookup, so that we can be sure it is always the
-        // same object.
         else if (defaultDBName == null)
         {
+            // Determine default database name.
             defaultDBName =
                 configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
         }
