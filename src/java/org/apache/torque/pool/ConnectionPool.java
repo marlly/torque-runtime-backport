@@ -54,7 +54,6 @@ package org.apache.torque.pool;
  * <http://www.apache.org/>.
  */
 
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +62,6 @@ import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -194,14 +192,14 @@ class ConnectionPool implements ConnectionEventListener
 
         this.connectionWaitTimeout =
             ((connectionWaitTimeout > 0)
-             ? connectionWaitTimeout * 1000 
+             ? connectionWaitTimeout * 1000
              : DEFAULT_CONNECTION_WAIT_TIMEOUT);
 
         this.logInterval = 1000 * logInterval;
 
         if (logInterval > 0)
         {
-            logger.debug("Starting Pool Monitor Thread with Log Interval " 
+            logger.debug("Starting Pool Monitor Thread with Log Interval "
                            + logInterval + " Milliseconds");
 
             // Create monitor thread
@@ -222,7 +220,7 @@ class ConnectionPool implements ConnectionEventListener
      * @param username The name of the database user.
      * @param password The password of the database user.
      * @return         A database connection.
-     * @exception SQLException
+     * @exception SQLException if there is aproblem with the db connection
      */
     final synchronized PooledConnection getConnection(String username,
             String password)
@@ -259,7 +257,7 @@ class ConnectionPool implements ConnectionEventListener
      * <code>password</code>.
      *
      * @return A database connection.
-     * @exception SQLException
+     * @exception SQLException if there is aproblem with the db connection
      */
     private PooledConnection getNewConnection()
         throws SQLException
@@ -283,13 +281,13 @@ class ConnectionPool implements ConnectionEventListener
         // point calculation.
         long currentTime = System.currentTimeMillis();
 
-        double ratio =
-            new Long(maxConnections - totalConnections).doubleValue() / maxConnections;
+        double ratio = new Long(maxConnections - totalConnections).doubleValue()
+            / maxConnections;
 
-        long ratioTime =
-            new Double(currentTime - (expiryTime * ratio)/4).longValue();
+        long ratioTime = new Double(currentTime - (expiryTime * ratio) / 4)
+            .longValue();
 
-        ratioTime = (expiryTime < 0 ) ? currentTime : ratioTime;
+        ratioTime = (expiryTime < 0) ? currentTime : ratioTime;
 
         timeStamps.put(pc, new Long(ratioTime));
         totalConnections++;
@@ -343,7 +341,7 @@ class ConnectionPool implements ConnectionEventListener
      * creating a new connection.
      *
      * @return An existing or new database connection.
-     * @exception Exception
+     * @throws Exception if the pool is empty
      */
     private PooledConnection popConnection()
         throws Exception
@@ -396,7 +394,7 @@ class ConnectionPool implements ConnectionEventListener
         long birth = ((Long) timeStamps.get(pc)).longValue();
         long age   = System.currentTimeMillis() - birth;
 
-        boolean dead = (expiryTime > 0) 
+        boolean dead = (expiryTime > 0)
             ? age > expiryTime
             : age > DEFAULT_EXPIRY_TIME;
 
@@ -515,6 +513,11 @@ class ConnectionPool implements ConnectionEventListener
         notify();
     }
 
+    /**
+     * Get the name of the pool
+     *
+     * @return the name of the pool
+     */
     String getPoolName()
     {
         return toString();
@@ -625,8 +628,12 @@ class ConnectionPool implements ConnectionEventListener
      */
     protected class Monitor extends Thread
     {
+        /** true if the monot is running */
         private boolean isRun = true;
 
+        /**
+         * run method for the monitor thread
+         */
         public void run()
         {
             StringBuffer buf = new StringBuffer();
@@ -651,6 +658,9 @@ class ConnectionPool implements ConnectionEventListener
             }
         }
 
+        /**
+         * Shut down the monitor
+         */
         public void shutdown()
         {
             isRun = false;

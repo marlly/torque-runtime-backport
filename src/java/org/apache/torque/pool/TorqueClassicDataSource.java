@@ -124,7 +124,7 @@ public class TorqueClassicDataSource
 
     /**
      * time to wait when initiating a connection
-     * for the database to respond 
+     * for the database to respond
      */
     private int connectionWaitTimeout;
 
@@ -133,7 +133,7 @@ public class TorqueClassicDataSource
 
     /** Do connections from this pool are auto-committing? */
     private boolean defaultAutoCommit;
-    
+
     /** Are connections from this pool read-only? */
     private boolean defaultReadOnly;
 
@@ -171,7 +171,6 @@ public class TorqueClassicDataSource
         this.defaultMaxConnections = v;
     }
 
-
     /**
      * Get the number of database connections to cache per user.  The keys
      * are usernames and the value is the maximum connections.  Any username
@@ -196,7 +195,6 @@ public class TorqueClassicDataSource
         this.perUserMaxConnections = v;
     }
 
-
     /**
      * Get the amount of time (in seconds) that database connections
      * will be cached.  The default is 3600 (1 hour).
@@ -218,7 +216,6 @@ public class TorqueClassicDataSource
     {
         this.maxExpiryTime = v;
     }
-
 
     /**
      * Get the amount of time (in seconds) a connection request will
@@ -243,7 +240,6 @@ public class TorqueClassicDataSource
     {
         this.connectionWaitTimeout = v;
     }
-
 
     /**
      * Get the interval (in seconds) between which the ConnectionPool logs
@@ -431,8 +427,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to connectionPoolDataSource.
      */
-    public void
-        setConnectionPoolDataSource(ConnectionPoolDataSource  v)
+    public void setConnectionPoolDataSource(ConnectionPoolDataSource  v)
     {
         if (v == null)
         {
@@ -454,6 +449,7 @@ public class TorqueClassicDataSource
     /**
      * Attempt to establish a database connection.
      *
+     * @return A database connection.
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException
@@ -464,11 +460,12 @@ public class TorqueClassicDataSource
     /**
      * Attempt to establish a database connection.
      *
-     * @param username
-     * @param password
+     * @param username The name of the database user.
+     * @param password The password of the database user.
+     * @return         A database connection.
      * @throws SQLException
      */
-    synchronized public Connection getConnection(String username,
+    public synchronized Connection getConnection(String username,
                                                  String password)
         throws SQLException
     {
@@ -516,8 +513,8 @@ public class TorqueClassicDataSource
 
     /**
      *
-     * @param username
-     * @param password
+     * @param username The name of the database user.
+     * @param password The password of the database user.
      * @throws javax.naming.NamingException
      */
     synchronized private void registerPool(String username, String password)
@@ -553,7 +550,7 @@ public class TorqueClassicDataSource
             }
 
             ConnectionPool pool = new ConnectionPool(cpds, username, password,
-                maxConnections, 
+                maxConnections,
                 getMaxExpiryTime(),
                 getConnectionWaitTimeout(),
                 getLogInterval());
@@ -568,6 +565,8 @@ public class TorqueClassicDataSource
     /**
      * Gets the maximum time in seconds that this data source can wait
      * while attempting to connect to a database.
+     *
+     * @return the login timeout
      */
     public int getLoginTimeout()
     {
@@ -577,6 +576,7 @@ public class TorqueClassicDataSource
     /**
      * Get the log writer for this data source.
      *
+     * @return the log writer
      * @deprecated Use correct debugging and logging code from Log4j
      */
     public PrintWriter getLogWriter()
@@ -591,6 +591,8 @@ public class TorqueClassicDataSource
     /**
      * Sets the maximum time in seconds that this data source will wait
      * while attempting to connect to a database. NOT USED.
+     *
+     * @param seconds the login timeout
      */
     public void setLoginTimeout(int seconds)
     {
@@ -600,6 +602,7 @@ public class TorqueClassicDataSource
     /**
      * Set the log writer for this data source.
      *
+     * @param out the log writer to use
      * @deprecated Use correct debugging and logging code from Log4j
      */
     public void setLogWriter(java.io.PrintWriter out)
@@ -609,6 +612,9 @@ public class TorqueClassicDataSource
 
     /**
      * <CODE>Referenceable</CODE> implementation.
+     *
+     * @return a reference
+     * @throws NamingException
      */
     public Reference getReference() throws NamingException
     {
@@ -653,7 +659,7 @@ public class TorqueClassicDataSource
      * @param name
      * @param context
      * @param env
-     * @return
+     * @return an instance of this class
      * @throws Exception
      */
     public Object getObjectInstance(Object refObj, Name name,
