@@ -570,7 +570,8 @@ public class ConnectionPool
     }
 
     /**
-     * Determines if a connection is still valid.
+     * Determines if a connection is still both connected and
+     * non-expired.
      *
      * @param connection The connection to test.
      * @return True if the connection is valid, false otherwise.
@@ -598,11 +599,12 @@ public class ConnectionPool
     /**
      * This method returns a connection to the pool, and <b>must</b>
      * be called by the requestor when finished with the connection.
+     * Internally synchronized.
      *
      * @param connection The database connection to release.
      * @exception Exception Trouble releasing the connection.
      */
-    public synchronized void releaseConnection(DBConnection dbconn)
+    public void releaseConnection(DBConnection dbconn)
         throws Exception
     {
         // DBConnections MUST be unlinked when returned to the pool
@@ -610,8 +612,11 @@ public class ConnectionPool
 
         if ( isValid(dbconn) )
         {
-            pool.push(dbconn);
-            notify();
+            synchronized (this)
+            {
+                pool.push(dbconn);
+                notify();
+            }
         }
         else
         {
@@ -621,7 +626,6 @@ public class ConnectionPool
             }
             catch (Exception ignored)
             {
-                // ignored
             }
             finally
             {
@@ -682,7 +686,7 @@ public class ConnectionPool
      * Decreases the count of connections in the pool
      * and also calls <code>notify()</code>.
      */
-    public void decrementConnections()
+    protected synchronized void decrementConnections()
     {
         totalConnections--;
         notify();
