@@ -31,6 +31,7 @@ import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
 import org.apache.torque.test.BooleanCheck;
 import org.apache.torque.test.BooleanCheckPeer;
+import org.apache.torque.test.A;
 import org.apache.torque.test.DateTest;
 import org.apache.torque.test.DateTestPeer;
 import org.apache.torque.test.MultiPk;
@@ -951,6 +952,29 @@ public class DataTest extends BaseTestCase
                      + " should be 1 ");
             }
         
+        }
+        catch( Exception e) 
+        {
+            e.printStackTrace();
+            fail("Exception caught : " 
+                     + e.getClass().getName() 
+                     + " : " + e.getMessage());
+        }
+    }
+        
+    /**
+     * Tests inserting single quotes in Strings.
+     * This may not crash now, but in a later task like datasql, 
+     * so the data has to be inserted in a table which does not get cleaned
+     * during the runtime test.
+     */
+    public void testSingleQuotes() 
+    {
+        try 
+        {
+            A a = new A();
+            a.setName("has Single ' Quote");
+            a.save();
         }
         catch( Exception e) 
         {
