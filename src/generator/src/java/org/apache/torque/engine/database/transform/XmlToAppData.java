@@ -217,9 +217,12 @@ public class XmlToAppData extends DefaultHandler
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
     {
-		try {
+		try 
+		{
 			return new DTDResolver().resolveEntity(publicId, systemId);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			throw new SAXException(e);
 		}
     }

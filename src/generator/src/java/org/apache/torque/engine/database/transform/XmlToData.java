@@ -197,7 +197,8 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
     {
-		try {
+		try 
+		{
 			if (dataDTD != null && dtdFileName.equals(systemId))
 			{
 			    log.info("Resolver: used " + dtdFile.getPath());
@@ -208,7 +209,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
 			    log.info("Resolver: used " + systemId);
 			    return getInputSource(systemId);
 			}
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			throw new SAXException(e);
 		}
     }
