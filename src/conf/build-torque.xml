@@ -245,6 +245,7 @@
       targetDatabase="${database}">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
+        <exclude name="id-table-schema.xml"/>
       </fileset>
     </torque-sql>      
   </target>
