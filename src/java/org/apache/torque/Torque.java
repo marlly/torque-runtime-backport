@@ -57,15 +57,14 @@ package org.apache.torque;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-
 import org.apache.commons.collections.ExtendedProperties;
-
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
-
+import org.apache.log4j.helpers.NullEnumeration;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
 import org.apache.torque.map.DatabaseMap;
@@ -209,6 +208,45 @@ public class Torque
         configuration = c;
         DBFactory.setConfiguration(c);
     }
+
+    /**
+     * Determine whether log4j has already been configured.
+     *
+     * @return boolean Whether log4j is configured.
+     */
+    protected boolean isLoggingConfigured() 
+    {
+        // This is a note from Ceki, taken from a message on the log4j
+        // user list:
+        //
+        // Having defined categories does not necessarily mean
+        // configuration. Remember that most categories are created
+        // outside the configuration file. What you want to check for
+        // is the existence of appenders. The correct procedure is to
+        // first check for appenders in the root category and if that
+        // returns no appenders to check in other categories.
+        
+        Enumeration enum = Category.getRoot().getAllAppenders();
+             
+        if (!(enum instanceof NullEnumeration))
+        {
+            return true;
+        } 
+        else 
+        { 
+            Enumeration cats =  Category.getCurrentCategories();
+            while(cats.hasMoreElements()) 
+            {
+                Category c = (Category) cats.nextElement();
+                if (!(c.getAllAppenders() instanceof NullEnumeration))
+                {
+                    return true;
+                }                     
+            }
+        }
+             
+        return false;
+    } 
 
     /**
      * Shuts down the service.
