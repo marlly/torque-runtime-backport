@@ -85,10 +85,10 @@ public class TypeMap
         SchemaType.TIMESTAMP, SchemaType.BOOLEANCHAR
     };
 
-    public static final String CHAR_OBJECT_TYPE = "new String()";
-    public static final String VARCHAR_OBJECT_TYPE = "new String()";
-    public static final String LONGVARCHAR_OBJECT_TYPE = "new String()";
-    public static final String CLOB_OBJECT_TYPE = "new String()";
+    public static final String CHAR_OBJECT_TYPE = "\"\"";
+    public static final String VARCHAR_OBJECT_TYPE = "\"\"";
+    public static final String LONGVARCHAR_OBJECT_TYPE = "\"\"";
+    public static final String CLOB_OBJECT_TYPE = "\"\"";
     public static final String NUMERIC_OBJECT_TYPE = "new BigDecimal(0)";
     public static final String DECIMAL_OBJECT_TYPE = "new BigDecimal(0)";
     public static final String BIT_OBJECT_TYPE = "new Boolean(true)";
@@ -106,7 +106,7 @@ public class TypeMap
     public static final String DATE_OBJECT_TYPE = "new Date()";
     public static final String TIME_OBJECT_TYPE = "new Date()";
     public static final String TIMESTAMP_OBJECT_TYPE = "new Date()";
-    public static final String BOOLEANCHAR_OBJECT_TYPE = "new String()";
+    public static final String BOOLEANCHAR_OBJECT_TYPE = "\"\"";
     public static final String BOOLEANINT_OBJECT_TYPE = "new Integer(0)";
 
     public static final String CHAR_NATIVE_TYPE = "String";

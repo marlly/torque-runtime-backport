@@ -874,7 +874,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #elseif ($cjtype == "double")
             return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-            return new Boolean(get${cfc}());
+            return Boolean.valueOf(get${cfc}());
     #elseif ($cjtype == "short")
             return new Short(get${cfc}());
     #elseif ($cjtype == "byte")
@@ -914,7 +914,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #elseif ($cjtype == "double")
             return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-            return new Boolean(get${cfc}());
+            return Boolean.valueOf(get${cfc}());
     #elseif ($cjtype == "short")
             return new Short(get${cfc}());
     #elseif ($cjtype == "byte")
@@ -953,7 +953,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #elseif ($cjtype == "double")
             return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-            return new Boolean(get${cfc}());
+            return Boolean.valueOf(get${cfc}());
     #elseif ($cjtype == "short")
             return new Short(get${cfc}());
     #elseif ($cjtype == "byte")

@@ -255,14 +255,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, 1);
-                }
-                else
-                {
-                    criteria.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
     #elseif ($col.isBooleanChar())
@@ -272,14 +265,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "Y");
-                }
-                else
-                {
-                    criteria.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
     #elseif ($col.isBit())
@@ -289,27 +275,15 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "1");
-                }
-                else
-                {
-                    criteria.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
     #end
   #end
 
-        // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to
-        // another value so == check is okay and faster
-        if (criteria.getDbName() == Torque.getDefaultDB())
-        {
-            criteria.setDbName(DATABASE_NAME);
-        }
-        if (con == null)
+        setDbName(criteria);
+
+		if (con == null)
         {
             return BasePeer.doInsert(criteria);
         }
@@ -468,14 +442,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, 1);
-                }
-                else
-                {
-                    criteria.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
     #elseif ($col.isBooleanChar())
@@ -485,14 +452,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "Y");
-                }
-                else
-                {
-                    criteria.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
     #elseif ($col.isBit())
@@ -502,27 +462,15 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "1");
-                }
-                else
-                {
-                    criteria.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
     #end
   #end
 
-        // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to
-        // another value so == check is okay and faster
-        if (criteria.getDbName() == Torque.getDefaultDB())
-        {
-            criteria.setDbName(DATABASE_NAME);
-        }
-        // BasePeer returns a List of Value (Village) arrays.  The array
+        setDbName(criteria);
+
+		// BasePeer returns a List of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
         if (con == null)
         {
@@ -673,14 +621,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, 1);
-                }
-                else
-                {
-                    criteria.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
     #elseif ($col.isBooleanChar())
@@ -690,14 +631,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "Y");
-                }
-                else
-                {
-                    criteria.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
     #elseif ($col.isBit())
@@ -707,14 +641,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "1");
-                }
-                else
-                {
-                    criteria.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
     #end
@@ -723,14 +650,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     #end
   #end
 
-        // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to
-        // another value so == check is okay and faster
-        if (criteria.getDbName() == Torque.getDefaultDB())
-        {
-            criteria.setDbName(DATABASE_NAME);
-        }
-        if (con == null)
+        setDbName(criteria);
+
+		if (con == null)
         {
             BasePeer.doUpdate(selectCriteria, criteria);
         }
@@ -775,14 +697,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, 1);
-                }
-                else
-                {
-                    criteria.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
     #elseif ($col.isBooleanChar())
@@ -792,14 +707,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "Y");
-                }
-                else
-                {
-                    criteria.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
     #elseif ($col.isBit())
@@ -809,26 +717,14 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    criteria.add($cup, "1");
-                }
-                else
-                {
-                    criteria.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
     #end
   #end
 
-        // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to
-        // another value so == check is okay and faster
-        if (criteria.getDbName() == Torque.getDefaultDB())
-        {
-            criteria.setDbName(DATABASE_NAME);
-        }
+        setDbName(criteria);
+
         if (con == null)
         {
             BasePeer.doDelete(criteria);
@@ -1297,27 +1193,21 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    protected static List doSelectJoin${joinColumnId}(Criteria c)
+    protected static List doSelectJoin${joinColumnId}(Criteria criteria)
         throws TorqueException
     {
-        // Set the correct dbName if it has not been overridden
-        // c.getDbName will return the same object if not set to
-        // another value so == check is okay and faster
-        if (c.getDbName() == Torque.getDefaultDB())
-        {
-            c.setDbName(DATABASE_NAME);
-        }
+        setDbName(criteria);
 
-        ${table.JavaName}Peer.addSelectColumns(c);
+        ${table.JavaName}Peer.addSelectColumns(criteria);
         int offset = numColumns + 1;
-        ${joinClassName}Peer.addSelectColumns(c);
+        ${joinClassName}Peer.addSelectColumns(criteria);
 
 
         #set ( $lfMap = $fk.LocalForeignMapping )
         #foreach ($columnName in $fk.LocalColumns)
           #set ( $column = $table.getColumn($columnName) )
           #set ( $columnFk = $joinTable.getColumn( $lfMap.get($columnName) ) )
-        c.addJoin(${table.JavaName}Peer.$column.Name.toUpperCase(),
+        criteria.addJoin(${table.JavaName}Peer.$column.Name.toUpperCase(),
             ${joinClassName}Peer.$columnFk.Name.toUpperCase());
         #end
 
@@ -1326,59 +1216,38 @@ public abstract class $basePrefix${table.JavaName}Peer
           #set ( $cup=$col.Name.toUpperCase() )
           #if($col.isBooleanInt())
         // check for conversion from boolean to int
-        if (c.containsKey($cup))
+        if (criteria.containsKey($cup))
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, 1);
-                }
-                else
-                {
-                    c.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
           #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
         if ( c.containsKey($cup) )
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, "Y");
-                }
-                else
-                {
-                    c.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
           #elseif ($col.isBit())
         // check for conversion from boolean to bit (1/0)
         if (c.containsKey($cup))
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, "1");
-                }
-                else
-                {
-                    c.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
           #end
         #end
 
-        List rows = BasePeer.doSelect(c);
+        List rows = BasePeer.doSelect(criteria);
         List results = new ArrayList();
 
         for (int i = 0; i < rows.size(); i++)
@@ -1417,13 +1286,13 @@ public abstract class $basePrefix${table.JavaName}Peer
                     break;
                 }
             }
+          #if ($objectIsCaching)
             if (newObject)
             {
-          #if ($objectIsCaching)
                 obj2.init${collThisTable}();
                 obj2.add${collThisTableMs}(obj1);
-          #end
             }
+          #end
             results.add(obj1);
         }
         return results;
@@ -1481,18 +1350,12 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    protected static List doSelectJoinAllExcept${excludeString}(Criteria c)
+    protected static List doSelectJoinAllExcept${excludeString}(Criteria criteria)
         throws TorqueException
     {
-        // Set the correct dbName if it has not been overridden
-        // c.getDbName will return the same object if not set to another value
-        // so == check is okay and faster
-        if (c.getDbName() == Torque.getDefaultDB())
-        {
-            c.setDbName(DATABASE_NAME);
-        }
+        setDbName(criteria);
 
-        addSelectColumns(c);
+        addSelectColumns(criteria);
         int offset2 = numColumns + 1;
         #set ( $index = 2 )
         #foreach ($fk in $table.ForeignKeys)
@@ -1503,7 +1366,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
             #if (!$joinClassName.equals($excludeClassName))
               #set ( $new_index = $index + 1 )
-        ${joinClassName}Peer.addSelectColumns(c);
+        ${joinClassName}Peer.addSelectColumns(criteria);
         int offset$new_index = offset$index + ${joinClassName}Peer.numColumns;
               #set ( $index = $new_index )
             #end
@@ -1513,59 +1376,38 @@ public abstract class $basePrefix${table.JavaName}Peer
           #set ( $cup=$col.Name.toUpperCase() )
           #if($col.isBooleanInt())
         // check for conversion from boolean to int
-        if (c.containsKey($cup))
+        if (criteria.containsKey($cup))
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, 1);
-                }
-                else
-                {
-                    c.add($cup, 0);
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? 1 : 0);
             }
          }
           #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
-        if ( c.containsKey($cup) )
+        if ( criteria.containsKey($cup) )
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, "Y");
-                }
-                else
-                {
-                    c.add($cup, "N");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
           #elseif ($col.isBit())
         // check for conversion from boolean to bit (1/0)
-        if (c.containsKey($cup))
+        if (criteria.containsKey($cup))
         {
-            Object possibleBoolean = c.get($cup);
+            Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean) possibleBoolean).booleanValue())
-                {
-                    c.add($cup, "1");
-                }
-                else
-                {
-                    c.add($cup, "0");
-                }
+                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
             }
          }
           #end
         #end
 
-        List rows = BasePeer.doSelect(c);
+        List rows = BasePeer.doSelect(criteria);
         List results = new ArrayList();
 
         for (int i = 0; i < rows.size(); i++)
@@ -1636,13 +1478,13 @@ public abstract class $basePrefix${table.JavaName}Peer
                     break;
                 }
             }
+                #if ($objectIsCaching)
             if (newObject)
             {
-                #if ($objectIsCaching)
                 obj${index}.init${collThisTable}();
                 obj${index}.add${collThisTableMs}(obj1);
-                #end
             }
+                #end
               #end
             #end
           #end
@@ -1671,4 +1513,15 @@ public abstract class $basePrefix${table.JavaName}Peer
         return Torque.getDatabaseMap(DATABASE_NAME).getTable(TABLE_NAME);
     }
   #end ## ends if (!$table.isAlias())
+
+    private static void setDbName(Criteria crit)
+    {
+		// Set the correct dbName if it has not been overridden
+        // crit.getDbName will return the same object if not set to
+        // another value so == check is okay and faster
+        if (crit.getDbName() == Torque.getDefaultDB())
+        {
+            crit.setDbName(DATABASE_NAME);
+        }
+    }
 }
