@@ -192,7 +192,7 @@ public class DBPostgres extends DB
      */
     public String getBooleanString(Boolean b)
     {
-        return (b == null) ? "0" : "1";
+        return (b == null) ? "0" : (Boolean.TRUE.equals(b) ? "1" : "0");    }
     }
 
 }
