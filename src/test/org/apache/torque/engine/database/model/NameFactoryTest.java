@@ -54,15 +54,14 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.torque.BaseTestCase;
-import org.apache.torque.engine.database.model.NameGenerator;
 
 /**
  * <p>Unit tests for class <code>NameFactory</code> and known
@@ -81,6 +80,8 @@ import org.apache.torque.engine.database.model.NameGenerator;
  */
 public class NameFactoryTest extends BaseTestCase
 {
+
+    /** The database to mimic in generating the SQL. */
     private static final String DATABASE_TYPE = "mysql";
 
     /**
@@ -89,36 +90,42 @@ public class NameFactoryTest extends BaseTestCase
      * implementations.
      */
     private static final String[] ALGORITHMS =
-    {
-        NameFactory.CONSTRAINT_GENERATOR, NameFactory.JAVA_GENERATOR
-    };
+        { NameFactory.CONSTRAINT_GENERATOR, NameFactory.JAVA_GENERATOR };
 
     /**
      * Two dimensional arrays of inputs for each algorithm.
      */
     private static final Object[][][] INPUTS =
-    {
-        { { makeString(61), "I", new Integer(1) },
-          { makeString(61), "I", new Integer(2) },
-          { makeString(65), "I", new Integer(3) },
-          { makeString(4), "FK", new Integer(1) },
-          { makeString(5), "FK", new Integer(2) } },
-        { { "MY_USER", NameGenerator.CONV_METHOD_UNDERSCORE },
-          { "MY_USER", NameGenerator.CONV_METHOD_JAVANAME },
-          { "MY_USER", NameGenerator.CONV_METHOD_NOCHANGE } }
+        { { { makeString(61), "I", new Integer(1)}, {
+                makeString(61), "I", new Integer(2)
+                }, {
+                makeString(65), "I", new Integer(3)
+                }, {
+                makeString(4), "FK", new Integer(1)
+                }, {
+                makeString(5), "FK", new Integer(2)
+                }
+        }, {
+            {
+                "MY_USER", NameGenerator.CONV_METHOD_UNDERSCORE }, {
+                "MY_USER", NameGenerator.CONV_METHOD_JAVANAME }, {
+                "MY_USER", NameGenerator.CONV_METHOD_NOCHANGE }
+        }
     };
 
     /**
      * Given the known inputs, the expected name outputs.
      */
     private static final String[][] OUTPUTS =
-    {
-        { makeString(60) + "_I_1",
-          makeString(60) + "_I_2",
-          makeString(60) + "_I_3",
-          makeString(4)  + "_FK_1",
-          makeString(5)  + "_FK_2" },
-        { "MyUser", "MYUSER", "MY_USER" }
+        {
+            {
+                makeString(60) + "_I_1",
+                makeString(60) + "_I_2",
+                makeString(60) + "_I_3",
+                makeString(4) + "_FK_1",
+                makeString(5) + "_FK_2" },
+            {
+            "MyUser", "MYUSER", "MY_USER" }
     };
 
     /**
@@ -128,6 +135,8 @@ public class NameFactoryTest extends BaseTestCase
 
     /**
      * Creates a new instance.
+     * 
+     * @param name the name of the test to run
      */
     public NameFactoryTest(String name)
     {
@@ -138,6 +147,9 @@ public class NameFactoryTest extends BaseTestCase
      * Creates a string of the specified length consisting entirely of
      * the character <code>A</code>.  Useful for simulating table
      * names, etc.
+     * 
+     * @param len the number of characters to include in the string
+     * @return a string of length <code>len</code> with every character an 'A'
      */
     private static final String makeString(int len)
     {
@@ -161,10 +173,10 @@ public class NameFactoryTest extends BaseTestCase
         return suite;
     }
 
+    /** Sets up the Torque model. */
     public void setUp()
     {
-        AppData appData =
-            new AppData(DATABASE_TYPE, "src/templates/sql/base/");
+        AppData appData = new AppData(DATABASE_TYPE, "src/templates/sql/base/");
         database = new Database();
         database.setDatabaseType(DATABASE_TYPE);
         appData.addDatabase(database);
@@ -172,9 +184,10 @@ public class NameFactoryTest extends BaseTestCase
 
     /**
      * Runs this test case.
+     * 
+     * @throws Exception on fail
      */
-    protected void runTest()
-        throws Throwable
+    protected void testNames() throws Exception
     {
         for (int algoIndex = 0; algoIndex < ALGORITHMS.length; algoIndex++)
         {
@@ -185,8 +198,10 @@ public class NameFactoryTest extends BaseTestCase
                 List inputs = makeInputs(algo, algoInputs[i]);
                 String generated = NameFactory.generateName(algo, inputs);
                 String expected = OUTPUTS[algoIndex][i];
-                assertEquals("Algorithm " + algo + " failed to generate an " +
-                             "unique name", generated, expected);
+                assertEquals(
+                    "Algorithm " + algo + " failed to generate an unique name",
+                    generated,
+                    expected);
             }
         }
     }
@@ -199,6 +214,7 @@ public class NameFactoryTest extends BaseTestCase
      * create an argument list for.
      * @param inputs The (possibly partial) list inputs from which to
      * generate the final list.
+     * @return the list of arguments to pass to the <code>NameGenerator</code>
      */
     private final List makeInputs(String algo, Object[] inputs)
     {
@@ -215,4 +231,5 @@ public class NameFactoryTest extends BaseTestCase
         }
         return list;
     }
+
 }

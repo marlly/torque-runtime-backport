@@ -54,16 +54,10 @@ package org.apache.torque.util;
  * <http://www.apache.org/>.
  */
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.TorqueException;
-import org.apache.torque.util.BasePeer;
-import org.apache.torque.util.Criteria;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.torque.adapter.DBFactory;
 
 /**
@@ -75,25 +69,27 @@ import org.apache.torque.adapter.DBFactory;
  */
 public class CriteriaTest extends BaseTestCase
 {
+
+    /** The criteria to use in the test. */
     private Criteria c;
 
     /**
      * Creates a new instance.
+     * 
+     * @param name the name of the test to run
      */
     public CriteriaTest(String name)
     {
         super(name);
     }
 
+    /**
+     * Initializes the criteria.
+     */
     public void setUp()
     {
         super.setUp();
         c = new Criteria();
-    }
-
-    public void tearDown()
-    {
-        c = null;
     }
 
     /**
@@ -106,7 +102,7 @@ public class CriteriaTest extends BaseTestCase
         final String value = "myValue";
 
         // Add the string
-        c.add(table, column, (Object)value);
+        c.add(table, column, (Object) value);
 
         // Verify that the key exists
         assertTrue(c.containsKey(table, column));
@@ -123,81 +119,95 @@ public class CriteriaTest extends BaseTestCase
         final String table2 = "myTable2";
         final String column2 = "myColumn2";
         final String value2 = "myValue2";
-        
+
         final String table3 = "myTable3";
         final String column3 = "myColumn3";
         final String value3 = "myValue3";
-        
+
         final String table4 = "myTable4";
         final String column4 = "myColumn4";
         final String value4 = "myValue4";
-        
+
         final String table5 = "myTable5";
         final String column5 = "myColumn5";
         final String value5 = "myValue5";
 
         Criteria.Criterion crit2 =
-            c.getNewCriterion(table2,column2,(Object)value2,Criteria.EQUAL);
+            c.getNewCriterion(table2, column2, (Object) value2, Criteria.EQUAL);
         Criteria.Criterion crit3 =
-            c.getNewCriterion(table3,column3,(Object)value3,Criteria.EQUAL);
+            c.getNewCriterion(table3, column3, (Object) value3, Criteria.EQUAL);
         Criteria.Criterion crit4 =
-            c.getNewCriterion(table4,column4,(Object)value4,Criteria.EQUAL);
+            c.getNewCriterion(table4, column4, (Object) value4, Criteria.EQUAL);
         Criteria.Criterion crit5 =
-            c.getNewCriterion(table5,column5,(Object)value5,Criteria.EQUAL);
-        
-        
-        crit2.and(crit3).or(crit4.and(crit5));
-        String expect = "((myTable2.myColumn2='myValue2' AND myTable3.myColumn3='myValue3') OR (myTable4.myColumn4='myValue4' AND myTable5.myColumn5='myValue5'))";
-        String result = crit2.toString();
-        assertEquals(expect,result);
-        
-        Criteria.Criterion crit6 =
-            c.getNewCriterion(table2,column2,(Object)value2,Criteria.EQUAL);
-        Criteria.Criterion crit7 =
-            c.getNewCriterion(table3,column3,(Object)value3,Criteria.EQUAL);
-        Criteria.Criterion crit8 =
-            c.getNewCriterion(table4,column4,(Object)value4,Criteria.EQUAL);
-        Criteria.Criterion crit9 =
-            c.getNewCriterion(table5,column5,(Object)value5,Criteria.EQUAL);
+            c.getNewCriterion(table5, column5, (Object) value5, Criteria.EQUAL);
 
-        
+        crit2.and(crit3).or(crit4.and(crit5));
+        String expect =
+            "((myTable2.myColumn2='myValue2' "
+                + "AND myTable3.myColumn3='myValue3') "
+            + "OR (myTable4.myColumn4='myValue4' "
+                + "AND myTable5.myColumn5='myValue5'))";
+        String result = crit2.toString();
+        assertEquals(expect, result);
+
+        Criteria.Criterion crit6 =
+            c.getNewCriterion(table2, column2, (Object) value2, Criteria.EQUAL);
+        Criteria.Criterion crit7 =
+            c.getNewCriterion(table3, column3, (Object) value3, Criteria.EQUAL);
+        Criteria.Criterion crit8 =
+            c.getNewCriterion(table4, column4, (Object) value4, Criteria.EQUAL);
+        Criteria.Criterion crit9 =
+            c.getNewCriterion(table5, column5, (Object) value5, Criteria.EQUAL);
+
         crit6.and(crit7).or(crit8).and(crit9);
-        expect = "(((myTable2.myColumn2='myValue2' AND myTable3.myColumn3='myValue3') OR myTable4.myColumn4='myValue4') AND myTable5.myColumn5='myValue5')";
+        expect =
+            "(((myTable2.myColumn2='myValue2' "
+                    + "AND myTable3.myColumn3='myValue3') "
+                + "OR myTable4.myColumn4='myValue4') "
+                    + "AND myTable5.myColumn5='myValue5')";
         result = crit6.toString();
-        assertEquals(expect,result);
-        
+        assertEquals(expect, result);
 
         // should make sure we have tests for all possibilities
-        
+
         Criteria.Criterion[] crita = crit2.getAttachedCriterion();
-        
-        assertEquals(crit2,crita[0]);
-        assertEquals(crit3,crita[1]);
-        assertEquals(crit4,crita[2]);
-        assertEquals(crit5,crita[3]);
-        
+
+        assertEquals(crit2, crita[0]);
+        assertEquals(crit3, crita[1]);
+        assertEquals(crit4, crita[2]);
+        assertEquals(crit5, crita[3]);
+
         String[] tables = crit2.getAllTables();
-               
-        assertEquals(crit2.getTable(),tables[0]);
-        assertEquals(crit3.getTable(),tables[1]);
-        assertEquals(crit4.getTable(),tables[2]);
-        assertEquals(crit5.getTable(),tables[3]);
-        
+
+        assertEquals(crit2.getTable(), tables[0]);
+        assertEquals(crit3.getTable(), tables[1]);
+        assertEquals(crit4.getTable(), tables[2]);
+        assertEquals(crit5.getTable(), tables[3]);
+
         // simple confirmations that equality operations work
         assertTrue(crit2.hashCode() == crit2.hashCode());
-        assertEquals(crit2.toString(),crit2.toString());
+        assertEquals(crit2.toString(), crit2.toString());
     }
 
+    /**
+     * Tests &lt;= and =&gt;.
+     */
     public void testBetweenCriterion()
     {
-        Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",
-                                                   new Integer(1000),
-                                                   Criteria.GREATER_EQUAL);
-        Criteria.Criterion cn2 = c.getNewCriterion("INVOICE.COST",
-                                                   new Integer(5000),
-                                                   Criteria.LESS_EQUAL);
+        Criteria.Criterion cn1 =
+            c.getNewCriterion(
+                "INVOICE.COST",
+                new Integer(1000),
+                Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn2 =
+            c.getNewCriterion(
+                "INVOICE.COST",
+                new Integer(5000),
+                Criteria.LESS_EQUAL);
         c.add(cn1.and(cn2));
-        String expect = "SELECT  FROM INVOICE WHERE (INVOICE.COST>=1000 AND INVOICE.COST<=5000)";
+        String expect =
+            "SELECT  FROM INVOICE WHERE "
+            + "(INVOICE.COST>=1000 AND INVOICE.COST<=5000)";
         String result = null;
         try
         {
@@ -208,7 +218,7 @@ public class CriteriaTest extends BaseTestCase
             fail("TorqueException thrown in BasePeer.createQueryString()");
         }
 
-        assertEquals(expect,result);
+        assertEquals(expect, result);
     }
 
     /**
@@ -216,22 +226,21 @@ public class CriteriaTest extends BaseTestCase
      */
     public void testPrecedence()
     {
-        Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",
-                                                   "1000",
-                                                   Criteria.GREATER_EQUAL);
-        Criteria.Criterion cn2 = c.getNewCriterion("INVOICE.COST",
-                                                   "2000",
-                                                   Criteria.LESS_EQUAL);
-        Criteria.Criterion cn3 = c.getNewCriterion("INVOICE.COST",
-                                                   "8000",
-                                                   Criteria.GREATER_EQUAL);
-        Criteria.Criterion cn4 = c.getNewCriterion("INVOICE.COST",
-                                                   "9000",
-                                                   Criteria.LESS_EQUAL);
+        Criteria.Criterion cn1 =
+            c.getNewCriterion("INVOICE.COST", "1000", Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn2 =
+            c.getNewCriterion("INVOICE.COST", "2000", Criteria.LESS_EQUAL);
+        Criteria.Criterion cn3 =
+            c.getNewCriterion("INVOICE.COST", "8000", Criteria.GREATER_EQUAL);
+        Criteria.Criterion cn4 =
+            c.getNewCriterion("INVOICE.COST", "9000", Criteria.LESS_EQUAL);
         c.add(cn1.and(cn2));
         c.or(cn3.and(cn4));
 
-        String expect = "SELECT  FROM INVOICE WHERE ((INVOICE.COST>='1000' AND INVOICE.COST<='2000') OR (INVOICE.COST>='8000' AND INVOICE.COST<='9000'))";
+        String expect =
+            "SELECT  FROM INVOICE WHERE "
+            + "((INVOICE.COST>='1000' AND INVOICE.COST<='2000') "
+            + "OR (INVOICE.COST>='8000' AND INVOICE.COST<='9000'))";
 
         String result = null;
         try
@@ -243,14 +252,16 @@ public class CriteriaTest extends BaseTestCase
             fail("TorqueException thrown in BasePeer.createQueryString()");
         }
 
-        assertEquals(expect,result);
+        assertEquals(expect, result);
     }
 
+    /**
+     * Test that true is evaluated correctly.
+     */
     public void testBoolean()
     {
-        Criteria c = new Criteria()
-            .add("TABLE.COLUMN", true);
-        
+        Criteria c = new Criteria().add("TABLE.COLUMN", true);
+
         String expect = "SELECT  FROM TABLE WHERE TABLE.COLUMN=1";
 
         String result = null;
@@ -263,11 +274,11 @@ public class CriteriaTest extends BaseTestCase
             fail("TorqueException thrown in BasePeer.createQueryString()");
         }
 
-        assertEquals(expect,result);
+        assertEquals(expect, result);
 
         // test the postgresql variation
         c = new Criteria();
-        Criteria.Criterion cc = 
+        Criteria.Criterion cc =
             c.getNewCriterion("TABLE.COLUMN", Boolean.TRUE, Criteria.EQUAL);
 
         Configuration conf = new BaseConfiguration();
@@ -284,4 +295,3 @@ public class CriteriaTest extends BaseTestCase
         assertEquals("TABLE.COLUMN=1", cc.toString());
     }
 }
-

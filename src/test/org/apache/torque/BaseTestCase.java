@@ -84,6 +84,8 @@ public abstract class BaseTestCase extends TestCase
 
     /**
      * Creates a new instance.
+     * 
+     * @param name the name of the test case to run
      */
     public BaseTestCase(String name)
     {

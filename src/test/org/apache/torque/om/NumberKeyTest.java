@@ -68,9 +68,13 @@ import junit.framework.TestCase;
 public class NumberKeyTest extends TestCase
 {
     
+    /** Test value. */
     private NumberKey n1a = new NumberKey(1);
+    /** Test value. */
     private NumberKey n1b = new NumberKey(1);
+    /** Test value. */
     private NumberKey n1c = new NumberKey(1);
+    /** Test value. */
     private NumberKey n2a = new NumberKey(2);
     
     /**
@@ -83,11 +87,17 @@ public class NumberKeyTest extends TestCase
         super(name);
     }
     
+    /**
+     * Test a.equals(a)
+     */
     public void testReflexive()
     {
         Assert.assertTrue(n1a.equals(n1a));
     }
     
+    /**
+     * Test a.equals(b) = b.equals(a)
+     */
     public void testSymmetric()
     {
         Assert.assertTrue(n1a.equals(n1b));
@@ -110,6 +120,9 @@ public class NumberKeyTest extends TestCase
         Assert.assertTrue(!new Integer(1).equals(n1a));
     }
     
+    /**
+     * Test a.equals(b) = b.equals(c) = c.equals(a)
+     */
     public void testTransitive()
     {
         Assert.assertTrue(n1a.equals(n1b));
@@ -117,11 +130,17 @@ public class NumberKeyTest extends TestCase
         Assert.assertTrue(n1c.equals(n1a));
     }
     
+    /**
+     * Test !a.equals(null)
+     */
     public void testNull()
     {
         Assert.assertTrue(!n1a.equals(null));
     }
     
+    /**
+     * Test sorting.
+     */
     public void testList()
     {
         Object[] array = new Object[] { n1a, n2a, n1b };
