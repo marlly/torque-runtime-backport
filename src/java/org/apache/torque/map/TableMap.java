@@ -54,7 +54,6 @@ package org.apache.torque.map;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -122,7 +121,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     {
         this.tableName = tableName;
         dbMap = containingDB;
-        columns = new Hashtable( (int)(1.25*numberOfColumns) + 1 );
+        columns = new Hashtable( (int) (1.25 * numberOfColumns) + 1 );
     }
 
     /**
@@ -178,7 +177,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     {
         if ( name.indexOf('.') > 0 )
         {
-            name = name.substring( name.indexOf('.')+1 );
+            name = name.substring( name.indexOf('.') + 1 );
         }
         return columns.containsKey(name);
     }
@@ -205,10 +204,9 @@ public class TableMap implements IDMethod, java.io.Serializable
         Iterator it = columns.values().iterator();
         while (it.hasNext())
         {
-            Object theType = ((ColumnMap)it.next()).getType();
-            if (! ( theType instanceof String ||
-                    theType instanceof Number ||
-                    theType instanceof java.util.Date ) )
+            Object theType = ((ColumnMap) it.next()).getType();
+            if (!(theType instanceof String || theType instanceof Number
+                    || theType instanceof java.util.Date ) )
             {
                 return true;
             }
@@ -474,17 +472,17 @@ public class TableMap implements IDMethod, java.io.Serializable
         // SCARAB_PROJECT.
         if (name.indexOf('.') > 0 && name.indexOf(getName()) != -1)
         {
-            name = name.substring(getName().length()+1);
+            name = name.substring(getName().length() + 1);
         }
         if ( fkTable != null &&
              fkTable.length() > 0 &&
-             fkColumn !=null &&
+             fkColumn != null &&
              fkColumn.length() > 0 )
         {
             if (fkColumn.indexOf('.') > 0 &&
                 fkColumn.indexOf(fkTable) != -1)
             {
-                fkColumn = fkColumn.substring(fkTable.length()+1);
+                fkColumn = fkColumn.substring(fkTable.length() + 1);
             }
         }
         ColumnMap col = new ColumnMap(name, this);
@@ -606,7 +604,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      */
     private final String firstLetterCaps ( String data )
     {
-        String firstLetter = data.substring(0,1).toUpperCase();
+        String firstLetter = data.substring(0, 1).toUpperCase();
         String restLetters = data.substring(1).toLowerCase();
         return firstLetter + restLetters;
     }

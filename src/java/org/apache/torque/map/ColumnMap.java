@@ -181,8 +181,10 @@ public class ColumnMap implements java.io.Serializable
         if ( fullyQualifiedName != null &&
              fullyQualifiedName.length() > 0)
         {
-            relatedTableName = fullyQualifiedName.substring( 0, fullyQualifiedName.indexOf('.') );
-            relatedColumnName = fullyQualifiedName.substring( fullyQualifiedName.indexOf('.')+1 );
+            relatedTableName = fullyQualifiedName.substring(
+                    0, fullyQualifiedName.indexOf('.'));
+            relatedColumnName = fullyQualifiedName.substring(
+                    fullyQualifiedName.indexOf('.') + 1);
         }
         else
         {
@@ -197,13 +199,10 @@ public class ColumnMap implements java.io.Serializable
      * @param tableName The name of the table that is foreign.
      * @param columnName The name of the column that is foreign.
      */
-    public void setForeignKey(String tableName,
-                              String columnName)
+    public void setForeignKey(String tableName, String columnName)
     {
-        if ( tableName != null &&
-             tableName.length() > 0 &&
-             columnName != null &&
-             columnName.length() > 0 )
+        if ( tableName != null && tableName.length() > 0 && columnName != null
+                && columnName.length() > 0 )
         {
             relatedTableName = tableName;
             relatedColumnName = columnName;
@@ -263,9 +262,13 @@ public class ColumnMap implements java.io.Serializable
     public boolean isForeignKey()
     {
         if ( relatedTableName != null && relatedTableName.length() > 0)
+        {
             return true;
+        }
         else
+        {
             return false;
+        }
     }
 
     /**
@@ -275,7 +278,7 @@ public class ColumnMap implements java.io.Serializable
      */
     public String getRelatedName()
     {
-        return relatedTableName+"."+relatedColumnName;
+        return relatedTableName + "." + relatedColumnName;
     }
 
     /**

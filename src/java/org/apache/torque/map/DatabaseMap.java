@@ -104,7 +104,7 @@ public class DatabaseMap implements java.io.Serializable
     public DatabaseMap(String name, int numberOfTables)
     {
         this.name = name;
-        tables = new Hashtable( (int)(1.25*numberOfTables) + 1 );
+        tables = new Hashtable((int) (1.25 * numberOfTables) + 1);
         idGenerators = new HashMap(6);
     }
 
@@ -285,6 +285,6 @@ public class DatabaseMap implements java.io.Serializable
      */
     IdGenerator getIdGenerator(String type)
     {
-        return (IdGenerator)idGenerators.get(type);
+        return (IdGenerator) idGenerators.get(type);
     }
 }
