@@ -54,17 +54,8 @@ package org.apache.torque.manager;
  * <http://www.apache.org/>.
  */
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.WeakHashMap;
-import java.util.Iterator;
 import java.io.Serializable;
-import org.apache.log4j.Category;
 import org.apache.jcs.access.GroupCacheAccess;
-import org.apache.jcs.access.exception.CacheException;
-import org.apache.commons.pool.ObjectPool;
-import org.apache.commons.pool.impl.StackObjectPool;
-
 import org.apache.torque.TorqueException;
 
 /**
@@ -87,7 +78,7 @@ public class NoOpMethodResultCache
     }
 
     protected Object getImpl(MethodCacheKey key)
-    {        
+    {
         return null;
     }
 
@@ -138,7 +129,7 @@ public class NoOpMethodResultCache
     {
     }
 
-    public void put(Object value, Serializable instanceOrClass, 
+    public void put(Object value, Serializable instanceOrClass,
                     String method, Serializable arg1)
     {
     }
