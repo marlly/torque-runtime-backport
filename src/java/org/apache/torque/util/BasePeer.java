@@ -904,6 +904,53 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
+     * Build Oracle-style query with limit or offset.
+     * If the original SQL is in variable: query then the requlting
+     * SQL looks like this:
+     * <pre>
+     * SELECT B.* FROM (
+     *          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
+     *                  query
+     *          ) A
+     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+     *     <= offset + limit
+     * </pre>
+     * 
+     * @param query the query
+     * @param limit 
+     * @param offset
+     * @return oracle-style query
+     */ 
+    private static String createOracleLimitOffsetQuery(Query query, 
+            int limit, int offset)
+    {
+        StringBuffer buf = new StringBuffer();
+        buf.append("SELECT B.* FROM ( ");
+        buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
+
+        buf.append(query.toString());
+        buf.append(" ) A ");
+        buf.append(" ) B WHERE ");
+
+        if (offset > 0)
+        {
+            buf.append(" B.TORQUE$ROWNUM > ");
+            buf.append(offset);
+            if (limit > 0)
+            {
+                buf.append(" AND B.TORQUE$ROWNUM <= ");
+                buf.append(offset + limit);
+            }
+        }
+        else
+        {
+            buf.append(" B.TORQUE$ROWNUM <= ");
+            buf.append(limit);
+        }
+        return buf.toString();
+    }
+
+    /**
      * Method to create an SQL query for actual execution based on values in a
      * Criteria.
      *
@@ -925,42 +972,9 @@ public abstract class BasePeer implements java.io.Serializable
         if ((limit > 0 || offset > 0)
             && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
         {
-            // Build Oracle-style query with limit or offset.
-            // If the original SQL is in variable: query then the requlting
-            // SQL looks like this:
-            // SELECT B.* FROM (
-            //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
-            //                  query
-            //          ) A
-            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
-            //     <= offset + limit
-            StringBuffer buf = new StringBuffer();
-            buf.append("SELECT B.* FROM ( ");
-            buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
-
-            buf.append(query.toString());
-            buf.append(" ) A ");
-            buf.append(" ) B WHERE ");
-
-            if (offset > 0)
-            {
-                buf.append(" B.TORQUE$ROWNUM > ");
-                buf.append(offset);
-                if (limit > 0)
-                {
-                    buf.append(" AND B.TORQUE$ROWNUM <= ");
-                    buf.append(offset + limit);
-                }
-            }
-            else
-            {
-                buf.append(" B.TORQUE$ROWNUM <= ");
-                buf.append(limit);
-            }
+            sql = createOracleLimitOffsetQuery(query, limit, offset);
             criteria.setLimit(-1);
             criteria.setOffset(0);
-
-            sql = buf.toString();
         }
         else
         {
@@ -2512,42 +2526,9 @@ public abstract class BasePeer implements java.io.Serializable
         if ((limit > 0 || offset > 0)
             && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
         {
-            // Build Oracle-style query with limit or offset.
-            // If the original SQL is in variable: query then the requlting
-            // SQL looks like this:
-            // SELECT B.* FROM (
-            //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
-            //                  query
-            //          ) A
-            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
-            //     <= offset + limit
-            StringBuffer buf = new StringBuffer();
-            buf.append("SELECT B.* FROM ( ");
-            buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
-
-            buf.append(query.toString());
-            buf.append(" ) A ");
-            buf.append(" ) B WHERE ");
-
-            if (offset > 0)
-            {
-                buf.append(" B.TORQUE$ROWNUM > ");
-                buf.append(offset);
-                if (limit > 0)
-                {
-                    buf.append(" AND B.TORQUE$ROWNUM <= ");
-                    buf.append(offset + limit);
-                }
-            }
-            else
-            {
-                buf.append(" B.TORQUE$ROWNUM <= ");
-                buf.append(limit);
-            }
+            sql = createOracleLimitOffsetQuery(query, limit, offset);
             criteria.setLimit(-1);
             criteria.setOffset(0);
-
-            sql = buf.toString();
         }
         else
         {
