@@ -104,7 +104,7 @@
     </dependency>
     <dependency>
       <id>commons-beanutils</id>
-      <version>1.2</version>
+      <version>1.4-dev-20020724</version>
     </dependency>
     <dependency>
       <id>commons-collections</id>
