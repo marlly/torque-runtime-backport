@@ -99,6 +99,7 @@ idTableControlTemplate = sql/id-table/Control.vm
 DataDTDControlTemplate = data/Control.vm
 DataDumpControlTemplate = data/dump/Control.vm
 DataSQLControlTemplate = sql/load/Control.vm
+DocControlTemplate = doc/Control.vm
 
 # -------------------------------------------------------------------
 # 

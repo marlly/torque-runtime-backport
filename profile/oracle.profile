@@ -2,7 +2,8 @@
 # so that it can be copied into the dist/lib directory.
 
 torque.testDatabaseJar = ${lib.repo}/classes12.jar
-torque.idMethod = idbroker
+#torque.idMethod = idbroker
+torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
@@ -100,6 +101,7 @@ idTableControlTemplate = sql/id-table/Control.vm
 DataDTDControlTemplate = data/Control.vm
 DataDumpControlTemplate = data/dump/Control.vm
 DataSQLControlTemplate = sql/load/Control.vm
+DocControlTemplate = doc/Control.vm
 
 # -------------------------------------------------------------------
 # 

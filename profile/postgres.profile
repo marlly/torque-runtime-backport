@@ -3,6 +3,7 @@
 
 torque.testDatabaseJar = ${lib.repo}/postgres7.2dev.jar
 torque.idMethod = idbroker
+#torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
@@ -99,6 +100,7 @@ idTableControlTemplate = sql/id-table/Control.vm
 DataDTDControlTemplate = data/Control.vm
 DataDumpControlTemplate = data/dump/Control.vm
 DataSQLControlTemplate = sql/load/Control.vm
+DocControlTemplate = doc/Control.vm
 
 # -------------------------------------------------------------------
 # 
