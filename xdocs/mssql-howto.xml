@@ -51,19 +51,25 @@ refer to SQL Server documentation for further details.
 </section>
 <section name="JDBC Driver">
 <p>
-Microsoft has a <a
-href="http://www.microsoft.com/sql/downloads/2000/jdbc.asp">JDBC
-driver for MS SQL Server</a> in beta. Alternately, a third party
-commercial driver from <a
-href="http://industry.java.sun.com/products/jdbc/drivers">JDBC(TM)
-Technology - Drivers</a>, the JDBC-ODBC bridge driver from Sun, or the
-free driver from <a href="http://www.freetds.org">FreeTDS</a> can be
-used.
+Microsoft has a JDBC driver for MS SQL Server available from their <a
+href="http://www.microsoft.com/sql/downloads/">SQL Downloads page</a>. 
+Alternately, a third party commercial driver from 
+<a href="http://industry.java.sun.com/products/jdbc/drivers">JDBC(TM)
+Technology - Drivers</a>, the JDBC-ODBC bridge driver from Sun, or one of the
+free drivers, <a href="http://www.freetds.org">FreeTDS</a> or 
+<a href="http://jtds.sourceforge.net/">jTDS</a> can be used.
 </p>
 
 <p>
 The driver from FreeTDS, as of version 0.51, is unstable and buggy, and not
-recommended for production environments. Use at your own risk.
+recommended for production environments. Use at your own risk. If you have used
+a more recent version of FreeTDS successfully then please let us know.
+</p>
+
+<p>
+We have only recently been informed of the existence of 
+<a href="http://jtds.sourceforge.net/">jTDS</a>, which is based on FreeTDS.
+Try it out and let us know how it goes.
 </p>
 
 <p>
