@@ -86,6 +86,10 @@
     classpathref="torque-classpath"
     classname="org.apache.torque.task.TorqueJDBCTransformTask"/>
   <taskdef
+    name="torque-package-to-path"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.PackageAsPathTask"/>
+  <taskdef
     name="torque-sql"
     classpathref="torque-classpath"
     classname="org.apache.torque.task.TorqueSQLTask"/>
@@ -489,31 +493,124 @@
       </fileset>
     </torque-data-model>
   </target>
-  
+
+
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E  O M  Z I P  F I L E                             -->
+  <!-- ================================================================ -->
+  <!-- Moves the files out of your source tree and into a zip file.     -->
+  <!-- ================================================================ -->
+
+  <target name="check-om-zip">
+    <condition property="torque.internal.omzip.src.base">
+      <equals arg1="${torque.omzip.src.base}" arg2="true"/>
+    </condition>
+    <condition property="torque.internal.omzip.src.extension">
+      <equals arg1="${torque.omzip.src.extension}" arg2="true"/>
+    </condition>
+    <condition property="torque.internal.omzip.bin.base">
+      <equals arg1="${torque.omzip.bin.base}" arg2="true"/>
+    </condition>
+    <condition property="torque.internal.omzip.bin.extension">
+      <equals arg1="${torque.omzip.bin.extension}" arg2="true"/>
+    </condition>
+    <condition property="torque.internal.omzip.delete">
+      <equals arg1="${torque.omzip.delete}" arg2="true"/>
+    </condition>
+  </target>
+
   <target
-    name="zip-base-om"
-    if="torque.basezip.dir"
-    description="Moves BaseXxx om files to separate jar and out of the source tree">
+    name="om-zip"
+    depends="check-om-zip"
+    description="Moves source om files to separate jar and out of the source tree">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
-    <echo message="| Zipping the Base Object Model files for  |"/>
-    <echo message="| YOUR Turbine project! Woo hoo!           |"/>
+    <echo message="| Zipping the Object Model files for YOUR  |"/>
+    <echo message="| Turbine project! Woo hoo!                |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <jar
-      jarfile="${torque.basezip.dir}/${torque.project}-om-base.jar"
-      basedir="${torque.java.dir}"
-      includes="${torque.targetPackage}/${torque.basePrefix}*.java"
+    <!-- Perform the package to path converison. -->
+    <torque-package-to-path
+      name="torque.internal.omzip.packagePath"
+      package="${torque.targetPackage}"
     />
 
+    <!-- See if the source files need jar'ed. -->
+    <antcall target="om-zip-worker">
+      <param name="torque.internal.omzip.type" value="src"/>
+      <param name="torque.internal.omzip.pattern" value="base"/>
+      <param name="torque.internal.omzip.files" value="java"/>
+      <param name="torque.internal.omzip.dir" value="${torque.java.dir}"/>
+    </antcall>
+    <antcall target="om-zip-worker">
+      <param name="torque.internal.omzip.type" value="src"/>
+      <param name="torque.internal.omzip.pattern" value="extension"/>
+      <param name="torque.internal.omzip.files" value="java"/>
+      <param name="torque.internal.omzip.dir" value="${torque.java.dir}"/>
+    </antcall>
+    <!-- See if the class files need jar'ed. -->
+    <antcall target="om-zip-worker">
+      <param name="torque.internal.omzip.type" value="bin"/>
+      <param name="torque.internal.omzip.pattern" value="base"/>
+      <param name="torque.internal.omzip.files" value="class"/>
+      <param name="torque.internal.omzip.dir" value="${torque.compile.build.dir}"/>
+    </antcall>
+    <antcall target="om-zip-worker">
+      <param name="torque.internal.omzip.type" value="bin"/>
+      <param name="torque.internal.omzip.pattern" value="extension"/>
+      <param name="torque.internal.omzip.files" value="class"/>
+      <param name="torque.internal.omzip.dir" value="${torque.compile.build.dir}"/>
+    </antcall>
+  </target>
+
+  <target 
+    name="om-zip-worker"
+    if="torque.internal.omzip.${torque.internal.omzip.type}.${torque.internal.omzip.pattern}">
+
+    <!-- Base files that typically aren't modified. -->
+    <patternset id="torque.internal.omzip.pattern.base">
+      <include name="${torque.internal.omzip.packagePath}/${torque.basePrefix}*.${torque.internal.omzip.files}"/>
+      <include name="${torque.internal.omzip.packagePath}/map/*MapBuilder.${torque.internal.omzip.files}"/>
+    </patternset>
+    <!-- Extension files that typically are modified. -->
+    <patternset id="torque.internal.omzip.pattern.extension">
+      <include name="${torque.internal.omzip.packagePath}/*.${torque.internal.omzip.files}"/>
+    </patternset>
+
+    <jar
+      jarfile="${torque.omzip.dir}/${torque.project}-om-${torque.internal.omzip.type}.jar"
+      update="true">
+      <fileset dir="${torque.internal.omzip.dir}">
+        <patternset refid="torque.internal.omzip.pattern.${torque.internal.omzip.pattern}"/>
+      </fileset>
+    </jar>
+
+    <antcall target="om-zip-worker-delete"/>
+
+  </target>
+
+  <target 
+    name="om-zip-worker-delete"
+    if="torque.internal.omzip.delete">
+
+    <!-- Base files that typically aren't modified. -->
+    <patternset id="torque.internal.omzip.pattern.base">
+      <include name="${torque.internal.omzip.packagePath}/${torque.basePrefix}*.*"/>
+      <include name="${torque.internal.omzip.packagePath}/map/*MapBuilder.*"/>
+    </patternset>
+    <!-- Extension files that typically are modified. -->
+    <patternset id="torque.internal.omzip.pattern.extension">
+      <include name="${torque.internal.omzip.packagePath}/*.*"/>
+    </patternset>
+
     <delete>
-      <fileset
-        dir="${torque.java.dir}"
-        includes="${torque.targetPackage}/${torque.basePrefix}*.java"
-      />
+      <fileset dir="${torque.internal.omzip.dir}">
+        <patternset refid="torque.internal.omzip.pattern.${torque.internal.omzip.pattern}"/>
+      </fileset>
     </delete>
+
   </target>
 
   <!-- =================================================================== -->
