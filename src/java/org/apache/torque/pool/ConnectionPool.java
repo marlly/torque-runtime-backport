@@ -601,8 +601,8 @@ class ConnectionPool implements ConnectionEventListener
      * frozes after certain amount of time/requests and you suspect
      * that you have connection leakage problem.
      *
-     * Set the <code>database.logInterval</code> property to the number of
-     * milliseconds you want to elapse between loging the number of
+     * Set the <code>logInterval</code> property of your pool definition
+     * to the number of seconds you want to elapse between loging the number of
      * connections.
      */
     protected class Monitor extends Thread
