@@ -112,6 +112,7 @@ public class NameFactory
      * @return A name generator
      */
     protected NameGenerator getAlgorithm(String name)
+            throws EngineException
     {
         synchronized (algorithms)
         {
@@ -125,12 +126,12 @@ public class NameFactory
                 }
                 catch (InstantiationException e)
                 {
-                    log.error("Unable to instantiate class " + name
-                            + ": Make sure it's in your run-time classpath");
+                    throw new EngineException("Unable to instantiate class " 
+                            + name + ": Make sure it's in your run-time classpath", e);
                 }
                 catch (Exception e)
                 {
-                    log.error(e, e);
+                    throw new EngineException(e);
                 }
                 algorithms.put(name, algorithm);
             }

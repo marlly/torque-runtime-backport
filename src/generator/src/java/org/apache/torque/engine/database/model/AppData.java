@@ -224,6 +224,7 @@ public class AppData
      * @return Database database
      */
     public Database getDatabase()
+            throws EngineException
     {
         doFinalInitialization();
         return (Database) dbList.get(0);
@@ -235,6 +236,7 @@ public class AppData
      * @return Array of Database objects
      */
     public Database[] getDatabases()
+            throws EngineException
     {
         doFinalInitialization();
         int size = dbList.size();
@@ -263,6 +265,7 @@ public class AppData
      * @return A Database object.  If it does not exist it returns null
      */
     public Database getDatabase (String name)
+            throws EngineException
     {
         doFinalInitialization();
         for (Iterator i = dbList.iterator(); i.hasNext();)
@@ -312,6 +315,7 @@ public class AppData
     }
 
     private void doFinalInitialization()
+            throws EngineException
     {
         if (!isInitialized)
         {

@@ -398,6 +398,7 @@ public class Database
     }
 
     public void doFinalInitialization()
+            throws EngineException
     {
         Table[] tables = getTables();
         for (int i = 0; i < tables.length; i++)
@@ -423,7 +424,7 @@ public class Database
                             + "' is marked as autoincrement, but it does not "
                             + "have a column which declared as the one to "
                             + "auto increment (i.e. autoIncrement=\"true\")\n";
-                    log.error("Error in XML schema: " + errorMessage);
+                    throw new EngineException("Error in XML schema: " + errorMessage);
                 }
             }
 
@@ -437,57 +438,64 @@ public class Database
                 Table foreignTable = getTable(currFK.getForeignTableName());
                 if (foreignTable == null)
                 {
-                    log.error("ERROR!! Attempt to set foreign"
+                    throw new EngineException("Attempt to set foreign"
                             + " key to nonexistent table, "
-                            + currFK.getForeignTableName() + "!");
+                            + currFK.getForeignTableName());
                 }
-
-                List referrers = foreignTable.getReferrers();
-                if ((referrers == null || !referrers.contains(currFK)))
+                else
                 {
-                    foreignTable.addReferrer(currFK);
-                }
-
-                // local column references
-                Iterator localColumnNames = currFK.getLocalColumns().iterator();
-                while (localColumnNames.hasNext())
-                {
-                    Column local = currTable
-                        .getColumn((String) localColumnNames.next());
-                    // give notice of a schema inconsistency.
-                    // note we do not prevent the npe as there is nothing
-                    // that we can do, if it is to occur.
-                    if (local == null)
+                    List referrers = foreignTable.getReferrers();
+                    if ((referrers == null || !referrers.contains(currFK)))
                     {
-                        log.error("ERROR!! Attempt to define foreign"
-                                + " key with nonexistent column in table, "
-                                + currTable.getName() + "!");
-                    }
-                    //check for foreign pk's
-                    if (local.isPrimaryKey())
-                    {
-                        currTable.setContainsForeignPK(true);
+                        foreignTable.addReferrer(currFK);
                     }
 
-                }
-
-                // foreign column references
-                Iterator foreignColumnNames
-                        = currFK.getForeignColumns().iterator();
-                while (foreignColumnNames.hasNext())
-                {
-                    String foreignColumnName = (String) foreignColumnNames.next();
-                    Column foreign = foreignTable.getColumn(foreignColumnName);
-                    // if the foreign column does not exist, we may have an
-                    // external reference or a misspelling
-                    if (foreign == null)
+                    // local column references
+                    Iterator localColumnNames = currFK.getLocalColumns().iterator();
+                    while (localColumnNames.hasNext())
                     {
-                        log.error("ERROR!! Attempt to set foreign"
-                                + " key to nonexistent column: table="
-                                +  currTable.getName() + ", foreign column=" 
-                                +  foreignColumnName + "!");
+                        Column local = currTable
+                                .getColumn((String) localColumnNames.next());
+                        // give notice of a schema inconsistency.
+                        // note we do not prevent the npe as there is nothing
+                        // that we can do, if it is to occur.
+                        if (local == null)
+                        {
+                            throw new EngineException("Attempt to define foreign"
+                                    + " key with nonexistent column in table, "
+                                    + currTable.getName());
+                        }
+                        else
+                        {
+                            //check for foreign pk's
+                            if (local.isPrimaryKey())
+                            {
+                                currTable.setContainsForeignPK(true);
+                            }
+                        }
                     }
-                    foreign.addReferrer(currFK);
+
+                    // foreign column references
+                    Iterator foreignColumnNames
+                            = currFK.getForeignColumns().iterator();
+                    while (foreignColumnNames.hasNext())
+                    {
+                        String foreignColumnName = (String) foreignColumnNames.next();
+                        Column foreign = foreignTable.getColumn(foreignColumnName);
+                        // if the foreign column does not exist, we may have an
+                        // external reference or a misspelling
+                        if (foreign == null)
+                        {
+                            throw new EngineException("Attempt to set foreign"
+                                    + " key to nonexistent column: table="
+                                    +  currTable.getName() + ", foreign column=" 
+                                    +  foreignColumnName);
+                        }
+                        else
+                        {
+                            foreign.addReferrer(currFK);
+                        }
+                    }
                 }
             }
         }
