@@ -1488,4 +1488,16 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         return peer;
     }
 #end
+
+    public String toString()
+    {
+        StringBuffer str = new StringBuffer();
+        str.append("$table.JavaName:\n");
+      #foreach ($col in $table.Columns)
+        str.append("$col.JavaName = ")
+           .append(get${col.JavaName}())
+           .append("\n");
+      #end
+        return(str.toString());
+    }
 }
