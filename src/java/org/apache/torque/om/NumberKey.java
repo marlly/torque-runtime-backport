@@ -136,10 +136,7 @@ public class NumberKey extends SimpleKey
      */
     public void setValue(NumberKey key)
     {
-        if (key != null)
-            this.key = key.getValue();
-        else
-            this.key = null;
+        this.key = (key == null ? null : key.getValue());
     }
 
     /**
