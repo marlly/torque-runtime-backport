@@ -12,82 +12,103 @@
   <!-- Set default values for the build -->
   <property file="project.properties" />
 
+  <!-- ================================================================== -->
+  <!-- T E S T                                                            -->
+  <!-- ================================================================== -->
+
+  <target
+    name="test"
+    depends="maven:jar"
+    description="==> runtime tests (set torque.testProfile in your build.properties)">
+
+    <ant antfile="build-test.xml"/>
+  </target>
+
+  <target
+    name="test-classpath"
+    depends="maven:jar"
+    description="==> runtime tests using the -classpath tasks (set torque.testProfile in your build.properties)">
+
+    <ant antfile="build-test.xml"
+         target="test-classpath"/>
+  </target>
+
   <!-- maven:start -->
-  
+
   <!-- ================================================================== -->
   <!-- D E L E G A T O R S                                                -->
   <!-- ================================================================== -->
-        
-  <target 
+
+  <target
     name="maven:site">
     <ant antfile="${maven.home}/build-docs.xml" target="site"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:jar">
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:install-jar">
     <ant antfile="${maven.home}/build-maven.xml" target="install-jar"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:env">
     <ant antfile="${maven.home}/build-maven.xml" target="env"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:docs">
     <ant antfile="${maven.home}/build-docs.xml" target="docs"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:test">
     <ant antfile="${maven.home}/build-test.xml" target="test"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:clean">
     <ant antfile="${maven.home}/build-maven.xml" target="clean"/>
   </target>
-        
-  <target  
+
+  <target
     name="maven:metrics">
     <ant antfile="${maven.home}/build-metrics.xml" target="metrics"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:dist">
     <ant antfile="${maven.home}/build-maven.xml" target="dist"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:deploy-site">
     <ant antfile="${maven.home}/build-docs.xml" target="deploy-site"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:gump-descriptor">
     <ant antfile="${maven.home}/build-maven.xml" target="gump-descriptor"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:javadocs">
     <ant antfile="${maven.home}/build-docs.xml" target="javadocs"/>
   </target>
-        
-  <target 
+
+  <target
     name="maven:compile">
     <ant antfile="${maven.home}/build-maven.xml" target="compile"/>
   </target>
 
-  <target 
+  <target
     name="maven:update-jars">
     <ant antfile="${maven.home}/build-maven.xml" target="update-jars"/>
   </target>
-    
+
   <!-- maven:end -->
 
 </project>
