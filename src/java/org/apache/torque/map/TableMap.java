@@ -58,33 +58,25 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+import org.apache.torque.adapter.IDMethod;
 import org.apache.torque.oid.IdGenerator;
 
 /**
  * TableMap is used to model a table in a database.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class TableMap
+public class TableMap implements IDMethod
 {
     /**
-     * Key generation through database-native id method
-     * (i.e. auto-increment for MySQL, sequence for Oracle, etc.).
+     * The list of valid ID generation methods.
      */
-    public static final String NATIVE = "native";
-
-    /** Key generation through auto-increment. */
-    public static final String AUTOINCREMENT = "autoincrement";
-
-    /** Key generation through sequences. */
-    public static final String SEQUENCE = "sequence";
-
-    /** Key generation through the IDBroker table. */
-    public static final String IDBROKERTABLE = "idbroker_table";
-
-    /** Keys are given by the  application. */
-    public static final String NONE = "none";
+    protected static final String[] VALID_ID_METHODS =
+    {
+        NATIVE, AUTO_INCREMENT, SEQUENCE, ID_BROKER, NO_ID_METHOD
+    };
 
     /** The columns in the table. */
     private Hashtable columns;
@@ -99,7 +91,7 @@ public class TableMap
     private String prefix;
 
     /** The primary key generation method. */
-    private String primaryKeyMethod = NONE;
+    private String primaryKeyMethod = NO_ID_METHOD;
 
     /** IdGenerator for this tableMap */
     private IdGenerator idGenerator;
@@ -273,7 +265,6 @@ public class TableMap
     {
         return getDatabaseMap().getIdGenerator(primaryKeyMethod);
     }
-
 
     /**
      * Get the information used to generate a primary key
@@ -507,13 +498,28 @@ public class TableMap
 
     /**
      * Sets the method used to generate a key for this table.  Valid
-     * values are AUTOINCREMENT, SEQUENCE, IDBROKERTABLE, NONE.
+     * values are as specified in the {@link
+     * org.apache.torque.adapter.IDMethod} interface.
      *
-     * @param method A String with the method name.
+     * @param method The ID generation method type name.
      */
     public void setPrimaryKeyMethod(String method)
     {
-        this.primaryKeyMethod = method;
+        // Validate ID generation method.
+        for (int i = 0; i < VALID_ID_METHODS.length; i++)
+        {
+            if (VALID_ID_METHODS[i].equals(method))
+            {
+                primaryKeyMethod = method;
+                break;
+            }
+        }
+
+        // Default to no ID generation method.
+        if (primaryKeyMethod != method)
+        {
+            primaryKeyMethod = NO_ID_METHOD;
+        }
     }
 
     /**
