@@ -436,4 +436,15 @@ public class CriteriaTest extends BaseTestCase
         assertEquals(cString, toStringExpect);
     }
 
+    /**
+     * test for TRQS25
+     */
+/*
+    public void testCriteriaAndString()
+    {
+        Criteria c = new Criteria()
+                .add("TABLE.COLUMN1", "string")
+                .and("TABLE.COLUMN2", "string", Criteria.LIKE);
+    }
+*/
 }
