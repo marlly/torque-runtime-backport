@@ -89,6 +89,11 @@
   </target>
 
   <target
+    name="maven:dist-build">
+    <ant antfile="${maven.home}/build-maven.xml" target="dist-build"/>
+  </target>
+
+  <target
     name="maven:deploy-site">
     <ant antfile="${maven.home}/build-docs.xml" target="deploy-site"/>
   </target>

@@ -158,7 +158,7 @@
     />
 
     <available
-      classname="org.apache.commons.lang.Strings"
+      classname="org.apache.commons.lang.StringUtils"
       property="commons-lang.present"
       classpathref="classpath"
     />
