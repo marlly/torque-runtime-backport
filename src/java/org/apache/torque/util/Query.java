@@ -248,15 +248,15 @@ public class Query
         if ( !whereCriteria.empty() )
             stmt.append(WHERE)
                 .append(whereCriteria.toString( AND ));
-        if ( !orderByColumns.empty() )
-            stmt.append(ORDER_BY)
-                .append(orderByColumns.toString(", "));
         if ( !groupByColumns.empty() )
             stmt.append(GROUP_BY)
                 .append(groupByColumns.toString(", "));
         if ( having != null )
             stmt.append(HAVING)
                 .append(having);
+        if ( !orderByColumns.empty() )
+            stmt.append(ORDER_BY)
+                .append(orderByColumns.toString(", "));
         if ( limit != null )
             stmt.append(LIMIT)
                 .append(limit);
