@@ -17,7 +17,7 @@
       </p>
 
       <p>
-        Torque offers an <a href="http://jakarta.apache.org/ant">Ant</a> build
+        Torque offers an <a href="http://ant.apache.org/">Ant</a> build
         file (<code>build-torque.xml</code>) which could be added to your
         project. It defines the following targets:
         <ul>
@@ -92,9 +92,7 @@
       </p>
 
       <p>
-        Torque also offers a plugin for
-        <a href="http://jakarta.apache.org/turbine/maven">Maven</a>. See the
-        <a href="../maven-howto.html">Maven-Howto</a> for more information.
+        <a href="http://maven.apache.org">Maven</a> offers a plugin for Torque.
       </p>
     </section>
   </body>
