@@ -63,7 +63,7 @@ import org.apache.torque.pool.DBConnection;
  * @author <a href="mailto:fedor@apache.org">Fedor K.</a>
  * @version $Id$
  */
-public interface Persistent extends java.io.Serializable
+public interface Persistent
 {
     /**
      * getter for the object primaryKey.

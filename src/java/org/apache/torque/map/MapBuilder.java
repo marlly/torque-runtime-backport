@@ -63,7 +63,7 @@ package org.apache.torque.map;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public interface MapBuilder extends java.io.Serializable
+public interface MapBuilder
 {
     /**
      * Build up the database mapping.

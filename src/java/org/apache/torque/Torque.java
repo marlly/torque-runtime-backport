@@ -55,6 +55,7 @@ package org.apache.torque;
  */
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -97,6 +98,12 @@ public class Torque
      */
     protected static final String DEFAULT_NAME = "default";
 
+    /**
+     * The property tag which specifies which
+     * log4j category to use for logging in BasePeer.
+     */
+    private static final String CATEGORY = "log4j.category";
+
     /** The global cache of database maps */
     private static Map dbMaps;
 
@@ -105,12 +112,6 @@ public class Torque
      * database URL.
      */
     private static Map pools;
-
-    /**
-     * The property tag which specifies which
-     * log4j category to use for logging in BasePeer.
-     */
-    private static final String CATEGORY = "log4j.category";
 
     /**
      * The default log4j category to use if the
@@ -159,6 +160,7 @@ public class Torque
         monitor.setDaemon(true);
         monitor.start();
 
+        DBFactory.setConfiguration(configuration);
         DBFactory.init();
     }
 
@@ -217,17 +219,20 @@ public class Torque
      */
     public static void shutdown()
     {
-        Iterator maps = dbMaps.values().iterator();
-        while ( maps.hasNext() )
+        if ( dbMaps != null )
         {
-            DatabaseMap map = (DatabaseMap) maps.next();
-            IDBroker idBroker = map.getIDBroker();
-            if (idBroker != null)
+            Iterator maps = dbMaps.values().iterator();
+            while ( maps.hasNext() )
             {
-                idBroker.stop();
+                DatabaseMap map = (DatabaseMap) maps.next();
+                IDBroker idBroker = map.getIDBroker();
+                if (idBroker != null)
+                {
+                    idBroker.stop();
+                }
             }
         }
-
+        
         if ( pools != null )
         {
             // Release connections for each pool.
@@ -244,6 +249,9 @@ public class Torque
                 }
             }
         }
+
+        // shutdown the thread
+        monitor = null;
     }
 
     /**
@@ -275,6 +283,18 @@ public class Torque
         if (name == null)
         {
             throw new TorqueException ("DatabaseMap name was null!");
+        }
+
+        if (dbMaps == null)
+        {
+            try
+            {
+                Torque.init();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         // Quick (non-sync) check for the map we want.
@@ -451,7 +471,7 @@ public class Torque
      *         rethrown wrapped into a TorqueException.
      * @exception Exception A generic exception.
      */
-    public static  void releaseConnection(DBConnection dbconn)
+    public static void releaseConnection(DBConnection dbconn)
         throws Exception
     {
         if ( dbconn != null )
@@ -529,7 +549,7 @@ public class Torque
         if ( !pools.containsKey(name) )
         {
             // Pool not there...
-            synchronized ( pools )
+            synchronized (pools)
             {
                 // ... sync and look again to avoid race collisions.
                 if ( !pools.containsKey(name) )

@@ -60,7 +60,7 @@ package org.apache.torque.om;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public interface Retriever extends java.io.Serializable
+public interface Retriever
 {
     /**
      * Gets an object of the same type as the object implementing
