@@ -176,14 +176,15 @@
            skipSql="false"
            baseClass="com.myapp.om.table.BaseClass"
            basePeer="com.myapp.om.table.BasePeer"
-           javaNamingMethod="underscore">
+           javaNamingMethod="underscore"
+           description="table for torque tests">
 
            <!-- column information here -->
 
          </table>]]>
        </source>
        <p>
-         The table element has 9 attributes associated with it, they are:
+         The table element has 10 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -224,6 +225,10 @@
              <td>Specifies how the name attribute is converted to the Java class
                name of the coresponding OM object.  this attribute overides the
                defaultJavaNamingMethod attribute of the database element</td>
+           </tr>
+           <tr>
+             <td>description</td>
+             <td>used for doc generation</td>
            </tr>
          </table>
        </p>
@@ -286,7 +291,7 @@
          </column>]]>
        </source>
        <p>
-         The column element has 10 attributes associated with it, they are:
+         The column element has 11 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -330,6 +335,10 @@
              <td>Specifies how the name attribute is converted to the Java class
                name of the coresponding OM object.  this attribute overides the
                defaultJavaNamingMethod attribute of the database element</td>
+           </tr>
+           <tr>
+             <td>description</td>
+             <td>used for doc generation</td>
            </tr>
            </tr>
          </table>
