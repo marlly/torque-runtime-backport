@@ -7,7 +7,7 @@ import org.apache.velocity.util.StringUtils;
  * Simple task to convert packages to paths.
  * 
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
- * @version $Revision$
+ * @version $Id$
  */
 public class PackageAsPathTask extends Task
 {

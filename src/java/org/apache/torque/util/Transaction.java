@@ -75,7 +75,7 @@ import org.apache.torque.TorqueException;
  * 
  * 
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
- * @version $Revision$
+ * @version $Id$
  */
 public class Transaction
 {
