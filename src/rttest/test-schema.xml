@@ -15,6 +15,8 @@
     <!-- TRQS28 -->
     <column name="col_b" type="BOOLEANINT" javaType="object" />
     <column name="col_c" type="BOOLEANCHAR" javaType="object" />
+    <!-- TRQ2 -->
+    <column name="remote" type="CHAR" size="10"/>
   </table>
 
 </database>
