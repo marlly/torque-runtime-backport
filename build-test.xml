@@ -258,6 +258,7 @@
     <pathelement location="${commons-util.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${build.dest}"/>
+    <pathelement location="${stratum.jar}"/>
     <pathelement location="${torque.destDir}"/>
     <pathelement location="${torque.testDatabaseJar}"/>
   </path>
@@ -306,7 +307,7 @@
     <copy file="${jdbc.jar}" todir="${test.libDir}"/>
     <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
     <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
-
+    <copy file="${stratum.jar}" todir="${test.libDir}"/>
   </target>
 
   <target

@@ -66,6 +66,7 @@
     <echo message="junit.jar = ${junit.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
+    <echo message="stratum.jar = ${stratum.jar}"/>
   </target>
 
   <!-- ================================================================== -->
