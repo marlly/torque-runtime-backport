@@ -1,0 +1,2 @@
+database.driver = com.sap.dbtech.jdbc.DriverSapDB
+database.url = jdbc:sapdb://localhost/${database.name}?sqlmode=oracle

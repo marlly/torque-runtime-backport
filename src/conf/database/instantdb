@@ -1,0 +1,2 @@
+database.driver=org.enhydra.instantdb.jdbc.idbDriver
+database.url=C:/TurbineDB/Turbine.prp

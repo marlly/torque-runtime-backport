@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!-- Build configuration file for Torque -->
+
+<project name="props-maker" default="generate-props" basedir=".">
+
+  <!-- Give user a chance to override without editing this file
+      (and without typing -D each time it compiles it -->
+  <property file="${user.home}/build.properties" />
+  <property file="default.properties" />
+
+  <property name="master.home" value="."/>
+  <property name="conf.home" value="../"/>
+  <property name="target.dir" value="../"/>
+
+  <property file="${conf.home}/database/${database.type}"/>
+
+  <property name="master" value="${master.home}/Torque.master"/>
+  <property name="copy" value="${target.dir}/Torque.properties"/>
+
+  <!-- =================================================================== -->
+  <!-- G E N E R A T E   P R O P S                                         -->
+  <!-- =================================================================== -->
+
+  <target name="generate-props" depends="configure"
+          description="--> generate properties file for Torque">
+
+    <echo message="Creating Torque.properties ..."/>
+    <delete file="${copy}"/>
+    <copy file="${master}" tofile="${copy}" filtering="on"/>
+
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- C O N F I G U R E  D A T A B A S E  P R O P E R T I E S             -->
+  <!-- =================================================================== -->
+
+  <target name="configure">
+
+    <filter token="DATABASE_DRIVER" value="${database.driver}"/>
+    <filter token="DATABASE_URL" value="${database.url}"/>
+    <filter token="DATABASE_ADAPTOR" value="${database.adaptor}"/>
+    <filter token="DATABASE_USER" value="${database.user}"/>
+    <filter token="DATABASE_PASSWORD" value="${database.password}"/>
+    <filter token="DATABASE_NAME" value="${database.name}"/>
+    <filter token="DATABASE_DEFAULT" value="default"/>
+    <filter token="PROJECT" value="${project}"/>
+    <filter token="APPLICATION_ROOT" value="${application.root}"/>
+
+  </target>
+
+</project>

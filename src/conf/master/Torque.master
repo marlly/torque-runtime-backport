@@ -1,0 +1,82 @@
+# -------------------------------------------------------------------
+# $Id$
+#
+# This is the configuration file for Torque.
+#
+# Note that strings containing "," (comma) characters must backslash
+# escape the comma (i.e. '\,')
+#
+# -------------------------------------------------------------------
+
+torque.applicationRoot = @APPLICATION_ROOT@
+
+# -------------------------------------------------------------------
+#
+#  L O G G I N G
+#
+# -------------------------------------------------------------------
+# We use Log4J for all Torque logging and we embed the log4j
+# properties within our application configuration.
+# -------------------------------------------------------------------
+
+# This first category is required and the category
+# must be named 'default'. This is used for all logging
+# where an explicit category is not specified.
+
+log4j.category.org.apache.torque = ALL, org.apache.torque
+log4j.appender.org.apache.torque = org.apache.log4j.FileAppender
+log4j.appender.org.apache.torque.file = ${torque.applicationRoot}/logs/torque.log
+log4j.appender.org.apache.torque.layout = org.apache.log4j.PatternLayout
+log4j.appender.org.apache.torque.layout.conversionPattern = %d [%t] %-5p %c - %m%n
+log4j.appender.org.apache.torque.append = false
+
+# -------------------------------------------------------------------
+#
+#  T O R Q U E  P R O P E R T I E S
+#
+# -------------------------------------------------------------------
+# These are your database settings. Look in the
+# org.apache.torque.pool.* packages for more information.
+#
+# The parameters to connect to the default database.  You MUST
+# configure these properly.
+# -------------------------------------------------------------------
+
+torque.database.default=@DATABASE_DEFAULT@
+
+torque.database.@DATABASE_DEFAULT@.driver = @DATABASE_DRIVER@
+torque.database.@DATABASE_DEFAULT@.url = @DATABASE_URL@
+torque.database.@DATABASE_DEFAULT@.username = @DATABASE_USER@
+torque.database.@DATABASE_DEFAULT@.password = @DATABASE_PASSWORD@
+
+# The number of database connections to cache per ConnectionPool
+# instance (specified per database).
+
+torque.database.default.maxConnections=80
+
+# The amount of time (in milliseconds) that database connections will be
+# cached (specified per database).
+#
+# Default: one hour = 60 * 60 * 1000
+
+torque.database.default.expiryTime=3600000
+
+# The amount of time (in milliseconds) a connection request will have to wait
+# before a time out occurs and an error is thrown.
+#
+# Default: ten seconds = 10 * 1000
+
+torque.database.connectionWaitTimeout=10000
+
+# The interval (in milliseconds) between which the PoolBrokerService logs
+# the status of it's ConnectionPools.
+#
+# Default: No logging = 0 = 0 * 1000
+
+torque.database.logInterval=0
+
+# Determines if the quantity column of the IDBroker's id_table should
+# be increased automatically if requests for ids reaches a high
+# volume.
+
+torque.idbroker.cleverquantity=true
