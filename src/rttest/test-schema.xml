@@ -2,7 +2,7 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 <!-- this schema is used to test problems users reported -->
 
-<database name="test" defaultIdMethod="idbroker">
+<database name="@DATABASE_DEFAULT@" defaultIdMethod="idbroker">
   <!-- TRQS15 -->
   <table name="varchar_pk">
     <column name="test_key" required="true" primaryKey="true" type="VARCHAR" size="30" />
@@ -18,6 +18,16 @@
     <!-- TRQ2 -->
     <column name="remote" type="CHAR" size="10"/>
   </table>
+
+  <!-- TRQ12 with multiple pks, combo key parse fails -->
+  <table name="multi_pk" idMethod="none">
+    <column name="pk1" required="true" primaryKey="true" type="VARCHAR" size="30" />
+    <column name="pk2" required="true" primaryKey="true" type="INTEGER" />
+    <column name="pk3" required="true" primaryKey="true" type="CHAR" size="5" />
+    <column name="col_a" type="BOOLEANINT" />
+    <column name="col_b" type="BOOLEANINT" javaType="object" />
+  </table>
+
 
 </database>
 

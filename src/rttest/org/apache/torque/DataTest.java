@@ -58,11 +58,13 @@ import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;
+import org.apache.torque.test.MultiPk;
 
 /**
- * Test code for LargeSelect.
+ * Runtime tests.
  *
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class DataTest extends BaseTestCase
@@ -102,6 +104,23 @@ public class DataTest extends BaseTestCase
                     book.save();
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * multiple pk test (TRQ12)
+     */
+    public void testMultiplePk()
+    {
+        try
+        {
+            MultiPk mpk = new MultiPk();
+            mpk.setPrimaryKey("Svarchar:N5:Schar:");
+            mpk.save();
         }
         catch (Exception ex)
         {
