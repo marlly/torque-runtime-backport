@@ -78,6 +78,41 @@
   </target>
 
   <!-- ================================================================ -->
+  <!-- G E N E R A T E   D O C S                                        -->
+  <!-- ================================================================ -->
+
+  <target
+    name="project-doc"
+    description="==> generates documentation for your datamodel">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating docs for YOUR datamodel!      |"/>
+    <echo message="| Woo hoo!                                 |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="torque-doc"
+      classname="org.apache.torque.task.TorqueDocumentationTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-doc
+      contextProperties="${build.properties}"
+      controlTemplate="${DocControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/doc"
+      outputFormat="html"
+      templatePath="${templatePath}"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputFile="report.${project}.doc.generation">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-doc>
+  </target>
+
+  <!-- ================================================================ -->
   <!-- C R E A T E  T A R G E T  D A T A B A S E                        -->
   <!-- ================================================================ -->
   <!-- Create the target database by executing a generated script       -->

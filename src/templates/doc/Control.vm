@@ -1,0 +1,10 @@
+#set ( $basepath = $generator.OutputPath)
+
+#foreach ($dataModel in $dataModels)
+
+  #set ( $outFile = "${dataModel.name}.html" )
+
+  File to be created: $outFile
+
+  $generator.parse("doc/$outputFormat/datamodel.vm",$outFile,"dataModel",$dataModel)
+#end

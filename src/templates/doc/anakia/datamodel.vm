@@ -1,0 +1,33 @@
+#set ( $database = $dataModel.database )
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>$dataModel.name</title>
+  </properties>
+
+  <body>
+
+  <section name="$dataModel.name">
+  <table border="1">
+    <tr>
+      <th>Table Name</th>
+      <th>OM Class</th>
+      <th>Description</th>
+    <tr>
+  #foreach ($tbl in $database.tables)
+    <tr>
+      <td>$tbl.Name</td>
+      <td>$tbl.JavaName</td>
+      <td>$!tbl.Description</td>
+    </tr>
+  #end
+  </table>
+
+  #foreach ($tbl in $database.tables)
+    $generator.parse("doc/html/table.vm",$outFile,"table",$tbl)
+  #end
+
+  </section>
+</body>
+</document>

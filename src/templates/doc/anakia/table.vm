@@ -1,0 +1,27 @@
+
+<h2>$table.Name</h2>
+
+<table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Size</th>
+    <th>Default</th>
+    <th>JavaName</th>
+    <th>PK</th>
+    <th>FK</th>
+    <th>not null</th>
+  </tr>
+#foreach ($col in $table.Columns)
+  <tr>
+    <td>$col.Name</td>
+    <td>$col.Type</td>
+    <td>$col.printSize()</td>
+    <td>$col.DefaultValue</td>
+    <td>$col.JavaName</td>
+    <td>$col.isPrimaryKey()</td>
+    <td>$col.isForeignKey()</td>
+    <td>$col.isNotNull()</td>
+  </tr>
+#end
+</table>
