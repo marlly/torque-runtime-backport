@@ -22,6 +22,10 @@
       Removed all deprecated stuff from the java code. Make sure to not get
       any deprecation warnings before you switch to 3.1!
     </li>
+    <li>
+      The generator was separated. The docs for the generator can be found
+      <a href="generator">here</a>
+    </li>
   </ul>
 </p>
 </subsection>

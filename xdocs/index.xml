@@ -12,7 +12,8 @@
 
     <section name="What is Torque?">
       <p>
-        Torque is a persistence layer. Torque generates all the database
+        Torque is a persistence layer. Torque includes a <a href="generator">
+        generator</a> to generate all the database
         resources required by your application and includes a runtime
         environment to run the generated classes.
       </p>

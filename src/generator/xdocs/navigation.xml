@@ -9,6 +9,7 @@
       <item name="generator"             href="http://db.apache.org/torque/generator/"/>
     </links>
 
+<!--
     <menu name="Torque">
       <item name="Overview"              href="/index.html"/>
       <item name="News and Status"       href="/status.html"/>
@@ -40,5 +41,6 @@
       <item name="References"            href="/references.html"/>
       <item name="Todo"                  href="/todo.html"/>
     </menu>
+-->
   </body>
 </project>
