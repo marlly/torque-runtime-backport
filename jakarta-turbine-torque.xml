@@ -24,6 +24,7 @@
 
     <depend project="commons-collections"/>
     <depend project="commons-lang"/>
+    <depend project="commons-pool"/>
     <depend project="jdbc"/>
     <depend project="jakarta-log4j"/>
     <depend project="jakarta-turbine-stratum"/>
