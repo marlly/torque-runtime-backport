@@ -398,7 +398,6 @@ public class SqlExpression
         // use = (equals).  Wildcards can be escaped by prepending
         // them with \ (backslash).
         String equalsOrLike = " = ";
-        String parsedCriteria = null;
         int position = 0;
         StringBuffer sb = new StringBuffer();
         while (position < criteria.length())
