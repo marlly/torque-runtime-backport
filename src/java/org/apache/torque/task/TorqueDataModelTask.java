@@ -327,6 +327,7 @@ public class TorqueDataModelTask
         // now. 
         context.put("dataModels", dataModels);
         context.put("databaseNames", databaseNames);
+        context.put("targetDatabase", targetDatabase);
     
         return context;
     }

@@ -128,7 +128,7 @@
 
     <taskdef
       name="torque-create-db"
-      classname="org.apache.torque.task.TorqueCreateDatabase">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 
@@ -346,7 +346,7 @@
 
     <taskdef
       name="torque-datadtd"
-      classname="org.apache.torque.task.TorqueDataDTDTask">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 

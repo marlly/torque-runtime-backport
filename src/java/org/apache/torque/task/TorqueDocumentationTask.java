@@ -64,38 +64,8 @@ import org.apache.velocity.context.Context;
  */
 public class TorqueDocumentationTask extends TorqueDataModelTask
 {
-
-    /**
-     * The target database(s) we are generating SQL
-     * for. Right now we can only deal with a single
-     * target, but we will support multiple targets
-     * soon.
-     */
-    private String targetDatabase;
-
+    /** output format for the generated docs */
     private String outputFormat;
-
-
-    /**
-     * Get the current target package.
-     *
-     * @return String target database(s)
-     */
-    public String getTargetDatabase()
-    {
-        return targetDatabase;
-    }
-
-    /**
-     * Set the current target package.  This is where
-     * generated java classes will live.
-     *
-     * @param v target database(s)
-     */
-    public void setTargetDatabase(String v)
-    {
-        targetDatabase = v;
-    }
 
     /**
      * Get the current output format.
@@ -123,7 +93,6 @@ public class TorqueDocumentationTask extends TorqueDataModelTask
     public Context initControlContext() throws Exception
     {
         super.initControlContext();
-        context.put("targetDatabase", targetDatabase);
         context.put("outputFormat", outputFormat);
         return context;
     }
