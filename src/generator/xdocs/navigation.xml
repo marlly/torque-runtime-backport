@@ -10,10 +10,6 @@
       <item name="maven-plugin"          href="http://db.apache.org/torque/maven-plugin/"/>
     </links>
 
-    <menu>
-        <item href="http://apachecon.com/2003/US/index.html" img="http://jakarta.apache.org/images/logos/ac2003-150.gif"/>
-    </menu>
-
     <menu name="Overview">
       <item name="Schema Reference"      href="/schema-reference.html"/>
       <item name="Properties Reference"  href="/properties-reference.html"/>
