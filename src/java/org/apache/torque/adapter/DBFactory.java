@@ -60,6 +60,7 @@ import java.util.Vector;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.util.StringUtils;
+
 import org.apache.log4j.Category;
 
 /**
@@ -70,6 +71,7 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:ralf@reswi.ruhr.de">Ralf Stranzenbach</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class DBFactory
@@ -112,6 +114,7 @@ public class DBFactory
             // spelled incorrectly.
             adapters = configuration.getVector("database.adaptor").elements();
         }
+
         while (adapters.hasMoreElements())
         {
             String adapter = (String) adapters.nextElement();
@@ -133,18 +136,20 @@ public class DBFactory
                 c = Class.forName(
                     "org.apache.torque.adapter." + adapter);
             }
-            catch (ClassNotFoundException ign1)
+            catch (ClassNotFoundException ignored)
             {
+                // Try adapter name as the fully qualified class name.
                 try
                 {
                     c = Class.forName(adapter);
                 }
-                catch (ClassNotFoundException ign2)
+                catch (ClassNotFoundException e)
                 {
-                    category.error(ign2);
+                    category.error(e);
                 }
             }
-            if ((c != null) && (driver != null))
+
+            if (c != null && driver != null)
             {
                 registerDriver(driver, c);
             }
@@ -183,7 +188,7 @@ public class DBFactory
     public static DB create(String driver)
         throws InstantiationException
     {
-        Class dc = (Class)drivers.get(driver);
+        Class dc = (Class) drivers.get(driver);
 
         if (dc != null)
         {
