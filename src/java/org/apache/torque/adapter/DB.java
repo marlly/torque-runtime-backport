@@ -418,4 +418,14 @@ public abstract class DB implements Serializable, IDMethod
 
         return ("{ts '" + ts + "'}");
     }
+
+    /**
+     * This method is used to format a boolean string.
+     *
+     * @return The proper date formatted String.
+     */
+    public String getBooleanString(Boolean b)
+    {
+        return b.equals(Boolean.TRUE) ? "1" : "0";
+    }
 }

@@ -288,7 +288,7 @@ public class SqlExpression
            }
            else if( criteria instanceof Boolean )
            {
-               criteria = criteria.equals(Boolean.TRUE) ? "1" : "0";
+               criteria = db.getBooleanString((Boolean)criteria);
            }
         }
 

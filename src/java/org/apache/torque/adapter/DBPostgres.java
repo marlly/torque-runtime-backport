@@ -186,4 +186,9 @@ public class DBPostgres extends DB
     {
         return DB.LIMIT_STYLE_POSTGRES;
     }
+
+    public String getBooleanString(Boolean b)
+    {
+        return (b == null) ? "false" : b.toString();
+    }
 }

@@ -62,6 +62,10 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.BaseConfiguration;
+import org.apache.torque.adapter.DBFactory;
+
 /**
  * Test class for Criteria.
  *
@@ -241,4 +245,45 @@ public class CriteriaTest extends BaseTestCase
 
         assertEquals(expect,result);
     }
+
+    public void testBoolean()
+    {
+        Criteria c = new Criteria()
+            .add("TABLE.COLUMN", true);
+        
+        String expect = "SELECT  FROM TABLE WHERE TABLE.COLUMN=1";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+            System.out.println(result);
+        }
+        catch (TorqueException e)
+        {
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect,result);
+
+        // test the postgresql variation
+        c = new Criteria();
+        Criteria.Criterion cc = 
+            c.getNewCriterion("TABLE.COLUMN", Boolean.TRUE, Criteria.EQUAL);
+
+        Configuration conf = new BaseConfiguration();
+        conf.addProperty("driver", "org.postgresql.Driver");
+        DBFactory.init(conf);
+        try
+        {
+            cc.setDB(DBFactory.create("org.postgresql.Driver"));
+        }
+        catch (Exception e)
+        {
+            fail("Exception thrown in DBFactory");
+        }
+
+        assertEquals("TABLE.COLUMN=true", cc.toString());
+    }
 }
+
