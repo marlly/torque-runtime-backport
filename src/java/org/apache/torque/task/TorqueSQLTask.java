@@ -201,7 +201,8 @@ public class TorqueSQLTask
 
         // If the load path for the id broker table xml schema is
         // defined then load it.
-        if (getIdTableXMLFile() != null)
+        String f = getIdTableXMLFile();
+        if (f != null && f.length() > 0)
         {
             loadIdBrokerModel();
         }
