@@ -298,8 +298,7 @@ public class Domain
 
     /**
      * Return a string that will give this column a default value.
-     * <p>
-     * TODO: Properly SQL-escape text values.
+     * @deprecated
      */
     public String getDefaultSetting()
     {

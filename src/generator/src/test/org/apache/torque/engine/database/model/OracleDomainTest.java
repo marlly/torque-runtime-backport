@@ -95,17 +95,17 @@ public class OracleDomainTest extends TestCase
     {
         Table table = db.getTable("product");
         Column name = table.getColumn("name");
-        assertEquals("VARCHAR", name.getType());
         assertEquals("VARCHAR2", name.getDomain().getSqlType());
         assertEquals("40", name.getSize());
+        assertEquals("name VARCHAR2(40)  ", name.getSqlString());
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getTorqueType());
-        assertEquals("NUMERIC", price.getType());
         assertEquals("NUMBER", price.getDomain().getSqlType());
         assertEquals("10", price.getSize());
         assertEquals("2", price.getScale());
         assertEquals("0", price.getDefaultValue());
         assertEquals("(10,2)", price.printSize());
+        assertEquals("price NUMBER(10,2) default 0  ", price.getSqlString());
     }
     
     /**
@@ -116,12 +116,12 @@ public class OracleDomainTest extends TestCase
         Table table = db.getTable("article");
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getTorqueType());
-        assertEquals("NUMERIC", price.getType());
         assertEquals("NUMBER", price.getDomain().getSqlType());
         assertEquals("12", price.getSize());
         assertEquals("2", price.getScale());
         assertEquals("1000", price.getDefaultValue());
         assertEquals("(12,2)", price.printSize());
+        assertEquals("price NUMBER(12,2) default 1000  ", price.getSqlString());
     }
     
     public void testDecimalColumn() throws Exception
@@ -129,11 +129,11 @@ public class OracleDomainTest extends TestCase
         Table table = db.getTable("article");
         Column col = table.getColumn("decimal_col");
         assertEquals("DECIMAL", col.getTorqueType());
-        assertEquals("DECIMAL", col.getType());
         assertEquals("NUMBER", col.getDomain().getSqlType());
         assertEquals("10", col.getSize());
         assertEquals("3", col.getScale());
         assertEquals("(10,3)", col.printSize());
+        assertEquals("decimal_col NUMBER(10,3)  ", col.getSqlString());
     }
 
     public void testDateColumn() throws Exception
@@ -141,9 +141,9 @@ public class OracleDomainTest extends TestCase
         Table table = db.getTable("article");
         Column col = table.getColumn("date_col");
         assertEquals("DATE", col.getTorqueType());
-        assertEquals("DATE", col.getType());
         assertEquals("DATE", col.getDomain().getSqlType());
         assertEquals("", col.printSize());
+        assertEquals("date_col DATE  ", col.getSqlString());
     }
 
     public void testNativeAutoincrement() throws Exception
@@ -151,6 +151,7 @@ public class OracleDomainTest extends TestCase
         Table table = db.getTable("native");
         Column col = table.getColumn("native_id");
         assertEquals("", col.getAutoIncrementString());
+        assertEquals("native_id NUMBER NOT NULL ", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
@@ -160,6 +161,7 @@ public class OracleDomainTest extends TestCase
         Table table = db.getTable("article");
         Column col = table.getColumn("article_id");
         assertEquals("", col.getAutoIncrementString());
+        assertEquals("article_id NUMBER NOT NULL ", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
@@ -170,8 +172,8 @@ public class OracleDomainTest extends TestCase
         Column col = table.getColumn("cbooleanint");
         assertEquals("", col.getAutoIncrementString());
         assertEquals("BOOLEANINT", col.getTorqueType());
-        assertEquals("INTEGER", col.getType());
         assertEquals("NUMBER", col.getDomain().getSqlType());
-       }    
+        assertEquals("cbooleanint NUMBER(1,0)  ", col.getSqlString());
+    }    
     
 }

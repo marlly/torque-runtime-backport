@@ -742,6 +742,7 @@ public class Column
 
     /**
      * Return a string that will give this column a default value.
+     * @deprecated
      */
      public String getDefaultSetting()
      {
@@ -804,7 +805,7 @@ public class Column
      * Set the column type from a string property
      * (normally a string from an sql input file)
      */
-    public void setTypeFromString (String typeName, String size)
+    public void setTypeFromString(String typeName, String size)
     {
         String tn = typeName.toUpperCase();
         setType(tn);
@@ -979,5 +980,33 @@ public class Column
             log.warn("could not load platform implementation");
         }
         return new PlatformDefaultImpl();
+    }
+    
+    public String getSqlString()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getName());
+        sb.append(" ");
+        sb.append(getDomain().getSqlType());
+        sb.append(getDomain().printSize());
+        sb.append(" ");
+        if (getDomain().getDefaultValue() != null)
+        {
+            sb.append("default ");
+            if (TypeMap.isTextType(getDomain().getType()))
+            {
+                // TODO: Properly SQL-escape the text.
+                sb.append('\'').append(getDefaultValue()).append('\'');
+            }
+            else
+            {
+                sb.append(getDefaultValue());
+            }
+            sb.append(" ");
+        }
+        sb.append(getNotNullString());
+        sb.append(" ");
+        sb.append(getAutoIncrementString());
+        return sb.toString();
     }
 }
