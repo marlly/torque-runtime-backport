@@ -20,7 +20,7 @@ import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
 import org.apache.torque.pool.DBConnection;
 #if ($addSaveMethod)
-import org.apache.commons.util.ObjectUtils;
+import org.apache.commons.lang.Objects;
 #end
 #if ($addIntakeRetrievable)
 import org.apache.fulcrum.intake.Retrievable;
@@ -141,7 +141,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         if (this.$clo != v)
         {
  #else
-        if ( !ObjectUtils.equals(this.$clo, v) )
+        if ( !Objects.equals(this.$clo, v) )
         {
  #end
             this.$clo = v;
@@ -161,7 +161,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $varName = "a$tblFK.JavaName" )
             #end
 
-        if ($varName != null &&  !ObjectUtils.equals(${varName}.get${colFK.JavaName}(), v) )
+        if ($varName != null &&  !Objects.equals(${varName}.get${colFK.JavaName}(), v) )
         {
             $varName = null;
         }
@@ -262,7 +262,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long")
         #set ( $conditional = "$conditional${and}this.${clo}>0" )
     #else
-        #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
+        #set ( $conditional = "$conditional${and}!Objects.equals(this.${clo}, null)" )
     #end
     #set ( $arglist = "$arglist${comma}this.$clo" )
     #set ( $and = " && " )

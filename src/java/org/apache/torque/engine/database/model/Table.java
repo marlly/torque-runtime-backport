@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.util.StringUtils;
+import org.apache.commons.lang.Strings;
 
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.IDMethod;
@@ -168,7 +168,7 @@ public class Table implements IDMethod
         basePeer = attrib.getValue("basePeer");
         alias = attrib.getValue("alias");
         heavyIndexing = "true".equals(attrib.getValue("heavyIndexing"))
-            || (!"false".equals(attrib.getValue("heavyIndexing")) && 
+            || (!"false".equals(attrib.getValue("heavyIndexing")) &&
                 getDatabase().isHeavyIndexing());
         description = attrib.getValue("description");
     }
@@ -254,7 +254,7 @@ public class Table implements IDMethod
             {
                 ForeignKey fk = (ForeignKey) foreignKeys.get(i);
                 name = fk.getName();
-                if (StringUtils.isEmpty(name))
+                if (Strings.isEmpty(name))
                 {
                     name = acquireConstraintName("FK", i + 1);
                     fk.setName(name);
@@ -265,7 +265,7 @@ public class Table implements IDMethod
             {
                 Index index = (Index) indices.get(i);
                 name = index.getName();
-                if (StringUtils.isEmpty(name))
+                if (Strings.isEmpty(name))
                 {
                     name = acquireConstraintName("I", i + 1);
                     index.setName(name);

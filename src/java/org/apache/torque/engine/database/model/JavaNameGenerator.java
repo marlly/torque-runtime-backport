@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.model;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ package org.apache.torque.engine.database.model;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.commons.util.StringUtils;
+import org.apache.commons.lang.Strings;
 
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
@@ -135,7 +135,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = ((String) tok.nextElement()).toLowerCase();
-            name.append(StringUtils.firstLetterCaps(namePart));
+            name.append(Strings.firstLetterCaps(namePart));
         }
         return name.toString();
     }
@@ -158,7 +158,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(StringUtils.firstLetterCaps(namePart));
+            name.append(Strings.firstLetterCaps(namePart));
         }
         return name.toString();
     }

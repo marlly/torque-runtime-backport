@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,7 +76,7 @@ import org.apache.torque.map.TableMap;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.util.BasePeer;
-import org.apache.commons.util.StringStack;
+import org.apache.commons.collections.StringStack;
 import org.apache.log4j.Category;
 
 /**
@@ -226,7 +226,7 @@ public class Criteria extends Hashtable
     /**
      * Log4j category used for logging.
      */
-    private static Category category = 
+    private static Category category =
         Category.getInstance(Criteria.class.getName());
 
     /**
@@ -417,11 +417,11 @@ public class Criteria extends Hashtable
             Criterion co = (Criterion)e.nextElement();
             String tableName = co.getTable();
             String tableName2 = getTableForAlias(tableName);
-            if (tableName2 != null) 
+            if (tableName2 != null)
             {
                 tableName = tableName2;
             }
-            
+
             if (!tables.contains(tableName))
             {
                 if (map.getTable(tableName).containsObjectColumn())
@@ -3356,9 +3356,9 @@ public class Criteria extends Hashtable
         public DB getDb()
         {
             DB db = null;
-            if ( this.db == null ) 
+            if ( this.db == null )
             {
-                // db may not be set if generating preliminary sql for 
+                // db may not be set if generating preliminary sql for
                 // debugging.
                 try
                 {
@@ -3372,11 +3372,11 @@ public class Criteria extends Hashtable
                        "Could not get a DB adapter, so sql may be wrong");
                 }
             }
-            else 
+            else
             {
                 db = this.db;
             }
-            
+
             return db;
         }
 

@@ -80,7 +80,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import org.apache.commons.util.StringUtils;
+import org.apache.commons.lang.Strings;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -515,7 +515,7 @@ public class TorqueSQLExec extends Task
      */
     private void insertDatabaseSqlFiles(String url, String database, Vector transactions)
     {
-        url = StringUtils.replace(url, "@DB@", database);
+        url = Strings.replace(url, "@DB@", database);
         System.out.println("Our new url -> " + url);
 
         Driver driverInstance = null;

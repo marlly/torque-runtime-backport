@@ -3,7 +3,7 @@ package org.apache.torque.om;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,7 +57,7 @@ package org.apache.torque.om;
 import java.util.ArrayList;
 
 import org.apache.torque.TorqueException;
-import org.apache.commons.util.ObjectUtils;
+import org.apache.commons.lang.Objects;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
@@ -315,7 +315,7 @@ public class ComboKey extends ObjectKey
                 isEqual = keys1.length == keys2.length;
                 for ( int i = 0; i < keys1.length && isEqual; i++)
                 {
-                    isEqual &= ObjectUtils.equals(keys1[i], keys2[i]);
+                    isEqual &= Objects.equals(keys1[i], keys2[i]);
                 }
             }
             else if ( keyObj instanceof SimpleKey[]
@@ -326,7 +326,7 @@ public class ComboKey extends ObjectKey
                 isEqual = keys1.length == keys2.length;
                 for ( int i = 0; i < keys1.length && isEqual; i++)
                 {
-                    isEqual &= ObjectUtils.equals(keys1[i], keys2[i]);
+                    isEqual &= Objects.equals(keys1[i], keys2[i]);
                 }
             }
         }

@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -95,7 +95,7 @@ import org.apache.torque.util.Query;
 import org.apache.torque.util.SqlExpression;
 
 //!! no good.
-import org.apache.commons.util.StringStack;
+import org.apache.commons.collections.StringStack;
 import org.apache.torque.TorqueException;
 import org.apache.log4j.Category;
 
@@ -133,7 +133,7 @@ public abstract class BasePeer implements java.io.Serializable
     /** Hashtable that contains the cached mapBuilders. */
     private static Hashtable mapBuilders = new Hashtable(5);
 
-    protected static Category category = 
+    protected static Category category =
         Category.getInstance(BasePeer.class.getName());
 
     /**
@@ -750,10 +750,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         else
         {
-            throw new Exception("Database insert attempted without " + 
+            throw new Exception("Database insert attempted without " +
                 "anything specified to insert");
         }
-        
+
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
         TableMap tableMap = dbMap.getTable(tableName);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
@@ -773,7 +773,7 @@ public abstract class BasePeer implements java.io.Serializable
         {
             if (keyGen == null)
             {
-                throw new Exception("IdGenerator for table '" + tableName + 
+                throw new Exception("IdGenerator for table '" + tableName +
                                     "' is null");
             }
             // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
@@ -987,7 +987,7 @@ public abstract class BasePeer implements java.io.Serializable
                 // functions may contain qualifiers so only take the last
                 // word as the table name.
                 int lastSpace = tableName.lastIndexOf(' ');
-                if ( lastSpace != -1 ) 
+                if ( lastSpace != -1 )
                 {
                     tableName = tableName.substring(lastSpace+1);
                 }

@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,7 +62,7 @@ import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
-import org.apache.commons.util.StringStack;
+import org.apache.commons.collections.StringStack;
 
 /**
  * This class represents a part of an SQL query found in the <code>WHERE</code>
@@ -289,7 +289,7 @@ public class SqlExpression
                Date dt = (Date) criteria;
                criteria = db.getDateString(dt);
            }
-           else if ( criteria instanceof DateKey ) 
+           else if ( criteria instanceof DateKey )
            {
                Date dt = (Date) ((DateKey) criteria).getValue();
                criteria = db.getDateString(dt);

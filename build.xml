@@ -18,7 +18,7 @@
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-util.jar}"/>
+    <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${stratum.jar}"/>
     <pathelement location="tdk.jar"/>
@@ -65,7 +65,7 @@
     <echo message="jdbc.jar = ${jdbc.jar}"/>
     <echo message="junit.jar = ${junit.jar}"/>
     <echo message="commons-collections.jar = ${commons-collections.jar}"/>
-    <echo message="commons-util.jar = ${commons-util.jar}"/>
+    <echo message="commons-lang.jar = ${commons-lang.jar}"/>
     <echo message="stratum.jar = ${stratum.jar}"/>
   </target>
 
@@ -141,8 +141,8 @@
     />
 
     <available
-      classname="org.apache.commons.util.exception.NestableException"
-      property="commons-util.present"
+      classname="org.apache.commons.lang.Strings"
+      property="commons-lang.present"
       classpathref="classpath"
     />
 
@@ -233,12 +233,12 @@
   </target>
 
   <target
-    name="check.commons-util"
-    unless="commons-util.present">
+    name="check.commons-lang"
+    unless="commons-lang.present">
 
     <antcall target="property-warning">
-      <param name="name" value="commons-util.jar"/>
-      <param name="value" value="${commons-util.jar}"/>
+      <param name="name" value="commons-lang.jar"/>
+      <param name="value" value="${commons-lang.jar}"/>
     </antcall>
   </target>
 
@@ -287,7 +287,7 @@
   <target
     name="prepare"
     depends="init,check.velocity,check.xerces,check.village,
-             check.log4j,check.commons-collections,check.commons-util,
+             check.log4j,check.commons-collections,check.commons-lang,
              check.stratum,check.jdbc,env">
 
     <mkdir dir="${build.dir}"/>
@@ -575,7 +575,7 @@
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-util.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-lang.jar}" todir="${torque.dir}/lib"/>
     <copy file="${stratum.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
 
