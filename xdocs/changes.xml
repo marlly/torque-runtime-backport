@@ -25,6 +25,15 @@
           </li>
           -->
           <li>
+            <strong>20 Jan 2002</strong>
+            <ul>
+              <li>
+                Made SqlEnum.java implement Serializable.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/util/SqlEnum.java.diff?r1=1.3&r2=1.4">Reference</a>.
+              </li>
+            </ul>
+          </li>
+          <li>
             <strong>18 Dec 2001</strong>
             <ul>
               <li>
