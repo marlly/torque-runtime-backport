@@ -657,8 +657,8 @@ public abstract class AbstractBaseManager
         }
         catch (Exception e)
         {
-            log.error("Cache could not be initialized for region: "
-                    + region + " after deserialization");
+            log.error("Cache could not be initialized for region '"
+                      + region + "' after deserialization");
         }
     }
 }
