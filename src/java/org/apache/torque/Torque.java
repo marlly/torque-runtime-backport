@@ -141,7 +141,7 @@ public class Torque
      *
      * @return Our singleton.
      */
-    private static TorqueInstance getInstance()
+    public static TorqueInstance getInstance()
     {
         if (torqueSingleton == null)
         {

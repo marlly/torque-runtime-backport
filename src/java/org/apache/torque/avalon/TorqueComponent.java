@@ -107,7 +107,12 @@ public class TorqueComponent
      */
     public TorqueComponent()
     {
-        this(new TorqueInstance());
+        // If we simply do a "new TorqueInstance()" here, we will get
+        // into trouble when some internal classes (e.g. the DatasSource Factory)
+        // simply calls Torque.<xxx> and gets a different TorqueInstance
+        // than the one we configured here. Make sure that we use the
+        // same object as the Facade class does.
+        this.torqueInstance = org.apache.torque.Torque.getInstance();
     }
 
     /**
