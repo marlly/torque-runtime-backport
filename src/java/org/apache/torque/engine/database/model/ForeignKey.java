@@ -60,7 +60,7 @@ import java.util.List;
 import org.xml.sax.Attributes;
 
 /**
- * A Class for information about foreign keys of a table.
+ * A class for information about foreign keys of a table.
  *
  * @author <a href="mailto:fedor.karpelevitch@home.com">Fedor</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
@@ -101,7 +101,7 @@ public class ForeignKey
     }
 
     /**
-     * normalizes the input of onDelete, onUpdate attributes
+     * Normalizes the input of onDelete, onUpdate attributes
      */
     private String normalizeFKey(String attrib)
     {
@@ -119,7 +119,7 @@ public class ForeignKey
     }
 
     /**
-     * returns whether or not the onUpdate attribute is set
+     * Returns whether or not the onUpdate attribute is set
      */
     public boolean hasOnUpdate()
     {
@@ -127,7 +127,7 @@ public class ForeignKey
     }
 
     /**
-     * returns whether or not the onDelete attribute is set
+     * Returns whether or not the onDelete attribute is set
      */
     public boolean hasOnDelete()
     {
@@ -135,7 +135,7 @@ public class ForeignKey
     }
 
     /**
-     * returns the onUpdate attribute
+     * Returns the onUpdate attribute
      */
     public String getOnUpdate()
     {
@@ -143,7 +143,7 @@ public class ForeignKey
     }
 
     /**
-     * returns the onDelete attribute
+     * Returns the onDelete attribute
      */
     public String getOnDelete()
     {
@@ -151,7 +151,7 @@ public class ForeignKey
     }
 
     /**
-     * sets the onDelete attribute
+     * Sets the onDelete attribute
      */
     public void setOnDelete(String value)
     {
@@ -159,7 +159,7 @@ public class ForeignKey
     }
 
     /**
-     * sets the onUpdate attribute
+     * Sets the onUpdate attribute
      */
     public void setOnUpdate(String value)
     {
@@ -215,7 +215,7 @@ public class ForeignKey
     }
 
     /**
-     * Returns the Name of the table the foreign key is in
+     * Returns the name of the table the foreign key is in
      */
     public String getTableName()
     {
@@ -223,7 +223,7 @@ public class ForeignKey
     }
 
     /**
-     * adds a new reference entry to the foreign key
+     * Adds a new reference entry to the foreign key
      */
     public void addReference(Attributes attrib)
     {
@@ -231,7 +231,7 @@ public class ForeignKey
     }
 
     /**
-     * adds a new reference entry to the foreign key
+     * Adds a new reference entry to the foreign key
      */
     public void addReference(String local, String foreign)
     {
@@ -240,7 +240,7 @@ public class ForeignKey
     }
 
     /**
-     * Return a comma delimited string of local column names
+     * Returns a comma delimited string of local column names
      */
     public String getLocalColumnNames()
     {
@@ -248,7 +248,7 @@ public class ForeignKey
     }
 
     /**
-     * Return a comma delimited string of foreign column names
+     * Returns a comma delimited string of foreign column names
      */
     public String getForeignColumnNames()
     {
@@ -256,7 +256,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the list of local columns. You should not edit this List.
+     * Returns the list of local column names. You should not edit this List.
      */
     public List getLocalColumns()
     {
@@ -264,7 +264,7 @@ public class ForeignKey
     }
 
     /**
-     * Utility method to get local column to foreign column
+     * Utility method to get local column names to foreign column names
      * mapping for this foreign key.
      */
     public Hashtable getLocalForeignMapping()
@@ -280,7 +280,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the list of local columns. You should not edit this List.
+     * Returns the list of local column names. You should not edit this List.
      */
     public List getForeignColumns()
     {
@@ -288,7 +288,7 @@ public class ForeignKey
     }
 
     /**
-     * Utility method to get local column to foreign column
+     * Utility method to get foreign column names to local column names
      * mapping for this foreign key.
      */
     public Hashtable getForeignLocalMapping()
@@ -327,4 +327,3 @@ public class ForeignKey
         return result.toString();
     }
 }
-

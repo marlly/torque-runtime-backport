@@ -32,6 +32,10 @@
     <li>
       TRQS95: Junit tests for sql2xml task (SQLToAppDataTest)
     </li>
+    <li>
+      Package names for generated java classes are now handled in the model
+      (not the templates)
+    </li>
   </ul>
 </p>
 </subsection>
@@ -48,6 +52,9 @@
     <li>
       TRQS90: SQLScanner reports wrong line numbers in Window platforms and
       behaves incorrectly when finding the minus sign
+    </li>
+    <li>
+      TRQS98: Documentation changes in ForeignKey.java
     </li>
   </ul>
 </p>
