@@ -81,6 +81,20 @@
       </properties>
     </dependency>
     <dependency>
+      <id>commons-configuration</id>
+      <version>1.0-dev</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
+    <dependency>
+      <id>commons-dbcp</id>
+      <version>1.0-dev-20020806</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
+    <dependency>
       <id>commons-lang</id>
       <version>1.0</version>
       <properties>
@@ -95,6 +109,13 @@
       </properties>
     </dependency>
     <dependency>
+      <id>stratum</id>
+      <version>1.0-b3</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
+    <dependency>
       <id>torque</id>
       <version>3.0</version>
       <properties>
@@ -104,6 +125,13 @@
     <dependency>
       <id>velocity</id>
       <version>1.3</version>
+      <properties>
+        <classloader>root</classloader>
+      </properties>
+    </dependency>
+    <dependency>
+      <id>village</id>
+      <version>2.0-dev-20021111</version>
       <properties>
         <classloader>root</classloader>
       </properties>
