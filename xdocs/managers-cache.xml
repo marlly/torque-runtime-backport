@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+
+<document>
+
+<properties>
+  <title>Torque Managers and Caching</title>
+  <author email="jmcnally@collab.net">John McNally</author>
+</properties>
+
+<body>
+    <!--
+    <section name="Table of Contents">
+      <p>
+        <ol>
+          <li>
+            <a href="#"></a>
+          </li>
+        </ol>
+      </p>
+    </section>
+    -->
+
+<section name="Managers - Intro">
+  <p>
+    A manager is responsible for instantiating new objects, retrieving stored
+    objects, and possibly caching these objects.  Managers provide static 
+    accessors for much of its functionality, so usage examples are:
+  </p>
+
+  <source><![CDATA[
+    Foo foo = FooManager.getInstance(); // gets a new Foo.
+    // an ObjectKey that identifies the object in the db
+    foo = FooManager.getInstance(id);
+    // an List of ObjectKey's that identifies objects in the db
+    List foos = FooManager.getInstances(ids); 
+  ]]></source>
+
+</section>
+
+<section name="Business Object Cache">
+
+  <p>
+    The no-arg constructor of BaseFooManager, the parent of FooManager, 
+    calls setRegion(region) where the String region is given by the fully 
+    qualified classname with dots replaced by underscores. 
+  </p>
+
+  <source><![CDATA[
+
+    public BaseFooManager()
+        throws TorqueException
+    {
+        setRegion("net_bar_om_Foo");
+        setClassName("net.bar.om.Foo");
+    }
+
+  ]]></source>
+
+  <p>
+    The classname setter allows the manager to instantiate alternate 
+    implementations of Foo assuming it is an interface or is subclassed.
+    (More on that later.)  The key given for the region is used in a JCS
+    configuration file, cache.ccf, to set up a cache that the manager uses
+    to store objects for which it is responsible. See the Stratum JCS 
+    <a href="http://jakarta.apache.org/turbine/stratum/index.html">
+    documentation</a> for details on configuring JCS.  But here is a 
+    simple section that creates an in-memory only LRU cache for FooManager.
+  </p>
+
+  <source><![CDATA[
+
+jcs.region.net_bar_om_Foo=
+jcs.region.net_bar_om_Foo.cacheattributes=org.apache.stratum.jcs.engine.CompositeCacheAttributes
+jcs.region.net_bar_om_Foo.cacheattributes.MaxObjects=1200
+jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=org.apache.stratum.jcs.engine.memory.lru.LRUMemoryCache
+
+  ]]></source>
+
+  <p>
+    The default is to set a region for each manager, but this behavior can be
+    modified.  A no-arg FooManager constructor could be created that does
+    not call setRegion, though it should still call setClassName, and the
+    manager will not use a cache.  There also will be no caching if JCS is 
+    not configured for the region given in the setter.
+  </p>
+
+  <p>
+    The generated object model classes have methods for getting objects 
+    that are related by foreign keys.  If the FOO table contains an fk to
+    the BAR table then Foo.getBar() will exist.  This method uses
+    BarManager.getInstance(bar_id) and therefore will return a cached
+    Bar, if the Bar has been previously requested (and it still exists in
+    the cache.)
+  </p>
+
+</section>
+
+<section name="Method Result Cache">
+
+  <p>
+    The above fk relationship will also generate a Bar.getFoos(Criteria).  It
+    would be preferrable that repeated requests to this method returned
+    cached results as opposed to hitting the db for each call.  It could be
+    possible to add such caching to the generated method, and Criteria
+    implements an equals() method that would make this possible.  But 
+    determining the equality of a Criteria is complex and possibly buggy (this
+    is the perception of the author of this doc, there are no known bugs).
+    Invalidating the results has also not been reduced to templated Java code.
+    So whether to cache these kinds of results is left to the developer
+    who is using torque.
+  </p>
+
+  <p>
+    It is a good practice to write methods within Bar that wrap the
+    getFoos(Criteria) method.  The conversion from application parameters
+    to a Criteria is then implemented in a more maintainable manner.  For
+    example:
+  </p>
+
+  <source><![CDATA[
+
+public List getFoos(FooType type, boolean deleted)
+{
+    List result = null;
+
+    Criteria crit = new Criteria();
+    crit.add(FooPeer.TYPE_ID, type.getId());
+    crit.add(FooPeer.DELETED, deleted);
+    result = getFoos(crit);
+
+    return result;
+}
+  ]]></source>
+
+  <p>
+    In the above code the database will be hit for every call to the method.
+    BarManager provides some convenience code to add caching to the above 
+    method, so it can be rewritten as:  
+  </p>
+
+  <source><![CDATA[
+
+public List getFoos(FooType type, boolean deleted)
+{
+    List result = null;
+    Boolean b = (deleted ? Boolean.TRUE : Boolean.FALSE);
+    Object obj = BarManager.getMethodResult().get(this, "getFoos", type, b); 
+    if ( obj == null ) 
+    {        
+        Criteria crit = new Criteria();
+        crit.add(FooPeer.TYPE_ID, type.getId());
+        crit.add(FooPeer.DELETED, deleted);
+        result = getFoos(crit);
+
+        BarManager.getMethodResult().put(result, this, "getFoos", type, b);
+    }
+    else 
+    {
+        result = (List)obj;
+    }
+    return result;
+}
+
+  ]]></source>
+
+  <p>
+    The getMethodResult() method returns a MethodResultCache object, which
+    creates a key from the arguments given in the get method.  All the
+    arguments must be Serializable.  The first object should be the business
+    object on which the method was called.  If the object is not Serializable
+    or the method is static, a String as given by Object.toString() method or
+    the className might be used.  The second argument is the method name.
+    There are versions of the get method that take up to 3 additional arguments
+    that will be the arguments to the method, or if they are not Serializable
+    some Serializable proxy.  There is also a get method that takes an
+    Object[] that can be used for methods that have more than 3 arguments; the
+    first two objects in the array should be the instance and method name.
+    The reason for not just having the Object[] format is that keys are pooled
+    and since most methods will be less than 4 arguments, object creation
+    related to the cache is minimized.  Now the method will return cached
+    results as long as the results remain in the cache, there must be some
+    way to invalidate these results, if the database changes in a way that
+    is likely to affect the result that should be returned by the method.
+  </p>
+
+</section>
+
+<section name="Invalidating the Cache">
+
+  <p>
+    An event model exists for invalidating cached method results.  Continuing
+    the example from above, bar should register itself as a listener with the 
+    FooManager.  Then FooManager will notify bar, if a foo.save() is called
+    that might affect its cached results.  Since the bar must have an id
+    before being registered as a listener, the setBarId() is a good place
+    to add the registration code.  The following code is added to Bar.java 
+    which implements the CacheListener interface.
+  </p>
+
+  <source><![CDATA[
+
+    /** overriding to handle caching */
+    public void setBarId(NumberKey id)
+        throws TorqueException
+    {
+        super.setBarId(id);
+        registerAsListener();
+    }
+
+    private void registerAsListener()
+    {
+        FooManager.addCacheListener(this);
+        XManager.addCacheListener(this);
+        ...
+    }
+
+    // -------------------------------------------------------------------
+    // CacheListener implementation
+
+    public void addedObject(Persistent om)
+    {
+        if (om instanceof Foo) 
+        {
+            getMethodResult().removeAll(this, "getFoos");
+        }
+        else if (om instanceof X) 
+        {
+            getMethodResult().remove(this, GET_URLS);
+            getMethodResult().removeAll(this, GET_COMMENTS);
+        }
+        ...
+    }
+
+    public void refreshedObject(Persistent om)
+    {
+        addedObject(om);
+    }
+
+    /** fields which interest us with respect to cache events */
+    public List getInterestedFields()
+    {
+        if (getIssueId() == null) 
+        {
+            throw new IllegalStateException(
+                "Cannot register a new Bar as a cache event listener.");
+        }
+        List interestedCacheFields = new LinkedList();
+        Object[] key = new Object[2];
+        key[0] = FooPeer.BAR_ID;
+        key[1] = getIssueId();
+        interestedCacheFields.add(key);
+        key = new Object[2];
+        key[0] = XPeer.X_ID;
+        key[1] = getXId();
+        interestedCacheFields.add(key);
+        ...
+        return interestedCacheFields;
+    }
+
+  ]]></source>
+
+  <p>
+    When a foo which is of interest to bar is saved, the instance is passed
+    to the appropriate listener method.  This object may contain information
+    that could result in no action or possibly more precise repair of the
+    cached data.  In the above examples the cache is just cleared of all
+    data that is potentially invalid. 
+    Some code is also added to FooManager to support the invalidation.
+  </p>
+
+  <source><![CDATA[
+
+    /**
+     * Creates a new <code>FooManager</code> instance.
+     */
+    public FooManager()
+        throws TorqueException
+    {
+        super();
+        validFields = new HashMap();
+        validFields.put(FooPeer.BAR_ID, null);
+    }
+
+    protected Persistent putInstanceImpl(Persistent om)
+        throws TorqueException
+    {
+        Persistent oldOm = super.putInstanceImpl(om);
+        // super method checks for correct class, so just cast it
+        Foo foo = (Foo)om;
+
+        Map subsetMap = (Map)listenersMap.get(FooPeer.BAR_ID);
+        if (subsetMap != null) 
+        {
+            ObjectKey bar_id = foo.getBarId();
+            List listeners = (List)subsetMap.get(bar_id);
+            notifyListeners(listeners, oldOm, om);
+        }
+        return oldOm;
+    }                
+
+  ]]></source>
+
+  <p>
+    In the above code, if a Foo which is related to a Bar with id=2, 
+    is saved to the db, the Manager will look for objects which are registered
+    as being interested in foo's with a bar_id=2 and allow them to 
+    take appropriate action. 
+  </p>
+
+</section>
+
+  </body>
+</document>
