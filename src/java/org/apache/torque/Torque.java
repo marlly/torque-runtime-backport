@@ -160,20 +160,6 @@ public class Torque
         throws Exception
     {
         ExtendedProperties c = new ExtendedProperties(configFile);
-        c = c.subset("services.DatabaseService");
-
-        Properties p = new Properties();
-        p.load(new FileInputStream(configFile));
-        PropertyConfigurator.configure(p);
-
-        Torque.setConfiguration(c);
-        Torque.init();
-    }
-
-    public static void init2(String configFile)
-        throws Exception
-    {
-        ExtendedProperties c = new ExtendedProperties(configFile);
         
         // First look for properties that are in the "torque"
         //  namespace.
