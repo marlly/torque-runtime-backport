@@ -1,4 +1,4 @@
 #foreach ($index in $table.Indices)
-create #if($index.IsUnique)unique#end INDEX $index.IndexName on $table.Name ($index.ColumnList);
+create #if($index.Unique)unique#end INDEX $index.IndexName on $table.Name ($index.ColumnList);
 #end
 
