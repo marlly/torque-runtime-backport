@@ -159,9 +159,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
 #if ($addSaveMethod)
 
- #if ( ($cjtype == "int") || ($cjtype == "long") || ($cjtype == "boolean")
-    || ($cjtype == "short") || ($cjtype == "float") || ($cjtype == "double")
-    || ($cjtype == "char") || ($cjtype == "byte") )
+ #if ($col.isPrimitive())
         if (this.$clo != v)
         {
  #else
