@@ -104,7 +104,6 @@ public class SQLToAppData
      *
      * @param sqlFile the sql file
      * @param databaseType
-     * @param basePropsFilePath
      */
     public SQLToAppData(String sqlFile, String databaseType)
     {
