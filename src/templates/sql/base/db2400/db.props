@@ -34,5 +34,5 @@ AUTOINCREMENT =
 NOTNULL = NOT NULL
 
 removeNotNullWithAutoIncrement = true
-
+maxColumnNameLenght = 30
 suppressDefaults = false
