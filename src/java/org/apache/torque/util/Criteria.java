@@ -238,7 +238,7 @@ public class Criteria extends Hashtable
      * can be reused as if it was new. Except if the criteria has grown in
      * capacity, it is left at the current capacity.
      */
-    public void clear() 
+    public void clear()
     {
         super.clear();
         ignoreCase = false;
@@ -251,7 +251,7 @@ public class Criteria extends Hashtable
         having = null;
         asColumns.clear();
         joinL = null;
-        joinR = null;       
+        joinR = null;
         dbName = originalDbName;
         offset = 0;
         limit = -1;
@@ -1763,12 +1763,12 @@ public class Criteria extends Hashtable
     /**
      * Add group by column name.
      *
-     * @param name The name of the column to group by.
+     * @param groupBy The name of the column to group by.
      * @return A modified Criteria object.
      */
-    public Criteria addGroupByColumn( String groupBy )
+    public Criteria addGroupByColumn(String groupBy)
     {
-        groupByColumns.add( groupBy );
+        groupByColumns.add(groupBy);
         return this;
     }
 
@@ -1883,7 +1883,7 @@ public class Criteria extends Hashtable
         {
             isEquiv = true;
         }
-        else if (this.size() == ((Criteria)crit).size())
+        else if (this.size() == ((Criteria) crit).size())
         {
             Criteria criteria = (Criteria)crit;
             if (this.offset == criteria.getOffset()
@@ -1898,9 +1898,9 @@ public class Criteria extends Hashtable
                )
             {
                 isEquiv = true;
-                for (Iterator it=criteria.keySet().iterator(); it.hasNext();)
+                for (Iterator it = criteria.keySet().iterator(); it.hasNext(); )
                 {
-                    String key = (String)it.next();
+                    String key = (String) it.next();
                     if (this.containsKey(key))
                     {
                         Criterion a = this.getCriterion(key);
@@ -1946,7 +1946,7 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    public Criteria addHaving( Criterion having )
+    public Criteria addHaving(Criterion having)
     {
         this.having = having;
         return this;

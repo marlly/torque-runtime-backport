@@ -78,11 +78,11 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import org.apache.torque.Torque;
 import org.apache.torque.om.NumberKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.SimpleKey;
 import org.apache.torque.om.StringKey;
-import org.apache.torque.Torque;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.oid.IdGenerator;
 import org.apache.torque.map.ColumnMap;
@@ -155,7 +155,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @return A byte[] with the converted Hashtable.
      * @exception TorqueException
      */
-    public static byte[] hashtableToByteArray( Hashtable hash )
+    public static byte[] hashtableToByteArray(Hashtable hash)
         throws TorqueException
     {
         Hashtable saveData = new Hashtable(hash.size());
@@ -168,9 +168,9 @@ public abstract class BasePeer implements java.io.Serializable
         {
             key = (String) keys.next();
             value = hash.get(key);
-            if ( value instanceof Serializable )
+            if (value instanceof Serializable)
             {
-                saveData.put ( key, value );
+                saveData.put(key, value);
             }
         }
 
@@ -240,7 +240,7 @@ public abstract class BasePeer implements java.io.Serializable
      */
     public static Schema initTableSchema(String tableName)
     {
-        return initTableSchema(tableName, null);
+        return initTableSchema(tableName, Torque.getDefaultDB());
     }
 
     /**
@@ -265,9 +265,8 @@ public abstract class BasePeer implements java.io.Serializable
         catch (Exception e)
         {
             category.error(e);
-            throw new Error("Error in BasePeer.initTableSchema(" +
-                            tableName + "): " +
-                            e.getMessage());
+            throw new Error("Error in BasePeer.initTableSchema(" + tableName
+                    + "): " + e.getMessage());
         }
         finally
         {
@@ -369,7 +368,7 @@ public abstract class BasePeer implements java.io.Serializable
         Connection con = Torque.getConnection(dbName);
         try
         {
-            if ( con.getMetaData().supportsTransactions() )
+            if (con.getMetaData().supportsTransactions())
             {
                 con.setAutoCommit(false);
             }
@@ -394,7 +393,7 @@ public abstract class BasePeer implements java.io.Serializable
     {
         try
         {
-            if ( con.getMetaData().supportsTransactions() )
+            if (con.getMetaData().supportsTransactions())
             {
                 con.commit();
                 con.setAutoCommit(true);
@@ -422,26 +421,26 @@ public abstract class BasePeer implements java.io.Serializable
     public static void rollBackTransaction(Connection con)
         throws TorqueException
     {
-        if (con == null) 
+        if (con == null)
         {
             throw new NullPointerException("Connection object was null. " +
-                "This could be due to a misconfiguration of the " + 
+                "This could be due to a misconfiguration of the " +
                 "DataSourceFactory.  Check the logs and Torque.properties " +
                 "to better determine the cause.");
         }
-        
+
         try
         {
-            if ( con.getMetaData().supportsTransactions() )
+            if (con.getMetaData().supportsTransactions())
             {
                 con.rollback();
                 con.setAutoCommit(true);
             }
             else
             {
-                category.error(
-                        "An attempt was made to rollback a transaction but the"
-                        + " database did not allow the operation to be rolled back.");
+                category.error("An attempt was made to rollback a transaction "
+                        + "but the database did not allow the operation to be "
+                        + "rolled back.");
             }
         }
         catch (SQLException e)
@@ -466,11 +465,9 @@ public abstract class BasePeer implements java.io.Serializable
      * @param value The value of the column.
      * @exception TorqueException
      */
-    public static void deleteAll( Connection con,
-                                  String table,
-                                  String column,
-                                  int value )
-        throws TorqueException
+    public static void deleteAll(Connection con, String table, String column,
+            int value)
+            throws TorqueException
     {
         Statement statement = null;
         try
@@ -478,14 +475,14 @@ public abstract class BasePeer implements java.io.Serializable
             statement = con.createStatement();
 
             StringBuffer query = new StringBuffer();
-            query.append( "DELETE FROM " )
-                .append( table )
-                .append( " WHERE " )
-                .append( column )
-                .append( " = " )
-                .append( value );
+            query.append("DELETE FROM ")
+                .append(table)
+                .append(" WHERE ")
+                .append(column)
+                .append(" = ")
+                .append(value);
 
-            statement.executeUpdate( query.toString() );
+            statement.executeUpdate(query.toString());
         }
         catch (SQLException e)
         {
@@ -525,7 +522,7 @@ public abstract class BasePeer implements java.io.Serializable
         {
             // Get a connection to the db.
             con = Torque.getConnection("default");
-            deleteAll( con, table, column, value );
+            deleteAll(con, table, column, value);
         }
         finally
         {
@@ -603,13 +600,13 @@ public abstract class BasePeer implements java.io.Serializable
             for (int i = 0; i < tableNames.length; i++)
             {
                 String tableName2 = criteria.getTableForAlias(tableNames[i]);
-                if ( tableName2 != null )
+                if (tableName2 != null)
                 {
                     tables.add(
                         new StringBuffer(tableNames[i].length() +
                                          tableName2.length() + 1)
                         .append(tableName2).append(' ').append(tableNames[i])
-                        .toString() );
+                        .toString());
                 }
                 else
                 {
@@ -629,9 +626,9 @@ public abstract class BasePeer implements java.io.Serializable
                         // Only delete rows where the foreign key is
                         // also a primary key.  Other rows need
                         // updateing, but that is not implemented.
-                        if ( columnMaps[j].isForeignKey()
+                        if (columnMaps[j].isForeignKey()
                             && columnMaps[j].isPrimaryKey()
-                            && key.equals(columnMaps[j].getRelatedName()) )
+                            && key.equals(columnMaps[j].getRelatedName()))
                         {
                             tables.add(tableMaps[i].getName());
                             criteria.add(columnMaps[j].getFullyQualifiedName(),
@@ -647,30 +644,30 @@ public abstract class BasePeer implements java.io.Serializable
             KeyDef kd = new KeyDef();
             StringStack whereClause = new StringStack();
 
-            ColumnMap[] columnMaps =
-                dbMap.getTable( tables.get(i) ).getColumns();
+            ColumnMap[] columnMaps = dbMap.getTable(tables.get(i)).getColumns();
             for (int j = 0; j < columnMaps.length; j++)
             {
                 ColumnMap colMap = columnMaps[j];
-                if ( colMap.isPrimaryKey() )
+                if (colMap.isPrimaryKey())
                 {
                     kd.addAttrib( colMap.getColumnName() );
                 }
                 String key = new StringBuffer(colMap.getTableName())
                     .append('.').append(colMap.getColumnName()).toString();
-                if ( criteria.containsKey(key) )
+                if (criteria.containsKey(key))
                 {
-                    if ( criteria.getComparison(key).equals(Criteria.CUSTOM) )
+                    if (criteria.getComparison(key).equals(Criteria.CUSTOM))
                     {
                         whereClause.add( criteria.getString(key) );
                     }
                     else
                     {
-                        whereClause.add( SqlExpression.build( colMap.getColumnName(),
-                            criteria.getValue(key),
-                            criteria.getComparison(key),
-                            criteria.isIgnoreCase(),
-                            db));
+                        whereClause.add(SqlExpression.build(
+                                colMap.getColumnName(),
+                                criteria.getValue(key),
+                                criteria.getComparison(key),
+                                criteria.isIgnoreCase(),
+                                db));
                     }
                 }
             }
@@ -686,7 +683,7 @@ public abstract class BasePeer implements java.io.Serializable
 
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
-                if ( tds.size() > 1 && criteria.isSingleRecord() )
+                if (tds.size() > 1 && criteria.isSingleRecord())
                 {
                     handleMultipleRecords(tds);
                 }
@@ -848,22 +845,21 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 try
                 {
-                    if ( pk.getType() instanceof Number )
+                    if (pk.getType() instanceof Number)
                     {
                         id = new NumberKey(keyGen.getIdAsBigDecimal
                                            (con, keyInfo));
                     }
                     else
                     {
-                        id = new StringKey(keyGen.getIdAsString
-                                           (con, keyInfo));
+                        id = new StringKey(keyGen.getIdAsString(con, keyInfo));
                     }
                 }
                 catch (Exception e)
                 {
                     throw new TorqueException(e);
                 }
-                criteria.add( pk.getFullyQualifiedName(), id );
+                criteria.add(pk.getFullyQualifiedName(), id);
             }
         }
 
@@ -871,7 +867,7 @@ public abstract class BasePeer implements java.io.Serializable
         TableDataSet tds = null;
         try
         {
-            tds = new TableDataSet(con, tableName );
+            tds = new TableDataSet(con, tableName);
             Record rec = tds.addRecord();
             BasePeer.insertOrUpdateRecord(rec, tableName, criteria);
         }
@@ -900,15 +896,13 @@ public abstract class BasePeer implements java.io.Serializable
         {
             try
             {
-                if ( pk.getType() instanceof Number )
+                if (pk.getType() instanceof Number)
                 {
-                    id = new NumberKey(keyGen.getIdAsBigDecimal
-                                       (con, keyInfo));
+                    id = new NumberKey(keyGen.getIdAsBigDecimal(con, keyInfo));
                 }
                 else
                 {
-                    id = new StringKey(keyGen.getIdAsString
-                                       (con, keyInfo));
+                    id = new StringKey(keyGen.getIdAsString(con, keyInfo));
                 }
             }
             catch (Exception e)
@@ -934,7 +928,7 @@ public abstract class BasePeer implements java.io.Serializable
                                              Criteria criteria)
         throws TorqueException
     {
-        DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
+        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
 
         ColumnMap[] columnMaps = dbMap.getTable( tableName ).getColumns();
         boolean shouldSave = false;
@@ -943,12 +937,12 @@ public abstract class BasePeer implements java.io.Serializable
             ColumnMap colMap = columnMaps[j];
             String key = new StringBuffer(colMap.getTableName())
                 .append('.').append(colMap.getColumnName()).toString();
-            if ( criteria.containsKey(key) )
+            if (criteria.containsKey(key))
             {
                 // A village Record.setValue( String, Object ) would
                 // be nice here.
                 Object obj = criteria.getValue(key);
-                if ( obj instanceof SimpleKey )
+                if (obj instanceof SimpleKey)
                 {
                     obj = ((SimpleKey) obj).getValue();
                 }
@@ -958,65 +952,62 @@ public abstract class BasePeer implements java.io.Serializable
                     {
                         rec.setValueNull(colMap.getColumnName());
                     }
-                    else if ( obj instanceof String )
+                    else if (obj instanceof String)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      (String) obj);
+                        rec.setValue(colMap.getColumnName(), (String) obj);
                     }
-                    else if ( obj instanceof Integer)
+                    else if (obj instanceof Integer)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      criteria.getInt(key));
+                        rec.setValue(colMap.getColumnName(),
+                                criteria.getInt(key));
                     }
-                    else if ( obj instanceof BigDecimal)
+                    else if (obj instanceof BigDecimal)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      (BigDecimal) obj );
+                        rec.setValue(colMap.getColumnName(), (BigDecimal) obj);
                     }
                     else if ( obj instanceof Boolean)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      criteria.getBoolean(key) ? 1 : 0);
+                        rec.setValue(colMap.getColumnName(),
+                                criteria.getBoolean(key) ? 1 : 0);
                     }
-                    else if ( obj instanceof java.util.Date)
+                    else if (obj instanceof java.util.Date)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      (java.util.Date) obj );
+                        rec.setValue(colMap.getColumnName(),
+                                (java.util.Date) obj);
                     }
-                    else if ( obj instanceof Float)
+                    else if (obj instanceof Float)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      criteria.getFloat(key) );
+                        rec.setValue(colMap.getColumnName(),
+                                criteria.getFloat(key));
                     }
-                    else if ( obj instanceof Double)
+                    else if (obj instanceof Double)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      criteria.getDouble(key) );
+                        rec.setValue(colMap.getColumnName(),
+                                criteria.getDouble(key));
                     }
-                    else if ( obj instanceof Byte)
+                    else if (obj instanceof Byte)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      ((Byte) obj).byteValue() );
+                        rec.setValue(colMap.getColumnName(),
+                                ((Byte) obj).byteValue());
                     }
-                    else if ( obj instanceof Long)
+                    else if (obj instanceof Long)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      criteria.getLong(key) );
+                        rec.setValue(colMap.getColumnName(),
+                                criteria.getLong(key));
                     }
-                    else if ( obj instanceof Short)
+                    else if (obj instanceof Short)
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      ((Short) obj).shortValue() );
+                        rec.setValue(colMap.getColumnName(),
+                                ((Short) obj).shortValue());
                     }
-                    else if ( obj instanceof Hashtable )
+                    else if (obj instanceof Hashtable )
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      hashtableToByteArray( (Hashtable)obj ) );
+                        rec.setValue(colMap.getColumnName(),
+                                hashtableToByteArray((Hashtable) obj));
                     }
-                    else if ( obj instanceof byte[])
+                    else if (obj instanceof byte[])
                     {
-                        rec.setValue( colMap.getColumnName(),
-                                      (byte[]) obj);
+                        rec.setValue(colMap.getColumnName(), (byte[]) obj);
                     }
                 }
                 catch (Exception e)
@@ -1050,12 +1041,12 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @exception TorqueException Trouble creating the query string.
      */
-    public static String createQueryString( Criteria criteria )
+    public static String createQueryString(Criteria criteria)
             throws TorqueException
     {
         Query query = new Query();
-        DB db = Torque.getDB( criteria.getDbName() );
-        DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
+        DB db = Torque.getDB(criteria.getDbName());
+        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
 
         StringStack selectModifiers = query.getSelectModifiers();
         StringStack selectClause = query.getSelectClause();
@@ -1073,7 +1064,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         for (int i = 0; i < modifiers.size(); i++)
         {
-            selectModifiers.add( modifiers.get(i) );
+            selectModifiers.add(modifiers.get(i));
         }
 
         for (int i = 0; i < select.size(); i++)
@@ -1097,19 +1088,19 @@ public abstract class BasePeer implements java.io.Serializable
                 // functions may contain qualifiers so only take the last
                 // word as the table name.
                 int lastSpace = tableName.lastIndexOf(' ');
-                if ( lastSpace != -1 )
+                if (lastSpace != -1 )
                 {
                     tableName = tableName.substring(lastSpace + 1);
                 }
             }
             String tableName2 = criteria.getTableForAlias(tableName);
-            if ( tableName2 != null )
+            if (tableName2 != null)
             {
                 fromClause.add(
                     new StringBuffer(tableName.length() +
                                      tableName2.length() + 1)
                     .append(tableName2).append(' ').append(tableName)
-                    .toString() );
+                    .toString());
             }
             else
             {
@@ -1151,7 +1142,7 @@ public abstract class BasePeer implements java.io.Serializable
                     table = tableName;
                 }
 
-                boolean ignorCase = ( (criteria.isIgnoreCase() ||
+                boolean ignorCase = ((criteria.isIgnoreCase() ||
                                        someCriteria[i].isIgnoreCase()) &&
                     (dbMap.getTable(table).getColumn(
                     someCriteria[i].getColumn()).getType() instanceof String));
@@ -1160,14 +1151,14 @@ public abstract class BasePeer implements java.io.Serializable
             }
 
             criterion.setDB(db);
-            whereClause.add( criterion.toString() );
+            whereClause.add(criterion.toString());
 
         }
 
         List join = criteria.getJoinL();
-        if ( join != null)
+        if (join != null)
         {
-            for ( int i = 0; i < join.size(); i++ )
+            for (int i = 0; i < join.size(); i++)
             {
                 String join1 = (String) join.get(i);
                 String join2 = (String) criteria.getJoinR().get(i);
@@ -1182,13 +1173,13 @@ public abstract class BasePeer implements java.io.Serializable
 
                 String tableName = join1.substring(0, join1.indexOf('.'));
                 String table = criteria.getTableForAlias(tableName);
-                if ( table != null )
+                if (table != null)
                 {
                     fromClause.add(
                         new StringBuffer(tableName.length() +
                                          table.length() + 1)
                         .append(table).append(' ').append(tableName)
-                        .toString() );
+                        .toString());
                 }
                 else
                 {
@@ -1198,7 +1189,7 @@ public abstract class BasePeer implements java.io.Serializable
                 int dot =  join2.indexOf('.');
                 tableName = join2.substring(0, dot);
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null )
+                if (table != null)
                 {
                     fromClause.add(
                         new StringBuffer(tableName.length() +
@@ -1214,24 +1205,23 @@ public abstract class BasePeer implements java.io.Serializable
 
                 boolean ignorCase = (criteria.isIgnoreCase() &&
                     (dbMap.getTable(table).getColumn(
-                        join2.substring(dot + 1, join2.length()) )
+                        join2.substring(dot + 1, join2.length()))
                     .getType() instanceof String));
 
                 whereClause.add(
-                    SqlExpression.buildInnerJoin(join1, join2,
-                                                 ignorCase, db) );
+                    SqlExpression.buildInnerJoin(join1, join2, ignorCase, db));
             }
         }
 
         // need to allow for multiple group bys
         if ( groupBy != null && groupBy.size() > 0)
         {
-            for (int i=0; i<groupBy.size(); i++)
+            for (int i = 0; i < groupBy.size(); i++)
             {
                 String groupByColumn = groupBy.get(i);
                 if (groupByColumn.indexOf('.') == -1)
                 {
-                    throwMalformedColumnNameException("group by",groupByColumn);
+                    throwMalformedColumnNameException("group by", groupByColumn);
                 }
 
                 groupByClause.add(groupByColumn);
@@ -1255,9 +1245,10 @@ public abstract class BasePeer implements java.io.Serializable
                 if (orderByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("order by",
-                                                      orderByColumn);
+                            orderByColumn);
                 }
-                String table = orderByColumn.substring(0,orderByColumn.indexOf('.') );
+                String table = orderByColumn.substring(0,
+                        orderByColumn.indexOf('.') );
                 // See if there's a space (between the column list and sort
                 // order in ORDER BY table.column DESC).
                 int spacePos = orderByColumn.indexOf(' ');
@@ -1299,7 +1290,7 @@ public abstract class BasePeer implements java.io.Serializable
         int limit = criteria.getLimit();
         int offset = criteria.getOffset();
         String limitString = null;
-        if ( offset > 0 && db.supportsNativeOffset() )
+        if (offset > 0 && db.supportsNativeOffset())
         {
             switch(db.getLimitStyle())
             {
@@ -1323,7 +1314,7 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setLimit(-1);
             criteria.setOffset(0);
         }
-        else if (limit > 0 && db.supportsNativeLimit() )
+        else if (limit > 0 && db.supportsNativeLimit())
         {
             limitString = String.valueOf(limit);
 
@@ -1366,10 +1357,10 @@ public abstract class BasePeer implements java.io.Serializable
             Connection con = beginTransaction(criteria.getDbName());
             try
             {
-                results = executeQuery( createQueryString(criteria),
-                                        criteria.getOffset(),
-                                        criteria.getLimit(),
-                                        criteria.isSingleRecord(), con );
+                results = executeQuery(createQueryString(criteria),
+                                       criteria.getOffset(),
+                                       criteria.getLimit(),
+                                       criteria.isSingleRecord(), con );
                 commitTransaction(con);
             }
             catch (Exception e)
@@ -1381,11 +1372,11 @@ public abstract class BasePeer implements java.io.Serializable
         }
         else
         {
-            results = executeQuery( createQueryString(criteria),
-                                    criteria.getOffset(),
-                                    criteria.getLimit(),
-                                    criteria.getDbName(),
-                                    criteria.isSingleRecord() );
+            results = executeQuery(createQueryString(criteria),
+                                   criteria.getOffset(),
+                                   criteria.getLimit(),
+                                   criteria.getDbName(),
+                                   criteria.isSingleRecord() );
         }
         return results;
     }
@@ -1401,8 +1392,8 @@ public abstract class BasePeer implements java.io.Serializable
     public static List doSelect(Criteria criteria, Connection con)
             throws TorqueException
     {
-        return executeQuery( createQueryString(criteria),
-                             criteria.isSingleRecord(), con );
+        return executeQuery(createQueryString(criteria),
+                            criteria.isSingleRecord(), con);
     }
 
     /**
@@ -1430,8 +1421,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @return List of Record objects.
      * @exception TorqueException
      */
-    public static List executeQuery(String queryString,
-                                      String dbName)
+    public static List executeQuery(String queryString, String dbName)
             throws TorqueException
     {
         return executeQuery(queryString, dbName, false);
@@ -1448,8 +1438,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @exception TorqueException
      */
     public static List executeQuery(String queryString,
-                                      String dbName,
-                                      boolean singleRecord)
+                                    String dbName,
+                                    boolean singleRecord)
             throws TorqueException
     {
         return executeQuery(queryString, 0, -1, dbName, singleRecord);
@@ -1466,8 +1456,8 @@ public abstract class BasePeer implements java.io.Serializable
      * @exception TorqueException
      */
     public static List executeQuery(String queryString,
-                                      boolean singleRecord,
-                                      Connection con)
+                                    boolean singleRecord,
+                                    Connection con)
         throws TorqueException
     {
         return executeQuery(queryString, 0, -1, singleRecord, con);
@@ -1487,10 +1477,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @exception TorqueException
      */
     public static List executeQuery(String queryString,
-                                      int start,
-                                      int numberOfResults,
-                                      String dbName,
-                                      boolean singleRecord)
+                                    int start,
+                                    int numberOfResults,
+                                    String dbName,
+                                    boolean singleRecord)
             throws TorqueException
     {
         Connection db = null;
@@ -1522,10 +1512,10 @@ public abstract class BasePeer implements java.io.Serializable
      * @exception TorqueException
      */
     public static List executeQuery(String queryString,
-                                      int start,
-                                      int numberOfResults,
-                                      boolean singleRecord,
-                                      Connection con)
+                                    int start,
+                                    int numberOfResults,
+                                    boolean singleRecord,
+                                    Connection con)
         throws TorqueException
     {
         QueryDataSet qds = null;
@@ -1568,7 +1558,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @return List of Record objects.
      * @exception TorqueException
      */
-    public static List getSelectResults( QueryDataSet qds )
+    public static List getSelectResults(QueryDataSet qds)
             throws TorqueException
     {
         return getSelectResults( qds, 0, -1, false);
@@ -1600,9 +1590,9 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @exception TorqueException
      */
-    public static List getSelectResults( QueryDataSet qds,
-                                           int numberOfResults,
-                                           boolean singleRecord )
+    public static List getSelectResults(QueryDataSet qds,
+                                        int numberOfResults,
+                                        boolean singleRecord)
             throws TorqueException
     {
         List results = null;
@@ -1625,16 +1615,16 @@ public abstract class BasePeer implements java.io.Serializable
      * single record.
      * @exception TorqueException
      */
-    public static List getSelectResults( QueryDataSet qds,
-                                           int start,
-                                           int numberOfResults,
-                                           boolean singleRecord )
+    public static List getSelectResults(QueryDataSet qds,
+                                        int start,
+                                        int numberOfResults,
+                                        boolean singleRecord)
             throws TorqueException
     {
         List results;
         try
         {
-            if ( numberOfResults <= 0 )
+            if (numberOfResults <= 0)
             {
                 results = new ArrayList();
                 qds.fetchRecords();
@@ -1644,13 +1634,13 @@ public abstract class BasePeer implements java.io.Serializable
                 results = new ArrayList(numberOfResults);
                 qds.fetchRecords(start, numberOfResults);
             }
-            if ( qds.size() > 1 && singleRecord )
+            if (qds.size() > 1 && singleRecord)
             {
                 handleMultipleRecords(qds);
             }
 
             // Return a List of Record objects.
-            for ( int i = 0; i < qds.size(); i++ )
+            for (int i = 0; i < qds.size(); i++)
             {
                 Record rec = qds.getRecord(i);
                 results.add(rec);
@@ -1681,7 +1671,7 @@ public abstract class BasePeer implements java.io.Serializable
         String table = criteria.getTableName(key);
         ColumnMap pk = null;
 
-        if ( !table.equals("") )
+        if (!table.equals(""))
         {
             DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
             if (dbMap == null)
@@ -1697,7 +1687,7 @@ public abstract class BasePeer implements java.io.Serializable
 
             for (int i = 0; i < columns.length; i++)
             {
-                if ( columns[i].isPrimaryKey() )
+                if (columns[i].isPrimaryKey())
                 {
                     pk = columns[i];
                     break;
@@ -1780,19 +1770,18 @@ public abstract class BasePeer implements java.io.Serializable
         ColumnMap pk = getPrimaryKey(updateValues);
         Criteria selectCriteria = null;
 
-        if ( pk != null &&
-             updateValues.containsKey(pk.getFullyQualifiedName()) )
+        if (pk != null && updateValues.containsKey(pk.getFullyQualifiedName()))
         {
             selectCriteria = new Criteria(2);
             selectCriteria.put(pk.getFullyQualifiedName(),
-                    updateValues.remove(pk.getFullyQualifiedName()) );
+                    updateValues.remove(pk.getFullyQualifiedName()));
         }
         else
         {
             throw new TorqueException("No PK specified for database update");
         }
 
-        doUpdate( selectCriteria, updateValues, con );
+        doUpdate(selectCriteria, updateValues, con);
     }
 
     /**
@@ -1872,7 +1861,7 @@ public abstract class BasePeer implements java.io.Serializable
         Iterator it = selectCriteria.keySet().iterator();
         while (it.hasNext())
         {
-            tables.add(selectCriteria.getTableName((String) it.next()) );
+            tables.add(selectCriteria.getTableName((String) it.next()));
         }
 
         for (int i = 0; i < tables.size(); i++)
@@ -1886,26 +1875,26 @@ public abstract class BasePeer implements java.io.Serializable
             for (int j = 0; j < columnMaps.length; j++)
             {
                 ColumnMap colMap = columnMaps[j];
-                if ( colMap.isPrimaryKey() )
+                if (colMap.isPrimaryKey())
                 {
                     kd.addAttrib( colMap.getColumnName() );
                 }
                 String key = new StringBuffer(colMap.getTableName())
                         .append('.').append(colMap.getColumnName()).toString();
-                if ( selectCriteria.containsKey(key) )
+                if (selectCriteria.containsKey(key))
                 {
-                    if ( selectCriteria.getComparison(key).equals(Criteria.CUSTOM) )
+                    if (selectCriteria.getComparison(key).equals(Criteria.CUSTOM))
                     {
-                        whereClause.add( selectCriteria.getString( key ));
+                        whereClause.add(selectCriteria.getString(key));
                     }
                     else
                     {
-                        whereClause.add( SqlExpression.build(
+                        whereClause.add(SqlExpression.build(
                                 colMap.getColumnName(),
-                                selectCriteria.getValue( key ),
-                                selectCriteria.getComparison( key ),
+                                selectCriteria.getValue(key),
+                                selectCriteria.getComparison(key),
                                 selectCriteria.isIgnoreCase(),
-                                db ));
+                                db));
                     }
                 }
             }
@@ -1919,7 +1908,7 @@ public abstract class BasePeer implements java.io.Serializable
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
 
-                if ( tds.size() > 1 && selectCriteria.isSingleRecord() )
+                if (tds.size() > 1 && selectCriteria.isSingleRecord())
                 {
                     handleMultipleRecords(tds);
                 }
@@ -1984,7 +1973,7 @@ public abstract class BasePeer implements java.io.Serializable
         try
         {
             db = Torque.getConnection(dbName);
-            rowCount = executeStatement( stmt, db );
+            rowCount = executeStatement(stmt, db);
         }
         finally
         {
@@ -2011,7 +2000,7 @@ public abstract class BasePeer implements java.io.Serializable
         try
         {
             statement = con.createStatement();
-            rowCount = statement.executeUpdate( stmt );
+            rowCount = statement.executeUpdate(stmt);
         }
         catch (SQLException e)
         {
@@ -2116,7 +2105,7 @@ public abstract class BasePeer implements java.io.Serializable
                   {
                      mb.doBuild();
                   }
-                  catch ( Exception e )
+                  catch (Exception e)
                   {
                       // need to think about whether we'd want to remove
                       //  the MapBuilder from the cache if it can't be
@@ -2177,7 +2166,7 @@ public abstract class BasePeer implements java.io.Serializable
                 }
                 else if (param instanceof NumberKey)
                 {
-                    stmt.setBigDecimal(i+1, ((NumberKey)param).getBigDecimal());
+                    stmt.setBigDecimal(i + 1, ((NumberKey) param).getBigDecimal());
                 }
                 else
                 {
@@ -2188,7 +2177,7 @@ public abstract class BasePeer implements java.io.Serializable
             QueryDataSet qds = null;
             try
             {
-                qds = new QueryDataSet( stmt.executeQuery() );
+                qds = new QueryDataSet(stmt.executeQuery());
                 v = getSelectResults(qds);
             }
             finally
@@ -2231,7 +2220,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         try
         {
-            v = doPSSelect (criteria,con);
+            v = doPSSelect(criteria,con);
         }
         finally
         {
@@ -2250,8 +2239,8 @@ public abstract class BasePeer implements java.io.Serializable
                                                List params)
         throws TorqueException
     {
-        DB db = Torque.getDB( criteria.getDbName() );
-        DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
+        DB db = Torque.getDB(criteria.getDbName());
+        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
 
         Query query = new Query();
 
@@ -2293,13 +2282,13 @@ public abstract class BasePeer implements java.io.Serializable
                 // functions may contain qualifiers so only take the last
                 // word as the table name.
                 int lastSpace = tableName.lastIndexOf(' ');
-                if ( lastSpace != -1 )
+                if (lastSpace != -1)
                 {
                     tableName = tableName.substring(lastSpace + 1);
                 }
             }
             String tableName2 = criteria.getTableForAlias(tableName);
-            if ( tableName2 != null )
+            if (tableName2 != null)
             {
                 fromClause.add(
                     new StringBuffer(tableName.length() +
@@ -2334,12 +2323,12 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 String tableName = someCriteria[i].getTable();
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null )
+                if (table != null)
                 {
                     fromClause.add(new StringBuffer(tableName.length()
                             + table.length() + 1)
                             .append(table).append(' ').append(tableName)
-                            .toString() );
+                            .toString());
                 }
                 else
                 {
@@ -2359,14 +2348,14 @@ public abstract class BasePeer implements java.io.Serializable
             criterion.setDB(db);
             StringBuffer sb = new StringBuffer();
             criterion.appendPsTo(sb,params);
-            whereClause.add( sb.toString() );
+            whereClause.add(sb.toString());
 
         }
 
         List join = criteria.getJoinL();
-        if ( join != null)
+        if (join != null)
         {
-            for ( int i = 0; i < join.size(); i++ )
+            for (int i = 0; i < join.size(); i++)
             {
                 String join1 = (String)join.get(i);
                 String join2 = (String)criteria.getJoinR().get(i);
@@ -2396,7 +2385,7 @@ public abstract class BasePeer implements java.io.Serializable
                 int dot = join2.indexOf('.');
                 tableName = join2.substring(0, dot);
                 table = criteria.getTableForAlias(tableName);
-                if ( table != null )
+                if (table != null)
                 {
                     fromClause.add(new StringBuffer(tableName.length()
                             + table.length() + 1)
@@ -2411,7 +2400,7 @@ public abstract class BasePeer implements java.io.Serializable
 
                 boolean ignorCase = (criteria.isIgnoreCase()
                         && (dbMap.getTable(table).getColumn(
-                        join2.substring(dot + 1, join2.length()) )
+                        join2.substring(dot + 1, join2.length()))
                         .getType() instanceof String));
 
                 whereClause.add(SqlExpression.buildInnerJoin(
@@ -2459,7 +2448,7 @@ public abstract class BasePeer implements java.io.Serializable
                     {
                         orderByClause.add(db.ignoreCaseInOrderBy(
                                 orderByColumn.substring(0, spacePos))
-                                + orderByColumn.substring(spacePos) );
+                                + orderByColumn.substring(spacePos));
                     }
                     selectClause.add( db.ignoreCaseInOrderBy(table + '.'
                             + columnName) );
@@ -2475,7 +2464,7 @@ public abstract class BasePeer implements java.io.Serializable
         int limit = criteria.getLimit();
         int offset = criteria.getOffset();
         String limitString = null;
-        if ( offset > 0 && db.supportsNativeOffset() )
+        if (offset > 0 && db.supportsNativeOffset())
         {
             switch(db.getLimitStyle())
             {
@@ -2499,7 +2488,7 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setLimit(-1);
             criteria.setOffset(0);
         }
-        else if (limit > 0 && db.supportsNativeLimit() )
+        else if (limit > 0 && db.supportsNativeLimit())
         {
             limitString = String.valueOf(limit);
 

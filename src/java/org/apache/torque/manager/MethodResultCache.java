@@ -56,8 +56,6 @@ package org.apache.torque.manager;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.WeakHashMap;
-import java.util.Iterator;
 import java.io.Serializable;
 import org.apache.log4j.Category;
 import org.apache.jcs.access.GroupCacheAccess;
@@ -73,9 +71,9 @@ import org.apache.torque.TorqueException;
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
-public class MethodResultCache 
+public class MethodResultCache
 {
-    private static final Category log = 
+    private static final Category log =
         Category.getInstance("org.apache.torque");
 
     private static final String keyClassName =
@@ -89,8 +87,8 @@ public class MethodResultCache
     public MethodResultCache(GroupCacheAccess cache)
         throws TorqueException
     {
-        // keys = new WeakHashMap();            
-        this.jcsCache = cache;            
+        // keys = new WeakHashMap();
+        this.jcsCache = cache;
         groups = new HashMap();
         pool = new StackObjectPool(new MethodCacheKey.Factory(), 10000);
     }
@@ -132,11 +130,11 @@ public class MethodResultCache
             }
         }
 
-        if (result != null) 
+        if (result != null)
         {
             log.debug("MethodResultCache saved expensive operation: " + key);
         }
-        
+
         return result;
     }
 
@@ -146,11 +144,11 @@ public class MethodResultCache
     {
         //register the group, if this is the first occurrence
         String group = key.getGroupKey();
-        if (!groups.containsKey(group)) 
+        if (!groups.containsKey(group))
         {
             synchronized (jcsCache)
             {
-                if (!groups.containsKey(group)) 
+                if (!groups.containsKey(group))
                 {
                     try
                     {
@@ -161,7 +159,7 @@ public class MethodResultCache
                         throw new TorqueException(ce);
                     }
                     groups.put(group, null);
-                }                
+                }
             }
         }
 
@@ -174,10 +172,10 @@ public class MethodResultCache
                 try
                 {
                     old = jcsCache.getFromGroup(key, group);
-                    while (inGet > 0) 
+                    while (inGet > 0)
                     {
                         Thread.yield();
-                    }                    
+                    }
                     jcsCache.putInGroup(key, group, value);
                 }
                 catch (CacheException ce)
@@ -207,14 +205,14 @@ public class MethodResultCache
                 try
                 {
                     old = jcsCache.getFromGroup(key, key.getGroupKey());
-                    while (inGet > 0) 
+                    while (inGet > 0)
                     {
                         Thread.yield();
                     }
                     jcsCache.remove(key, key.getGroupKey());
                 }
                 // jcs does not throw an exception here, might remove this
-                catch (Exception ce) 
+                catch (Exception ce)
                 {
                     lockCache = false;
                     throw new TorqueException(
@@ -233,11 +231,11 @@ public class MethodResultCache
     public Object get(Serializable instanceOrClass, String method)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = getImpl(key);
@@ -254,7 +252,7 @@ public class MethodResultCache
             catch (Exception e)
             {
                 log.error("", e);
-            }            
+            }
         }
         return result;
     }
@@ -263,11 +261,11 @@ public class MethodResultCache
                       Serializable arg1)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = getImpl(key);
@@ -293,11 +291,11 @@ public class MethodResultCache
                       Serializable arg1, Serializable arg2)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = getImpl(key);
@@ -324,11 +322,11 @@ public class MethodResultCache
                       Serializable arg3)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = getImpl(key);
@@ -353,11 +351,11 @@ public class MethodResultCache
     public Object get(Serializable[] keys)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(keys);
                 result = getImpl(key);
@@ -383,7 +381,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =  
+            MethodCacheKey key =
                 (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method);
             putImpl(key, value);
@@ -394,12 +392,12 @@ public class MethodResultCache
         }
     }
 
-    public void put(Object value, Serializable instanceOrClass, 
+    public void put(Object value, Serializable instanceOrClass,
                     String method, Serializable arg1)
     {
         try
         {
-            MethodCacheKey key =  
+            MethodCacheKey key =
                 (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1);
             putImpl(key, value);
@@ -415,7 +413,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =  
+            MethodCacheKey key =
                 (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2);
             putImpl(key, value);
@@ -431,7 +429,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =  
+            MethodCacheKey key =
                 (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2, arg3);
             putImpl(key, value);
@@ -446,7 +444,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =  
+            MethodCacheKey key =
                 (MethodCacheKey)pool.borrowObject();
             key.init(keys);
             putImpl(key, value);
@@ -460,11 +458,11 @@ public class MethodResultCache
 
     public void removeAll(Serializable instanceOrClass, String method)
     {
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 String groupName = key.getGroupKey();
@@ -483,7 +481,7 @@ public class MethodResultCache
             catch (Exception e)
             {
                 log.error("", e);
-            }            
+            }
         }
     }
 
@@ -491,11 +489,11 @@ public class MethodResultCache
     public Object remove(Serializable instanceOrClass, String method)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = removeImpl(key);
@@ -512,7 +510,7 @@ public class MethodResultCache
             catch (Exception e)
             {
                 log.error("", e);
-            }            
+            }
         }
         return result;
     }
@@ -521,11 +519,11 @@ public class MethodResultCache
                          Serializable arg1)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = removeImpl(key);
@@ -551,11 +549,11 @@ public class MethodResultCache
                          Serializable arg1, Serializable arg2)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = removeImpl(key);
@@ -582,11 +580,11 @@ public class MethodResultCache
                          Serializable arg3)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = removeImpl(key);
@@ -611,11 +609,11 @@ public class MethodResultCache
     public Object remove(Serializable[] keys)
     {
         Object result = null;
-        if (jcsCache != null) 
+        if (jcsCache != null)
         {
             try
             {
-                MethodCacheKey key = 
+                MethodCacheKey key =
                     (MethodCacheKey)pool.borrowObject();
                 key.init(keys);
                 result = removeImpl(key);
