@@ -853,6 +853,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       if (!alreadyInSave)
       {
         alreadyInSave = true;
+
+#* the following code can cause an infinite loop, needs more thought
+System.out.println("Entering save for " + this);
 	#if ($pVars.size() != 0)
 
         // We call the save method on the following object(s) if they
@@ -872,6 +875,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }   
       #end
     #end
+*#
+
   #end
 
         // If this object has been modified, then save it to the database.
