@@ -175,6 +175,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #if ($complexObjectModel)
       #if ($col.isForeignKey())
         #set ( $tblFK = $table.Database.getTable($col.RelatedTableName) )
+        #set ($interfaceName = $tblFK.JavaName)
+        #if ($tblFK.Interface)
+          #set ($interfaceName = $tblFK.Interface)
+        #end
         #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
         #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
           #set ( $relCol = "" )
@@ -185,9 +189,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
           #if ($relCol != "")
             #set ( $relCol = "RelatedBy$relCol" )
           #end
-          #set ( $varName = "a${tblFK.JavaName}$relCol" )
+          #set ( $varName = "a${interfaceName}$relCol" )
         #else
-          #set ( $varName = "a$tblFK.JavaName" )
+          #set ( $varName = "a$interfaceName" )
         #end
 
         #if($colFK.Primitive)
@@ -237,6 +241,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
     #set ( $className = $tblFK.JavaName )
+    #set ($interfaceName = $tblFK.JavaName)
+    #if ($tblFK.Interface)
+      #set ($interfaceName = $tblFK.Interface)
+    #end
 
     #set ( $relCol = "" )
     #foreach ($columnName in $fk.LocalColumns)
@@ -250,19 +258,19 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $relCol = "RelatedBy$relCol" )
     #end
 
-    #set ( $pVarName = "$className$relCol" )
+    #set ( $pVarName = "$interfaceName$relCol" )
     #set ( $varName = "a$pVarName" )
     #set ( $retVal = $pVars.add($pVarName) )
     #set ( $retVal = $aVars.add($varName) )
-    private $className $varName;
+    private $interfaceName $varName;
 
     /**
-     * Declares an association between this object and a $className object
+     * Declares an association between this object and a $interfaceName object
      *
-     * @param v $className
+     * @param v $interfaceName
      * @throws TorqueException
      */
-    public void set${pVarName}($className v) throws TorqueException
+    public void set${pVarName}($interfaceName v) throws TorqueException
     {
     #foreach ($columnName in $fk.LocalColumns)
       #set ( $column = $table.getColumn($columnName) )
@@ -293,34 +301,33 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         $varName = v;
     }
 
-        #set ( $and = "" )
-        #set ( $comma = "" )
-        #set ( $conditional = "" )
-        #set ( $arglist = "" )
-        #set ( $argsize = 0 )
-        #foreach ($columnName in $fk.LocalColumns)
-          #set ( $column = $table.getColumn($columnName) )
-          #set ( $cjtype = $column.JavaNative )
-          #set ( $clo=$column.UncapitalisedJavaName )
-          #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long" || $cjtype == "byte" || $cjtype == "float" || $cjtype == "double")
-            #set ( $conditional = "$conditional${and}this.${clo} != 0" )
-          #else
-            #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
-          #end
-          #set ( $arglist = "$arglist${comma}this.$clo" )
-          #set ( $and = " && " )
-          #set ( $comma = ", " )
-          #set ( $argsize = $argsize + 1 )
-        #end
-      #set ( $pCollName = "${table.JavaName}s$relCol" )
+    #set ( $and = "" )
+    #set ( $comma = "" )
+    #set ( $conditional = "" )
+    #set ( $arglist = "" )
+    #set ( $argsize = 0 )
+    #foreach ($columnName in $fk.LocalColumns)
+      #set ( $column = $table.getColumn($columnName) )
+      #set ( $cjtype = $column.JavaNative )
+      #set ( $clo=$column.UncapitalisedJavaName )
+      #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long" || $cjtype == "byte" || $cjtype == "float" || $cjtype == "double")
+        #set ( $conditional = "$conditional${and}this.${clo} != 0" )
+      #else
+        #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
+      #end
+      #set ( $arglist = "$arglist${comma}this.$clo" )
+      #set ( $and = " && " )
+      #set ( $comma = ", " )
+      #set ( $argsize = $argsize + 1 )
+    #end
 
     /**
-     * Get the associated $className object
+     * Get the associated $interfaceName object
      *
-     * @return the associated $className object
+     * @return the associated $interfaceName object
      * @throws TorqueException
      */
-    public $className get${pVarName}() throws TorqueException
+    public $interfaceName get${pVarName}() throws TorqueException
     {
         if ($varName == null && ($conditional))
         {
@@ -491,6 +498,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
     }
 
+    #set ($interfaceName = $table.JavaName)
+    #if ($table.Interface)
+      #set ($interfaceName = $table.Interface)
+    #end
+
     /**
      * Method called to associate a $tblFK.JavaName object to this object
      * through the $className foreign key attribute
@@ -501,7 +513,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public void add${relColMs}($className l) throws TorqueException
     {
         get${relCol}().add(l);
-        l.set${table.JavaName}${suffix}(($table.JavaName) this);
+        l.set${interfaceName}${suffix}(($table.JavaName) this);
     }
 
     /**
@@ -511,9 +523,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #end
 
     /**
+      #if ($objectIsCaching)
      * If this collection has already been initialized, returns
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria())
+      #else
+     * A wrapper for get${relCol}(new Criteria())
+      #end
      *
      * @throws TorqueException
      */
@@ -526,14 +542,18 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
         return $collName;
       #else
-            return get${relCol}(new Criteria(10));
+        return get${relCol}(new Criteria(10));
       #end
     }
 
     /**
+      #if ($objectIsCaching)
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
      * Otherwise if this $table.JavaName has previously
+      #else
+     * If this $table.JavaName has previously
+      #end
      * been saved, it will retrieve related ${relCol} from storage.
      * If this $table.JavaName is new, it will return
      * an empty collection or the current collection, the criteria
@@ -592,9 +612,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     }
 
     /**
+      #if ($objectIsCaching)
      * If this collection has already been initialized, returns
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria(),Connection)
+      #else
+     * A wrapper for get${relCol}(new Criteria(),Connection)
+      #end
      * This method takes in the Connection also as input so that
      * referenced objects can also be obtained using a Connection
      * that is taken as input
@@ -608,14 +632,18 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
         return $collName;
       #else
-            return get${relCol}(new Criteria(10), con);
+        return get${relCol}(new Criteria(10), con);
       #end
     }
 
     /**
+      #if ($objectIsCaching)
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
      * Otherwise if this $table.JavaName has previously
+      #else
+     * If this $table.JavaName has previously
+      #end
      * been saved, it will retrieve related ${relCol} from storage.
      * If this $table.JavaName is new, it will return
      * an empty collection or the current collection, the criteria
@@ -653,7 +681,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                  // the following code is to determine if a new query is
                  // called for.  If the criteria is the same as the last
                  // one, just return the collection.
-       #end
+      #end
       #foreach ($columnName in $fk.ForeignColumns)
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
@@ -738,9 +766,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
           #if ($doJoinGet)
 
     /**
+            #if ($objectIsCaching)
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
      * Otherwise if this $table.JavaName is new, it will return
+            #else
+     * If this $table.JavaName is new, this method will return
+            #end
      * an empty collection; or if this $table.JavaName has previously
      * been saved, it will retrieve related ${relCol} from storage.
      *
@@ -775,7 +807,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             // called for.  If the criteria is the same as the last
             // one, just return the collection.
             #end
-
             #foreach ($columnName in $fk.ForeignColumns)
               #set ( $column = $table.getColumn($columnName) )
               #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
@@ -792,7 +823,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         return $collName;
             #else
-            return ${className}Peer.doSelectJoin${relCol2}(criteria);
+        return ${className}Peer.doSelectJoin${relCol2}(criteria);
             #end
     }
           #end 
@@ -805,10 +836,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
   #if ($countFK > 2)
 
     /**
+    #if ($objectIsCaching)
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
      * Otherwise if this $table.JavaName is new, it will return
-     * an empty collection; or if this $table.JavaName has previously
+    #else
+     * If this $table.JavaName is new, this method will return
+    #end
+    * an empty collection; or if this $table.JavaName has previously
      * been saved, it will retrieve related ${relCol} from storage.
      *
      * This method is protected by default in order to keep the public
@@ -818,7 +853,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     protected List get${relCol}JoinAllExcept${table.JavaName}(Criteria criteria)
         throws TorqueException
     {
-   #if ($objectIsCaching)
+    #if ($objectIsCaching)
         if ($collName == null)
         {
             if (isNew())
@@ -904,7 +939,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public Object getByName(String name)
     {
   #foreach ($col in $table.Columns)
-    #set ( $cfc = $col.JavaName )
     #set ( $cjtype = $col.JavaNative )
         if (name.equals("${col.JavaName}"))
         {
@@ -943,7 +977,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public Object getByPeerName(String name)
     {
   #foreach ($col in $table.Columns)
-    #set ( $cfc = $col.JavaName )
     #set ( $cup=$col.Name.toUpperCase() )
     #set ( $cjtype = $col.JavaNative )
         if (name.equals(${table.JavaName}Peer.$cup))
@@ -983,7 +1016,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
   #set ($i = 0)
   #foreach ($col in $table.Columns)
-    #set ( $cfc = $col.JavaName )
     #set ( $cjtype = $col.JavaNative )
         if (pos == $i)
         {
@@ -1133,13 +1165,18 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         if ($aVarName != null)
         {
             ${aVarName}.save(con);
-            set${pVars}.get($i)($aVarName);
+            set$pVars.get($i)($aVarName);
         }
       #end
     #end
 *#
   #end
 
+  #if ($table.PrimaryKey.size() > 0)
+    #set ($tableHasPrimaryKey = true)
+  #else
+    #set ($tableHasPrimaryKey = false)
+  #end
             // If this object has been modified, then save it to the database.
             if (isModified())
             {
@@ -1173,7 +1210,6 @@ shows the infinite loop: System.out.println("Entering save for " + this);
           #set ( $relCol = "${className}sRelatedBy$relCol" )
         #end
         #set ( $collName = "coll$relCol" )
-
         #if ($objectIsCaching)
             if ($collName != null)
             {
@@ -1426,7 +1462,6 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     {
   ## Work around the fact that BaseObject.setPrimaryKey() declares
   ## that it throws Exception instead of TorqueException.
-  #set ($tableHasPrimaryKey = $table.PrimaryKey.size() > 0)
   #if (!$tableHasPrimaryKey)
         try
         {
