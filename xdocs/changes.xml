@@ -61,6 +61,10 @@
       TRQ39: Data Dump task may generate invalid XML output
     </li>
     <li>
+      TRQ44: add a NumberKey(Number key) constructor and added methods to get
+      native datatypes (byte, int, long, float, double)
+    </li>
+    <li>
       bugzilla #12626: Peer.vm was missing the DateKey import.
     </li>
     <li>
