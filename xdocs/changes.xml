@@ -86,6 +86,9 @@
     <li>
       TRQS122: Join methods are not generated.
     </li>
+    <li>
+      TRQS132: Database.java using null object
+    </li>
   </ul>
 </p>
 </subsection>

@@ -479,8 +479,7 @@ public class Database
                     if (foreign == null)
                     {
                         System.out.println("ERROR!! Attempt to set foreign"
-                                + " key to nonexistent column, "
-                                + foreign.getName() + ", in table, "
+                                + " key to nonexistent column in table, "
                                 + foreignTable.getName() + "!");
                     }
                     foreign.addReferrer(currFK);
