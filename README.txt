@@ -13,16 +13,17 @@ xdocs/      Torque documention in Anakia formatted tags.
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
-You must first rename the build.properties.sample to build.properties
-
-You must set the following properties in either your  
-${user.home}/build.properties file, or the build.properties file provided 
-in the Torque build/ directory:
+You must set the following properties in either your
+${user.home}/build.properties file, or a build.properties file added
+by you to the Torque top-level directory:
 
 velocity.jar
 xerces.jar
 village.jar
 log4j.jar
+
+Alternately, you can set the property lib.repo to the directory acting
+as a repository holding the JARs named by default.properties.
 
 Torque uses Velocity to generate the OM sources, and Torque
 XML schema parsing requires Xerces. We will soon move to using
