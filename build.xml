@@ -334,6 +334,41 @@
   </target>
 
   <!-- ================================================================== -->
+  <!-- D I S T - L I T E                                                  -->
+  <!-- ================================================================== -->
+  <target name="dist-list" depends="jar,check.village"
+          description="==> Creates torque.zip distribution without jars"> 
+    <property name="torque.dir" value="${build.dir}/torque/torque"/>
+    <mkdir dir="${torque.dir}"/>
+    <mkdir dir="${torque.dir}/lib"/>
+
+    <filter token="TORQUE_HOME" value="."/>
+
+    <copy todir="${torque.dir}/lib" filtering="no">
+      <fileset dir="${build.dir}">
+        <include name="${final.name}.jar"/>
+      </fileset>
+    </copy>
+        
+    <copy todir="${torque.dir}/templates" filtering="yes">
+      <fileset dir="./src/templates"/>
+    </copy>
+
+    <copy todir="${torque.dir}" filtering="yes">
+      <fileset dir="./src/conf"/>
+    </copy>
+
+    <copy todir="${torque.dir}/schema" filtering="yes">
+      <fileset dir="./examples"/>
+    </copy>
+        
+    <zip zipfile="${build.dir}/${final.name}.zip"
+      basedir="${build.dir}/torque"
+    />
+     
+  </target>
+
+  <!-- ================================================================== -->
   <!-- D I S T                                                            -->
   <!-- ================================================================== -->
 
