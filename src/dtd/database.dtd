@@ -75,6 +75,7 @@ agnostic way.
 <!ELEMENT foreign-key (reference+)>
 <!ATTLIST foreign-key 
   foreignTable CDATA #REQUIRED
+  name CDATA #IMPLIED
   onUpdate (cascade|setnull|restrict|none) "none" 
   onDelete (cascade|setnull|restrict|none) "none" 
 >
@@ -87,7 +88,7 @@ agnostic way.
 
 <!ELEMENT index (index-column+)>
 <!ATTLIST index 
-  name CDATA #REQUIRED
+  name CDATA #IMPLIED
 >
 
 <!ELEMENT index-column EMPTY>
