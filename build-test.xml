@@ -17,7 +17,17 @@
 
   <target 
     name="test">
-    
+
+    <copy 
+      todir="${torque.distDir}/lib"
+      file="${mysql.jar}"
+    />
+
+    <copy 
+      todir="${torque.distDir}/lib"
+      file="${postgresql.jar}"
+    />
+
     <copy 
       todir="${torque.distDir}/schema"
       file="${torque.testSchema}"
@@ -61,6 +71,8 @@
     name="test-generative">
     
     <antcall target="test-project-sql"/>
+    <antcall target="test-create-db"/>
+    <antcall target="test-project-insert-sql"/>
     <antcall target="test-project-om"/>
     
     <!--
@@ -84,6 +96,26 @@
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-sql"
+      inheritAll="false">
+    </ant>
+  </target>
+
+  <target
+    name="test-create-db">
+    <ant 
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-create-db"
+      inheritAll="false">
+    </ant>
+  </target>
+
+  <target
+    name="test-project-insert-sql">
+    <ant 
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-insert-sql"
       inheritAll="false">
     </ant>
   </target>
