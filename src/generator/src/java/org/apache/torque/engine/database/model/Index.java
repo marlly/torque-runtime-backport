@@ -108,7 +108,7 @@ public class Index
     {
         this();
         setTable(table);
-        if (indexColumns.size() > 0)
+        if (!indexColumns.isEmpty())
         {
             this.indexColumns = indexColumns;
             createName();
