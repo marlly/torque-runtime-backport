@@ -363,7 +363,7 @@
     depends="test-libs,test-templates">
 
     <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
-    <filter token="DATABASE_URL" value="${torqe.sqlTest.databaseUrl}"/>
+    <filter token="DATABASE_URL" value="${torque.sqlTest.databaseUrl}"/>
     <filter token="DATABASE_USER" value="${databaseUser}"/>
     <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
     <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
