@@ -68,7 +68,7 @@ import org.apache.torque.oid.IdGenerator;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class TableMap implements IDMethod
+public class TableMap implements IDMethod, java.io.Serializable
 {
     /**
      * The list of valid ID generation methods.

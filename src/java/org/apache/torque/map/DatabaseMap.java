@@ -68,7 +68,7 @@ import org.apache.torque.oid.IdGenerator;
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id$
  */
-public class DatabaseMap
+public class DatabaseMap implements java.io.Serializable
 {
     /** Name of the database. */
     private String name;

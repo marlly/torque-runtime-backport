@@ -60,7 +60,7 @@ package org.apache.torque.om;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public interface Retrievable
+public interface Retrievable extends java.io.Serializable
 {
     /**
      * get an id that differentiates this object from others

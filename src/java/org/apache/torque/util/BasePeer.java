@@ -112,7 +112,7 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public abstract class BasePeer
+public abstract class BasePeer implements java.io.Serializable
 {
     /** Constant criteria key to reference ORDER BY columns. */
     public static final String ORDER_BY = "ORDER BY";

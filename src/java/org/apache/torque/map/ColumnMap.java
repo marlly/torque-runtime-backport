@@ -60,7 +60,7 @@ package org.apache.torque.map;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public class ColumnMap
+public class ColumnMap implements java.io.Serializable
 {
     /** Type of the column. */
     private Object type = null;
