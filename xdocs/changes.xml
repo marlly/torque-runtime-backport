@@ -25,6 +25,17 @@
           </li>
           -->
           <li>
+            <strong>17 Mar 2002</strong>
+            <ul>
+              <li>
+                Fix from Bill Schneider (bschneider NOSPAM vecna.com)
+                to correct date handling in the DBOracle database
+                adapter. (dlr)
+              </li>
+            </ul>
+          </li>
+
+          <li>
             <strong>07 Mar 2002</strong>
             <ul>
               <li>
