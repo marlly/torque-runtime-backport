@@ -16,6 +16,7 @@
       </action>
       <action dev='seade' type='update'>
         Upgrade to and xerces-2.4.0.
+      </action>
       <action dev='seade' type='add'>
         HSQL adapter enhancements: added support for case-insensitive queries
         and cascading deletes.  Thanks to Partick Carl for the patch.
