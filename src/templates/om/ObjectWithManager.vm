@@ -306,18 +306,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ( $conditional )
         {
-  #if ($tblFK.isAlias())
-        ## Leaving this as is for now, though it should probably be
-        ## changed to use the Manager like the else clause does.
-        return ${className}Peer.retrieve${className}ByPK($arglist);
-  #else
    #if ($argsize > 1)
        SimpleKey[] keys = { $arglist };
         return ${interfaceName}Manager.getInstance(new ComboKey(keys));
    #else
         return ${interfaceName}Manager.getInstance($arglist);
    #end
-  #end
         }
         return $varName;
     }
