@@ -94,6 +94,8 @@ class SqlEnum
         new SqlEnum("<=");  
     public static final SqlEnum LIKE =
         new SqlEnum(" LIKE ");
+    public static final SqlEnum NOT_LIKE =
+        new SqlEnum(" NOT LIKE ");
     public static final SqlEnum IN =
         new SqlEnum(" IN ");
     public static final SqlEnum NOT_IN =

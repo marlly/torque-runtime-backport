@@ -81,7 +81,6 @@ import org.apache.commons.util.StringStack;
  */
 public class SqlExpression
 {
-    private static final String LIKE = " LIKE ";
     private static final char SINGLE_QUOTE = '\'';
     private static final char BACKSLASH = '\\';
 
@@ -301,9 +300,10 @@ public class SqlExpression
            }
         }
 
-        if ( comparison.equals(Criteria.LIKE) )
+        if ( comparison.equals(Criteria.LIKE) ||
+             comparison.equals(Criteria.NOT_LIKE) )
         {
-            buildLike( columnName, (String)criteria,
+            buildLike( columnName, (String)criteria, comparison,
                        ignoreCase, db, whereClause);
         }
         else if ( comparison.equals(Criteria.IN) ||
@@ -350,6 +350,7 @@ public class SqlExpression
      *
      * @param columnName A column.
      * @param criteria The value to compare the column against.
+     * @param comparision Whether to do a LIKE or a NOT LIKE
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
@@ -359,11 +360,13 @@ public class SqlExpression
      */
     static String buildLike( String columnName,
                              String criteria,
+                             SqlEnum comparison,
                              boolean ignoreCase,
                              DB db )
     {
         StringBuffer whereClause = new StringBuffer();
-        buildLike( columnName, criteria, ignoreCase, db, whereClause );
+        buildLike( columnName, criteria, comparison, ignoreCase, db,
+                   whereClause );
         return whereClause.toString();
     }
 
@@ -380,6 +383,7 @@ public class SqlExpression
      *
      * @param columnName A column name.
      * @param criteria The value to compare the column against.
+     * @param comparision Whether to do a LIKE or a NOT LIKE
      * @param ignoreCase If true and columns represent Strings, the
      * appropriate function defined for the database will be used to
      * ignore differences in case.
@@ -390,6 +394,7 @@ public class SqlExpression
      */
     static void buildLike( String columnName,
                            String criteria,
+                           SqlEnum comparison,
                            boolean ignoreCase,
                            DB db,
                            StringBuffer whereClause )
@@ -430,14 +435,14 @@ public class SqlExpression
                 break;
             case '%':
             case '_':
-                equalsOrLike = LIKE;
+                equalsOrLike = comparison.toString();
                 break;
             case '*':
-                equalsOrLike = LIKE;
+                equalsOrLike = comparison.toString();
                 checkWildcard = '%';
                 break;
             case '?':
-                equalsOrLike = LIKE;
+                equalsOrLike = comparison.toString();
                 checkWildcard = '_';
                 break;
             }
