@@ -97,13 +97,9 @@ public class Torque
      */
     protected static final String DEFAULT_NAME = "default";
 
-    /**
-     * The property tag which specifies which
-     * log4j category to use for logging in BasePeer.
+    /** 
+     * The global cache of database maps 
      */
-    private static final String CATEGORY = "log4j.category";
-
-    /** The global cache of database maps */
     private static Map dbMaps;
 
     /**
@@ -111,12 +107,6 @@ public class Torque
      * database URL.
      */
     private static Map pools;
-
-    /**
-     * The default log4j category to use if the
-     * the log4j.category property isn't set.
-     */
-    private static String DEFAULT_CATEGORY;
 
     /**
      * The logging category.
@@ -170,7 +160,6 @@ public class Torque
         PropertyConfigurator.configure(p);
 
         Torque.setConfiguration(c);
-        Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
         Torque.init();
     }
 
@@ -205,7 +194,6 @@ public class Torque
         }
 
         Torque.setConfiguration(c);
-        Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
         Torque.init();
     }
 
