@@ -13,9 +13,9 @@
     <tr>
   #foreach ($tbl in $database.tables)
     <tr>
-      <td>$tbl.Name</td>
+      <td><a href="#$tbl.Name">$tbl.Name</a></td>
       <td>$tbl.JavaName</td>
-      <td>$!tbl.Description</td>
+      <td>#if ($tbl.Description) $tbl.Description#else &nbsp;#end</td>
     </tr>
   #end
   </table>
