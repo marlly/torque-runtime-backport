@@ -43,7 +43,9 @@
   <!-- U S A G E                                                          -->
   <!-- ================================================================== -->
   
-  <target name="usage">
+  <target 
+    name="usage">
+    
     <echo message="use -projecthelp to see the available targets"/>
   </target>
 
@@ -53,6 +55,7 @@
 
   <target
     name="test">
+    
     <ant antfile="build-test.xml"/>
   </target>
 
@@ -60,7 +63,9 @@
   <!-- I N I T                                                            -->
   <!-- ================================================================== -->
 
-  <target name="init">
+  <target 
+    name="init">
+    
     <available 
       classname="org.apache.velocity.anakia.AnakiaTask"
       property="AnakiaTask.present"
@@ -120,14 +125,20 @@
   <!-- P R O P E R T Y  C H E C K S  A N D  W A R N I N G S               -->
   <!-- ================================================================== -->
 
-  <target name="check.velocity" unless="velocity.present">
+  <target 
+    name="check.velocity" 
+    unless="velocity.present">
+    
     <antcall target="property-warning">
       <param name="name" value="velocity.jar"/>
       <param name="value" value="${velocity.jar}"/>
     </antcall>
   </target>
 
-  <target name="check.xerces" unless="xerces.present">
+  <target 
+    name="check.xerces" 
+    unless="xerces.present">
+    
     <antcall target="property-warning">
       <param name="name" value="xerces.jar"/>
       <param name="value" value="${xerces.jar}"/>
@@ -141,29 +152,40 @@
     </antcall>
   </target>
 
-  <target name="check.log4j" unless="log4j.present">
+  <target 
+    name="check.log4j" 
+    unless="log4j.present">
+    
     <antcall target="property-warning">
       <param name="name" value="log4j.jar"/>
       <param name="value" value="${log4j.jar}"/>
     </antcall>
   </target>
 
-  <target name="check.commons-collections"
-          unless="commons-collections.present">
+  <target 
+    name="check.commons-collections"
+    unless="commons-collections.present">
+    
     <antcall target="property-warning">
       <param name="name" value="commons-collections.jar"/>
       <param name="value" value="${commons-collections.jar}"/>
     </antcall>
   </target>
 
-  <target name="check.commons-util" unless="commons-util.present">
+  <target 
+    name="check.commons-util" 
+    unless="commons-util.present">
+    
     <antcall target="property-warning">
       <param name="name" value="commons-util.jar"/>
       <param name="value" value="${commons-util.jar}"/>
     </antcall>
   </target>
 
-  <target name="check.jdbc" unless="jdbc.present">
+  <target 
+    name="check.jdbc" 
+    unless="jdbc.present">
+    
     <antcall target="property-warning">
       <param name="name" value="jdbc.jar"/>
       <param name="value" value="${jdbc.jar}"/>
@@ -192,7 +214,8 @@
   <!-- P R E P A R E                                                      -->
   <!-- ================================================================== -->
   
-  <target name="prepare" 
+  <target 
+    name="prepare" 
     depends="init,check.velocity,check.xerces,check.village,check.log4j,
              check.commons-collections,check.commons-util,check.jdbc,env">
     
@@ -205,8 +228,11 @@
   <!-- C O M P I L E                                                      -->
   <!-- ================================================================== -->
   
-  <target name="compile" depends="prepare"
-          description="==> compiles the source code">
+  <target 
+    name="compile" 
+    depends="prepare"
+    description="==> compiles the source code">
+    
     <javac srcdir="${src.dir}/java"
       destdir="${build.dest}"
       debug="${debug}"
@@ -220,8 +246,12 @@
       todir="${build.dest}/org/apache/torque/engine/database/transform"/>
   </target>
 
-  <target name="compile-test" depends="compile" if="junit.present"
-          description="==> compiles the test source code">
+  <target 
+    name="compile-test" 
+    depends="compile" 
+    if="junit.present"
+    description="==> compiles the test source code">
+    
     <mkdir dir="${build.test}"/>
 
     <javac srcdir="${test.dir}"
@@ -240,12 +270,16 @@
   <!-- ================================================================== -->
   <!-- T E S T                                                            -->
   <!-- ================================================================== -->
-  <target name="run-test" depends="prepare,compile-test" if="junit.present"
-          description="==> runs the test source code">
+  <target 
+    name="run-test" 
+    depends="prepare,compile-test" 
+    if="junit.present"
+    description="==> runs the test source code">
 
-    <taskdef name="junit"
-          classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
-          <classpath refid="classpath"/>
+    <taskdef 
+      name="junit"
+      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+      <classpath refid="classpath"/>
     </taskdef>
 
     <junit printsummary="no" haltonfailure="yes">
@@ -283,7 +317,11 @@
   <!-- J A R                                                              -->
   <!-- ================================================================== -->
   
-  <target name="jar" depends="compile" description="==> generates the torque.jar">
+  <target 
+    name="jar" 
+    depends="compile" 
+    description="==> generates the torque.jar">
+    
     <jar jarfile="${build.dir}/${final.name}.jar">
       <fileset dir="${build.dest}">
         <exclude name="**/package.html"/>
@@ -300,9 +338,11 @@
   <!-- J A V A D O C S                                                    -->
   <!-- ================================================================== -->
   
-  <target name="javadocs"
-            depends="prepare"
-            description="==> generates the API documentation">
+  <target 
+    name="javadocs"
+    depends="prepare"
+    description="==> generates the API documentation">
+    
     <mkdir dir="${docs.dest}/api"/>
 
     <javadoc
@@ -315,8 +355,7 @@
       use="true"
       windowtitle="${name} ${version} API"
       doctitle="${name} ${version} API"
-      bottom="Copyright &amp;copy; ${year} Apache Software Foundation. All Rights Reserved."
-      >
+      bottom="Copyright &amp;copy; ${year} Apache Software Foundation. All Rights Reserved.">
       <classpath refid="classpath"/>
       <classpath path="${ant.home}/lib/ant.jar"/>
     </javadoc>
@@ -326,7 +365,10 @@
   <!-- C L E A N                                                          -->
   <!-- ================================================================== -->
   
-  <target name="clean" description="==> cleans up the build directory">
+  <target 
+    name="clean" 
+    description="==> cleans up the build directory">
+    
     <delete dir="${build.dir}"/>
   </target>
 
@@ -334,7 +376,9 @@
   <!-- A N A K I A  D O C U M E N T A T I O N                             -->
   <!-- ================================================================== -->
   
-  <target name="check_for_jdom">
+  <target 
+    name="check_for_jdom">
+    
     <available 
       property="jdom.present"
       classname="org.jdom.JDOMException">
@@ -354,10 +398,11 @@
     </echo>
   </target>
 
-  <target name="docs"
-          depends="docs-prepare-error"
-          description="==> generates the HTML documentation"
-          if="jdom.present">
+  <target 
+    name="docs"
+    depends="docs-prepare-error"
+    description="==> generates the HTML documentation"
+    if="jdom.present">
 
     <taskdef name="anakia"
        classname="org.apache.velocity.anakia.AnakiaTask">
@@ -399,8 +444,11 @@
   <!-- ================================================================== -->
   <!-- D I S T - L I T E                                                  -->
   <!-- ================================================================== -->
-  <target name="dist-lite" depends="jar,check.village"
-          description="==> Creates torque.zip distribution without jars"> 
+  <target 
+    name="dist-lite" 
+    depends="jar,check.village"
+    description="==> Creates torque.zip distribution without jars"> 
+    
     <property name="torque.dir" value="${build.dir}/torque/torque"/>
     <mkdir dir="${torque.dir}"/>
     <mkdir dir="${torque.dir}/lib"/>
@@ -435,8 +483,11 @@
   <!-- D I S T                                                            -->
   <!-- ================================================================== -->
 
-  <target name="dist" depends="jar,check.village" 
-          description="==> Creates torque.zip distribution">
+  <target 
+    name="dist" 
+    depends="jar,check.village" 
+    description="==> Creates torque.zip distribution">
+    
     <property name="torque.dir" value="${build.dir}/torque/torque"/>
     <mkdir dir="${torque.dir}"/>
     <mkdir dir="${torque.dir}/lib"/>
@@ -478,8 +529,11 @@
   <!-- I N S T A L L  J A R                                               -->
   <!-- ================================================================== -->
 
-  <target name="install-jar" depends="jar" 
-          description="==> Installs .jar file in ${lib.repo}">
+  <target 
+    name="install-jar" 
+    depends="jar" 
+    description="==> Installs .jar file in ${lib.repo}">
+    
     <copy todir="${lib.repo}" filtering="no">
       <fileset dir="${build.dir}">
         <include name="${final.name}.jar"/>
