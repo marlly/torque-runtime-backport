@@ -773,6 +773,12 @@ public abstract class $basePrefix${table.JavaName}Peer
          BasePeer.doDelete ( criteria, dbCon );
      }
 
+    /** Method to do selects */
+    public static Vector doSelect($table.JavaName obj) throws Exception
+    {
+        return doSelect(buildCriteria(obj));
+    }
+
     /** Method to do inserts */
     public static void doInsert( $table.JavaName obj ) throws Exception
     {
@@ -791,6 +797,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         doUpdate(buildCriteria(obj));
     }
+
     /**
      * @param obj the data object to delete in the database.
      */
