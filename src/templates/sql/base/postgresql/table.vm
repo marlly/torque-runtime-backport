@@ -3,6 +3,9 @@
 -- $table.Name
 -----------------------------------------------------------------------------
 $generator.parse("$basepath/drop.vm", "", "table", $tbl)
+#set ( $sequence = $generator.parse("$basepath/sequence.vm", "", "table", $tbl) )
+#if ($sequence.length()>0)$sequence#end
+
 CREATE TABLE $table.Name
 (
 #set ( $cols = $generator.parse("$basepath/columns.vm", "", "table",$tbl) )
@@ -15,3 +18,4 @@ CREATE TABLE $table.Name
 
 );
 #if($index.length() > 0)$strings.chop($index,1)#end
+

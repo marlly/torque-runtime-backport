@@ -9,7 +9,11 @@
     #else
         #set ( $size = "" )
     #end
-    #set ( $default = $col.DefaultSetting )
+    #if (($table.IdMethod == "native") && ($col.isPrimaryKey()))
+      #set ( $default = "DEFAULT nextval('$table.SequenceName')" )
+    #else
+      #set ( $default = $col.DefaultSetting )
+    #end
     #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
     #set ( $entry = "$col.Name $type $size $default $nullString" )
     #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
