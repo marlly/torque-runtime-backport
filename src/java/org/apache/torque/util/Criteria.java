@@ -76,6 +76,7 @@ import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.util.BasePeer;
 import org.apache.commons.util.StringStack;
+import org.apache.log4j.Category;
 
 /**
  * This is a utility class that is used for retrieving different types
@@ -214,8 +215,13 @@ public class Criteria extends Hashtable
     // flag to note that the criteria involves a blob.
     private boolean blobFlag = false;
 
-
     private HashMap aliases = null;
+
+    /**
+     * Log4j category used for logging.
+     */
+    private Category category = 
+        Category.getInstance(Criteria.class.getName());
 
     /**
      * Creates a new instance with the default capacity.
@@ -3335,7 +3341,7 @@ public class Criteria extends Hashtable
                 {
                     // we are only doing this to allow easier debugging, so
                     // no need to throw up the exception, just make note of it.
-                    Torque.getCategory().error(
+                    category.error(
                        "Could not get a DB adapter, so sql may be wrong");
                 }
             }

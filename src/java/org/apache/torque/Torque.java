@@ -203,22 +203,6 @@ public class Torque
     }
 
     /**
-     * Sets the logging category for Torque and all dependencies.
-     */
-    public static void setCategory(Category c)
-    {
-        category = c;
-    }
-
-    /**
-     * Retrieves the logging category.
-     */
-    public static Category getCategory()
-    {
-        return category;
-    }
-
-    /**
      * Sets the configuration for Torque and all dependencies.
      */
     public static void setConfiguration(ExtendedProperties c)
@@ -756,7 +740,8 @@ public class Torque
                         .append(pool.getNbrAvailable()).append(" + ")
                         .append(pool.getNbrCheckedOut()).append(" = ")
                         .append(pool.getTotalCount());
-                    getCategory().info(buf.toString());
+                    
+                    category.info(buf.toString());
                 }
 
                 // Wait for a bit.

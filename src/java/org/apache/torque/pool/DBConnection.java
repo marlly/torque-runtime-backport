@@ -64,7 +64,7 @@ import java.util.Vector;
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
-import org.apache.torque.Torque;
+import org.apache.log4j.Category;
 
 /**
  * This class wraps the JDBC <code>Connection</code> class, providing
@@ -122,6 +122,12 @@ public class DBConnection
      * ConnectionEventListeners
      */
     private Vector eventListeners;
+
+    /**
+     * Log4j category used for logging.
+     */
+    private Category category = 
+        Category.getInstance(DBConnection.class.getName());
 
     /**
      * Required by proxy. Does nothing.
@@ -223,7 +229,7 @@ public class DBConnection
             // to a ConnectionPool, it means that it was taken from a pool
             // and not returned.  We log this fact, close the underlying
             // Connection, and return it to the ConnectionPool.
-            Torque.getCategory().warn(
+            category.warn(
                     "A DBConnection was finalized, without being returned "
                   + "to the ConnectionPool it belonged to" );
 
@@ -422,7 +428,7 @@ public class DBConnection
         catch(SQLException e)
         {
             e.printStackTrace();
-            Torque.getCategory().error(e);
+            category.error(e);
         }
     }
 
@@ -438,7 +444,7 @@ public class DBConnection
         catch(SQLException e)
         {
             e.printStackTrace();
-            Torque.getCategory().error(e);
+            category.error(e);
         }
     }
 
@@ -456,7 +462,7 @@ public class DBConnection
         catch(SQLException e)
         {
             e.printStackTrace();
-            Torque.getCategory().error(e);
+            category.error(e);
         }
     }
 
@@ -475,7 +481,7 @@ public class DBConnection
         catch (SQLException e)
         {
             e.printStackTrace();
-            Torque.getCategory().error(e);
+            category.error(e);
         }
         return stmt;
     }
@@ -496,7 +502,7 @@ public class DBConnection
         catch (SQLException e)
         {
             e.printStackTrace();
-            Torque.getCategory().error(e);
+            category.error(e);
         }
         return stmt;
     }
@@ -528,7 +534,7 @@ public class DBConnection
         catch (Exception e)
         {
             String errMsg = "Couldn't close database connection: " + e;
-            Torque.getCategory().warn(errMsg);
+            category.warn(errMsg);
             throw new SQLException(errMsg);
         }
     }
