@@ -80,7 +80,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * A Class that is used to parse an input xml schema file and creates an AppData
+ * A Class that is used to parse an input xml schema file and creates a Database
  * java structure.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
@@ -147,10 +147,10 @@ public class XmlToAppData extends DefaultHandler
 
     /**
      * Parses a XML input file and returns a newly created and
-     * populated AppData structure.
+     * populated Database structure.
      *
      * @param xmlFile The input file to parse.
-     * @return AppData populated by <code>xmlFile</code>.
+     * @return Database populated by <code>xmlFile</code>.
      */
     public Database parseFile(String xmlFile)
             throws EngineException
@@ -221,7 +221,7 @@ public class XmlToAppData extends DefaultHandler
      * @param publicId The public identifier of the external entity
      * @param systemId The system identifier of the external entity
      * @return an InputSource for the database.dtd file
-     * @see org.apache.torque.engine.database.transform.DTDResolver#resolveEntity(String, String)
+     * @see DTDResolver#resolveEntity(String, String)
      */
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException

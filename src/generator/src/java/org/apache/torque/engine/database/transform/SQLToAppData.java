@@ -69,9 +69,9 @@ import org.apache.torque.engine.sql.SQLScanner;
 import org.apache.torque.engine.sql.Token;
 
 /**
- * A Class that converts an sql input file to an AppData
- * structure.  The class makes use of SQL Scanner to get
- * sql tokens and the parses these to create the AppData
+ * A Class that converts an sql input file to a Database structure.
+ * The class makes use of SQL Scanner to get
+ * sql tokens and the parses these to create the Database
  * class. SQLToAppData is in effect a simplified sql parser.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
@@ -133,10 +133,9 @@ public class SQLToAppData
     }
 
     /**
-     * Move to the next token.  Throws an exception
-     * if there is no more tokens available.
+     * Move to the next token.
      *
-     * @throws ParseException
+     * @throws ParseException if there is no more tokens available.
      */
     private void next() throws ParseException
     {

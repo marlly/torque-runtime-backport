@@ -80,8 +80,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * A Class that is used to parse an input xml schema file and creates and
- * AppData java structure. <br>
- * It uses apache Xerces to do the xml parsing.
+ * AppData java structure.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
