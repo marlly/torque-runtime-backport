@@ -23,7 +23,6 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
 /**
  * Tests for domain handling (for MySql).
  *
- * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @version $Id$
  */
 public class DomainTest extends TestCase
@@ -132,7 +131,7 @@ public class DomainTest extends TestCase
         Table table = db.getTable("native");
         Column col = table.getColumn("native_id");
         assertEquals("AUTO_INCREMENT", col.getAutoIncrementString());
-        assertEquals("native_id INTEGER NOT NULL AUTO_INCREMENT", col.getSqlString());
+        assertEquals("native_id MEDIUMINT NOT NULL AUTO_INCREMENT", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
@@ -142,7 +141,7 @@ public class DomainTest extends TestCase
         Table table = db.getTable("article");
         Column col = table.getColumn("article_id");
         assertEquals("", col.getAutoIncrementString());
-        assertEquals("article_id INTEGER NOT NULL ", col.getSqlString());
+        assertEquals("article_id MEDIUMINT NOT NULL ", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
