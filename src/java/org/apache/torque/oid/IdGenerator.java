@@ -79,7 +79,7 @@ public interface IdGenerator
      * @return An int with the value for the id.
      * @exception Exception Database error.
      */
-    public int getIdAsInt(Connection connection, Object keyInfo)
+    int getIdAsInt(Connection connection, Object keyInfo)
         throws Exception;
 
     /**
@@ -90,7 +90,7 @@ public interface IdGenerator
      * @return A long with the value for the id.
      * @exception Exception Database error.
      */
-    public long getIdAsLong(Connection connection, Object keyInfo)
+    long getIdAsLong(Connection connection, Object keyInfo)
         throws Exception;
 
     /**
@@ -101,8 +101,8 @@ public interface IdGenerator
      * @return A BigDecimal id.
      * @exception Exception Database error.
      */
-    public BigDecimal getIdAsBigDecimal(Connection connection,
-                                        Object keyInfo)
+    BigDecimal getIdAsBigDecimal(Connection connection,
+                                 Object keyInfo)
         throws Exception;
 
     /**
@@ -113,7 +113,7 @@ public interface IdGenerator
      * @return A String id
      * @exception Exception Database error.
      */
-    public String getIdAsString(Connection connection, Object keyInfo)
+    String getIdAsString(Connection connection, Object keyInfo)
         throws Exception;
 
     /**
@@ -121,14 +121,14 @@ public interface IdGenerator
      *
      * @return a <code>boolean</code> value
      */
-    public boolean isPriorToInsert();
+    boolean isPriorToInsert();
 
     /**
      * A flag to determine the timing of the id generation
      *
      * @return a <code>boolean</code> value
      */
-    public boolean isPostInsert();
+    boolean isPostInsert();
 
     /**
      * A flag to determine whether a Connection is required to
@@ -136,5 +136,5 @@ public interface IdGenerator
      *
      * @return a <code>boolean</code> value
      */
-    public boolean isConnectionRequired();
+    boolean isConnectionRequired();
 }

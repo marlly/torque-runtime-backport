@@ -69,13 +69,13 @@ public interface UnsecurePersistent
     /**
      * Saves the object.
      */
-    public void save() throws Exception;
+    void save() throws Exception;
 
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
      */
-    public void save(String dbName) throws Exception;
+    void save(String dbName) throws Exception;
 
     /**
      * Stores the object in the database.  If the object is new,
@@ -84,5 +84,5 @@ public interface UnsecurePersistent
      * the save() method and the connection details will be handled
      * internally
      */
-    public void save(DBConnection dbCon) throws Exception;
+    void save(DBConnection dbCon) throws Exception;
 }

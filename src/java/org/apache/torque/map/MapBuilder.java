@@ -70,7 +70,7 @@ public interface MapBuilder
      *
      * @exception Exception Couldn't build mapping.
      */
-    public abstract void doBuild()
+    void doBuild()
         throws Exception;
 
     /**
@@ -79,12 +79,12 @@ public interface MapBuilder
      *
      * @return Whether the DatabaseMap is built.
      */
-    public abstract boolean isBuilt();
+    boolean isBuilt();
 
     /**
      * Gets the database mapping this map builder built.
      *
      * @return A DatabaseMap.
      */
-    public abstract DatabaseMap getDatabaseMap();
+    DatabaseMap getDatabaseMap();
 }

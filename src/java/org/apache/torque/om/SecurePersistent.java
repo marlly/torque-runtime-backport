@@ -70,13 +70,13 @@ public interface SecurePersistent
     /**
      * Saves the object.
      */
-    public void save(SecurityInfo securityInfo) throws Exception;
+    void save(SecurityInfo securityInfo) throws Exception;
 
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
      */
-    public void save(String dbName, SecurityInfo securityInfo) 
+    void save(String dbName, SecurityInfo securityInfo) 
         throws Exception;
 
     /**
@@ -86,6 +86,6 @@ public interface SecurePersistent
      * the save() method and the connection details will be handled
      * internally
      */
-    public void save(DBConnection dbCon, SecurityInfo securityInfo) 
+    void save(DBConnection dbCon, SecurityInfo securityInfo) 
         throws Exception;
 }

@@ -66,5 +66,5 @@ public interface SecurityInfo
     /**
      * method called by an om prior to sensitive operation (such as save).
      */
-    public boolean hasPermission();
+    boolean hasPermission();
 }

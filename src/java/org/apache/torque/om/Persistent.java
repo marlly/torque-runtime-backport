@@ -70,7 +70,7 @@ public interface Persistent
      *
      * @return the object primaryKey as an Object
      */
-    public ObjectKey getPrimaryKey();
+    ObjectKey getPrimaryKey();
 
     /**
      * Sets the PrimaryKey for the object.
@@ -78,7 +78,7 @@ public interface Persistent
      * @param ObjectKey The new PrimaryKey for the object.
      * @exception Exception, This method might throw an exceptions
      */
-    public void setPrimaryKey(ObjectKey primaryKey) throws Exception;
+    void setPrimaryKey(ObjectKey primaryKey) throws Exception;
 
     /**
      * Sets the PrimaryKey for the object.
@@ -87,14 +87,15 @@ public interface Persistent
      *        ObjectKey.toString().
      * @exception Exception, This method might throw an exceptions
      */
-    public void setPrimaryKey(String primaryKey) throws Exception;
+    void setPrimaryKey(String primaryKey) throws Exception;
+
     /**
      * Returns whether the object has been modified, since it was
      * last retrieved from storage.
      *
      * @return True if the object has been modified.
      */
-    public boolean isModified();
+    boolean isModified();
 
     /**
      * Returns whether the object has ever been saved.  This will
@@ -103,7 +104,7 @@ public interface Persistent
      *
      * @return true, if the object has never been persisted.
      */
-    public boolean isNew();
+    boolean isNew();
 
     /**
      * Setter for the isNew attribute.  This method will be called
@@ -111,12 +112,12 @@ public interface Persistent
      *
      * @param b, the state of the object.
      */
-    public void setNew(boolean b);
+    void setNew(boolean b);
 
     /**
      * Sets the modified state for the object.
      *
      * @param m The new modified state for the object.
      */
-    public void setModified(boolean m);
+    void setModified(boolean m);
 }

@@ -71,7 +71,7 @@ public interface NameGenerator
      * The character used by most implementations as the separator
      * between name elements.
      */
-    public static final char STD_SEPARATOR_CHAR = '_';
+    char STD_SEPARATOR_CHAR = '_';
 
     /**
      * Traditional method for converting schema table and column names
@@ -81,7 +81,7 @@ public interface NameGenerator
      *
      * @see JavaNameGenerator#underscoreMethod(String)
      */
-    public static final String CONV_METHOD_UNDERSCORE = "underscore";
+    String CONV_METHOD_UNDERSCORE = "underscore";
 
     /**
      * Similar to {@link #CONV_METHOD_UNDERSCORE} except nothing is
@@ -89,13 +89,13 @@ public interface NameGenerator
      *
      * @see JavaNameGenerator#javanameMethod(String)
      */
-    public static final String CONV_METHOD_JAVANAME = "javaname";
+    String CONV_METHOD_JAVANAME = "javaname";
 
     /**
      * Specifies no modification when converting from a schema column
      * or table name to a java name.
      */
-    public static final String CONV_METHOD_NOCHANGE = "nochange";
+    String CONV_METHOD_NOCHANGE = "nochange";
 
     /**
      * Given a list of <code>String</code> objects, implements an
@@ -104,6 +104,6 @@ public interface NameGenerator
      * @param inputs Inputs used to generate a name.
      * @return The generated name.
      */
-    public String generateName(List inputs)
+    String generateName(List inputs)
         throws TorqueException;
 }

@@ -68,7 +68,7 @@ public interface Retriever
      *
      * @return the object that matches the key
      */
-    public Object retrieve(String key)
+    Object retrieve(String key)
         throws Exception;
 }
 
