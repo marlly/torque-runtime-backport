@@ -336,7 +336,7 @@
   <!-- ================================================================== -->
   <!-- D I S T - L I T E                                                  -->
   <!-- ================================================================== -->
-  <target name="dist-list" depends="jar,check.village"
+  <target name="dist-lite" depends="jar,check.village"
           description="==> Creates torque.zip distribution without jars"> 
     <property name="torque.dir" value="${build.dir}/torque/torque"/>
     <mkdir dir="${torque.dir}"/>
