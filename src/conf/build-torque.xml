@@ -401,7 +401,7 @@
       contextProperties="${torque.contextProperties}"
       controlTemplate="${torque.template.idTable}"
       outputDirectory="${torque.sql.dir}"
-      outputFile="${torque.database}-id-table-init.sql"
+      outputFile="report.idtable-init.sql.generation"
       sqldbmap="${torque.sql.dir}/sqldb.map"
       suffix="-idtable-init"
       targetDatabase="${torque.database}"

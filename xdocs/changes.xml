@@ -21,6 +21,13 @@
       TRQ41: make getPrimaryKey return ObjectKey but getPkField return the type
       it is.
     </li>
+    <li>
+      TRQS37: Torque 3.0 doesn't work with Intake in Turbine 2.x's Retrievable
+      interface. Added a property <code>torque.retrievableInterface</code>
+      (defaults to the turbine-2 version). <br/>
+      Fulcrum users have to set the property to
+      <code>org.apache.fulcrum.intake.Retrievable</code>
+    </li>
   </ul>
 </p>
 </subsection>
@@ -90,6 +97,9 @@
     </li>
     <li>
       TRQS15: Torque gererated code does not compile
+    </li>
+    <li>
+      TRQS40: id-table-init-sql creates empty .sql file
     </li>
     <li>
       bugzilla #12626: Peer.vm was missing the DateKey import.
