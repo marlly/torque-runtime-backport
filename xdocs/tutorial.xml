@@ -9,9 +9,9 @@
 
   <body>
 
-<section name="About this Tutorial"> 
+<section name="About this Tutorial">
 
-<p> 
+<p>
   This tutorial is intended to give first-time users an
   introduction to using Torque, an object-relational tool.
   Torque was developed as part of the Turbine web
@@ -26,7 +26,7 @@
   setting up a database, and writing a sample application
   to demonstrate the power of Torque.  The tutorial is not
   meant to be an exhaustive introduction to Torque, please
-  refer to the documentation on the 
+  refer to the documentation on the
   <a href="index.html">Torque homepage</a> for more
   detailed information.
 </p>
@@ -35,7 +35,7 @@
   The example used throughout this tutorial is based on an
   email sent to the <a href="/site/mail.html">
   turbine-user</a> mailing list by Steven F. Davis
-  called 
+  called
   <a href="http://www.mail-archive.com/turbine-user%40jakarta.apache.org/msg03639.html">
   torque outside turbine - detailed example (long)</a>.
 </p>
@@ -47,7 +47,7 @@
 <p>
   First, you need to obtain the Torque distribution.  As
   of this writing, the standalone version of Torque has
-  not been released; however, there is a beta version 
+  not been released; however, there is a beta version
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
   available</a>.
 </p>
@@ -100,11 +100,11 @@
   source/class files representing your object model,
   SQL statements for your specific database, and
   documentation.  To accomplish these tasks, it uses
-  <a href="/ant/index.html">Ant</a> to control its
+  <a href="jakarta.apache.org/ant/index.html">Ant</a> to control its
   build process, and ant uses the
   <em>build.properties</em> file in the top-level
   Torque directory to setup your development
-  environment.  It is this file that we will now edit. 
+  environment.  It is this file that we will now edit.
 </p>
 
 <p>
@@ -123,8 +123,8 @@
 <source><![CDATA[
   torque.project = bookstore
   torque.database = mysql
-  torque.targetPackage = com.kazmier.om 
-  torque.database.createUrl = jdbc:mysql://127.0.0.1/mysql  
+  torque.targetPackage = com.kazmier.om
+  torque.database.createUrl = jdbc:mysql://127.0.0.1/mysql
   torque.database.buildUrl = jdbc:mysql://127.0.0.1/bookstore
   torque.database.url = jdbc:mysql://127.0.0.1/bookstore
   torque.database.driver = org.gjt.mm.mysql.Driver
@@ -199,85 +199,85 @@
 
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<!DOCTYPE database SYSTEM 
+<!DOCTYPE database SYSTEM
  "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
-<database 
-  name="bookstore" 
+<database
+  name="bookstore"
   defaultIdMethod="idbroker">
 
   <table name="book" description="Book Table">
-    <column 
-      name="book_id" 
-      required="true" 
-      primaryKey="true" 
-      type="INTEGER" 
+    <column
+      name="book_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
       description="Book Id"/>
-    <column 
-      name="title" 
-      required="true" 
-      type="VARCHAR" 
-      size="255" 
+    <column
+      name="title"
+      required="true"
+      type="VARCHAR"
+      size="255"
       description="Book Title"/>
-    <column 
-      name="isbn" 
-      required="true" 
-      type="VARCHAR" 
-      size="24" 
+    <column
+      name="isbn"
+      required="true"
+      type="VARCHAR"
+      size="24"
       javaName="ISBN"
       description="ISBN Number"/>
-    <column 
-      name="publisher_id" 
-      required="true" 
+    <column
+      name="publisher_id"
+      required="true"
       type="INTEGER"
       description="Foreign Key Publisher"/>
-    <column 
-      name="author_id" 
-      required="true" 
+    <column
+      name="author_id"
+      required="true"
       type="INTEGER"
       description="Foreign Key Author"/>
     <foreign-key foreignTable="publisher">
-      <reference 
-        local="publisher_id" 
+      <reference
+        local="publisher_id"
         foreign="publisher_id"/>
     </foreign-key>
     <foreign-key foreignTable="author">
-      <reference 
-        local="author_id" 
+      <reference
+        local="author_id"
         foreign="author_id"/>
     </foreign-key>
   </table>
   <table name="publisher" description="Publisher Table">
-    <column 
-      name="publisher_id" 
-      required="true" 
+    <column
+      name="publisher_id"
+      required="true"
       primaryKey="true"
-      type="INTEGER" 
+      type="INTEGER"
       description="Publisher Id"/>
-    <column 
-      name="name" 
-      required="true" 
-      type="VARCHAR" 
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
       size="128"
       description="Publisher Name"/>
   </table>
   <table name="author" description="Author Table">
-    <column 
-      name="author_id" 
-      required="true" 
+    <column
+      name="author_id"
+      required="true"
       primaryKey="true"
-      type="INTEGER" 
+      type="INTEGER"
       description="Author Id"/>
-    <column 
-      name="first_name" 
-      required="true" 
-      type="VARCHAR" 
+    <column
+      name="first_name"
+      required="true"
+      type="VARCHAR"
       size="128"
       description="First Name"/>
-    <column 
-      name="last_name" 
-      required="true" 
-      type="VARCHAR" 
+    <column
+      name="last_name"
+      required="true"
+      type="VARCHAR"
       size="128"
       description="Last Name"/>
   </table>
@@ -328,8 +328,8 @@
   </tr>
   <tr>
     <td>idbroker</td>
-    <td> 
-      Instructs Torque to use its 
+    <td>
+      Instructs Torque to use its
       <a href="peers-howto.html#ID%20Broker">IDBroker</a>
       service to generate IDs in a database agnostic
       manner.  This is the method that will be
@@ -338,7 +338,7 @@
   </tr>
   <tr>
     <td>native</td>
-    <td> 
+    <td>
       Instructs Torque to use the underlying
       database's mechanism to generate IDs (varies
       per database).
@@ -346,7 +346,7 @@
   </tr>
   <tr>
     <td>none</td>
-    <td> 
+    <td>
       Instructs Torque to not generate IDs.  This
       can be useful in some situations (an example
       is described below).
@@ -399,26 +399,26 @@
 
 <source><![CDATA[
   <table name="book" idMethod="none" description="Book Table">
-    <column 
-      name="publisher_id" 
-      required="true" 
-      primaryKey="true" 
+    <column
+      name="publisher_id"
+      required="true"
+      primaryKey="true"
       type="INTEGER"
       description="Foreign Key Publisher"/>
-    <column 
-      name="author_id" 
-      required="true" 
-      primaryKey="true" 
+    <column
+      name="author_id"
+      required="true"
+      primaryKey="true"
       type="INTEGER"
       description="Foreign Key Author"/>
     <foreign-key foreignTable="publisher">
-      <reference 
-        local="publisher_id" 
+      <reference
+        local="publisher_id"
         foreign="publisher_id"/>
     </foreign-key>
     <foreign-key foreignTable="author">
-      <reference 
-        local="author_id" 
+      <reference
+        local="author_id"
         foreign="author_id"/>
     </foreign-key>
   </table>
@@ -427,7 +427,7 @@
 <p>
   Another common mistake is to forget that XML is
   <b>case-sensitive</b>.  All of the elements and
-  attributes must be specified according to the 
+  attributes must be specified according to the
   <a href="/turbine/dtd/database.dtd">DTD</a>
   for the database schema.  In addition, you must
   include the XML declaration and DTD specification in
@@ -448,30 +448,30 @@
 
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<!DOCTYPE database SYSTEM 
+<!DOCTYPE database SYSTEM
  "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 <database name="bookstore">
   <table name="ID_TABLE" idMethod="idbroker">
-    <column 
-      name="ID_TABLE_ID" 
-      required="true" 
-      primaryKey="true" 
+    <column
+      name="ID_TABLE_ID"
+      required="true"
+      primaryKey="true"
       type="INTEGER"/>
-    <column 
-      name="TABLE_NAME" 
-      required="true" 
-      size="255" 
+    <column
+      name="TABLE_NAME"
+      required="true"
+      size="255"
       type="VARCHAR"/>
-    <column 
-      name="NEXT_ID" 
+    <column
+      name="NEXT_ID"
       type="INTEGER"/>
-    <column 
-      name="QUANTITY" 
+    <column
+      name="QUANTITY"
       type="INTEGER"/>
     <unique>
       <unique-column name="TABLE_NAME"/>
-    </unique>    
+    </unique>
   </table>
 </database>
 ]]></source>
@@ -486,7 +486,7 @@
   run-time properties.  For additional information on
   the XML elements and attributes, please refer to the
   <a href="/turbine/torque/schema-reference.html">
-  Torque Schema Reference</a>.  
+  Torque Schema Reference</a>.
 </p>
 
 </subsection>
@@ -503,7 +503,7 @@
   passwords.  These properties can be saved in any
   file because your application must explicitly
   initialize Torque (as you'll see later in this
-  document).  
+  document).
 </p>
 
 <p>
@@ -544,7 +544,7 @@ torque.database.bookstore.password = password
         Torque uses <a href="/log4j/index.html">Log4J</a>
         for a logging.  This parameter configures
         the Log4J system to log all messages (debug,
-        info, warn, error, and fatal).  
+        info, warn, error, and fatal).
       </td>
     </tr>
     <tr>
@@ -679,7 +679,7 @@ sections.
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml 
+ant -f build-torque.xml
 ]]></source>
 <p/>
 
@@ -715,7 +715,7 @@ ant -f build-torque.xml
   If you encounter errors while building, it is more
   than likely a formatting error of your database
   schema file.  Check the format of the file and make
-  sure it conforms to the 
+  sure it conforms to the
   <a href="/turbine/torque/schema-reference.html">
   Torque Schema Reference</a>.
 </p>
@@ -753,7 +753,7 @@ ant -f build-torque.xml
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml create-db  
+ant -f build-torque.xml create-db
 ]]></source>
 
 <p>
@@ -763,7 +763,7 @@ ant -f build-torque.xml create-db
 
 <source><![CDATA[
 ant -f build-torque.xml id-table-init-sql
-ant -f build-torque.xml insert-sql  
+ant -f build-torque.xml insert-sql
 ]]></source>
 
 <p>
@@ -822,7 +822,7 @@ defined in your database schema.  For example, the
 <em>book</em> table, defined in the database schema
 presented earlier, will result in the following classes:
 <em>Book</em>, <em>BookPeer</em>, <em>BaseBook</em>, and
-<em>BaseBookPeer</em>.  
+<em>BaseBookPeer</em>.
 </p>
 
 <p>
@@ -853,8 +853,8 @@ column defined in those tables as well as the convenient
 <em>save</em> method.  Both Peer and Data Objects have a
 one-to-one mapping to a table defined in your database
 schema.  For a more in-depth discussion on Peers and
-Data Objects, refer to the 
-<a href="peers-howto.html#Peer%20Classes">Peers HOWTO</a>.  
+Data Objects, refer to the
+<a href="peers-howto.html#Peer%20Classes">Peers HOWTO</a>.
 An example of adding logic to both the Peer and Data
 Objects is presented later in the tutorial.
 </p>
@@ -885,7 +885,7 @@ application are detailed.
   the Database Schema Configuration section above).
 </p>
 
-<p> 
+<p>
   For example, to insert a new row in the
   <em>author</em> table (as defined in this tutorial's
   database schema): instantiate a new <em>Author</em>
@@ -897,7 +897,7 @@ application are detailed.
 
 <source><![CDATA[
 Publisher addison = new Publisher();
-addison.setName("Addison Wesley Professional");  
+addison.setName("Addison Wesley Professional");
 addison.save();
 
 Author bloch = new Author();
@@ -929,7 +929,7 @@ bloch.save();
 <source><![CDATA[
 Author stevens = new Author();
 stevens.setFirstName("W.");
-stevens.setLastName("Stevens");  
+stevens.setLastName("Stevens");
 AuthorPeer.doInsert(stevens);
 ]]></source>
 
@@ -988,7 +988,7 @@ effective.save();
 * Inserting the foreign-keys manually.
 */
 Book tcpip = new Book();
-tcpip.setTitle("TCP/IP Illustrated, Volume 1");  
+tcpip.setTitle("TCP/IP Illustrated, Volume 1");
 tcpip.setISBN("0-201-63346-9");
 tcpip.setPublisherId(addison.getPublisherId());
 tcpip.setAuthorId(stevens.getAuthorId());
@@ -997,7 +997,7 @@ tcpip.save();
 
 <p>
   As you can see, inserting rows into your database is
-  very easy to do with your Torque object model.  
+  very easy to do with your Torque object model.
 </p>
 
 </subsection>
@@ -1034,7 +1034,7 @@ tcpip.save();
 
 <source><![CDATA[
 Criteria crit = new Criteria();
-List v = BookPeer.doSelect(crit);  
+List v = BookPeer.doSelect(crit);
 ]]></source>
 
 <p>
@@ -1050,12 +1050,12 @@ Iterator i = v.iterator();
 while (i.hasNext())
 {
 Book book = (Book) i.next();
-System.out.println("Title: " + book.getTitle() + "\n"); 
+System.out.println("Title: " + book.getTitle() + "\n");
 System.out.println("ISBN:  " + book.getISBN() + "\n");
-System.out.println("Publisher: " + 
+System.out.println("Publisher: " +
 book.getPublisher().getName() + "\n");
-System.out.println("Author: " + 
-book.getAuthor().getLastName() + ", " + 
+System.out.println("Author: " +
+book.getAuthor().getLastName() + ", " +
 book.getAuthor().getFirstName() + "\n");
 }
 ]]></source>
@@ -1126,7 +1126,7 @@ book.getAuthor().getFirstName() + "\n");
 
 <source><![CDATA[
 Criteria crit = new Criteria();
-crit.add(BookPeer.ISBN, "0-618-12902-2");  
+crit.add(BookPeer.ISBN, "0-618-12902-2");
 List v = BookPeer.doSelect(crit);
 ]]></source>
 
@@ -1135,7 +1135,7 @@ List v = BookPeer.doSelect(crit);
   <em>Criteria</em> objects.  <em>Criteria</em> can be
   used to specify very simple to very complex queries.
   For a much more in-depth discussion of
-  <em>Criteria</em>, please refer to the 
+  <em>Criteria</em>, please refer to the
   <a href="criteria-howto.html">Criteria HOWTO</a>.
 </p>
 
@@ -1153,7 +1153,7 @@ List v = BookPeer.doSelect(crit);
   This flag is checked when <em>save</em> is invoked
   to determine if the Peer's <em>doInsert</em> or
   <em>doUpdate</em> is called to perform the database
-  operation.  
+  operation.
 </p>
 
 <p>
@@ -1163,7 +1163,7 @@ List v = BookPeer.doSelect(crit);
 </p>
 
 <source><![CDATA[
-effective.setAuthor(stevens);  
+effective.setAuthor(stevens);
 effective.save();
 ]]></source>
 
@@ -1179,7 +1179,7 @@ effective.save();
 
 <source><![CDATA[
 tcpip.setAuthor(bloch);
-BookPeer.doUpdate(tcpip);  
+BookPeer.doUpdate(tcpip);
 ]]></source>
 
 <p>
@@ -1204,7 +1204,7 @@ BookPeer.doUpdate(tcpip);
   a <em>Criteria</em> object or a Data Object to
   specify which row or rows to delete.  It should be
   noted that there is no corresponding method in the
-  Data Object to delete a row.  
+  Data Object to delete a row.
 </p>
 
 <p>
@@ -1241,7 +1241,7 @@ PublisherPeer.doDelete(addison);
   books from the <em>book</em> table does not
   automatically delete the corresponding rows in the
   <em>author</em> and <em>publisher</em> tables.
-  
+
 </p>
 
 <table>
@@ -1307,7 +1307,7 @@ PublisherPeer.doDelete(addison);
 
 <source><![CDATA[
 // Book.java
-public class Book 
+public class Book
   extends com.kazmier.om.BaseBook
   implements Persistent
 {
@@ -1354,7 +1354,7 @@ public  class Publisher
 <p>
   The next change that we'll make is to the Peer
   classes.  For convenience (and based on the
-  suggestion in the 
+  suggestion in the
   <a href="peers-howto.html#Useful%20Methods">Peers
   Howto</a>) we'll add <em>doSelectAll</em>
   methods which will return a List of all the Data
@@ -1368,7 +1368,7 @@ public  class Publisher
 // BookPeer.java
 import org.apache.torque.util.*;
 
-public class BookPeer 
+public class BookPeer
   extends com.kazmier.om.BaseBookPeer
 {
   public static List doSelectAll() throws Exception
@@ -1381,7 +1381,7 @@ public class BookPeer
 // AuthorPeer.java
 import org.apache.torque.util.*;
 
-public class AuthorPeer 
+public class AuthorPeer
   extends com.kazmier.om.BaseAuthorPeer
 {
   public static List doSelectAll() throws Exception
@@ -1394,7 +1394,7 @@ public class AuthorPeer
 // PublisherPeer.java
 import org.apache.torque.util.*;
 
-public class PublisherPeer 
+public class PublisherPeer
   extends com.kazmier.om.BasePublisherPeer
 {
   public static List doSelectAll() throws Exception
@@ -1494,7 +1494,7 @@ public class Bookstore
        * helper method defined in BookPeer
        * (doSelectAll).
        */
-      System.out.println("Full booklist:\n"); 
+      System.out.println("Full booklist:\n");
       List booklist = BookPeer.doSelectAll();
       printBooklist(booklist);
 
@@ -1558,7 +1558,7 @@ public class Bookstore
   /*
    * Helper method to print a booklist to standard out.
    */
-  private static void printBooklist(List booklist) 
+  private static void printBooklist(List booklist)
     throws Exception
   {
     Iterator i = booklist.iterator();
@@ -1594,7 +1594,7 @@ public class Bookstore
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml compile  
+ant -f build-torque.xml compile
 ]]></source>
 
 <p>
@@ -1627,10 +1627,10 @@ ant -f build-torque.xml compile
 </p>
 
 <source><![CDATA[
-  [kaz@coco torque]$ CLASSPATH=bin/classes   
+  [kaz@coco torque]$ CLASSPATH=bin/classes
   [kaz@coco torque]$ for i in lib/*
   > do
-  > CLASSPATH=$CLASSPATH:$i  
+  > CLASSPATH=$CLASSPATH:$i
   > done
   [kaz@coco torque]$ export CLASSPATH
 ]]></source>
@@ -1644,7 +1644,7 @@ ant -f build-torque.xml compile
 </p>
 
 <source><![CDATA[
-  java com.kazmier.Bookstore  
+  java com.kazmier.Bookstore
 ]]></source>
 
 <p>
@@ -1654,36 +1654,36 @@ ant -f build-torque.xml compile
 
 <source><![CDATA[
   Full booklist:
-  
+
   Title:    Effective Java
   ISBN:     0-618-12902-2
   Publisher:  Addison Wesley Professional
   Author:   Bloch, Joshua
-  
-  Title:    TCP/IP Illustrated, Volume 1  
+
+  Title:    TCP/IP Illustrated, Volume 1
   ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
   Author:   Stevens, W.
-  
+
   Booklist (specific ISBN):
-  
+
   Title:    TCP/IP Illustrated, Volume 1
   ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
   Author:   Stevens, W.
-  
+
   Booklist (authors swapped):
-  
+
   Title:    Effective Java
   ISBN:     0-618-12902-2
   Publisher:  Addison Wesley Professional
   Author:   Stevens, W.
-  
+
   Title:    TCP/IP Illustrated, Volume 1
   ISBN:     0-201-63346-9
   Publisher:  Addison Wesley Professional
   Author:   Bloch, Joshua
-  
+
   Booklist (should be empty):
   ]]></source>
   <p>
@@ -1697,7 +1697,7 @@ ant -f build-torque.xml compile
     application does not run the first time.  Carefully
     retrace all of the steps outlined in this tutorial.
     If you are still not able to get your application to
-    run, use the Turbine 
+    run, use the Turbine
     <a href="/site/mail.html">mailing list</a> to your
     advantage.
   </p>
@@ -1722,6 +1722,6 @@ ant -f build-torque.xml compile
 
 </section>
 
-  </body> 
+  </body>
 </document>
 

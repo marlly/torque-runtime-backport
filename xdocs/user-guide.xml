@@ -56,7 +56,9 @@ torque/
     templates/        <--- Velocity templates used for source generation.
     src/              <--- Target location for output (stand-alone version).
 
-    build.xml         <--- Ant build file that controls Torque.
+    build-torque.xml  <--- Ant build file that controls Torque.
+                           (not named build.xml to make it easier to use it
+                           from your projects build.xml)
     build.properties  <--- Properties file that controls Torque behaviour.
 ]]></source>
 
@@ -74,7 +76,8 @@ torque/
 <p>
   For those who just want to see Torque go all you have to do is select your
   target database and target package in <em>build.properties</em>, edit the
-  <em>project-schema.xml</em> to suit your needs, then <strong>ant</strong>.
+  <em>project-schema.xml</em> to suit your needs, then type
+  <strong>ant -f build-torque.xml</strong>.
   That's it!
 </p>
 
@@ -87,8 +90,8 @@ torque/
 </p>
 
 <p>
-  For example if you change the <em>project</em> property from the default 
-  value of "project" to "killerapp" then you must change the name of the default 
+  For example if you change the <em>project</em> property from the default
+  value of "project" to "killerapp" then you must change the name of the default
   schema in the <strong>schema</strong> directory from <em>project-schema.xml</em>
   to <em>killerapp-schema.xml</em>.
 </p>
@@ -100,7 +103,7 @@ torque/
 <subsection name="build.properties">
 
 <p>
-  For a complete list of build properties, please refer to the 
+  For a complete list of build properties, please refer to the
   <a href="properties-reference.html">properties reference</a>. Below
   is a short list of the primary properties you should be interested in.
 </p>

@@ -9,6 +9,46 @@
 
   <body>
 
+<section name="Torque 3.0-b4">
+
+<p>
+  Changes between Torque 3.0-b3 and 3.0-b4.
+</p>
+
+<subsection name="Changes that could (will) break older environments">
+<p>
+  <ul>
+    <li>
+      jdbc2pool package dissolved (the old Torque pool is back in the torque
+      codebase, the new pool is part of commons-dbcp now)
+    </li>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+
+<subsection name="Other changes">
+<p>
+  <ul>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+</section>
+
 <section name="Torque 3.0-b3">
 
 <p>
@@ -157,14 +197,6 @@
       the pool packages has been removed <br/>
       commons-jdbc2pool is used instead.
     </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
   </ul>
 </p>
 </subsection>
@@ -177,14 +209,7 @@
       new idMethod NATIVE. this replaces SEQUENCE and AUTOINCREMENT
     </li>
     <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
+      support for axion added
     </li>
   </ul>
 </p>
@@ -196,27 +221,13 @@
     <li>
       fixed logging when category is null.
     </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
-    <li>
-    </li>
   </ul>
 </p>
 </subsection>
 
 </section>
 
-<!--
-</section>
-    <section name="Changes">
+<section name="Changes">
       <p>
         <ul>
 
@@ -559,19 +570,8 @@
               </li>
             </ul>
           </li>
-          <li>
-            <strong>30 Dec 2001</strong>
-            <ul>
-              <li>
-                The javadocs are now included with the distribution. The
-                "dist" target will now produce the standard zip file with the addition of
-                a docs/api directory.
-              </li>
-            </ul>
-          </li>
         </ul>
       </p>
     </section>
--->
   </body>
 </document>

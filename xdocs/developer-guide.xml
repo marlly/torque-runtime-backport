@@ -44,7 +44,7 @@
         the <a href="/site/cvsindex.html">documentation</a>).
       </p>
       <p>
-        <code>maven -p project-b5.xml java:jar</code> builds the jar. <br/>
+        <code>maven java:jar</code> builds the jar. <br/>
         Please refer to the Maven
         <a href="http://jakarta.apache.org/turbine/maven/getting-started.html">
         Getting Started</a> document for instructions on how to build the
@@ -68,7 +68,7 @@
       </p>
 
       <source><![CDATA[
-    maven -p project-b5.xml runtime:test
+    maven runtime:test
       ]]></source>
 
       <p>
