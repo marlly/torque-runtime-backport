@@ -33,11 +33,11 @@
   -->
   <path id="torque-classpath">
     <fileset dir="${torque.lib.dir}">
-      <include name="**/commons-beanutils-1.4.1.jar"/>
-      <include name="**/commons-collections-2.0.jar"/>
+      <include name="**/commons-beanutils-1.5.jar"/>
+      <include name="**/commons-collections-2.1.jar"/>
       <include name="**/commons-configuration-1.0-dev.jar"/>
-      <include name="**/commons-dbcp-1.0-dev-20020806.jar"/>
-      <include name="**/commons-lang-1.0.jar"/>
+      <include name="**/commons-dbcp-1.1-dev-20021215.jar"/>
+      <include name="**/commons-lang-1.0.1.jar"/>
       <include name="**/commons-logging-1.0.2.jar"/>
       <include name="**/commons-pool-1.0.jar"/>
       <include name="**/jcs-1.0-dev.jar"/>
