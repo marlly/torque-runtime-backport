@@ -76,7 +76,7 @@ public class DTDResolver implements EntityResolver
 {
     /** Where the DTD is located on the web. */
     public static final String WEB_SITE_DTD
-            = "http://db.apache.org/torque/dtd/database_3_1.dtd";
+            = "http://db.apache.org/torque/dtd/database_3_2.dtd";
 
     /** InputSource for <code>database.dtd</code>. */
     private InputSource databaseDTD = null;
