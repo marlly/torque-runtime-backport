@@ -3,7 +3,7 @@ package org.apache.torque;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,6 @@ import java.util.Map;
 import java.util.List;
 import java.util.Vector;
 import java.util.Properties;
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -76,6 +75,11 @@ import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
+import org.apache.stratum.configuration.Configuration;
+import org.apache.stratum.configuration.PropertiesConfiguration;
+import org.apache.stratum.exception.NestableException;
+import org.apache.stratum.lifecycle.Configurable;
+import org.apache.stratum.lifecycle.Initializable;
 
 /**
  * The implementation of Torque.
@@ -84,9 +88,10 @@ import org.apache.torque.util.BasePeer;
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class Torque
+public class Torque implements Initializable, Configurable
 {
     /**
      * Name of property that specifies the default
@@ -104,8 +109,8 @@ public class Torque
      */
     private static String defaultDBName;
 
-    /** 
-     * The global cache of database maps 
+    /**
+     * The global cache of database maps
      */
     private static Map dbMaps;
 
@@ -118,13 +123,13 @@ public class Torque
     /**
      * The logging category.
      */
-    private static Category category = 
+    private static Category category =
         Category.getInstance(Torque.class.getName());
 
     /**
      * Torque-specific configuration.
      */
-    private static ExtendedProperties configuration;
+    private static Configuration configuration;
 
     /**
      * The connection pool monitor.
@@ -144,46 +149,35 @@ public class Torque
      */
     private static List mapBuilders = new Vector();
 
-    /**
-     * Initialization of Torque with a properties file.
-     *
-     * @param configFile The absolute path to the configuration file.
-     */
-    public static void init(String configFile)
-        throws Exception
-    {
-        ExtendedProperties c = new ExtendedProperties(configFile);
-        init(c);
-    }
 
     /**
-     * Initialization of Torque with a properties file.
+     * initialize Torque
      *
-     * @param c The Torque configuration.
+     * @see org.apache.stratum.lifecycle.Initializable
      */
-    public static void init(ExtendedProperties c)
-        throws Exception
+    public void initialize() throws Exception
     {
-        Torque.setConfiguration(c);
+        // FIX ME!!
+        // duplicated code init(Configuration)
         if (configuration == null)
         {
             throw new Exception("Torque cannot be initialized without " +
                 "a valid configuration. Please check the log files " +
                     "for further details.");
-        }            
-        
+        }
+
         // Setup log4j, I suppose we might want to deal with
         // systems other than log4j ...
         configureLogging();
-        
+
         // Now that we have dealt with processing the log4j properties
         // that may be contained in the configuration we will make the
         // configuration consist only of the remain torque specific
-        // properties that are contained in the configuration. First 
+        // properties that are contained in the configuration. First
         // look for properties that are in the "torque" namespace.
-        ExtendedProperties originalConf = configuration;
+        Configuration originalConf = configuration;
         configuration = configuration.subset("torque");
-        
+
         if (configuration == null || configuration.isEmpty())
         {
             // If there are no properties in the "torque" namespace
@@ -195,7 +189,7 @@ public class Torque
             if (configuration == null || configuration.isEmpty())
             {
                 configuration = originalConf;
-            }            
+            }
         }
 
         dbMaps = new HashMap();
@@ -203,14 +197,102 @@ public class Torque
         DBFactory.init(configuration);
 
         isInit = true;
-        for ( Iterator i=mapBuilders.iterator(); i.hasNext(); ) 
+        for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
         {
             //this will add any maps in this builder to the proper database map
             BasePeer.getMapBuilder((String)i.next());
         }
         // any further mapBuilders will be called/built on demand
         mapBuilders = null;
-        
+
+
+        // Create monitor thread
+        monitor = new Monitor();
+        // Indicate that this is a system thread. JVM will quit only when there
+        // are no more active user threads. Settings threads spawned internally
+        // by Turbine as daemons allows commandline applications using Turbine
+        // to terminate in an orderly manner.
+        monitor.setDaemon(true);
+        monitor.start();
+    }
+
+    /**
+     * configure torque
+     *
+     * @see org.apache.stratum.lifecycle.Configurable
+     */
+    public void configure(Configuration config) throws NestableException
+    {
+        configuration = config;
+    }
+
+    /**
+     * Initialization of Torque with a properties file.
+     *
+     * @param configFile The absolute path to the configuration file.
+     */
+    public static void init(String configFile)
+        throws Exception
+    {
+        Configuration c = (Configuration)new PropertiesConfiguration(configFile);
+        init(c);
+    }
+
+    /**
+     * Initialization of Torque with a properties file.
+     *
+     * @param c The Torque configuration.
+     */
+    public static void init(Configuration c)
+        throws Exception
+    {
+        Torque.setConfiguration(c);
+        if (configuration == null)
+        {
+            throw new Exception("Torque cannot be initialized without " +
+                "a valid configuration. Please check the log files " +
+                    "for further details.");
+        }
+
+        // Setup log4j, I suppose we might want to deal with
+        // systems other than log4j ...
+        configureLogging();
+
+        // Now that we have dealt with processing the log4j properties
+        // that may be contained in the configuration we will make the
+        // configuration consist only of the remain torque specific
+        // properties that are contained in the configuration. First
+        // look for properties that are in the "torque" namespace.
+        Configuration originalConf = configuration;
+        configuration = configuration.subset("torque");
+
+        if (configuration == null || configuration.isEmpty())
+        {
+            // If there are no properties in the "torque" namespace
+            // than try the "services.DatabaseService" namespace. This
+            // will soon be deprecated.
+            configuration = originalConf.subset("services.DatabaseService");
+
+            // the configuration may already have any prefixes stripped
+            if (configuration == null || configuration.isEmpty())
+            {
+                configuration = originalConf;
+            }
+        }
+
+        dbMaps = new HashMap();
+        pools = new HashMap();
+        DBFactory.init(configuration);
+
+        isInit = true;
+        for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
+        {
+            //this will add any maps in this builder to the proper database map
+            BasePeer.getMapBuilder((String)i.next());
+        }
+        // any further mapBuilders will be called/built on demand
+        mapBuilders = null;
+
 
         // Create monitor thread
         monitor = new Monitor();
@@ -230,7 +312,7 @@ public class Torque
     /**
      * Sets the configuration for Torque and all dependencies.
      */
-    public static void setConfiguration(ExtendedProperties c)
+    public static void setConfiguration(Configuration c)
     {
         configuration = c;
     }
@@ -238,11 +320,11 @@ public class Torque
     /**
      * Get the configuration for this component.
      */
-    public static ExtendedProperties getConfiguration()
+    public static Configuration getConfiguration()
     {
         return configuration;
-    }        
-    
+    }
+
     /**
      * Configure the logging for this subsystem.
      */
@@ -252,9 +334,9 @@ public class Torque
         {
             // Get the applicationRoot for use in the log4j
             // properties.
-            String applicationRoot = 
+            String applicationRoot =
                 getConfiguration().getString("torque.applicationRoot", ".");
-            
+
             //!! Need a configurable log directory.
             File logsDir = new File(applicationRoot, "logs");
 
@@ -267,29 +349,29 @@ public class Torque
             }
 
             // Extract the log4j values out of the configuration and
-            // place them in a Properties object so that we can 
+            // place them in a Properties object so that we can
             // use the log4j PropertyConfigurator.
             Properties p = new Properties();
             p.put("torque.applicationRoot", applicationRoot);
-            
+
             Iterator i = getConfiguration().getKeys();
             while (i.hasNext())
             {
                 String key = (String) i.next();
-                
+
                 // We only want log4j properties.
                 if (key.startsWith("log4j") == false)
                 {
                     continue;
                 }
-                
+
                 // We have to deal with ExtendedProperties way
                 // of dealing with "," in properties which is to
                 // make them separate values. Log4j category
                 // properties contain commas so we must stick them
                 // back together for log4j.
                 String[] values = getConfiguration().getStringArray(key);
-                
+
                 String value;
                 if (values.length == 1)
                 {
@@ -298,15 +380,15 @@ public class Torque
                 else
                 {
                     value = values[0] + "," + values[1];
-                }                    
-                
+                }
+
                 p.put(key, value);
-            } 
-            
+            }
+
             PropertyConfigurator.configure(p);
             category.info("Logging has been configured by Torque.");
         }
-        
+
     }
 
     /**
@@ -482,7 +564,7 @@ public class Torque
     public static void registerMapBuilder(String className)
     {
         mapBuilders.add(className);
-    } 
+    }
 
     /**
      * Returns the specified property of the given database, or the empty
@@ -835,7 +917,7 @@ public class Torque
                         .append(pool.getNbrAvailable()).append(" + ")
                         .append(pool.getNbrCheckedOut()).append(" = ")
                         .append(pool.getTotalCount());
-                    
+
                     category.info(buf.toString());
                 }
 
@@ -865,10 +947,10 @@ public class Torque
         // same object.
         else if (defaultDBName == null)
         {
-            defaultDBName = 
+            defaultDBName =
                 configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
         }
-        
+
         return defaultDBName;
     }
 

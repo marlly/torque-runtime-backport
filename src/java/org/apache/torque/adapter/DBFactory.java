@@ -56,8 +56,9 @@ package org.apache.torque.adapter;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
+import org.apache.stratum.configuration.Configuration;
+
 
 /**
  * This class creates different {@link org.apache.torque.adapter.DB}
@@ -101,7 +102,7 @@ public class DBFactory
      * configuration is queried to get a list of JDBC drivers and
      * their associated adapters.
      */
-    public static void init(ExtendedProperties configuration)
+    public static void init(Configuration configuration)
     {
         adapters = new Hashtable();
         initializeDriverToAdapterMap();

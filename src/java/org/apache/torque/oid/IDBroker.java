@@ -64,8 +64,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
+import org.apache.stratum.configuration.Configuration;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -196,7 +196,7 @@ public class IDBroker
      */
     private static final BigDecimal ONE = new BigDecimal("1");
 
-    private ExtendedProperties configuration;
+    private Configuration configuration;
 
     private static final String DB_IDBROKER_CLEVERQUANTITY =
         "idbroker.clever.quantity";
@@ -219,7 +219,7 @@ public class IDBroker
     {
         this.tableMap = tMap;
         configuration = Torque.getConfiguration();
-        
+
         // Start the housekeeper thread only if prefetch has not been disabled
         if (configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
@@ -270,7 +270,7 @@ public class IDBroker
         }
     }
 
-    public void setConfiguration(ExtendedProperties configuration)
+    public void setConfiguration(Configuration configuration)
     {
         this.configuration = configuration;
     }
