@@ -261,14 +261,9 @@ public class ConnectionPool
     /**
      * Returns a connection that maintains a link to the pool it came from.
      *
-     * @param driver   The fully-qualified name of the JDBC driver to use.
-     * @param url      The URL of the database from which the connection is
-     *                 desired.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return         A database connection.
+     * @return A database connection.
      *
-     * @exception Exception
+     * @exception Exception Error retrieving connection.
      */
     public synchronized final DBConnection getConnection()
         throws Exception
