@@ -37,7 +37,7 @@
   source/class files representing your object model,
   SQL statements for your specific database, and
   documentation.  To accomplish these tasks, it uses
-  <a href="jakarta.apache.org/ant/index.html">Ant</a> to control its
+  <a href="http://ant.apache.org/">Ant</a> to control its
   build process, and ant uses the
   <em>build.properties</em> file in the top-level
   Torque directory to setup your development

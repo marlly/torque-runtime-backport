@@ -43,9 +43,7 @@
   Along with the <code>build-torque.xml</code> and <code>build.properties</code>,
   you must ensure that Torque and all of it's dependencies are in the classpath. 
   For a list of dependencies, please refer to 
-  <a href="http://jakarta.apache.org/turbine/torque/dependencies.html">
-    dependencies.html
-  </a>.
+  <a href="dependencies.html">dependencies.html</a>.
 </p>
 
 <p>
