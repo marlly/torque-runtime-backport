@@ -1375,10 +1375,9 @@ public class Criteria extends Hashtable
                              int year,
                              int month,
                              int date )
-        {
-        add(column, new GregorianCalendar(year, month, date) );
-        return this;
-        }
+    {
+        return addDate(column, year, month, date);
+    }
 
     /**
      * @deprecated These methods were wrongly named and are misleading.
@@ -1390,8 +1389,7 @@ public class Criteria extends Hashtable
                              int date,
                              SqlEnum comparison)
     {
-        add(column, new GregorianCalendar(year, month, date), comparison );
-        return this;
+        return addDate(column, year, month, date, comparison);
     }
 
     /**
