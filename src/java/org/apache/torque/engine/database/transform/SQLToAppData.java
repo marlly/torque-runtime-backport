@@ -90,21 +90,28 @@ public class SQLToAppData
     private AppData appData;
     private Database appDataDB;
     private int count;
-
-    /**
-     * Create a new class without any input Reader.
-     */
-    public SQLToAppData()
-    {
-        this (null);
-    }
+    private String databaseType; 
+    private String basePropsFilePath;
 
     /**
      * Create a new class with an input Reader
      */
-    public SQLToAppData (String sqlFile)
+    public SQLToAppData(String sqlFile)
     {
         this.sqlFile = sqlFile;
+    }
+
+    /**
+     * Create a new class with an input Reader.  This ctor is not used
+     * but putting here in the event db.props properties are found to
+     * be useful converting sql to xml, the infrastructure will exist
+     */
+    public SQLToAppData(String sqlFile, String databaseType, 
+                        String basePropsFilePath)
+    {
+        this.sqlFile = sqlFile;
+        this.databaseType = databaseType;
+        this.basePropsFilePath = basePropsFilePath; 
     }
 
 
@@ -488,7 +495,7 @@ public class SQLToAppData
     public AppData execute() throws IOException, ParseException
     {
         count = 0;
-        appData = new AppData();
+        appData = new AppData(databaseType, basePropsFilePath);
         appDataDB = new Database();
         appData.addDatabase(appDataDB);
 

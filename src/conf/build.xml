@@ -67,6 +67,7 @@
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       templatePath="${templatePath}"
+      basePathToDbProps="sql/base/"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
       idTableXMLFile="${torque.home}/schema/id-table-schema.xml"
@@ -102,6 +103,7 @@
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       templatePath="${templatePath}"
+      basePathToDbProps="sql/base/"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
       targetDatabase="${database}">
@@ -423,6 +425,7 @@
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/java"
       templatePath="${templatePath}"
+      basePathToDbProps="sql/base/"
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
       targetDatabase="${database}">

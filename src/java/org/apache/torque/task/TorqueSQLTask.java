@@ -76,14 +76,6 @@ import org.apache.torque.engine.database.model.AppData;
 public class TorqueSQLTask 
     extends TorqueDataModelTask
 {
-    /**
-     * The target database(s) we are generating SQL
-     * for. Right now we can only deal with a single
-     * target, but we will support multiple targets
-     * soon.
-     */
-    private String targetDatabase;
-
     // if the database is set than all generated sql files
     // will be placed in the specified database, the database
     // will not be taken from the data model schema file.
@@ -132,27 +124,6 @@ public class TorqueSQLTask
         return idTableXMLFile;
     }
     
-    /**
-     * Get the current target package.
-     *
-     * @return String target database(s)
-     */
-    public String getTargetDatabase ()
-    {
-        return targetDatabase;
-    }
-
-    /**
-     * Set the current target package.  This is where
-     * generated java classes will live.
-     *
-     * @param String target database(s)
-     */
-    public void setTargetDatabase (String v)
-    {
-        targetDatabase = v;
-    }
-
     private void createSqlDbMap()
         throws Exception
     {
@@ -208,7 +179,8 @@ public class TorqueSQLTask
     {
         // Transform the XML database schema into
         // data model object.
-        XmlToAppData xmlParser = new XmlToAppData();
+        XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(), 
+                                                  getBasePathToDbProps());
         AppData ad = xmlParser.parseFile(getIdTableXMLFile());
         xmlParser.parseFile(getIdTableXMLFile());
         ad.setName("idmodel");
@@ -224,7 +196,7 @@ public class TorqueSQLTask
         throws Exception
     {   
         super.initControlContext();
-        context.put("targetDatabase", targetDatabase);
+        context.put("targetDatabase", getTargetDatabase());
         createSqlDbMap();
 
         // If the load path for the id broker table xml schema is

@@ -124,14 +124,6 @@ public class XmlToAppData extends DefaultHandler
     }
 
     /**
-     * Creates a new instance.
-     */
-    public XmlToAppData()
-    {
-        this(null, null);
-    }
-
-    /**
      * Creates a new instance for the specified database type.
      *
      * @param databaseType The type of database for the application.
@@ -140,8 +132,7 @@ public class XmlToAppData extends DefaultHandler
      */
     public XmlToAppData(String databaseType, String basePropsFilePath)
     {
-        app = (databaseType == null ? new AppData() :
-               new AppData(databaseType, basePropsFilePath));
+        app = new AppData(databaseType, basePropsFilePath);
         firstPass = true;
         errorMessage = "";
     }

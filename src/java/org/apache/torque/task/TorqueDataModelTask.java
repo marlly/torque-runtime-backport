@@ -129,6 +129,21 @@ public class TorqueDataModelTask
     protected String sqldbmap;
 
     /**
+     * The path to properties file containing db idiosyncrasies is
+     * constructed by appending the "getTargetDatabase()/db.props
+     * to this path.
+     */
+    private String basePathToDbProps;
+
+    /**
+     * The target database(s) we are generating SQL
+     * for. Right now we can only deal with a single
+     * target, but we will support multiple targets
+     * soon.
+     */
+    private String targetDatabase;
+
+    /**
      * Set the sqldbmap.
      *
      * @param String sqldbmap
@@ -201,6 +216,47 @@ public class TorqueDataModelTask
     }
 
     /**
+     * Get the current target package.
+     *
+     * @return String target database(s)
+     */
+    public String getTargetDatabase ()
+    {
+        return targetDatabase;
+    }
+
+    /**
+     * Set the current target package.  This is where
+     * generated java classes will live.
+     *
+     * @param String target database(s)
+     */
+    public void setTargetDatabase (String v)
+    {
+        targetDatabase = v;
+    }
+    
+    /**
+     * The path to properties file containing db idiosyncrasies is
+     * constructed by appending the "getTargetDatabase()/db.props
+     * to this path.
+     */
+    public String getBasePathToDbProps() 
+    {
+        return basePathToDbProps;
+    }
+    
+    /**
+     * The path to properties file containing db idiosyncrasies is
+     * constructed by appending the "getTargetDatabase()/db.props
+     * to this path.
+     */
+    public void setBasePathToDbProps(String  v) 
+    {
+        this.basePathToDbProps = v;
+    }
+    
+    /**
      *  Set up the initialial context for generating the
      *  SQL from the XML schema.
      *
@@ -221,7 +277,8 @@ public class TorqueDataModelTask
         {
             // Transform the XML database schema into
             // data model object.
-            xmlParser = new XmlToAppData();
+            xmlParser = 
+                new XmlToAppData(getTargetDatabase(), getBasePathToDbProps());
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
             ad.setName(grokName(xmlFile));
@@ -242,7 +299,8 @@ public class TorqueDataModelTask
                 for (int j = 0; j < dataModelFiles.length; j++)
                 {
                     File f = new File(srcDir, dataModelFiles[j]);
-                    xmlParser = new XmlToAppData();
+                    xmlParser = new XmlToAppData(getTargetDatabase(), 
+                                                 getBasePathToDbProps());
                     AppData ad = xmlParser.parseFile(f.toString());
                     xmlParser.parseFile(f.toString());
                     ad.setName(grokName(f.toString()));

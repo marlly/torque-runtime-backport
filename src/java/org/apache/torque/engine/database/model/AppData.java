@@ -105,14 +105,6 @@ public class AppData
     private String name;
 
     /**
-     * Creates a new instance.
-     */
-    public AppData()
-    {
-        this(null, null);
-    }
-
-    /**
      * Creates a new instance for the specified database type.
      *
      * @param databaseType The default type for any databases added to
@@ -161,7 +153,21 @@ public class AppData
                 }
                 idiosyncrasyTable.put(databaseType, idiosyncrasies);
             }
-            else
+            else 
+            {
+                try
+                {
+                    String path = '/' + basePropsFilePath + databaseType + 
+                        "/db.props";
+                    idiosyncrasies.load(getClass().getResourceAsStream(path));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            
+            if (idiosyncrasies.isEmpty()) 
             {
                 throw new TorqueException("Database-specific properties " +
                                           "file does not exist: " +
