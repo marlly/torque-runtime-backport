@@ -1,4 +1,5 @@
-package org.apache.torque;
+package org.apache.torque.avalon;
+
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,53 +55,16 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
-import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.configuration.Configurable;
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-
+import org.apache.avalon.framework.component.Component;
 
 /**
- * Avalon component for Torque.
+ * Avalon role interface for Torque.
  *
- * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class TorqueComponent implements Configurable, Initializable, Disposable
+public interface Torque
+        extends Component
 {
-
-    /**
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
-     */
-    public void configure(Configuration configuration) throws ConfigurationException
-    {
-        String configFile = configuration.getChild("configfile").getValue();
-        try 
-        {
-            Torque.init(configFile);
-        }
-        catch (TorqueException tex)
-        {
-            throw new ConfigurationException("Torque could not be configured", tex);
-        }
-    }
-
-    /**
-     * @see org.apache.avalon.framework.activity.Initializable#initialize()
-     */
-    public void initialize() throws Exception
-    {
-        Torque torque = new Torque();
-        torque.initialize();        
-    }
-
-    /**
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
-     */
-    public void dispose()
-    {
-        Torque torque = new Torque();
-        torque.dispose();        
-    }
+    String ROLE = "org.apache.torque.avalon.Torque";
 }
