@@ -7,6 +7,7 @@
     <author email="jvanzyl@apache.org">Jason van Zyl</author>
     <author email="jmcnally@collab.net">John McNally</author>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
@@ -18,36 +19,53 @@
       </p>
 
       <source><![CDATA[
-    jakarta-turbine-torque/
-      examples/       <--- example schema and config files
-      profile/        <--- testing profiles
-      src/            <--- sources
-        conf/         <--- runtime configuration
-        dtd/          <--- DTD for schema.xml files
-        generator/    <--- home of torque-gen
-        java/         <--- java sources
-        rttest/       <--- sources for the runtime tests
-        schema/       <--- needed schema files (IDBroker)
-        templates/    <--- templates for sql- and om- generation
-        test/         <--- junit tests
-      xdocs/          <--- docs in anakia xml format
+    db-torque/
+      examples/        <--- example schema and config files
+      profile/         <--- testing profiles
+      src/             <--- sources
+        conf/          <--- runtime configuration
+        generator/     <--- home of torque-gen
+          src/         <--- sources
+            conf/      <--- generator configuration and ant buildfile
+            dtd/       <--- DTD for schema.xml files
+            java/      <--- java sources for generator
+            schema/    <--- needed schema files (IDBroker)
+            templates/ <--- templates for sql- and om- generation
+            test/      <--- junit tests
+          xdocs/       <--- docs for generator in anakia xml format
+        java/          <--- java sources for runtime
+        maven-plugin   <--- home of maven-plugin
+          xdocs/       <--- docs for maven-plugin in anakia xml format
+        rttest/        <--- sources for the runtime tests
+        test/          <--- junit tests
+      xdocs/           <--- docs for runtime in anakia xml format
       ]]></source>
     </section>
 
     <section name="Building">
       <p>
-        Building Torque from CVS is now very easy because it has been
-        Maven-enabled.  Before you begin, you'll need to check out the
-        <code>db-torque</code> CVS repository (if you are not familiar with the
-        Apache CVS repositories, please refer to the
+        The Torque build process uses
+        <a href="http://maven.apache.org">Maven</a>.  Before you begin, you'll 
+        need to check out the <code>db-torque</code> CVS repository (if you are 
+        not familiar with the Apache CVS repositories, please refer to the
         <a href="http://www.apache.org/dev/version-control.html">documentation</a>).
+        Specific information for Torque is available on the 
+        <a href="cvs-usage.html">Source Repository</a> page.
       </p>
       <p>
-        <code>maven jar:jar</code> builds the jar. <br/>
-        Please refer to the Maven
-        <a href="http://maven.apache.org/start/index.html">
-        Getting Started</a> document for instructions on how to build the
-        project using Maven.
+        To build the Torque generator jar execute <code>maven jar:jar</code> in 
+        the <code>src/generator</code> directory (<code>maven 
+        jar:install</code> to install a copy of the jar in your local Maven 
+        repository).
+      </p>
+      <p>
+        To build and install the Torque maven-plugin execute <code>maven 
+        plugin:install</code> in the <code>src/maven-plugin</code> directory.
+      </p>
+      <p>
+        To build the Torque runtime jar execute <code>maven jar:jar</code> in 
+        the root directory of the project (<code>maven jar:install</code> to
+        install a copy of the jar in your local Maven repository).
       </p>
     </section>
 
