@@ -86,9 +86,7 @@ public class MethodResultCache
         keys = new WeakHashMap();            
         this.jcsCache = cache;            
         groups = new HashMap();
-
-        PoolableObjectFactory factory = new MethodCacheKey.Factory();
-        pool = new StackObjectPool(factory, 10000);
+        pool = new StackObjectPool(new MethodCacheKey.Factory(), 10000);
     }
 
     public void clear()
