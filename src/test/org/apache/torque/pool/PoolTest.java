@@ -137,7 +137,6 @@ public class PoolTest implements Runnable
         {
             e.printStackTrace();
         }
-
     }
 
     public void run()
@@ -170,9 +169,9 @@ public class PoolTest implements Runnable
                 }
                 finally
                 {
-                    System.out.println ("Release Connection1: " + thread);
+                    System.out.println("Releasing connection: " + thread);
                     Torque.releaseConnection(dbCon);
-                    System.out.println ("Release Connection2: " + thread);
+                    System.out.println("Released connection: " + thread);
                 }
             }
             catch (ConnectionWaitTimeoutException cwte)
