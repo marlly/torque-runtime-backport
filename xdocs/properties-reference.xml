@@ -152,7 +152,7 @@
   <td><code> torque.database.buildUrl </code></td>
   <td><code> N/A </code></td>
   <td>
-    The JDBC URL that will be used to access yourdatabase. Torque can use
+    The JDBC URL that will be used to access your database. Torque can use
     this to create your tables if instructed to do so.  This value should
     reflect the database name specified in the database schema file
     (described in the next section).
@@ -273,7 +273,7 @@
   <td><code> torque.addTimeStamp </code></td>
   <td><code> true </code></td>
   <td>
-    If true, Torque true puts time stamps in generated om files.
+    If true, Torque puts time stamps in generated om files.
   </td>
 </tr>
 <tr>
@@ -288,7 +288,7 @@
   <td><code> true </code></td>
   <td>
     If true, Torque generates data objects with collection support and
-    methods to easily retreive foreign key relationships.
+    methods to easily retrieve foreign key relationships.
   </td>
 </tr>
 <tr>

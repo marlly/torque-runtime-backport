@@ -213,7 +213,7 @@ tcpip.save();
   table defines a static method called
   <em>doSelect</em> which is used to pull data out of
   the table.  The argument to <em>doSelect</em> is a
-  <em>Critieria</em> object.  It is this object that
+  <em>Criteria</em> object.  It is this object that
   specifies the criteria to be used when selecting
   data from the database.  As a result of the query,
   <em>doSelect</em> returns a vector of Data Objects

@@ -50,6 +50,12 @@
   not been released; however, there is a beta version
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
   available</a>.
+  Note that for this tutorial, you should NOT use the CVS version
+  of db-torque instead of the normal release version, since the
+  Torque CVS tree has a differing directory layout; thus it's unsuitable
+  for this example (at least if you're a newbie who doesn't know how to
+  configure the CVS version properly, which is probably true
+  for most people that are reading this tutorial).
 </p>
 
 <p>
@@ -112,7 +118,7 @@
   bare minimum to get your first Torque application up
   and running.  However, the <em>build.properties</em>
   file is thoroughly commented, so please refer to it
-  if you have a question regarding part of the file
+  if you have a question regarding a part of the file
   that is not covered here.  Make the following
   changes and edit appropriately for your environment.
   The properties are described in the table following
@@ -174,7 +180,7 @@
   format of <em>name-schema.xml</em> where
   <em>name</em> was the same as the <em>project</em>
   property defined in <em>build.properties</em>;
-  otherwise, Torque was not be able to find your
+  otherwise, Torque was not able to find your
   database schema file.  This is no longer the case,
   <em>name</em> is no longer restricted to the project
   name. However, it must end with
@@ -432,7 +438,7 @@
   for the database schema.  In addition, you must
   include the XML declaration and DTD specification in
   your database schema file.  Failure to do so can
-  result it errors.
+  result in errors.
 </p>
 
 <p>
@@ -529,7 +535,7 @@ log4j.appender.default = org.apache.log4j.FileAppender
 log4j.appender.default.file = ./torque.log
 log4j.appender.default.layout = org.apache.log4j.SimpleLayout
 
-torque.database.default=bookstore
+torque.database.default = bookstore
 torque.database.bookstore.driver = org.gjt.mm.mysql.Driver
 torque.database.bookstore.url = jdbc:mysql://127.0.0.1/bookstore
 torque.database.bookstore.username = user
@@ -1010,7 +1016,7 @@ tcpip.save();
   table defines a static method called
   <em>doSelect</em> which is used to pull data out of
   the table.  The argument to <em>doSelect</em> is a
-  <em>Critieria</em> object.  It is this object that
+  <em>Criteria</em> object.  It is this object that
   specifies the criteria to be used when selecting
   data from the database.  As a result of the query,
   <em>doSelect</em> returns a vector of Data Objects
@@ -1149,7 +1155,7 @@ List v = BookPeer.doSelect(crit);
   that represents the row by invoking one or more
   mutators and then calling its <em>save</em> method.
   When a mutator is called, the Data Object sets an
-  internal flag to indicate that its been modified.
+  internal flag to indicate that it's been modified.
   This flag is checked when <em>save</em> is invoked
   to determine if the Peer's <em>doInsert</em> or
   <em>doUpdate</em> is called to perform the database

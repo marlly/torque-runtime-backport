@@ -14,8 +14,8 @@
     <p>
       The Torque Database Schema Reference attempts to explain what the
       different elements and attributes are when defining your own database
-      schema. In addition I will attempt to explain what attributes mean what
-      in the different databases currently supported.
+      schema. In addition I will attempt to explain which attributes mean what
+      in the different databases that are currently supported.
     </p>
    </section>
 
@@ -175,7 +175,7 @@
        <p>
          The base peer to use when generating the Object Model Peers.
          Unlike baseClass, basePeer should extend BasePeer at some point in the
-         chain, i.e it needs to be the superclass.
+         chain, i.e. it needs to be the superclass.
        </p>
      </subsection>
      <subsection name="Element: table">

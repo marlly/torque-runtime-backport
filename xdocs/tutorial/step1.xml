@@ -13,6 +13,12 @@
   First, you need to obtain the Torque
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
   distribution</a>.
+  Note that for this tutorial, you should NOT use the CVS version
+  of db-torque instead of the normal release version, since the
+  Torque CVS tree has a differing directory layout; thus it's unsuitable
+  for this example (at least if you're a newbie who doesn't know how to
+  configure the CVS version properly, which is probably true
+  for most people that are reading this tutorial).
 </p>
 
 <p>

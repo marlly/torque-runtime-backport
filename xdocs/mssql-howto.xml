@@ -65,7 +65,7 @@ box that says, "Use ANSI nulls, paddings and warnings.".
 </p>
 
 </section>
-<section name="Edit properity files">
+<section name="Edit property files">
 <p>
 In the ...\WEB-INF\build\build.properties file make sure that;
 </p>

@@ -100,4 +100,16 @@
     <column name="START_DATE" type="TIMESTAMP"/>
     <column name="END_DATE" type="TIMESTAMP"/>
   </table>
+  
+  <!-- test for hypersonic -->
+  <table name="NATIVE_TEST">
+    <column name="NATIVE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
+    <column name="NAME" type="VARCHAR" size="250"/>
+  </table>
+  <table name="NATIVE_REF_TEST">
+    <column name="NATIVE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
+    <column name="NAME" type="VARCHAR" size="250"/>
+    <column name="FK_ID" required="true" type="INTEGER"/>
+  </table>
+  
 </database>

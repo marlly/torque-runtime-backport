@@ -8,8 +8,8 @@ o Sybase support is working and passing the testbed.  JConnect, the
   not supported so the JDBCToXMLSchema tasks will not generate the schema
   properly at this time.
 
-o TorqueDataDumpTask will need to know about contraints.  On databases
-  without constrains, the load generated sql will work, but with constraints,
+o TorqueDataDumpTask will need to know about constraints.  On databases
+  without constraints, the load generated sql will work, but with constraints,
   the insert statements need to be in the correct order or they will fail
-  with constaint violations.
+  with constant violations.
 

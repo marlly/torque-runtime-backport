@@ -215,7 +215,7 @@ public class Torque
         if (configuration == null || configuration.isEmpty())
         {
             // If there are no properties in the "torque" namespace
-            // than try the "services.DatabaseService" namespace. This
+            // then try the "services.DatabaseService" namespace. This
             // will soon be deprecated.
             configuration = originalConf.subset("services.DatabaseService");
             if (configuration != null && !configuration.isEmpty())

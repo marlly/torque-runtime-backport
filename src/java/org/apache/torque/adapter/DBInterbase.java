@@ -105,7 +105,7 @@ public class DBInterbase extends DB
     /**
      * Gets the string delimiter (usually '\'').
      *
-     * @return The delimeter.
+     * @return The delimiter.
      */
     public char getStringDelimiter()
     {

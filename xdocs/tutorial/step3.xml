@@ -89,7 +89,7 @@ ant -f build-torque.xml
   than likely a formatting error of your database
   schema file.  Check the format of the file and make
   sure it conforms to the
-  <a href="/turbine/torque/schema-reference.html">
+  <a href="../schema-reference.html">
   Torque Schema Reference</a>.
 </p>
 
