@@ -67,6 +67,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         new ${table.JavaName}Peer();
 
 #if (!$table.isAlias())
+  ## member variables
   #foreach ($col in $table.Columns)
     #set ( $cjtype = $col.JavaNative )
     #set ( $clo=$col.UncapitalisedJavaName )
@@ -100,26 +101,25 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #end
     #end
 
-        /**
-         * The value for the $clo field
-         */
-        private $cjtype $clo$defVal;
+    /** The value for the $clo field */
+    private $cjtype $clo$defVal;
   #end
 
+  ## getter and setter methods
   #foreach ($col in $table.Columns)
     #set ( $cfc=$col.JavaName )
     #set ( $clo=$col.UncapitalisedJavaName )
     #set ( $cjtype = $col.JavaNative )
 
-        /**
-         * Get the $cfc
-         *
-         * @return $cjtype
-         */
-        public $cjtype get${cfc}()
-        {
-            return $clo;
-        }
+    /**
+     * Get the $cfc
+     *
+     * @return $cjtype
+     */
+    public $cjtype get${cfc}()
+    {
+        return $clo;
+    }
 
     #set ( $throwsClause = "" )
     #if ($complexObjectModel)
@@ -133,30 +133,27 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #end
     #end
 
-        /**
-         * Set the value of $cfc
-         *
-         * @param v new value
-         */
-        public void set${cfc}($cjtype v) $throwsClause
-        {
+    /**
+     * Set the value of $cfc
+     *
+     * @param v new value
+     */
+    public void set${cfc}($cjtype v) $throwsClause
+    {
     #if (($cjtype == "NumberKey") || ($cjtype == "StringKey") || ($cjtype == "DateKey"))
-
-            if (v != null && v.getValue() == null)
-            {
-                // If this is an Objectkey than this set method is
-                // probably storing the id of this object or some
-                // associated object.  If the objectKey value is null
-                // then we convert the parameter to null so that this
-                // property is consistently null to indicate that no
-                // object is associated or defined.
-                v = null;
-            }
+        if (v != null && v.getValue() == null)
+        {
+            // If this is an Objectkey than this set method is
+            // probably storing the id of this object or some
+            // associated object.  If the objectKey value is null
+            // then we convert the parameter to null so that this
+            // property is consistently null to indicate that no
+            // object is associated or defined.
+            v = null;
+        }
     #end
 
-
     #if ($addSaveMethod)
-
       #if ($col.isPrimitive())
         if (this.$clo != v)
       #else
@@ -167,7 +164,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             setModified(true);
         }
     #else
-          this.$clo = v;
+        this.$clo = v;
     #end
 
     #if ($complexObjectModel)
@@ -189,7 +186,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #end
 
         #if($colFK.Primitive)
-        if ($varName != null && !(${varName}.get${colFK.JavaName}()==v))
+        if ($varName != null && !(${varName}.get${colFK.JavaName}() == v))
         #else
         if ($varName != null && !ObjectUtils.equals(${varName}.get${colFK.JavaName}(), v))
         #end
@@ -209,15 +206,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #set ( $collName = "coll${tblFK.JavaName}s" )
           #end
 
-              // update associated $tblFK.JavaName
-              if ($collName != null)
-              {
-                  for (int i = 0; i < ${collName}.size(); i++)
-                  {
-                      ((${tblFK.JavaName}) ${collName}.get(i))
-                          .set${colFK.JavaName}(v);
-                  }
-              }
+        // update associated $tblFK.JavaName
+        if ($collName != null)
+        {
+            for (int i = 0; i < ${collName}.size(); i++)
+            {
+                ((${tblFK.JavaName}) ${collName}.get(i))
+                    .set${colFK.JavaName}(v);
+            }
+        }
         #end
       #end
     #end
@@ -226,7 +223,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 #end
 
 ##association code
-
 #if ($complexObjectModel)
   #set($pVars = [])  ## Array of object set method names for later reference.
   #set($aVars = [])  ## Array of object field names for later reference.
@@ -272,7 +268,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
           #set ($coldefval = $column.DefaultValue)
             set${column.JavaName}($coldefval);
           #else
-            set${column.JavaName}(($column.JavaNative)null);
+            set${column.JavaName}(($column.JavaNative) null);
           #end
         }
         else
@@ -336,7 +332,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                never be used.
                $className obj = ${className}Peer.retrieveByPK($arglist);
                obj.add${pCollName}(this);
-             */
+            */
         }
         return $varName;
     }
@@ -364,37 +360,36 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
           #set ($fktype = $col.JavaNative)
           #if ($fktype == "short")
-                set${col.JavaName}(((NumberKey) keys[$i]).shortValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).shortValue());
           #elseif($fktype == "int")
-                set${col.JavaName}(((NumberKey) keys[$i]).intValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).intValue());
           #elseif($fktype == "long")
-                set${col.JavaName}(((NumberKey) keys[$i]).longValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).longValue());
           #elseif($fktype == "BigDecimal")
-                set${col.JavaName}(((NumberKey) keys[$i]).getBigDecimal());
+        set${col.JavaName}(((NumberKey) keys[$i]).getBigDecimal());
           #elseif($fktype == "byte") )
-                set${col.JavaName}(((NumberKey) keys[$i]).byteValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).byteValue());
           #elseif($fktype == "float")
-                set${col.JavaName}(((NumberKey) keys[$i]).floatValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).floatValue());
           #elseif($fktype == "double")
-                set${col.JavaName}(((NumberKey) keys[$i]).doubleValue());
+        set${col.JavaName}(((NumberKey) keys[$i]).doubleValue());
           #elseif($fktype == "Short")
-                set${col.JavaName}(new Short(((NumberKey) keys[$i]).shortValue()));
+        set${col.JavaName}(new Short(((NumberKey) keys[$i]).shortValue()));
           #elseif($fktype == "Integer")
-                set${col.JavaName}(new Integer(((NumberKey) keys[$i]).intValue()));
+        set${col.JavaName}(new Integer(((NumberKey) keys[$i]).intValue()));
           #elseif($fktype == "Long")
-                set${col.JavaName}(new Long(((NumberKey) keys[$i]).longValue()));
+        set${col.JavaName}(new Long(((NumberKey) keys[$i]).longValue()));
           #elseif($fktype == "Byte") )
-                set${col.JavaName}(new Byte(((NumberKey) keys[$i]).byteValue()));
+        set${col.JavaName}(new Byte(((NumberKey) keys[$i]).byteValue()));
           #elseif($fktype == "Float")
-                set${col.JavaName}(new Float(((NumberKey) keys[$i]).floatValue()));
+        set${col.JavaName}(new Float(((NumberKey) keys[$i]).floatValue()));
           #elseif($fktype == "Double")
-                set${col.JavaName}(new Double(((NumberKey) keys[$i]).doubleValue()));
+        set${col.JavaName}(new Double(((NumberKey) keys[$i]).doubleValue()));
           #elseif($fktype == "String")
-                set${col.JavaName}(keys[$i].toString());
+        set${col.JavaName}(keys[$i].toString());
           #elseif($fktype == "Date")
-                set${col.JavaName}(((DateKey)keys[$i]).getDate());
+        set${col.JavaName}(((DateKey)keys[$i]).getDate());
           #end
-
           #set ( $i = $i + 1 )
         #end
       #else
@@ -403,35 +398,35 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         #set ($fktype = $col.JavaNative)
         #if ($fktype == "short")
-                set${col.JavaName}(((NumberKey) key).shortValue());
+        set${col.JavaName}(((NumberKey) key).shortValue());
         #elseif($fktype == "int")
-                set${col.JavaName}(((NumberKey) key).intValue());
+        set${col.JavaName}(((NumberKey) key).intValue());
         #elseif($fktype == "long")
-                set${col.JavaName}(((NumberKey) key).longValue());
+        set${col.JavaName}(((NumberKey) key).longValue());
         #elseif($fktype == "BigDecimal")
-                set${col.JavaName}(((NumberKey) key).getBigDecimal());
+        set${col.JavaName}(((NumberKey) key).getBigDecimal());
         #elseif($fktype == "byte") )
-                set${col.JavaName}(((NumberKey) key).byteValue());
+        set${col.JavaName}(((NumberKey) key).byteValue());
         #elseif($fktype == "float")
-                set${col.JavaName}(((NumberKey) key).floatValue());
+        set${col.JavaName}(((NumberKey) key).floatValue());
         #elseif($fktype == "double")
-                set${col.JavaName}(((NumberKey) key).doubleValue());
+        set${col.JavaName}(((NumberKey) key).doubleValue());
         #elseif($fktype == "Short")
-                set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
+        set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
         #elseif($fktype == "Integer")
-                set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
+        set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
         #elseif($fktype == "Long")
-                set${col.JavaName}(new Long(((NumberKey) key).longValue()));
+        set${col.JavaName}(new Long(((NumberKey) key).longValue()));
         #elseif($fktype == "Byte") )
-                set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
+        set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
         #elseif($fktype == "Float")
-                set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
+        set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
         #elseif($fktype == "Double")
-                set${col.JavaName}(new Double(((NumberKey) key).doubleValue()));
+        set${col.JavaName}(new Double(((NumberKey) key).doubleValue()));
         #elseif($fktype == "String")
-                set${col.JavaName}(key.toString());
+        set${col.JavaName}(key.toString());
         #elseif($fktype == "Date")
-                set${col.JavaName}(((DateKey)key).getDate());
+        set${col.JavaName}(((DateKey)key).getDate());
         #end
       #end
     }
@@ -747,7 +742,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $column = $table.getColumn($columnName) )
               #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
               #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
+            criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
             #end
             if (!last${relCol}Criteria.equals(criteria))
             {
@@ -825,9 +820,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 *#
 ## ------------------------------------------------------------
 
-
   #end    ## ends foreach over table.Referrers
-
 #end    ##ends the if(complexObjectModel)
 
 ##
@@ -843,15 +836,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public static synchronized List getFieldNames()
     {
-      if (fieldNames == null)
-      {
-        fieldNames = new ArrayList();
+        if (fieldNames == null)
+        {
+            fieldNames = new ArrayList();
   #foreach ($col in $table.Columns)
-        fieldNames.add("${col.JavaName}");
+            fieldNames.add("${col.JavaName}");
   #end
-        fieldNames = Collections.unmodifiableList(fieldNames);
-      }
-      return fieldNames;
+            fieldNames = Collections.unmodifiableList(fieldNames);
+        }
+        return fieldNames;
     }
 
     /**
@@ -866,30 +859,31 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $cfc = $col.JavaName )
     #set ( $cjtype = $col.JavaNative )
         if (name.equals("${col.JavaName}"))
-    {
+        {
     #if ($cjtype == "int")
-        return new Integer(get${cfc}());
+            return new Integer(get${cfc}());
     #elseif ($cjtype == "long")
-        return new Long(get${cfc}());
+            return new Long(get${cfc}());
     #elseif ($cjtype == "float")
-        return new Float(get${cfc}());
+            return new Float(get${cfc}());
     #elseif ($cjtype == "double")
-        return new Double(get${cfc}());
+            return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-        return new Boolean(get${cfc}());
+            return new Boolean(get${cfc}());
     #elseif ($cjtype == "short")
-        return new Short(get${cfc}());
+            return new Short(get${cfc}());
     #elseif ($cjtype == "byte")
-        return new Byte(get${cfc}());
+            return new Byte(get${cfc}());
     #elseif ($cjtype == "char")
-        return new Character(get${cfc}());
+            return new Character(get${cfc}());
     #else
-        return get${cfc}();
+            return get${cfc}();
     #end
-    }
+        }
   #end
         return null;
     }
+    
     /**
      * Retrieves a field from the object by name passed in
      * as a String.  The String must be one of the static
@@ -907,25 +901,25 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         if (name.equals(${table.JavaName}Peer.$cup))
         {
     #if ($cjtype == "int")
-        return new Integer(get${cfc}());
+            return new Integer(get${cfc}());
     #elseif ($cjtype == "long")
-        return new Long(get${cfc}());
+            return new Long(get${cfc}());
     #elseif ($cjtype == "float")
-        return new Float(get${cfc}());
+            return new Float(get${cfc}());
     #elseif ($cjtype == "double")
-        return new Double(get${cfc}());
+            return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-        return new Boolean(get${cfc}());
+            return new Boolean(get${cfc}());
     #elseif ($cjtype == "short")
-        return new Short(get${cfc}());
+            return new Short(get${cfc}());
     #elseif ($cjtype == "byte")
-        return new Byte(get${cfc}());
+            return new Byte(get${cfc}());
     #elseif ($cjtype == "char")
-        return new Character(get${cfc}());
+            return new Character(get${cfc}());
     #else
-        return get${cfc}();
+            return get${cfc}();
     #end
-    }
+        }
   #end
         return null;
     }
@@ -943,28 +937,28 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
   #foreach ($col in $table.Columns)
     #set ( $cfc = $col.JavaName )
     #set ( $cjtype = $col.JavaNative )
-    if (pos == $i)
-    {
+        if (pos == $i)
+        {
     #if ($cjtype == "int")
-        return new Integer(get${cfc}());
+            return new Integer(get${cfc}());
     #elseif ($cjtype == "long")
-        return new Long(get${cfc}());
+            return new Long(get${cfc}());
     #elseif ($cjtype == "float")
-        return new Float(get${cfc}());
+            return new Float(get${cfc}());
     #elseif ($cjtype == "double")
-        return new Double(get${cfc}());
+            return new Double(get${cfc}());
     #elseif ($cjtype == "boolean")
-        return new Boolean(get${cfc}());
+            return new Boolean(get${cfc}());
     #elseif ($cjtype == "short")
-        return new Short(get${cfc}());
+            return new Short(get${cfc}());
     #elseif ($cjtype == "byte")
-        return new Byte(get${cfc}());
+            return new Byte(get${cfc}());
     #elseif ($cjtype == "char")
-        return new Character(get${cfc}());
+            return new Character(get${cfc}());
     #else
-        return get${cfc}();
+            return get${cfc}();
     #end
-    }
+        }
     #set ($i = $i + 1)
   #end
         return null;
@@ -981,7 +975,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public void save() throws $saveException
     {
   #if ($complexObjectModel)
-            save(${table.JavaName}Peer.getMapBuilder()
+        save(${table.JavaName}Peer.getMapBuilder()
                 .getDatabaseMap().getName());
   #else
         if (isModified())
@@ -1026,7 +1020,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             Transaction.safeRollback(con);
             throw e;
         }
-
   #else
         if (isModified())
         {
@@ -1050,7 +1043,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                 Torque.closeConnection(con);
             }
         }
-
   #end
     }
 
@@ -1072,9 +1064,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public void save(Connection con) throws TorqueException
     {
   #if ($complexObjectModel)
-      if (!alreadyInSave)
-      {
-        alreadyInSave = true;
+        if (!alreadyInSave)
+        {
+            alreadyInSave = true;
 
 #* FIXME! the following code can cause an infinite loop, needs more thought
 shows the infinite loop: System.out.println("Entering save for " + this);
@@ -1098,22 +1090,21 @@ shows the infinite loop: System.out.println("Entering save for " + this);
       #end
     #end
 *#
-
   #end
 
-        // If this object has been modified, then save it to the database.
-        if (isModified())
-        {
-            if (isNew())
+            // If this object has been modified, then save it to the database.
+            if (isModified())
             {
-                ${table.JavaName}Peer.doInsert(($table.JavaName) this, con);
-                setNew(false);
+                if (isNew())
+                {
+                    ${table.JavaName}Peer.doInsert(($table.JavaName) this, con);
+                    setNew(false);
+                }
+                else
+                {
+                    ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
+                }
             }
-            else
-            {
-                ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
-            }
-        }
 
   #if ($complexObjectModel)
     #foreach ($fk in $table.Referrers)
@@ -1135,19 +1126,19 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #end
         #set ( $collName = "coll$relCol" )
 
-          if ($collName != null)
-          {
-              for (int i = 0; i < ${collName}.size(); i++)
-              {
-                  ((${className}) ${collName}.get(i)).save(con);
-              }
-          }
+            if ($collName != null)
+            {
+                for (int i = 0; i < ${collName}.size(); i++)
+                {
+                    ((${className}) ${collName}.get(i)).save(con);
+                }
+            }
       #end
     #end
   #end
   #if ($complexObjectModel)
-        alreadyInSave = false;
-      }
+            alreadyInSave = false;
+        }
   #end
     }
 #end
@@ -1185,37 +1176,37 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         $throwsClause
     {
     #if ($cjtype == "short")
-            set${col.JavaName}(((NumberKey) key).shortValue());
+        set${col.JavaName}(((NumberKey) key).shortValue());
     #elseif($cjtype == "int")
-            set${col.JavaName}(((NumberKey) key).intValue());
+        set${col.JavaName}(((NumberKey) key).intValue());
     #elseif($cjtype == "long")
-            set${col.JavaName}(((NumberKey) key).longValue());
+        set${col.JavaName}(((NumberKey) key).longValue());
     #elseif($cjtype == "BigDecimal")
-            set${col.JavaName}(((NumberKey) key).getBigDecimal());
+        set${col.JavaName}(((NumberKey) key).getBigDecimal());
     #elseif($cjtype == "byte") )
-            set${col.JavaName}(((NumberKey) key).byteValue());
+        set${col.JavaName}(((NumberKey) key).byteValue());
     #elseif($cjtype == "float")
-            set${col.JavaName}(((NumberKey) key).floatValue());
+        set${col.JavaName}(((NumberKey) key).floatValue());
     #elseif($cjtype == "double")
-            set${col.JavaName}(((NumberKey) key).doubleValue());
+        set${col.JavaName}(((NumberKey) key).doubleValue());
     #elseif($cjtype == "Short")
-            set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
+        set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
     #elseif($cjtype == "Integer")
-            set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
+        set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
     #elseif($cjtype == "Long")
-            set${col.JavaName}(new Long(((NumberKey) key).longValue()));
+        set${col.JavaName}(new Long(((NumberKey) key).longValue()));
     #elseif($cjtype == "Byte") )
-            set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
+        set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
     #elseif($cjtype == "Float")
-            set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
+        set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
     #elseif($cjtype == "Double")
-            set${col.JavaName}(new Double(((NumberKey) key).doubleValue()));
+        set${col.JavaName}(new Double(((NumberKey) key).doubleValue()));
     #elseif($cjtype == "String")
-            set${col.JavaName}(key.toString());
+        set${col.JavaName}(key.toString());
     #elseif($cjtype == "Date")
-            set${col.JavaName}(((DateKey)key).getDate());
+        set${col.JavaName}(((DateKey)key).getDate());
     #else
-            set${col.JavaName}(($cjtype)key);
+        set${col.JavaName}(($cjtype)key);
     #end
     }
 
@@ -1227,37 +1218,37 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     public void setPrimaryKey(String key) $throwsClause
     {
     #if ($cjtype == "short")
-            set${col.JavaName}(Short.parseShort(key));
+        set${col.JavaName}(Short.parseShort(key));
     #elseif($cjtype == "int")
-            set${col.JavaName}(Integer.parseInt(key));
+        set${col.JavaName}(Integer.parseInt(key));
     #elseif($cjtype == "long")
-            set${col.JavaName}(Long.parseLong(key));
+        set${col.JavaName}(Long.parseLong(key));
     #elseif($cjtype == "BigDecimal")
-            set${col.JavaName}(new BigDecimal(key));
+        set${col.JavaName}(new BigDecimal(key));
     #elseif($cjtype == "byte") )
-            set${col.JavaName}(Byte.parseByte(key));
+        set${col.JavaName}(Byte.parseByte(key));
     #elseif($cjtype == "float")
-            set${col.JavaName}(Float.parseFloat(key));
+        set${col.JavaName}(Float.parseFloat(key));
     #elseif($cjtype == "double")
-            set${col.JavaName}(Double.parseDouble(key));
+        set${col.JavaName}(Double.parseDouble(key));
     #elseif($cjtype == "Short")
-            set${col.JavaName}(new Short(key));
+        set${col.JavaName}(new Short(key));
     #elseif($cjtype == "Integer")
-            set${col.JavaName}(new Integer(key));
+        set${col.JavaName}(new Integer(key));
     #elseif($cjtype == "Long")
-            set${col.JavaName}(new Long(key));
+        set${col.JavaName}(new Long(key));
     #elseif($cjtype == "Byte") )
-            set${col.JavaName}(new Byte(key));
+        set${col.JavaName}(new Byte(key));
     #elseif($cjtype == "Float")
-            set${col.JavaName}(new Float(key));
+        set${col.JavaName}(new Float(key));
     #elseif($cjtype == "Double")
-            set${col.JavaName}(new Double(key));
+        set${col.JavaName}(new Double(key));
     #elseif($cjtype == "String")
-            set${col.JavaName}(key);
+        set${col.JavaName}(key);
     #elseif($cjtype == "Date")
-            set${col.JavaName}(new Date(key));
+        set${col.JavaName}(new Date(key));
     #else
-            set${col.JavaName}(new ${cjtype}(key));
+        set${col.JavaName}(new ${cjtype}(key));
     #end
     }
 
@@ -1265,6 +1256,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 
     private final SimpleKey[] pks = new SimpleKey[$table.PrimaryKey.size()];
     private final ComboKey comboPK = new ComboKey(pks);
+    
     /**
      * Set the PrimaryKey with an ObjectKey
      *
@@ -1278,35 +1270,35 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #foreach ($pk in $table.PrimaryKey)
       #set ($pktype = $pk.JavaNative)
       #if ($pktype == "short")
-            set${pk.JavaName}(((NumberKey)keys[$i]).shortValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).shortValue());
       #elseif($pktype == "int")
-            set${pk.JavaName}(((NumberKey)keys[$i]).intValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).intValue());
       #elseif($pktype == "long")
-            set${pk.JavaName}(((NumberKey)keys[$i]).longValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).longValue());
       #elseif($pktype == "BigDecimal")
-            set${pk.JavaName}(((NumberKey)keys[$i]).getBigDecimal());
+        set${pk.JavaName}(((NumberKey)keys[$i]).getBigDecimal());
       #elseif($pktype == "byte") )
-            set${pk.JavaName}(((NumberKey)keys[$i]).byteValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).byteValue());
       #elseif($pktype == "float")
-            set${pk.JavaName}(((NumberKey)keys[$i]).floatValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).floatValue());
       #elseif($pktype == "double")
-            set${pk.JavaName}(((NumberKey)keys[$i]).doubleValue());
+        set${pk.JavaName}(((NumberKey)keys[$i]).doubleValue());
       #elseif($pktype == "Short")
-            set${pk.JavaName}(new Short(((NumberKey)keys[$i]).shortValue()));
+        set${pk.JavaName}(new Short(((NumberKey)keys[$i]).shortValue()));
       #elseif($pktype == "Integer")
-            set${pk.JavaName}(new Integer(((NumberKey)keys[$i]).intValue()));
+        set${pk.JavaName}(new Integer(((NumberKey)keys[$i]).intValue()));
       #elseif($pktype == "Long")
-            set${pk.JavaName}(new Long(((NumberKey)keys[$i]).longValue()));
+        set${pk.JavaName}(new Long(((NumberKey)keys[$i]).longValue()));
       #elseif($pktype == "Byte") )
-            set${pk.JavaName}(new Byte(((NumberKey)keys[$i]).byteValue()));
+        set${pk.JavaName}(new Byte(((NumberKey)keys[$i]).byteValue()));
       #elseif($pktype == "Float")
-            set${pk.JavaName}(new Float(((NumberKey)keys[$i]).floatValue()));
+        set${pk.JavaName}(new Float(((NumberKey)keys[$i]).floatValue()));
       #elseif($pktype == "Double")
-            set${pk.JavaName}(new Double(((NumberKey)keys[$i]).doubleValue()));
+        set${pk.JavaName}(new Double(((NumberKey)keys[$i]).doubleValue()));
       #elseif($pktype == "String")
-            set${pk.JavaName}(keys[$i].toString());
+        set${pk.JavaName}(keys[$i].toString());
       #elseif($pktype == "Date")
-            set${pk.JavaName}(((DateKey)keys[$i]).getDate());
+        set${pk.JavaName}(((DateKey)keys[$i]).getDate());
       #end
       #set ( $i = $i + 1 )
     #end
@@ -1325,7 +1317,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         $throwsClause
     {
     #foreach ($col in $table.PrimaryKey)
-         set${col.JavaName}($col.UncapitalisedJavaName);
+        set${col.JavaName}($col.UncapitalisedJavaName);
     #end
     }
 
@@ -1336,7 +1328,6 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     {
         setPrimaryKey(new ComboKey(key));
     }
-
   #end
 
     /**
@@ -1418,11 +1409,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
       #if($col.Primitive)
         #set ($coldefval = "0")
         #set ($coldefval = $col.DefaultValue)
-          copyObj.set${col.JavaName}($coldefval);
+        copyObj.set${col.JavaName}($coldefval);
       #else
         #set ( $pkid = "null" )
         #set ( $cjtype = $col.JavaNative )
-          copyObj.set${col.JavaName}((${cjtype})${pkid});
+        copyObj.set${col.JavaName}((${cjtype})${pkid});
       #end
     #end
   #end
