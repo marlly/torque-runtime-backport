@@ -62,13 +62,6 @@
       <path refid="maven.dependency.classpath"/>
     </path>
 
-    <!-- The default.properties file will map old properties to the new ones along
-         with setting the correct defaults.
-
-         Note: I have no idea why this file is not already processed by the plugin..
-      -->
-    <property file="${maven.plugin.dir}/maven-torque-plugin-3.2-dev/plugin.properties"/>
-
     <!-- Define all of the tasks -->
     <taskdef
       name="torque-data-model"
