@@ -6,8 +6,6 @@
   <property file="${user.home}/build.properties" />
   <!-- Allow user defaults for this project -->
   <property file="build.properties" />
-  <!-- Set values in test profile -->
-  <property file="${torque.testProfile}"/>
   <!-- Set default values for the build -->
   <property file="default.properties" />
 
@@ -106,6 +104,9 @@
   <goal
     name="runtime:prepare"
     prereqs="java:jar">
+
+    <!-- Set values in test profile -->
+    <property file="${torque.testProfile}"/>
 
     <!-- Use the profile as the build.properties file
          in the dist directory so that it is customizable
