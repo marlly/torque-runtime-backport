@@ -81,6 +81,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
+import org.apache.stratum.lifecycle.Disposable;
 
 /**
  * The implementation of Torque.
@@ -90,9 +91,13 @@ import org.apache.stratum.lifecycle.Initializable;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class Torque implements Initializable, Configurable
+public class Torque 
+    implements Initializable, 
+               Configurable,
+               Disposable
 {
     /**
      * Name of property that specifies the default
@@ -660,6 +665,15 @@ public class Torque implements Initializable, Configurable
         }
 
         return m;
+    }
+
+    /**
+     * Shuts down the service, Lifecycle style
+     *
+     */
+    public void dispose()
+    {
+        shutdown();
     }
 
     /**
