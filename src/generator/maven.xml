@@ -48,10 +48,11 @@
     </copy>
 
     <!-- copy master files to the right place -->
+<!--    
     <copy todir="${maven.dist.bin.assembly.dir}/master">
       <fileset dir="${maven.src.dir}/conf/master" />
     </copy>
-
+-->
     <!-- copy config files to the right place -->
     <copy todir="${maven.dist.bin.assembly.dir}">
       <fileset dir="${maven.src.dir}/conf" />
