@@ -65,6 +65,12 @@ import java.sql.SQLException;
  */
 public class DBDB2400 extends DBDB2App
 {
+   /**
+    * UpperCase/IgnoreCase sql function in DB2/400
+    */
+   final static public String UCASE = "UCASE";
+
+
     /**
      * DBDB2400 constructor.
      */
@@ -74,26 +80,38 @@ public class DBDB2400 extends DBDB2App
     }
 
     /**
-     * This method is used to ignore case. Had to override the
-     * <code>org.apache.turbine.util.db.adapter.DBDB2App</code>
-     * until I figure out the best way to accomplish this.
+     * This method is used to ignore case.
      *
      * @param in The string whose case to ignore.
      * @return The string in a case that can be ignored.
      */
     public String ignoreCase(String in)
     {
-        return in;
+        String s = formatCase(in);
+        return s;
     }
 
     /**
-     * This method is used to ignore case.  Ditto ignoreCase ;).
+     * This method is used to ignore case.
      *
      * @param in The string to transform to upper case.
      * @return The upper case string.
      */
     public String toUpperCase(String in)
     {
-        return in;
+        String s = formatCase(in);
+        return s;
+    }
+
+    /**
+     * Convenience method for String-formatting
+     * upper/ignore case statements.
+     *
+     * @param in The string to transform to upper case.
+     * @return The upper case string.
+     */
+    private String formatCase(String in)
+    {
+        return new StringBuffer(UCASE + "(").append(in).append(")").toString();
     }
 }
