@@ -278,13 +278,16 @@ public abstract class BasePeer implements java.io.Serializable
 
     public static void closeConnection(Connection con)
     {
-        try
+        if (con != null)
         {
-            con.close();
-        }
-        catch(Exception e)
-        {
-            category.error("Error while closing connection.", e);
+            try
+            {
+                con.close();
+            }
+            catch(Exception e)
+            {
+                category.error("Error while closing connection.", e);
+            }
         }
     }
 
