@@ -2100,15 +2100,7 @@ public abstract class BasePeer implements java.io.Serializable
             // return null.
             String message =
                 "BasePeer.MapBuilder failed trying to instantiate: " + name;
-            if (log == null)
-            {
-                System.out.println(message);
-                e.printStackTrace();
-            }
-            else
-            {
-                log.error(message, e);
-            }
+            log.error(message, e);
         }
         return null;
     }
