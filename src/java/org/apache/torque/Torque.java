@@ -97,8 +97,8 @@ import org.apache.torque.util.BasePeer;
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
-public class Torque 
-    implements Initializable, 
+public class Torque
+    implements Initializable,
                Configurable,
                Disposable
 {
@@ -145,11 +145,6 @@ public class Torque
      * The cache of DataSourceFactory's
      */
     private static Map dsFactoryMap;
-
-    /**
-     * The cache of datasources
-     */
-    private static Map dsMap;
 
     /**
      * The cache of DB adapter keys
@@ -266,12 +261,12 @@ public class Torque
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
-                String key = (String)i.next();
+                String key = (String) i.next();
                 if (key.endsWith("adapter"))
                 {
                     String adapter = c.getString(key);
                     String handle = key.substring(0, key.indexOf('.'));
-                    DB db = DBFactory.create( adapter );
+                    DB db = DBFactory.create(adapter);
                     // register the adapter for this name
                     adapterMap.put(handle, db);
                 }
@@ -303,7 +298,7 @@ public class Torque
                 Iterator i = c.getKeys();
                 while (i.hasNext())
                 {
-                    String key = (String)i.next();
+                    String key = (String) i.next();
                     if (key.endsWith("factory"))
                     {
                         String classname = c.getString(key);
@@ -313,7 +308,7 @@ public class Torque
 
                         Class dsfClass = Class.forName(classname);
                         DataSourceFactory dsf =
-                            (DataSourceFactory)dsfClass.newInstance();
+                            (DataSourceFactory) dsfClass.newInstance();
                         dsf.initialize(c.subset(handle));
                         dsFactoryMap.put(handle, dsf);
                     }
@@ -333,15 +328,15 @@ public class Torque
         // not, then add a dummy entry for the "default"
         //
         // Without this, you can't actually access the "default"
-        // data-source, even if you have an entry like 
+        // data-source, even if you have an entry like
         //
-        // database.default = bookstore 
+        // database.default = bookstore
         //
         // in your Torque.properties
         //
         String defaultDB = getDefaultDB();
 
-        if (dsFactoryMap.get(DEFAULT_NAME) == null 
+        if (dsFactoryMap.get(DEFAULT_NAME) == null
             && !defaultDB.equals(DEFAULT_NAME))
         {
             category.debug("Adding a dummy entry for "
@@ -469,7 +464,7 @@ public class Torque
      * @param className
      * @throws TorqueException
      */
-    private synchronized static void initManager(String name, String className)
+    private static synchronized void initManager(String name, String className)
         throws TorqueException
     {
         AbstractBaseManager manager = (AbstractBaseManager) managers.get(name);
@@ -587,7 +582,6 @@ public class Torque
             PropertyConfigurator.configure(p);
             category.info("Logging has been configured by Torque.");
         }
-
     }
 
     /**
@@ -693,10 +687,10 @@ public class Torque
      */
     public static void shutdown()
     {
-        if ( dbMaps != null )
+        if (dbMaps != null)
         {
             Iterator maps = dbMaps.values().iterator();
-            while ( maps.hasNext() )
+            while (maps.hasNext())
             {
                 DatabaseMap map = (DatabaseMap) maps.next();
                 IDBroker idBroker = map.getIDBroker();
@@ -777,7 +771,7 @@ public class Torque
         try
         {
             String key = getDatabaseProperty(name, "driver");
-            if ( key == null || key.length() == 0 )
+            if (key == null || key.length() == 0)
             {
                 key = getDatabaseProperty(name, "adapter");
             }
@@ -823,11 +817,11 @@ public class Torque
      */
     private static String getDatabaseProperty(String db, String prop)
     {
-        return configuration.getString( new StringBuffer("database.")
+        return configuration.getString(new StringBuffer("database.")
                 .append(db)
                 .append('.')
                 .append(prop)
-                .toString(), "" );
+                .toString(), "");
     }
 
     /**
@@ -866,9 +860,7 @@ public class Torque
     /**
      * This method returns a Connecton using the given parameters.
      *
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database from which the connection is
-     * desired.
+     * @param name The database name.
      * @param username The name of the database user.
      * @param password The password of the database user.
      * @return A Connection.
@@ -887,7 +879,7 @@ public class Torque
         DataSourceFactory dsf = null;
         try
         {
-            dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            dsf = (DataSourceFactory) dsFactoryMap.get(name);
             con = dsf.getDataSource().getConnection(username, password);
         }
         catch (Exception e)
@@ -898,9 +890,9 @@ public class Torque
                      "There was no DataSourceFactory "
                      + "configured for the connection " + name);
              }
-             else 
+             else
              {
-                 throw new TorqueException(e);                 
+                 throw new TorqueException(e);
              }
         }
         return con;
@@ -913,7 +905,7 @@ public class Torque
         DataSourceFactory dsf = null;
         try
         {
-            dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            dsf = (DataSourceFactory) dsFactoryMap.get(name);
             con = dsf.getDataSource().getConnection();
         }
         catch (Exception e)
@@ -924,9 +916,9 @@ public class Torque
                      "There was no DataSourceFactory "
                      + "configured for the connection " + name);
              }
-             else 
+             else
              {
-                 throw new TorqueException(e);                 
+                 throw new TorqueException(e);
              }
         }
         return con;
@@ -940,10 +932,9 @@ public class Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static DB getDB(String name)
-        throws TorqueException
+    public static DB getDB(String name) throws TorqueException
     {
-        return (DB)adapterMap.get(name);
+        return (DB) adapterMap.get(name);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -977,7 +968,7 @@ public class Torque
 
     /**
      * Closes a connection.
-     * 
+     *
      * @param con A Connection to close.
      */
     public static void closeConnection(Connection con)
@@ -994,5 +985,4 @@ public class Torque
             }
         }
     }
-
 }
