@@ -310,7 +310,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="insert-sql">
+    name="insert-sql"
+    description="==> inserts the generated sql ">
 
     <torque-sql-exec
       autocommit="true"
@@ -386,7 +387,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="id-table-init-sql">
+    name="id-table-init-sql"
+    description="==> generates initialization sql for ID Broker">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -567,7 +569,7 @@
   <target
     name="om-zip"
     depends="check-om-zip"
-    description="Moves source om files to separate jar and out of the source tree">
+    description="==> moves source om files to separate jar and out of the source tree">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -725,7 +727,8 @@
   <!-- =================================================================== -->
 
   <target
-    name="ojb-repository">
+    name="ojb-repository"
+    description="==> generates the repository for ojb (experimental)">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -751,7 +754,8 @@
   </target>
 
   <target
-    name="ojb-model">
+    name="ojb-model"
+    description="==> generates an object model for ojb (experimental)">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
