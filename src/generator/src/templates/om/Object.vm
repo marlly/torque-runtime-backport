@@ -93,6 +93,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #elseif ($cjtype == "StringKey")
         #set ( $quote = '"' )
         #set ($defVal = "= new StringKey($quote$defaultValue$quote)")
+      #elseif ($cjtype == 'Byte')
+        #set ($defVal = "= new ${cjtype}((byte) $defaultValue)")
       #else
         #if (!$col.isPrimitive() && $cjtype != "String")
           #set ( $defaultValue = "new ${cjtype}($defaultValue)" )
