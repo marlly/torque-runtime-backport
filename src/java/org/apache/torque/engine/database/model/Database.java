@@ -58,8 +58,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.xml.sax.Attributes;
+
+import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 
 /**
  * A class for holding application data structures.
@@ -67,10 +71,12 @@ import org.xml.sax.Attributes;
  * @author <a href="mailto:leon@opticode.co.za>Leon Messerschmidt</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
+ * @author <a href="mailto:dlr@collab.net>Daniel Rall</a>
  * @version $Id$
  */
 public class Database
 {
+    private String databaseType = null;
     private List tableList = new ArrayList(100);
     private Column curColumn;
     private String name;
@@ -83,7 +89,7 @@ public class Database
     private Hashtable tablesByJavaName = new Hashtable();
 
     /**
-     * Default Constructor
+     * Creates a new instance with unset attributes.
      */
     public Database()
     {
@@ -92,15 +98,9 @@ public class Database
     /**
      * Load the database object from an xml tag.
      */
-    public void loadFromXML (Attributes attrib)
+    public void loadFromXML(Attributes attrib)
     {
-        name = attrib.getValue("name");
-        if ( name == null )
-        {
-            //!! Hard coding this for now. It should
-            // be a property.
-            name =  "default";
-        }
+        setName(attrib.getValue("name"));
         pkg = attrib.getValue("package");
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
@@ -118,9 +118,9 @@ public class Database
     /**
      * Set the name of the Database
      */
-    public void setName(String newName)
+    public void setName(String name)
     {
-        name = newName;
+        this.name = (name == null ? Torque.getDefaultDB() : name);
     }
 
     /**
@@ -273,6 +273,31 @@ public class Database
     public AppData getAppData()
     {
         return dbParent;
+    }
+
+    protected String getDatabaseType()
+    {
+        return databaseType;
+    }
+
+    public void setDatabaseType(String databaseType)
+    {
+        this.databaseType = databaseType;
+    }
+
+    /**
+     * Returns the value of the named property from this database's
+     * <code>db.props</code> file.
+     *
+     * @param name The name of the property to retrieve the value of.
+     * @return The value of the specified property.
+     * @exception TorqueException Couldn't access properties.
+     */
+    protected String getProperty(String name)
+        throws TorqueException
+    {
+        Properties p = getAppData().getIdiosyncrasies(databaseType);
+        return (p == null ? null : p.getProperty(name));
     }
 
     /**
