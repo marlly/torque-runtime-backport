@@ -76,7 +76,7 @@ database.manual.creation = true
 ]]></source>
 
 <p>
-And set the JDBC connection information;
+And set the JDBC connection information:
 </p>
 
 <source><![CDATA[
@@ -88,7 +88,21 @@ databaseUrl = [Follow JDBC Driver Docs]
 ]]></source>
 
 <p>
-If you are using the JDBC-ODBC bridge driver then;
+If you are using the Microsoft driver
+(i.e. <code>com.microsoft.jdbc.sqlserver.SQLServerDriver</code>),
+you'll need to use the <code>SelectMethod=cursor</code> parameter in
+the JDBC connection string (as outlined by <a
+href="http://forum.java.sun.com/thread.jsp?forum=48&thread=184797">this
+JDC thread</a>).  Your <code>databaseUrl</code> would look something
+like the following:
+</p>
+
+<source><![CDATA[
+jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=mydb;SelectMethod=cursor
+]]></source>
+
+<p>
+If you are using the JDBC-ODBC bridge driver:
 </p>
 
 <source><![CDATA[
