@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<project name="Torque" default="test" basedir=".">
+
+  <!--
+    
+    These are the targets that we need tests for:
+    
+    project-datadtd
+    project-datadump
+    project-datasql
+    project-jdbc
+    project-om
+    project-om-classpath
+    project-sql
+    project-sql-classpath
+    project-sql2xml
+  
+    The tests will be run from the distribution that is
+    produced by the build process.
+  
+  -->
+
+  <target
+    name="test">
+    
+    <antcall target="test-project-datadtd"/>
+    <antcall target="test-project-datadump"/>
+    <antcall target="test-project-datasql"/>
+    <antcall target="test-project-jdbc"/>
+    <antcall target="test-project-om"/>
+    <antcall target="test-project-om-classpath"/>
+    <antcall target="test-project-sql"/>
+    <antcall target="test-project-sql-classpath"/>
+    <antcall target="test-project-sql2xml"/>
+    
+  </target>
+
+  <target
+    name="test-project-datadtd">
+  </target>
+  
+  <target
+    name="test-project-datadump">
+  </target>
+  
+  <target
+    name="test-project-datasql">
+  </target>
+  
+  <target
+    name="test-project-jdbc">
+  </target>
+  
+  <target
+    name="test-project-om">
+  </target>
+  
+  <target
+    name="test-project-om-classpath">
+  </target>
+  
+  <target
+    name="test-project-sql">
+  </target>
+  
+  <target
+    name="test-project-sql-classpath">
+  </target>
+  
+  <target
+    name="test-project-sql2xml">
+  </target>
+
+</project>
