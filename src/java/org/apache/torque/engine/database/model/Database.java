@@ -81,7 +81,6 @@ public class Database
 {
     private String databaseType = null;
     private List tableList = new ArrayList(100);
-    private Column curColumn;
     private String name;
     private String pkg;
     private String baseClass;
