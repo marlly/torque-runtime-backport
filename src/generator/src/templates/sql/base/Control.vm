@@ -10,9 +10,12 @@
   
   Platform used: $platform.class.Name
   
-  #set ( $outFile = "${database.FileName}.sql" )
+  #set ($outFile = "$database.FileName")
+  #if (!$outFile.toLowerCase().endsWith('.sql'))
+    #set ($outFile = "${outFile}.sql")
+  #end
 
-  File to be created: $outFile
+  SQL file to be created: $outFile
   
   #foreach ($tbl in $database.tables)
     Primary Key:#if ($tbl.hasPrimaryKey()) Yes #else No #end
