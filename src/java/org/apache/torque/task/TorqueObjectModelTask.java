@@ -93,4 +93,16 @@ public class TorqueObjectModelTask
     {
         targetPackage = v;
     }
+
+    /**
+     * Place our target package value
+     * into the context for use in the templates.
+     */
+    public Context initControlContext()
+        throws Exception
+    {
+        super.initControlContext();
+        context.put("targetPackage", targetPackage);
+        return context;
+    }
 }
