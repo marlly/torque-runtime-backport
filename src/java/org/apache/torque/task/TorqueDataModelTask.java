@@ -60,6 +60,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
@@ -401,7 +402,12 @@ public class TorqueDataModelTask extends TexenTask
      * Override Texen's context properties to map the
      * torque.xxx properties (including defaults set by the
      * org/apache/torque/defaults.properties) to just xxx.
-     * 
+     *
+     * <p>
+     * Also, move xxx.yyy properties to xxxYyy as Velocity
+     * doesn't like the xxx.yyy syntax.
+     * </p>
+     *
      * @param file the file to read the properties from
      */
     public void setContextProperties(String file)
@@ -415,9 +421,17 @@ public class TorqueDataModelTask extends TexenTask
             String key = (String) i.next();
             if (key.startsWith("torque."))
             {
-                contextProperties.setProperty(
-                    key.substring("torque.".length()),
-                    env.get(key));
+                String newKey = key.substring("torque.".length());
+                int j = newKey.indexOf(".");
+                while (j != -1)
+                {
+                    newKey =
+                        newKey.substring(0, j)
+                        +  StringUtils.capitalise(newKey.substring(j + 1));
+                    j = newKey.indexOf(".");
+                }
+
+                contextProperties.setProperty(newKey, env.get(key));
             }
         }
     }        
