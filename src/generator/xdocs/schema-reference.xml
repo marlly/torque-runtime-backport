@@ -78,7 +78,19 @@
            </tr>
            <tr>
              <td>heavyIndexing</td>
-             <td>? (true or false, defaults to false)</td>
+             <td>Adds extra indices for multi-part primary key
+                 columns.  true or false, defaults to false.
+
+                 For databases like MySQL, values in a where clause
+                 must match key part order from the left to right.
+                 So, in the key definition <code>PRIMARY KEY (FOO_ID,
+                 BAR_ID)</code>, <code>FOO_ID</code> <i>must</i> be
+                 the first element used in the <code>where</code>
+                 clause of the SQL query used against this table for
+                 the primary key index to be used.  This feature could
+                 cause problems under MySQL with heavily indexed
+                 tables, by causing too many indices to be created
+                 (overrunning MySQL's table limit).</p></td>
            </tr>
          </table>
        </p>
