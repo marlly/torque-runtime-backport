@@ -72,24 +72,17 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
 /**
  *  An extended Texen task used for dumping data from db into XML
  *
- * @author   <a href="mailto:fedor.karpelevitch@home.com">  Fedor Karpelevitch  </a>
- * @version  $Id$
+ * @author <a href="mailto:fedor.karpelevitch@home.com">  Fedor Karpelevitch  </a>
+ * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
+ * @version $Id$
  */
 public class TorqueDataDumpTask
-    extends TexenTask
+    extends TorqueDataModelTask
 {
     /**
-     *  Application model. In this case a database model.
+     * Database name.
      */
-    private AppData app;
-
     private String databaseName;
-
-    /**
-     *  XML that describes the database model, this is transformed
-     *  into the application model object.
-     */
-    private String xmlFile;
 
     /**
      *  Database URL used for JDBC connection.
@@ -111,31 +104,6 @@ public class TorqueDataDumpTask
      */
     private String databasePassword;
 
-
-    /**
-     *  Get the xml schema describing the application
-     *  model.
-     *
-     * @return  String xml schema file.
-     */
-    public String getXmlFile()
-    {
-        return xmlFile;
-    }
-
-
-    /**
-     *  Set the xml schema describing the application
-     *  model.
-     *
-     * @param  v The new XmlFile value
-     */
-    public void setXmlFile(String v)
-    {
-        xmlFile = v;
-    }
-
-
     /**
      *  Get the database name to dump
      *
@@ -145,7 +113,6 @@ public class TorqueDataDumpTask
     {
         return databaseName;
     }
-
 
     /**
      *  Set the database name
@@ -157,7 +124,6 @@ public class TorqueDataDumpTask
         databaseName = v;
     }
 
-
     /**
      *  Get the database url
      *
@@ -167,7 +133,6 @@ public class TorqueDataDumpTask
     {
         return databaseUrl;
     }
-
 
     /**
      *  Set the database url
@@ -179,7 +144,6 @@ public class TorqueDataDumpTask
         databaseUrl = v;
     }
 
-
     /**
      *  Get the database driver name
      *
@@ -189,7 +153,6 @@ public class TorqueDataDumpTask
     {
         return databaseDriver;
     }
-
 
     /**
      *  Set the database driver name
@@ -201,7 +164,6 @@ public class TorqueDataDumpTask
         databaseDriver = v;
     }
 
-
     /**
      *  Get the database user
      *
@@ -211,7 +173,6 @@ public class TorqueDataDumpTask
     {
         return databaseUser;
     }
-
 
     /**
      *  Set the database user
@@ -223,7 +184,6 @@ public class TorqueDataDumpTask
         databaseUser = v;
     }
 
-
     /**
      *  Get the database password
      *
@@ -233,7 +193,6 @@ public class TorqueDataDumpTask
     {
         return databasePassword;
     }
-
 
     /**
      *  Set the database password
@@ -245,36 +204,16 @@ public class TorqueDataDumpTask
         databasePassword = v;
     }
 
-
     /**
      *  Initializes initial context
      *
      * @return  Description of the Returned Value
      */
     public Context initControlContext()
+        throws Exception
     {
-        /*
-         * Create a new Velocity context.
-         */
-        Context context = new VelocityContext();
-
-        /*
-         * Transform the XML database schema into an
-         * object that represents our model.
-         */
-        XmlToAppData xmlParser = new XmlToAppData();
-        app = xmlParser.parseFile(xmlFile);
-
-        /*
-         * Place our model in the context.
-         */
-        Database dbm = app.getDatabase(databaseName);
-        if (dbm == null)
-        {
-            dbm = app.getDatabases()[0];
-        }
-        context.put("databaseModel", dbm);
-
+        super.initControlContext();
+        
         context.put("dataset", "all");
 
         System.err.println("Your DB settings are:");
@@ -309,7 +248,6 @@ public class TorqueDataDumpTask
 
         return context;
     }
-
 
     /**
      *  A nasty do-it-all tool class. It serves as:

@@ -54,65 +54,24 @@ package org.apache.torque.task;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
-
 import org.apache.velocity.context.Context;
-import org.apache.velocity.texen.ant.TexenTask;
-import org.apache.torque.engine.database.model.AppData;
-import org.apache.torque.engine.database.transform.XmlToAppData;
+import org.apache.velocity.VelocityContext;
 
 /**
  * An ant task for generating output by using Velocity
  *
- * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @version $Id$
  */
-public class TorqueObjectModelTask extends TexenTask
+public class TorqueObjectModelTask 
+    extends TorqueDataModelTask
 {
-    /**
-     * Application model.
-     */
-    private AppData app;
-
-    /**
-     * XML schema file.
-     */
-    private String xmlFile;
-
     /**
      * Target Java package to place the generated
      * files in.
      */
     private String targetPackage;
-
-    /**
-     * The target database(s) we are generating SQL
-     * for. Right now we can only deal with a single
-     * target, but we will support multiple targets
-     * soon.
-     */
-    private String targetDatabase;
-
-    /**
-     * Get the current xml file.
-     *
-     * @return String xml schema file.
-     */
-    public String getXmlFile ()
-    {
-        return xmlFile;
-    }
-
-    /**
-     * Set the xml file.
-     *
-     * @param String xml schema file.
-     */
-    public void setXmlFile(String v)
-    {
-        xmlFile = v;
-    }
 
     /**
      * Get the current target package.
@@ -133,66 +92,5 @@ public class TorqueObjectModelTask extends TexenTask
     public void setTargetPackage (String v)
     {
         targetPackage = v;
-    }
-
-    /**
-     * Get the current target database.
-     *
-     * @return String target database(s)
-     */
-    public String getTargetDatabase ()
-    {
-        return targetDatabase;
-    }
-
-    /**
-     * Set the current target database.
-     *
-     * @param String target database(s)
-     */
-    public void setTargetDatabase (String v)
-    {
-        targetDatabase = v;
-    }
-
-    /**
-     * Populates the initialial context with the model used to
-     * generate SQL from a XML schema.
-     *
-     * @param context The initial context, ripe for population.
-     * @exception Exception None expected.
-     */
-    protected void populateInitialContext(Context context)
-        throws Exception
-    {
-        super.populateInitialContext(context);
-
-        /*
-         * Build our application model from the
-         * XML schema. Can someone document the
-         * double pass here?
-         */
-        XmlToAppData xmlParser = new XmlToAppData();
-
-        app = xmlParser.parseFile(xmlFile);
-        xmlParser.parseFile(xmlFile);
-
-        /*
-         * Place some initial values in the context.
-         * most of these could be automatically fed
-         * into the context with the contextProperties
-         * option.
-         */
-        context.put("appData", app);
-
-        /*
-         * Place the target database in the context.
-         */
-        context.put("targetDatabase", targetDatabase);
-
-        /*
-         * Place the target package in the context.
-         */
-        context.put("targetPackage", targetPackage);
     }
 }

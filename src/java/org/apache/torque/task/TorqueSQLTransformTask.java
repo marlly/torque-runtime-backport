@@ -66,14 +66,21 @@ import org.apache.torque.engine.database.transform.SQLToAppData;
 /**
  * An ant task for creating an xml schema from an sql schema
  *
- * @author <a href="mailto:leon@opticode.co.za>Leon Messerschmidt</a>
+ * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
+ * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
  * @version $Id$
  */
 public class TorqueSQLTransformTask
     extends Task
 {
-
+    /**
+     * SQL input file.
+     */
     private String inputFile;
+    
+    /**
+     * XML descriptor output file.
+     */
     private String outputFile;
 
     /**
@@ -91,7 +98,6 @@ public class TorqueSQLTransformTask
     {
         inputFile = v;
     }
-
 
     /**
      * Get the current output file.
@@ -111,7 +117,13 @@ public class TorqueSQLTransformTask
         outputFile = v;
     }
 
-    public void execute () throws BuildException
+    /**
+     * Execute the task.
+     *
+     * @throws BuildException
+     */
+    public void execute() 
+        throws BuildException
     {
         try
         {
@@ -133,7 +145,10 @@ public class TorqueSQLTransformTask
         }
         catch (Throwable e)
         {
-            e.printStackTrace ();
+            // Propagate the error up the stack so that
+            // the stacktrace will appear in the standard
+            // ant output.
+            throw new BuildException(e);
         }
     }
 }

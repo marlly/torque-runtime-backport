@@ -1,4 +1,4 @@
-package org.apache.torque;
+package org.apache.torque.task;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -180,9 +180,9 @@ public class TorqueDataModelTask
      *
      * @param  v The new XmlFile value
      */
-    public void setXmlFile(String v)
+    public void setXmlFile(String xmlFile)
     {
-        xmlFile = v;
+        this.xmlFile = project.resolveFile(xmlFile).toString();
     }
 
     /**
@@ -217,7 +217,10 @@ public class TorqueDataModelTask
             xmlParser = new XmlToAppData();
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
-            //FIXME: ad.setName(xmlFile.substring(0,xmlFile.indexOf(".")));
+            String name = xmlFile.substring(
+                xmlFile.lastIndexOf(System.getProperty("file.separator"))+1,
+                    xmlFile.indexOf("."));
+            ad.setName(name);
             dataModels.addElement(ad);
         } 
         else 
@@ -240,7 +243,7 @@ public class TorqueDataModelTask
                     xmlParser.parseFile(
                         new File(srcDir, dataModelFiles[j]).toString());
                     
-                    //FIXME: ad.setName(dataModelFiles[j].substring(0,dataModelFiles[j].indexOf(".")));
+                    ad.setName(dataModelFiles[j].substring(0,dataModelFiles[j].indexOf(".")));
                     dataModels.addElement(ad);
                 }
             }
@@ -255,10 +258,9 @@ public class TorqueDataModelTask
         while (i.hasNext())
         {
             AppData ad = (AppData) i.next();
-            //FIXME: Database database = ad.getDatabase();
-            Database database = null;
+            Database database = ad.getDatabase();
             databaseNames.put(database.getName(), database.getName());
-            //FIXME: dataModelDbMap.put(ad.getName(), database.getName());
+            dataModelDbMap.put(ad.getName(), database.getName());
         }
 
         // Create a new Velocity context.

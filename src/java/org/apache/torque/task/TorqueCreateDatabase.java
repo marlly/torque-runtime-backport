@@ -25,13 +25,13 @@ package org.apache.torque.task;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
- *    derived from this software without prior written permission. For
+ * 4. The names "Apache" and "Apache Software Foundation" and 
+ *    "Apache Turbine" must not be used to endorse or promote products 
+ *    derived from this software without prior written permission. For 
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    "Apache Turbine", nor may "Apache" appear in their name, without 
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -56,32 +56,17 @@ package org.apache.torque.task;
 
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.texen.ant.TexenTask;
-
-import org.apache.torque.engine.database.model.AppData;
-import org.apache.torque.engine.database.transform.XmlToAppData;
 
 /**
  * An extended Texen task used for generating simple scripts
  * for creating databases on various platforms.
  *
- * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
  * @version $Id$
  */
-public class TorqueCreateDatabase
-    extends TexenTask
+public class TorqueCreateDatabase 
+    extends TorqueDataModelTask
 {
-    /**
-     * Application model. In this case a database model.
-     */
-    private AppData app;
-
-    /**
-     * XML that describes the database model, this is transformed
-     * into the application model object.
-     */
-    private String xmlFile;
-    
     /**
      * The target database vendor: MySQL, Oracle.
      */
@@ -98,38 +83,16 @@ public class TorqueCreateDatabase
      * Database user.
      */
     private String databaseUser;
-
+    
     /**
      * Password for specified database user.
      */
     private String databasePassword;
-
+    
     /**
      * Host on which specified database resides.
      */
     private String databaseHost;
-
-    /**
-     * Get the xml schema describing the application
-     * model.
-     *
-     * @return String xml schema file.
-     */
-    public String getXmlFile ()
-    {
-        return xmlFile;
-    }
-
-    /**
-     * Set the xml schema describing the application
-     * model.
-     *
-     * @param String xml schema file.
-     */
-    public void setXmlFile(String v)
-    {
-        xmlFile = v;
-    }
 
     /**
      * Get the target database.
@@ -237,23 +200,16 @@ public class TorqueCreateDatabase
      * templates.
      */
     public Context initControlContext()
-    {
-        // Create a new Velocity context.
-        Context context = new VelocityContext();
-        
-        // Transform the XML database schema into an object that
-        // represents our model.
-        XmlToAppData xmlParser = new XmlToAppData();
-        app = xmlParser.parseFile(xmlFile);
-
-        // Place our model in the context.
-        context.put("appData", app);
+        throws Exception
+    {   
+        super.initControlContext();
         
         context.put("targetDatabase", targetDatabase);
         context.put("targetPlatform", targetPlatform);
         context.put("databaseUser", databaseUser);
         context.put("databasePassword", databasePassword);
         context.put("databaseHost", databaseHost);
+        
         return context;
     }
 }

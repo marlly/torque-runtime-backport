@@ -90,7 +90,7 @@ import org.w3c.dom.Node;
  * This class generates an XML schema of an existing database from
  * JDBC metadata.
  *
- *  @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ *  @author <a href="mailto:jvanzyl@periapt.com">Jason van Zyl</a>
  *  @author <a href="mailto:fedor.karpelevitch@barra.com">Fedor Karpelevitch</a>
  *  @version $Id$
  */
@@ -288,6 +288,7 @@ public class TorqueJDBCTransformTask extends Task
                 /* int columnNullableUnknown = 2; */
 
                 Integer nullType = (Integer) v.elementAt(3);
+                String defValue = (String)v.elementAt(4);
 
                 Element column = doc.createElement("column");
                 column.setAttribute("name", name);
@@ -314,6 +315,24 @@ public class TorqueJDBCTransformTask extends Task
                 if (primaryKeys.containsKey(name))
                 {
                     column.setAttribute("primaryKey", "true");
+                }
+
+                if (defValue!=null)
+                {
+                    // trim out parens & quotes out of def value.
+                    // makes sense for MSSQL. not sure about others.
+
+                    if (defValue.startsWith("(") && defValue.endsWith(")"))
+                    {
+                        defValue = defValue.substring(1, defValue.length()-1);
+                    }
+
+                    if (defValue.startsWith("'") && defValue.endsWith("'"))
+                    {
+                        defValue = defValue.substring(1, defValue.length()-1);
+                    }
+
+                    column.setAttribute("default", defValue);
                 }
 
                 table.appendChild(column);
@@ -397,12 +416,14 @@ public class TorqueJDBCTransformTask extends Task
             Integer sqlType = new Integer(columnSet.getString(5));
             Integer size = new Integer(columnSet.getInt(7));
             Integer nullType = new Integer(columnSet.getInt(11));
+            String defValue = columnSet.getString(13);
 
             Vector v = new Vector();
             v.addElement (name);
             v.addElement (sqlType);
             v.addElement (size);
             v.addElement (nullType);
+            v.addElement (defValue);
             columns.addElement (v);
         }
         return columns;
