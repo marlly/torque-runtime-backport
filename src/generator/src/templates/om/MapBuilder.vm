@@ -65,11 +65,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
      */
     public boolean isBuilt()
     {
-        if (dbMap != null)
-        {
-            return true;
-        }
-        return false;
+        return (dbMap != null);
     }
 
     /**
