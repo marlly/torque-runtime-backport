@@ -116,4 +116,8 @@ class SqlEnum implements java.io.Serializable
         new SqlEnum(" IS NULL ");
     public static final SqlEnum ISNOTNULL =
         new SqlEnum(" IS NOT NULL ");
+    public static final SqlEnum CURRENT_DATE =
+        new SqlEnum("CURRENT_DATE");
+    public static final SqlEnum CURRENT_TIME =
+        new SqlEnum("CURRENT_TIME");
 }

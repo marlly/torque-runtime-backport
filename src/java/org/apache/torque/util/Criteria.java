@@ -150,6 +150,12 @@ public class Criteria extends Hashtable
     /** "IS NOT NULL" null comparison */
     public static final SqlEnum ISNOTNULL = SqlEnum.ISNOTNULL;
 
+    /** "CURRENT_DATE" ANSI SQL function */
+    public static final SqlEnum CURRENT_DATE = SqlEnum.CURRENT_DATE;
+
+    /** "CURRENT_TIME" ANSI SQL function */
+    public static final SqlEnum CURRENT_TIME = SqlEnum.CURRENT_TIME;
+
     private static final int DEFAULT_CAPACITY = 10;
 
     private boolean ignoreCase = false;

@@ -311,4 +311,28 @@ public class CriteriaTest extends BaseTestCase
 
         assertEquals("TABLE.COLUMN=1", cc.toString());
     }
+
+    public void testCurrentDate()
+    {
+        Criteria c = new Criteria()
+                .add("TABLE.DATE_COLUMN", Criteria.CURRENT_DATE)
+                .add("TABLE.TIME_COLUMN", Criteria.CURRENT_TIME);
+
+        String expect = "SELECT  FROM TABLE WHERE TABLE.TIME_COLUMN=CURRENT_TIME AND TABLE.DATE_COLUMN=CURRENT_DATE";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect,result);
+
+    }
+
 }
