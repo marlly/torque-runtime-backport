@@ -255,7 +255,7 @@
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-configuration.jar}"/>
-    <pathelement location="${commons-jdbc2pool.jar}"/>
+    <pathelement location="${commons-dbcp.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${commons-pool.jar}"/>
@@ -281,7 +281,7 @@
       ${commons-beanutils.jar}
       ${commons-collections.jar}
       ${commons-configuration.jar}
-      ${commons-jdbc2pool.jar}
+      ${commons-dbcp.jar}
       ${commons-lang.jar}
       ${commons-logging.jar}
       ${commons-pool.jar}
@@ -321,7 +321,7 @@
     <copy file="${commons-beanutils.jar}" todir="${test.libDir}"/>
     <copy file="${commons-collections.jar}" todir="${test.libDir}"/>
     <copy file="${commons-configuration.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-jdbc2pool.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-dbcp.jar}" todir="${test.libDir}"/>
     <copy file="${commons-lang.jar}" todir="${test.libDir}"/>
     <copy file="${commons-logging.jar}" todir="${test.libDir}"/>
     <copy file="${commons-pool.jar}" todir="${test.libDir}"/>

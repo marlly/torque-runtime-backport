@@ -60,8 +60,8 @@ import javax.sql.ConnectionPoolDataSource;
 import java.util.Iterator;
 import org.apache.commons.configuration.Configuration;
 import org.apache.torque.TorqueException;
-import org.apache.commons.jdbc2pool.Jdbc2PoolDataSource;
-import org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS;
+import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
+import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able

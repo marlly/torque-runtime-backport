@@ -19,10 +19,10 @@ versions see the runtime configuration section of
 </p>
 
 <p>
-Starting with Torque-3.0b3, torque no longer includes a built-in pool.  
+Starting with Torque-3.0b3, torque no longer requires use of a built-in pool.  
 Torque's old pool has been updated to be a <code>javax.sql.DataSource</code>
-implementation and has been moved into the commons-jdbc2pool package within
-the commons sandbox.
+implementation so that any connection pool implementing the 
+<code>DataSource</code> can be used in its place.
 Torque now expects a factory that can return a <code>DataSource</code> and can
 be configured using torque's configuration file.
 </p>
@@ -31,7 +31,7 @@ be configured using torque's configuration file.
 Torque provides two special purpose factories as well as a general
 factory that uses jndi to retrieve the <code>DataSource</code>.  The first
 factory discussed below uses the updated version of torque's old pool and the
-second uses the more full featured pool available in the same package.
+second uses the more full featured pool available in the commons.dbcp package.
 The jndi factory looks up a <code>DataSource</code> bound to jndi; it
 also provides a simple property file based way to configure and deploy most
 <code>DataSource</code>'s, though in many cases a pool may already be 
@@ -146,7 +146,7 @@ class for more information.
 
 <p>
 This factory uses the more full featured DataSource available in the 
-commons-jdbc2pool package.  Jdbc2PoolDataSourceFactory provides an easy way 
+commons-dbcp package.  Jdbc2PoolDataSourceFactory provides an easy way 
 to configure this pool and it assumes you will have a jdbc Driver class 
 providing the physical database connections.  Again, you must let torque know 
 you are using this factory.
@@ -183,7 +183,7 @@ application, so the likelihood of the application receiving a bad connection
 is much smaller than using <code>TorqueClassicDataSource</code>.  
 <code>Jdbc2PoolDataSource</code> contains several other options, for example,
 the ability have several usernames sharing the same pool settings.  Please
-see the commons-jdbc2pool javadoc for more info.
+see the commons-dbcp javadoc for more info.
 </p>
 
 </section>
@@ -253,13 +253,13 @@ can specify the values for these properties as shown below:
 </p>
 
 <source><![CDATA[
-torque.dsfactory.bookstore.datasource.classname=org.apache.commons.jdbc2pool.TorqueClassicDataSource
+torque.dsfactory.bookstore.datasource.classname=org.apache.torque.pool.TorqueClassicDataSource
 torque.dsfactory.bookstore.datasource.dataSourceName=jdbc/DBbookstore
 torque.dsfactory.bookstore.datasource.defaultMaxConnections=10
 ]]></source>
 
 <source><![CDATA[
-torque.dsfactory.DBbookstore.datasource.factory=org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS
+torque.dsfactory.DBbookstore.datasource.factory=org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS
 torque.dsfactory.DBbookstore.datasource.driver = org.gjt.mm.mysql.Driver
 torque.dsfactory.DBbookstore.datasource.url = jdbc:mysql://localhost:3306/bookstore
 torque.dsfactory.DBbookstore.datasource.user = root
@@ -271,9 +271,9 @@ In the above example two objects are being configured.  One is a
 <code>DataSource</code> that is used by the application (torque).  The other is
 a <code>ConnectionPoolDataSource</code> that is provided as part of a jdbc2
 driver.  If the jdbc driver implementation you are using does not fully
-implement the jdbc2 specification.  commons-jdbc2pool provides an
+implement the jdbc2 specification.  commons-dbcp provides an
 adapter for older <code>Driver</code> based drivers.  Another alternative is
-provided in commons/dbcp where <code>BasicDataSource</code> provides a
+provided in commons-dbcp where <code>BasicDataSource</code> provides a
 <code>DataSource</code> frontend, and has properties to directly configure
 a jdbc1 <code>Driver</code>.  But regardless of the implementation torque
 uses commons-beanutils package to call the setters on the object using 
@@ -315,11 +315,11 @@ webapp:
 
 <source><![CDATA[
  <Resource name="jdbc/ScarabDB" auth="Container"
-            type="org.apache.commons.jdbc2pool.TorqueClassicDataSource"/>
+            type="org.apache.torque.pool.TorqueClassicDataSource"/>
   <ResourceParams name="jdbc/bookstore">
     <parameter>
       <name>factory</name>
-      <value>org.apache.commons.jdbc2pool.TorqueClassicDataSource</value>
+      <value>org.apache.torque.pool.TorqueClassicDataSource</value>
     </parameter>
     <parameter>
       <name>dataSourceName</name><value>java:comp/env/jdbc/DBbookstore</value>
@@ -355,7 +355,7 @@ the servlet specification:
     jdbc/bookstore
   </res-ref-name>
   <res-type>
-    org.apache.commons.jdbc2pool.TorqueClassicDataSource
+    org.apache.torque.pool.TorqueClassicDataSource
   </res-type>
   <res-auth>
     Container
@@ -374,7 +374,7 @@ torque.dsfactory.bookstore.jndi.path=java:comp/env/jdbc/bookstore
 ]]></source>
 
 <p>
-Remember that commons-jdbc2pool pools expect a 
+Remember that jdbc2 pools expect a 
 <code>ConnectionPoolDataSource</code>
 available via jndi under the name given in the dataSourceName, so you will
 need entries in server.xml and web.xml for this object as well.
@@ -411,7 +411,7 @@ torque.dsfactory.DBscarabDB.jndi.path=jdbc/DBscarabDB
 # Connection properties for the pooling DataSource
 # These properties will vary from one datasource to another, see the class
 # javadoc for a description of which properties can be set.
-torque.dsfactory.scarab.datasource.classname=org.apache.commons.jdbc2pool.TorqueClassicDataSource
+torque.dsfactory.scarab.datasource.classname=org.apache.torque.pool.TorqueClassicDataSource
 torque.dsfactory.scarab.datasource.dataSourceName=jdbc/DBscarabDB
 torque.dsfactory.scarab.datasource.defaultMaxConnections=30
 torque.dsfactory.scarab.datasource.maxExpiryTime=3600
@@ -419,7 +419,7 @@ torque.dsfactory.scarab.datasource.connectionWaitTimeout=10
 torque.dsfactory.scarab.datasource.logInterval=0
 
 # Connection properties for the ConnectionPoolDataSource
-torque.dsfactory.DBscarabDB.datasource.classname=org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS
+torque.dsfactory.DBscarabDB.datasource.classname=org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS
 torque.dsfactory.DBscarabDB.datasource.driver=org.gjt.mm.mysql.Driver
 torque.dsfactory.DBscarabDB.datasource.url=jdbc:mysql://localhost:3306/scarab
 torque.dsfactory.DBscarabDB.datasource.user=xxx

@@ -73,7 +73,7 @@ torque.dsfactory.@DATABASE_DEFAULT@.connection.password = @DATABASE_PASSWORD@
 #torque.dsfactory.@DATABASE_DEFAULT@.jndi.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
 #torque.dsfactory.@DATABASE_DEFAULT@.jndi.java.naming.factory.url.pkgs = org.apache.naming
 
-#torque.dsfactory.@DATABASE_DEFAULT@.datasource.classname=org.apache.commons.jdbc2pool.TorqueClassicDataSource
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.classname=org.apache.torque.pool.TorqueClassicDataSource
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.dataSourceName=jdbc/DB@DATABASE_DEFAULT@
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.jndiEnvironment.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.jndiEnvironment.java.naming.factory.url.pkgs = org.apache.naming
@@ -84,7 +84,7 @@ torque.dsfactory.@DATABASE_DEFAULT@.connection.password = @DATABASE_PASSWORD@
 #torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.path=jdbc/DB@DATABASE_DEFAULT@
 #torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
 #torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.java.naming.factory.url.pkgs = org.apache.naming
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.classname=org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS
+#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.classname=org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS
 #torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.driver = @DATABASE_DRIVER@
 #torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.url = @DATABASE_URL@
 #torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.user = @DATABASE_USER@

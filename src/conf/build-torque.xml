@@ -36,7 +36,7 @@
     <pathelement location="${torque.lib.dir}/commons-beanutils-1.4-dev-20020724"/>
     <pathelement location="${torque.lib.dir}/commons-collections-2.0.jar"/>
     <pathelement location="${torque.lib.dir}/commons-configuration-1.0-dev.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-jdbc2pool-1.0-dev.jar"/>
+    <pathelement location="${torque.lib.dir}/commons-dbcp-1.0-dev-20020806.jar"/>
     <pathelement location="${torque.lib.dir}/commons-lang-1.0-dev-20020716.jar"/>
     <pathelement location="${torque.lib.dir}/commons-logging-1.0.jar"/>
     <pathelement location="${torque.lib.dir}/commons-pool-1.0.jar"/>

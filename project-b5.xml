@@ -131,8 +131,8 @@
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
-      <id>commons-jdbc2pool</id>
-      <version>1.0-dev</version>
+      <id>commons-dbcp</id>
+      <version>1.0-dev-20020806</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
