@@ -71,6 +71,9 @@ import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 
+import com.workingdogs.village.QueryDataSet;
+import com.workingdogs.village.Record;
+
 /**
  *  An extended Texen task used for dumping data from db into XML
  *
@@ -293,9 +296,10 @@ public class TorqueDataDumpTask
      */
     public class TableTool implements Iterator
     {
-        private ResultSet rs;
+        private QueryDataSet qds;
         private boolean isEmpty;
-
+        private int curIndex = -1;
+        private Record curRec = null;
 
         /**
          *  Constructor for the TableTool object
@@ -312,10 +316,11 @@ public class TorqueDataDumpTask
          * @exception SQLException Problem using database record set
          * cursor.
          */
-        protected TableTool(ResultSet rs) throws SQLException
+        protected TableTool(QueryDataSet qds) throws Exception
         {
-            this.rs = rs;
-            this.isEmpty = !rs.isBeforeFirst();
+            this.qds = qds;
+            this.qds.fetchRecords();
+            this.isEmpty = !(qds.size() > 0);
         }
 
 
@@ -328,14 +333,13 @@ public class TorqueDataDumpTask
          * @exception SQLException Problem creating connection or
          * executing query.
          */
-        public TableTool fetch(String tableName) throws SQLException
+        public TableTool fetch(String tableName) throws Exception
         {
             log("Fetching data for table " + tableName, Project.MSG_INFO);
             // Set Statement object in associated TorqueDataDump
             // instance
-            stmt = conn.createStatement();
             return new TableTool
-                (stmt.executeQuery("SELECT * FROM " + tableName));
+                (new QueryDataSet(conn, "SELECT * FROM " + tableName));
         }
 
 
@@ -348,11 +352,11 @@ public class TorqueDataDumpTask
         {
             try
             {
-                return !(rs.isLast() || this.isEmpty);
+                return ((this.curIndex < this.qds.size()-1) && (!isEmpty));
             }
-            catch (SQLException se)
+            catch (Exception se)
             {
-                System.err.println("SQLException :");
+                System.err.println("Exception :");
                 se.printStackTrace();
             }
             return false;
@@ -370,11 +374,11 @@ public class TorqueDataDumpTask
             try
             {
                 System.err.print(".");
-                rs.next();
+                this.curRec = this.qds.getRecord(++curIndex);
             }
-            catch (SQLException se)
+            catch (Exception se)
             {
-                System.err.println("SQLException while iterating:");
+                System.err.println("Exception while iterating:");
                 se.printStackTrace();
                 throw new NoSuchElementException(se.getMessage());
             }
@@ -392,11 +396,11 @@ public class TorqueDataDumpTask
         {
             try
             {
-                return rs.getString(columnName);
+                return(this.curRec.getValue(columnName).asString());
             }
-            catch (SQLException se)
+            catch (Exception se)
             {
-                log("SQLException fetching value " + columnName + ": " +
+                log("Exception fetching value " + columnName + ": " +
                     se.getMessage(), Project.MSG_ERR);
             }
             return null;

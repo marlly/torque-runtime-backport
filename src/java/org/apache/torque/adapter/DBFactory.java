@@ -160,6 +160,7 @@ public class DBFactory
         driverToAdapterMap.put("org.postgresql.Driver", "DBPostgres");
         driverToAdapterMap.put("com.sap.dbtech.jdbc.DriverSapDB", "DBSapDB");
         driverToAdapterMap.put("com.sybase.jdbc.SybDriver", "DBSybase");
+        driverToAdapterMap.put("com.sybase.jdbc2.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("weblogic.jdbc.pool.Driver", "DBWeblogic");
     }
 

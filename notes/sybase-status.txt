@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------
+S Y B A S E  S T A T U S
+--------------------------------------------------------------------------
+
+o Sybase support is working and passing the testbed.  JConnect, the 
+  jdbc driver distributed by Sybase, is not completely jdbc 2.0 
+  compliant, so certain items will not work.  The database metadata is 
+  not supported so the JDBCToXMLSchema tasks will not generate the schema
+  properly at this time.
+
+o TorqueDataDumpTask will need to know about contraints.  On databases
+  without constrains, the load generated sql will work, but with constraints,
+  the insert statements need to be in the correct order or they will fail
+  with constaint violations.
+
