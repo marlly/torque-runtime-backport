@@ -597,6 +597,7 @@ public class Column
                         || torqueType.equals("DATE")
                         || torqueType.equals("DATETIME")
                         || torqueType.equals("TIMESTAMP")
+                        || torqueType.equals("TIME")
                         || torqueType.equals("CHAR")
                         || torqueType.equals("CLOB"));
     }

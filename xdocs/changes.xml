@@ -10,6 +10,10 @@
 
     <release version="3.2-alpha" date="in CVS">
       <action dev='seade' type='fix'>
+        TRQS154: TIME should be enclosed in single quotes for SQL Loader.
+        Thanks to Matt Finn for the patch.
+      </action>
+      <action dev='seade' type='fix'>
         TRQS226: Remove unneeded code in Torque maven plugin.  Thanks to
         Thierry Lach for the patch.
       </action>
