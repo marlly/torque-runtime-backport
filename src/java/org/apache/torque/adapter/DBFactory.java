@@ -58,17 +58,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
-
-//!!
-// NOTE
-// The Configuration class is used here to try and
-// decouple this from Turbine so that the DatabaseService
-// can be used completely outside of the context of
-// Turbine. I realized this is a yucky Velocity reference
-// in here, but I'm waiting until we have a nice Configuration
-// interface in the commons that we can bind to. jvz.
 
 /**
  * This class creates different DB objects based on the database
@@ -82,14 +73,16 @@ import org.apache.velocity.runtime.configuration.Configuration;
  */
 public class DBFactory
 {
-    // List of registered drivers.
+    /**
+     * List of registered drivers.
+     */
     private static Hashtable drivers = null;
 
-    private static Configuration configuration;
+    private static ExtendedProperties configuration;
 
     private static Category category;
 
-    public static void setConfiguration(Configuration c)
+    public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
     }

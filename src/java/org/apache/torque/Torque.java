@@ -68,8 +68,8 @@ import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
 
+import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.velocity.runtime.configuration.Configuration;
 
 /**
  * Turbine's default implementation of {@link DatabaseService}.
@@ -110,7 +110,7 @@ public class Torque
     private static final String DEFAULT_CATEGORY = "sql";
 
     private static Category category;
-    private static Configuration configuration;
+    private static ExtendedProperties configuration;
 
     private static Monitor monitor;
 
@@ -148,7 +148,7 @@ public class Torque
         return category;
     }
 
-    public static void setConfiguration(Configuration c)
+    public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
     }
@@ -505,7 +505,7 @@ public class Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static  DB getDB()
+    public static DB getDB()
         throws Exception
     {
         return getDB(configuration.getString(DATABASE_DEFAULT,"default"));
