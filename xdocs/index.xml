@@ -125,7 +125,7 @@
           </li>
         </ul>
 
-        If your Databse is not listed here, please read the document about
+        If your database is not listed here, please read the document about
         <a href="db-adapters.html">writing DB Adapters</a>
      </p>
    </section>
