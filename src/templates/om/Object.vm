@@ -636,27 +636,27 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $cfc = $col.JavaName )
       #set ( $cjtype = $col.JavaNative )
         if (name.equals("${col.JavaName}"))
-	{
-	  #if ($cjtype == "int")
-	    return new Integer(get${cfc}());
-	  #elseif ($cjtype == "long")
-	    return new Long(get${cfc}());
-	  #elseif ($cjtype == "float")
-	    return new Float(get${cfc}());
-	  #elseif ($cjtype == "double")
-	    return new Double(get${cfc}());
-	  #elseif ($cjtype == "boolean")
-	    return new Boolean(get${cfc}());
-	  #elseif ($cjtype == "short")
-	    return new Short(get${cfc}());
-	  #elseif ($cjtype == "byte")
-	    return new Byte(get${cfc}());
-	  #elseif ($cjtype == "char")
-	    return new Character(get${cfc}());
-	  #else
-	    return get${cfc}();
-	  #end
-	}
+    {
+      #if ($cjtype == "int")
+        return new Integer(get${cfc}());
+      #elseif ($cjtype == "long")
+        return new Long(get${cfc}());
+      #elseif ($cjtype == "float")
+        return new Float(get${cfc}());
+      #elseif ($cjtype == "double")
+        return new Double(get${cfc}());
+      #elseif ($cjtype == "boolean")
+        return new Boolean(get${cfc}());
+      #elseif ($cjtype == "short")
+        return new Short(get${cfc}());
+      #elseif ($cjtype == "byte")
+        return new Byte(get${cfc}());
+      #elseif ($cjtype == "char")
+        return new Character(get${cfc}());
+      #else
+        return get${cfc}();
+      #end
+    }
     #end
         return null; 
     }
@@ -672,27 +672,27 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $cup=$col.Name.toUpperCase() )
       #set ( $cjtype = $col.JavaNative )
         if (name.equals(${table.JavaName}Peer.$cup ))
-	    {
-	  #if ($cjtype == "int")
-	    return new Integer(get${cfc}());
-	  #elseif ($cjtype == "long")
-	    return new Long(get${cfc}());
-	  #elseif ($cjtype == "float")
-	    return new Float(get${cfc}());
-	  #elseif ($cjtype == "double")
-	    return new Double(get${cfc}());
-	  #elseif ($cjtype == "boolean")
-	    return new Boolean(get${cfc}());
-	  #elseif ($cjtype == "short")
-	    return new Short(get${cfc}());
-	  #elseif ($cjtype == "byte")
-	    return new Byte(get${cfc}());
-	  #elseif ($cjtype == "char")
-	    return new Character(get${cfc}());
-	  #else
-	    return get${cfc}();
-	  #end
-	}
+        {
+      #if ($cjtype == "int")
+        return new Integer(get${cfc}());
+      #elseif ($cjtype == "long")
+        return new Long(get${cfc}());
+      #elseif ($cjtype == "float")
+        return new Float(get${cfc}());
+      #elseif ($cjtype == "double")
+        return new Double(get${cfc}());
+      #elseif ($cjtype == "boolean")
+        return new Boolean(get${cfc}());
+      #elseif ($cjtype == "short")
+        return new Short(get${cfc}());
+      #elseif ($cjtype == "byte")
+        return new Byte(get${cfc}());
+      #elseif ($cjtype == "char")
+        return new Character(get${cfc}());
+      #else
+        return get${cfc}();
+      #end
+    }
     #end
         return null; 
     }
@@ -708,34 +708,34 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $cfc = $col.JavaName )
       #set ( $cjtype = $col.JavaNative )
     if ( pos == $i )
-	{
-	  #if ($cjtype == "int")
-	    return new Integer(get${cfc}());
-	  #elseif ($cjtype == "long")
-	    return new Long(get${cfc}());
-	  #elseif ($cjtype == "float")
-	    return new Float(get${cfc}());
-	  #elseif ($cjtype == "double")
-	    return new Double(get${cfc}());
-	  #elseif ($cjtype == "boolean")
-	    return new Boolean(get${cfc}());
-	  #elseif ($cjtype == "short")
-	    return new Short(get${cfc}());
-	  #elseif ($cjtype == "byte")
-	    return new Byte(get${cfc}());
-	  #elseif ($cjtype == "char")
-	    return new Character(get${cfc}());
-	  #else
-	    return get${cfc}();
-	  #end
-	}
+    {
+      #if ($cjtype == "int")
+        return new Integer(get${cfc}());
+      #elseif ($cjtype == "long")
+        return new Long(get${cfc}());
+      #elseif ($cjtype == "float")
+        return new Float(get${cfc}());
+      #elseif ($cjtype == "double")
+        return new Double(get${cfc}());
+      #elseif ($cjtype == "boolean")
+        return new Boolean(get${cfc}());
+      #elseif ($cjtype == "short")
+        return new Short(get${cfc}());
+      #elseif ($cjtype == "byte")
+        return new Byte(get${cfc}());
+      #elseif ($cjtype == "char")
+        return new Character(get${cfc}());
+      #else
+        return get${cfc}();
+      #end
+    }
     #set ($i = $i + 1)
     #end
         return null; 
     }
 
 #end     ## ends the if(addGetByNameMethod)
-	
+    
 
 #if (!$table.isAlias() && $addSaveMethod)
     /**
@@ -766,6 +766,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
+#if ($complexObjectModel)
+     * Note: this code is here because the method body is 
+     * auto-generated conditionally and therefore needs to be
+     * in this file instead of in the super class, BaseObject.
+#end
      */
     public void save(String dbName) throws Exception
     {
@@ -812,8 +817,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     }
 
   #if ($complexObjectModel)
-    // flag to prevent endless save loop, if this object is referenced
-    // by another object which falls in this transaction.
+    /** flag to prevent endless save loop, if this object is referenced
+        by another object which falls in this transaction. */
     private boolean alreadyInSave = false;
   #end
     /**
@@ -1008,7 +1013,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #end
         return comboPK;
 #else
-		return getPrimaryKey();
+        return getPrimaryKey();
 #end
     }
 
