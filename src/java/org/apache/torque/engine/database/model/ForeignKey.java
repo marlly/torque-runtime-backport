@@ -63,11 +63,13 @@ import org.xml.sax.Attributes;
  * A Class for information about foreign keys of a table
  *
  * @author <a href="mailto:fedor.karpelevitch@home.com">Fedor</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class ForeignKey
 {
     private String foreignTableName;
+    private String name;
     private String onUpdate;
     private String onDelete;
     private Table parentTable;
@@ -91,6 +93,7 @@ public class ForeignKey
     public void loadFromXML (Attributes attrib)
     {
         foreignTableName = attrib.getValue("foreignTable");
+        name = attrib.getValue("name");
         onUpdate = attrib.getValue("onUpdate");
         onDelete = attrib.getValue("onDelete");
         onUpdate = normalizeFKey(onUpdate);
@@ -162,6 +165,22 @@ public class ForeignKey
     public void setOnUpdate(String value)
     {
        onUpdate = normalizeFKey(value);
+    }
+
+    /**
+     * Returns the name attribute.
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Sets the name attribute.
+     */
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     /**
@@ -307,16 +326,19 @@ public class ForeignKey
     {
         StringBuffer result = new StringBuffer();
         result.append("    <foreign-key foreignTable=\"")
-              .append(foreignTableName)
-              .append("\"");
-        result.append(">\n");
+            .append(getForeignTableName())
+            .append("\" name=\"")
+            .append(getName())
+            .append("\">\n");
 
-        for (int i=0; i<localColumns.size(); i++)
+        for (int i = 0; i < localColumns.size(); i++)
+        {
             result.append("        <reference local=\"")
                 .append(localColumns.get(i))
                 .append("\" foreign=\"")
                 .append(foreignColumns.get(i))
                 .append("\"/>\n");
+        }
         result.append("    </foreign-key>\n");
         return result.toString();
     }
