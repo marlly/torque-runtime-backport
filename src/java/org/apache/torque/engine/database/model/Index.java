@@ -132,9 +132,8 @@ public class Index
      */
     public void loadFromXML (Attributes attrib)
     {
-        indexName     = attrib.getValue("name");
-        String unique = attrib.getValue("unique");
-        isUnique = (unique != null && unique.equalsIgnoreCase("true"));
+        indexName = attrib.getValue("name");
+        isUnique = "true".equalsIgnoreCase(attrib.getValue("unique"));
     }
 
     /**
