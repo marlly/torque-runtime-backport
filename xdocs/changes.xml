@@ -8,6 +8,11 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='mpoeschl' type='fix'>
+        TRQS223: The get${pVarName} method in the Object.vm template does not 
+        return related objects with a negative PK.  Thanks to Nick Curry for
+        the patch.
+      </action>
       <action dev='seade' type='add'>
         DB2 limit and offset support.  Thanks to Augustin Vidovic for the patch.
       </action>

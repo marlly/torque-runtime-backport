@@ -303,7 +303,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $cjtype = $column.JavaNative )
       #set ( $clo=$column.UncapitalisedJavaName )
       #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long" || $cjtype == "byte" || $cjtype == "float" || $cjtype == "double")
-        #set ( $conditional = "$conditional${and}this.${clo} > 0" )
+        #set ( $conditional = "$conditional${and}this.${clo} != 0" )
       #else
         #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
       #end
