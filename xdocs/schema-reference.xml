@@ -600,7 +600,7 @@
         The unique-column element and its relevant attributes
       </p>
       <source><![CDATA[
-        <index-column name="UNIQUE_COLUMN"/>]]>
+        <unique-column name="UNIQUE_COLUMN"/>]]>
       </source>
       <p>
         The unique-column element has 1 attribute associated with it, it is:

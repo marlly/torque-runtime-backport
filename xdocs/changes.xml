@@ -67,6 +67,9 @@
       TRQ47: limit and offset patch for Oracle
     </li>
     <li>
+      TRQD21: torque schema-reference.html bug: unique-column
+    </li>
+    <li>
       TRQS29, TRQS93: fix endless loop in Monitor
     </li>
     <li>
