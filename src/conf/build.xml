@@ -2,9 +2,12 @@
 
   <property name="torque.home" value="@TORQUE_HOME@"/>
 
+  <!-- Override this property if you build a "lite" distribution. -->
+  <property name="lib.dir" value="lib"/>
+
   <!-- Build classpath -->
   <path id="classpath">
-    <fileset dir="lib">
+    <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
   </path>
