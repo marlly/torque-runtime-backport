@@ -1,8 +1,10 @@
 #set ($basePath = $generator.OutputPath)
 
-#if ($targetDatabase)
-   #set ( $dbprops = $properties.load("sql/base/$targetDatabase/db.props") )
-#end
+targetdatabase = $targetDatabase
+#set ( $dbprops = $properties.load("sql/base/$targetDatabase/db.props") )
+dbprops.idMethod = $dbprops.get("idMethod")
+#include ( "sql/base/$targetDatabase/db.props" )
+
 #foreach ($dataModel in $dataModels)
 #foreach ($database in $dataModel.Databases)
 
