@@ -1,2 +1,7 @@
-database.driver=org.enhydra.instantdb.jdbc.idbDriver
-database.url=C:/TurbineDB/Turbine.prp
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+database.driver = org.enhydra.instantdb.jdbc.idbDriver
+database.url = C:/TurbineDB/Turbine.prp
+database.create.url = 

@@ -1,2 +1,7 @@
-database.driver=oracle.jdbc.driver.OracleDriver
-database.url=jdbc:oracle:thin:@localhost:1521:ORCL
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+database.driver = oracle.jdbc.driver.OracleDriver
+database.url = jdbc:oracle:thin:@localhost:1521:ORCL
+database.create.url = 

@@ -1,2 +1,7 @@
-database.driver=org.gjt.mm.mysql.Driver
-database.url=jdbc:mysql://localhost:3306/${database.name}
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+database.driver = org.gjt.mm.mysql.Driver
+database.url = jdbc:mysql://localhost:3306/${database.name}
+database.create.url = jdbc:mysql://localhost:3306/mysql

@@ -1,1 +1,7 @@
-database.driver=COM.ibm.db2.jdbc.app.DB2Driver
+# ------------------------------------------------------------------------
+# D A T A B A S E  P R O P E R T I E S
+# ------------------------------------------------------------------------
+
+database.driver = COM.ibm.db2.jdbc.app.DB2Driver
+database.url =
+database.create.url = 
