@@ -71,7 +71,7 @@ torque.defaults.connection.driver = @DATABASE_DRIVER@
 torque.defaults.connection.url = @DATABASE_URL@
 
 # Sets login and password for the data sources.
-torque.defaults.connection.username = @DATABASE_USER@
+torque.defaults.connection.user = @DATABASE_USER@
 torque.defaults.connection.password = @DATABASE_PASSWORD@
 
 # -------------------------------------------------------------------
