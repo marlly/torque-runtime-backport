@@ -57,7 +57,6 @@ package org.apache.torque.util;
 import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.TorqueException;
-import org.apache.torque.om.NumberKey;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
 
