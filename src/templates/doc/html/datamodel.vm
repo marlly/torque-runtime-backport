@@ -2,21 +2,25 @@
 <html>
 <header>
   <title>$dataModel.name</title>
+  <style>
+  .normalFont {
+    $docHtmlNormalFont
+  }
+  </style>
 </header>
 
-<body>
-  <h1><center>Torque Generated Tables</center></h1>
-  <table border="1">
-    <tr>
-      <th>Table Name</th>
-      <th>OM Class</th>
-      <th>Description</th>
+<body class="normalFont">
+  <table border="1" cellspacing="0" cellpadding="0">
+    <tr bgcolor="#CCCCCC">
+      <th class="normalFont">Table Name</th>
+      <th class="normalFont">OM Class</th>
+      <th class="normalFont">Description</th>
     <tr>
   #foreach ($tbl in $database.tables)
     <tr>
-      <td><a href="#$tbl.Name">$tbl.Name</a></td>
-      <td>$tbl.JavaName</td>
-      <td>#if ($tbl.Description) $tbl.Description#else &nbsp;#end</td>
+      <td class="normalFont"><a href="#$tbl.Name">$tbl.Name</a></td>
+      <td class="normalFont">$tbl.JavaName</td>
+      <td class="normalFont">#if ($tbl.Description) $tbl.Description#else &nbsp;#end</td>
     </tr>
   #end
   </table>

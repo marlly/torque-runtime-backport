@@ -320,6 +320,22 @@
   </td>
 </tr>
 <tr>
+  <td><code> torque.doc.html.normalFont </code></td>
+  <td><code> font-family: Verdana; font-size: 10pt; </code></td>
+  <td>
+    The value for the CSS class <code>normalFont</code> that is used to format
+    the text of the HTML output.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.doc.html.fkColor </code></td>
+  <td><code> afe295 </code></td>
+  <td>
+    The color that the names of foreign key columns are highlighted with in the
+    HTML output.
+  </td>
+</tr>
+<tr>
   <td><code> torque.initialID </code></td>
   <td><code> 101 </code></td>
   <td>

@@ -2,29 +2,39 @@
 <h2>$table.Name</h2>
 $!table.Description
 <p/>
-<table border="1">
+<table border="1" cellspacing="0">
   <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Size</th>
-    <th>Default</th>
-    <th>JavaName</th>
-    <th>PK</th>
-    <th>FK</th>
-    <th>not null</th>
-    <th>Description</th>
+    <th class="normalFont" bgcolor="#CCCCCC">Name</th>
+    <th class="normalFont" bgcolor="#CCCCCC">Type</th>
+    <th class="normalFont" bgcolor="#CCCCCC">Size</th>
+    <th class="normalFont" bgcolor="#CCCCCC">Default</th>
+    <th class="normalFont" bgcolor="#CCCCCC">JavaName</th>
+    <th class="normalFont" bgcolor="#CCCCCC">PK</th>
+    <th class="normalFont" bgcolor="#CCCCCC">FK</th>
+    <th class="normalFont" bgcolor="#CCCCCC">not null</th>
+    <th class="normalFont" bgcolor="#CCCCCC">Description</th>
   </tr>
 #foreach ($col in $table.Columns)
   <tr>
-    <td>$col.Name</td>
-    <td>$col.Type</td>
-    <td>#if ($col.printSize()) $col.printSize()#else &nbsp;#end</td>
-    <td>#if ($col.DefaultValue) $col.DefaultValue#else &nbsp;#end</td>
-    <td>$col.JavaName</td>
-    <td>#if ($col.isPrimaryKey()==true)X#else &nbsp;#end</td>
-    <td>#if ($col.isForeignKey()==true)X#else &nbsp;#end</td>
-    <td>#if ($col.isNotNull()==true)X#else &nbsp;#end</td>
-    <td>#if ($col.Description) $col.Description#else &nbsp;#end</td>
+    <td class="normalFont" id="$table.Name$col.Name">$col.Name</td>
+    <td class="normalFont">$col.Type</td>
+    <td class="normalFont">#if ($col.printSize() && $col.printSize().length() > 0) $col.printSize() #else &nbsp;#end</td>
+    <td class="normalFont">#if ($col.DefaultValue) $col.DefaultValue#else &nbsp;#end</td>
+    <td class="normalFont">$col.JavaName</td>
+    <td class="normalFont"><center> #if ($col.isPrimaryKey()==true)X#else &nbsp;#end </center></td>
+    <td class="normalFont"><center> #if ($col.isForeignKey()==true)X#else &nbsp;#end </center></td>
+    <td class="normalFont"><center> #if ($col.isNotNull()==true)X#else &nbsp;#end </center></td>
+    <td class="normalFont">#if ($col.Description) $col.Description#else &nbsp;#end</td>
   </tr>
 #end
 </table>
+<script>
+#foreach ( $fk in $table.ForeignKeys )
+if( document.getElementById  )
+{
+var col = document.getElementById("$table.Name$fk.LocalColumnNames");
+col.style.backgroundColor = "$docHtmlFkColor";
+col.title="Foreignkey from $fk.ForeignTableName.$fk.ForeignColumnNames";
+}
+#end
+</script>
