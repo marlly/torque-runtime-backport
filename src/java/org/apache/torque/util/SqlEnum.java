@@ -64,7 +64,7 @@ package org.apache.torque.util;
  * @version $Id$
  * @since 3.0
  */
-class SqlEnum 
+class SqlEnum implements java.io.Serializable
 {
     private final String s;
     
