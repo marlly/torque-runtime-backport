@@ -4,7 +4,11 @@
     #else
        #set ( $type = $dbprops.get($col.Type) )
     #end
-    #set ( $size = $col.printSize() )
+    #if ($col.TorqueType.indexOf("INT") == -1)
+        #set ( $size = $col.printSize() )
+    #else
+        #set ( $size = "" )
+    #end
     #set ( $default = $col.DefaultSetting )
     #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
     #set ( $entry = "$col.Name $type $size $default $nullString" )
