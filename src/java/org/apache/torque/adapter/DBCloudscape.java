@@ -66,6 +66,7 @@ import java.util.StringTokenizer;
  */
 public class DBCloudscape extends DB
 {
+    /** qualifier */
     private static final String QUALIFIER = ".";
 
     /**
