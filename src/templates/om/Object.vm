@@ -106,11 +106,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         /**
          * Get the $cfc
+         *
          * @return $cjtype
          */
         public $cjtype get${cfc}()
         {
-          return $clo;
+            return $clo;
         }
 
         #set ( $throwsClause = "" )
@@ -127,6 +128,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         /**
          * Set the value of $cfc
+         *
+         * @param v new value
          */
         public void set${cfc}($cjtype v) $throwsClause
         {
@@ -219,6 +222,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #if ($col.isPrimaryKey() || $col.isForeignKey())
      /**
       * Set the value of $cfc as a string.
+      *
+      * @param v new value
       */
       public void set${cfc}(String v) $throwsClause
       {
@@ -297,7 +302,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     public $className get${pVarName}() throws TorqueException
     {
-        if ( $varName==null && ($conditional) )
+        if ($varName==null && ($conditional))
         {
   #if ($tblFK.isAlias())
         $varName = ${className}Peer.retrieve${className}ByPK($arglist);
@@ -338,13 +343,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ($i = 0)
         #foreach ($colName in $fk.LocalColumns)
             #set ($col = $table.getColumn($colName) )
-            set${col.JavaName}(($col.JavaNative)keys[$i]);
+            set${col.JavaName}(($col.JavaNative) keys[$i]);
             #set ( $i = $i + 1 )
         #end
     #else
         #set ($colName = $fk.LocalColumns.get(0))
         #set ($col = $table.getColumn($colName) )
-        set${col.JavaName}(($col.JavaNative)key);
+        set${col.JavaName}(($col.JavaNative) key);
     #end
     }
  #end   ## end of foreach loop over foreign keys
@@ -494,7 +499,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ($collName == null)
         {
-            $collName = get${relCol}(new Criteria(10),con);
+            $collName = get${relCol}(new Criteria(10), con);
         }
         return $collName;
     }
@@ -919,15 +924,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             try
             {
                 BasePeer.rollBackTransaction(con);
-             }
-             catch (Exception rollBackEx)
-             {
-                 throw new TorqueException(e.getMessage()
-                     + "; a rollback exception ocurred when rolling back the error: "
-                     + rollBackEx.getMessage(),
-                     e);
-             }
-             throw e;
+            }
+            catch (Exception rollBackEx)
+            {
+                throw new TorqueException(e.getMessage()
+                    + "; a rollback exception ocurred when rolling back the error: "
+                    + rollBackEx.getMessage(), e);
+            }
+            throw e;
         }
         BasePeer.commitTransaction(con);
 
@@ -1108,7 +1112,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      */
     public void setPrimaryKey(ObjectKey key) throws TorqueException
     {
-        SimpleKey[] keys = (SimpleKey[])key.getValue();
+        SimpleKey[] keys = (SimpleKey[]) key.getValue();
     #set ($i = 0)
     #foreach ($pk in $table.PrimaryKeys)
             set${pk.JavaName}(($pk.JavaNative)keys[$i]);
@@ -1166,7 +1170,6 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     }
 
 #end
-
 
     /**
      * returns an id that differentiates this object from others

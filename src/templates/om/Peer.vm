@@ -135,7 +135,8 @@ public abstract class $basePrefix${table.JavaName}Peer
      * resultset MUST return columns in the right order.  You can use
      * getFieldNames() in BaseObject to get the correct sequence.
      */
-    public static List resultSet2Objects (java.sql.ResultSet results) throws TorqueException
+    public static List resultSet2Objects(java.sql.ResultSet results)
+            throws TorqueException
     {
         try
         {
@@ -143,15 +144,18 @@ public abstract class $basePrefix${table.JavaName}Peer
             List rows = null;
             try
             {
-                qds = new QueryDataSet( results );
-                rows = getSelectResults( qds );
+                qds = new QueryDataSet(results);
+                rows = getSelectResults(qds);
             }
             finally
             {
-                if (qds != null) qds.close();
+                if (qds != null)
+                {
+                    qds.close();
+                }
             }
 
-            return populateObjects (rows);
+            return populateObjects(rows);
         }
         catch (SQLException e)
         {
@@ -271,7 +275,8 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
     /** Add all the columns needed to create a new object */
-    public static void addSelectColumns (Criteria criteria) throws TorqueException
+    public static void addSelectColumns(Criteria criteria)
+            throws TorqueException
     {
     #foreach ($col in $table.Columns)
         #set ( $cup=$col.Name.toUpperCase() )
@@ -293,7 +298,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         try
         {
-            $table.JavaName obj = ($table.JavaName)cls.newInstance();
+            $table.JavaName obj = ($table.JavaName) cls.newInstance();
             populateObject(row, offset, obj);
             #if ($addSaveMethod)
                 obj.setModified(false);
@@ -348,20 +353,20 @@ public abstract class $basePrefix${table.JavaName}Peer
                 #if ($col.isPrimaryKey() || $col.isForeignKey() )
             ## The field should always be an Object type but make sure so we
             ## are sure we can set it to null.
-            if ( row.getValue(offset+$n).$col.VillageMethod instanceof Object )
+            if (row.getValue(offset + $n).$col.VillageMethod instanceof Object)
             {
                ## If the database value is a null value then set the Key
                ## value to null so comparisons with ObjectUtils.equals really work.
-               if ( null == row.getValue(offset+$n).$col.VillageMethod )
-               { 
-                  obj.set${col.JavaName}( (${col.JavaNative}) null );
+               if (null == row.getValue(offset + $n).$col.VillageMethod)
+               {
+                  obj.set${col.JavaName}((${col.JavaNative}) null);
                }
                else
                ## Do what we normally do
                {
                   obj.set${col.JavaName}(
-                      new ${col.JavaNative}(row.getValue(offset+$n).$col.VillageMethod));
-               } 
+                      new ${col.JavaNative}(row.getValue(offset + $n).$col.VillageMethod));
+               }
             }
                 #else
             obj.set${col.JavaName}(row.getValue(offset + $n).$col.VillageMethod);
@@ -442,7 +447,7 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
-        if ( criteria.containsKey($cup) )
+        if (criteria.containsKey($cup))
         {
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
@@ -598,8 +603,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doUpdate(Criteria criteria, Connection con)
         throws TorqueException
     {
-        Criteria selectCriteria = new
-            Criteria(DATABASE_NAME, 2);
+        Criteria selectCriteria = new Criteria(DATABASE_NAME, 2);
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -621,7 +625,7 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to int
-        if ( criteria.containsKey($cup) )
+        if (criteria.containsKey($cup))
         {
             Object possibleBoolean = criteria.get($cup);
             if (possibleBoolean instanceof Boolean)
@@ -638,18 +642,18 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
          #end
          #if($col.isPrimaryKey())
-         selectCriteria.put( $cup, criteria.remove($cup) );
+         selectCriteria.put($cup, criteria.remove($cup));
          #end
      #end
 
         // Set the correct dbName if it has not been overridden
         // criteria.getDbName will return the same object if not set to
         // another value so == check is okay and faster
-        if ( criteria.getDbName() == Torque.getDefaultDB() )
+        if (criteria.getDbName() == Torque.getDefaultDB())
         {
             criteria.setDbName(DATABASE_NAME);
         }
-        if ( con == null )
+        if (con == null)
         {
             BasePeer.doUpdate(selectCriteria, criteria);
         }
@@ -744,7 +748,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
     /** Method to do inserts */
-    public static void doInsert( $table.JavaName obj ) throws TorqueException
+    public static void doInsert($table.JavaName obj) throws TorqueException
     {
         #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
         doInsert(buildCriteria(obj));
@@ -779,7 +783,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      *
      * @param obj the data object to insert into the database.
      */
-    public static void doInsert( $table.JavaName obj, Connection con)
+    public static void doInsert($table.JavaName obj, Connection con)
         throws TorqueException
     {
         #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
@@ -848,7 +852,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      *
      * @param pk the primary key
      */
-    public static $table.JavaName ${retrieveMethod}( ObjectKey pk )
+    public static $table.JavaName ${retrieveMethod}(ObjectKey pk)
         throws TorqueException
     {
         Connection db = null;
@@ -994,22 +998,24 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         Connection db = null;
         $table.JavaName retVal = null;
-       try
+        try
         {
            db = Torque.getConnection(DATABASE_NAME);
            retVal = retrieveByPK(
            #set ( $comma = false )
            #foreach ($col in $table.PrimaryKeys)
-         #set ( $clo=$col.Name.toLowerCase() )
-         #if ($comma),#end $clo
-              #set ( $comma = true )
+               #set ( $clo=$col.Name.toLowerCase() )
+               #if ($comma),#end $clo
+               #set ( $comma = true )
            #end
                , db);
         }
         finally
         {
-           if (db != null)
-              closeConnection(db);
+            if (db != null)
+            {
+                closeConnection(db);
+            }
         }
         return(retVal);
     }
@@ -1032,17 +1038,17 @@ public abstract class $basePrefix${table.JavaName}Peer
     #if ($comma),#end $cjtype $clo
         #set ( $comma = true )
 #end
-       ,Connection con ) throws TorqueException
+       ,Connection con) throws TorqueException
     {
 
         Criteria criteria = new Criteria(5);
 #foreach ($col in $table.PrimaryKeys)
     #set ( $cup=$col.Name.toUpperCase() )
     #set ( $clo=$col.Name.toLowerCase() )
-        criteria.add( $cup, $clo );
+        criteria.add($cup, $clo);
 #end
         List v = doSelect(criteria, con);
-        if ( v.size() != 1)
+        if (v.size() != 1)
         {
             throw new TorqueException("Failed to select one and only one row.");
         }
@@ -1068,7 +1074,7 @@ public abstract class $basePrefix${table.JavaName}Peer
  #if ($countFK >= 1)
  #foreach ($fk in $table.ForeignKeys)
   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-  #if (!$tblFK.isForReferenceOnly()) 
+  #if (!$tblFK.isForReferenceOnly())
    ## want to cover this case, but the code is not there yet.
    #if ( !($fk.ForeignTableName.equals($table.Name)) )
 
@@ -1121,7 +1127,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to
         // another value so == check is okay and faster
-        if ( c.getDbName() == Torque.getDefaultDB() )
+        if (c.getDbName() == Torque.getDefaultDB())
         {
             c.setDbName(DATABASE_NAME);
         }
@@ -1144,12 +1150,12 @@ public abstract class $basePrefix${table.JavaName}Peer
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
         // check for conversion from boolean to int
-        if ( c.containsKey($cup) )
+        if (c.containsKey($cup))
         {
             Object possibleBoolean = c.get($cup);
-            if ( possibleBoolean instanceof Boolean )
+            if (possibleBoolean instanceof Boolean)
             {
-                if ( ((Boolean)possibleBoolean).booleanValue() )
+                if (((Boolean) possibleBoolean).booleanValue())
                 {
                     c.add($cup, 1);
                 }
@@ -1164,9 +1170,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         if ( c.containsKey($cup) )
         {
             Object possibleBoolean = c.get($cup);
-            if ( possibleBoolean instanceof Boolean )
+            if (possibleBoolean instanceof Boolean)
             {
-                if ( ((Boolean)possibleBoolean).booleanValue() )
+                if (((Boolean) possibleBoolean).booleanValue())
                 {
                     c.add($cup, "Y");
                 }
@@ -1184,7 +1190,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         for (int i = 0; i < rows.size(); i++)
         {
-            Record row = (Record)rows.get(i);
+            Record row = (Record) rows.get(i);
 
 #set ($classDecl = "Class")
 #if ($table.ChildrenColumn)
@@ -1194,7 +1200,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 #end
 #set ($classDecl = "")
 
-            $className obj1 = ($className)${table.JavaName}Peer
+            $className obj1 = ($className) ${table.JavaName}Peer
                 .row2Object(row, 1, omClass);
 
 
@@ -1229,7 +1235,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         return results;
     }
   #end
- #end 
+ #end
  #end
  #end
 
@@ -1239,7 +1245,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
   #foreach ($fk in $table.ForeignKeys)
    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-   #if (!$tblFK.isForReferenceOnly()) 
+   #if (!$tblFK.isForReferenceOnly())
 
      #set ( $excludeTable = $table.Database.getTable($fk.ForeignTableName) )
      #set ( $excludeClassName = $excludeTable.JavaName )
@@ -1330,7 +1336,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             Object possibleBoolean = c.get($cup);
             if (possibleBoolean instanceof Boolean)
             {
-                if (((Boolean)possibleBoolean).booleanValue())
+                if (((Boolean) possibleBoolean).booleanValue())
                 {
                     c.add($cup, "Y");
                 }
@@ -1359,7 +1365,7 @@ public abstract class $basePrefix${table.JavaName}Peer
       #set ($classDecl = "")
 
             $className obj1 = ($className)${table.JavaName}Peer
-                .row2Object( row, 1, omClass);
+                .row2Object(row, 1, omClass);
 
 
     #set ( $index = 1 )
@@ -1404,11 +1410,11 @@ public abstract class $basePrefix${table.JavaName}Peer
                 .row2Object( row, offset$index, omClass);
 
             #if ($index == 2) boolean #end newObject = true;
-            for (int j=0; j<results.size(); j++)
+            for (int j = 0; j < results.size(); j++)
             {
                 $className temp_obj1 = ($className)results.get(j);
                 $joinClassName temp_obj$index = ($joinClassName)temp_obj1.get${joinString}();
-                if ( temp_obj${index}.getPrimaryKey().equals(obj${index}.getPrimaryKey() ) )
+                if (temp_obj${index}.getPrimaryKey().equals(obj${index}.getPrimaryKey()))
                 {
                     newObject = false;
                     temp_obj${index}.add${collThisTableMs}(obj1);
