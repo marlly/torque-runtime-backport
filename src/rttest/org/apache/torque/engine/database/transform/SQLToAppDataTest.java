@@ -62,7 +62,7 @@ import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.torque.BaseTestCase;
-import org.apache.torque.engine.database.model.AppData;
+import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.sql.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -127,7 +127,7 @@ public class SQLToAppDataTest extends BaseTestCase
                 String filename = file.getAbsolutePath();
                 // load the sql file
                 SQLToAppData s2a = new SQLToAppData(filename);
-                AppData ad = s2a.execute();
+                Database ad = s2a.execute();
                 // write the output to a new xml file
                 String xmlFilename = filename + ".xml";
                 PrintWriter out = new PrintWriter(
