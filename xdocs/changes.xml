@@ -99,6 +99,9 @@
       TRQS15: Torque gererated code does not compile
     </li>
     <li>
+      TRQS33: fix foreign key generation statements for db2
+    </li>
+    <li>
       TRQS40: id-table-init-sql creates empty .sql file
     </li>
     <li>
