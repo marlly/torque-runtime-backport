@@ -23,6 +23,8 @@
   <property name="lib.dir" value="lib"/>
   <property name="torque.lib.dir" value="${lib.dir}"/>
 
+  <property name="torque.jar" value="${torque.lib.dir}/torque-3.0-b4-dev.jar"/>
+
   <!--
     Build the classpath. Specifically point to each file we're including to avoid 
     version conflicts in the case of the torque.lib.dir being something like lib.repo.
@@ -43,7 +45,7 @@
     <pathelement location="${torque.lib.dir}/log4j-1.1.3.jar"/>
     <pathelement location="${torque.lib.dir}/stratum-1.0-b3-dev.jar"/>
     <pathelement location="${torque.lib.dir}/tomcat-naming-1.0.jar"/>
-    <pathelement location="${torque.lib.dir}/torque-3.0-b4-dev.jar"/>
+    <pathelement location="${torque.jar}"/>
     <pathelement location="${torque.lib.dir}/velocity-1.3.jar"/>
     <pathelement location="${torque.lib.dir}/village-1.5.3.jar"/>
     <pathelement location="${torque.lib.dir}/xercesImpl-2.0.2.jar"/>
@@ -58,7 +60,7 @@
     with setting the corret defaults.
   -->
   <property
-    classpathref="torque-classpath"
+    classpath="${torque.jar}"
     resource="org/apache/torque/default.properties"/>
 
   <!--
