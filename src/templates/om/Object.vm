@@ -205,6 +205,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
  ##association code
 
 #if ($complexObjectModel)
+ #set($pVars = [])  ## Array of object set method names for later reference.
+ #set($aVars = [])  ## Array of object field names for later reference.
  #foreach ($fk in $table.ForeignKeys)
 
    #set ( $tmp = $fk.ForeignTableName )
@@ -227,7 +229,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
    #set ( $pVarName = $strings.concat([$className, $relCol]) )
    #set ( $varName = $strings.concat(["a", $pVarName]) )
-
+   #set ( $retVal = $pVars.add($pVarName) )
+   #set ( $retVal = $aVars.add($varName) )
     private $className $varName;
 
     /**
@@ -860,7 +863,28 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       if (!alreadyInSave)
       {
         alreadyInSave = true;
-  #end      
+	#if ($pVars.size() != 0)
+
+        // We call the save method on the following object(s) if they
+        // were passed to this object by their coresponding set
+        // method.  This object relates to these object(s) by a
+        // foreign key reference.  If the object(s) being saved were
+        // new to the database, an insert was performed, then they may
+        // have a new PrimaryKey.  We call the coresponding set method
+        // for the given object(s) to set this object's Id reference
+        // to this new Primary key so that it will be saved.
+      #foreach ($aVarName in $aVars)
+        #set($i = $velocityCount - 1)
+        if ($aVarName != null)
+        {   
+            ${aVarName}.save(dbCon);
+            set$pVars.get($i)($aVarName);
+        }   
+      #end
+    #end
+  #end
+
+        // If this object has been modified, then save it to the database.
         if (isModified())
         {
             if (isNew())
