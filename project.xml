@@ -188,13 +188,11 @@
   </contributors>
 
   <dependencies>
-<!--  
     <dependency>
       <id>avalon-framework</id>
       <version>4.1.4</version>
       <url>http://jakarta.apache.org/avalon/</url>
     </dependency>
--->
     <dependency>
       <id>commons-beanutils</id>
       <version>1.6.1</version>
@@ -207,7 +205,7 @@
     </dependency>
     <dependency>
       <id>commons-configuration</id>
-      <version>SNAPSHOT</version>
+      <version>1.0-dev-3.20030603.101200</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -222,7 +220,7 @@
     </dependency>
     <dependency>
       <id>commons-logging</id>
-      <version>1.0.2</version>
+      <version>1.0.3</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -247,7 +245,7 @@
     </dependency>
     <dependency>
       <id>log4j</id>
-      <version>1.2.7</version>
+      <version>1.2.8</version>
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
     <dependency>

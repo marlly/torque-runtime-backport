@@ -1,0 +1,5 @@
+<componentConfig>
+    <TorqueComponent>
+      <configFile>/WEB-INF/conf/Torque.properties</configFile>
+    </TorqueComponent>
+</componentConfig>
