@@ -122,9 +122,9 @@
         </tr>
         <tr>
           <td>DB2/AS400</td>
-          <td>COM.ibm.db2.jdbc.{app|net}.AS400JDBCDriver</td>
+          <td>com.ibm.as400.access.AS400JDBCDriver</td>
+          <td>possible case-insensitivity issues</td>
           <td><a href="mailto:Sweaver@rippe.com">Scott Weaver</a></td>
-          <td></td>
         </tr>
         <tr>
           <td>Hypersonic</td>
@@ -182,9 +182,12 @@
         </tr>
         <tr>
           <td><a href="sybase-howto.html">Sybase</a></td>
-          <td>com.sybase.jdbc.SybDriver</td>
-          <td>untested</td>
-          <td></td>
+          <td>com.sybase.jdbc2.jdbc.SybDriver</td>
+          <td>
+          JDBCToXMLSchema task will not generate the schema properly.
+          All other tests pass.
+          </td>
+          <td><a href="mailto:brekke@apache.com">Jeffrey D. Brekke</a></td>
         </tr>
         <tr>
           <td>Weblogic</td>
