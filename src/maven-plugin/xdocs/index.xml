@@ -5,14 +5,15 @@
     <title>Maven Torque Plugin</title>
     <author email="stephenh@chase3000.com">Stephen Haberman</author>
     <author email="quintonm@bellsouth.net">Quinton McCombs</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
     <section name="Maven Torque Plugin">
       <p>
         This plugin provides easy intergration with 
-        <a href="http://db.apache.org/torque/">Torque</a> for your project.  This replaces using
-        the build-torque.xml ant script that previously provided the same
+        <a href="../index.html">Torque</a> for your project.  This replaces 
+        using the build-torque.xml ant script that previously provided the same
         functionality.
       </p>
       <p>
