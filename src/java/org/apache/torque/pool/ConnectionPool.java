@@ -64,6 +64,8 @@ import javax.sql.ConnectionEventListener;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 
+import org.apache.log4j.Category;
+
 /**
  * This class implements a simple connection pooling scheme.  Multiple
  * pools are available through use of the <code>PoolBrokerService</code>.
@@ -77,6 +79,7 @@ import javax.sql.PooledConnection;
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 class ConnectionPool implements ConnectionEventListener
@@ -122,6 +125,12 @@ class ConnectionPool implements ConnectionEventListener
      */
     private int waitCount = 0;
 
+    /**
+     * The logging category.
+     */
+    private static Category category
+        = Category.getInstance(ConnectionPool.class.getName());
+
     private int logInterval;
     private Monitor monitor;
 
@@ -140,8 +149,6 @@ class ConnectionPool implements ConnectionEventListener
      */
     private Map timeStamps;
 
-    private PrintWriter logWriter;
-
     /**
      * Creates a <code>ConnectionPool</code> with the default
      * attributes.
@@ -153,12 +160,10 @@ class ConnectionPool implements ConnectionEventListener
      * @param expiryTime connection expiry time
      * @param connectionWaitTimeout timeout
      * @param logInterval log interval
-     * @param logWriter the log
      */
     ConnectionPool(ConnectionPoolDataSource cpds, String username,
                    String password, int maxConnections, int expiryTime,
-                   int connectionWaitTimeout, int logInterval,
-                   PrintWriter logWriter)
+                   int connectionWaitTimeout, int logInterval)
     {
         totalConnections = 0;
         pool = new Stack();
@@ -192,7 +197,6 @@ class ConnectionPool implements ConnectionEventListener
             this.connectionWaitTimeout = 10 * 1000; // ten seconds
         }
         this.logInterval = logInterval * 1000;
-        this.logWriter = logWriter;
 
         // Create monitor thread
         monitor = new Monitor();
@@ -570,24 +574,12 @@ class ConnectionPool implements ConnectionEventListener
         }
         catch (Exception e)
         {
-            log("[ERROR] Error occurred trying to close a PooledConnection."
-                    + e.getMessage());
+            category.error("Error occurred trying to close a "
+                           + "PooledConnection.", e);
         }
         finally
         {
             decrementConnections();
-        }
-    }
-
-    private void log(String s)
-    {
-        if (logWriter != null)
-        {
-            logWriter.println(s);
-        }
-        else
-        {
-            System.out.println(s);
         }
     }
 
@@ -619,7 +611,7 @@ class ConnectionPool implements ConnectionEventListener
                        .append(getNbrAvailable()).append(" + ")
                        .append(getNbrCheckedOut()).append(" = ")
                        .append(getTotalCount());
-                log(buf.toString());
+                category.info(buf.toString());
 
                 // Wait for a bit.
                 try

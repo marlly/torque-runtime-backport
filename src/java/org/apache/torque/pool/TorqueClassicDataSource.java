@@ -530,7 +530,7 @@ public class TorqueClassicDataSource
 
             ConnectionPool pool = new ConnectionPool(cpds, username, password,
                 maxConnections, maxExpiryTime, connectionWaitTimeout,
-                logInterval, getLogWriter());
+                logInterval);
 
             // avoid ConcurrentModificationException
             Map newPools = new HashMap(pools);
@@ -550,6 +550,8 @@ public class TorqueClassicDataSource
 
     /**
      * Get the log writer for this data source.
+     *
+     * @deprecated Use correct debugging and logging code from Log4j
      */
     public PrintWriter getLogWriter()
     {
@@ -571,6 +573,8 @@ public class TorqueClassicDataSource
 
     /**
      * Set the log writer for this data source.
+     *
+     * @deprecated Use correct debugging and logging code from Log4j
      */
     public void setLogWriter(java.io.PrintWriter out)
     {
