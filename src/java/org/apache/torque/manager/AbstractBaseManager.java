@@ -85,11 +85,12 @@ import org.apache.log4j.Category;
 public abstract class AbstractBaseManager
     implements Serializable
 {
+    /** the log */
     protected static final Category category =
         Category.getInstance(AbstractBaseManager.class.getName());
 
     /** used to cache the om objects. cache is set by the region property */
-    transient protected GroupCacheAccess cache;
+    protected transient GroupCacheAccess cache;
 
     /** method results cache */
     protected MethodResultCache mrCache;
@@ -110,6 +111,8 @@ public abstract class AbstractBaseManager
 
     /**
      * Get the Class instance
+     *
+     * @return the om class
      */
     protected Class getOMClass()
     {
@@ -118,6 +121,8 @@ public abstract class AbstractBaseManager
 
     /**
      * Set the Class that will be instantiated by this manager
+     *
+     * @param omClass the om class
      */
     protected void setOMClass(Class omClass)
     {
@@ -126,6 +131,10 @@ public abstract class AbstractBaseManager
 
     /**
      * Get a fresh instance of an om
+     *
+     * @return an instance of the om class
+     * @throws InstantiationException
+     * @throws IllegalAccessException
      */
     protected Persistent getOMInstance()
         throws InstantiationException, IllegalAccessException
@@ -145,6 +154,7 @@ public abstract class AbstractBaseManager
     /**
      * Set the classname to instantiate for getInstance()
      * @param v  Value to assign to className.
+     * @throws TorqueException
      */
     public void setClassName(String  v)
         throws TorqueException
@@ -164,6 +174,9 @@ public abstract class AbstractBaseManager
 
     /**
      * Return an instance of an om based on the id
+     *
+     * @param id
+     * @throws TorqueException
      */
     protected Persistent getOMInstance(ObjectKey id)
         throws TorqueException
@@ -173,6 +186,8 @@ public abstract class AbstractBaseManager
 
     /**
      * Return an instance of an om based on the id
+     *
+     * @throws TorqueException
      */
     protected Persistent getOMInstance(ObjectKey key, boolean fromCache)
         throws TorqueException
@@ -284,8 +299,8 @@ public abstract class AbstractBaseManager
         if (getOMClass() != null && !getOMClass().isInstance(om))
         {
             throw new TorqueException(om + "; class=" + om.getClass().getName()
-                + "; id=" + om.getPrimaryKey() + " cannot be cached with " +
-                getOMClass().getName() + " objects");
+                + "; id=" + om.getPrimaryKey() + " cannot be cached with "
+                + getOMClass().getName() + " objects");
         }
 
         Persistent oldOm = null;
@@ -358,7 +373,7 @@ public abstract class AbstractBaseManager
         throws TorqueException
     {
         List oms = null;
-        if ( ids != null && ids.size() > 0 )
+        if (ids != null && ids.size() > 0)
         {
             // start a new list where we will replace the id's with om's
             oms = new ArrayList(ids);
@@ -381,14 +396,14 @@ public abstract class AbstractBaseManager
                 }
             }
 
-            if ( newIds.size() > 0 )
+            if (newIds.size() > 0)
             {
                 List newOms = retrieveStoredOMs(newIds);
                 for (int i = 0; i < oms.size(); i++)
                 {
                     if (oms.get(i) instanceof ObjectKey)
                     {
-                        for (int j=newOms.size() - 1; j >= 0; j--)
+                        for (int j = newOms.size() - 1; j >= 0; j--)
                         {
                             Persistent om = (Persistent) newOms.get(j);
                             if (om.getPrimaryKey().equals(oms.get(i)))
@@ -425,7 +440,9 @@ public abstract class AbstractBaseManager
 
     /**
      * Set the value of region.
+     *
      * @param v  Value to assign to region.
+     * @throws TorqueException
      */
     public void setRegion(String v)
         throws TorqueException
@@ -433,12 +450,12 @@ public abstract class AbstractBaseManager
         this.region = v;
         try
         {
-            if (Torque.getConfiguration().getBoolean(Torque.CACHE_KEY)) 
+            if (Torque.getConfiguration().getBoolean(Torque.CACHE_KEY))
             {
                 cache = JCS.getInstance(getRegion());
-                mrCache = new MethodResultCache(cache);              
+                mrCache = new MethodResultCache(cache);
             }
-            else 
+            else
             {
                 mrCache = new NoOpMethodResultCache(cache);
             }
@@ -521,7 +538,7 @@ public abstract class AbstractBaseManager
         }
     }
 
-    synchronized private List createSubsetList(String key)
+    private synchronized List createSubsetList(String key)
     {
         FastArrayList list = null;
         if (listenersMap.containsKey(key))

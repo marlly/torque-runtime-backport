@@ -65,8 +65,8 @@ import org.apache.torque.om.Persistent;
  */
 public interface CacheListener
 {
-    public void addedObject(Persistent om);
-    public void refreshedObject(Persistent om);
+    void addedObject(Persistent om);
+    void refreshedObject(Persistent om);
     //public void removedObject(Persistent om);
-    public List getInterestedFields();
+    List getInterestedFields();
 }

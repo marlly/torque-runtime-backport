@@ -1,6 +1,5 @@
 package org.apache.torque.manager;
 
-
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
@@ -180,7 +179,7 @@ public class MethodCacheKey implements Serializable
     /**
      * Initialize key for method with more than two arguments.
      *
-     * @param Serializable[] where
+     * @param keys Serializable[] where
      * [0]=>the Object on which the method is invoked
      * if the method is static, a String representing the class name is used.
      * [1]=>the method name
@@ -264,8 +263,8 @@ public class MethodCacheKey implements Serializable
                     {
                         for (int i = 5; i < n + 2; i++)
                         {
-                            h+= (moreThanThree[i] == null ?
-                                 0 : moreThanThree[i].hashCode());
+                            h += (moreThanThree[i] == null ? 0
+                                    : moreThanThree[i].hashCode());
                         }
                     }
                 }
@@ -325,7 +324,7 @@ public class MethodCacheKey implements Serializable
         public void passivateObject(Object obj)
             throws Exception
         {
-            MethodCacheKey key = (MethodCacheKey)obj;
+            MethodCacheKey key = (MethodCacheKey) obj;
             if (key.instanceOrClass == null && key.method == null)
             {
                 throw new TorqueException(

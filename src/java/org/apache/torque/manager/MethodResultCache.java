@@ -73,6 +73,7 @@ import org.apache.torque.TorqueException;
  */
 public class MethodResultCache
 {
+    /** the log */
     private static final Category log =
         Category.getInstance("org.apache.torque");
 
@@ -228,8 +229,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = getImpl(key);
                 try
@@ -258,8 +258,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = getImpl(key);
                 try
@@ -288,8 +287,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = getImpl(key);
                 try
@@ -319,8 +317,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = getImpl(key);
                 try
@@ -348,8 +345,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(keys);
                 result = getImpl(key);
                 try
@@ -374,8 +370,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =
-                (MethodCacheKey)pool.borrowObject();
+            MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
             key.init(instanceOrClass, method);
             putImpl(key, value);
         }
@@ -390,8 +385,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =
-                (MethodCacheKey)pool.borrowObject();
+            MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
             key.init(instanceOrClass, method, arg1);
             putImpl(key, value);
         }
@@ -406,8 +400,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =
-                (MethodCacheKey)pool.borrowObject();
+            MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2);
             putImpl(key, value);
         }
@@ -422,8 +415,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =
-                (MethodCacheKey)pool.borrowObject();
+            MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2, arg3);
             putImpl(key, value);
         }
@@ -437,8 +429,7 @@ public class MethodResultCache
     {
         try
         {
-            MethodCacheKey key =
-                (MethodCacheKey)pool.borrowObject();
+            MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
             key.init(keys);
             putImpl(key, value);
         }
@@ -455,8 +446,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method);
                 String groupName = key.getGroupKey();
                 jcsCache.invalidateGroup(groupName);
@@ -486,8 +476,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = removeImpl(key);
                 try
@@ -516,8 +505,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = removeImpl(key);
                 try
@@ -546,8 +534,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = removeImpl(key);
                 try
@@ -577,8 +564,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = removeImpl(key);
                 try
@@ -606,8 +592,7 @@ public class MethodResultCache
         {
             try
             {
-                MethodCacheKey key =
-                    (MethodCacheKey)pool.borrowObject();
+                MethodCacheKey key = (MethodCacheKey) pool.borrowObject();
                 key.init(keys);
                 result = removeImpl(key);
                 try
