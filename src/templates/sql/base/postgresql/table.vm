@@ -9,7 +9,7 @@ CREATE TABLE $table.Name
 #set ( $pk = $generator.parse("$basepath/primarykey.vm", "", "table", $tbl) )
 #set ( $unique = $generator.parse("$basepath/unique.vm", "", "table", $tbl) )
 #set ( $index = $generator.parse("$basepath/index.vm", "", "table", $tbl) )
-#if($strings.allEmpty([$pk,$unique]))$strings.chop($cols,1)#else$cols#end
+#if($strings.allEmpty([$pk,$unique]))$strings.chop($cols,2)#else$cols#end
 #if($strings.allEmpty([$unique]) && $pk.length()>0)$strings.chop($pk,2)#else$pk#end
 #if($unique.length() > 0)$strings.chop($unique,2)#end
 
