@@ -54,7 +54,7 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
-import org.apache.torque.pool.DBConnection;
+import java.sql.Connection;
 
 /**
  * This interface defines methods related to saving an object
@@ -139,5 +139,5 @@ public interface Persistent
      * the save() method and the connection details will be handled
      * internally
      */
-    void save(DBConnection dbCon) throws Exception;
+    void save(Connection con) throws Exception;
 }

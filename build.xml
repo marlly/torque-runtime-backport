@@ -18,6 +18,7 @@
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${jcs.jar}"/>
     <pathelement location="${log4j.jar}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-configuration.jar}"/>
     <pathelement location="${commons-lang.jar}"/>

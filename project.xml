@@ -103,6 +103,13 @@
   <dependencies>
 
     <dependency>
+      <name>commons-beanutils</name>
+      <type>required</type>
+      <version>1.2</version>
+      <jar>commons-beanutils-1.2.jar</jar>
+    </dependency>
+
+    <dependency>
       <name>commons-collections</name>
       <type>required</type>
       <version>1.0</version>
@@ -119,10 +126,26 @@
     </dependency>
 
     <dependency>
+      <name>commons-jdbc2pool</name>
+      <type>required</type>
+      <version>1.0</version>
+      <jar>commons-jdbc2pool-1.0-dev.jar</jar>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+
+    <dependency>
       <name>commons-lang</name>
       <type>required</type>
       <version>0.1</version>
       <jar>commons-lang-0.1-dev.jar</jar>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+
+    <dependency>
+      <name>commons-logging</name>
+      <type>required</type>
+      <version>1.0</version>
+      <jar>commons-logging-1.0.jar</jar>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
 
@@ -135,11 +158,27 @@
     </dependency>
 
     <dependency>
+      <name>jakarta-turbine-jcs</name>
+      <type>required</type>
+      <version>1.0-dev</version>
+      <jar>jcs-1.0-dev.jar</jar>
+      <url>http://jakarta.apache.org/turbine/jcs/</url>
+    </dependency>
+
+    <dependency>
       <name>jdbc</name>
       <type>required</type>
       <version>2.0</version>
       <jar>jdbc2_0-stdext.jar</jar>
       <url>http://java.sun.com/products/jdbc/download.html#spec</url>
+    </dependency>
+
+    <dependency>
+      <name>jndi</name>
+      <type>required</type>
+      <version>1.2.1</version>
+      <jar>jndi-1.2.1.jar</jar>
+      <url>http://java.sun.com/products/jndi/</url>
     </dependency>
 
     <dependency>
@@ -159,11 +198,11 @@
     </dependency>
 
     <dependency>
-      <name>jakarta-turbine-jcs</name>
+      <name>jakarta-tomcat-naming</name>
       <type>required</type>
-      <version>1.0-dev</version>
-      <jar>jcs-1.0-dev.jar</jar>
-      <url>http://jakarta.apache.org/turbine/jcs/</url>
+      <version>none</version>
+      <jar>tomcat-naming-common.jar</jar>
+      <url>http://jakarta.apache.org/tomcat/</url>
     </dependency>
 
     <dependency>

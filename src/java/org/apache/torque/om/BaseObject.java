@@ -57,7 +57,7 @@ package org.apache.torque.om;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import org.apache.log4j.Category;
-import org.apache.torque.pool.DBConnection;
+import java.sql.Connection;
 
 /**
  * This class contains attributes and methods that are used by all
@@ -457,5 +457,5 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * @see org.apache.torque.om.Persistent#save(DBConnection)
      */
-    public abstract void save(DBConnection dbCon) throws Exception;
+    public abstract void save(Connection con) throws Exception;
 }

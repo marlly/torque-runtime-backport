@@ -68,9 +68,6 @@ import java.util.StringTokenizer;
 public class DBCloudscape
     extends DB
 {
-    private String url;
-    private String username;
-    private String password;
     private static final String QUALIFIER = ".";
 
     /**
@@ -79,43 +76,6 @@ public class DBCloudscape
     protected DBCloudscape()
     {
     }
-
-    /**
-     * Returns a JDBC <code>Connection</code> from the
-     * <code>DriverManager</code>.
-     *
-     * @return A JDBC <code>Connection</code> object for this
-     * database.
-     * @exception SQLException
-     */
-    public Connection getConnection()
-        throws SQLException
-    {
-        return DriverManager.getConnection(url, username, password);
-    }
-
-    /**
-     * Performs basic initialization.  Calls Class.forName() to assure
-     * that the JDBC driver for this adapter can be loaded.
-     *
-     * @param url The URL of the database to connect to.
-     * @param username The name of the user to use when connecting.
-     * @param password The user's password.
-     * @exception Exception The JDBC driver could not be loaded or
-     * instantiated.
-     */
-    public void init(String url,
-                     String username,
-                     String password)
-        throws Exception
-    {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-
-        Class.forName(getJDBCDriver()).newInstance();
-    }
-
     /**
      * This method is used to ignore case.
      *

@@ -58,7 +58,6 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.ArrayList;
 import org.apache.torque.Torque;
-import org.apache.torque.pool.DBConnection;
 import com.workingdogs.village.QueryDataSet;
 
 /**
@@ -88,7 +87,7 @@ public class LargeSelect implements Runnable
     private int currentlyFilledTo = -1;
     private String query;
     private String dbName;
-    private DBConnection db = null;
+    private Connection db = null;
     private QueryDataSet qds = null;
     private List results = null;
     private Thread thread = null;
@@ -324,10 +323,9 @@ public class LargeSelect implements Runnable
         {
             // Get a connection to the db.
             db = Torque.getConnection(dbName);
-            Connection connection = db.getConnection();
 
             // Execute the query.
-            qds = new QueryDataSet( connection, query );
+            qds = new QueryDataSet( db, query );
 
             // Continue getting rows until the memory limit is
             // reached, all results have been retrieved, or the rest
@@ -364,7 +362,7 @@ public class LargeSelect implements Runnable
                 {
                     qds.close();
                 }
-                Torque.releaseConnection(db);
+                db.close();
             }
             catch(Exception e)
             {

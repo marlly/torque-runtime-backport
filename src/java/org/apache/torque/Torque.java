@@ -55,6 +55,12 @@ package org.apache.torque;
  */
 
 import java.io.IOException;
+import java.sql.Connection;
+import javax.sql.DataSource;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyEditorManager;
+import java.beans.PropertyEditor;
+import java.lang.reflect.Method;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Enumeration;
@@ -64,6 +70,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameAlreadyBoundException;
+import javax.naming.NamingException;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -73,14 +85,15 @@ import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
 import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
-import org.apache.torque.pool.ConnectionPool;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.MappedPropertyDescriptor;
 
 /**
  * The implementation of Torque.
@@ -128,6 +141,26 @@ public class Torque implements Initializable, Configurable
      */
     private static Map dbMaps;
 
+    /** 
+     * The cache of initial contexts that contain jdbc datasources 
+     */
+    private static Map jndiContexts;
+
+    /** 
+     * The cache of jndi paths to jdbc datasources 
+     */
+    private static Map dsJndiPaths;
+
+    /** 
+     * The cache of datasources 
+     */
+    private static Map dsMap;
+
+    /** 
+     * The cache of DB adapter keys 
+     */
+    private static Map adapterMap;
+
     /**
      * The various connection pools this broker contains.  Keyed by
      * database URL.
@@ -149,11 +182,6 @@ public class Torque implements Initializable, Configurable
      * Torque-specific configuration.
      */
     private static Configuration configuration;
-
-    /**
-     * The connection pool monitor.
-     */
-    private static Monitor monitor;
 
     /**
      * flag to set to true once this class has been initialized
@@ -222,6 +250,9 @@ public class Torque implements Initializable, Configurable
         dbMaps = new HashMap();
         pools = new HashMap();
         DBFactory.init(configuration);
+        initAdapters(configuration);
+        initJNDI(configuration);
+        initDataSources(configuration);
 
         isInit = true;
         for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
@@ -234,15 +265,275 @@ public class Torque implements Initializable, Configurable
 
         // setup manager mappings
         initManagerMappings(configuration);
+    }
 
-        // Create monitor thread
-        monitor = new Monitor();
-        // Indicate that this is a system thread. JVM will quit only when there
-        // are no more active user threads. Settings threads spawned internally
-        // by Turbine as daemons allows commandline applications using Turbine
-        // to terminate in an orderly manner.
-        monitor.setDaemon(true);
-        monitor.start();
+    private static final void initJNDI(Configuration configuration)
+        throws TorqueException
+    {
+        category.debug("Starting initJNDI"); 
+        jndiContexts = new HashMap();
+        dsJndiPaths = new HashMap();
+        Configuration c = configuration.subset("jndi");
+        //Map dsMap = new HashMap();
+        if (c != null) 
+        {
+            try
+            {
+                Iterator i = c.getKeys();
+                while (i.hasNext())
+                {
+                    String key = (String)i.next();                
+                    if (key.endsWith("path"))
+                    {
+                        String path = c.getString(key);
+                        String handle = key.substring(0, key.indexOf('.'));
+                        //dsMap.put(name, cpdsClassName);
+                        category.debug("JNDI handle: " + handle + 
+                                       " path: " + path);
+                        
+                        Configuration jndiProps = c.subset(handle);
+                        
+                        Hashtable env = new Hashtable();
+                        Iterator j = jndiProps.getKeys();
+                        while (j.hasNext())
+                        {
+                            String prop = (String)j.next();
+                            if ( !"path".equals(prop) ) 
+                            {
+                                category.debug("Setting jndi " + handle +
+                                               " property: " + prop);
+                                env.put(prop, jndiProps.getString(prop)); 
+                            }
+                        }
+                        if ( env.size() == 0 ) 
+                        {
+                            jndiContexts.put(handle, new InitialContext());
+                        }
+                        else 
+                        {
+                            jndiContexts.put(handle, new InitialContext(env));
+                        }
+                        
+                        dsJndiPaths.put(handle, path);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            category.error("", e);
+            throw new TorqueException(e);
+        }        
+        }
+        else 
+        {
+            category.error(
+                "There were no datasource paths in the configuration");
+        }
+        
+    }
+
+    private static final void initAdapters(Configuration configuration)
+        throws TorqueException
+    {
+        category.debug("Starting initAdapters"); 
+        adapterMap = new HashMap();
+        Configuration c = configuration.subset("database");
+        if (c != null) 
+        {        
+        try
+        {
+            Iterator i = c.getKeys();
+            while (i.hasNext())
+            {
+                String key = (String)i.next();                
+                if (key.endsWith("adapter"))
+                {
+                    String adapter = c.getString(key);
+                    String handle = key.substring(0, key.indexOf('.'));
+                    DB db = DBFactory.create( adapter );
+                    // register the adapter for this name
+                    adapterMap.put(handle, db);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            category.error("", e);
+            throw new TorqueException(e);
+        }
+            
+        }
+        else 
+        {
+            category.warn("There were no adapters in the configuration.");
+        }        
+    }
+
+
+    private static final void initDataSources(Configuration configuration)
+        throws TorqueException
+    {
+        category.debug("Starting initDataSources"); 
+        Configuration c = configuration.subset("datasource");
+        try
+        {
+            Class mapClass = Class.forName("java.util.Map");
+            Iterator i = c.getKeys();
+            while (i.hasNext())
+            {
+                String key = (String)i.next();                
+                if (key.endsWith("factory"))
+                {
+                    String classname = c.getString(key);
+                    String handle = key.substring(0, key.indexOf('.'));
+                    category.debug("Datasource handle: " + handle + 
+                                   " factory: " + classname);
+
+                    Class dsClass = Class.forName(classname);
+                    Object ds = dsClass.newInstance();
+                    Configuration dsProps = c.subset(handle);
+                    // use reflection to set properties
+                    Iterator j = dsProps.getKeys();
+                    while (j.hasNext())
+                    {
+                        String property = (String)j.next();
+                        if ( !"factory".equals(property) ) 
+                        {
+                            category.debug("Setting datasource " + handle +
+                                           " property: " + property);
+                            setProperty(property, dsProps, ds);
+                        }
+                    }
+
+                    Context ctx = (Context)jndiContexts.get(handle);
+                    if ( ctx == null ) 
+                    {
+                        if ( dsMap == null) 
+                        {
+                            dsMap = new HashMap();
+                        }
+                        dsMap.put(handle, ds);
+                    }
+                    else 
+                    {
+                        // bind the datasource
+                        String path = (String)dsJndiPaths.get(handle);
+                        bindDStoJndi(ctx, path, ds);
+                    }                    
+                }
+            }            
+        }
+        catch (Exception e)
+        {
+            category.error("", e);
+            throw new TorqueException(e);
+        }    
+    }
+
+    private static void bindDStoJndi(Context ctx, String path, Object ds) 
+        throws Exception
+    {
+                    // Start debugging
+                    category.debug("instantiated InitialContext");
+                    Map env = ctx.getEnvironment();
+                    Iterator qw = env.keySet().iterator();
+                    category.debug("Environment properties:" + env.size() );
+                    while ( qw.hasNext() ) 
+                    {
+                        Object prop = qw.next();
+                        category.debug("    " + prop + ": " + env.get(prop) );
+                    }
+                    // End debugging
+
+                    // add subcontexts, if not added already
+                    int start = path.indexOf(':') + 1;
+                    if ( start > 0 ) 
+                    {
+                        path = path.substring(start);
+                    }
+                    StringTokenizer st = new StringTokenizer(path, "/");
+                    while ( st.hasMoreTokens() ) 
+                    {
+                        String subctx = st.nextToken();
+                        if ( st.hasMoreTokens() ) 
+                        {
+                            try
+                            {
+                                ctx.createSubcontext(subctx);
+                                category.debug("Added sub context: "+subctx); 
+                            }
+                            catch(NameAlreadyBoundException nabe)
+                            {
+                                // ignore
+                            }
+                            catch(NamingException ne)
+                            {
+                                // even though there is a specific exception
+                                // for this condition, some implementations
+                                // throw the more general one.
+                                /*
+                                if (ne.getMessage().indexOf("already bound") == -1 ) 
+                                {
+                                    throw ne;
+                                }
+                                */
+                                // ignore
+                            }
+                            ctx = (Context)ctx.lookup(subctx);
+                        }
+                        else 
+                        {
+                            // not really a subctx, it is the ds name
+                            ctx.bind(subctx, ds);
+                        }                        
+                    }
+    }
+
+    private static void setProperty(String property, Configuration c, 
+                                    Object ds)
+        throws Exception
+    {
+        String key = property;
+        Class dsClass = ds.getClass();
+        int dot = property.indexOf('.');
+        try
+        {
+            if ( dot > 0 )
+            {
+                property = property.substring(0, dot);                
+
+                MappedPropertyDescriptor mappedPD = 
+                    new MappedPropertyDescriptor(property, dsClass);
+                Class propertyType = mappedPD.getMappedPropertyType();
+                Configuration subProps = c.subset(property);
+                // use reflection to set properties
+                Iterator j = subProps.getKeys();
+                while (j.hasNext())
+                {
+                    String subProp = (String)j.next();
+                    String propVal = subProps.getString(subProp);
+                    Object value = ConvertUtils.convert(propVal, propertyType);
+                    PropertyUtils
+                        .setMappedProperty(ds, property, subProp, value);
+                }
+            }
+            else 
+            {
+                Class propertyType = 
+                    PropertyUtils.getPropertyType(ds, property);
+                Object value = 
+                    ConvertUtils.convert(c.getString(property), propertyType);
+                PropertyUtils.setSimpleProperty(ds, property, value);
+            }
+        }
+        catch (Exception e)
+        {
+            category.error("Property: " + property + " value: "
+                           + c.getString(key) +
+                           " is not supported by DataSource: " + 
+                           ds.getClass().getName());
+            throw e;
+        }
     }
 
     /**
@@ -346,7 +637,7 @@ public class Torque implements Initializable, Configurable
                         // the exception thrown here seems to disappear.
                         // At least when initialized by Turbine, should find
                         // out why, but for now make sure it is noticed.
-                        category.error(e);
+                        category.error("", e);
                         e.printStackTrace();
                         throw e;
                     }
@@ -457,7 +748,7 @@ public class Torque implements Initializable, Configurable
                     continue;
                 }
 
-                // We have to deal with ExtendedProperties way
+                // We have to deal with Configuration way
                 // of dealing with "," in properties which is to
                 // make them separate values. Log4j category
                 // properties contain commas so we must stick them
@@ -553,25 +844,6 @@ public class Torque implements Initializable, Configurable
                 }
             }
         }
-
-        if ( pools != null )
-        {
-            // Release connections for each pool.
-            Iterator pool = pools.values().iterator();
-            while ( pool.hasNext() )
-            {
-                try
-                {
-                    ((ConnectionPool) pool.next()).shutdown();
-                }
-                catch (Exception ignored)
-                {
-                    // Unlikely.
-                }
-            }
-        }
-        // shutdown the thread
-        monitor = null;
     }
 
     /**
@@ -642,7 +914,12 @@ public class Torque implements Initializable, Configurable
         // Setup other ID generators for this map.
         try
         {
-            DB db = DBFactory.create(getDatabaseProperty(name, "driver"));
+            String key = getDatabaseProperty(name, "driver");
+            if ( key == null || key.length() == 0 ) 
+            {
+                key = getDatabaseProperty(name, "adapter");
+            }
+            DB db = DBFactory.create(key);
             for (int i = 0; i < IDGeneratorFactory.ID_GENERATOR_METHODS.length;
                  i++)
             {
@@ -711,227 +988,59 @@ public class Torque implements Initializable, Configurable
     }
 
     /**
-     * This method returns a DBConnection from the default pool.
+     * This method returns a Connection from the default pool.
      *
      * @return The requested connection.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static DBConnection getConnection()
-        throws TorqueException
+    public static Connection getConnection()
+        throws TorqueException, java.sql.SQLException, 
+               javax.naming.NamingException
     {
         return getConnection(getDefaultDB());
     }
 
     /**
-     * This method returns a DBConnection from the pool with the
-     * specified name.  The pool must either have been registered
-     * with the {@link #registerPool(String,String,String,String,String)}
-     * method, or be specified in the property file using the
-     * following syntax:
-     *
-     * <pre>
-     * database.[name].driver
-     * database.[name].url
-     * database.[name].username
-     * database.[name].password
-     * </pre>
-     *
-     * @param name The name of the pool to get a connection from.
-     * @return     The requested connection.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static DBConnection getConnection(String name)
-        throws TorqueException
-    {
-        try
-        {
-            // The getPool method ensures the validity of the returned pool.
-            return getPool(name).getConnection();
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
-    }
-
-    /**
-     * This method returns a DBConnecton using the given parameters.
+     * This method returns a Connecton using the given parameters.
      *
      * @param driver The fully-qualified name of the JDBC driver to use.
      * @param url The URL of the database from which the connection is
      * desired.
      * @param username The name of the database user.
      * @param password The password of the database user.
-     * @return A DBConnection.
+     * @return A Connection.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      *
      * @deprecated Database parameters should not be specified each
-     * time a DBConnection is fetched from the service.
+     * time a Connection is fetched from the service.
      */
-    public static DBConnection getConnection(String driver,
-                                      String url,
-                                      String username,
-                                      String password)
+    public static Connection getConnection(String name,
+                                           String username,
+                                           String password)
         throws TorqueException
     {
-        ConnectionPool pool = null;
-        url = url.trim();
-
-        // Quick (non-sync) check for the pool we want.
-        // NOTE: Here we must not call getPool(), since the pool
-        // is almost certainly not defined in the properties file
-        pool = (ConnectionPool) pools.get(url + username);
-        if ( pool == null )
-        {
-            registerPool(url + username, driver,  url, username, password);
-            pool = (ConnectionPool) pools.get(url + username);
-        }
-
+        Connection con = null;
         try
         {
-            return pool.getConnection();
+            Context ctx = (Context)jndiContexts.get(name);
+            String jndiPath = (String)dsJndiPaths.get(name);
+            con = ((DataSource)ctx.lookup(jndiPath))
+                .getConnection(username, password);
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             throw new TorqueException(e);
         }
+        return con;
     }
 
-    /**
-     * Release a connection back to the database pool.  <code>null</code>
-     * references are ignored.
-     *
-     * @param dbconn the connection to release
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static void releaseConnection(DBConnection dbconn)
+    public static Connection getConnection(String name)
         throws TorqueException
     {
-        if ( dbconn != null )
-        {
-            ConnectionPool pool = dbconn.getPool();
-            if ( pools.containsValue( pool ) )
-            {
-                try
-                {
-                    pool.releaseConnection( dbconn );
-                }
-                catch (Exception e)
-                {
-                    throw new TorqueException(e);
-                }
-            }
-        }
-    }
-
-    /**
-     * This method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     *
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password )
-        throws TorqueException
-    {
-        /**
-         * Added so that the configuration file can define maxConnections &
-         * expiryTime for each database pool that is defined in the
-         * TurbineResources.properties
-         * Was defined as: database.expiryTime=3600000
-         * If you need per database, it is
-         * now database.helpdesk.expiryTime=3600000
-         */
-        registerPool(
-            name,
-            driver,
-            url,
-            username,
-            password,
-            configuration.getInt(getProperty(name, "maxConnections"), 10),
-            configuration.getLong(getProperty(name, "expiryTime"), 3600000),
-            configuration.getLong(getProperty(name, "maxConnectionAttempts"), 50),
-            configuration.getLong(getProperty(name, "connectionWaitTimeout"), 10000));
-    }
-
-    /**
-     * This thread-safe method registers a new pool using the given parameters.
-     *
-     * @param name The name of the pool to register.
-     * @param driver The fully-qualified name of the JDBC driver to use.
-     * @param url The URL of the database to use.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @param maxCons
-     * @param expiryTime
-     * @param maxConnectionAttempts
-     * @param connectionWaitTimeout
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static void registerPool( String name,
-                              String driver,
-                              String url,
-                              String username,
-                              String password,
-                              int maxCons,
-                              long expiryTime,
-                              long maxConnectionAttempts,
-                              long connectionWaitTimeout)
-        throws TorqueException
-    {
-
-        // Quick (non-sync) check for the pool we want.
-        if ( !pools.containsKey(name) )
-        {
-            // Pool not there...
-            synchronized (pools)
-            {
-                // ... sync and look again to avoid race collisions.
-                if ( !pools.containsKey(name) )
-                {
-                    // Still not there.  Create and add.
-                    ConnectionPool pool =
-                        new ConnectionPool(
-                            driver,
-                            url,
-                            username,
-                            password,
-                            maxCons,
-                            expiryTime,
-                            maxConnectionAttempts,
-                            connectionWaitTimeout);
-
-                    pools.put( name, pool );
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns the database adapter for the default connection pool.
-     *
-     * @return The database adapter.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static DB getDB()
-        throws TorqueException
-    {
-        return getDB(getDefaultDB());
+        return getConnection(name, null, null);
     }
 
     /**
@@ -945,148 +1054,10 @@ public class Torque implements Initializable, Configurable
     public static DB getDB(String name)
         throws TorqueException
     {
-        try
-        {
-            return getPool(name).getDB();
-        }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
+        return (DB)adapterMap.get(name);
     }
 
     ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * This method returns the default pool.
-     *
-     * @return The default pool.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     * @see #getPool(String name)
-     */
-    private static ConnectionPool getPool()
-        throws TorqueException
-    {
-        return getPool(getDefaultDB());
-    }
-
-    /**
-     * This method returns a pool with the specified name.  The pool must
-     * either have been registered with the
-     * {@link #registerPool(String,String,String,String,String)} method, or be
-     * specified in the TurbineResources properties.  This method is used
-     * internally by the service.  Under normal usage it would not be used
-     * in application code, but is public in the event the pool must be
-     * accessed directly, such as to shutdown an individual pool.
-     *
-     * @param name The name of the pool to get.
-     * @return     The requested pool.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static ConnectionPool getPool(String name)
-        throws TorqueException
-    {
-        if (name == null)
-        {
-            throw new TorqueException ("Torque.getPool(): name is null");
-        }
-        if (pools == null)
-        {
-            throw new TorqueException (
-                "Torque.getPool(): pools is null, did you call Torque.init() first?");
-        }
-
-        ConnectionPool pool = (ConnectionPool) pools.get(name);
-
-        // If the pool is not in the Hashtable, we must register it.
-        if ( pool == null )
-        {
-            // check that pool for this particular db is actually
-            // configured
-
-            String driver = getDatabaseProperty(name, "driver");
-            String url = getDatabaseProperty(name, "url");
-            String username = getDatabaseProperty(name, "username");
-            String password = getDatabaseProperty(name, "password");
-
-            if (driver == null || url == null
-                || driver.equals("") || url.equals(""))
-            {
-                throw new TorqueException
-                    ("Attempt to register pool for database " + name
-                       + " that is not configured in Torque.properties");
-            }
-
-            registerPool(name, driver, url, username, password);
-            pool = (ConnectionPool) pools.get(name);
-        }
-
-        return pool;
-    }
-
-    /**
-     * Returns the string for the specified property of the given database.
-     *
-     * @param dbName The name of the database whose property to get.
-     * @param prop The name of the property to get.
-     * @return The string of the property.
-     */
-    private static final String getProperty(String dbName, String prop)
-    {
-        return ("database." + dbName + '.' + prop);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * This inner class monitors the <code>PoolBrokerService</code>.
-     *
-     * This class is capable of logging the number of connections available in
-     * the pool periodically. This can prove useful if you application
-     * frozes after certain amount of time/requests and you suspect
-     * that you have connection leakage problem.
-     *
-     * Set the <code>database.logInterval</code> property to the number of
-     * milliseconds you want to elapse between loging the number of
-     * connections.
-     */
-    protected static class Monitor extends Thread
-    {
-        public void run()
-        {
-            int logInterval = configuration.getInt("database.logInterval", 0);
-            StringBuffer buf = new StringBuffer();
-            while (logInterval > 0)
-            {
-                // Loop through all pools and log.
-                Iterator poolIter = pools.keySet().iterator();
-                while ( poolIter.hasNext() )
-                {
-                    String poolName = (String) poolIter.next();
-                    ConnectionPool pool = (ConnectionPool) pools.get(poolName);
-                    buf.setLength(0);
-                    buf.append(poolName).append(" (in + out = total): ")
-                        .append(pool.getNbrAvailable()).append(" + ")
-                        .append(pool.getNbrCheckedOut()).append(" = ")
-                        .append(pool.getTotalCount());
-
-                    category.info(buf.toString());
-                }
-
-                // Wait for a bit.
-                try
-                {
-                    Thread.sleep(logInterval);
-                }
-                catch (InterruptedException ignored)
-                {
-                    // Don't care.
-                }
-            }
-        }
-    }
 
     /**
      * Returns the name of the default database.

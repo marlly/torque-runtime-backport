@@ -19,7 +19,7 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.om.*;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
-import org.apache.torque.pool.DBConnection;
+import java.sql.Connection;
 #if ($addSaveMethod)
 import org.apache.commons.lang.Objects;
 #end
@@ -806,41 +806,41 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      */
     public void save(String dbName) throws TorqueException
     {
-        DBConnection dbCon = null;
+        Connection con = null;
  #if ($complexObjectModel)
         try
         {
-            dbCon = BasePeer.beginTransaction(dbName);
-            save(dbCon);
+            con = BasePeer.beginTransaction(dbName);
+            save(con);
         }
         catch(TorqueException e)
         {
-            BasePeer.rollBackTransaction(dbCon);
+            BasePeer.rollBackTransaction(con);
             throw e;
         }
-        BasePeer.commitTransaction(dbCon);
+        BasePeer.commitTransaction(con);
 
  #else
         if (isModified())
         {
             try
             {
-                dbCon = Torque.getConnection( dbName );
+                con = BasePeer.getConnection( dbName );
                 if (isNew())
                 {
                     ${table.JavaName}Peer
-                        .doInsert(($table.JavaName)this, dbCon);
+                        .doInsert(($table.JavaName)this, con);
                     setNew(false);
                 }
                 else
                 {
                     ${table.JavaName}Peer
-                        .doUpdate(($table.JavaName)this, dbCon);
+                        .doUpdate(($table.JavaName)this, con);
                 }
             }
             finally
             {
-                Torque.releaseConnection(dbCon);
+                BasePeer.closeConnection(con);
             }
         }
 
@@ -859,7 +859,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the save() method and the connection details will be handled
      * internally
      */
-    public void save(DBConnection dbCon) throws TorqueException
+    public void save(Connection con) throws TorqueException
     {
   #if ($complexObjectModel)
       if (!alreadyInSave)
@@ -881,8 +881,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
       #foreach ($aVarName in $aVars)
         #set($i = $velocityCount - 1)
         if ($aVarName != null)
-        {
-            ${aVarName}.save(dbCon);
+        {   
+            ${aVarName}.save(con);
             set$pVars.get($i)($aVarName);
         }
       #end
@@ -896,12 +896,12 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         {
             if (isNew())
             {
-                ${table.JavaName}Peer.doInsert(($table.JavaName)this, dbCon);
+                ${table.JavaName}Peer.doInsert(($table.JavaName)this, con);
                 setNew(false);
             }
             else
             {
-                ${table.JavaName}Peer.doUpdate(($table.JavaName)this, dbCon);
+                ${table.JavaName}Peer.doUpdate(($table.JavaName)this, con);
             }
         }
 
@@ -929,7 +929,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
           {
               for (int i=0; i<${collName}.size(); i++)
               {
-                  ((${className})${collName}.get(i)).save(dbCon);
+                  ((${className})${collName}.get(i)).save(con);
               }
           }
      #end

@@ -68,7 +68,6 @@ import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
 
 //!!
@@ -236,12 +235,11 @@ public class IDBroker
         // IDBroker is being used with a database that does not
         // support transactions.
         String dbName = tMap.getDatabaseMap().getName();
-        DBConnection dbCon = null;
+        Connection dbCon = null;
         try
         {
             dbCon = Torque.getConnection(dbName);
-            transactionsSupported = dbCon.getConnection()
-                .getMetaData().supportsTransactions();
+            transactionsSupported = dbCon.getMetaData().supportsTransactions();
         }
         catch (Exception e)
         {
@@ -252,7 +250,7 @@ public class IDBroker
             try
             {
                 // Return the connection to the pool.
-                Torque.releaseConnection(dbCon);
+                dbCon.close();
             }
             catch (Exception e)
             {
@@ -485,16 +483,13 @@ public class IDBroker
             .toString();
 
         boolean exists = false;
-        DBConnection dbCon = null;
+        Connection dbCon = null;
         try
         {
             String databaseName = tableMap.getDatabaseMap().getName();
 
-            // Get a connection to the db
             dbCon = Torque.getConnection(databaseName);
-            Connection connection = dbCon.getConnection();
-
-            Statement statement = connection.createStatement();
+            Statement statement = dbCon.createStatement();
             ResultSet rs = statement.executeQuery(query);
             exists = rs.next();
             statement.close();
@@ -504,7 +499,7 @@ public class IDBroker
             // Return the connection to the pool.
             try
             {
-                Torque.releaseConnection(dbCon);
+                dbCon.close();
             }
             catch (Exception e)
             {
@@ -652,7 +647,6 @@ public class IDBroker
                 checkTiming(tableName);
             }
 
-            DBConnection dbCon = null;
             try
             {
                 if (connection == null || configuration
@@ -663,13 +657,12 @@ public class IDBroker
                     // transaction.
                     if (transactionsSupported)
                     {
-                        dbCon = BasePeer.beginTransaction(databaseName);
+                        connection = BasePeer.beginTransaction(databaseName);
                     }
                     else
                     {
-                        dbCon = Torque.getConnection(databaseName);
+                        connection = Torque.getConnection(databaseName);
                     }
-                    connection = dbCon.getConnection();
                 }
 
                 // Write the current value of quantity of keys to grab
@@ -689,25 +682,25 @@ public class IDBroker
                 BigDecimal newNextId = nextId.add(quantity);
                 updateNextId(connection, tableName, newNextId.toString() );
 
-                if (transactionsSupported && dbCon != null)
+                if (transactionsSupported && connection != null)
                 {
-                    BasePeer.commitTransaction(dbCon);
+                    BasePeer.commitTransaction(connection);
                 }
             }
             catch (Exception e)
             {
-                if (transactionsSupported && dbCon != null)
+                if (transactionsSupported && connection != null)
                 {
-                    BasePeer.rollBackTransaction(dbCon);
+                    BasePeer.rollBackTransaction(connection);
                 }
                 throw e;
             }
             finally
             {
-                if (!transactionsSupported && dbCon != null)
+                if (!transactionsSupported && connection != null)
                 {
                     // Return the connection to the pool.
-                    Torque.releaseConnection(dbCon);
+                    BasePeer.closeConnection(connection);
                 }
             }
 
@@ -758,7 +751,7 @@ public class IDBroker
         }
         else
         {
-            DBConnection dbCon = null;
+            Connection dbCon = null;
             try
             {
                 if (connection == null || configuration
@@ -767,11 +760,10 @@ public class IDBroker
                     String databaseName = tableMap.getDatabaseMap().getName();
                     // Get a connection to the db
                     dbCon = Torque.getConnection(databaseName);
-                    connection = dbCon.getConnection();
                 }
 
                 // Read the row from the ID_TABLE.
-                BigDecimal[] results = selectRow(connection, tableName);
+                BigDecimal[] results = selectRow(dbCon, tableName);
 
                 // QUANTITY column.
                 quantity = results[1];
@@ -786,10 +778,7 @@ public class IDBroker
                 // Return the connection to the pool.
                 try
                 {
-                    if (dbCon != null)
-                    {
-                        Torque.releaseConnection(dbCon);
-                    }
+                    dbCon.close();
                 }
                 catch (Exception e)
                 {

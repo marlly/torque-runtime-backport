@@ -57,7 +57,6 @@ package org.apache.torque.adapter;
 import java.util.Date;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import javax.sql.ConnectionPoolDataSource;
@@ -109,96 +108,11 @@ public abstract class DB implements Serializable, IDMethod
     /** <code><pre>SELECT ... WHERE ... AND ROWNUM < <limit></pre></code> */
     public static final int LIMIT_STYLE_ORACLE = 4;
 
-    /** The database user name. */
-    protected String DB_USER;
-
-    /** The database password. */
-    protected String DB_PASS;
-
-    /** The database name. */
-    protected String DB_CONNECTION;
-
-    /** The JDBC driver. */
-    private String JDBCDriver = null;
-
     /**
      * Empty constructor.
      */
     protected DB()
     {
-    }
-
-    /**
-     * Returns a JDBC <code>Connection</code> from the
-     * <code>DriverManager</code>.
-     *
-     * @return A JDBC <code>Connection</code> object for this database.
-     * @exception SQLException
-     */
-    public Connection getConnection()
-        throws SQLException
-    {
-        // Workaround for buggy Weblogic 5.1 classloader - ignore the
-        // exception upon first invocation.
-        try
-        {
-            return DriverManager.getConnection( DB_CONNECTION,
-                                                DB_USER,
-                                                DB_PASS );
-        }
-        catch( ClassCircularityError e )
-        {
-            return DriverManager.getConnection( DB_CONNECTION,
-                                                DB_USER,
-                                                DB_PASS );
-        }
-    }
-
-    /**
-     * Returns a new JDBC <code>PooledConnection</code>.
-     * The JDBC driver should support the JDBC 2.0 extenstions. Since the
-     * implementation of this class is driver specific, the actual class
-     * of the JDBC driver that implements the PooledConnection interface
-     * should be defined in the specific DB Adapter
-     *
-     * @return A JDBC <code>PooledConnection</code> object for this database.
-     * @exception SQLException if the driver does not support PooledConnection
-     * objects
-     */
-    public ConnectionPoolDataSource getConnectionPoolDataSource()
-        throws SQLException
-    {
-        throw new SQLException(
-            "ConnectionPoolDataSource objects not supported by JDBC driver");
-    }
-
-    /**
-     * Performs basic initialization.  Calls Class.forName() to assure
-     * that the JDBC driver for this adapter can be loaded.
-     *
-     * @param url The URL of the database to connect to.
-     * @param username The name of the user to use when connecting.
-     * @param password The user's password.
-     * @exception Exception The JDBC driver could not be loaded or instantiated.
-     */
-    public void init(String url,
-                     String username,
-                     String password)
-        throws Exception
-    {
-        DB_USER = username;
-        DB_PASS = password;
-        DB_CONNECTION = url;
-
-        if (JDBCDriver != null)
-        {
-            Class.forName( JDBCDriver ).newInstance();
-        }
-        else
-        {
-            throw new Exception("The JDBC driver must be set for the DB " +
-                "object with a URL of " + url);
-        }
     }
 
     /**
@@ -300,25 +214,15 @@ public abstract class DB implements Serializable, IDMethod
         return ignoreCase(in);
     }
 
-    /**
+    /* *
      * Sets the JDBC driver used by this adapter.
      *
      * @param newDriver The fully-qualified class name of the JDBC
      * driver to use.
-     */
+     * /
     public void setJDBCDriver(String newDriver)
     {
         JDBCDriver = newDriver;
-    }
-
-    /**
-     * Gets the JDBC driver used by this adapter.
-     *
-     * @return The JDBC Driver classname to use for this DB.
-     */
-    public String getJDBCDriver()
-    {
-        return(JDBCDriver);
     }
 
     /**

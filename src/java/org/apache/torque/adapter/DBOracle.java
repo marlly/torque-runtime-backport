@@ -187,29 +187,6 @@ public class DBOracle
         return DB.LIMIT_STYLE_ORACLE;
     }
 
-    public ConnectionPoolDataSource getConnectionPoolDataSource()
-        throws java.sql.SQLException
-    {
-        try
-        {
-            Class c = Class.forName("oracle.jdbc.pool.OracleConnectionPoolDataSource");
-            ConnectionPoolDataSource instance =
-                            (ConnectionPoolDataSource) c.newInstance();
-
-            // use introspection to set the url in order to avoid import
-            // of JDBC specific classes
-            Method m = c.getMethod("setURL", new Class[]{ String.class });
-            m.invoke(instance, new Object[]{ DB_CONNECTION });
-
-            return (ConnectionPoolDataSource) instance;
-        }
-        catch (Exception e)
-        {
-            throw new SQLException
-                ("Could not create OracleConnectioPoolDataSource object: " + e);
-        }
-    }
-
     /**
      * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
      * any string in a SqlExpression with a BACKSLASH will either be changed to

@@ -367,17 +367,25 @@
 
   <!-- Build classpath -->
   <path id="classpath">
-    <pathelement location="${log4j.jar}"/>
-    <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${build.dest}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-configuration.jar}"/>
+    <pathelement location="${commons-jdbc2pool.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
-    <pathelement location="${village.jar}"/>
-    <pathelement location="${build.dest}"/>
-    <pathelement location="${stratum.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${commons-pool.jar}"/>
     <pathelement location="${jcs.jar}"/>
+    <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${jndi.jar}"/>
+    <pathelement location="${log4j.jar}"/>
+    <pathelement location="${stratum.jar}"/>
+    <pathelement location="${tomcat-naming.jar}"/>
     <pathelement location="${torque.destDir}"/>
     <pathelement location="${torque.testDatabaseJar}"/>
+    <pathelement location="${village.jar}"/>
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${xmlParserAPIs.jar}"/>
   </path>
 
   <target
@@ -385,16 +393,24 @@
     depends="filterTokens">
 
     <echo>
-      ${log4j.jar}
-      ${jdbc.jar}
+      ${build.dest}
+      ${commons-beanutils.jar}
       ${commons-collections.jar}
       ${commons-configuration.jar}
-      ${commons-lang.jar}
-      ${village.jar}
+      ${commons-jdbc2pool.jar}
+      ${commons-lang.jar} 
+      ${commons-logging.jar}
+      ${commons-pool.jar}
       ${jcs.jar}
-      ${build.dest}
-      ${torque.destDir}
+      ${jdbc.jar}
+      ${jndi.jar}
+      ${log4j.jar}
+      ${stratum.jar}
+      ${tomcat-naming.jar}
       ${torque.testDatabaseJar}
+      ${village.jar}
+      ${xerces.jar}
+      ${xmlParserAPIs.jar}
     </echo>
 
     <!-- Copy test Torque.properties -->
@@ -417,19 +433,25 @@
     <mkdir dir="${test.libDir}"/>
     <mkdir dir="${build.test}/logs"/>
 
-    <copy file="${velocity.jar}" todir="${test.libDir}"/>
-    <copy file="${xerces.jar}" todir="${test.libDir}"/>
-    <copy file="${xmlParserAPIs.jar}" todir="${test.libDir}"/>
-    <copy file="${village.jar}" todir="${test.libDir}"/>
-    <copy file="${log4j.jar}" todir="${test.libDir}"/>
+    <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-beanutils.jar}" todir="${test.libDir}"/>
     <copy file="${commons-collections.jar}" todir="${test.libDir}"/>
     <copy file="${commons-configuration.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-jdbc2pool.jar}" todir="${test.libDir}"/>
     <copy file="${commons-lang.jar}" todir="${test.libDir}"/>
-    <copy file="${jdbc.jar}" todir="${test.libDir}"/>
-    <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
-    <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
-    <copy file="${stratum.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-logging.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-pool.jar}" todir="${test.libDir}"/>
     <copy file="${jcs.jar}" todir="${test.libDir}"/>
+    <copy file="${jdbc.jar}" todir="${test.libDir}"/>
+    <copy file="${jndi.jar}" todir="${test.libDir}"/>
+    <copy file="${log4j.jar}" todir="${test.libDir}"/>
+    <copy file="${stratum.jar}" todir="${test.libDir}"/>
+    <copy file="${tomcat-naming.jar}" todir="${test.libDir}"/>
+    <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
+    <copy file="${velocity.jar}" todir="${test.libDir}"/>
+    <copy file="${village.jar}" todir="${test.libDir}"/>
+    <copy file="${xerces.jar}" todir="${test.libDir}"/>
+    <copy file="${xmlParserAPIs.jar}" todir="${test.libDir}"/>
   </target>
 
   <target

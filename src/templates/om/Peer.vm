@@ -15,7 +15,6 @@ import org.apache.torque.util.BasePeer;
 import org.apache.torque.om.*;
 import org.apache.torque.util.*;
 import org.apache.torque.map.*;
-import org.apache.torque.pool.DBConnection;
 import org.apache.torque.TorqueException;
 
 // Local classes
@@ -195,7 +194,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
-            .doInsert( criteria, (DBConnection) null );
+            .doInsert( criteria, (Connection) null );
     }
 
     /**
@@ -203,7 +202,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * otherwise use the doInsert(Criteria) method.  It will take care of
      * the connection details internally.
      */
-    public static ObjectKey doInsert( Criteria criteria, DBConnection dbCon )
+    public static ObjectKey doInsert( Criteria criteria, Connection con ) 
         throws TorqueException
     {
      #foreach ($col in $table.Columns)
@@ -252,13 +251,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             criteria.setDbName(DATABASE_NAME);
         }
-        if ( dbCon == null )
+        if ( con == null )
         {
             return BasePeer.doInsert( criteria );
         }
         else
         {
-            return BasePeer.doInsert( criteria, dbCon );
+            return BasePeer.doInsert( criteria, con );
         }
     }
 
@@ -361,11 +360,10 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 
     /** Method to do selects within a transaction */
-    public static List doSelect( Criteria criteria,
-                                   DBConnection dbCon )
+    public static List doSelect(Criteria criteria, Connection con) 
         throws TorqueException
     {
-        return populateObjects( doSelectVillageRecords(criteria, dbCon) );
+        return populateObjects( doSelectVillageRecords(criteria, con) ); 
     }
 
     /**
@@ -379,15 +377,15 @@ public abstract class $basePrefix${table.JavaName}Peer
         throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
-            .doSelectVillageRecords(criteria, (DBConnection) null);
+            .doSelectVillageRecords(criteria, (Connection) null);
     }
 
     /**
      * Grabs the raw Village records to be formed into objects.
      * This method should be used for transactions
      */
-    public static List doSelectVillageRecords( Criteria criteria,
-                                                 DBConnection dbCon )
+    public static List doSelectVillageRecords( Criteria criteria, 
+                                               Connection con ) 
         throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
@@ -448,13 +446,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         // BasePeer returns a List of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
-        if ( dbCon == null)
+        if ( con == null)
         {
             return BasePeer.doSelect(criteria);
         }
         else
         {
-            return BasePeer.doSelect(criteria, dbCon);
+            return BasePeer.doSelect(criteria, con);
         }
     }
 
@@ -562,7 +560,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doUpdate(Criteria criteria) throws TorqueException
     {
          $basePrefix${table.JavaName}Peer
-            .doUpdate( criteria, (DBConnection) null );
+            .doUpdate( criteria, (Connection) null );
     }
 
     /**
@@ -574,8 +572,8 @@ public abstract class $basePrefix${table.JavaName}Peer
      *        statement.
      * @param dbCon the connection to use
      */
-    public static void doUpdate(Criteria criteria, DBConnection dbCon)
-            throws TorqueException
+    public static void doUpdate(Criteria criteria, Connection con) 
+        throws TorqueException
     {
         Criteria selectCriteria = new
             Criteria(DATABASE_NAME, 2);
@@ -628,13 +626,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             criteria.setDbName(DATABASE_NAME);
         }
-        if ( dbCon == null )
+        if ( con == null )
         {
             BasePeer.doUpdate( selectCriteria, criteria );
         }
         else
         {
-            BasePeer.doUpdate( selectCriteria, criteria, dbCon );
+            BasePeer.doUpdate( selectCriteria, criteria, con );
         }
     }
 
@@ -646,7 +644,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      public static void doDelete(Criteria criteria) throws TorqueException
      {
          $basePrefix${table.JavaName}Peer
-            .doDelete ( criteria, (DBConnection) null );
+            .doDelete ( criteria, (Connection) null );
      }
 
     /**
@@ -657,9 +655,9 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param criteria object containing data that is used DELETE from database.
      * @param dbCon the connection to use
      */
-    public static void doDelete(Criteria criteria, DBConnection dbCon)
+     public static void doDelete(Criteria criteria, Connection con) 
         throws TorqueException
-    {
+     {
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -706,13 +704,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             criteria.setDbName(DATABASE_NAME);
         }
-        if ( dbCon == null )
+        if ( con == null )
         {
             BasePeer.doDelete ( criteria );
         }
         else
         {
-            BasePeer.doDelete ( criteria, dbCon );
+            BasePeer.doDelete ( criteria, con );
         }
      }
 
@@ -757,13 +755,13 @@ public abstract class $basePrefix${table.JavaName}Peer
      *
      * @param obj the data object to insert into the database.
      */
-    public static void doInsert( $table.JavaName obj, DBConnection dbCon)
+    public static void doInsert( $table.JavaName obj, Connection con)
         throws TorqueException
     {
         #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
-        doInsert(buildCriteria(obj), dbCon);
+        doInsert(buildCriteria(obj), con);
         #else
-        obj.setPrimaryKey(doInsert(buildCriteria(obj), dbCon));
+        obj.setPrimaryKey(doInsert(buildCriteria(obj), con));
         #end
         obj.setNew(false);
         obj.setModified(false);
@@ -776,10 +774,10 @@ public abstract class $basePrefix${table.JavaName}Peer
      *
      * @param obj the data object to update in the database.
      */
-    public static void doUpdate($table.JavaName obj, DBConnection dbCon)
+    public static void doUpdate($table.JavaName obj, Connection con)
         throws TorqueException
     {
-        doUpdate(buildCriteria(obj), dbCon);
+        doUpdate(buildCriteria(obj), con);
     }
     /**
      * Method to delete.  This method is to be used during a transaction,
@@ -788,10 +786,10 @@ public abstract class $basePrefix${table.JavaName}Peer
      *
      * @param obj the data object to delete in the database.
      */
-    public static void doDelete($table.JavaName obj, DBConnection dbCon)
+    public static void doDelete($table.JavaName obj, Connection con)
         throws TorqueException
     {
-        doDelete(buildCriteria(obj), dbCon);
+        doDelete(buildCriteria(obj), con);
     }
 
     /** Build a Criteria object from the data object for this peer */
@@ -827,7 +825,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static $table.JavaName ${retrieveMethod}( ObjectKey pk )
         throws TorqueException
     {
-        DBConnection db = null;
+        Connection db = null;
         $table.JavaName retVal = null;
        try
         {
@@ -837,7 +835,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         finally
         {
            if (db != null)
-              Torque.releaseConnection(db);
+              closeConnection(db);
         }
         return(retVal);
     }
@@ -846,9 +844,9 @@ public abstract class $basePrefix${table.JavaName}Peer
      * Retrieve a single object by pk
      *
      * @param pk the primary key
-     * @param dbcon the connection to use
+     * @param con the connection to use
      */
-    public static $table.JavaName ${retrieveMethod}( ObjectKey pk, DBConnection dbcon )
+    public static $table.JavaName ${retrieveMethod}( ObjectKey pk, Connection con )
         throws TorqueException
     {
 
@@ -864,7 +862,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         #set ( $i = $i + 1 )
     #end
   #end
-        List v = doSelect(criteria, dbcon);
+        List v = doSelect(criteria, con);
         if ( v.size() != 1)
         {
             throw new TorqueException("Failed to select one and only one row.");
@@ -883,7 +881,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static List ${retrieveMethod}s( List pks )
         throws TorqueException
     {
-        DBConnection db = null;
+        Connection db = null;
         List retVal = null;
         try
         {
@@ -893,7 +891,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         finally
         {
            if (db != null)
-              Torque.releaseConnection(db);
+              closeConnection(db);
         }
         return(retVal);
     }
@@ -904,7 +902,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param pks List of primary keys
      * @param dbcon the connection to use
      */
-    public static List ${retrieveMethod}s( List pks, DBConnection dbcon )
+    public static List ${retrieveMethod}s( List pks, Connection dbcon )
         throws TorqueException
     {
         List objs = null;
@@ -964,12 +962,12 @@ public abstract class $basePrefix${table.JavaName}Peer
 #end
         ) throws TorqueException
     {
-        DBConnection db = null;
+        Connection db = null;
         $table.JavaName retVal = null;
        try
         {
            db = Torque.getConnection( DATABASE_NAME );
-           retVal = retrieveByPK(
+           retVal = retrieveByPK( 
            #set ( $comma = false )
            #foreach ($col in $table.PrimaryKeys)
          #set ( $clo=$col.Name.toLowerCase() )
@@ -981,7 +979,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         finally
         {
            if (db != null)
-              Torque.releaseConnection(db);
+              closeConnection(db);
         }
         return(retVal);
     }
@@ -995,7 +993,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
 #end
-     * @param dbcon DBConnection
+     * @param Connection con
      */
     public static $table.JavaName ${retrieveMethod}(
 #foreach ($col in $table.PrimaryKeys)
@@ -1004,7 +1002,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     #if ($comma),#end $cjtype $clo
         #set ( $comma = true )
 #end
-       ,DBConnection dbcon ) throws TorqueException
+       ,Connection con ) throws TorqueException
     {
 
         Criteria criteria = new Criteria(5);
@@ -1013,7 +1011,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $clo=$col.Name.toLowerCase() )
         criteria.add( $cup, $clo );
 #end
-        List v = doSelect(criteria, dbcon);
+        List v = doSelect(criteria, con);
         if ( v.size() != 1)
         {
             throw new TorqueException("Failed to select one and only one row.");

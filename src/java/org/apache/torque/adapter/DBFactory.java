@@ -114,13 +114,12 @@ public class DBFactory
         while (i.hasNext())
         {
             String key = (String) i.next();
-
-            if (key.endsWith("driver"))
+            if (key.endsWith("driver") || key.endsWith("adapter"))
             {
-                String driver = configuration.getString(key);
+                String mapKey = configuration.getString(key);
                 Class adapterClass = null;
-                String adapterClassName =
-                    (String) adapterPackage + "." + driverToAdapterMap.get(driver);
+                String adapterClassName = (String) adapterPackage + "." + 
+                    driverToAdapterMap.get(mapKey);
 
                 category.debug("Using " + adapterClassName);
 
@@ -133,9 +132,9 @@ public class DBFactory
                     category.error(e);
                 }
 
-                if (adapterClass != null && driver != null)
+                if (adapterClass != null && mapKey != null)
                 {
-                    registerAdapter(driver, adapterClass);
+                    registerAdapter(mapKey, adapterClass);
                 }
             }
         }
@@ -169,6 +168,22 @@ public class DBFactory
         driverToAdapterMap.put("com.sybase.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("com.sybase.jdbc2.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("weblogic.jdbc.pool.Driver", "DBWeblogic");
+
+        // add some short names to be used when drivers are not used
+        driverToAdapterMap.put("as400", "DBDB2400");
+        driverToAdapterMap.put("db2app", "DBDB2App");
+        driverToAdapterMap.put("db2net", "DBDB2Net");
+        driverToAdapterMap.put("cloudscape", "DBCloudscape");
+        driverToAdapterMap.put("hypersonic", "DBHypersonicSQL");
+        driverToAdapterMap.put("interbase", "DBInterbase");
+        driverToAdapterMap.put("instantdb", "DBInstantDB");
+        driverToAdapterMap.put("mssql", "DBMSSQL");
+        driverToAdapterMap.put("mysql", "DBMM");
+        driverToAdapterMap.put("oracle", "DBOracle");
+        driverToAdapterMap.put("postgresql", "DBPostgres");
+        driverToAdapterMap.put("sapdb", "DBSapDB");
+        driverToAdapterMap.put("sybase", "DBSybase");
+        driverToAdapterMap.put("weblogic", "DBWeblogic");
     }
 
     /**
@@ -193,10 +208,10 @@ public class DBFactory
 
     /**
      * Creates a new instance of the Turbine database adapter associated
-     * with the specified JDBC driver.
+     * with the specified JDBC driver or adapter key.
      *
      * @param driver The fully-qualified name of the JDBC driver to
-     * create a new adapter instance for.
+     * create a new adapter instance for or a shorter form adapter key.
      * @return An instance of a Turbine database adapter.
      */
     public static DB create(String driver)
@@ -209,7 +224,7 @@ public class DBFactory
             try
             {
                 DB adapter = (DB) adapterClass.newInstance();
-                adapter.setJDBCDriver(driver);
+                // adapter.setJDBCDriver(driver);
                 return adapter;
             }
             catch (IllegalAccessException e)

@@ -76,7 +76,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
-
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import org.apache.torque.TorqueException;
 import org.apache.torque.om.NumberKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.SimpleKey;
@@ -88,7 +90,9 @@ import org.apache.torque.map.ColumnMap;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.MapBuilder;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.pool.DBConnection;
+import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Query;
+import org.apache.torque.util.SqlExpression;
 
 //!! no good.
 import org.apache.commons.collections.StringStack;
@@ -131,6 +135,22 @@ public abstract class BasePeer implements java.io.Serializable
 
     protected static Category category =
         Category.getInstance(BasePeer.class.getName());
+
+    protected static final Context ctx = getInitialContext();
+
+    private static Context getInitialContext()
+    {
+        Context ctx = null;
+        try
+        {
+            ctx =  new InitialContext();
+        }
+        catch (javax.naming.NamingException e)
+        {
+            category.error(e);
+        }
+        return ctx;
+    }
 
     /**
      * Converts a hashtable to a byte array for storage/serialization.
@@ -239,24 +259,12 @@ public abstract class BasePeer implements java.io.Serializable
     public static Schema initTableSchema(String tableName, String dbName)
     {
         Schema schema = null;
-        DBConnection db = null;
+        Connection con = null;
 
         try
         {
-            if (dbName == null)
-            {
-                // Get a connection to the db.
-                db = Torque.getConnection();
-            }
-            else
-            {
-                // Get a connection to the db.
-                db = Torque.getConnection( dbName );
-            }
-
-            Connection connection = db.getConnection();
-
-            schema = new Schema().schema(connection, tableName);
+            con = Torque.getConnection(dbName);
+            schema = new Schema().schema(con, tableName);
         }
         catch (Exception e)
         {
@@ -267,15 +275,21 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            try
-            {
-                Torque.releaseConnection(db);
-            }
-            catch (Exception e)
-            {
-            }
+            closeConnection(con);
         }
         return schema;
+    }
+
+    public static void closeConnection(Connection con)
+    {
+        try
+        {
+            con.close();
+        }
+        catch(Exception e)
+        {
+            category.error("Error while closing connection.", e);
+        }
     }
 
     /**
@@ -350,23 +364,22 @@ public abstract class BasePeer implements java.io.Serializable
      * @return The DBConnection for the transaction.
      * @exception TorqueException
      */
-    public static DBConnection beginTransaction(String dbName)
+    public static Connection beginTransaction(String dbName)
         throws TorqueException
     {
-        DBConnection dbCon = Torque.getConnection( dbName );
+        Connection con = Torque.getConnection(dbName);
         try
         {
-            if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+            if ( con.getMetaData().supportsTransactions() )
             {
-                dbCon.setAutoCommit(false);
+                con.setAutoCommit(false);
             }
         }
         catch (SQLException e)
         {
             throw new TorqueException(e);
         }
-
-        return dbCon;
+        return con;
     }
 
     /**
@@ -374,18 +387,18 @@ public abstract class BasePeer implements java.io.Serializable
      * connection after the commit.  in databases that do not support
      * transactions, it only returns the connection.
      *
-     * @param dbCon The DBConnection for the transaction.
+     * @param con The Connection for the transaction.
      * @exception TorqueException
      */
-    public static void commitTransaction(DBConnection dbCon)
+    public static void commitTransaction(Connection con)
         throws TorqueException
     {
         try
         {
-            if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+            if ( con.getMetaData().supportsTransactions() )
             {
-                dbCon.commit();
-                dbCon.setAutoCommit(true);
+                con.commit();
+                con.setAutoCommit(true);
             }
         }
         catch (SQLException e)
@@ -394,8 +407,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            // Release the connection to the pool.
-            Torque.releaseConnection( dbCon );
+            closeConnection(con);
         }
     }
 
@@ -405,18 +417,18 @@ public abstract class BasePeer implements java.io.Serializable
      * transactions, this method will log the attempt and release the
      * connection.
      *
-     * @param dbCon The DBConnection for the transaction.
+     * @param con The Connection for the transaction.
      * @exception TorqueException
      */
-    public static void rollBackTransaction(DBConnection dbCon)
+    public static void rollBackTransaction(Connection con)
         throws TorqueException
     {
         try
         {
-            if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+            if ( con.getMetaData().supportsTransactions() )
             {
-                dbCon.rollback();
-                dbCon.setAutoCommit(true);
+                con.rollback();
+                con.setAutoCommit(true);
             }
             else
             {
@@ -431,8 +443,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            // Release the connection to the pool.
-            Torque.releaseConnection( dbCon );
+            closeConnection(con);
         }
     }
 
@@ -442,13 +453,13 @@ public abstract class BasePeer implements java.io.Serializable
      * rows.  Village throws an Exception when multiple rows are
      * deleted.
      *
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @param table The table to delete records from.
      * @param column The column in the where clause.
      * @param value The value of the column.
      * @exception TorqueException
      */
-    public static void deleteAll( DBConnection dbCon,
+    public static void deleteAll( Connection con,
                                   String table,
                                   String column,
                                   int value )
@@ -457,8 +468,7 @@ public abstract class BasePeer implements java.io.Serializable
         Statement statement = null;
         try
         {
-            Connection conn = dbCon.getConnection();
-            statement = conn.createStatement();
+            statement = con.createStatement();
 
             StringBuffer query = new StringBuffer();
             query.append( "DELETE FROM " )
@@ -503,17 +513,16 @@ public abstract class BasePeer implements java.io.Serializable
     public static void deleteAll(String table, String column, int value)
             throws TorqueException
     {
-        DBConnection dbCon = null;
+        Connection con = null;
         try
         {
             // Get a connection to the db.
-            dbCon = Torque.getConnection();
-
-            deleteAll( dbCon, table, column, value );
+            con = Torque.getConnection("default");
+            deleteAll( con, table, column, value );
         }
         finally
         {
-            Torque.releaseConnection(dbCon);
+            closeConnection(con);
         }
     }
 
@@ -527,7 +536,7 @@ public abstract class BasePeer implements java.io.Serializable
     public static void doDelete(Criteria criteria)
             throws TorqueException
     {
-        DBConnection dbCon = null;
+        Connection con = null;
         String dbName = criteria.getDbName();
 
         // Do the work, assuring the database connection is released.
@@ -536,13 +545,13 @@ public abstract class BasePeer implements java.io.Serializable
             // For PostgreSQL and LOBs.
             try
             {
-                dbCon = beginTransaction(criteria.getDbName());
-                doDelete(criteria, dbCon);
-                commitTransaction(dbCon);
+                con = beginTransaction(criteria.getDbName());
+                doDelete(criteria, con);
+                commitTransaction(con);
             }
             catch (Exception e)
             {
-                rollBackTransaction(dbCon);
+                rollBackTransaction(con);
                 throw new TorqueException(e);
             }
         }
@@ -550,12 +559,12 @@ public abstract class BasePeer implements java.io.Serializable
         {
             try
             {
-                dbCon = Torque.getConnection(dbName);
-                doDelete(criteria, dbCon);
+                con = Torque.getConnection(dbName);
+                doDelete(criteria, con);
             }
             finally
             {
-                Torque.releaseConnection(dbCon);
+                closeConnection(con);
             }
         }
     }
@@ -565,23 +574,14 @@ public abstract class BasePeer implements java.io.Serializable
      * Criteria.
      *
      * @param criteria The criteria to use.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @exception TorqueException
      */
-    public static void doDelete(Criteria criteria, DBConnection dbCon)
+    public static void doDelete(Criteria criteria, Connection con)
             throws TorqueException
     {
         DB db = Torque.getDB( criteria.getDbName() );
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
-        Connection connection = null;
-        try
-        {
-            connection = dbCon.getConnection();
-        }
-        catch (SQLException e)
-        {
-            throw new TorqueException(e);
-        }
 
         // Set up a list of required tables and add extra entries to
         // criteria if directed to delete all related records.
@@ -672,7 +672,7 @@ public abstract class BasePeer implements java.io.Serializable
             TableDataSet tds = null;
             try
             {
-                tds = new TableDataSet(connection, tables.get(i), kd);
+                tds = new TableDataSet(con, tables.get(i), kd);
                 String sqlSnippet = whereClause.toString(" AND ");
 
                 category.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
@@ -736,7 +736,7 @@ public abstract class BasePeer implements java.io.Serializable
     public static ObjectKey doInsert(Criteria criteria)
             throws TorqueException
     {
-        DBConnection dbCon = null;
+        Connection con = null;
         ObjectKey id = null;
 
         boolean doTransaction = criteria.isUseTransaction();
@@ -746,23 +746,23 @@ public abstract class BasePeer implements java.io.Serializable
             // Get a connection to the db.
             if (doTransaction)
             {
-                dbCon = beginTransaction(criteria.getDbName());
+                con = beginTransaction(criteria.getDbName());
             }
             else
             {
-                dbCon = Torque.getConnection( criteria.getDbName() );
+                con = Torque.getConnection(criteria.getDbName());
             }
-            id = doInsert(criteria, dbCon);
+            id = doInsert(criteria, con);
         }
         finally
         {
             if (doTransaction)
             {
-                commitTransaction(dbCon);
+                commitTransaction(con);
             }
             else
             {
-                Torque.releaseConnection(dbCon);
+                closeConnection(con);
             }
         }
         return id;
@@ -787,14 +787,14 @@ public abstract class BasePeer implements java.io.Serializable
      * inserted as specified in Criteria and null will be returned.
      *
      * @param criteria Object containing values to insert.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @return An Object which is the id of the row that was inserted
      * (if the table has a primary key) or null (if the table does not
      * have a primary key).
      * @exception TorqueException
      */
-    public static ObjectKey doInsert(Criteria criteria, DBConnection dbCon)
-            throws TorqueException
+    public static ObjectKey doInsert(Criteria criteria, Connection con)
+        throws TorqueException
     {
         SimpleKey id = null;
 
@@ -844,12 +844,12 @@ public abstract class BasePeer implements java.io.Serializable
                     if ( pk.getType() instanceof Number )
                     {
                         id = new NumberKey(keyGen.getIdAsBigDecimal
-                                           (dbCon.getConnection(), keyInfo));
+                                           (con, keyInfo));
                     }
                     else
                     {
                         id = new StringKey(keyGen.getIdAsString
-                                           (dbCon.getConnection(), keyInfo));
+                                           (con, keyInfo));
                     }
                 }
                 catch (Exception e)
@@ -864,7 +864,7 @@ public abstract class BasePeer implements java.io.Serializable
         TableDataSet tds = null;
         try
         {
-            tds = new TableDataSet(dbCon.getConnection(), tableName);
+            tds = new TableDataSet(con, tableName );
             Record rec = tds.addRecord();
             BasePeer.insertOrUpdateRecord(rec, tableName, criteria);
         }
@@ -895,13 +895,13 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 if ( pk.getType() instanceof Number )
                 {
-                id = new NumberKey(keyGen.getIdAsBigDecimal
-                                   (dbCon.getConnection(), keyInfo));
+                    id = new NumberKey(keyGen.getIdAsBigDecimal
+                                       (con, keyInfo));
                 }
                 else
                 {
                     id = new StringKey(keyGen.getIdAsString
-                                       (dbCon.getConnection(), keyInfo));
+                                       (con, keyInfo));
                 }
             }
             catch (Exception e)
@@ -1356,19 +1356,19 @@ public abstract class BasePeer implements java.io.Serializable
         List results = null;
         if (criteria.isUseTransaction())
         {
-            DBConnection dbCon = beginTransaction(criteria.getDbName());
+            Connection con = beginTransaction(criteria.getDbName());
             try
             {
                 results = executeQuery( createQueryString(criteria),
                                         criteria.getOffset(),
                                         criteria.getLimit(),
-                                        criteria.isSingleRecord(), dbCon );
-                commitTransaction(dbCon);
+                                        criteria.isSingleRecord(), con );
+                commitTransaction(con);
             }
             catch (Exception e)
             {
                 // make sure to return connection
-                rollBackTransaction(dbCon);
+                rollBackTransaction(con);
                 throw new TorqueException(e);
             }
         }
@@ -1387,15 +1387,15 @@ public abstract class BasePeer implements java.io.Serializable
      * Returns all results.
      *
      * @param criteria A Criteria.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @return List of Record objects.
      * @exception TorqueException
      */
-    public static List doSelect(Criteria criteria, DBConnection dbCon)
+    public static List doSelect(Criteria criteria, Connection con)
             throws TorqueException
     {
         return executeQuery( createQueryString(criteria),
-                             criteria.isSingleRecord(), dbCon );
+                             criteria.isSingleRecord(), con );
     }
 
     /**
@@ -1454,16 +1454,16 @@ public abstract class BasePeer implements java.io.Serializable
      * @param queryString A String with the sql statement to execute.
      * @param singleRecord Whether or not we want to select only a
      * single record.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @return List of Record objects.
      * @exception TorqueException
      */
     public static List executeQuery(String queryString,
                                       boolean singleRecord,
-                                      DBConnection dbCon)
-            throws TorqueException
+                                      Connection con)
+        throws TorqueException
     {
-        return executeQuery(queryString, 0, -1, singleRecord, dbCon);
+        return executeQuery(queryString, 0, -1, singleRecord, con);
     }
 
 
@@ -1486,19 +1486,18 @@ public abstract class BasePeer implements java.io.Serializable
                                       boolean singleRecord)
             throws TorqueException
     {
-        DBConnection db = null;
+        Connection db = null;
         List results = null;
         try
         {
-            // get a connection to the db
-            db = Torque.getConnection( dbName );
+            db = Torque.getConnection(dbName);
             // execute the query
             results = executeQuery(queryString, start, numberOfResults,
                                    singleRecord, db);
         }
         finally
         {
-            Torque.releaseConnection(db);
+            closeConnection(db);
         }
         return results;
     }
@@ -1511,7 +1510,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param numberOfResults The number of rows to return.
      * @param singleRecord Whether or not we want to select only a
      * single record.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @return List of Record objects.
      * @exception TorqueException
      */
@@ -1519,26 +1518,16 @@ public abstract class BasePeer implements java.io.Serializable
                                       int start,
                                       int numberOfResults,
                                       boolean singleRecord,
-                                      DBConnection dbCon)
-            throws TorqueException
+                                      Connection con)
+        throws TorqueException
     {
-        Connection connection = null;
-        try
-        {
-            connection = dbCon.getConnection();
-        }
-        catch (SQLException e)
-        {
-            throw new TorqueException(e);
-        }
-
         QueryDataSet qds = null;
         List results = new ArrayList();
         try
         {
             // execute the query
             long startTime = System.currentTimeMillis();
-            qds = new QueryDataSet( connection, queryString );
+            qds = new QueryDataSet( con, queryString );
             category.debug("Elapsed time="
                     + (System.currentTimeMillis() - startTime) + " ms");
             results = getSelectResults(qds, start, numberOfResults,
@@ -1732,7 +1721,7 @@ public abstract class BasePeer implements java.io.Serializable
             throws TorqueException
     {
         boolean doTransaction = updateValues.isUseTransaction();
-        DBConnection db = null;
+        Connection db = null;
         try
         {
             // Get a connection to the db.
@@ -1742,7 +1731,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             else
             {
-                db = Torque.getConnection( updateValues.getDbName() );
+                db = Torque.getConnection(updateValues.getDbName());
             }
 
             doUpdate(updateValues, db);
@@ -1755,7 +1744,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             else
             {
-                Torque.releaseConnection(db);
+                closeConnection(db);
             }
         }
     }
@@ -1774,12 +1763,12 @@ public abstract class BasePeer implements java.io.Serializable
      * clause use doUpdate(criteria, criteria).
      *
      * @param updateValues A Criteria object containing values used in
-     *        set clause.
-     * @param dbCon A DBConnection.
+     * set clause.
+     * @param con A Connection.
      * @exception TorqueException
      */
-    public static void doUpdate(Criteria updateValues, DBConnection dbCon)
-            throws TorqueException
+    public static void doUpdate(Criteria updateValues, Connection con)
+        throws TorqueException
     {
         ColumnMap pk = getPrimaryKey(updateValues);
         Criteria selectCriteria = null;
@@ -1796,7 +1785,7 @@ public abstract class BasePeer implements java.io.Serializable
             throw new TorqueException("No PK specified for database update");
         }
 
-        doUpdate( selectCriteria, updateValues, dbCon );
+        doUpdate( selectCriteria, updateValues, con );
     }
 
     /**
@@ -1817,9 +1806,8 @@ public abstract class BasePeer implements java.io.Serializable
     public static void doUpdate(Criteria selectCriteria, Criteria updateValues)
             throws TorqueException
     {
-        boolean doTransaction =
-            updateValues.isUseTransaction();
-        DBConnection db = null;
+        boolean doTransaction = updateValues.isUseTransaction();
+        Connection db = null;
         try
         {
             // Get a connection to the db.
@@ -1829,7 +1817,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             else
             {
-                db = Torque.getConnection( selectCriteria.getDbName() );
+                db = Torque.getConnection(selectCriteria.getDbName());
             }
             doUpdate(selectCriteria, updateValues, db);
         }
@@ -1841,7 +1829,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             else
             {
-                Torque.releaseConnection(db);
+                closeConnection(db);
             }
         }
     }
@@ -1859,26 +1847,17 @@ public abstract class BasePeer implements java.io.Serializable
      *        clause.
      * @param updateValues A Criteria object containing values used in set
      *        clause.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @exception TorqueException
      */
     public static void doUpdate(Criteria selectCriteria,
                                 Criteria updateValues,
-                                DBConnection dbCon)
-            throws TorqueException
+                                Connection con)
+        throws TorqueException
     {
         DB db = Torque.getDB( selectCriteria.getDbName() );
         DatabaseMap dbMap =
             Torque.getDatabaseMap( selectCriteria.getDbName() );
-        Connection connection = null;
-        try
-        {
-            connection = dbCon.getConnection();
-        }
-        catch (SQLException e)
-        {
-            throw new TorqueException(e);
-        }
 
         // Set up a list of required tables.  StringStack.add()
         // only adds element if it is unique.
@@ -1927,7 +1906,7 @@ public abstract class BasePeer implements java.io.Serializable
             try
             {
                 // Get affected records.
-                tds = new TableDataSet(connection, tables.get(i), kd );
+                tds = new TableDataSet(con, tables.get(i), kd );
                 String sqlSnippet = whereClause.toString(" AND ");
                 category.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
                 tds.where(sqlSnippet);
@@ -1993,18 +1972,16 @@ public abstract class BasePeer implements java.io.Serializable
     public static int executeStatement(String stmt, String dbName)
             throws TorqueException
     {
-        DBConnection db = null;
+        Connection db = null;
         int rowCount = -1;
         try
         {
-            // Get a connection to the db.
-            db = Torque.getConnection( dbName );
-
+            db = Torque.getConnection(dbName);
             rowCount = executeStatement( stmt, db );
         }
         finally
         {
-            Torque.releaseConnection(db);
+            closeConnection(db);
         }
         return rowCount;
     }
@@ -2015,25 +1992,15 @@ public abstract class BasePeer implements java.io.Serializable
      * statements.  Use executeQuery() for selects.
      *
      * @param stmt A String with the sql statement to execute.
-     * @param dbCon A DBConnection.
+     * @param con A Connection.
      * @return The number of rows affected.
      * @exception TorqueException
      */
-    public static int executeStatement(String stmt, DBConnection dbCon)
-            throws TorqueException
+    public static int executeStatement(String stmt, Connection con)
+        throws TorqueException
     {
         int rowCount = -1;
         Statement statement = null;
-        Connection con = null;
-        try
-        {
-            con = dbCon.getConnection();
-        }
-        catch (SQLException e)
-        {
-            throw new TorqueException(e);
-        }
-
         try
         {
             statement = con.createStatement();
@@ -2178,7 +2145,7 @@ public abstract class BasePeer implements java.io.Serializable
      *
      * @exception TorqueException Error performing database query.
      */
-    public static List doPSSelect(Criteria criteria, DBConnection dbCon)
+    public static List doPSSelect(Criteria criteria, Connection con)
         throws TorqueException
     {
         List v = null;
@@ -2191,7 +2158,7 @@ public abstract class BasePeer implements java.io.Serializable
         PreparedStatement stmt = null;
         try
         {
-            stmt = dbCon.getConnection().prepareStatement(qry.toString());
+            stmt = con.prepareStatement(qry.toString());
 
             for (int i = 0; i < params.size(); i++)
             {
@@ -2245,18 +2212,18 @@ public abstract class BasePeer implements java.io.Serializable
     /**
      * Do a Prepared Statement select according to the given criteria
      */
-    public static List doPSSelect(Criteria criteria) throws Exception
+    public static List doPSSelect(Criteria criteria) throws TorqueException
     {
-        DBConnection dbCon = Torque.getConnection( criteria.getDbName() );
+        Connection con = Torque.getConnection(criteria.getDbName());
         List v = null;
 
         try
         {
-            v = doPSSelect (criteria,dbCon);
+            v = doPSSelect (criteria,con);
         }
         finally
         {
-            Torque.releaseConnection( dbCon );
+            closeConnection(con);
         }
 
         return v;
