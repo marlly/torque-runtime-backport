@@ -140,14 +140,6 @@
                  IDs</td>
            </tr>
            <tr>
-             <td>autoincrement</td>
-             <td>deprecated, please use native</td>
-           </tr>
-           <tr>
-             <td>sequence</td>
-             <td>deprecated, please use native</td>
-           </tr>
-           <tr>
              <td>none</td>
              <td>Typically used if you do not want IDs generated</td>
            </tr>
