@@ -12,43 +12,43 @@
 
   <table name="TYPES">
 
-    <column name="CHAR" type="CHAR"/>
-    <column name="VARCHAR" type="VARCHAR"/>
-    <column name="INTEGER" type="INTEGER"/>
-    <column name="DATE" type="DATE"/>
-    <column name="TIME" type="TIME"/>
-    <column name="TIMESTAMP" type="TIMESTAMP"/>
+    <column name="CHAR_TYPE" type="CHAR"/>
+    <column name="VARCHAR_TYPE" type="VARCHAR"/>
+    <column name="INTEGER_TYPE" type="INTEGER"/>
+    <column name="DATE_TYPE" type="DATE"/>
+    <column name="TIME_TYPE" type="TIME"/>
+    <column name="TIMESTAMP_TYPE" type="TIMESTAMP"/>
     
     <!--
     
-    <column name="BIT" type="BIT"/>
-    <column name="TINYINT" type="TINYINT"/>
-    <column name="SMALLINT" type="SMALLINT"/>
-    <column name="BIGINT" type="BIGINT"/>
-    <column name="FLOAT" type="FLOAT"/>
-    <column name="REAL" type="REAL"/>
-    <column name="DOUBLE" type="DOUBLE"/>
-    <column name="NUMERIC" type="NUMERIC"/>
-    <column name="DECIMAL" type="DECIMAL"/>
-    <column name="LONGVARCHAR" type="LONGVARCHAR"/>
-    <column name="BINARY" type="BINARY"/>
-    <column name="VARBINARY" type="VARBINARY"/>
-    <column name="LONGVARBINARY" type="LONGVARBINARY"/>
-    <column name="NULL" type="NULL"/>
-    <column name="BLOB" type="BLOB"/>
-    <column name="CLOB" type="CLOB"/>
+    <column name="BIT_TYPE" type="BIT"/>
+    <column name="TINYINT_TYPE" type="TINYINT"/>
+    <column name="SMALLINT_TYPE" type="SMALLINT"/>
+    <column name="BIGINT_TYPE" type="BIGINT"/>
+    <column name="FLOAT_TYPE" type="FLOAT"/>
+    <column name="REAL_TYPE" type="REAL"/>
+    <column name="DOUBLE_TYPE" type="DOUBLE"/>
+    <column name="NUMERIC_TYPE" type="NUMERIC"/>
+    <column name="DECIMAL_TYPE" type="DECIMAL"/>
+    <column name="LONGVARCHAR_TYPE" type="LONGVARCHAR"/>
+    <column name="BINARY_TYPE" type="BINARY"/>
+    <column name="VARBINARY_TYPE" type="VARBINARY"/>
+    <column name="LONGVARBINARY_TYPE" type="LONGVARBINARY"/>
+    <column name="NULL_TYPE" type="NULL"/>
+    <column name="BLOB_TYPE" type="BLOB"/>
+    <column name="CLOB_TYPE" type="CLOB"/>
   
     -->
   
     <!-- These types have been left out intentionally for now
          as I'm not sure how they map and dealing with the types
          above will give the testbed a thorough workout I'm sure :-)
-    <column name="OTHER" type="OTHER"/>
-    <column name="JAVA_OBJECT" type="JAVA_OBJECT"/>
-    <column name="DISTINCT" type="DISTINCT"/>
-    <column name="STRUCT" type="STRUCT"/>
-    <column name="ARRAY" type="ARRAY"/>
-    <column name="REF" type="REF"/>
+    <column name="OTHER_TYPE" type="OTHER"/>
+    <column name="JAVA_OBJECT_TYPE" type="JAVA_OBJECT"/>
+    <column name="DISTINCT_TYPE" type="DISTINCT"/>
+    <column name="STRUCT_TYPE" type="STRUCT"/>
+    <column name="ARRAY_TYPE" type="ARRAY"/>
+    <column name="REF_TYPE" type="REF"/>
     
     -->
   
