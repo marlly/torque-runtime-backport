@@ -570,12 +570,7 @@ public class Column
      */
     public String printSize()
     {
-        if (size != null)
-        {
-            return "(" + size + ")";
-        }
-
-        return "";
+        return (size == null ? "" : '(' + size + ')');
     }
 
     /**
