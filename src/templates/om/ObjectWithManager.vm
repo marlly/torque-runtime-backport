@@ -832,7 +832,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         {
             try
             {
-                con = BasePeer.getConnection( dbName );
+                con = Torque.getConnection( dbName );
                 if (isNew())
                 {
                     ${table.JavaName}Peer

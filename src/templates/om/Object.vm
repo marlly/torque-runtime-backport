@@ -183,7 +183,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               {
                   for (int i = 0; i < ${collName}.size(); i++)
                   {
-                      ((${tblFK.JavaName})${collName}.get(i))
+                      ((${tblFK.JavaName}) ${collName}.get(i))
                           .set${colFK.JavaName}(v);
                   }
               }
@@ -241,6 +241,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * Declares an association between this object and a $className object
      *
      * @param v $className
+     * @throws TorqueException
      */
     public void set${pVarName}($className v) throws TorqueException
     {
@@ -375,11 +376,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * through the $className foreign key attribute
      *
      * @param l $className
+     * @throws TorqueException
      */
     public void add${relColMs}($className l) throws TorqueException
     {
         get${relCol}().add(l);
-        l.set${table.JavaName}${suffix}(($table.JavaName)this);
+        l.set${table.JavaName}${suffix}(($table.JavaName) this);
     }
 
     /**
@@ -391,6 +393,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * If this collection has already been initialized, returns
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria())
+     *
+     * @throws TorqueException
      */
     public List get${relCol}() throws TorqueException
     {
@@ -409,6 +413,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * If this $table.JavaName is new, it will return
      * an empty collection or the current collection, the criteria
      * is ignored on a new object.
+     *
+     * @throws TorqueException
      */
     public List get${relCol}(Criteria criteria) throws TorqueException
     {
@@ -822,7 +828,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         {
             try
             {
-                con = BasePeer.getConnection(dbName);
+                con = Torque.getConnection(dbName);
                 if (isNew())
                 {
                     ${table.JavaName}Peer
