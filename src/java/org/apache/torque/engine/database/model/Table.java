@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.commons.util.StringUtils;
 
@@ -580,8 +581,14 @@ public class Table implements IDMethod
     {
         if (javaName == null)
         {
-            //TO DO: Do some pritty printing here
-            return StringUtils.removeUnderScores(name);
+            StringBuffer buf = new StringBuffer();
+            StringTokenizer tok = new StringTokenizer(name, "_");
+            while (tok.hasMoreTokens())
+            {
+                String namePart = ((String) tok.nextElement()).toLowerCase();
+                buf.append(StringUtils.firstLetterCaps(namePart));
+            }
+            return buf.toString();
         }
         else
         {
