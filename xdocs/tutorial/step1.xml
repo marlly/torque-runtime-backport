@@ -10,11 +10,9 @@
 <section name="Step 1: Obtaining the Torque Distribution">
 
 <p>
-  First, you need to obtain the Torque distribution.  As
-  of this writing, the standalone version of Torque has
-  not been released; however, there is a beta version
+  First, you need to obtain the Torque
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
-  available</a>.
+  distribution</a>.
 </p>
 
 <p>

@@ -19,7 +19,7 @@
       <p>
         Torque was developed as part of the Turbine Framework. It is now
         decoupled and can be used by itself. Starting with version 2.2 Turbine
-        will use the decoupled Torque.
+        uses the decoupled Torque.
       </p>
 
       <subsection name="Torque's generation tasks">
@@ -34,7 +34,7 @@
         <p>
           Torque offers an <a href="http://jakarta.apache.org/ant">Ant</a> build
           file (<code>build-torque.xml</code>) which could be added to your
-          project . It defines the following targets:
+          project. It defines the following targets:
           <ul>
             <li>
               <strong>sql</strong><br/>
@@ -104,6 +104,12 @@
               generates the repository for ojb (experimental)
             </li>
           </ul>
+        </p>
+
+        <p>
+          Torque also offers a plugin for
+          <a href="http://jakarta.apache.org/turbine/maven">Maven</a>. See the
+          <a href="maven-howto.html">Maven-Howto</a> for more information.
         </p>
       </subsection>
 
