@@ -1536,8 +1536,16 @@ public abstract class BasePeer implements java.io.Serializable
                 handleMultipleRecords(qds);
             }
 
+            int startRecord = 0;
+
+            //Offset the correct number of people
+            if (start > 0 && numberOfResults <= 0)
+            {
+                startRecord = start;
+            }
+
             // Return a List of Record objects.
-            for (int i = 0; i < qds.size(); i++)
+            for (int i = startRecord; i < qds.size(); i++)
             {
                 Record rec = qds.getRecord(i);
                 results.add(rec);
