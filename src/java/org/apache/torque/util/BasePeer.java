@@ -778,8 +778,8 @@ public abstract class BasePeer implements java.io.Serializable
         {
             if (keyGen == null)
             {
-                throw new Exception ("IdGenerator for: '" + tableName + 
-                                     "' is null.");
+                throw new Exception("IdGenerator for table '" + tableName + 
+                                    "' is null");
             }
             // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
             // before the insert.
