@@ -718,7 +718,7 @@ public class TorqueInstance
     protected DataSourceFactory getDataSourceFactory(String name)
             throws TorqueException
     {
-    	if (!Torque.isInit()) 
+    	if (!isInit()) 
     	{
             throw new TorqueException("Torque is not initialized.");    		
     	}
