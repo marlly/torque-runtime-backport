@@ -40,7 +40,7 @@ public class $table.JavaName $extendsBaseClass
       #set ( $defaultValue = "null" )
       #if ( $cjtype == "boolean")
         #set ( $defaultValue = "false" )
-      #elseif ($cjtype == "int")
+      #elseif ($cjtype == "int" || $cjtype == "short" || $cjtype == "long" || $cjtype == "float" || $cjtype == "double")
         #set ( $defaultValue = "0" )
       #end
     protected $cjtype $clo = $defaultValue;
