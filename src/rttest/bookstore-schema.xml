@@ -233,7 +233,7 @@
     />
   </table>
 
-  <table name="MULTIPK_SELF_REFTABLE">
+  <table name="MULTIPK_SELF_REFTABLE" idMethod="none">
     <column name="COL1" primaryKey="true" required="true" type="DECIMAL"/>
     <column name="COL2" primaryKey="true" required="true" type="DECIMAL"/>
             
