@@ -75,6 +75,8 @@ import org.apache.torque.map.DatabaseMap;
  * and will be removed in the future in favour of using Torque as an Avalon
  * Component.
  *
+ * @todo This class will be made abstract once Stratum is removed.
+ *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
@@ -120,16 +122,18 @@ public class Torque
     /**
      * C'tor for usage with the Stratum Lifecycle.
      *
-     * @todo Should be removed / made private once Stratum is removedP
+     * @todo Should be made private or protected once Stratum is
+     * removed.
      */
     public Torque()
     {
     }
 
     /**
-     * Get the TorqueInstance Instance.
+     * Retrieves the single {@link org.apache.torque.TorqueInstance}
+     * used by this class.
      *
-     * @return A Torque Singleton instance
+     * @return Our singleton.
      */
     private static TorqueInstance getInstance()
     {
