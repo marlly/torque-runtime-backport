@@ -617,9 +617,9 @@ public class SqlExpression
     }
 
     /**
-     *
      * @deprecated Use quoteAndEscapeText(String rawText, DB db) instead.
      * the quoteAndEscapeText rules depend on the database.
+     * @see #quoteAndEscapeText(String, DB)
      */
     public static String quoteAndEscapeText(String rawText)
     {
