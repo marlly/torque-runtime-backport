@@ -760,16 +760,11 @@ public abstract class BasePeer implements java.io.Serializable
             throw new Exception("Database insert attempted without " + 
                 "anything specified to insert");
         }
+        
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
         TableMap tableMap = dbMap.getTable(tableName);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
         IdGenerator keyGen = tableMap.getIdGenerator();
-
-        if (keyGen == null)
-        {
-            throw new Exception ("IdGenerator for: '" + tableName + 
-                "' is null.");
-        }
 
         ColumnMap pk = getPrimaryKey(criteria);
         // only get a new key value if you need to
@@ -781,6 +776,11 @@ public abstract class BasePeer implements java.io.Serializable
 
         if (!criteria.containsKey(pk.getFullyQualifiedName()))
         {
+            if (keyGen == null)
+            {
+                throw new Exception ("IdGenerator for: '" + tableName + 
+                                     "' is null.");
+            }
             // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
             // before the insert.
 
