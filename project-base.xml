@@ -12,7 +12,7 @@
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.torque</package>
-  <logo>/images/blue-logo.gif</logo>
+  <logo>/images/torque-logo-blue.png</logo>
 
   <!-- Gump integration -->
   <gumpRepositoryId>jakarta</gumpRepositoryId>
