@@ -25,7 +25,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     public static final String CLASS_NAME =
         "${package}.map.${table.JavaName}MapBuilder";
 
-#if ($generateDeprecated)
+#if ($generateDeprecated == "true")
     /**
      * Item
      * @deprecated use ${table.JavaName}Peer.TABLE_NAME constant
