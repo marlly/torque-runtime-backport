@@ -240,25 +240,25 @@ public class Criteria extends Hashtable
      */
     public void clear() 
     {
-       super.clear();
-       ignoreCase = false;
-       singleRecord = false;
-       cascade = false;
-       selectModifiers.clear();
-       selectColumns.clear();
-       orderByColumns.clear();
-       groupByColumns.clear();
-       having = null;
-       asColumns.clear();
-       joinL = null;
-       joinR = null;       
-       dbName = originalDbName;
-       offset = 0;
-       limit = -1;
-       blobFlag = null;
-       aliases = null;
-       useTransaction = false;
-     }
+        super.clear();
+        ignoreCase = false;
+        singleRecord = false;
+        cascade = false;
+        selectModifiers.clear();
+        selectColumns.clear();
+        orderByColumns.clear();
+        groupByColumns.clear();
+        having = null;
+        asColumns.clear();
+        joinL = null;
+        joinR = null;       
+        dbName = originalDbName;
+        offset = 0;
+        limit = -1;
+        blobFlag = null;
+        aliases = null;
+        useTransaction = false;
+    }
 
     /**
      * Add an AS clause to the select columns. Usage:
