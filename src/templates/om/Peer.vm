@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -1250,7 +1251,7 @@ public abstract class $basePrefix${table.JavaName}Peer
    #end
   #end
 
-  #if ($includeJoinAll) 
+  #if ($includeJoinAll)
   #foreach ($fk in $table.ForeignKeys)
    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
 
