@@ -263,6 +263,13 @@
   </td>
 </tr>
 <tr>
+  <td><code> torque.saveException </code></td>
+  <td><code> Exception </code></td>
+  <td>
+    Defines which Exception should be thrown by the Object.save() method.
+  </td>
+</tr>
+<tr>
   <td><code> torque.addTimeStamp </code></td>
   <td><code> true </code></td>
   <td>
