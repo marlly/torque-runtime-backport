@@ -1102,8 +1102,7 @@ public abstract class BasePeer implements java.io.Serializable
         while (critKeys.hasNext())
         {
             String key = (String) critKeys.next();
-            Criteria.Criterion criterion =
-                (Criteria.Criterion) criteria.getCriterion(key);
+            Criteria.Criterion criterion = criteria.getCriterion(key);
             Criteria.Criterion[] someCriteria =
                 criterion.getAttachedCriterion();
             String table = null;
@@ -2327,8 +2326,7 @@ public abstract class BasePeer implements java.io.Serializable
         while (critKeys.hasNext())
         {
             String key = (String) critKeys.next();
-            Criteria.Criterion criterion =
-                (Criteria.Criterion) criteria.getCriterion(key);
+            Criteria.Criterion criterion = criteria.getCriterion(key);
             Criteria.Criterion[] someCriteria =
                 criterion.getAttachedCriterion();
 
