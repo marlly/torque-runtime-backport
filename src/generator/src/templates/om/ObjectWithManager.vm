@@ -263,7 +263,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     /**
      * Declares an association between this object and a $interfaceName object
      *
-     * @param $interfaceName v
+     * @param v $interfaceName
      * @throws TorqueException
      */
     public void set${pVarName}($interfaceName v) throws TorqueException
@@ -1335,7 +1335,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #foreach ($col in $table.PrimaryKey)
       #set ( $clo=$col.UncapitalisedJavaName )
       #set ( $cjtype= $col.JavaNative )
-     * @param $cjtype $clo
+     * @param $clo $cjtype
     #end
      */
     public void setPrimaryKey($argList)

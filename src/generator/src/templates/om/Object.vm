@@ -1359,7 +1359,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     #foreach ($col in $table.PrimaryKey)
       #set ( $clo=$col.UncapitalisedJavaName )
       #set ( $cjtype= $col.JavaNative )
-     * @param $cjtype $clo
+     * @param $clo $cjtype
     #end
      */
     public void setPrimaryKey($argList)

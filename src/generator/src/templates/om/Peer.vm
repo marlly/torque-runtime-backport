@@ -421,6 +421,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * Grabs the raw Village records to be formed into objects.
      * This method should be used for transactions
      *
+     * @param criteria object used to create the SELECT statement.
      * @param con the connection to use
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -1105,7 +1106,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $cjtype= $col.JavaNative )
      * @param $clo $cjtype
   #end
-     * @param Connection con
+     * @param con Connection
      */
     public static $table.JavaName ${retrieveMethod}(
   #foreach ($col in $table.PrimaryKey)
