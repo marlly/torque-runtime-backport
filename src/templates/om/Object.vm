@@ -1130,15 +1130,19 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 
         #if ($relCol == "")
             #set ( $pCollName = "${className}s" )
+            #set ( $pCollNameNoS = "${className}" )
         #else
             #set ( $pCollName = "${className}sRelatedBy$relCol" )
+            #set ( $pCollNameNoS = "${className}RelatedBy$relCol" )
         #end
 
-         ${list}v = copyObj.get${pCollName}();
-         for (int i=0; i<v.size(); i++)
-         {
-             ((Persistent)v.get(i)).setNew(true);
-         }
+        ${list}v = get${pCollName}();
+        for (int i=0; i<v.size(); i++)
+        {
+            $className obj = ($className) v.get(i);
+            copyObj.add$pCollNameNoS(obj.copy());
+            ((Persistent)v.get(i)).setNew(true);
+        }
         #set ( $list = "" )
     #end
   #end
