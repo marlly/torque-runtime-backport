@@ -142,6 +142,12 @@ public class ConnectionPool
     private long dbCheckFrequency = 5000;
 
     /**
+     * Counter that keeps track of the number of threads that are in
+     * the wait state, waiting to aquire a connection.
+     */
+    private int waitCount = 0;
+  
+    /**
      * The class containing the database specific info for connections
      * in this pool (i.e. the Turbine database adapter).
      */
@@ -488,6 +494,7 @@ public class ConnectionPool
                             "connection from empty pool!");
     }
 
+
     /**
      * Gets a pooled database connection.
      *
@@ -498,10 +505,21 @@ public class ConnectionPool
     private synchronized DBConnection getInternalPooledConnection()
         throws ConnectionWaitTimeoutException, Exception
     {
-        DBConnection dbconn = null;
-
-        if ( pool.empty() )
+        if ( waitCount > 0 || pool.empty() )
         {
+            // We test waitCount > 0 to make sure no other threads are
+            // waiting for a connection. If waitCount is not tested
+            // the following situation occurs: After a thread
+            // returns a connection it calls notify. If another thread
+            // is currently in the wait state, it will awaken and
+            // begin competing for the synchronization lock.
+            // Meanwhile, if another thread is attempting to call this
+            // method, it may acquire the lock first and "steal" the
+            // connection.  The thread that was waiting will then
+            // acquire the lock, but the connection is no longer
+            // available, so a ConnectionWaitTimeoutExecption is
+            // thrown.
+          
             connectionAttemptsCounter++;
 
             // The connection pool is empty and we cannot allocate any new
@@ -509,12 +527,18 @@ public class ConnectionPool
             // a connection is returned.
             try
             {
+                waitCount++;
                 wait( connectionWaitTimeout );
             }
             catch (InterruptedException ignored)
             {
                 // Don't care how we come out of the wait state.
             }
+            finally
+            {
+                waitCount--;
+            }
+            
 
             // Check for a returned connection.
             if ( pool.empty() )
@@ -523,14 +547,9 @@ public class ConnectionPool
                 // someone returning a connection.
                 throw new ConnectionWaitTimeoutException(url);
             }
-            dbconn = popConnection();
-        }
-        else
-        {
-            dbconn = popConnection();
         }
 
-        return dbconn;
+        return popConnection();
     }
 
     /**
