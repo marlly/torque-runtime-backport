@@ -55,7 +55,6 @@ package org.apache.torque.om;
  */
 
 import java.util.ArrayList;
-
 import org.apache.commons.lang.ObjectUtils;
 
 /**
@@ -134,7 +133,8 @@ public class ComboKey extends ObjectKey
     public void setValue(String[] keys)
     {
         this.key = new SimpleKey[keys.length];
-        for ( int i = 0; i < keys.length; i++ ) {
+        for (int i = 0; i < keys.length; i++)
+        {
             this.key[i] = new StringKey(keys[i]);
         }
     }
@@ -158,9 +158,10 @@ public class ComboKey extends ObjectKey
             {
                 char keyType = keys.charAt(startPtr);
                 String keyString = keys.substring(startPtr + 1, indexOfSep);
-                
+
                 SimpleKey newKey = null;
-                switch(keyType){
+                switch(keyType)
+                {
                     case 'N':
                         newKey = new NumberKey(keyString);
                         break;
@@ -168,9 +169,12 @@ public class ComboKey extends ObjectKey
                         newKey = new StringKey(keyString);
                         break;
                     case 'D':
-                        try{
+                        try
+                        {
                             newKey = new DateKey(keyString);
-                        }catch(NumberFormatException nfe){
+                        }
+                        catch (NumberFormatException nfe)
+                        {
                             newKey = new DateKey();
                         }
                         break;
@@ -180,13 +184,13 @@ public class ComboKey extends ObjectKey
                 tmpKeys.add(newKey);
             }
             startPtr = indexOfSep + 1;
-            indexOfSep = keys.indexOf(SEPARATOR,startPtr);
+            indexOfSep = keys.indexOf(SEPARATOR, startPtr);
         }
 
         this.key = new SimpleKey[tmpKeys.size()];
-        for ( int i = 0; i < this.key.length; i++ )
+        for (int i = 0; i < this.key.length; i++)
         {
-            this.key[i] = (SimpleKey)tmpKeys.get(i);
+            this.key[i] = (SimpleKey) tmpKeys.get(i);
         }
     }
 
@@ -296,13 +300,21 @@ public class ComboKey extends ObjectKey
             {
                 if (keys[i] != null)
                 {
-                    if(keys[i] instanceof StringKey){
+                    if (keys[i] instanceof StringKey)
+                    {
                         sb.append("S");
-                    }else if(keys[i] instanceof NumberKey){
+                    }
+                    else if (keys[i] instanceof NumberKey)
+                    {
                         sb.append("N");
-                    }else if(keys[i] instanceof DateKey){
+                    }
+                    else if (keys[i] instanceof DateKey)
+                    {
                         sb.append("D");
-                    }else{ // unknown type
+                    }
+                    else
+                    {
+                        // unknown type
                         sb.append("U");
                     }
                     keys[i].appendTo(sb);
