@@ -1,6 +1,6 @@
 <project name="Torque" default="main" basedir=".">
 
-  <property name="torque.home" value="@TORQUE_HOME@"/>
+  <property name="torque.home" value="."/>
 
   <!-- Override this property if you build a "lite" distribution. -->
   <property name="lib.dir" value="lib"/>
@@ -9,9 +9,6 @@
   <path id="classpath">
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
-    </fileset>
-    <fileset dir="lib">
-      <include name="torque*.jar"/>
     </fileset>
   </path>
 
@@ -46,6 +43,43 @@
     
     <antcall target="project-sql-classpath"/>
     <antcall target="project-om-classpath"/>
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
+  <!-- ================================================================ -->
+  <!-- Generate the SQL for your project, these are in addition         -->
+  <!-- to the base Turbine tables! The tables you require for your      -->
+  <!-- project should be specified in project-schema.xml.               -->
+  <!-- ================================================================ -->
+
+  <target 
+    name="project-sql" 
+    description="==> generates the SQL for your project">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating SQL for YOUR Turbine project! |"/>
+    <echo message="| Woo hoo!                                 |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <torque-sql
+      contextProperties="${build.properties}"
+      controlTemplate="${SQLControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      templatePath="${templatePath}"
+      outputFile="report.${project}.sql.generation"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
+    />
+
   </target>
 
   <!-- ================================================================ -->
@@ -180,44 +214,6 @@
       templatePath="${templatePath}"
       outputFile="report.${project}.datadtd.generation"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-    />
-
-  </target>
-
-
-  <!-- ================================================================ -->
-  <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
-  <!-- ================================================================ -->
-  <!-- Generate the SQL for your project, these are in addition         -->
-  <!-- to the base Turbine tables! The tables you require for your      -->
-  <!-- project should be specified in project-schema.xml.               -->
-  <!-- ================================================================ -->
-
-  <target 
-    name="project-sql" 
-    description="==> generates the SQL for your project">
-
-    <echo message="+------------------------------------------+"/>
-    <echo message="|                                          |"/>
-    <echo message="| Generating SQL for YOUR Turbine project! |"/>
-    <echo message="| Woo hoo!                                 |"/>
-    <echo message="|                                          |"/>
-    <echo message="+------------------------------------------+"/>
-
-    <taskdef 
-      name="torque-sql"
-      classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <torque-sql
-      contextProperties="${build.properties}"
-      controlTemplate="${SQLControlTemplate}"
-      outputDirectory="${torque.home}/${outputDirectory}/sql"
-      templatePath="${templatePath}"
-      outputFile="report.${project}.sql.generation"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
     />
 
   </target>
