@@ -615,10 +615,11 @@ class ConnectionPool implements ConnectionEventListener
             while (logInterval > 0 && isRun)
             {
                 buf.setLength(0);
-                buf.append(getPoolName()).append(" (in + out = total): ")
-                       .append(getNbrAvailable()).append(" + ")
-                       .append(getNbrCheckedOut()).append(" = ")
-                       .append(getTotalCount());
+
+                buf.append(getPoolName());
+                buf.append(" avail: ").append(getNbrAvailable());
+                buf.append(" in use: ").append(getNbrCheckedOut());
+                buf.append(" total: ").append(getTotalCount());
                 category.info(buf.toString());
 
                 // Wait for a bit.
