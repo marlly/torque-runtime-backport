@@ -401,23 +401,16 @@ public class Torque
             }
         }
 
-        // Quick (non-sync) check for the map we want.
-        DatabaseMap map = (DatabaseMap) dbMaps.get(name);
-        if (map == null)
+        synchronized (dbMaps)
         {
-            // Map not there...
-            synchronized (dbMaps)
+            DatabaseMap map = (DatabaseMap) dbMaps.get(name);
+            if (map == null)
             {
-                // ... sync and look again to avoid race condition.
-                map = (DatabaseMap) dbMaps.get(name);
-                if (map == null)
-                {
-                    // Still not there.  Create and add.
-                    map = initDatabaseMap(name);
-                }
+                // Still not there.  Create and add.
+                map = initDatabaseMap(name);
             }
+            return map;
         }
-        return map;
     }
 
     /**
@@ -450,7 +443,12 @@ public class Torque
         {
             throw new TorqueException(e);
         }
-        dbMaps.put(name, map);
+
+        // Avoid possible ConcurrentModificationException by
+        // constructing a copy of dbMaps.
+        Map newMaps = new HashMap(dbMaps);
+        newMaps.put(name, map);
+        dbMaps = newMaps;
 
         return map;
     }
