@@ -1245,9 +1245,17 @@ public abstract class $basePrefix${table.JavaName}Peer
 
   #if ($countFK > 2)
 
+  #set ($includeJoinAll = true)
   #foreach ($fk in $table.ForeignKeys)
    #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-   #if (!$tblFK.isForReferenceOnly())
+   #if ($tblFK.isForReferenceOnly())
+       #set ($includeJoinAll = false)
+   #end
+  #end
+
+  #if ($includeJoinAll) 
+  #foreach ($fk in $table.ForeignKeys)
+   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
 
      #set ( $excludeTable = $table.Database.getTable($fk.ForeignTableName) )
      #set ( $excludeClassName = $excludeTable.JavaName )
