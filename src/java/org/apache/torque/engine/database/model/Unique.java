@@ -59,83 +59,35 @@ import java.util.List;
 import org.xml.sax.Attributes;
 
 /**
- * A Class for information about unique indices of a table
+ * Information about unique indices of a table.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+ * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id$
  */
-public class Unique
+public class Unique extends Index
 {
-    private String indexName;
-    private Table parentTable;
-    private List indexColumns = new ArrayList(3);
-
     /**
-     * Default Constructor
+     * Creates a new, unique <code>Index</code> instance.
      */
     public Unique()
     {
     }
 
     /**
-     * Set the parent Table of the foreign key
+     * @see org.apache.torque.engine.database.model.Index#Index(List indexColumns)
      */
-    public void setTable(Table parent)
+    public Unique(List indexColumns)
     {
-        parentTable = parent;
+        super(indexColumns);
     }
 
     /**
-     * Get the parent Table of the foreign key
+     * Returns <code>true</code>.
      */
-    public Table getTable()
+    public final boolean getUnique()
     {
-        return parentTable;
-    }
-
-    /**
-     * Returns the Name of the table the foreign key is in
-     */
-    public String getTableName()
-    {
-        return parentTable.getName();
-    }
-
-    /**
-     *  adds a new column to an index
-     */
-    public void addColumn(Attributes attrib)
-    {
-        indexColumns.add(attrib.getValue("name"));
-    }
-
-    /**
-     * Creates a list of columns delimited by commas
-     */
-    private String makeColumnList(List cols)
-    {
-        StringBuffer res = new StringBuffer(cols.get(0).toString());
-        for (int i=1; i < cols.size(); i++)
-            res.append(", ")
-                .append(cols.get(i).toString());
-        return res.toString();
-    }
-
-    /**
-     * Return a comma delimited string of the index columns
-     */
-    public String getColumnList()
-    {
-        return makeColumnList(indexColumns);
-    }
-
-    /**
-     * Return the vector of local columns.  You should not edit
-     * this vector.
-     */
-    public List getIndexColumns()
-    {
-        return indexColumns;
+        return true;
     }
 
     /**
@@ -145,12 +97,17 @@ public class Unique
     public String toString()
     {
         StringBuffer result = new StringBuffer();
-        result.append(" <unique>\n");
+        result.append(" <unique name=\"")
+            .append(getName())
+            .append("\">\n");
 
-        for (int i=0; i<indexColumns.size(); i++)
+        List columns = getColumns();
+        for (int i = 0; i < columns.size(); i++)
+        {
             result.append("  <unique-column name=\"")
-                .append(indexColumns.get(i))
+                .append(columns.get(i))
                 .append("\"/>\n");
+        }
         result.append(" </unique>\n");
         return result.toString();
     }
