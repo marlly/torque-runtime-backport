@@ -187,7 +187,7 @@
           JDBCToXMLSchema task will not generate the schema properly.
           All other tests pass.
           </td>
-          <td><a href="mailto:brekke@apache.com">Jeffrey D. Brekke</a></td>
+          <td><a href="mailto:brekke@apache.org">Jeffrey D. Brekke</a></td>
         </tr>
         <tr>
           <td>Weblogic</td>
