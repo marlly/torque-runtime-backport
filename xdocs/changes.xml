@@ -19,6 +19,8 @@
 <p>
   <ul>
     <li>
+      Removed all deprecated stuff from the java code. Make sure to not get
+      any deprecation warnings before you switch to 3.1!
     </li>
   </ul>
 </p>
@@ -28,6 +30,7 @@
 <p>
   <ul>
     <li>
+      TRQS95: Junit tests for sql2xml task (SQLToAppDataTest)
     </li>
   </ul>
 </p>

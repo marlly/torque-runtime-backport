@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+<database>
+<table name="jiveForum">
+    <column name="forumID" type="INTEGER" />
+    <column name="name" type="VARCHAR" />
+    <column name="description" type="VARCHAR" />
+    <column name="modifiedDate" type="VARCHAR" />
+    <column name="creationDate" type="VARCHAR" size="15"/>
+    <column name="moderated" type="INTEGER" />
+</table>
+</database>
