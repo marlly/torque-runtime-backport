@@ -13,6 +13,8 @@
       <item name="Overview"              href="/index.html"/>
       <item name="News and Status"       href="/status.html"/>
       <item name="Downloads"             href="/status.html"/>
+      <item name="Torque Wiki"           href="http://nagoya.apache.org/wiki/apachewiki.cgi?TorqueProjectPages"/>
+      
     </menu>
     <menu name="Guides">
       <item name="Tutorial"              href="/tutorial/index.html" collapse="true">
