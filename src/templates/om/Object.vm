@@ -131,15 +131,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         #if ($complexObjectModel)
           #if ($col.isForeignKey())
-            #set ( $tmp = $col.RelatedTableName )
-            #set ( $tblFK = $table.Database.getTable($tmp) )
+            #set ( $tblFK = $table.Database.getTable($col.RelatedTableName) )
             #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
-            #if ($col.isMultipleFK())
-              #set ( $varName = $strings.concat(["a", $tblFK.JavaName, "RelatedBy", $col.JavaName]) )
-            #elseif ($tmp.equals($table.Name))
-              #set ( $varName = $strings.concat(["a", $tblFK.JavaName, "RelatedBy", $col.JavaName]) )
+            #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
+              #set ( $varName = "a${tblFK.JavaName}RelatedBy$col.JavaName" )
             #else
-              #set ( $varName = $strings.concat(["a", $tblFK.JavaName]) )
+              #set ( $varName = "a$tblFK.JavaName" )
             #end
             $varName = null;
           #end
@@ -150,9 +147,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #if ( !($tblFK.Name.equals($table.Name)) )
               #set ( $colFK = $tblFK.getColumn($fkColName) )
               #if ($colFK.isMultipleFK())
-                #set ( $collName = $strings.concat(["coll", $tblFK.JavaName, "sRelatedBy", $colFK.JavaName]) )
+                #set ( $collName = "coll${tblFK.JavaName}sRelatedBy$colFK.JavaName" )
               #else
-                #set ( $collName = $strings.concat(["coll", $tblFK.JavaName, "s"]) )
+                #set ( $collName = "coll${tblFK.JavaName}s" )
               #end
 
               // update associated $tblFK.JavaName
@@ -209,26 +206,23 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
  #set($aVars = [])  ## Array of object field names for later reference.
  #foreach ($fk in $table.ForeignKeys)
 
-   #set ( $tmp = $fk.ForeignTableName )
-   #set ( $tblFK = $table.Database.getTable($tmp) )
+   #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
    #set ( $className = $tblFK.JavaName )
 
    #set ( $relCol = "" )
    #foreach ($columnName in $fk.LocalColumns)
     #set ( $column = $table.getColumn($columnName) )
-    #if ($column.isMultipleFK())
-        #set ( $relCol = $strings.concat([$relCol, $column.JavaName]) )
-    #elseif ($tmp.equals($table.Name))
-        #set ( $relCol = $strings.concat([$relCol, $column.JavaName]) )
+    #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.Name))
+        #set ( $relCol = "$relCol$column.JavaName" )
     #end
    #end
 
    #if ($relCol != "")
-       #set ( $relCol = $strings.concat(["RelatedBy", $relCol]) )
+       #set ( $relCol = "RelatedBy$relCol" )
    #end
 
-   #set ( $pVarName = $strings.concat([$className, $relCol]) )
-   #set ( $varName = $strings.concat(["a", $pVarName]) )
+   #set ( $pVarName = "$className$relCol" )
+   #set ( $varName = "a$pVarName" )
    #set ( $retVal = $pVars.add($pVarName) )
    #set ( $retVal = $aVars.add($varName) )
     private $className $varName;
@@ -257,20 +251,16 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $column = $table.getColumn($columnName) )
     #set ( $cjtype = $column.JavaNative )
     #set ( $clo=$column.Name.toLowerCase() )
-    #if ($cjtype == "int")
-        #set ( $conditional = $strings.concat([$conditional, $and, "this.", $clo, ">0"]) )
-    #elseif ($cjtype == "long")
-        #set ( $conditional = $strings.concat([$conditional, $and, "this.", $clo, ">0"]) )
-    #elseif ($cjtype == "short")
-        #set ( $conditional = $strings.concat([$conditional, $and, "this.", $clo, ">0"]) )
+    #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long")
+        #set ( $conditional = "$conditional${and}this.${clo}>0" )
     #else
-        #set ( $conditional = $strings.concat([$conditional, $and, "!ObjectUtils.equals(this.", $clo, ", null)"]) )
+        #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
     #end
-    #set ( $arglist = $strings.concat([$arglist, $comma, "this.", $clo]) )
+    #set ( $arglist = "$arglist${comma}this.$clo" )
     #set ( $and = " && " )
     #set ( $comma = ", " )
    #end
-   #set ( $pCollName = $strings.concat([$table.JavaName, "s", $relCol]) )
+   #set ( $pCollName = "${table.JavaName}s$relCol" )
     
     public $className get${pVarName}() throws Exception
     {
@@ -339,20 +329,20 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #foreach ($columnName in $fk.LocalColumns)
     #set ( $column = $tblFK.getColumn($columnName) )
     #if ($column.isMultipleFK())
-        #set ($relatedByCol=$strings.concat([$relatedByCol,$column.JavaName]))
+        #set ($relatedByCol= "$relatedByCol$column.JavaName")
     #end
    #end
 
    #if ($relatedByCol == "")
     #set ( $suffix = "" )
-    #set ( $relCol = $strings.concat([$className, "s"]) )
+    #set ( $relCol = "${className}s" )
     #set ( $relColMs = $className )
    #else
-    #set ( $suffix = $strings.concat(["RelatedBy", $relatedByCol]) )
-    #set ( $relCol=$strings.concat([$className,"sRelatedBy",$relatedByCol]))
-    #set ( $relColMs=$strings.concat([$className,"RelatedBy",$relatedByCol]))
+    #set ( $suffix = "RelatedBy$relatedByCol" )
+    #set ( $relCol= "${className}sRelatedBy$relatedByCol" )
+    #set ( $relColMs= "${className}RelatedBy$relatedByCol" )
    #end
-   #set ( $collName = $strings.concat(["coll", $relCol]) )
+   #set ( $collName = "coll$relCol" )
 
     /**
      * Collection to store aggregation of $collName
@@ -487,7 +477,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #foreach ($columnName in $fk2.LocalColumns)
         #set ( $column = $tblFK.getColumn($columnName) )
         #if ($column.isMultipleFK())
-            #set($relatedByCol2=$strings.concat([$relatedByCol2,$column.JavaName]))
+            #set($relatedByCol2 = "$relatedByCol2$column.JavaName")
         #end
     #end 
 
@@ -501,7 +491,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #if ($relatedByCol2 == "")
         #set ( $relCol2 = $fkClassName )
     #else
-        #set ($relCol2=$strings.concat([$fkClassName,"RelatedBy",$relatedByCol2]))
+        #set ($relCol2 = "${fkClassName}RelatedBy$relatedByCol2")
     #end
 
     #if ( $relatedByCol == "") 
@@ -907,16 +897,16 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #foreach ($columnName in $fk.LocalColumns)
             #set ( $column = $tblFK.getColumn($columnName) )
             #if ($column.isMultipleFK())
-                #set ( $relCol = $strings.concat([$relCol, $column.JavaName]) )
+                #set ( $relCol = "$relCol$column.JavaName" )
             #end
         #end
 
         #if ($relCol == "")
-            #set ( $relCol = $strings.concat([$className, "s"]) )
+            #set ( $relCol = "${className}s" )
         #else
-            #set ( $relCol = $strings.concat([$className, "sRelatedBy", $relCol]) )
+            #set ( $relCol = "${className}sRelatedBy$relCol" )
         #end
-        #set ( $collName = $strings.concat(["coll", $relCol]) )
+        #set ( $collName = "coll$relCol" )
 
           if ($collName != null )
           {
@@ -1129,14 +1119,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #foreach ($columnName in $fk.LocalColumns)
             #set ( $column = $tblFK.getColumn($columnName) )
             #if ($column.isMultipleFK())
-                #set ( $relCol = $strings.concat([$relCol, $column.JavaName]) )
+                #set ( $relCol = "$relCol$column.JavaName" )
             #end
         #end
 
         #if ($relCol == "")
-            #set ( $pCollName = $strings.concat([$className, "s"]) )
+            #set ( $pCollName = "${className}s" )
         #else
-            #set ( $pCollName = $strings.concat([$className, "sRelatedBy", $relCol]) )
+            #set ( $pCollName = "${className}sRelatedBy$relCol" )
         #end
 
          ${list}v = copyObj.get${pCollName}();

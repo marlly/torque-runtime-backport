@@ -911,10 +911,8 @@ public abstract class $basePrefix${table.JavaName}Peer
      #set ( $partJoinName = "" )
      #foreach ($columnName in $fk.LocalColumns)
         #set ( $column = $table.getColumn($columnName) )
-        #if ($column.isMultipleFK())
-            #set ( $partJoinName=$strings.concat([$partJoinName,$column.JavaName]) )
-        #elseif ( $fk.ForeignTableName.equals($table.Name) )
-            #set ( $partJoinName=$strings.concat([$partJoinName,$column.JavaName]) )
+        #if ($column.isMultipleFK() || $fk.ForeignTableName.equals($table.Name))
+            #set ( $partJoinName = "$partJoinName$column.JavaName" )
         #end
      #end
 
@@ -923,12 +921,12 @@ public abstract class $basePrefix${table.JavaName}Peer
 
      #if ($partJoinName == "")
         #set ( $joinColumnId = $joinClassName )
-        #set ( $collThisTable = $strings.concat([$className, "s"]) )
+        #set ( $collThisTable = "${className}s" )
         #set ( $collThisTableMs = $className )
      #else
-        #set ( $joinColumnId=$strings.concat([$joinClassName,"RelatedBy",$partJoinName]) )
-        #set ( $collThisTable=$strings.concat([$className,"sRelatedBy",$partJoinName]) )
-        #set ( $collThisTableMs=$strings.concat([$className,"RelatedBy",$partJoinName]) )
+        #set ( $joinColumnId= "${joinClassName}RelatedBy$partJoinName" )
+        #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
+        #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
      #end
 
 
@@ -1079,18 +1077,18 @@ public abstract class $basePrefix${table.JavaName}Peer
      #foreach ($columnName in $fk.LocalColumns)
         #set ( $column = $table.getColumn($columnName) )
         #if ($column.isMultipleFK())
-            #set ($relatedByCol=$strings.concat([$relatedByCol,$column.JavaName]))
+            #set ($relatedByCol = "$relatedByCol$column.JavaName")
         #end
      #end
 
      #if ($relatedByCol == "")
         #set ( $excludeString = $excludeClassName )
-        #set ( $collThisTable = $strings.concat([$className, "s"]) )
+        #set ( $collThisTable = "${className}s" )
         #set ( $collThisTableMs = $className )
      #else
-        #set ( $excludeString=$strings.concat([$excludeClassName,"RelatedBy",$relatedByCol]) )
-        #set ( $collThisTable=$strings.concat([$className,"sRelatedBy",$relatedByCol]) )
-        #set ( $collThisTableMs=$strings.concat([$className,"RelatedBy",$relatedByCol]) )
+        #set ( $excludeString="${excludeClassName}RelatedBy$relatedByCol" )
+        #set ( $collThisTable="${className}sRelatedBy$relatedByCol" )
+        #set ( $collThisTableMs="${className}RelatedBy$relatedByCol" )
      #end
 
 
@@ -1205,18 +1203,18 @@ public abstract class $basePrefix${table.JavaName}Peer
             #foreach ($columnName in $fk.LocalColumns)
                 #set ( $column = $table.getColumn($columnName) )
                 #if ($column.isMultipleFK())
-                    #set ( $partJoinName=$strings.concat([$partJoinName,$column.JavaName]) )
+                    #set ( $partJoinName = "$partJoinName$column.JavaName" )
                 #end
             #end
 
             #if ($partJoinName == "")
                 #set ( $joinString = $joinClassName )
-                #set ( $collThisTable = $strings.concat([$className, "s"]) )
+                #set ( $collThisTable = "${className}s" )
                 #set ( $collThisTableMs = $className )
             #else
-                #set ( $joinString=$strings.concat([$joinClassName,"RelatedBy",$partJoinName]) )
-                #set ( $collThisTable=$strings.concat([$className,"sRelatedBy",$partJoinName]) )
-                #set ( $collThisTableMs=$strings.concat([$className,"RelatedBy",$partJoinName]) )
+                #set ( $joinString="${joinClassName}RelatedBy$partJoinName" )
+                #set ( $collThisTable="${className}sRelatedBy$partJoinName" )
+                #set ( $collThisTableMs="${className}RelatedBy$partJoinName" )
             #end
 
             #set ( $index = $index + 1 )
