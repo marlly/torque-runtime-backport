@@ -184,7 +184,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         finally
         {
@@ -222,6 +222,19 @@ public abstract class BasePeer implements java.io.Serializable
             }
         }
         return byteArray;
+    }
+
+    private static void throwTorqueException(Exception e)
+        throws TorqueException
+    {
+        if (e instanceof TorqueException) 
+        {
+            throw (TorqueException)e;
+        }
+        else 
+        {
+            throw new TorqueException(e);
+        }
     }
 
     /**
@@ -439,7 +452,7 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 Transaction.rollback(con);   
             }
-            throw new TorqueException(e);
+            throw e;
         }
     }
 
@@ -571,7 +584,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             catch (Exception e)
             {
-                throw new TorqueException(e);
+                throwTorqueException(e);
             }
             finally
             {
@@ -717,7 +730,7 @@ public abstract class BasePeer implements java.io.Serializable
                 }
                 catch (Exception e)
                 {
-                    throw new TorqueException(e);
+                    throwTorqueException(e);
                 }
                 criteria.add(pk.getFullyQualifiedName(), id);
             }
@@ -733,7 +746,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         finally
         {
@@ -745,7 +758,7 @@ public abstract class BasePeer implements java.io.Serializable
                 }
                 catch (Exception e)
                 {
-                    throw new TorqueException(e);
+                    throwTorqueException(e);
                 }
             }
         }
@@ -767,7 +780,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             catch (Exception e)
             {
-                throw new TorqueException(e);
+                throwTorqueException(e);
             }
         }
 
@@ -876,7 +889,7 @@ public abstract class BasePeer implements java.io.Serializable
                 }
                 catch (Exception e)
                 {
-                    throw new TorqueException(e);
+                    throwTorqueException(e);
                 }
                 shouldSave = true;
             }
@@ -890,7 +903,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             catch (Exception e)
             {
-                throw new TorqueException(e);
+                throwTorqueException(e);
             }
         }
         else
@@ -1362,7 +1375,7 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 Transaction.rollback(con);   
             }
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         return results;
     }
@@ -1535,7 +1548,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         finally
         {
@@ -1636,7 +1649,7 @@ public abstract class BasePeer implements java.io.Serializable
         boolean singleRecord)
         throws TorqueException
     {
-        List results;
+        List results = null;
         try
         {
             if (numberOfResults <= 0)
@@ -1671,7 +1684,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         return results;
     }
@@ -1933,7 +1946,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
             catch (Exception e)
             {
-                throw new TorqueException(e);
+                throwTorqueException(e);
             }
             finally
             {
@@ -1945,7 +1958,7 @@ public abstract class BasePeer implements java.io.Serializable
                     }
                     catch (Exception e)
                     {
-                        throw new TorqueException(e);
+                        throwTorqueException(e);
                     }
                 }
             }
@@ -2196,7 +2209,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(e);
+            throwTorqueException(e);
         }
         finally
         {
