@@ -13,7 +13,7 @@
 
 <p>
   The standard practice for using Torque has been to download the jar, unjar it
-  to get the directory structure given in the <a href="user-guide.xml">user
+  to get the directory structure given in the <a href="user-guide.html">user
   guide</a>, and  somehow either integrate your source tree and Torque's 
   un-jared directory  structure. While doable, this was less than desirable, 
   especially when working with prespecified directory structures, such as that
