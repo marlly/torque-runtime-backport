@@ -26,6 +26,63 @@
           -->
 
           <li>
+            <strong>21 Feb 2002</strong>
+            <ul>
+              <li>
+                Handling of object data no longer needs to be wrapped in a
+                transaction when the Postgres bytea type is used instead of the
+                oid hack for the JDBC type VARBINARY.
+              </li>
+              <li>
+                Deprecated DB.objectDataNeedsTrans(). Postgres was the only
+                RDBMS using the objectDataNeedsTrans() method.
+              </li>
+              <li>
+                Removed use of objectDataNeedsTrans() in BasePeer
+              </li>
+              <li>
+                Added load-templates for SAPDB
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <strong>16 Feb 2002</strong>
+            <ul>
+              <li>
+                Fix TorqueDataSQLTask (Column names were not generated)
+              </li>
+              <li>
+                Fix Path handling in TorqueSQLExex task
+              </li>
+              <li>
+                Better mapping of binary data types for Postgres
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <strong>12 Feb 2002</strong>
+            <ul>
+              <li>
+                made Category static so that Criteria can be serialized
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <strong>6 Feb 2002</strong>
+            <ul>
+              <li>
+                Make Torque implement Configurable and Initializeable (stratum)
+              </li>
+              <li>
+                Use the stratum.configuration package instead of ExtendedProperties
+              </li>
+            </ul>
+          </li>
+
+          <li>
             <strong>28 Jan 2002</strong>
             <ul>
               <li>
