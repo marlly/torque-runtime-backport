@@ -435,7 +435,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (TorqueException e)
         {
-            Transaction.rollback(con);
+            if (con != null) 
+            {
+                Transaction.rollback(con);   
+            }
             throw new TorqueException(e);
         }
     }
@@ -625,7 +628,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (TorqueException e)
         {
-            Transaction.rollback(con);
+            if (con != null) 
+            {
+                Transaction.rollback(con);   
+            }
             throw e;
         }
 
@@ -1352,7 +1358,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (Exception e)
         {
-            Transaction.rollback(con);
+            if (con != null) 
+            {
+                Transaction.rollback(con);   
+            }
             throw new TorqueException(e);
         }
         return results;
@@ -1743,7 +1752,10 @@ public abstract class BasePeer implements java.io.Serializable
         }
         catch (TorqueException e)
         {
-            Transaction.rollback(con);
+            if (con != null) 
+            {
+                Transaction.rollback(con);   
+            }
             throw e;
         }
     }
@@ -1806,18 +1818,20 @@ public abstract class BasePeer implements java.io.Serializable
     public static void doUpdate(Criteria selectCriteria, Criteria updateValues)
         throws TorqueException
     {
-        Connection db = null;
+        Connection con = null;
         try
         {
-            db = Transaction.beginOptional(
-                    selectCriteria.getDbName(),
-                    updateValues.isUseTransaction());
-            doUpdate(selectCriteria, updateValues, db);
-            Transaction.commit(db);
+            con = Transaction.beginOptional(selectCriteria.getDbName(),
+                                            updateValues.isUseTransaction());
+            doUpdate(selectCriteria, updateValues, con);
+            Transaction.commit(con);
         }
         catch (TorqueException e)
         {
-            Transaction.rollback(db);
+            if (con != null) 
+            {
+                Transaction.rollback(con);   
+            }
             throw e;
         }
     }
