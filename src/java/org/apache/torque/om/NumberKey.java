@@ -172,13 +172,9 @@ public class NumberKey extends SimpleKey
         {
             return getValue().equals(((NumberKey) keyObj).getValue());
         }
-        else if (((NumberKey) keyObj).getValue() != null)
-        {
-            return false;
-        }
         else
         {
-            // They are both null...still return false.
+            // Even if they are both null...still return false.
             return false;
         }
     }
