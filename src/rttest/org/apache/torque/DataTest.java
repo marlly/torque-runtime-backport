@@ -54,10 +54,16 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Iterator;
 import org.apache.log4j.Category;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;
+import org.apache.torque.test.BookPeer;
+import org.apache.torque.util.Criteria;
 import org.apache.torque.test.MultiPk;
 
 /**
@@ -121,6 +127,48 @@ public class DataTest extends BaseTestCase
             MultiPk mpk = new MultiPk();
             mpk.setPrimaryKey("Svarchar:N5:Schar:");
             mpk.save();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    private static final String[] validTitles = {
+        "Book 7 - Author 8", "Book 6 - Author 8", "Book 7 - Author 7", 
+        "Book 6 - Author 7", "Book 7 - Author 6", "Book 6 - Author 6",
+        "Book 7 - Author 5", "Book 6 - Author 5", "Book 7 - Author 4",
+        "Book 6 - Author 4"};
+
+    /**
+     * test limit/offset which was broken for oracle (TRQ47)
+     */
+    public void testLimitOffset()
+    {
+        Map titleMap = new HashMap();
+        for (int j=0; j<validTitles.length; j++) 
+        {
+            titleMap.put(validTitles[j], null);
+        }
+
+        try
+        {
+            Criteria crit = new Criteria();
+            Criteria.Criterion c = crit.getNewCriterion(BookPeer.TITLE, (Object)"Book 6 - Author 1", Criteria.GREATER_EQUAL);
+            c.and(crit.getNewCriterion(BookPeer.TITLE, (Object)"Book 8 - Author 3", Criteria.LESS_EQUAL));
+            crit.add(c);
+            crit.addDescendingOrderByColumn(BookPeer.BOOK_ID);
+            crit.setLimit(10);
+            crit.setOffset(5);
+            List books = BookPeer.doSelect(crit);
+            assertTrue("List should have 10 books, not " + books.size(), 
+                       books.size() == 10);
+            for (Iterator i=books.iterator(); i.hasNext();) 
+            {
+                String title = ((Book)i.next()).getTitle();
+                assertTrue("Incorrect title: " + title, 
+                           titleMap.containsKey(title));
+            }
         }
         catch (Exception ex)
         {

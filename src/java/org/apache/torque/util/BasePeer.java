@@ -930,22 +930,67 @@ public abstract class BasePeer implements java.io.Serializable
         // Limit the number of rows returned.
         int limit = criteria.getLimit();
         int offset = criteria.getOffset();
-        if (offset > 0 && db.supportsNativeOffset())
+
+        String sql;
+        if ((limit > 0 || offset > 0) 
+            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE) 
         {
-            // Now set the criteria's limit and offset to return the
-            // full resultset since the results are limited on the
-            // server.
+            // Build Oracle-style query with limit or offset.
+            // If the original SQL is in variable: query then the requlting 
+            // SQL looks like this:
+            // SELECT B.* FROM ( 
+            //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
+            //                  query
+            //          ) A
+            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM <= offset + limit
+            StringBuffer buf = new StringBuffer();
+            buf.append("SELECT B.* FROM ( ");
+            buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
+            
+            buf.append(query.toString());
+            buf.append(" ) A ");
+            buf.append(" ) B WHERE ");
+
+            if (offset > 0) 
+            {
+                buf.append(" B.TORQUE$ROWNUM > ");
+                buf.append(offset);
+                if (limit > 0) 
+                {
+                    buf.append(" AND B.TORQUE$ROWNUM <= ");
+                    buf.append(offset + limit);
+                }
+            }
+            else 
+            {
+                buf.append(" B.TORQUE$ROWNUM <= ");
+                buf.append(limit);
+            }
             criteria.setLimit(-1);
             criteria.setOffset(0);
-        }
-        else if (limit > 0 && db.supportsNativeLimit())
+
+            sql = buf.toString();
+        } 
+        else 
         {
-            // Now set the criteria's limit to return the full
-            // resultset since the results are limited on the server.
-            criteria.setLimit(-1);
+            if (offset > 0 && db.supportsNativeOffset())
+            {
+                // Now set the criteria's limit and offset to return the
+                // full resultset since the results are limited on the
+                // server.
+                criteria.setLimit(-1);
+                criteria.setOffset(0);
+            }
+            else if (limit > 0 && db.supportsNativeLimit())
+            {
+                // Now set the criteria's limit to return the full
+                // resultset since the results are limited on the server.
+                criteria.setLimit(-1);
+            }
+
+            sql = query.toString();
         }
 
-        String sql = query.toString();
         category.debug(sql);
         return sql;
     }
@@ -1269,7 +1314,8 @@ public abstract class BasePeer implements java.io.Serializable
             //criteria.setLimit(-1);
             //criteria.setOffset(0);
         }
-        else if (limit > 0 && db.supportsNativeLimit())
+        else if (limit > 0 && db.supportsNativeLimit() 
+                 && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
         {
             limitString = String.valueOf(limit);
 
@@ -1286,14 +1332,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         if (limitString != null)
         {
-            switch (db.getLimitStyle())
-            {
-                case DB.LIMIT_STYLE_ORACLE :
-                    whereClause.add("rownum <= " + limitString);
-                    break;
-                default :
-                    query.setLimit(limitString);
-            }
+            query.setLimit(limitString);
         }
 
         return query;
@@ -2439,7 +2478,8 @@ public abstract class BasePeer implements java.io.Serializable
         int limit = criteria.getLimit();
         int offset = criteria.getOffset();
         String limitString = null;
-        if (offset > 0 && db.supportsNativeOffset())
+        if (offset > 0 && db.supportsNativeOffset()
+            && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
         {
             switch (db.getLimitStyle())
             {
@@ -2467,7 +2507,8 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setLimit(-1);
             criteria.setOffset(0);
         }
-        else if (limit > 0 && db.supportsNativeLimit())
+        else if (limit > 0 && db.supportsNativeLimit()
+                 && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
         {
             limitString = String.valueOf(limit);
 
@@ -2480,9 +2521,6 @@ public abstract class BasePeer implements java.io.Serializable
         {
             switch (db.getLimitStyle())
             {
-                case DB.LIMIT_STYLE_ORACLE :
-                    whereClause.add("rownum <= " + limitString);
-                    break;
                     /* Don't have a Sybase install to validate this against. (dlr)
                     case DB.LIMIT_STYLE_SYBASE:
                         query.setRowcount(limitString);
@@ -2493,7 +2531,51 @@ public abstract class BasePeer implements java.io.Serializable
             }
         }
 
-        String sql = query.toString();
+        String sql;
+        if ((limit > 0 || offset > 0) 
+            && db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE) 
+        {
+            // Build Oracle-style query with limit or offset.
+            // If the original SQL is in variable: query then the requlting 
+            // SQL looks like this:
+            // SELECT B.* FROM ( 
+            //          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
+            //                  query
+            //          ) A
+            //     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM <= offset + limit
+            StringBuffer buf = new StringBuffer();
+            buf.append("SELECT B.* FROM ( ");
+            buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
+            
+            buf.append(query.toString());
+            buf.append(" ) A ");
+            buf.append(" ) B WHERE ");
+
+            if (offset > 0) 
+            { 
+                buf.append(" B.TORQUE$ROWNUM > ");
+                buf.append(offset);
+                if (limit > 0)
+                {
+                    buf.append(" AND B.TORQUE$ROWNUM <= ");
+                    buf.append(offset + limit);
+                }
+            } 
+            else
+            {
+                buf.append(" B.TORQUE$ROWNUM <= ");
+                buf.append(limit);
+            }
+            criteria.setLimit(-1);
+            criteria.setOffset(0);
+
+            sql = buf.toString();
+        } 
+        else 
+        {
+            sql = query.toString();
+        }
+
         category.debug(sql);
         queryString.append(sql);
     }
