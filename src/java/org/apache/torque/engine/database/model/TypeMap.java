@@ -216,8 +216,8 @@ public class TypeMap
     public static final String DATE_VILLAGE_METHOD = "asUtilDate()";
     public static final String TIME_VILLAGE_METHOD = "asUtilDate()";
     public static final String TIMESTAMP_VILLAGE_METHOD = "asUtilDate()";
-    public static final String BOOLEANCHAR_VILLAGE_METHOD = "asString()";
-    public static final String BOOLEANINT_VILLAGE_METHOD = "asInt()";
+    public static final String BOOLEANCHAR_VILLAGE_METHOD = "asBoolean()";
+    public static final String BOOLEANINT_VILLAGE_METHOD = "asBoolean()";
 
     public static final String BIT_VILLAGE_OBJECT_METHOD = "asBooleanObj()";
     public static final String TINYINT_VILLAGE_OBJECT_METHOD = "asByteObj()";
@@ -227,8 +227,8 @@ public class TypeMap
     public static final String REAL_VILLAGE_OBJECT_METHOD = "asFloatObj()";
     public static final String FLOAT_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
     public static final String DOUBLE_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
-    public static final String BOOLEANCHAR_VILLAGE_OBJECT_METHOD = "asString()";
-    public static final String BOOLEANINT_VILLAGE_OBJECT_METHOD = "asInt()";
+    public static final String BOOLEANCHAR_VILLAGE_OBJECT_METHOD = "asBooleanObj()";
+    public static final String BOOLEANINT_VILLAGE_OBJECT_METHOD = "asBooleanObj()";
 
     public static final String CHAR_PP_METHOD = "getString(ppKey)";
     public static final String VARCHAR_PP_METHOD = "getString(ppKey)";
