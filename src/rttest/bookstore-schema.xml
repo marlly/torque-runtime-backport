@@ -183,7 +183,7 @@
   </table>
 
 
-  <table name="d">
+  <table name="d" idMethod="none">
     <column name="d_id" required="true"
             primaryKey="true" type="INTEGER"/>
     <column name="name" required="true" size="255" type="VARCHAR"/>
