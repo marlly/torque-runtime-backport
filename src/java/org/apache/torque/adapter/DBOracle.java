@@ -113,36 +113,29 @@ public class DBOracle
     }
 
     /**
-     * Returns the SQL to get the database key of the last row
-     * inserted.
-     * Oracle doesn't have this, so it returns null.
-     *
-     * @return null.
+     * @see org.apache.torque.adapter.DB#getIDMethodType()
      */
-    public String getIdSqlForAutoIncrement(Object obj)
+    public String getIDMethodType()
     {
-        return null;
+        return SEQUENCE;
     }
 
     /**
-     * Returns the next key from a sequence.  Databases like Oracle
-     * which support this feature will return a result, others will
-     * return null.
+     * Returns the next key from a sequence.  Uses the following
+     * implementation:
      *
-     * Oracle does this by returning
+     * <blockquote><code><pre>
+     * select sequenceName.nextval from dual
+     * </pre></code></blockquote>
      *
-     *   select sequenceName.nextval from dual
-     *
-     * @param sequenceName, An object of type String
-     * @return The next database key.
+     * @param sequenceName The name of the sequence (should be of type
+     * <code>String</code>).
+     * @return SQL to retreive the next database key.
+     * @see org.apache.torque.adapter.DB#getIDMethodSQL()
      */
-    public String getSequenceSql(Object sequenceName)
+    public String getIDMethodSQL(Object sequenceName)
     {
-        return new StringBuffer()
-               .append("select ")
-               .append((String)sequenceName)
-               .append(".nextval from dual")
-               .toString();
+        return ("select " + sequenceName + ".nextval from dual");
     }
 
     /**

@@ -77,7 +77,7 @@ public class DBMM
     extends DB
 {
     /**
-     * Empty constructor
+     * Empty constructor.
      */
     protected DBMM()
     {
@@ -116,27 +116,23 @@ public class DBMM
     }
 
     /**
+     * @see org.apache.torque.adapter.DB#getIDMethodType()
+     */
+    public String getIDMethodType()
+    {
+        return AUTO_INCREMENT;
+    }
+
+    /**
      * Returns the SQL to get the database key of the last row
      * inserted, which in this case is <code>SELECT
      * LAST_INSERT_ID()</code>.
      *
-     * @return SQL to get the key of the last row inserted.
+     * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object obj)
      */
-    public String getIdSqlForAutoIncrement(Object obj)
+    public String getIDMethodSQL(Object obj)
     {
         return "SELECT LAST_INSERT_ID()";
-    }
-
-    /**
-     * Returns the last auto-increment key.  Databases like Oracle
-     * which support this feature will return a result, others will
-     * return null.
-     *
-     * @return null.
-     */
-    public String getSequenceSql(Object obj)
-    {
-        return null;
     }
 
     /**
