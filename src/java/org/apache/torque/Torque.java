@@ -1001,13 +1001,23 @@ public class Torque implements Initializable, Configurable
         // If the pool is not in the Hashtable, we must register it.
         if ( pool == null )
         {
-            registerPool(
-                name,
-                getDatabaseProperty(name, "driver"),
-                getDatabaseProperty(name, "url"),
-                getDatabaseProperty(name, "username"),
-                getDatabaseProperty(name, "password"));
+            // check that pool for this particular db is actually
+            // configured
 
+            String driver = getDatabaseProperty(name, "driver");
+            String url = getDatabaseProperty(name, "url");
+            String username = getDatabaseProperty(name, "username");
+            String password = getDatabaseProperty(name, "password");
+
+            if (driver == null || url == null
+                || driver.equals("") || url.equals(""))
+            {
+                throw new TorqueException
+                    ("Attempt to register pool for database " + name
+                       + " that is not configured in Torque.properties");
+            }
+
+            registerPool(name, driver, url, username, password);
             pool = (ConnectionPool) pools.get(name);
         }
 
