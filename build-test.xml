@@ -19,35 +19,9 @@
   <!-- ============================================================== -->
 
   <target
-    name="test-prepare"
-    depends="filterTokens,test-libs">
-
-    <!-- copy test schemas -->
-    <copy
-      todir="${torque.distDir}/schema"
-      filtering="yes"
-      overwrite="yes">
-      <fileset dir="${rttest.dir}">
-        <include name="**/*.xml"/>
-      </fileset>
-    </copy>
-
-    <!-- copy test sql -->
-    <copy
-      todir="${torque.distDir}/sql"
-      filtering="yes"
-      overwrite="yes">
-      <fileset dir="${rttest.dir}">
-        <include name="*.sql"/>
-        <include name="*.ref.xml"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target
     name="test"
     description="run the testbed">
-    <antcall target="test-prepare"/>
+    <antcall target="test-libs"/>
     <antcall target="test-pre-runtime"/>
     <antcall target="test-runtime"/>
     <antcall target="test-post-runtime"/>
@@ -233,18 +207,6 @@
     </ant>
   </target>
 
-  <target name="filterTokens">
-    <filter token="APPLICATION_ROOT" value="."/>
-    <filter token="DATABASE" value="${torque.database}"/>
-    <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
-    <filter token="DATABASE_URL" value="${torque.database.url}"/>
-    <filter token="DATABASE_USER" value="${torque.database.user}"/>
-    <filter token="DATABASE_DRIVER" value="${torque.database.driver}"/>
-    <filter token="DATABASE_PASSWORD" value="${torque.database.password}"/>
-    <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
-    <filter token="DATABASE_ADAPTER" value="${torque.database}"/>
-  </target>
-
   <!-- ============================================================== -->
   <!-- R U N T I M E  T E S T S                                       -->
   <!-- ============================================================== -->
@@ -260,16 +222,7 @@
   </path>
 
   <target
-    name="test-runtime"
-    depends="filterTokens">
-
-    <!-- Copy test Torque.properties -->
-    <copy
-      tofile="${build.test}/rttest/Torque.properties"
-      file="src/conf/master/Torque.master"
-      filtering="yes"
-      overwrite="yes"
-    />
+    name="test-runtime">
 
     <!-- Runs the actual rttest tests -->
     <junit printsummary="no" haltonfailure="yes" fork="true">
@@ -283,8 +236,8 @@
 
       <batchtest todir="target/test-reports/">
         <fileset dir="${torque.destDir}">
-          <include name="**/*Test*.class"/>
-          <exclude name="**/BaseTestCase.class"/>
+          <include name="**/*Test.class"/>
+          <exclude name="**/test/*.class"/>
           <exclude name="**/LargeSelectTest.class"/>
         </fileset>
       </batchtest>

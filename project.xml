@@ -189,6 +189,11 @@
 
   <dependencies>
     <dependency>
+      <id>avalon-framework</id>
+      <version>4.1.4</version>
+      <url>http://jakarta.apache.org/avalon/</url>
+    </dependency>
+    <dependency>
       <id>commons-beanutils</id>
       <version>1.6.1</version>
       <url>http://jakarta.apache.org/commons/beanutils.html</url>

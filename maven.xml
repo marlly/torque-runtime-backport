@@ -141,6 +141,17 @@
       </fileset>
     </copy>
 
+    <!-- copy test sql -->
+    <copy
+      todir="${torque.distDir}/sql"
+      filtering="yes"
+      overwrite="yes">
+      <fileset dir="${rttest.dir}">
+        <include name="*.sql"/>
+        <include name="*.ref.xml"/>
+      </fileset>
+    </copy>
+
     <!-- copy test sources -->
     <copy todir="${torque.distDir}/src/java">
       <fileset dir="${rttest.dir}"/>
