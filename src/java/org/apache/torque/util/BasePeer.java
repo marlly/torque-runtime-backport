@@ -1886,6 +1886,7 @@ public abstract class BasePeer implements java.io.Serializable
      *
      */
     public static MapBuilder getMapBuilder()
+        throws Exception
     {
         return getMapBuilder(DEFAULT_MAP_BUILDER.trim());
     }

@@ -34,19 +34,19 @@ public abstract class $basePrefix${table.JavaName}Peer
 {
 #if (!$table.isAlias())
 
-    /** the mapbuilder for this class */
-    protected static final ${table.JavaName}MapBuilder mapBuilder = 
-        (${table.JavaName}MapBuilder)getMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
-
-    /** the table name for this class */
-    public static final String TABLE_NAME = mapBuilder.getTable();
-
+    /** the default database name for this class */
+    public static final String DATABASE_NAME = "$table.Database.Name";
+ 
+     /** the table name for this class */
+    public static final String TABLE_NAME = "$table.Name";
+ 
     /** 
      * @returns the map builder for this peer 
      */
     public static MapBuilder getMapBuilder()
+        throws Exception
     {
-       return(mapBuilder);
+        return getMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
     }
 
 #foreach ($col in $table.Columns)
@@ -54,8 +54,34 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ( $cfc=$col.JavaName )
     #set ( $cup=$col.Name.toUpperCase() )
     /** the column name for the $cup field */
-    public static final String $cup = mapBuilder.get${tfc}_${cfc}();
+    public static final String $cup;
 #end
+
+    static
+    {
+#foreach ($col in $table.Columns)
+    #set ( $tfc=$table.JavaName )
+    #set ( $cfc=$col.JavaName )
+    #set ( $cup=$col.Name.toUpperCase() )
+    $cup = "${table.Name}.$cup";
+#end
+
+        if (Torque.isInit())
+        {
+            try
+            {
+                getMapBuilder();
+            }
+            catch (Exception e)
+            {
+                category.error("Could not initialize Peer", e);
+            }
+        }
+        else
+        {
+            Torque.registerMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
+        }
+    }
 
 #end ## ends if (!$table.isAlias())
 
@@ -215,7 +241,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             // another value so == check is okay and faster
             if ( criteria.getDbName() == Torque.getDefaultDB() )
             {
-                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+                criteria.setDbName(DATABASE_NAME);
             }
             return BasePeer.doInsert( criteria );
         }
@@ -382,7 +408,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             // another value so == check is okay and faster
             if ( criteria.getDbName() == Torque.getDefaultDB() )
             {
-                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+                criteria.setDbName(DATABASE_NAME);
             }
             return BasePeer.doSelect(criteria);
         }
@@ -499,7 +525,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doUpdate(Criteria criteria, DBConnection dbCon) throws Exception
     {
         Criteria selectCriteria = new
-            Criteria(mapBuilder.getDatabaseMap().getName(), 2);
+            Criteria(DATABASE_NAME, 2);
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -549,7 +575,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             // another value so == check is okay and faster
             if ( criteria.getDbName() == Torque.getDefaultDB() )
             {
-                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+                criteria.setDbName(DATABASE_NAME);
             }
             BasePeer.doUpdate( selectCriteria, criteria );
         }
@@ -626,7 +652,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             // another value so == check is okay and faster
             if ( criteria.getDbName() == Torque.getDefaultDB() )
             {
-                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+                criteria.setDbName(DATABASE_NAME);
             }
             BasePeer.doDelete ( criteria );
         }
@@ -750,7 +776,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         $table.JavaName retVal = null;
        try
         {
-           db = Torque.getConnection( mapBuilder.getDatabaseMap().getName() );
+           db = Torque.getConnection( DATABASE_NAME );
            retVal = ${retrieveMethod}( pk, db );
         }
         finally
@@ -819,7 +845,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         $table.JavaName retVal = null;
        try
         {
-           db = Torque.getConnection( mapBuilder.getDatabaseMap().getName() );
+           db = Torque.getConnection( DATABASE_NAME );
            retVal = retrieveByPK( 
            #set ( $comma = false )
            #foreach ($col in $table.PrimaryKeys)
@@ -938,7 +964,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         // another value so == check is okay and faster
         if ( c.getDbName() == Torque.getDefaultDB() )
         {
-            c.setDbName(mapBuilder.getDatabaseMap().getName());
+            c.setDbName(DATABASE_NAME);
         }
 
         ${table.JavaName}Peer.addSelectColumns(c);
@@ -1098,7 +1124,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         // so == check is okay and faster
         if ( c.getDbName() == Torque.getDefaultDB() )
         {
-            c.setDbName(mapBuilder.getDatabaseMap().getName());
+            c.setDbName(DATABASE_NAME);
         }
 
         addSelectColumns(c);
@@ -1253,8 +1279,9 @@ public abstract class $basePrefix${table.JavaName}Peer
      * need.
      */
     protected static TableMap getTableMap()
+        throws Exception
     {
-        return mapBuilder.getDatabaseMap().getTable(TABLE_NAME);
+        return Torque.getDatabaseMap(DATABASE_NAME).getTable(TABLE_NAME);
     }     
 #end ## ends if (!$table.isAlias())
 

@@ -25,6 +25,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
     /** 
      * Item 
+     * @deprecated use ${table.JavaName}Peer.TABLE_NAME constant
      */
     public static String getTable( )
     {
@@ -38,6 +39,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
     /** 
      * ${table.Name}.$cup 
+     * @deprecated use ${table.JavaName}Peer.${table.Name}.$cup constant
      */
     public static String get${tfc}_${cfc}()
     {
@@ -45,6 +47,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     }
     #end
 
+ 
     /** 
      * The database map.
      */
@@ -78,8 +81,8 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     {
         dbMap = Torque.getDatabaseMap("$table.Database.Name");
 
-        dbMap.addTable(getTable());
-        TableMap tMap = dbMap.getTable(getTable());
+        dbMap.addTable("$table.Name");
+        TableMap tMap = dbMap.getTable("$table.Name");
 
         #if ($table.IdMethod == "native")
         tMap.setPrimaryKeyMethod(TableMap.NATIVE);
@@ -108,22 +111,21 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         #set ( $tfc=$table.JavaName )
         #set ( $cfc=$col.JavaName )
         #set ( $cup=$col.Name.toUpperCase() )
-
         #if($col.isPrimaryKey())
           #if($col.isForeignKey())
             tMap.addForeignPrimaryKey ( 
-                get${tfc}_${cfc}(), $col.JavaObject , "$col.RelatedTableName" , 
+                "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" , 
                     "$col.RelatedColumnName" );
         #else
-            tMap.addPrimaryKey ( get${tfc}_${cfc}(), $col.JavaObject );
+            tMap.addPrimaryKey ( "${table.Name}.$cup", $col.JavaObject );
           #end
         #else
           #if($col.isForeignKey())
             tMap.addForeignKey ( 
-                get${tfc}_${cfc}(), $col.JavaObject , "$col.RelatedTableName" , 
+                "${table.Name}.$cup", $col.JavaObject , "$col.RelatedTableName" , 
                     "$col.RelatedColumnName" );
           #else
-            tMap.addColumn ( get${tfc}_${cfc}(), $col.JavaObject );
+            tMap.addColumn ( "${table.Name}.$cup", $col.JavaObject );
           #end
         #end
         #end

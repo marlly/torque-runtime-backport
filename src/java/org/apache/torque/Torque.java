@@ -60,6 +60,8 @@ import java.util.HashMap;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
+import java.util.Vector;
 import java.util.Properties;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
@@ -73,6 +75,7 @@ import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
+import org.apache.torque.util.BasePeer;
 
 /**
  * The implementation of Torque.
@@ -129,11 +132,39 @@ public class Torque
     private static Monitor monitor;
 
     /**
-     * Initializes Torque.
+     * flag to set to true once this class has been initialized
      */
-    public static void init()
+    private static boolean isInit = false;
+
+    /**
+     * Store mapbuilder classnames for peers that have been referenced prior
+     * to Torque being initialized.  This can happen if torque om/peer objects
+     * are serialized then unserialized prior to Torque being reinitialized.
+     * This condition exists in a normal catalina restart.
+     */
+    private static List mapBuilders = new Vector();
+
+    /**
+     * Initialization of Torque with a properties file.
+     *
+     * @param configFile The path to the configuration file.
+     */
+    public static void init(String configFile)
         throws Exception
     {
+        ExtendedProperties c = new ExtendedProperties(configFile);
+        init(c);
+    }
+
+    /**
+     * Initialization of Torque with a properties file.
+     *
+     * @param configFile The path to the configuration file.
+     */
+    public static void init(ExtendedProperties c)
+        throws Exception
+    {
+        Torque.setConfiguration(c);
         if (configuration == null)
         {
             throw new Exception("Torque cannot be initialized without " +
@@ -171,6 +202,16 @@ public class Torque
         pools = new HashMap();
         DBFactory.init(configuration);
 
+        isInit = true;
+        for ( Iterator i=mapBuilders.iterator(); i.hasNext(); ) 
+        {
+            //this will add any maps in this builder to the proper database map
+            BasePeer.getMapBuilder((String)i.next());
+        }
+        // any further mapBuilders will be called/built on demand
+        mapBuilders = null;
+        
+
         // Create monitor thread
         monitor = new Monitor();
         // Indicate that this is a system thread. JVM will quit only when there
@@ -181,17 +222,9 @@ public class Torque
         monitor.start();
     }
 
-    /**
-     * Initialization of Torque with a properties file.
-     *
-     * @param configFile The path to the configuration file.
-     */
-    public static void init(String configFile)
-        throws Exception
+    public static boolean isInit()
     {
-        ExtendedProperties c = new ExtendedProperties(configFile);
-        Torque.setConfiguration(c);
-        Torque.init();
+        return isInit;
     }
 
     /**
@@ -391,14 +424,7 @@ public class Torque
 
         if (dbMaps == null)
         {
-            try
-            {
-                Torque.init();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            throw new TorqueException("Torque was not initialized properly.");
         }
 
         synchronized (dbMaps)
@@ -452,6 +478,11 @@ public class Torque
 
         return map;
     }
+
+    public static void registerMapBuilder(String className)
+    {
+        mapBuilders.add(className);
+    } 
 
     /**
      * Returns the specified property of the given database, or the empty
