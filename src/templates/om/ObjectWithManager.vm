@@ -12,6 +12,7 @@ package ${package};
     #set ($extendsBaseClass = "extends $table.BaseClass" )
 #end
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
