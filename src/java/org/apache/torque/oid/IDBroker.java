@@ -433,6 +433,55 @@ public class IDBroker
     }
 
     /**
+     * Describe <code>exists</code> method here.
+     *
+     * @param tableName a <code>String</code> value that is used to identify
+     * the row
+     * @return a <code>boolean</code> value
+     * @exception TorqueException if an error occurs
+     */
+    public boolean exists(String tableName)
+        throws TorqueException, Exception
+    {
+        String query = new StringBuffer(100)
+            .append("select ")
+            .append(TABLE_NAME)
+            .append(" where ")
+            .append(TABLE_NAME).append("='").append(tableName).append('\'')
+            .toString();
+
+        boolean exists = false;
+        DBConnection dbCon = null;
+        try
+        {
+            String databaseName = tableMap.getDatabaseMap().getName();
+            
+            // Get a connection to the db
+            dbCon = Torque.getConnection(databaseName);
+            Connection connection = dbCon.getConnection();
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            exists = rs.next();
+            statement.close();
+        }
+        finally
+        {
+            // Return the connection to the pool.
+            try
+            {
+                Torque.releaseConnection(dbCon);
+            }
+            catch (Exception e)
+            {
+                Torque.getCategory().error("Release of connection failed.", e);
+            }
+        }
+        
+        return exists;
+    }
+
+    /**
      * A background thread that tries to ensure that when someone asks
      * for ids, that there are already some loaded and that the
      * database is not accessed.
