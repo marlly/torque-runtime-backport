@@ -54,7 +54,8 @@
   <!-- ================================================================== -->
 
   <target
-    name="test">
+    name="test"
+    depends="compile-test,dist">
     
     <ant antfile="build-test.xml"/>
   </target>
@@ -246,23 +247,25 @@
       todir="${build.dest}/org/apache/torque/engine/database/transform"/>
   </target>
 
+  <!-- ================================================================== -->
+  <!-- C O M P I L E  T E S T S                                           -->
+  <!-- ================================================================== -->
+
   <target 
     name="compile-test" 
     depends="compile" 
     if="junit.present"
     description="==> compiles the test source code">
     
-    <mkdir dir="${build.test}"/>
-
     <javac srcdir="${test.dir}"
-      destdir="${build.test}"
+      destdir="${build.dest}"
       excludes="**/package.html"
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
       <classpath refid="classpath"/>
       <classpath>
-          <pathelement path="${build.dest}"/>
+        <pathelement path="${build.dest}"/>
       </classpath>
     </javac>
   </target>

@@ -147,7 +147,6 @@ public class Torque
         throws Exception
     {
         dbMaps = new HashMap();
-
         pools = new HashMap();
 
         // Create monitor thread
@@ -177,6 +176,31 @@ public class Torque
         p.load(new FileInputStream(configFile));
         PropertyConfigurator.configure(p);
 
+        Torque.setConfiguration(c);
+        Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
+        Torque.init();
+    }
+
+    public static void init2(String configFile)
+        throws Exception
+    {
+        ExtendedProperties c = new ExtendedProperties(configFile);
+        c = c.subset("torque");
+        
+        if (isLoggingConfigured() == false)
+        {
+            // Get the applicationRoot for use in the log4j
+            // properties.
+            String applicationRoot = c.getString("applicationRoot", ".");
+        
+            Properties p = new Properties();
+            p.load(new FileInputStream(configFile));
+            // Set the applicationRoot in the log4j properties so that
+            // ${applicationRoot} can be used in the properties file.
+            p.setProperty("applicationRoot", applicationRoot);
+            PropertyConfigurator.configure(p);
+        }
+        
         Torque.setConfiguration(c);
         Torque.setCategory(Category.getInstance(DEFAULT_CATEGORY));
         Torque.init();
@@ -214,7 +238,7 @@ public class Torque
      *
      * @return boolean Whether log4j is configured.
      */
-    protected boolean isLoggingConfigured() 
+    protected static boolean isLoggingConfigured() 
     {
         // This is a note from Ceki, taken from a message on the log4j
         // user list:
