@@ -55,17 +55,21 @@ package org.apache.torque.util;
  */
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.lang.reflect.Method;
 
 import org.apache.log4j.Category;
 import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
 
 import com.workingdogs.village.QueryDataSet;
+import com.workingdogs.village.DataSetException;
 
 /**
  * This class can be used to retrieve a large result set from a database query.
@@ -180,7 +184,7 @@ public class LargeSelect implements Runnable
     /** The record number of the last record in memory. */
     private int blockEnd;
     /** How much of the memory block is currently occupied with result data. */
-    private int currentlyFilledTo = -1;
+    private volatile int currentlyFilledTo = -1;
     
     /** The SQL query that this <code>LargeSelect</code> represents. */
     private String query;
@@ -191,18 +195,25 @@ public class LargeSelect implements Runnable
     /** Used to retrieve query results from Village. */
     private QueryDataSet qds = null;
 
-    // I have a nagging feeling that results should be a 
-    // Vector so that access is synchronised. (scott)
     /** The memory store of records. */
     private List results = null;
 
     /** The thread that executes the query. */
     private Thread thread = null;
-    /** A flag used to kill the thread when the currently executing query is no longer required. */
-    private boolean killThread = false;
-    /** An indication of whether or not the current query has completed processing. */
-    private boolean queryCompleted = false;
-    /** An indication of whether or not the totals (records and pages) are at their final values. */
+    /**
+     * A flag used to kill the thread when the currently executing query is no
+     * longer required.
+     */
+    private volatile boolean killThread = false;
+    /**
+     * An indication of whether or not the current query has completed
+     * processing.
+     */
+    private volatile boolean queryCompleted = false;
+    /**
+     * An indication of whether or not the totals (records and pages) are at
+     * their final values.
+     */
     private boolean totalsFinalized = false;
     
     /** The cursor position in the result set. */
@@ -248,6 +259,9 @@ public class LargeSelect implements Runnable
 
     private static int memoryPageLimit = DEFAULT_MEMORY_LIMIT_PAGES;
 
+    /** A place to store search parameters that relate to this query. */
+    private Hashtable params = null;
+
     /**
      * Creates a LargeSelect whose results are returned as a <code>List</code>
      * containing a maximum of <code>pageSize</code> Village <code>Record</code>
@@ -261,9 +275,9 @@ public class LargeSelect implements Runnable
      * @param pageSize number of rows to return in one block.
      * @throws IllegalArgumentException if <code>criteria</code> uses one or
      * both of offset and limit, or if <code>pageSize</code> is less than 1;
-     * @throws Exception a generic exception.
      */
-    public LargeSelect(Criteria criteria, int pageSize) throws Exception
+    public LargeSelect(Criteria criteria, int pageSize)
+            throws IllegalArgumentException
     {
         this(criteria, pageSize, LargeSelect.memoryPageLimit);
     }
@@ -284,10 +298,9 @@ public class LargeSelect implements Runnable
      * @throws IllegalArgumentException if <code>criteria</code> uses one or
      * both of offset and limit, or if <code>pageSize</code> or
      * <code>memoryLimitPages</code> are less than 1;
-     * @throws Exception a generic exception.
      */
     public LargeSelect(Criteria criteria, int pageSize, int memoryPageLimit)
-        throws Exception
+            throws IllegalArgumentException
     {
         init(criteria, pageSize, memoryPageLimit);
     }
@@ -311,17 +324,16 @@ public class LargeSelect implements Runnable
      * build the result records (may implement <code>addSelectColumns(Criteria)
      * </code> and must implement <code>populateObjects(List)</code>).
      * @throws IllegalArgumentException if <code>criteria</code> uses one or
-     * both of offset and limit, or if <code>pageSize</code> is less than 1;
-     * @throws NoSuchMethodException when a one or both of <code>
-     * addSelectColumns(Criteria)</code> and <code>populateObjects(List)</code>
-     * are not found in the class named <code>returnBuilderClassName</code>.
-     * @throws Exception a generic exception.
+     * both of offset and limit, if <code>pageSize</code> is less than 1, or if
+     * problems are experienced locating and invoking either one or both of
+     * <code>addSelectColumns(Criteria)</code> and <code> populateObjects(List)
+     * </code> in the class named <code>returnBuilderClassName</code>.
      */
     public LargeSelect(
-        Criteria criteria,
-        int pageSize,
-        String returnBuilderClassName)
-        throws Exception
+            Criteria criteria,
+            int pageSize,
+            String returnBuilderClassName)
+            throws IllegalArgumentException
     {
         this(
             criteria,
@@ -351,36 +363,45 @@ public class LargeSelect implements Runnable
      * build the result records (may implement <code>addSelectColumns(Criteria)
      * </code> and must implement <code>populateObjects(List)</code>).
      * @throws IllegalArgumentException if <code>criteria</code> uses one or
-     * both of offset and limit, or if <code>pageSize</code> or
-     * <code>memoryLimitPages</code> are less than 1;
-     * @throws NoSuchMethodException when a one or both of <code>
-     * addSelectColumns(Criteria)</code> and <code>populateObjects(List)</code>
-     * are not found in the class named <code>returnBuilderClassName</code>.
-     * @throws Exception a generic exception.
+     * both of offset and limit, if <code>pageSize</code> or <code>
+     * memoryLimitPages</code> are less than 1, or if problems are experienced
+     * locating and invoking either one or both of <code>
+     * addSelectColumns(Criteria)</code> and <code> populateObjects(List)</code>
+     * in the class named <code>returnBuilderClassName</code>.
      */
     public LargeSelect(
-        Criteria criteria,
-        int pageSize,
-        int memoryPageLimit,
-        String returnBuilderClassName)
-        throws Exception
+            Criteria criteria,
+            int pageSize,
+            int memoryPageLimit,
+            String returnBuilderClassName)
+            throws IllegalArgumentException
     {
-        this.returnBuilderClass = Class.forName(returnBuilderClassName);
-
-        // Add the select columns if necessary.
-        if (criteria.getSelectColumns().size() == 0)
+        try
         {
-            Class[] argTypes = { Criteria.class };
-            Method selectColumnAdder =
-                returnBuilderClass.getMethod("addSelectColumns", argTypes);
-            Object[] theArgs = { criteria };
-            selectColumnAdder.invoke(returnBuilderClass.newInstance(), theArgs);
-        }
+            this.returnBuilderClass = Class.forName(returnBuilderClassName);
 
-        // Locate the populateObjects() method - this will be used later
-        Class[] argTypes = { List.class };
-        populateObjectsMethod =
-            returnBuilderClass.getMethod("populateObjects", argTypes);
+            // Add the select columns if necessary.
+            if (criteria.getSelectColumns().size() == 0)
+            {
+                Class[] argTypes = { Criteria.class };
+                Method selectColumnAdder =
+                    returnBuilderClass.getMethod("addSelectColumns", argTypes);
+                Object[] theArgs = { criteria };
+                selectColumnAdder.invoke(returnBuilderClass.newInstance(),
+                        theArgs);
+            }
+
+            // Locate the populateObjects() method - this will be used later
+            Class[] argTypes = { List.class };
+            populateObjectsMethod =
+                returnBuilderClass.getMethod("populateObjects", argTypes);
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException(
+                    "The class named as returnBuilderClassName does not "
+                    + "provide the necessary facilities - see javadoc.");
+        }
 
         init(criteria, pageSize, memoryPageLimit);
     }
@@ -398,25 +419,26 @@ public class LargeSelect implements Runnable
      * @throws IllegalArgumentException if <code>criteria</code> uses one or
      * both of offset and limit and if <code>pageSize</code> or
      * <code>memoryLimitPages</code> are less than 1;
-     * @throws Exception a generic exception.
      */
     private void init(Criteria criteria, int pageSize, int memoryLimitPages)
-        throws Exception
+            throws IllegalArgumentException
     {
         if (criteria.getOffset() != 0 || criteria.getLimit() != -1)
         {
             throw new IllegalArgumentException(
-                "Criteria passed to " + " must not use Offset and/or Limit.");
+                    "criteria must not use Offset and/or Limit.");
         }
 
         if (pageSize < 1)
         {
-            throw new IllegalArgumentException("pageSize must be greater than zero.");
+            throw new IllegalArgumentException(
+                    "pageSize must be greater than zero.");
         }
 
         if (memoryLimitPages < 1)
         {
-            throw new IllegalArgumentException("memoryPageLimit must be greater than zero.");
+            throw new IllegalArgumentException(
+                    "memoryPageLimit must be greater than zero.");
         }
 
         this.pageSize = pageSize;
@@ -430,23 +452,25 @@ public class LargeSelect implements Runnable
     /**
      * Retrieve a specific page, if it exists.
      *
-     * @param pageNumber the number of the page to be retrieved - must be greater
-     * than zero.  An empty <code>List</code> will be returned if <code>pageNumber
-     * </code> exceeds the total number of pages that exist.
+     * @param pageNumber the number of the page to be retrieved - must be
+     * greater than zero.  An empty <code>List</code> will be returned if
+     * <code>pageNumber</code> exceeds the total number of pages that exist.
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> results.
      * @throws IllegalArgumentException when <code>pageNo</code> is not
      * greater than zero.
-     * @throws Exception a generic exception.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public List getPage(int pageNumber) throws Exception
+    public List getPage(int pageNumber) throws TorqueException
     {
         if (pageNumber < 1)
         {
-            throw new IllegalArgumentException("pageNumber must be greater than zero.");
+            throw new IllegalArgumentException("pageNumber must be greater "
+                    + "than zero.");
         }
         currentPageNumber = pageNumber;
-        return getResults((pageNumber - 1) * pageSize, pageSize);
+        return getResults((pageNumber - 1) * pageSize);
     }
 
     /**
@@ -454,16 +478,17 @@ public class LargeSelect implements Runnable
      *
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> reslts.
-     * @throws Exception a generic exception.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public List getNextResults() throws Exception
+    public List getNextResults() throws TorqueException
     {
         if (!getNextResultsAvailable())
         {
             return getCurrentPageResults();
         }
         currentPageNumber++;
-        return getResults(position, pageSize);
+        return getResults(position);
     }
 
     /**
@@ -482,9 +507,10 @@ public class LargeSelect implements Runnable
      *
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> reslts.
-     * @throws Exception a generic exception.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public List getPreviousResults() throws Exception
+    public List getPreviousResults() throws TorqueException
     {
         if (!getPreviousResultsAvailable())
         {
@@ -502,7 +528,7 @@ public class LargeSelect implements Runnable
             start = position - 2 * pageSize;
             currentPageNumber--;
         }
-        return getResults(start, pageSize);
+        return getResults(start);
     }
 
     /**
@@ -511,9 +537,10 @@ public class LargeSelect implements Runnable
      * @param start the starting row.
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> reslts.
-     * @throws Exception a generic exception.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public List getResults(int start) throws Exception
+    private List getResults(int start) throws TorqueException
     {
         return getResults(start, pageSize);
     }
@@ -526,20 +553,22 @@ public class LargeSelect implements Runnable
      * @param size the number of rows.
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> reslts.
-     * @throws Exception a generic exception.
+     * @throws IllegalArgumentException if <code>size &gt; memoryLimit</code> or
+     * <code>start</code> and <code>size</code> result in a situation that is
+     * not catered for.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    synchronized public List getResults(int start, int size) throws Exception
+    synchronized private List getResults(int start, int size)
+            throws IllegalArgumentException, TorqueException
     {
-        log.debug(
-            "LargeSelect.getResults(start: "
-                + start
-                + ", size: "
-                + size
-                + ") invoked.");
+        log.debug("getResults(start: " + start
+                + ", size: " + size + ") invoked.");
 
         if (size > memoryLimit)
         {
-            throw new Exception("Memory limit does not permit a range this large.");
+            throw new IllegalArgumentException("size (" + size
+                    + ") exceeds memory limit (" + memoryLimit + ").");
         }
 
         // Request was for a block of rows which should be in progess.
@@ -547,17 +576,20 @@ public class LargeSelect implements Runnable
         // retrieved.
         if (start >= blockBegin && (start + size - 1) <= blockEnd)
         {
-            log.debug(
-                "LargeSelect.getResults(): Sleeping until start+size-1 ("
-                    + (start + size - 1)
-                    + ") > currentlyFilledTo ("
-                    + currentlyFilledTo
-                    + ") && !queryCompleted (!"
-                    + queryCompleted
-                    + ")");
+            log.debug("getResults(): Sleeping until "
+                    + "start+size-1 (" + (start + size - 1)
+                    + ") > currentlyFilledTo (" + currentlyFilledTo
+                    + ") && !queryCompleted (!" + queryCompleted + ")");
             while (((start + size - 1) > currentlyFilledTo) && !queryCompleted)
             {
-                Thread.currentThread().sleep(500);
+                try
+                {
+                    Thread.currentThread().sleep(500);
+                }
+                catch (InterruptedException e)
+                {
+                    throw new TorqueException("Unexpected interruption", e);
+                }
             }
         }
 
@@ -565,12 +597,8 @@ public class LargeSelect implements Runnable
         // might want at least 2 sets of data.
         else if (start < blockBegin && start >= 0)
         {
-            log.debug(
-                "LargeSelect.getResults(): Paging backwards as start ("
-                    + start
-                    + ") < blockBegin ("
-                    + blockBegin
-                    + ") && start >= 0");
+            log.debug("getResults(): Paging backwards as start (" + start
+                    + ") < blockBegin (" + blockBegin + ") && start >= 0");
             stopQuery();
             if (memoryLimit >= 2 * size)
             {
@@ -593,13 +621,9 @@ public class LargeSelect implements Runnable
         // Assume we are moving on, do not retrieve any records prior to start.
         else if ((start + size - 1) > blockEnd)
         {
-            log.debug(
-                "LargeSelect.getResults(): "
-                    + "Paging past end of loaded data as start+size-1 ("
-                    + (start + size - 1)
-                    + ") > blockEnd ("
-                    + blockEnd
-                    + ")");
+            log.debug("getResults(): Paging past end of loaded data as "
+                    + "start+size-1 (" + (start + size - 1)
+                    + ") > blockEnd (" + blockEnd + ")");
             stopQuery();
             blockBegin = start;
             blockEnd = blockBegin + memoryLimit - 1;
@@ -610,29 +634,33 @@ public class LargeSelect implements Runnable
 
         else
         {
-            throw new Exception("Parameter configuration not accounted for.");
+            throw new IllegalArgumentException("Parameter configuration not "
+                    + "accounted for.");
         }
 
         int fromIndex = start - blockBegin;
         int toIndex = fromIndex + Math.min(size, results.size() - fromIndex);
-        log.debug(
-            "LargeSelect.getResults(): "
-                + "Retrieving records from results elements start-blockBegin ("
-                + fromIndex
-                + ") through "
+        log.debug("getResults(): Retrieving records from results elements "
+                + "start-blockBegin (" + fromIndex + ") through "
                 + "fromIndex + Math.min(size, results.size() - fromIndex) ("
-                + toIndex
-                + ")");
+                + toIndex + ")");
         List returnResults = results.subList(fromIndex, toIndex);
 
         if (null != returnBuilderClass)
         {
             // Invoke the populateObjects() method
             Object[] theArgs = { returnResults };
-            returnResults =
-                (List) populateObjectsMethod.invoke(
-                    returnBuilderClass.newInstance(),
-                    theArgs);
+            try
+            {
+                returnResults =
+                    (List) populateObjectsMethod.invoke(
+                        returnBuilderClass.newInstance(),
+                        theArgs);
+            }
+            catch (Exception e)
+            {
+                throw new TorqueException("Unable to populate results", e);
+            }
         }
         position = start + size;
         lastResults = returnResults;
@@ -644,12 +672,11 @@ public class LargeSelect implements Runnable
      */
     public void run()
     {
+        int size = pageSize;
         try
         {
             // Add 1 to memory limit to check if the query ends on a page break.
             results = new ArrayList(memoryLimit + 1);
-            currentlyFilledTo = -1;
-            queryCompleted = false;
 
             // Use the criteria to limit the rows that are retrieved to the
             // block of records that fit in the predefined memoryLimit.
@@ -662,10 +689,10 @@ public class LargeSelect implements Runnable
             db = Torque.getConnection(dbName);
 
             // Execute the query.
-            log.debug("LargeSelect.run(): query = " + query);
-            log.debug("LargeSelect.run(): memoryLimit = " + memoryLimit);
-            log.debug("LargeSelect.run(): blockBegin = " + blockBegin);
-            log.debug("LargeSelect.run(): blockEnd = " + blockEnd);
+            log.debug("run(): query = " + query);
+            log.debug("run(): memoryLimit = " + memoryLimit);
+            log.debug("run(): blockBegin = " + blockBegin);
+            log.debug("run(): blockEnd = " + blockEnd);
             qds = new QueryDataSet(db, query);
 
             // Continue getting rows one page at a time until the memory limit
@@ -680,17 +707,16 @@ public class LargeSelect implements Runnable
                 if ((currentlyFilledTo + pageSize) >= blockEnd)
                 {
                     // Add 1 to check if the query ends on a page break.
-                    pageSize = blockEnd - currentlyFilledTo + 1;
+                    size = blockEnd - currentlyFilledTo + 1;
                 }
 
-                log.debug(
-                    "LargeSelect.run(): "
-                        + "Invoking BasePeer.getSelectResults(qds, "
-                        + pageSize
-                        + ", false)");
-                List tempResults = BasePeer.getSelectResults(qds, pageSize, false);
+                log.debug("run(): Invoking BasePeer.getSelectResults(qds, "
+                        + size + ", false)");
 
-                for (int i = 0; i < tempResults.size(); i++)
+                List tempResults
+                        = BasePeer.getSelectResults(qds, size, false);
+
+                for (int i = 0, n = tempResults.size(); i < n; i++)
                 {
                     results.add(tempResults.get(i));
                 }
@@ -707,7 +733,7 @@ public class LargeSelect implements Runnable
                 }
 
                 if (results.size() > 0
-                    && blockBegin + currentlyFilledTo > totalRecords)
+                    && blockBegin + currentlyFilledTo >= totalRecords)
                 {
                     // Add 1 because index starts at 0
                     totalRecords = blockBegin + currentlyFilledTo + 1;
@@ -728,24 +754,26 @@ public class LargeSelect implements Runnable
                 qds.clearRecords();
             }
             
-            log.debug(
-                "LargeSelect.run(): While loop terminated "
-                    + "because either:");
-            log.debug(
-                "LargeSelect.run(): 1. qds.allRecordsRetrieved(): "
+            log.debug("run(): While loop terminated because either:");
+            log.debug("run(): 1. qds.allRecordsRetrieved(): "
                     + qds.allRecordsRetrieved());
-            log.debug("LargeSelect.run(): 2. killThread: " + killThread);
-            log.debug(
-                "LargeSelect.run(): 3. !(currentlyFilledTo + "
-                    + "size <= blockEnd): !"
+            log.debug("run(): 2. killThread: " + killThread);
+            log.debug("run(): 3. !(currentlyFilledTo + size <= blockEnd): !"
                     + (currentlyFilledTo + pageSize <= blockEnd));
-            log.debug(
-                "LargeSelect.run(): - currentlyFilledTo: " + currentlyFilledTo);
-            log.debug("LargeSelect.run(): - size: " + pageSize);
-            log.debug("LargeSelect.run(): - blockEnd: " + blockEnd);
-            log.debug("LargeSelect.run(): - results.size(): " + results.size());
+            log.debug("run(): - currentlyFilledTo: " + currentlyFilledTo);
+            log.debug("run(): - size: " + pageSize);
+            log.debug("run(): - blockEnd: " + blockEnd);
+            log.debug("run(): - results.size(): " + results.size());
         }
-        catch (Exception e)
+        catch (TorqueException e)
+        {
+            log.error(e);
+        }
+        catch (SQLException e)
+        {
+            log.error(e);
+        }
+        catch (DataSetException e)
         {
             log.error(e);
         }
@@ -759,7 +787,11 @@ public class LargeSelect implements Runnable
                 }
                 db.close();
             }
-            catch (Exception e)
+            catch (SQLException e)
+            {
+                log.error(e);
+            }
+            catch (DataSetException e)
             {
                 log.error(e);
             }
@@ -770,11 +802,12 @@ public class LargeSelect implements Runnable
      * Starts a new thread to retrieve the result set.
      *
      * @param initialSize the initial size for each block.
-     * @throws Exception a generic exception.
      */
-    private void startQuery(int initialSize) throws Exception
+    private void startQuery(int initialSize)
     {
         pageSize = initialSize;
+        currentlyFilledTo = -1;
+        queryCompleted = false;
         thread = new Thread(this);
         thread.start();
     }
@@ -783,14 +816,21 @@ public class LargeSelect implements Runnable
      * Used to stop filling the memory with the current block of results, if it
      * has been determined that they are no longer relevant.
      *
-     * @throws Exception a generic exception.
+     * @throws TorqueException if a sleep is interrupted.
      */
-    private void stopQuery() throws Exception
+    private void stopQuery() throws TorqueException
     {
         killThread = true;
         while (thread.isAlive())
         {
-            Thread.currentThread().sleep(100);
+            try
+            {
+                Thread.currentThread().sleep(100);
+            }
+            catch (InterruptedException e)
+            {
+                throw new TorqueException("Unexpected interruption", e);
+            }
         }
         killThread = false;
     }
@@ -833,7 +873,7 @@ public class LargeSelect implements Runnable
         {
             return true;
         }
-        return blockBegin + currentlyFilledTo > pageSize;
+        return blockBegin + currentlyFilledTo + 1 > pageSize;
     }
 
     /**
@@ -900,6 +940,14 @@ public class LargeSelect implements Runnable
     }
 
     /**
+     * Retrieve the more pages/records indicator.
+      */
+    public static String getMoreIndicator()
+    {
+        return LargeSelect.moreIndicator;
+    }
+
+    /**
      * Sets the multiplier that will be used to compute the memory limit when a
      * constructor with no memory page limit is used - the memory limit will be
      * this number multiplied by the page size.
@@ -910,6 +958,16 @@ public class LargeSelect implements Runnable
     public static void setMemoryPageLimit(int memoryPageLimit)
     {
         LargeSelect.memoryPageLimit = memoryPageLimit;
+    }
+
+    /**
+     * Retrieves the multiplier that will be used to compute the memory limit
+     * when a constructor with no memory page limit is used - the memory limit
+     * will be this number multiplied by the page size.
+     */
+    public static int getMemoryPageLimit()
+    {
+        return LargeSelect.memoryPageLimit;
     }
 
     /**
@@ -942,12 +1000,11 @@ public class LargeSelect implements Runnable
      */
     public int getCurrentPageSize()
     {
-        if (getCurrentPageNumber() < getTotalPages()
-            || getTotalRecords() % getPageSize() == 0)
+        if (null == lastResults)
         {
-            return getPageSize();
+            return 0;
         }
-        return getTotalRecords() % getPageSize();
+        return lastResults.size();
     }
 
     /**
@@ -971,7 +1028,12 @@ public class LargeSelect implements Runnable
      */
     public int getLastRecordNoForPage()
     {
-        return (getCurrentPageNumber() - 1) * getPageSize() + getCurrentPageSize();
+        if (0 == currentPageNumber)
+        {
+            return 0;
+        }
+        return (getCurrentPageNumber() - 1) * getPageSize()
+                + getCurrentPageSize();
     }
 
     /**
@@ -1023,6 +1085,79 @@ public class LargeSelect implements Runnable
             return false;
         }
         return true;
+    }
+
+    /**
+     * Indicates if any results are available.
+     *
+     * @return <code>true</code> of any results are available.
+     */
+    public boolean hasResultsAvailable()
+    {
+        return getTotalRecords() > 0;
+    }
+
+    /**
+     * Clear the query result so that the query is reexecuted when the next page
+     * is retrieved.  You may want to invoke this method if you are returning to
+     * a page after performing an operation on an item in the result set.
+     *
+     * @throws TorqueException if a sleep is interrupted.
+     */
+    public void invalidateResult() throws TorqueException
+    {
+        stopQuery();
+        blockBegin = 0;
+        blockEnd = 0;
+        currentlyFilledTo = -1;
+        qds = null;
+        results = null;
+        position = 0;
+        totalPages = -1;
+        totalRecords = 0;
+        // todo Perhaps store the oldPageNumber and immediately restart the query.
+        // oldPageNumber = currentPageNumber;
+        currentPageNumber = 0;
+        queryCompleted = false;
+        totalsFinalized = false;
+        lastResults = null;
+    }
+
+    /**
+     * Retrieve a search parameter.  This acts as a convenient place to store
+     * parameters that relate to the LargeSelect to make it easy to get at them
+     * in order to repopulate search parameters on a form when the next page of
+     * results is retrieved - they in no way effect the operation of
+     * LargeSelect.
+     *
+     * @param name the search parameter key to retrieve.
+     * @return the value of the search parameter.
+     */
+    public String getSearchParam(String name)
+    {
+        if (null == params)
+        {
+            return "";
+        }
+        return (String) params.get(name);
+    }
+
+    /**
+     * Set a parameter used to retrieve the last set of results.
+     *
+     * @param name the search parameter key to set.
+     * @param value the value of the search parameter to store.
+     */
+    public void setSearchParam(String name, String value)
+    {
+        if (null == params)
+        {
+            params = new Hashtable();
+        }
+        if (name != null && value != null)
+        {
+            params.put(name, value);
+        }
     }
 
 }
