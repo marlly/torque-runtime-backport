@@ -78,12 +78,88 @@
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       templatePath="${templatePath}"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
-      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
-    />
+      targetDatabase="${database}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-sql>
 
   </target>
+
+  <!-- ================================================================ -->
+  <!-- C R E A T E  T A R G E T  D A T A B A S E                        -->
+  <!-- ================================================================ -->
+  <!-- Create the target database by executing a generated script       -->
+  <!-- that is capable of performing the task.                          -->
+  <!-- ================================================================ -->
+  
+  <target 
+    name="project-create-db"
+    unless="database.manual.creation"
+    description="--> generates the target database">
+
+    <taskdef 
+      name="torque-create-db"
+      classname="org.apache.torque.task.TorqueCreateDatabase">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <torque-create-db
+      controlTemplate="sql/db-init/Control.vm"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      templatePath="${templatePath}"
+      outputFile="create-db.sql"
+      targetPlatform="${platform}"
+      targetDatabase="${database}"
+      databaseUser="${databaseUser}"
+      databasePassword="${databasePassword}"
+      databaseHost="${databaseHost}">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-create-db>
+  
+    <sql
+      driver="${databaseDriver}"
+      url="${createDatabaseUrl}"
+      userid="${databaseUser}"
+      password="${databasePassword}"
+      src="${torque.home}/${outputDirectory}/sql/create-db.sql"
+      autocommit="true"
+      onerror="continue">
+      <classpath refid="classpath"/>
+    </sql>
+  
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- I N S E R T  S I N G L E  S Q L  F I L E S                       -->
+  <!-- ================================================================ -->
+
+  <target 
+    name="project-insert-sql">
+
+    <taskdef 
+      name="torque-insert-sql"
+      classname="org.apache.torque.task.TorqueSQLExec">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <torque-insert-sql
+      driver="${databaseDriver}"
+      url="${databaseUrl}"
+      userid="${databaseUser}"
+      password="${databasePassword}"
+      autocommit="true"
+      onerror="continue"
+      sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
+      srcDir="${basedir}/${outputDirectory}/sql">
+      <classpath refid="classpath"/>
+    </torque-insert-sql>
+  </target>
+
 
   <!-- ================================================================ -->
   <!-- J D B C  TO  X M L                                               -->
@@ -254,7 +330,6 @@
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
     />
 
   </target>
