@@ -56,6 +56,7 @@ package org.apache.torque.om;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import org.apache.torque.pool.DBConnection;
 
 /**
  * This class contains attributes and methods that are used by all
@@ -407,6 +408,21 @@ public abstract class BaseObject implements Persistent, Serializable
 
         return ok.hashCode();
     }
+
+    /**
+     * @see org.apache.torque.om.Persistent#save()
+     */
+    public abstract void save() throws Exception;
+
+    /**
+     * @see org.apache.torque.om.Persistent#save(String)
+     */
+    public abstract void save(String dbName) throws Exception;
+
+    /**
+     * @see org.apache.torque.om.Persistent#save(DBConnection)
+     */
+    public abstract void save(DBConnection dbCon) throws Exception;
 }
 
 
