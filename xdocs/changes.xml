@@ -12,6 +12,9 @@
         TRQS97: Fix bad syntax in generated model when using primary keys of
         short or byte.
       </action>
+      <action dev='mpoeschl' type='fix'>
+        TRQS190: Error on "byte" data type generation rules.
+      </action>
       <action dev='mpoeschl' type='remove'>
         Remove support for old properties (properties without 'torque.' prefix)
       </action>
