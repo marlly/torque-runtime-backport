@@ -425,6 +425,7 @@
       controlTemplate="${SQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       useClasspath="true"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
       targetDatabase="${database}"
     >
