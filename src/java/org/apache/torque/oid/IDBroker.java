@@ -434,11 +434,11 @@ public class IDBroker
         {
             if (availableIds == null)
             {
-                category.info ("Forced id retrieval - no available list");
+                category.debug("Forced id retrieval - no available list");
             }
             else
             {
-                category.info ("Forced id retrieval - " + availableIds.size());
+                category.debug("Forced id retrieval - " + availableIds.size());
             }
             storeIDs(tableName, true, connection);
             availableIds = (List) ids.get(tableName);
@@ -518,7 +518,7 @@ public class IDBroker
      */
     public void run()
     {
-        category.info("IDBroker thread was started.");
+        category.debug("IDBroker thread was started.");
 
         Thread thisThread = Thread.currentThread();
         while (houseKeeperThread == thisThread)
@@ -537,7 +537,7 @@ public class IDBroker
             while (it.hasNext())
             {
                 String tableName = (String) it.next();
-                category.info("IDBroker thread checking for more keys "
+                category.debug("IDBroker thread checking for more keys "
                         + "on table: " + tableName);
                 List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
@@ -549,7 +549,7 @@ public class IDBroker
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false, null);
-                        category.info("Retrieved more ids for table: "
+                        category.debug("Retrieved more ids for table: "
                                 + tableName);
                     }
                     catch (Exception exc)
@@ -560,7 +560,7 @@ public class IDBroker
                 }
             }
         }
-        category.info("IDBroker thread finished.");
+        category.debug("IDBroker thread finished.");
     }
 
     /**
@@ -606,7 +606,7 @@ public class IDBroker
             int timeLapse = (int) (nowLong - thenLong);
             if ( timeLapse < sleepPeriod && timeLapse > 0 )
             {
-                category.info("Unscheduled retrieval of more ids for table: " +
+                category.debug("Unscheduled retrieval of more ids for table: " +
                          tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
