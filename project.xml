@@ -102,6 +102,15 @@
 
   <dependencies>
 
+    <!-- And will likely override any of the classes in this jar,
+         but it is needed to avoid javadoc errors -->
+    <dependency>
+      <name>jakarta-ant</name>
+      <type>required</type>
+      <version>1.4.1</version>
+      <jar>ant-1.4.1.jar</jar>
+    </dependency>
+
     <dependency>
       <name>commons-beanutils</name>
       <type>required</type>
