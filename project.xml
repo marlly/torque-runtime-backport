@@ -4,7 +4,7 @@
   <pomVersion>3</pomVersion>
   <id>torque</id>
   <name>Torque</name>
-  <currentVersion>3.1-dev</currentVersion>
+  <currentVersion>3.1-alpha1</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>

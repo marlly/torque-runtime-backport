@@ -5,7 +5,7 @@
   <id>torque-gen</id>
   <groupId>torque</groupId>
   <name>Torque generator</name>
-  <currentVersion>3.1-dev</currentVersion>
+  <currentVersion>3.1-alpha1</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>
