@@ -32,6 +32,10 @@
       <action dev='mpoeschl' type='remove'>
         Removed PasePeer.DEFAULT_MAP_BUILDER and BasePeer.getMapBuilder()
       </action>
+      <action dev='seade' type='update'>
+        For PostgreSQL the LONGVARCHAR datatype now maps to <em>text</em>
+        rather than <em>bytea</em>.
+      </action>
     </release>
   </body>
 </document>
