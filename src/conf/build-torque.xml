@@ -528,7 +528,7 @@
 
     <taskdef
       name="torque-create-db"
-      classname="org.apache.torque.task.TorqueCreateDatabase">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 
@@ -596,6 +596,41 @@
         <exclude name="id-table-schema.xml"/>
       </fileset>
     </torque-sql>
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E   D O C S                                        -->
+  <!-- ================================================================ -->
+
+  <target
+    name="project-doc-classpath"
+    description="==> generates documentation for your datamodel">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating docs for YOUR datamodel!      |"/>
+    <echo message="| Woo hoo!                                 |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="torque-doc"
+      classname="org.apache.torque.task.TorqueDocumentationTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-doc
+      contextProperties="${build.properties}"
+      controlTemplate="${DocControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/doc"
+      outputFormat="${documentationFormat}"
+      useClasspath="true"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputFile="report.${project}.doc.generation">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </torque-doc>
   </target>
 
   <!-- =================================================================== -->
