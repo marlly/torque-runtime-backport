@@ -79,7 +79,7 @@
   <td><code> torque.output.dir </code></td>
   <td><code> ${torque.home}/src </code></td>
   <td>
-    The base directory for the output of SQL and Java files.
+    The base directory for the output files.
   </td>
 </tr>
 <tr>
@@ -101,6 +101,13 @@
   <td><code> ${torque.output.dir}/java </code></td>
   <td>
     The directory to place all of the generated Java code in.
+  </td>
+</tr>
+<tr>
+  <td><code> torque.sql.dir </code></td>
+  <td><code> ${torque.output.dir}/sql </code></td>
+  <td>
+    The directory to place all of the generated SQL in.
   </td>
 </tr>
 <tr>
