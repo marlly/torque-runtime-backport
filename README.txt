@@ -4,7 +4,7 @@ T O R Q U E
 
 Torque is an Object/Relational persistence layer.
 
-bin/        Temporary directory for building the project.
+target/     Temporary directory for building the project.
 build/      Location of Ant build.xml and build.properties files.
 examples/   Example XML Torque schemas that are part of the distribution.
 src/        Location of Java sources and Torque templates.
