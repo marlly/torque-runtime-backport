@@ -54,9 +54,12 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
+import java.sql.Types;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.sql.Types;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 // I don't know if the peer system deals
 // with the recommended mappings.
@@ -110,6 +113,9 @@ import java.sql.Types;
  */
 public class TypeMap
 {
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(Column.class);
+    
     private static final SchemaType[] TEXT_TYPES =
     {
         SchemaType.CHAR, SchemaType.VARCHAR, SchemaType.LONGVARCHAR, 
@@ -586,7 +592,13 @@ public class TypeMap
         {
             initialize();
         }
-        return (SchemaType) jdbcToTorqueTypeMap.get(sqlType);
+        SchemaType st = (SchemaType) jdbcToTorqueTypeMap.get(sqlType);
+        if (st == null)
+        {
+            log.warn("SchemaType for JdbcType " + sqlType + " is not defined");
+            st = SchemaType.VARCHAR;
+        }
+        return st;
     }
 
     /**
