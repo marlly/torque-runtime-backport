@@ -174,8 +174,14 @@ public class Torque
      * are serialized then unserialized prior to Torque being reinitialized.
      * This condition exists in a normal catalina restart.
      */
-    private static List mapBuilders
-            = Collections.synchronizedList(new ArrayList());
+    private static List mapBuilders = null;
+
+    //
+    // Static initializer
+    //
+    {
+        mapBuilders = Collections.synchronizedList(new ArrayList());
+    }
 
 
     /**
