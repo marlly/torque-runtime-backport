@@ -23,10 +23,6 @@
     name="torque:init"
     description="Build classpath and define tasks">
 
-    <echo>
-    torque.useClasspath=${torque.useClasspath}
-    </echo>
-
     <!-- Setup the classpath for torque plugins -->
     <path id="torque-classpath">
       <pathelement path="${plugin.getDependencyPath('commons-collections')}"/>
@@ -83,10 +79,6 @@
       name="torque-sql-transform"
       classpathref="torque-classpath"
       classname="org.apache.torque.task.TorqueSQLTransformTask"/>
-
-    <echo>
-    torque.useClasspath=${torque.useClasspath}
-    </echo>
 
   </goal>
 
