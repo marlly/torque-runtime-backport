@@ -326,13 +326,13 @@ public abstract class $basePrefix${table.JavaName}Peer
                 #else
             obj.set${col.JavaName}(b ? Boolean.TRUE : Boolean.FALSE);
                 #end
-            #elseif ($col.isBooleanInt() && $col.isUsePrimitive())
-            obj.set${col.JavaName}
-                (1 == row.getValue(offset+$n).$col.VillageMethod);
             #elseif ($col.isBooleanInt())
-            obj.set${col.JavaName}
-                (1 == row.getValue(offset+$n).${col.VillageMethod}.intValue() ?
-                 Boolean.TRUE : Boolean.FALSE);
+            boolean b = (row.getValue(offset+$n).$col.VillageMethod == 1);
+                #if ($col.isUsePrimitive())
+            obj.set${col.JavaName}(b);
+                #else
+            obj.set${col.JavaName}(b ? Boolean.TRUE : Boolean.FALSE);
+                #end
             #else
                 #if ($col.isPrimaryKey() || $col.isForeignKey() )
             obj.set${col.JavaName}(
