@@ -54,12 +54,9 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -137,8 +134,7 @@ public class DBOracle
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException, No Statement could be created or
-     * executed.
+     * @exception SQLException No Statement could be created or executed.
      */
     public void lockTable(Connection con,
                           String table)
@@ -148,8 +144,8 @@ public class DBOracle
 
         StringBuffer stmt = new StringBuffer();
         stmt.append( "SELECT next_id FROM " )
-        .append( table )
-        .append( " FOR UPDATE" );
+                .append( table )
+                .append( " FOR UPDATE" );
 
         statement.executeQuery( stmt.toString() );
     }

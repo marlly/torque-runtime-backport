@@ -54,9 +54,6 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 /**
  * Turbine Database Adapter for DB2/400 on the IBM AS400 platform.
  *
@@ -68,7 +65,7 @@ public class DBDB2400 extends DBDB2App
    /**
     * UpperCase/IgnoreCase sql function in DB2/400
     */
-   final static public String UCASE = "UCASE";
+   public static final String UCASE = "UCASE";
 
 
     /**
