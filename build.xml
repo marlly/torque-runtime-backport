@@ -16,6 +16,7 @@
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${commons-util.jar}"/>
+    <pathelement location="${junit.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -31,6 +32,7 @@
     <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
+    <echo message="junit.jar = ${junit.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
   </target>
 
@@ -84,8 +86,14 @@
     />
 
     <available
-      classname="javax.sql.ConnectionPoolDataSource" 
+      classname="javax.sql.ConnectionPoolDataSource"
       property="jdbc.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="junit.framework.TestCase"
+      property="junit.present"
       classpathref="classpath"
     />
   </target>
@@ -144,7 +152,7 @@
       | You must define the following property in order                |
       | to build Torque:                                               |
       |                                                                |
-      | ${name} = ${value}
+      | ${name} (currently "${value}")
       |                                                                |
       | You can set this property in the provided build.properties     |
       | file, or you may set this property in your                     |
@@ -162,12 +170,12 @@
     depends="init,check.velocity,check.xerces,check.village,check.log4j,check.commons-util,check.jdbc,env">
     
     <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dir}/classes"/>
-    <mkdir dir="${build.dir}/src"/>
+    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.src}"/>
 
     <filter token="VERSION" value="${version}"/>
 
-    <copy todir="${build.dir}/src/org" filtering="yes">
+    <copy todir="${build.src}/org" filtering="yes">
       <fileset dir="${src.dir}/java/org"/>
     </copy>
   </target>
@@ -177,8 +185,8 @@
   <!-- ================================================================== -->
   
   <target name="compile" depends="prepare" description="==> compiles the source code">
-    <javac srcdir="${build.dir}/src"
-      destdir="${build.dir}/classes"
+    <javac srcdir="${build.src}"
+      destdir="${build.dest}"
       excludes="**/package.html"
       debug="${debug}"
       deprecation="${deprecation}"
@@ -188,20 +196,22 @@
   
     <!-- copy database.dtd to the right place -->
     <copy file="${src.dir}/dtd/database.dtd"
-      todir="${build.dir}/classes/org/apache/torque/engine/database/transform"/>
+      todir="${build.dest}/org/apache/torque/engine/database/transform"/>
   </target>
 
-  <target name="compile-test" depends="prepare,compile" 
-          description="==> compiles the test source code">  
+  <target name="compile-test" depends="prepare,compile" if="junit.present"
+          description="==> compiles the test source code">
+    <mkdir dir="${build.test}"/>
+
     <javac srcdir="${test.dir}"
-      destdir="${test.dir}"
+      destdir="${build.test}"
       excludes="**/package.html"
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
       <classpath refid="classpath"/>
       <classpath>
-          <pathelement path="${build.dir}/classes"/>
+          <pathelement path="${build.dest}"/>
       </classpath>
     </javac>
   </target>
@@ -209,20 +219,44 @@
   <!-- ================================================================== -->
   <!-- T E S T                                                            -->
   <!-- ================================================================== -->
-  <!-- Not currently working due to the way that Ant mucks with 
-       a subprocess's threads
-  <target name="run-test" depends="prepare,compile-test" 
+  <target name="run-test" depends="prepare,compile-test" if="junit.present"
           description="==> runs the test source code">
+
+    <taskdef name="junit"
+          classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+          <classpath refid="classpath"/>
+    </taskdef>
+
+    <junit printsummary="no" haltonfailure="yes">
+      <classpath>
+        <pathelement location="${build.dest}"/>
+        <pathelement location="${build.test}"/>
+        <path refid="classpath"/>
+      </classpath>
+
+      <formatter type="plain" usefile="false"/>
+
+      <batchtest>
+        <fileset dir="${test.dir}">
+          <exclude name="**/BaseTestCase.java"/>
+          <exclude name="**/PoolTest.java"/>
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <!-- Not currently working due to the way that Ant mucks with 
+         a subprocess's threads. (JSS)
     <java classname="org.apache.torque.pool.PoolTest">
       <classpath refid="classpath"/>
       <classpath>
-          <pathelement path="${build.dir}/classes"/>
+          <pathelement path="${build.dest}"/>
           <pathelement path="${test.dir}"/>
           <pathelement location="../scarab/lib/mm.mysql-2.0.4.jar"/>
       </classpath>
     </java>
+    -->
   </target>
-  -->
 
   <!-- ================================================================== -->
   <!-- J A R                                                              -->
@@ -230,7 +264,7 @@
   
   <target name="jar" depends="compile" description="==> generates the torque.jar">
     <jar jarfile="${build.dir}/${final.name}.jar"
-         basedir="${build.dir}/classes"
+         basedir="${build.dest}"
          excludes="**/package.html"/>
   </target>
 
