@@ -65,16 +65,28 @@
       native datatypes (byte, int, long, float, double)
     </li>
     <li>
+      TRQ45: add static keyFor methods to generate appropriate SimpleKey
+      instance
+    </li>
+    <li>
+      TRQS1: several small patches to correct db2 sql generation
+    </li>
+    <li>
       bugzilla #12626: Peer.vm was missing the DateKey import.
     </li>
     <li>
-      postgres: Unable to identify an operator '=' for types 'smallint' and 'boolean'
+      postgres: Unable to identify an operator '=' for types 'smallint' and
+      'boolean'
     </li>
     <li>
       sapdb: generate valid sql for primary keys
     </li>
     <li>
       objects: avoid npe and set id to null if the object was null
+    </li>
+    <li>
+      objects: the generation of the BaseClass and the Interface is working even
+      if the Interface is empty.
     </li>
   </ul>
 </p>
