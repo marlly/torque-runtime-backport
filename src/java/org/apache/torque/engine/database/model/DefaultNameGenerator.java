@@ -57,6 +57,8 @@ package org.apache.torque.engine.database.model;
 import java.util.List;
 import java.util.Iterator;
 
+import org.apache.torque.TorqueException;
+
 /**
  * The default <code>NameGenerator</code> implementation.
  *
@@ -66,21 +68,22 @@ import java.util.Iterator;
 public class DefaultNameGenerator implements NameGenerator
 {
     /**
-     * Concatenates elements of <code>components</code> together,
+     * Concatenates elements of <code>inputs</code> together,
      * separated by underscores.
      *
-     * @param components Inputs used to generate a name.
+     * @see org.apache.torque.engine.database.model.NameGenerator
      */
-    public String generateName(List components)
+    public String generateName(List inputs)
+        throws TorqueException
     {
         StringBuffer buf = new StringBuffer();
-        Iterator i = components.iterator();
+        Iterator i = inputs.iterator();
         while (i.hasNext())
         {
             buf.append(i.next());
             if (i.hasNext())
             {
-                buf.append('_');
+                buf.append(STD_SEPARATOR_CHAR);
             }
         }
         return buf.toString();
