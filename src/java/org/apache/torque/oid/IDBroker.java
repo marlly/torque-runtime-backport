@@ -168,12 +168,12 @@ public class IDBroker implements Runnable, IdGenerator
     /**
      * Amount of time for the thread to sleep
      */
-    private static final int sleepPeriod = 1 * 60000;
+    private static final int SLEEP_PERIOD = 1 * 60000;
 
     /**
      * The safety Margin
      */
-    private static final float safetyMargin = 1.2f;
+    private static final float SAFETY_MARGIN = 1.2f;
 
     /**
      * The houseKeeperThread thread
@@ -190,22 +190,25 @@ public class IDBroker implements Runnable, IdGenerator
      */
     private static final BigDecimal ONE = new BigDecimal("1");
 
+    /** the configuration */
     private Configuration configuration;
 
+    /** property name */
     private static final String DB_IDBROKER_CLEVERQUANTITY =
         "idbroker.clever.quantity";
 
+    /** property name */
     private static final String DB_IDBROKER_PREFETCH =
         "idbroker.prefetch";
 
+    /** property name */
     private static final String DB_IDBROKER_USENEWCONNECTION =
         "idbroker.usenewconnection";
 
     /**
      * Logger used for logging.
      */
-    private Logger logger =
-        Logger.getLogger(IDBroker.class);
+    private Logger logger = Logger.getLogger(IDBroker.class);
 
     /**
      * Creates an IDBroker for the ID table.
@@ -257,15 +260,20 @@ public class IDBroker implements Runnable, IdGenerator
         if (!transactionsSupported)
         {
             logger.warn("IDBroker is being used with db '" + dbName
-                        + "', which does not support transactions. IDBroker "
-                        + "attempts to use transactions to limit the possibility "
-                        + "of duplicate key generation.  Without transactions, "
-                        + "duplicate key generation is possible if multiple JVMs "
-                        + "are used or other means are used to write to the "
-                        + "database.");
+                    + "', which does not support transactions. IDBroker "
+                    + "attempts to use transactions to limit the possibility "
+                    + "of duplicate key generation.  Without transactions, "
+                    + "duplicate key generation is possible if multiple JVMs "
+                    + "are used or other means are used to write to the "
+                    + "database.");
         }
     }
 
+    /**
+     * Set the configuration
+     *
+     * @param configuration the configuration
+     */
     public void setConfiguration(Configuration configuration)
     {
         this.configuration = configuration;
@@ -440,8 +448,8 @@ public class IDBroker implements Runnable, IdGenerator
             availableIds = (List) ids.get(tableName);
         }
 
-        int size = availableIds.size() < numOfIdsToReturn ?
-            availableIds.size() : numOfIdsToReturn;
+        int size = availableIds.size() < numOfIdsToReturn
+                ? availableIds.size() : numOfIdsToReturn;
 
         BigDecimal[] results = new BigDecimal[size];
 
@@ -467,7 +475,7 @@ public class IDBroker implements Runnable, IdGenerator
      * the row
      * @return a <code>boolean</code> value
      * @exception TorqueException if an error occurs
-     * @exception Exception
+     * @exception Exception a generic exception.
      */
     public boolean exists(String tableName)
         throws TorqueException, Exception
@@ -520,7 +528,7 @@ public class IDBroker implements Runnable, IdGenerator
         {
             try
             {
-                houseKeeperThread.sleep(sleepPeriod);
+                houseKeeperThread.sleep(SLEEP_PERIOD);
             }
             catch (InterruptedException exc)
             {
@@ -598,7 +606,7 @@ public class IDBroker implements Runnable, IdGenerator
             long thenLong = lastTime.getTime();
             long nowLong = now.getTime();
             int timeLapse = (int) (nowLong - thenLong);
-            if (timeLapse < sleepPeriod && timeLapse > 0)
+            if (timeLapse < SLEEP_PERIOD && timeLapse > 0)
             {
                 logger.debug("Unscheduled retrieval of more ids for table: "
                              + tableName);
@@ -607,7 +615,7 @@ public class IDBroker implements Runnable, IdGenerator
                 float rate = getQuantity(tableName, null).floatValue()
                     / (float) timeLapse;
                 quantityStore.put(tableName, new BigDecimal(
-                                      Math.ceil(sleepPeriod * rate * safetyMargin)));
+                    Math.ceil(SLEEP_PERIOD * rate * SAFETY_MARGIN)));
             }
         }
         lastQueryTime.put(tableName, now);
@@ -798,8 +806,8 @@ public class IDBroker implements Runnable, IdGenerator
             }
             else
             {
-                throw new TorqueException("The table " + tableName +
-                                          " does not have a proper entry in the " + ID_TABLE);
+                throw new TorqueException("The table " + tableName
+                        + " does not have a proper entry in the " + ID_TABLE);
             }
         }
         finally
