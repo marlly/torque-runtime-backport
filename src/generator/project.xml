@@ -17,12 +17,12 @@
   <!-- Gump integration -->
   <gumpRepositoryId>jakarta</gumpRepositoryId>
 
-  <description>Torque is a persistence layer.</description>
-  <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque/</url>
+  <description>Generator for Torque.</description>
+  <shortDescription>Generator for Torque</shortDescription>
+  <url>http://db.apache.org/torque/generator</url>
   <issueTrackingUrl>http://scarab.werken.com/scarab/issues</issueTrackingUrl>
   <siteAddress>db.apache.org</siteAddress>
-  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
+  <siteDirectory>/www/db.apache.org/torque/generator</siteDirectory>
   <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
 
   <repository>
