@@ -841,7 +841,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @exception Exception, a generic exception.
      */
-    private static void insertOrUpdateRecord(Record rec,
+    private void insertOrUpdateRecord(Record rec,
                                              String tableName,
                                              Criteria criteria)
         throws Exception
