@@ -255,7 +255,7 @@ public class Index
      * more elements are going to be added, such as when a name is
      * being generated).  Feel free to modify this list.
      */
-    public List getColumnNames()
+    protected List getColumnNames()
     {
         List names = new ArrayList(indexColumns.size() + 2);
         Iterator i = getColumns().iterator();
