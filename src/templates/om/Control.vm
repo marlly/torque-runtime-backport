@@ -48,11 +48,20 @@
     #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
     $generator.parse("om/Object.vm",$path,"table",$tbl)
 
+    #set ( $fname = "${basePrefix}${firstcap}Manager.java" )
+    #set ( $path = "${strings.getPackageAsPath($pkbase)}$fname" )
+    $generator.parse("om/BaseManager.vm",$path,"table",$tbl)
+
     #set ( $fname = "${firstcap}.java" )
-    #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
-    
+    #set ( $path = "${strings.getPackageAsPath($package)}$fname" )    
     #if (!$files.file($basePath,$path).exists())
       $generator.parse("om/ExtensionObject.vm",$path,"table",$tbl)
+    #end
+
+    #set ( $fname = "${firstcap}Manager.java" )
+    #set ( $path = "${strings.getPackageAsPath($package)}$fname" )    
+    #if (!$files.file($basePath,$path).exists())
+      $generator.parse("om/ExtensionManager.vm",$path,"table",$tbl)
     #end
 
     #set ( $fname = "${firstcap}Peer.java" )

@@ -3,6 +3,7 @@ package ${package}.map;
 import java.util.*;
 import java.math.*;
 import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 import org.apache.torque.map.MapBuilder;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
@@ -77,7 +78,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     /** 
      * The doBuild() method builds the DatabaseMap 
      */
-    public void doBuild() throws Exception
+    public void doBuild() throws TorqueException
     {
         dbMap = Torque.getDatabaseMap("$table.Database.Name");
 

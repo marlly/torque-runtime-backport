@@ -62,6 +62,7 @@ import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
+import org.apache.torque.TorqueException;
 import org.apache.commons.collections.StringStack;
 
 /**
@@ -174,12 +175,13 @@ public class SqlExpression
      * !=, LIKE, etc.
      * @return A simple SQL expression, e.g. UPPER(table_a.column_a)
      * LIKE UPPER('ab%c').
-     * @exception Exception, a generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static String build( String columnName,
                                 Object criteria,
                                 SqlEnum comparison )
-        throws Exception
+        throws TorqueException
     {
         // 'db' can be null because 'ignoreCase' is null
         return build( columnName, criteria, comparison, false, null );
@@ -199,14 +201,15 @@ public class SqlExpression
      * functions.
      * @return A simple sql expression, e.g. UPPER(table_a.column_a)
      * LIKE UPPER('ab%c').
-     * @exception Exception, a generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static String build( String columnName,
                                 Object criteria,
                                 SqlEnum comparison,
                                 boolean ignoreCase,
                                 DB db )
-        throws Exception
+        throws TorqueException
     {
         int addlength = (ignoreCase ? 40 : 20);
         StringBuffer sb = new StringBuffer(columnName.length() + addlength );

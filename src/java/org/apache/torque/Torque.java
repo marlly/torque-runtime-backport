@@ -54,8 +54,8 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.io.IOException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -75,6 +75,7 @@ import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
+import org.apache.torque.om.AbstractBaseManager;
 import org.apache.stratum.configuration.Configuration;
 import org.apache.stratum.configuration.PropertiesConfiguration;
 import org.apache.stratum.exception.NestableException;
@@ -105,6 +106,19 @@ public class Torque implements Initializable, Configurable
     private static final String DEFAULT_NAME = "default";
 
     /**
+     * A prefix for <code>Manager</code> properties in
+     * TurbineResource.properties.
+     */
+    public static final String MANAGER_PREFIX = "managers.";
+
+    /**
+     * A <code>Service</code> property determining its implementing
+     * class name .
+     */
+    public static final String CLASSNAME_SUFFIX = ".classname";
+
+
+    /**
      * The db name that is specified as the default in the property file
      */
     private static String defaultDBName;
@@ -119,6 +133,12 @@ public class Torque implements Initializable, Configurable
      * database URL.
      */
     private static Map pools;
+
+    /**
+     * A repository of Manager instances.
+     */
+    protected static Map managers = new HashMap();
+
 
     /**
      * The logging category.
@@ -154,14 +174,16 @@ public class Torque implements Initializable, Configurable
      * initialize Torque
      *
      * @see org.apache.stratum.lifecycle.Initializable
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
-    public void initialize() throws Exception
+    public void initialize() throws TorqueException
     {
         // FIX ME!!
         // duplicated code init(Configuration)
         if (configuration == null)
         {
-            throw new Exception("Torque cannot be initialized without " +
+            throw new TorqueException("Torque cannot be initialized without " +
                 "a valid configuration. Please check the log files " +
                     "for further details.");
         }
@@ -220,8 +242,10 @@ public class Torque implements Initializable, Configurable
      * configure torque
      *
      * @see org.apache.stratum.lifecycle.Configurable
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
-    public void configure(Configuration config) throws NestableException
+    public void configure(Configuration config) throws TorqueException
     {
         configuration = config;
     }
@@ -230,26 +254,37 @@ public class Torque implements Initializable, Configurable
      * Initialization of Torque with a properties file.
      *
      * @param configFile The absolute path to the configuration file.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void init(String configFile)
-        throws Exception
+        throws TorqueException
     {
-        Configuration c = (Configuration)new PropertiesConfiguration(configFile);
-        init(c);
+        try
+        {
+            Configuration c = (Configuration)new PropertiesConfiguration(configFile);
+            init(c);
+        }
+        catch (IOException e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     /**
      * Initialization of Torque with a properties file.
      *
      * @param c The Torque configuration.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void init(Configuration c)
-        throws Exception
+        throws TorqueException
     {
         Torque.setConfiguration(c);
         if (configuration == null)
         {
-            throw new Exception("Torque cannot be initialized without " +
+            throw new TorqueException("Torque cannot be initialized without " +
                 "a valid configuration. Please check the log files " +
                     "for further details.");
         }
@@ -293,6 +328,8 @@ public class Torque implements Initializable, Configurable
         // any further mapBuilders will be called/built on demand
         mapBuilders = null;
 
+        // setup manager mappings
+        initManagerMappings(configuration);
 
         // Create monitor thread
         monitor = new Monitor();
@@ -302,6 +339,73 @@ public class Torque implements Initializable, Configurable
         // to terminate in an orderly manner.
         monitor.setDaemon(true);
         monitor.start();
+    }
+
+
+    /**
+     * Creates a mapping between Manager names and class names.
+     *
+     * The mapping is built according to settings present in
+     * TurbineResources.properties.  The entries should have the
+     * following form:
+     *
+     * <pre>
+     * torque.manager.MyManager.classname=com.mycompany.MyManagerImpl
+     * services.manager.MyOtherManager.classname=com.mycompany.MyOtherManagerImpl
+     * </pre>
+     *
+     * <br>
+     *
+     * Generic ServiceBroker provides no Services.
+     */
+    protected static void initManagerMappings(Configuration configuration)
+        throws TorqueException
+    {
+        int pref = MANAGER_PREFIX.length();
+        int suff = CLASSNAME_SUFFIX.length();
+
+        Iterator keys = configuration.getKeys();
+
+        while(keys.hasNext())
+        {
+            String key = (String)keys.next();
+
+            if(key.startsWith(MANAGER_PREFIX) && key.endsWith(CLASSNAME_SUFFIX))
+            {
+                String managerKey = key.substring(pref, key.length() - suff);
+                category.info("Added Mapping for Manager: " + managerKey);
+
+                if (! managers.containsKey(managerKey))
+                {
+                    initManager(managerKey, configuration.getString(key));
+                }
+            }
+        }
+    }
+
+    private static void initManager(String name, String className)
+        throws TorqueException
+    { 
+        AbstractBaseManager manager = (AbstractBaseManager) managers.get(name);
+
+        if (manager == null)
+        {
+            if (className != null && className.length() != 0)
+            {
+                try
+                {
+                    manager = (AbstractBaseManager)
+                        Class.forName(className).newInstance();
+                    managers.put(name, manager);
+                }
+                catch (Exception e)
+                {
+                    throw new TorqueException(
+                        "Could not instantiate manager associated with key: " 
+                        + name, e);
+                }
+            }
+        }
     }
 
     public static boolean isInit()
@@ -430,6 +534,11 @@ public class Torque implements Initializable, Configurable
         return false;
     }
 
+    public static AbstractBaseManager getManager(String name)
+    {
+        return (AbstractBaseManager)managers.get(name);
+    }
+
     /**
      * Shuts down the service.
      *
@@ -477,7 +586,7 @@ public class Torque implements Initializable, Configurable
      * Returns the default database map information.
      *
      * @return A DatabaseMap.
-     * @throws TorqueException Any exceptions caught during procssing will be
+     * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
     public static DatabaseMap getDatabaseMap()
@@ -493,8 +602,8 @@ public class Torque implements Initializable, Configurable
      * @param name The name of the database corresponding to the
      * <code>DatabaseMap</code> to retrieve.
      * @return The named <code>DatabaseMap</code>.
-     * @throws TorqueException Any exceptions caught during procssing
-     * will be rethrown wrapped into a <code>TorqueException</code>.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static DatabaseMap getDatabaseMap(String name)
         throws TorqueException
@@ -527,6 +636,8 @@ public class Torque implements Initializable, Configurable
      *
      * @param name The name of the database to map.
      * @return The desired map.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static final DatabaseMap initDatabaseMap(String name)
         throws TorqueException
@@ -610,7 +721,7 @@ public class Torque implements Initializable, Configurable
      *         rethrown wrapped into a TorqueException.
      */
     public static DBConnection getConnection()
-        throws Exception
+        throws TorqueException
     {
         return getConnection(getDefaultDB());
     }
@@ -635,10 +746,17 @@ public class Torque implements Initializable, Configurable
      *         rethrown wrapped into a TorqueException.
      */
     public static DBConnection getConnection(String name)
-        throws Exception
+        throws TorqueException
     {
-        // The getPool method ensures the validity of the returned pool.
-        return getPool(name).getConnection();
+        try
+        {
+            // The getPool method ensures the validity of the returned pool.
+            return getPool(name).getConnection();
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     /**
@@ -660,7 +778,7 @@ public class Torque implements Initializable, Configurable
                                       String url,
                                       String username,
                                       String password)
-        throws Exception
+        throws TorqueException
     {
         ConnectionPool pool = null;
         url = url.trim();
@@ -675,7 +793,14 @@ public class Torque implements Initializable, Configurable
             pool = (ConnectionPool) pools.get(url + username);
         }
 
-        return pool.getConnection();
+        try
+        {
+            return pool.getConnection();
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     /**
@@ -684,17 +809,23 @@ public class Torque implements Initializable, Configurable
      *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @exception Exception A generic exception.
      */
     public static void releaseConnection(DBConnection dbconn)
-        throws Exception
+        throws TorqueException
     {
         if ( dbconn != null )
         {
             ConnectionPool pool = dbconn.getPool();
             if ( pools.containsValue( pool ) )
             {
-                pool.releaseConnection( dbconn );
+                try
+                {
+                    pool.releaseConnection( dbconn );
+                }
+                catch (Exception e)
+                {
+                    throw new TorqueException(e);
+                }
             }
         }
     }
@@ -708,7 +839,7 @@ public class Torque implements Initializable, Configurable
      * @param username The name of the database user.
      * @param password The password of the database user.
      *
-     * @throws Exception Any exceptions caught during processing will be
+     * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
     public static void registerPool( String name,
@@ -716,7 +847,7 @@ public class Torque implements Initializable, Configurable
                               String url,
                               String username,
                               String password )
-        throws Exception
+        throws TorqueException
     {
         /**
          * Added so that the configuration file can define maxConnections &
@@ -746,7 +877,8 @@ public class Torque implements Initializable, Configurable
      * @param url The URL of the database to use.
      * @param username The name of the database user.
      * @param password The password of the database user.
-     * @exception Exception A generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void registerPool( String name,
                               String driver,
@@ -757,7 +889,7 @@ public class Torque implements Initializable, Configurable
                               long expiryTime,
                               long maxConnectionAttempts,
                               long connectionWaitTimeout)
-        throws Exception
+        throws TorqueException
     {
 
         // Quick (non-sync) check for the pool we want.
@@ -795,7 +927,7 @@ public class Torque implements Initializable, Configurable
      *         rethrown wrapped into a TorqueException.
      */
     public static DB getDB()
-        throws Exception
+        throws TorqueException
     {
         return getDB(getDefaultDB());
     }
@@ -809,9 +941,16 @@ public class Torque implements Initializable, Configurable
      *         rethrown wrapped into a TorqueException.
      */
     public static DB getDB(String name)
-        throws Exception
+        throws TorqueException
     {
-        return getPool(name).getDB();
+        try
+        {
+            return getPool(name).getDB();
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -820,11 +959,12 @@ public class Torque implements Initializable, Configurable
      * This method returns the default pool.
      *
      * @return The default pool.
-     * @exception Exception A generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      * @see #getPool(String name)
      */
     private static ConnectionPool getPool()
-        throws Exception
+        throws TorqueException
     {
         return getPool(getDefaultDB());
     }
@@ -838,11 +978,11 @@ public class Torque implements Initializable, Configurable
      *
      * @param name The name of the pool to get.
      * @return     The requested pool.
-     *
-     * @exception Exception A generic exception.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     private static ConnectionPool getPool(String name)
-        throws Exception
+        throws TorqueException
     {
         if (name == null)
         {

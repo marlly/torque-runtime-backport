@@ -29,22 +29,22 @@ import ${package}.map.*;
   *
 #end
   */
-public abstract class $basePrefix${table.JavaName}Peer 
+public abstract class $basePrefix${table.JavaName}Peer
     extends $table.BasePeer
 {
 #if (!$table.isAlias())
 
     /** the default database name for this class */
     public static final String DATABASE_NAME = "$table.Database.Name";
- 
+
      /** the table name for this class */
     public static final String TABLE_NAME = "$table.Name";
- 
-    /** 
-     * @returns the map builder for this peer 
+
+    /**
+     * @returns the map builder for this peer
      */
     public static MapBuilder getMapBuilder()
-        throws Exception
+        throws TorqueException
     {
         return getMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
     }
@@ -89,7 +89,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static final int numColumns =  $table.NumColumns;
 
     /** A class that can be returned by this peer. */
-    protected static final String CLASSNAME_DEFAULT = 
+    protected static final String CLASSNAME_DEFAULT =
         "${package}.$table.JavaName";
 
     /** A class that can be returned by this peer. */
@@ -100,7 +100,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     {
         Class c = null;
         try
-        { 
+        {
             c = Class.forName(className);
         }
         catch (Throwable t)
@@ -127,22 +127,32 @@ public abstract class $basePrefix${table.JavaName}Peer
      * resultset MUST return columns in the right order.  You can use
      * getFieldNames() in BaseObject to get the correct sequence.
      */
-    public static Vector resultSet2Objects (java.sql.ResultSet results) throws Exception
+    public static Vector resultSet2Objects (java.sql.ResultSet results) throws TorqueException
     {
-        QueryDataSet qds = null;
-        Vector rows = null;
         try
         {
-            qds = new QueryDataSet( results );
-            rows = getSelectResults( qds );
+            QueryDataSet qds = null;
+            Vector rows = null;
+            try
+            {
+                qds = new QueryDataSet( results );
+                rows = getSelectResults( qds );
+            }
+            finally
+            {
+                if (qds != null) qds.close();
+            }
+
+            return populateObjects (rows);
         }
-        finally
+        catch (SQLException e)
         {
-            if (qds != null) qds.close();
+            throw new TorqueException(e);
         }
-
-        return populateObjects (rows);
-
+        catch (DataSetException e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
 
@@ -181,7 +191,8 @@ public abstract class $basePrefix${table.JavaName}Peer
     /** 
      * Method to do inserts 
      */
-    public static ObjectKey doInsert( Criteria criteria ) throws Exception
+    public static ObjectKey doInsert( Criteria criteria ) 
+        throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
             .doInsert( criteria, (DBConnection) null );
@@ -193,7 +204,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      * the connection details internally. 
      */
     public static ObjectKey doInsert( Criteria criteria, DBConnection dbCon ) 
-        throws Exception
+        throws TorqueException
     {
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
@@ -209,10 +220,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, 1);
                 }
                 else
-                {   
+                {
                     criteria.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
@@ -226,16 +237,16 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     criteria.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
      #end
 
         // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to 
+        // criteria.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if ( criteria.getDbName() == Torque.getDefaultDB() )
         {
@@ -252,7 +263,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
     /** Add all the columns needed to create a new object */
-    public static void addSelectColumns (Criteria criteria) throws Exception
+    public static void addSelectColumns (Criteria criteria) throws TorqueException
     {
     #foreach ($col in $table.Columns)
         #set ( $cup=$col.Name.toUpperCase() )
@@ -261,38 +272,51 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
 
-    /** 
+    /**
      * Create a new object of type cls from a resultset row starting
      * from a specified offset.  This is done so that you can select
      * other rows than just those needed for this object.  You may
      * for example want to create two objects from the same row.
      */
-    public static $table.JavaName row2Object (Record row, 
-                                              int offset, 
-                                              Class cls ) 
-        throws Exception
+    public static $table.JavaName row2Object (Record row,
+                                              int offset,
+                                              Class cls )
+        throws TorqueException
     {
-        $table.JavaName obj = ($table.JavaName)cls.newInstance();
-        populateObject(row, offset, obj);
-        #if ($addSaveMethod)
-            obj.setModified(false);
-        #end
-        obj.setNew(false);
+        try
+        {
+            $table.JavaName obj = ($table.JavaName)cls.newInstance();
+            populateObject(row, offset, obj);
+            #if ($addSaveMethod)
+                obj.setModified(false);
+            #end
+            obj.setNew(false);
 
-        return obj;
+            return obj;
+        }
+        catch (InstantiationException e)
+        {
+            throw new TorqueException(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
-    /** 
+    /**
      * Populates an object from a resultset row starting
      * from a specified offset.  This is done so that you can select
      * other rows than just those needed for this object.  You may
      * for example want to create two objects from the same row.
      */
-    public static void populateObject (Record row, 
-                                       int offset, 
-                                       $table.JavaName obj ) 
-        throws Exception
+    public static void populateObject (Record row,
+                                       int offset,
+                                       $table.JavaName obj )
+        throws TorqueException
     {
+        try
+        {
         #set ( $n=0 )
         #foreach ($col in $table.Columns)
             #if ($col.isBooleanChar())
@@ -314,49 +338,54 @@ public abstract class $basePrefix${table.JavaName}Peer
             #end
                 #set ( $n = $n + 1 )
         #end
+        }
+        catch (DataSetException e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     /** Method to do selects */
-    public static Vector doSelect( Criteria criteria ) throws Exception
+    public static Vector doSelect( Criteria criteria ) throws TorqueException
     {
-        return populateObjects( doSelectVillageRecords(criteria) ); 
+        return populateObjects( doSelectVillageRecords(criteria) );
     }
 
 
     /** Method to do selects within a transaction */
-    public static Vector doSelect( Criteria criteria, 
-                                   DBConnection dbCon ) 
-        throws Exception
+    public static Vector doSelect( Criteria criteria,
+                                   DBConnection dbCon )
+        throws TorqueException
     {
-        return populateObjects( doSelectVillageRecords(criteria, dbCon) ); 
+        return populateObjects( doSelectVillageRecords(criteria, dbCon) );
     }
 
-    /** 
+    /**
      * Grabs the raw Village records to be formed into objects.
      * This method handles connections internally.  The Record objects
      * returned by this method should be considered readonly.  Do not
      * alter the data and call save(), your results may vary, but are
      * certainly likely to result in hard to track MT bugs.
      */
-    public static Vector doSelectVillageRecords( Criteria criteria ) 
-        throws Exception
+    public static Vector doSelectVillageRecords( Criteria criteria )
+        throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
             .doSelectVillageRecords(criteria, (DBConnection) null);
     }
 
-    /** 
+    /**
      * Grabs the raw Village records to be formed into objects.
-     * This method should be used for transactions 
+     * This method should be used for transactions
      */
-    public static Vector doSelectVillageRecords( Criteria criteria, 
-                                                 DBConnection dbCon ) 
-        throws Exception
+    public static Vector doSelectVillageRecords( Criteria criteria,
+                                                 DBConnection dbCon )
+        throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          criteria.setBlobFlag();
-    #end 
+    #end
 
         if (criteria.getSelectColumns().size() == 0)
         {
@@ -377,10 +406,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, 1);
                 }
                 else
-                {   
+                {
                     criteria.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
@@ -394,16 +423,16 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     criteria.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
      #end
 
         // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to 
+        // criteria.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if ( criteria.getDbName() == Torque.getDefaultDB() )
         {
@@ -421,12 +450,12 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
     }
 
-    /** 
+    /**
      * The returned vector will contain objects of the default type or
      * objects that inherit from the default.
      */
-    public static Vector populateObjects(Vector records) 
-        throws Exception
+    public static Vector populateObjects(Vector records)
+        throws TorqueException
     {
         Vector results = new Vector(records.size());
 
@@ -449,16 +478,19 @@ public abstract class $basePrefix${table.JavaName}Peer
 #if ($table.ChildrenColumn)
 
     #set ($col = $table.ChildrenColumn)
-    /** 
+    /**
      * The returned Class will contain objects of the default type or
      * objects that inherit from the default.
      */
-    public static Class getOMClass(Record record, int offset) 
-        throws Exception
+    public static Class getOMClass(Record record, int offset)
+        throws TorqueException
     {
+        Class c = null;
+        try
+        {
     #if ($col.isEnumeratedClasses())
             Class omClass = null;
-            $col.JavaNative classKey = 
+            $col.JavaNative classKey =
                 record.getValue(offset-1 + $col.Position)
                 .$col.VillageMethod;
         #set ($if = "if")
@@ -477,22 +509,28 @@ public abstract class $basePrefix${table.JavaName}Peer
             {
                 omClass = getOMClass();
             }
-            return omClass;
+            c = omClass;
     #else
-            return Class.forName( 
+            c = Class.forName(
                 record.getValue(offset-1 + $col.Position).asString());
     #end
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
+        return c;
     }
-    
+
 #end
 
-    /** 
-     * The class that the Peer will make instances of. 
+    /**
+     * The class that the Peer will make instances of.
      * If the BO is abstract then you must implement this method
      * in the BO.
      */
-    public static Class getOMClass() 
-        throws Exception
+    public static Class getOMClass()
+        throws TorqueException
     {
     #if ($table.isAbstract())
         String error = "You must implement the getOMClass method in your";
@@ -508,24 +546,24 @@ public abstract class $basePrefix${table.JavaName}Peer
 #if (!$table.isAlias())
 
     /**
-     * Method to do updates. 
+     * Method to do updates.
      *
      * @param Criteria object containing data that is used to create the UPDATE statement.
      */
-    public static void doUpdate(Criteria criteria) throws Exception
+    public static void doUpdate(Criteria criteria) throws TorqueException
     {
          $basePrefix${table.JavaName}Peer
             .doUpdate( criteria, (DBConnection) null );
     }
 
-    /** 
+    /**
      * Method to do updates.  This method is to be used during a transaction,
-     * otherwise use the doUpdate(Criteria) method.  It will take care of 
-     * the connection details internally. 
+     * otherwise use the doUpdate(Criteria) method.  It will take care of
+     * the connection details internally.
      *
      * @param Criteria object containing data that is used to create the UPDATE statement.
      */
-    public static void doUpdate(Criteria criteria, DBConnection dbCon) throws Exception
+    public static void doUpdate(Criteria criteria, DBConnection dbCon) throws TorqueException
     {
         Criteria selectCriteria = new
             Criteria(DATABASE_NAME, 2);
@@ -543,10 +581,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, 1);
                 }
                 else
-                {   
+                {
                     criteria.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to int
@@ -560,10 +598,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     criteria.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
          #if($col.isPrimaryKey())
@@ -572,7 +610,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      #end
 
         // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to 
+        // criteria.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if ( criteria.getDbName() == Torque.getDefaultDB() )
         {
@@ -588,26 +626,26 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
     }
 
-    /** 
+    /**
      * Method to do deletes.
      *
      * @param Criteria object containing data that is used DELETE from database.
      */
-     public static void doDelete(Criteria criteria) throws Exception
+     public static void doDelete(Criteria criteria) throws TorqueException
      {
          $basePrefix${table.JavaName}Peer
             .doDelete ( criteria, (DBConnection) null );
      }
 
-    /** 
+    /**
      * Method to do deletes.  This method is to be used during a transaction,
-     * otherwise use the doDelete(Criteria) method.  It will take care of 
-     * the connection details internally. 
+     * otherwise use the doDelete(Criteria) method.  It will take care of
+     * the connection details internally.
      *
      * @param Criteria object containing data that is used DELETE from database.
      */
-     public static void doDelete(Criteria criteria, DBConnection dbCon) 
-        throws Exception
+     public static void doDelete(Criteria criteria, DBConnection dbCon)
+        throws TorqueException
      {
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
@@ -623,10 +661,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, 1);
                 }
                 else
-                {   
+                {
                     criteria.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
@@ -640,16 +678,16 @@ public abstract class $basePrefix${table.JavaName}Peer
                     criteria.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     criteria.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
      #end
 
         // Set the correct dbName if it has not been overridden
-        // criteria.getDbName will return the same object if not set to 
+        // criteria.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if ( criteria.getDbName() == Torque.getDefaultDB() )
         {
@@ -666,13 +704,13 @@ public abstract class $basePrefix${table.JavaName}Peer
      }
 
     /** Method to do selects */
-    public static Vector doSelect($table.JavaName obj) throws Exception
+    public static Vector doSelect($table.JavaName obj) throws TorqueException
     {
         return doSelect(buildCriteria(obj));
     }
 
     /** Method to do inserts */
-    public static void doInsert( $table.JavaName obj ) throws Exception
+    public static void doInsert( $table.JavaName obj ) throws TorqueException
     {
         #if ($table.IdMethod.equals("none"))
         doInsert(buildCriteria(obj));
@@ -686,7 +724,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * @param obj the data object to update in the database.
      */
-    public static void doUpdate($table.JavaName obj) throws Exception
+    public static void doUpdate($table.JavaName obj) throws TorqueException
     {
         doUpdate(buildCriteria(obj));
     }
@@ -694,20 +732,20 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * @param obj the data object to delete in the database.
      */
-    public static void doDelete($table.JavaName obj) throws Exception
+    public static void doDelete($table.JavaName obj) throws TorqueException
     {
         doDelete(buildCriteria(obj));
     }
 
-    /** 
+    /**
      * Method to do inserts.  This method is to be used during a transaction,
-     * otherwise use the doInsert($table.JavaName) method.  It will take 
-     * care of the connection details internally. 
+     * otherwise use the doInsert($table.JavaName) method.  It will take
+     * care of the connection details internally.
      *
      * @param obj the data object to insert into the database.
      */
     public static void doInsert( $table.JavaName obj, DBConnection dbCon)
-        throws Exception
+        throws TorqueException
     {
         #if ($table.IdMethod.equals("none"))
         doInsert(buildCriteria(obj), dbCon);
@@ -720,25 +758,25 @@ public abstract class $basePrefix${table.JavaName}Peer
 
     /**
      * Method to do update.  This method is to be used during a transaction,
-     * otherwise use the doUpdate($table.JavaName) method.  It will take 
-     * care of the connection details internally. 
+     * otherwise use the doUpdate($table.JavaName) method.  It will take
+     * care of the connection details internally.
      *
      * @param obj the data object to update in the database.
      */
     public static void doUpdate($table.JavaName obj, DBConnection dbCon)
-        throws Exception
+        throws TorqueException
     {
         doUpdate(buildCriteria(obj), dbCon);
     }
     /**
      * Method to delete.  This method is to be used during a transaction,
-     * otherwise use the doDelete($table.JavaName) method.  It will take 
-     * care of the connection details internally. 
+     * otherwise use the doDelete($table.JavaName) method.  It will take
+     * care of the connection details internally.
      *
      * @param obj the data object to delete in the database.
      */
     public static void doDelete($table.JavaName obj, DBConnection dbCon)
-        throws Exception
+        throws TorqueException
     {
         doDelete(buildCriteria(obj), dbCon);
     }
@@ -767,13 +805,13 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ($retrieveMethod = "retrieveByPK")
 #end
 
-    /** 
+    /**
      * Retrieve a single object by pk
      *
      * @param ObjectKey pk
      */
     public static $table.JavaName ${retrieveMethod}( ObjectKey pk )
-        throws Exception
+        throws TorqueException
     {
         DBConnection db = null;
         $table.JavaName retVal = null;
@@ -790,14 +828,14 @@ public abstract class $basePrefix${table.JavaName}Peer
         return(retVal);
     }
 
-    /** 
+    /**
      * Retrieve a single object by pk
      *
      * @param ObjectKey pk
      * @param DBConnection dbcon
      */
     public static $table.JavaName ${retrieveMethod}( ObjectKey pk, DBConnection dbcon )
-        throws Exception
+        throws TorqueException
     {
 
         Criteria criteria = new Criteria();
@@ -815,7 +853,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         Vector v = doSelect(criteria, dbcon);
         if ( v.size() != 1)
         {
-            throw new Exception("Failed to select one and only one row.");
+            throw new TorqueException("Failed to select one and only one row.");
         }
         else
         {
@@ -824,9 +862,78 @@ public abstract class $basePrefix${table.JavaName}Peer
     }
 
 
+    /** 
+     * Retrieve a multiple objects by pk
+     *
+     * @param ObjectKey pk
+     */
+    public static List ${retrieveMethod}s( List pks )
+        throws TorqueException
+    {
+        DBConnection db = null;
+        List retVal = null;
+        try
+        {
+           db = Torque.getConnection( DATABASE_NAME );
+           retVal = ${retrieveMethod}s( pks, db );
+        }
+        finally
+        {
+           if (db != null)
+              Torque.releaseConnection(db);
+        }
+        return(retVal);
+    }
+
+    /** 
+     * Retrieve a multiple objects by pk
+     *
+     * @param List pks
+     * @param DBConnection dbcon
+     */
+    public static List ${retrieveMethod}s( List pks, DBConnection dbcon )
+        throws TorqueException
+    {
+        List objs = null;
+        if (pks == null || pks.size() == 0)
+        {
+            objs = new LinkedList();
+        }
+        else
+        {
+            Criteria criteria = new Criteria();
+#if ($table.PrimaryKeys.size() == 1)
+            criteria.addIn( $table.PrimaryKeys.get(0).Name.toUpperCase(), pks );
+#else
+            Iterator iter = pks.iterator();
+            while (iter.hasNext())
+            {
+                ObjectKey pk = (ObjectKey)iter.next();
+                SimpleKey[] keys = (SimpleKey[])pk.getValue();
+                #set ( $i = 0 )
+                #foreach ($col in $table.PrimaryKeys)
+                    #set ( $cup=$col.Name.toUpperCase() )
+                    Criteria.Criterion c$i = criteria.getNewCriterion(
+                        $cup, keys[$i], Criteria.EQUAL);
+                    #set ( $j = $i - 1 )
+                    #if ($i > 0)
+                        c${j}.and(c${i});
+                    #end
+                    #set ( $i = $i + 1 )
+                #end
+                criteria.or(c0);
+            }            
+#end
+        objs = doSelect(criteria, dbcon);
+        }
+        return objs;            
+    }
+
+
+
 #if ($table.PrimaryKeys.size() > 1)
 #set ( $comma = false )
-    /** 
+    /**
      * retrieve object using using pk values.
      *
 #foreach ($col in $table.PrimaryKeys)
@@ -842,14 +949,14 @@ public abstract class $basePrefix${table.JavaName}Peer
     #if ($comma),#end $cjtype $clo
         #set ( $comma = true )
 #end
-        ) throws Exception
+        ) throws TorqueException
     {
         DBConnection db = null;
         $table.JavaName retVal = null;
        try
         {
            db = Torque.getConnection( DATABASE_NAME );
-           retVal = retrieveByPK( 
+           retVal = retrieveByPK(
            #set ( $comma = false )
            #foreach ($col in $table.PrimaryKeys)
          #set ( $clo=$col.Name.toLowerCase() )
@@ -864,10 +971,10 @@ public abstract class $basePrefix${table.JavaName}Peer
               Torque.releaseConnection(db);
         }
         return(retVal);
-    }   
+    }
 
 #set ( $comma = false )
-    /** 
+    /**
      * retrieve object using using pk values.
      *
 #foreach ($col in $table.PrimaryKeys)
@@ -884,9 +991,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     #if ($comma),#end $cjtype $clo
         #set ( $comma = true )
 #end
-       ,DBConnection dbcon ) throws Exception
+       ,DBConnection dbcon ) throws TorqueException
     {
-    
+
         Criteria criteria = new Criteria(5);
 #foreach ($col in $table.PrimaryKeys)
     #set ( $cup=$col.Name.toUpperCase() )
@@ -896,7 +1003,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         Vector v = doSelect(criteria, dbcon);
         if ( v.size() != 1)
         {
-            throw new Exception("Failed to select one and only one row.");
+            throw new TorqueException("Failed to select one and only one row.");
         }
         else
         {
@@ -908,11 +1015,11 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 #if ($complexObjectModel)
 
- ## 
+ ##
  ## setup joins
  ##
- #set ( $className = $table.JavaName ) 
- #set ( $countFK = 0 )  
+ #set ( $className = $table.JavaName )
+ #set ( $countFK = 0 )
  #foreach ($dummyFK in $table.ForeignKeys)
       #set ( $countFK = $countFK + 1 )
  #end
@@ -955,15 +1062,15 @@ public abstract class $basePrefix${table.JavaName}Peer
     * actually need in ${table.JavaName}Peer.
     */
     protected static Vector doSelectJoin${joinColumnId}(Criteria c)
-        throws Exception
+        throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag();
-    #end 
+    #end
 
         // Set the correct dbName if it has not been overridden
-        // c.getDbName will return the same object if not set to 
+        // c.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if ( c.getDbName() == Torque.getDefaultDB() )
         {
@@ -998,10 +1105,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     c.add($cup, 1);
                 }
                 else
-                {   
+                {
                     c.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
@@ -1015,14 +1122,14 @@ public abstract class $basePrefix${table.JavaName}Peer
                     c.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     c.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
      #end
-        
+
         Vector rows = BasePeer.doSelect(c);
         Vector results = new Vector();
 
@@ -1050,7 +1157,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 #set ($classDecl = "")
             $joinClassName obj2 = ($joinClassName)${joinClassName}Peer
                 .row2Object(row, offset, omClass);
-            
+
             boolean newObject = true;
             for (int j=0; j<results.size(); j++)
             {
@@ -1075,8 +1182,8 @@ public abstract class $basePrefix${table.JavaName}Peer
         return results;
     }
   #end
- #end 
- #end 
+ #end
+ #end
 
 ## ===========================================================
 
@@ -1107,21 +1214,21 @@ public abstract class $basePrefix${table.JavaName}Peer
 
 
    /**
-    * selects a collection of $className objects pre-filled with 
+    * selects a collection of $className objects pre-filled with
     * all related objects.
     *
     * This method is protected by default in order to keep the public
     * api reasonable.  You can provide public methods for those you
     * actually need in ${table.JavaName}Peer.
     */
-    protected static Vector doSelectJoinAllExcept${excludeString}(Criteria c) 
-        throws Exception
+    protected static Vector doSelectJoinAllExcept${excludeString}(Criteria c)
+        throws TorqueException
     {
     #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
          // stuff for postgresql problem.....
          c.setBlobFlag();
-    #end 
- 
+    #end
+
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to another value
         // so == check is okay and faster
@@ -1161,10 +1268,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     c.add($cup, 1);
                 }
                 else
-                {   
+                {
                     c.add($cup, 0);
                 }
-            }                     
+            }
          }
          #elseif ($col.isBooleanChar())
         // check for conversion from boolean to Y/N
@@ -1178,10 +1285,10 @@ public abstract class $basePrefix${table.JavaName}Peer
                     c.add($cup, "Y");
                 }
                 else
-                {   
+                {
                     c.add($cup, "N");
                 }
-            }                     
+            }
          }
          #end
      #end
@@ -1241,9 +1348,9 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ($classDecl = "")
             $joinClassName obj$index = ($joinClassName)${joinClassName}Peer
                 .row2Object( row, offset$index, omClass);
-            
+
             #if ($index == 2) boolean #end newObject = true;
-            for (int j=0; j<results.size(); j++)    
+            for (int j=0; j<results.size(); j++)
             {
                 $className temp_obj1 = ($className)results.elementAt(j);
                 $joinClassName temp_obj$index = temp_obj1.get${joinString}();
@@ -1269,23 +1376,23 @@ public abstract class $basePrefix${table.JavaName}Peer
         return results;
     }
  #end
- #end  
+ #end
 #end
 
 ## ------------------------------------------------------------
 
 
 #if (!$table.isAlias())
-    /** 
-     * Returns the TableMap related to this peer.  This method is not 
+    /**
+     * Returns the TableMap related to this peer.  This method is not
      * needed for general use but a specific application could have a
      * need.
      */
     protected static TableMap getTableMap()
-        throws Exception
+        throws TorqueException
     {
         return Torque.getDatabaseMap(DATABASE_NAME).getTable(TABLE_NAME);
-    }     
+    }
 #end ## ends if (!$table.isAlias())
 
 

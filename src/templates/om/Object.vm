@@ -15,6 +15,7 @@ package ${package};
 import java.util.*;
 import java.math.*;
 import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 import org.apache.torque.om.*;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
@@ -102,11 +103,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ( $throwsClause = "" )
         #if ($complexObjectModel)
           #if ($col.isForeignKey())
-            #set ( $throwsClause = "throws Exception" )
+            #set ( $throwsClause = "throws TorqueException" )
           #end    
           #if ( $col.Referrers.size() > 0 )
             #if ($throwsClause == "")
-              #set ( $throwsClause = "throws Exception" )
+              #set ( $throwsClause = "throws TorqueException" )
             #end
           #end
         #end
@@ -240,7 +241,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      *
      * @param $className v
      */
-    public void set${pVarName}($className v) throws Exception
+    public void set${pVarName}($className v) throws TorqueException
     {
    #foreach ($columnName in $fk.LocalColumns)
     #set ( $column = $table.getColumn($columnName) )
@@ -270,7 +271,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
    #set ( $pCollName = "${table.JavaName}s$relCol" )
     
-    public $className get${pVarName}() throws Exception
+    public $className get${pVarName}() throws TorqueException
     {
         if ( $varName==null && ($conditional) )
         {
@@ -307,7 +308,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * overridden in <code>$table.JavaName</code>.
 #end
      */
-    public void set${pVarName}Key(ObjectKey key) throws Exception
+    public void set${pVarName}Key(ObjectKey key) throws TorqueException
     {
     #if ($fk.LocalColumns.size() > 1)
         SimpleKey[] keys = (SimpleKey[])key.getValue();
@@ -376,7 +377,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      *
      * @param $className l
      */
-    public void add${relColMs}($className l) throws Exception
+    public void add${relColMs}($className l) throws TorqueException
     {
         get${relCol}().add(l);
         l.set${table.JavaName}${suffix}(($table.JavaName)this);
@@ -392,7 +393,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the collection. Otherwise returns the results of 
      * get${relCol}(new Criteria())
      */
-    public Vector get${relCol}() throws Exception
+    public Vector get${relCol}() throws TorqueException
     {
         if ($collName == null)
         {
@@ -410,7 +411,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * an empty collection or the current collection, the criteria
      * is ignored on a new object. 
      */
-    public Vector get${relCol}(Criteria criteria) throws Exception
+    public Vector get${relCol}(Criteria criteria) throws TorqueException
     {
         if ($collName == null)
         {
@@ -523,7 +524,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * actually need in ${table.JavaName}.
      */
     protected Vector get${relCol}Join${relCol2}(Criteria criteria) 
-        throws Exception
+        throws TorqueException
     {
         if ($collName == null)
         {
@@ -581,7 +582,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * actually need in ${table.JavaName}.
      */
     protected Vector get${relCol}JoinAllExcept${table.JavaName}(Criteria criteria) 
-        throws Exception
+        throws TorqueException
     {
         if ($collName == null)
         {
@@ -800,7 +801,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * in this file instead of in the super class, BaseObject.
 #end
      */
-    public void save(String dbName) throws Exception
+    public void save(String dbName) throws TorqueException
     {
         DBConnection dbCon = null;
  #if ($complexObjectModel)
@@ -809,7 +810,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             dbCon = BasePeer.beginTransaction(dbName);
             save(dbCon);
         }
-        catch(Exception e)
+        catch(TorqueException e)
         {
             BasePeer.rollBackTransaction(dbCon);
             throw e;
@@ -855,7 +856,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the save() method and the connection details will be handled
      * internally
      */
-    public void save(DBConnection dbCon) throws Exception
+    public void save(DBConnection dbCon) throws TorqueException
     {
   #if ($complexObjectModel)
       if (!alreadyInSave)
@@ -948,7 +949,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 #foreach ($col in $table.PrimaryKeys)
     #if ($complexObjectModel)
         #if ( $col.isForeignKey() || ($col.Referrers.size() > 0) )
-            #set ( $throwsClause = "throws Exception" )
+            #set ( $throwsClause = "throws TorqueException" )
         #end
     #end
 
@@ -990,7 +991,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     /** 
      * Set the PrimaryKey with an ObjectKey
      */
-    public void setPrimaryKey(ObjectKey key) throws Exception
+    public void setPrimaryKey(ObjectKey key) throws TorqueException
     {
         SimpleKey[] keys = (SimpleKey[])key.getValue();
     #set ($i = 0)
@@ -1034,7 +1035,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     /** 
      * Set the PrimaryKey using a String.
      */
-    public void setPrimaryKey(String key) throws Exception
+    public void setPrimaryKey(String key) throws TorqueException
     {
         int prevPos = 0;
 
@@ -1094,7 +1095,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      * of its class.
      */
     public void setQueryKey(String key) 
-        throws Exception
+        throws TorqueException
     {
         setPrimaryKey(key);
     }
@@ -1110,10 +1111,10 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 #end
      */
 #if ($table.ChildrenColumn || $table.isAbstract()) 
-    public $table.JavaName copyInto($table.JavaName copyObj) throws Exception
+    public $table.JavaName copyInto($table.JavaName copyObj) throws TorqueException
     {
 #else
-    public $table.JavaName copy() throws Exception
+    public $table.JavaName copy() throws TorqueException
     {
         $table.JavaName copyObj = new ${table.JavaName}();
 #end
