@@ -69,6 +69,7 @@ public interface NameGenerator
      * algorithm which produces a name.
      *
      * @param components Inputs used to generate a name.
+     * @return The generated name.
      */
     public String generateName(List components);
 }
