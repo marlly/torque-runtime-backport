@@ -137,7 +137,7 @@
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM
- "http://jakarta.apache.org/turbine/dtd/database.dtd">
+ "http://jakarta.apache.org/turbine/dtd/database_3_1.dtd">
 
 <database
   name="bookstore"
@@ -365,7 +365,7 @@
   Another common mistake is to forget that XML is
   <b>case-sensitive</b>.  All of the elements and
   attributes must be specified according to the
-  <a href="/turbine/dtd/database.dtd">DTD</a>
+  <a href="/turbine/dtd/database_3_1.dtd">DTD</a>
   for the database schema.  In addition, you must
   include the XML declaration and DTD specification in
   your database schema file.  Failure to do so can
@@ -386,7 +386,7 @@
 <source><![CDATA[
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE database SYSTEM
- "http://jakarta.apache.org/turbine/dtd/database.dtd">
+ "http://jakarta.apache.org/turbine/dtd/database_3_1.dtd">
 
 <database name="bookstore">
   <table name="ID_TABLE" idMethod="idbroker">
