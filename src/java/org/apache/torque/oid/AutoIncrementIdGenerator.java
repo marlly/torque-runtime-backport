@@ -69,9 +69,9 @@ import com.workingdogs.village.Value;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public class AutoIncrementIdGenerator
-    implements IdGenerator
+public class AutoIncrementIdGenerator implements IdGenerator
 {
+    /** the adapter that knows the correct sql syntax */
     private DB dbAdapter;
 
     /**

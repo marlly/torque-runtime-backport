@@ -71,13 +71,13 @@ import com.workingdogs.village.Value;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public class SequenceIdGenerator
-    implements IdGenerator
+public class SequenceIdGenerator implements IdGenerator
 {
-    
     /** The log. */
-    private static Category category = Category.getInstance(SequenceIdGenerator.class);
-    
+    private static Category category = Category.getInstance(
+            SequenceIdGenerator.class);
+
+    /** the adapter that knows the correct sql syntax */
     private DB dbAdapter;
 
     /**
@@ -192,7 +192,7 @@ public class SequenceIdGenerator
         category.debug(idSql);
 
         // Execute the query.
-        QueryDataSet qds = new QueryDataSet( connection, idSql );
+        QueryDataSet qds = new QueryDataSet(connection, idSql);
         Record rec;
         try
         {

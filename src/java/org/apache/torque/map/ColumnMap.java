@@ -177,8 +177,7 @@ public class ColumnMap implements java.io.Serializable
      */
     public void setForeignKey(String fullyQualifiedName)
     {
-        if (fullyQualifiedName != null &&
-             fullyQualifiedName.length() > 0)
+        if (fullyQualifiedName != null && fullyQualifiedName.length() > 0)
         {
             relatedTableName = fullyQualifiedName.substring(
                     0, fullyQualifiedName.indexOf('.'));

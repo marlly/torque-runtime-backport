@@ -79,8 +79,7 @@ import javax.sql.PooledConnection;
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
  */
-class ConnectionPool
-    implements ConnectionEventListener
+class ConnectionPool implements ConnectionEventListener
 {
     /**
      * Pool containing database connections.
@@ -108,20 +107,17 @@ class ConnectionPool
     private String password;
 
     /**
-     * The current number of database connections that have been
-     * created.
+     * The current number of database connections that have been created.
      */
     private int totalConnections;
 
     /**
-     * The maximum number of database connections that can be
-     * created.
+     * The maximum number of database connections that can be created.
      */
     private int maxConnections;
 
     /**
-     * The amount of time in milliseconds that a connection will be
-     * pooled.
+     * The amount of time in milliseconds that a connection will be pooled.
      */
     private int expiryTime; // 1 hour
 
@@ -172,7 +168,7 @@ class ConnectionPool
         this.cpds = cpds;
         this.username = username;
         this.password = password;
-        if ( maxConnections > 0 )
+        if (maxConnections > 0)
         {
             this.maxConnections = maxConnections;
         }
@@ -180,7 +176,7 @@ class ConnectionPool
         {
             this.maxConnections = 1;
         }
-        if ( expiryTime > 0 )
+        if (expiryTime > 0)
         {
             this.expiryTime = expiryTime * 1000;
         }
@@ -188,7 +184,7 @@ class ConnectionPool
         {
             this.expiryTime = 3600 * 1000; // one hour
         }
-        if ( connectionWaitTimeout > 0 )
+        if (connectionWaitTimeout > 0)
         {
             this.connectionWaitTimeout = connectionWaitTimeout * 1000;
         }
@@ -225,13 +221,13 @@ class ConnectionPool
         getConnection(String username, String password)
         throws SQLException
     {
-        if ( username != this.username || password != this.password )
+        if (username != this.username || password != this.password)
         {
             throw new SQLException("Username and password are invalid.");
         }
 
         PooledConnection pcon = null;
-        if ( pool.empty() && totalConnections < maxConnections )
+        if (pool.empty() && totalConnections < maxConnections)
         {
             pcon = getNewConnection();
         }
@@ -262,7 +258,7 @@ class ConnectionPool
         throws SQLException
     {
         PooledConnection pc = null;
-        if ( username == null )
+        if (username == null)
         {
             pc = cpds.getPooledConnection();
         }
@@ -274,8 +270,8 @@ class ConnectionPool
         // Age some connections so that there will not be a run on the db,
         // when connections start expiring
         long currentTime = System.currentTimeMillis();
-        double ratio = (1.0 * totalConnections)/maxConnections;
-        currentTime -= expiryTime*0.25*(1.0-ratio);
+        double ratio = (1.0 * totalConnections) / maxConnections;
+        currentTime -= expiryTime * 0.25 * (1.0 - ratio);
         timeStamps.put(pc, new Long(currentTime));
         totalConnections++;
         return pc;
@@ -293,7 +289,7 @@ class ConnectionPool
     {
         // We test waitCount > 0 to make sure no other threads are
         // waiting for a connection.
-        if ( waitCount > 0 || pool.empty() )
+        if (waitCount > 0 || pool.empty())
         {
             // The connection pool is empty and we cannot allocate any new
             // connections.  Wait the prescribed amount of time and see if
@@ -301,7 +297,7 @@ class ConnectionPool
             try
             {
                 waitCount++;
-                wait( connectionWaitTimeout );
+                wait(connectionWaitTimeout);
             }
             catch (InterruptedException ignored)
             {
@@ -313,7 +309,7 @@ class ConnectionPool
             }
 
             // Check for a returned connection.
-            if ( pool.empty() )
+            if (pool.empty())
             {
                 // If the pool is still empty here, we were not awoken by
                 // someone returning a connection.
@@ -333,13 +329,13 @@ class ConnectionPool
     private PooledConnection popConnection()
         throws Exception
     {
-        while ( !pool.empty() )
+        while (!pool.empty())
         {
             PooledConnection con = (PooledConnection) pool.pop();
 
             // It's really not safe to assume this connection is
             // valid even though it's checked before being pooled.
-            if ( isValid(con) )
+            if (isValid(con))
             {
                 return con;
             }
@@ -353,7 +349,7 @@ class ConnectionPool
                 // guaranteed not to exceed the connection limit since we
                 // just killed off one or more invalid connections, and no
                 // one else can be accessing this cache right now.
-                if ( pool.empty() )
+                if (pool.empty())
                 {
                     return getNewConnection();
                 }
@@ -374,13 +370,13 @@ class ConnectionPool
      * @param connection The connection to test.
      * @return True if the connection is expired, false otherwise.
      */
-    private boolean isExpired( PooledConnection connection )
+    private boolean isExpired(PooledConnection connection)
     {
         // Test the age of the connection (defined as current time
         // minus connection birthday) against the connection pool
         // expiration time.
-        return ( expiryTime < (System.currentTimeMillis() -
-                 ((Long)timeStamps.get(connection)).longValue()) );
+        return (expiryTime < (System.currentTimeMillis() -
+                 ((Long) timeStamps.get(connection)).longValue()));
     }
 
     /**
@@ -389,15 +385,15 @@ class ConnectionPool
      * @param connection The connection to test.
      * @return True if the connection is valid, false otherwise.
      */
-    private boolean isValid( PooledConnection connection )
+    private boolean isValid(PooledConnection connection)
     {
-        // all this code is commented out because 
+        // all this code is commented out because
         // connection.getConnection() is called when the connection
         // is returned to the pool and it will open a new logical Connection
-        // which does not get closed, then when it is called again 
+        // which does not get closed, then when it is called again
         // when a connection is requested it likely fails because a
         // new Connection has been requested and the old one is still
-        // open.  need to either do it right or skip it.  null check 
+        // open.  need to either do it right or skip it.  null check
         // was not working either.
 
         //try
@@ -435,13 +431,13 @@ class ConnectionPool
      */
     void shutdown()
     {
-        if ( pool != null )
+        if (pool != null)
         {
-            while ( !pool.isEmpty() )
+            while (!pool.isEmpty())
             {
                 try
                 {
-                    ((PooledConnection)pool.pop()).close();
+                    ((PooledConnection) pool.pop()).close();
                 }
                 catch (SQLException ignore)
                 {
@@ -507,7 +503,7 @@ class ConnectionPool
      */
     public void connectionClosed(ConnectionEvent event)
     {
-        releaseConnection( (PooledConnection)event.getSource());
+        releaseConnection((PooledConnection) event.getSource());
     }
 
     /**
@@ -522,7 +518,7 @@ class ConnectionPool
                 .println("CLOSING DOWN CONNECTION DUE TO INTERNAL ERROR");
             //remove this from the listener list because we are no more
             //interested in errors since we are about to close this connection
-            ( (PooledConnection) event.getSource() )
+            ((PooledConnection) event.getSource())
                 .removeConnectionEventListener(this);
         }
         catch (Exception ignore)
@@ -532,7 +528,7 @@ class ConnectionPool
 
         try
         {
-            closePooledConnection( (PooledConnection)event.getSource() );
+            closePooledConnection((PooledConnection)event.getSource());
         }
         catch (Exception ignore)
         {
@@ -548,7 +544,7 @@ class ConnectionPool
      */
     private synchronized void releaseConnection(PooledConnection pcon)
     {
-        if ( isValid(pcon) )
+        if (isValid(pcon))
         {
             pool.push(pcon);
             notify();
@@ -559,6 +555,10 @@ class ConnectionPool
         }
     }
 
+    /**
+     *
+     * @param pcon
+     */
     private void closePooledConnection(PooledConnection pcon)
     {
         try
@@ -579,7 +579,7 @@ class ConnectionPool
 
     private void log(String s)
     {
-        if ( logWriter != null )
+        if (logWriter != null)
         {
             logWriter.println(s);
         }

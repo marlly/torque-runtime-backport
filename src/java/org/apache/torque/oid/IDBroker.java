@@ -112,8 +112,7 @@ import org.apache.torque.util.Transaction;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public class IDBroker
-    implements Runnable, IdGenerator
+public class IDBroker implements Runnable, IdGenerator
 {
     /**
      * Name of the ID_TABLE = ID_TABLE
@@ -207,7 +206,7 @@ public class IDBroker
     /**
      * Category used for logging.
      */
-    Category category =
+    private Category category =
         Category.getInstance(IDBroker.class.getName());
 
     /**
@@ -259,13 +258,13 @@ public class IDBroker
         }
         if (!transactionsSupported)
         {
-            category.warn
-                ("IDBroker is being used with db '" + dbName +
-                 "', which does not support transactions.  IDBroker " +
-                 "attempts to use transactions to limit the possibility of " +
-                 "duplicate key generation.  Without transactions, " +
-                 "duplicate key generation is possible if multiple JVMs " +
-                 "are used or other means are used to write to the database.");
+            category.warn("IDBroker is being used with db '" + dbName
+                    + "', which does not support transactions. IDBroker "
+                    + "attempts to use transactions to limit the possibility "
+                    + "of duplicate key generation.  Without transactions, "
+                    + "duplicate key generation is possible if multiple JVMs "
+                    + "are used or other means are used to write to the "
+                    + "database.");
         }
     }
 
@@ -287,7 +286,7 @@ public class IDBroker
      * @exception Exception Database error.
      */
     public int getIdAsInt(Connection connection, Object tableName)
-        throws Exception
+            throws Exception
     {
         return getIdAsBigDecimal(connection, tableName).intValue();
     }
@@ -415,7 +414,7 @@ public class IDBroker
     {
         if (tableName == null)
         {
-            throw new Exception ("getNextIds(): tableName == null");
+            throw new Exception("getNextIds(): tableName == null");
         }
 
         // A note about the synchronization:  I (jmcnally) looked at
@@ -429,8 +428,7 @@ public class IDBroker
 
         List availableIds = (List) ids.get(tableName);
 
-        if ( availableIds == null ||
-             availableIds.size() < numOfIdsToReturn )
+        if (availableIds == null || availableIds.size() < numOfIdsToReturn)
         {
             if (availableIds == null)
             {
@@ -456,8 +454,8 @@ public class IDBroker
 //        {
             for (int i = size - 1; i >= 0; i--)
             {
-                    results[i] = (BigDecimal) availableIds.get(i);
-                    availableIds.remove(i);
+                results[i] = (BigDecimal) availableIds.get(i);
+                availableIds.remove(i);
             }
 //        }
 
@@ -507,7 +505,6 @@ public class IDBroker
                 category.error("Release of connection failed.", e);
             }
         }
-
         return exists;
     }
 
@@ -541,7 +538,7 @@ public class IDBroker
                         + "on table: " + tableName);
                 List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
-                if ( quantity > availableIds.size() )
+                if (quantity > availableIds.size())
                 {
                     try
                     {
@@ -589,25 +586,24 @@ public class IDBroker
         // Check if quantity changing is switched on.
         // If prefetch is turned off, changing quantity does not make sense
         if (!configuration.getBoolean(DB_IDBROKER_CLEVERQUANTITY, true)
-            || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
+                || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
             return;
         }
 
         // Get the last id request for this table.
-        java.util.Date lastTime =
-            (java.util.Date) lastQueryTime.get(tableName);
+        java.util.Date lastTime = (java.util.Date) lastQueryTime.get(tableName);
         java.util.Date now = new java.util.Date();
 
-        if ( lastTime != null)
+        if (lastTime != null)
         {
             long thenLong = lastTime.getTime();
             long nowLong = now.getTime();
             int timeLapse = (int) (nowLong - thenLong);
-            if ( timeLapse < sleepPeriod && timeLapse > 0 )
+            if (timeLapse < sleepPeriod && timeLapse > 0)
             {
-                category.debug("Unscheduled retrieval of more ids for table: " +
-                         tableName);
+                category.debug("Unscheduled retrieval of more ids for table: "
+                        + tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
                 float rate = getQuantity(tableName, null).floatValue()
@@ -672,7 +668,7 @@ public class IDBroker
                 // Update the row based on the quantity in the
                 // ID_TABLE.
                 BigDecimal newNextId = nextId.add(quantity);
-                updateNextId(connection, tableName, newNextId.toString() );
+                updateNextId(connection, tableName, newNextId.toString());
 
                 Transaction.commit(connection);
             }
@@ -683,10 +679,10 @@ public class IDBroker
             }
 
             List availableIds = (List) ids.get(tableName);
-            if ( availableIds == null )
+            if (availableIds == null)
             {
                 availableIds = new ArrayList();
-                ids.put( tableName, availableIds );
+                ids.put(tableName, availableIds);
             }
 
             // Create the ids and store them in the list of available ids.
@@ -776,16 +772,15 @@ public class IDBroker
      * @return A BigDecimal[].
      * @exception Exception a generic exception.
      */
-    private BigDecimal[] selectRow(Connection con,
-                                   String tableName)
-        throws Exception
+    private BigDecimal[] selectRow(Connection con, String tableName)
+            throws Exception
     {
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "SELECT " + NEXT_ID + ", " + QUANTITY)
-            .append( " FROM " + ID_TABLE )
-            .append( " WHERE TABLE_NAME = '" )
-            .append( tableName )
-            .append( '\'' );
+        stmt.append("SELECT " + NEXT_ID + ", " + QUANTITY)
+                .append(" FROM " + ID_TABLE)
+                .append(" WHERE TABLE_NAME = '")
+                .append(tableName)
+                .append('\'');
 
         Statement statement = null;
 
@@ -793,7 +788,7 @@ public class IDBroker
         try
         {
             statement = con.createStatement();
-            ResultSet rs = statement.executeQuery( stmt.toString() );
+            ResultSet rs = statement.executeQuery(stmt.toString());
 
             if (rs.next())
             {
@@ -829,21 +824,19 @@ public class IDBroker
      * @param id An int with the value to set for the id.
      * @exception Exception Database error.
      */
-    private void updateNextId(Connection con,
-                              String tableName,
-                              String id)
-        throws Exception
+    private void updateNextId(Connection con, String tableName, String id)
+            throws Exception
     {
 
 
-        StringBuffer stmt =
-            new StringBuffer(id.length() + tableName.length() + 50);
-            stmt.append( "UPDATE " + ID_TABLE )
-            .append( " SET NEXT_ID = " )
-            .append( id )
-            .append( " WHERE TABLE_NAME = '" )
-            .append( tableName )
-            .append( '\'' );
+        StringBuffer stmt = new StringBuffer(id.length()
+                + tableName.length() + 50);
+        stmt.append("UPDATE " + ID_TABLE)
+                .append(" SET NEXT_ID = ")
+                .append(id)
+                .append(" WHERE TABLE_NAME = '")
+                .append(tableName)
+                .append('\'');
 
         Statement statement = null;
 
@@ -852,7 +845,7 @@ public class IDBroker
         try
         {
             statement = con.createStatement();
-            statement.executeUpdate( stmt.toString() );
+            statement.executeUpdate(stmt.toString());
         }
         finally
         {
@@ -872,20 +865,18 @@ public class IDBroker
      * @param quantity An int with the value of the quantity.
      * @exception Exception Database error.
      */
-    private void updateQuantity(Connection con,
-                                String tableName,
-                                BigDecimal quantity)
+    private void updateQuantity(Connection con, String tableName,
+            BigDecimal quantity)
             throws Exception
     {
-        StringBuffer stmt =
-            new StringBuffer(quantity.toString().length() + tableName.length()
-                             + 50);
-            stmt.append( "UPDATE " + ID_TABLE )
-            .append( " SET QUANTITY = " )
-            .append( quantity )
-            .append( " WHERE TABLE_NAME = '" )
-            .append( tableName )
-            .append( '\'' );
+        StringBuffer stmt = new StringBuffer(quantity.toString().length()
+                + tableName.length() + 50);
+        stmt.append("UPDATE " + ID_TABLE)
+                .append(" SET QUANTITY = ")
+                .append(quantity)
+                .append(" WHERE TABLE_NAME = '")
+                .append(tableName)
+                .append('\'');
 
         Statement statement = null;
 
@@ -894,7 +885,7 @@ public class IDBroker
         try
         {
             statement = con.createStatement();
-            statement.executeUpdate( stmt.toString() );
+            statement.executeUpdate(stmt.toString());
         }
         finally
         {

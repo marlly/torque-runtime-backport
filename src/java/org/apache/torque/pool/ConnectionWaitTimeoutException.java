@@ -68,7 +68,7 @@ public class ConnectionWaitTimeoutException extends Exception
      *
      * @param url The URL whose connection we were waiting for.
      */
-    public ConnectionWaitTimeoutException( String url )
+    public ConnectionWaitTimeoutException(String url)
     {
         super("Timed out waiting for pooled connection from '" + url + '\'');
     }

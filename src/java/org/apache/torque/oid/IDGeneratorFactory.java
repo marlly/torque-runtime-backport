@@ -82,10 +82,8 @@ public class IDGeneratorFactory
      * org.apache.torque.adapter.DB#getIDMethodType()} method.
      * Returns <code>null</code> for unknown types.
      *
-     * @param dbAdapter The type of adapter to create an ID generator
-     * for.
-     * @return The appropriate ID generator (possibly
-     * <code>null</code>).
+     * @param dbAdapter The type of adapter to create an ID generator for.
+     * @return The appropriate ID generator (possibly <code>null</code>).
      */
     public static IdGenerator create(DB dbAdapter)
     {

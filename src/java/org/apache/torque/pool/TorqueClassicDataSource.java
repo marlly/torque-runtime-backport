@@ -190,7 +190,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to expiryTime.
      */
-    public void setMaxExpiryTime(int  v)
+    public void setMaxExpiryTime(int v)
     {
         this.maxExpiryTime = v;
     }
@@ -215,7 +215,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to connectionWaitTimeout.
      */
-    public void setConnectionWaitTimeout(int  v)
+    public void setConnectionWaitTimeout(int v)
     {
         this.connectionWaitTimeout = v;
     }
@@ -240,7 +240,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to logInterval.
      */
-    public void setLogInterval(int  v)
+    public void setLogInterval(int v)
     {
         this.logInterval = v;
     }
@@ -266,7 +266,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to defaultAutoCommit.
      */
-    public void setDefaultAutoCommit(boolean  v)
+    public void setDefaultAutoCommit(boolean v)
     {
         this.defaultAutoCommit = v;
     }
@@ -292,7 +292,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to defaultReadOnly.
      */
-    public void setDefaultReadOnly(boolean  v)
+    public void setDefaultReadOnly(boolean v)
     {
         this.defaultReadOnly = v;
     }
@@ -316,15 +316,15 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to dataSourceName.
      */
-    public void setDataSourceName(String  v)
+    public void setDataSourceName(String v)
     {
-        if (getConnectionPoolDataSource() != null) 
+        if (getConnectionPoolDataSource() != null)
         {
             throw new IllegalStateException("connectionPoolDataSource property"
-                + " already has a value.  Both dataSourceName and "  
+                + " already has a value.  Both dataSourceName and "
                 + "connectionPoolDataSource properties cannot be set.");
         }
-        
+
         this.dataSourceName = v;
     }
 
@@ -348,7 +348,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to description.
      */
-    public void setDescription(String  v)
+    public void setDescription(String v)
     {
         this.description = v;
     }
@@ -359,6 +359,7 @@ public class TorqueClassicDataSource
      * a jndi InitialContext.  This InitialContext is used to locate the
      * backend ConnectionPoolDataSource.
      *
+     * @param key environment key
      * @return value of jndiEnvironment.
      */
     public String getJndiEnvironment(String key)
@@ -376,7 +377,8 @@ public class TorqueClassicDataSource
      * a jndi InitialContext.  This InitialContext is used to locate the
      * backend ConnectionPoolDataSource.
      *
-     * @param v  Value to assign to jndiEnvironment.
+     * @param key environment key
+     * @param value  Value to assign to jndiEnvironment.
      */
     public void setJndiEnvironment(String key, String value)
     {
@@ -405,7 +407,7 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to connectionPoolDataSource.
      */
-    public void 
+    public void
         setConnectionPoolDataSource(ConnectionPoolDataSource  v)
     {
         if (v == null)
@@ -413,10 +415,10 @@ public class TorqueClassicDataSource
             throw new IllegalArgumentException(
                 "Null argument value is not allowed.");
         }
-        if (getDataSourceName() != null) 
+        if (getDataSourceName() != null)
         {
             throw new IllegalStateException("dataSourceName property"
-                + " already has a value.  Both dataSourceName and "  
+                + " already has a value.  Both dataSourceName and "
                 + "connectionPoolDataSource properties cannot be set.");
         }
         this.cpds = v;
@@ -425,31 +427,35 @@ public class TorqueClassicDataSource
         dataSourceName = v.hashCode() + " internal cpds name " + cpdsCounter++;
     }
 
-
     /**
      * Attempt to establish a database connection.
+     *
+     * @throws SQLException
      */
-    public Connection getConnection()
-        throws SQLException
+    public Connection getConnection() throws SQLException
     {
         return getConnection(null, null);
     }
 
     /**
      * Attempt to establish a database connection.
+     *
+     * @param username
+     * @param password
+     * @throws SQLException
      */
     synchronized public Connection getConnection(String username,
                                                  String password)
         throws SQLException
     {
         String key = getKey(username);
-        ConnectionPool pool = (ConnectionPool)pools.get(key);
-        if ( pool == null )
+        ConnectionPool pool = (ConnectionPool) pools.get(key);
+        if (pool == null)
         {
             try
             {
                 registerPool(username, password);
-                pool = (ConnectionPool)pools.get(key);
+                pool = (ConnectionPool) pools.get(key);
             }
             catch (Exception e)
             {
@@ -457,40 +463,50 @@ public class TorqueClassicDataSource
             }
         }
 
-        Connection con =
-            pool.getConnection(username, password).getConnection();
+        Connection con = pool.getConnection(username, password).getConnection();
         con.setAutoCommit(defaultAutoCommit);
         con.setReadOnly(defaultReadOnly);
         return con;
     }
 
+    /**
+     *
+     * @param suffix
+     * @return
+     */
     private String getKey(String suffix)
     {
         String key = getDataSourceName();
         if (key == null)
         {
-            throw new IllegalStateException("Attempted to use DataSource " 
+            throw new IllegalStateException("Attempted to use DataSource "
                 + "without a backend ConnectionPoolDataSource defined.");
         }
-        
-        if ( suffix != null )
+
+        if (suffix != null)
         {
             key += suffix;
         }
         return key;
     }
 
+    /**
+     *
+     * @param username
+     * @param password
+     * @throws javax.naming.NamingException
+     */
     synchronized private void registerPool(String username, String password)
          throws javax.naming.NamingException
     {
         String key = getKey(username);
-        if ( !pools.containsKey(key) )
+        if (!pools.containsKey(key))
         {
             ConnectionPoolDataSource cpds = this.cpds;
-            if ( cpds == null )
+            if (cpds == null)
             {
                 Context ctx = null;
-                if ( jndiEnvironment == null )
+                if (jndiEnvironment == null)
                 {
                     ctx = new InitialContext();
                 }
@@ -498,15 +514,15 @@ public class TorqueClassicDataSource
                 {
                     ctx = new InitialContext(jndiEnvironment);
                 }
-                cpds = (ConnectionPoolDataSource)ctx.lookup(dataSourceName);
+                cpds = (ConnectionPoolDataSource) ctx.lookup(dataSourceName);
             }
 
             int maxConnections = getDefaultMaxConnections();
-            if ( username != null )
+            if (username != null)
             {
                 String userMaxCon =
-                    (String)getPerUserMaxConnections().get(username);
-                if ( userMaxCon != null )
+                    (String) getPerUserMaxConnections().get(username);
+                if (userMaxCon != null)
                 {
                     maxConnections = Integer.parseInt(userMaxCon);
                 }
@@ -564,8 +580,7 @@ public class TorqueClassicDataSource
     /**
      * <CODE>Referenceable</CODE> implementation.
      */
-    public Reference getReference()
-        throws NamingException
+    public Reference getReference() throws NamingException
     {
         String factory = getClass().getName();
 
@@ -584,7 +599,7 @@ public class TorqueClassicDataSource
 
         byte[] serJndiEnv = null;
         // BinaryRefAddr does not allow null byte[].
-        if ( jndiEnvironment != null )
+        if (jndiEnvironment != null)
         {
             serJndiEnv = SerializationUtils.serialize(jndiEnvironment);
             ref.add(new BinaryRefAddr("jndiEnvironment", serJndiEnv));
@@ -592,7 +607,7 @@ public class TorqueClassicDataSource
 
         byte[] serPUMC = null;
         // BinaryRefAddr does not allow null byte[].
-        if ( getPerUserMaxConnections() != null )
+        if (getPerUserMaxConnections() != null)
         {
             serPUMC = SerializationUtils.serialize(getPerUserMaxConnections());
             ref.add(new BinaryRefAddr("perUserMaxConnections", serPUMC));
@@ -601,42 +616,49 @@ public class TorqueClassicDataSource
         return ref;
     }
 
-
     /**
      * implements ObjectFactory to create an instance of this class
+     *
+     * @param refObj
+     * @param name
+     * @param context
+     * @param env
+     * @return
+     * @throws Exception
      */
     public Object getObjectInstance(Object refObj, Name name,
                                     Context context, Hashtable env)
         throws Exception
     {
-        Reference ref = (Reference)refObj;
+        Reference ref = (Reference) refObj;
 
         if (ref.getClassName().equals(getClass().getName()))
         {
             setDefaultMaxConnections(Integer.parseInt(
-                (String)ref.get("defaultMaxConnections").getContent()));
+                (String) ref.get("defaultMaxConnections").getContent()));
             setMaxExpiryTime(Integer.parseInt(
-                (String)ref.get("maxExpiryTime").getContent()));
+                (String) ref.get("maxExpiryTime").getContent()));
             setConnectionWaitTimeout(Integer.parseInt(
-                (String)ref.get("connectionWaitTimeout").getContent()));
+                (String) ref.get("connectionWaitTimeout").getContent()));
             setLogInterval(Integer.parseInt(
-                (String)ref.get("logInterval").getContent()));
-            setDataSourceName((String)ref.get("dataSourceName").getContent());
-            setDescription((String)ref.get("description").getContent());
+                (String) ref.get("logInterval").getContent()));
+            setDataSourceName((String) ref.get("dataSourceName").getContent());
+            setDescription((String) ref.get("description").getContent());
 
             RefAddr refAddr = ref.get("jndiEnvironment");
-            if ( refAddr != null )
+            if (refAddr != null)
             {
-                byte[] serialized = (byte[])refAddr.getContent();
-                jndiEnvironment = (Properties)SerializationUtils.deserialize(serialized);
+                byte[] serialized = (byte[]) refAddr.getContent();
+                jndiEnvironment = (Properties)
+                        SerializationUtils.deserialize(serialized);
             }
 
             refAddr = ref.get("perUserMaxConnections");
-            if ( refAddr != null )
+            if (refAddr != null)
             {
-                byte[] serialized = (byte[])refAddr.getContent();
+                byte[] serialized = (byte[]) refAddr.getContent();
                 setPerUserMaxConnections(
-                    (Properties)SerializationUtils.deserialize(serialized) );
+                    (Properties) SerializationUtils.deserialize(serialized));
             }
 
             return this;
