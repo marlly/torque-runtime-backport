@@ -87,6 +87,7 @@ public class TorqueClassicDataSource
 {
     /** Pools keyed by username. */
     private static Map pools = new HashMap();
+    private static int cpdsCounter;
 
     /** DataSource Name used to find the ConnectionPoolDataSource */
     private String dataSourceName;
@@ -317,6 +318,13 @@ public class TorqueClassicDataSource
      */
     public void setDataSourceName(String  v)
     {
+        if (getConnectionPoolDataSource() != null) 
+        {
+            throw new IllegalStateException("connectionPoolDataSource property"
+                + " already has a value.  Both dataSourceName and "  
+                + "connectionPoolDataSource properties cannot be set.");
+        }
+        
         this.dataSourceName = v;
     }
 
@@ -397,9 +405,24 @@ public class TorqueClassicDataSource
      *
      * @param v  Value to assign to connectionPoolDataSource.
      */
-    public void setConnectionPoolDataSource(ConnectionPoolDataSource  v)
+    public void 
+        setConnectionPoolDataSource(ConnectionPoolDataSource  v)
     {
+        if (v == null)
+        {
+            throw new IllegalArgumentException(
+                "Null argument value is not allowed.");
+        }
+        if (getDataSourceName() != null) 
+        {
+            throw new IllegalStateException("dataSourceName property"
+                + " already has a value.  Both dataSourceName and "  
+                + "connectionPoolDataSource properties cannot be set.");
+        }
         this.cpds = v;
+
+        // set the dataSourceName to a unique value
+        dataSourceName = v.hashCode() + " internal cpds name " + cpdsCounter++;
     }
 
 
@@ -444,6 +467,12 @@ public class TorqueClassicDataSource
     private String getKey(String suffix)
     {
         String key = getDataSourceName();
+        if (key == null)
+        {
+            throw new IllegalStateException("Attempted to use DataSource " 
+                + "without a backend ConnectionPoolDataSource defined.");
+        }
+        
         if ( suffix != null )
         {
             key += suffix;
