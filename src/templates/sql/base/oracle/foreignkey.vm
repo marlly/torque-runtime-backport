@@ -2,7 +2,7 @@
 ALTER TABLE $table.Name
     ADD CONSTRAINT $fk.Name FOREIGN KEY ($fk.LocalColumnNames)
     REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
-#if ($fk.hasOnUpdate())
+#if ($fk.hasOnUpdate() && !$fk.OnUpdate.equalsIgnoreCase("cascade"))
 ON UPDATE $fk.OnUpdate
 #end
 #if ($fk.hasOnDelete())
