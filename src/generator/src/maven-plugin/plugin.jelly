@@ -245,7 +245,6 @@
           outputFile="report.${torque.project}.om.generation"
           targetDatabase="${torque.database}"
           targetPackage="${torque.targetPackage}"
-          templatePath="${torque.templatePath}"
           useClasspath="${torque.useClasspath}">
           <fileset dir="${torque.schema.dir}"
             includes="${torque.schema.om.includes}"
