@@ -158,6 +158,14 @@ torque/
     </td>
 </tr>
 <tr>
+    <td>databaseSchema</td>
+    <td>
+        Used by the JDBC -> XML process, and by the SQL Ant Task
+        that will initialize your target database with the
+        generated SQL. This is only used by Oracle at this time.
+     </td>
+</tr>
+<tr>
     <td><strong>You should not have to edit any properties below here!</strong></td>
     <td></td>
 </tr>
