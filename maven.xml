@@ -18,10 +18,11 @@
   <preGoal name="dist:build-bin">
 
     <!-- copy schema files to the right place -->
+<!--    
     <copy todir="${maven.dist.bin.assembly.dir}/schema">
       <fileset dir="${maven.src.dir}/schema" />
     </copy>
-
+-->
     <!-- copy master files to the right place -->
     <copy todir="${maven.dist.bin.assembly.dir}/master">
       <fileset dir="${maven.src.dir}/conf/master" />
