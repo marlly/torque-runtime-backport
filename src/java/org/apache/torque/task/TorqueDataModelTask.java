@@ -185,7 +185,7 @@ public class TorqueDataModelTask
      *  Set the xml schema describing the application
      *  model.
      *
-     * @param  v The new XmlFile value
+     * @param xmlFile The new XmlFile value
      */
     public void setXmlFile(String xmlFile)
     {
