@@ -26,6 +26,28 @@
           -->
 
           <li>
+            <strong>14 Dec 2001</strong>
+            <ul>
+              <li>
+	        From patch submitted by Byron Foster:  Updated DBFactory to know about the other Sybase jdbc driver name. 
+	        <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.18&amp;r2=1.19&amp;sortby=date&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+	        From patch submitted by Byron Foster:  Sybase is not fully jdbc 2.0 compliant, so the TorqueDataDumpTask.TableTool needed to be reimplemented using Village.
+                This provided support for any jdbc driver that Village supports ( and Torque since it is currently implemented with Village ).  The downside to this implementation is QueryDataSet
+                loads the entire result set into memory, so for large tables this may prove to be trouble.
+	        <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/task/TorqueDataDumpTask.java.diff?r1=1.5&amp;r2=1.6&amp;sortby=date&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+                From patch submitted by Byron Foster:  Added missing pieces of sybase support to the repository and created a sybase-status document in notes.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/sql/load/sybase/">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/sql/db-init/sybase/createdb.vm?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/profile/sybase.profile?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/notes/sybase-status.txt?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+              </li>
+            </ul>
+          </li>
+          <li>
             <strong>9 Dec 2001</strong>
             <ul>
               <li>
