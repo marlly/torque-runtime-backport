@@ -257,7 +257,6 @@ public class CriteriaTest extends BaseTestCase
         try
         {
             result = BasePeer.createQueryString(c);
-            System.out.println(result);
         }
         catch (TorqueException e)
         {
