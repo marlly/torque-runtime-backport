@@ -8,6 +8,7 @@
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
+    <logo>/images/jakarta-logo-blue.gif</logo>
   </organization>
   <logo>/images/blue-logo.gif</logo>
   <inceptionYear>2000</inceptionYear>
