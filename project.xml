@@ -2,22 +2,23 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <name>jakarta-turbine-torque</name>
   <id>torque</id>
+  <name>jakarta-turbine-torque</name>
   <currentVersion>3.0-b4-dev</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://jakarta.apache.org/</url>
     <logo>/images/jakarta-logo-blue.gif</logo>
   </organization>
-  <logo>/images/blue-logo.gif</logo>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.torque</package>
-  <!-- Gump integration -->
+  <logo>/images/blue-logo.gif</logo>
 
+  <!-- Gump integration -->
   <gumpRepositoryId>jakarta</gumpRepositoryId>
-  <shortDescription>Persistence Layer</shortDescription>
+
   <description>Torque is a persistence layer.</description>
+  <shortDescription>Persistence Layer</shortDescription>
   <url>http://jakarta.apache.org/turbine/torque/</url>
   <issueTrackingUrl>http://issues.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
@@ -50,68 +51,104 @@
       <id>dobbs</id>
       <email>dobbs@apache.org</email>
       <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Stephen Haberman</name>
       <id>stephenh</id>
       <email>stephenh@chase3000.com</email>
       <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Fedor Karpelevitch</name>
       <id>fedor</id>
       <email>fedor@karpelevitch.net</email>
       <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>John McNally</name>
       <id>jmcnally</id>
       <email>jmcnally@collab.net</email>
       <organization>CollabNet</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Martin Poeschl</name>
       <id>mpoeschl</id>
       <email>mpoeschl@marmot.at</email>
       <organization>Tucana.at</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Daniel Rall</name>
       <id>dlr</id>
       <email>dlr@finemaltcoding.com</email>
       <organization>CollabNet, Inc.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Kurt Schrader</name>
       <id>kschrader</id>
       <email>kschrader@karmalab.org</email>
       <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Jon Scott Stevens</name>
       <id>jon</id>
       <email>jon@latchkey.com</email>
       <organization>CollabNet, Inc.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>James Taylor</name>
       <id>jtaylor</id>
       <email>james@jamestaylor.org</email>
       <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
     <developer>
       <name>Jason van Zyl</name>
       <id>jvanzyl</id>
       <email>jason@zenplex.com</email>
       <organization>Zenplex</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
     </developer>
+
   </developers>
-  <!-- Need to mark these as compile-time/run-time -->
 
   <dependencies>
-    <!-- And will likely override any of the classes in this jar,
-         but it is needed to avoid javadoc errors -->
-
     <dependency>
       <id>ant</id>
       <version>1.4.1</version>
@@ -216,8 +253,7 @@
     <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    <aspectSourceDirectories></aspectSourceDirectories>
-    <!-- Unit test classes -->
+    <aspectSourceDirectory></aspectSourceDirectory>
 
     <unitTest>
       <includes>
