@@ -151,29 +151,59 @@ public class NumberKey extends SimpleKey
     }
 
     /**
-     * keyObj is equal to this NumberKey if keyObj is a NumberKey or String
-     * that contains the same information this key contains.  Two ObjectKeys
-     * that both contain null values are not considered equal.
+     * Two ObjectKeys that both contain null values <strong>are not</strong> considered equal.
+     * 
+     * @param keyObj the key to compare values to
+     * @return whether the two objects are equal
      */
     public boolean equals(Object keyObj)
     {
-        boolean isEqual = false;
-
-        if ( key != null )
+        if (keyObj == this)
         {
-            if (keyObj instanceof String)
-            {
-                isEqual =  toString().equals(keyObj);
-            }
-            // check against a NumberKey. Two keys are equal, if their
-            // internal keys equivalent.
-            else if (keyObj instanceof NumberKey)
-            {
-                Object obj = ((NumberKey) keyObj).getValue();
-                isEqual =  key.equals(obj);
-            }
+            return true;
         }
-        return isEqual;
+        
+        if (!(keyObj instanceof NumberKey))
+        {
+            return false;
+        }
+        
+        if (getValue() != null)
+        {
+            return getValue().equals(((NumberKey) keyObj).getValue());
+        }
+        else if (((NumberKey) keyObj).getValue() != null)
+        {
+            return false;
+        }
+        else
+        {
+            // They are both null...still return false.
+            return false;
+        }
+    }
+   
+    /**
+     * @return a hash code based on the value
+     */ 
+    public int hashCode()
+    {
+        if (getValue() == null)
+        {
+            super.hashCode();
+        }
+        else
+        {
+            return getValue().hashCode();
+        }
+    }
+    
+    /**
+     * @return a numeric comparison of the two values
+     */
+    public int compareTo(Object o)
+    {
+        return getBigDecimal().compareTo(((NumberKey) o).getBigDecimal());
     }
 
     /**
