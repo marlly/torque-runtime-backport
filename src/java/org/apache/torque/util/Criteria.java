@@ -69,7 +69,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
@@ -383,10 +382,10 @@ public class Criteria extends Hashtable
      * Object column.
      *
      * @return A boolean.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @throws Exception Any exceptions caught during processing will be
+     *         rethrown wrapped into a Exception.
      */
-    public boolean containsObjectColumn() throws TorqueException
+    public boolean containsObjectColumn() throws Exception
     {
         return containsObjectColumn(dbName);
     }
@@ -397,11 +396,11 @@ public class Criteria extends Hashtable
      *
      * @param databaseMapName A String.
      * @return A boolean.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @throws Exception Any exceptions caught during processing will be
+     *         rethrown wrapped into a Exception.
      */
     public boolean containsObjectColumn(String databaseMapName)
-        throws TorqueException
+        throws Exception
     {
         // Peer or application may have noted the existence of a blob
         // so we can save the lookup.
