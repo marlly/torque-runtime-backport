@@ -3,6 +3,7 @@
 <project>
   <pomVersion>3</pomVersion>
   <id>torque-gen</id>
+  <groupId>torque</groupId>
   <name>Torque generator</name>
   <currentVersion>3.1-dev</currentVersion>
   <organization>
