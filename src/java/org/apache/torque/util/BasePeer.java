@@ -494,7 +494,7 @@ public abstract class BasePeer implements java.io.Serializable
                     {
                         // Only delete rows where the foreign key is
                         // also a primary key.  Other rows need
-                        // updateing, but that is not implemented.
+                        // updating, but that is not implemented.
                         if (columnMaps[j].isForeignKey()
                             && columnMaps[j].isPrimaryKey()
                             && key.equals(columnMaps[j].getRelatedName()))
