@@ -55,7 +55,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     public static ${table.JavaName} getInstance()
-        throws Exception
+        throws TorqueException
     {
         return getManager().getInstance();
     }
@@ -68,7 +68,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     public static ${table.JavaName} getInstance(ObjectKey id)
-        throws Exception
+        throws TorqueException
     {
         return getManager().getInstanceImpl(id);
     }
@@ -81,7 +81,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     public static ${table.JavaName} getInstance(ObjectKey id, boolean fromCache)
-        throws Exception
+        throws TorqueException
     {
         return getManager().getInstanceImpl(id, fromCache);
     }
@@ -94,7 +94,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     public static List getInstances(List ids)
-        throws Exception
+        throws TorqueException
     {
         return getManager().getInstancesImpl(ids);
     }
@@ -107,25 +107,25 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     public static List getInstances(List ids, boolean fromCache)
-        throws Exception
-    {
+        throws TorqueException
+    {    
         return getManager().getInstancesImpl(ids, fromCache);
     }
 
     public static void putInstance(Persistent om)
-        throws Exception
+        throws TorqueException
     {
         getManager().putInstanceImpl(om);
     }
 
     public static void clear()
-        throws Exception
+        throws TorqueException
     {
         getManager().clearImpl();
     }
 
     public static boolean exists(${table.JavaName} obj)
-        throws Exception
+        throws TorqueException
     {
         return getManager().existsImpl(obj);
     }
@@ -147,9 +147,18 @@ public abstract class $basePrefix${table.JavaName}Manager
      * Get a fresh instance of a ${table.JavaName}Manager
      */
     protected ${table.JavaName} getInstanceImpl()
-        throws Exception
+        throws TorqueException
     {
-        return (${table.JavaName}) getOMInstance();
+        ${table.JavaName} obj = null;
+        try
+        {
+            obj = (${table.JavaName}) getOMInstance();
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
+        return obj;
     }
 
 
@@ -159,7 +168,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @param id <code>ObjectKey</code> value
      */
     protected ${table.JavaName} getInstanceImpl(ObjectKey id)
-        throws Exception
+        throws TorqueException
     {
         return (${table.JavaName}) getOMInstance(id);
     }
@@ -172,7 +181,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * from storage.
      */
     protected ${table.JavaName} getInstanceImpl(ObjectKey id, boolean fromCache)
-        throws Exception
+        throws TorqueException
     {
         return (${table.JavaName}) getOMInstance(id, fromCache);
     }
@@ -185,7 +194,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     protected List getInstancesImpl(List ids) 
-        throws Exception
+        throws TorqueException
     {
         return getOMs(ids);
     }
@@ -200,7 +209,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     protected List getInstancesImpl(List ids, boolean fromCache) 
-        throws Exception
+        throws TorqueException
     {
         return getOMs(ids, fromCache);
     }
@@ -209,7 +218,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * check for a duplicate project name
      */
     protected boolean existsImpl(${table.JavaName} om)
-        throws Exception
+        throws TorqueException
     {
         Criteria crit = ${table.JavaName}Peer.buildCriteria(om);
         return ${table.JavaName}Peer.doSelect(crit).size() > 0;
@@ -223,7 +232,7 @@ public abstract class $basePrefix${table.JavaName}Manager
 
 
     protected Persistent retrieveStoredOM(ObjectKey id)
-        throws Exception
+        throws TorqueException
     {
         return ${table.JavaName}Peer.${retrieveMethod}(id);
     }
@@ -236,7 +245,7 @@ public abstract class $basePrefix${table.JavaName}Manager
      * @exception Exception if an error occurs
      */
     protected List retrieveStoredOMs(List ids) 
-        throws Exception
+        throws TorqueException
     {
         return ${table.JavaName}Peer.${retrieveMethod}s(ids);
     }

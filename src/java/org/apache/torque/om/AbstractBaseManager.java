@@ -141,7 +141,7 @@ public abstract class AbstractBaseManager
      * Return an instance of an om based on the id
      */
     protected Persistent getOMInstance(ObjectKey id) 
-        throws Exception
+        throws TorqueException
     {
         return getOMInstance(id, true);
     }
@@ -150,7 +150,7 @@ public abstract class AbstractBaseManager
      * Return an instance of an om based on the id
      */
     protected Persistent getOMInstance(ObjectKey id, boolean fromCache) 
-        throws Exception
+        throws TorqueException
     {
         String key = id.toString();
         Persistent om = null;
@@ -242,7 +242,7 @@ public abstract class AbstractBaseManager
     }
 
     protected abstract Persistent retrieveStoredOM(ObjectKey id)
-        throws Exception;
+        throws TorqueException;
 
     /**
      * Gets a list of om's based on id's.
@@ -252,7 +252,7 @@ public abstract class AbstractBaseManager
      * @exception Exception if an error occurs
      */
     protected List getOMs(ObjectKey[] ids) 
-        throws Exception
+        throws TorqueException
     {
         return getOMs(Arrays.asList(ids));
     }
@@ -265,7 +265,7 @@ public abstract class AbstractBaseManager
      * @exception Exception if an error occurs
      */
     protected List getOMs(List ids) 
-        throws Exception
+        throws TorqueException
     {
         return getOMs(ids, true);
     }
@@ -278,7 +278,7 @@ public abstract class AbstractBaseManager
      * @exception Exception if an error occurs
      */
     protected List getOMs(List ids, boolean fromCache) 
-        throws Exception
+        throws TorqueException
     {
         List oms = null;
         if ( ids != null && ids.size() > 0 ) 
@@ -336,7 +336,7 @@ public abstract class AbstractBaseManager
     }
 
     protected abstract List retrieveStoredOMs(List ids)
-        throws Exception;
+        throws TorqueException;
 
     /**
      * Get the value of region.
