@@ -802,34 +802,6 @@ public class Column
             jtype = TypeMap.getJavaNative(torqueType);
         }
 
-        if ( isPrimaryKey() || isForeignKey() )
-        {
-            if ( jtype.equals("String") )
-            {
-                jtype = "StringKey";
-            }
-            else if ( jtype.equals("Date") )
-            {
-                jtype = "DateKey";
-            }
-            else if ( jtype.equals("short")
-                      || jtype.equals("int")
-                      || jtype.equals("long")
-                      || jtype.equals("BigDecimal")
-                      || jtype.equals("byte")
-                      || jtype.equals("float")
-                      || jtype.equals("double")
-                      || jtype.equals("Short")
-                      || jtype.equals("Integer")
-                      || jtype.equals("Long")
-                      || jtype.equals("Byte")
-                      || jtype.equals("Float")
-                      || jtype.equals("Double") )
-            {
-                jtype = "NumberKey";
-            }
-        }
-
         return jtype;
     }
 
@@ -845,19 +817,6 @@ public class Column
             vmethod = TypeMap.getVillageMethod(torqueType);
         }
 
-        String jtype = TypeMap.getJavaNative(torqueType);
-        if ( isPrimaryKey() || isForeignKey() )
-        {
-            if ( jtype.equals("short")
-                 || jtype.equals("int")
-                 || jtype.equals("long")
-                 || jtype.equals("byte")
-                 || jtype.equals("float")
-                 || jtype.equals("double") )
-            {
-                vmethod = "asBigDecimal()";
-            }
-        }
         return vmethod;
     }
 
