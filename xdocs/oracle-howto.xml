@@ -11,10 +11,11 @@
 <section name="Introductory note">
 
 <p>
-This HOWTO was written some time ago and was targeted at Oracle 8i. If any of 
-the information below needs to be updated for later releases then please send
-a note to the <a href="mailto:turbine-dev@db.apache.org">Turbine Dev mailing 
-list</a>.
+This HOWTO was written some time ago and was targeted at Oracle 8i and the
+version of Torque that was coupled with the 
+<a href="http://jakarta.apache.org/turbine/">Turbine</a> application framework.
+Contributions towards updating the information below can be submitted to the 
+<a href="mailto:torque-dev@db.apache.org">Torque Dev mailing list</a>.
 </p>
 
 <p>
@@ -29,8 +30,9 @@ Patched for Oracle LOBs - For use with Torque 3.1</a>
 
 <p>
 This HOWTO aims to be a simple guide to make Turbine run with an existing
-Oracle 8i database. The process of making Turbine run are not covered in
-this guide, proceed to <a href="install.html">Turbine Installation</a> for
+Oracle 8i database. The process of making Turbine run is not covered in
+this guide, proceed to the 
+<a href="http://jakarta.apache.org/turbine/">Turbine</a> site for
 help on how to install Turbine.
 </p>
 
