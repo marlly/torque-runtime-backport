@@ -69,7 +69,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 #if (!$table.isAlias())
   #foreach ($col in $table.Columns)
     #set ( $cjtype = $col.JavaNative )
-    #set ( $clo=$col.Name.toLowerCase() )
+    #set ( $clo=$col.UncapitalisedJavaName )
     #set ($defVal = "")
     #if ($col.DefaultValue && !$col.DefaultValue.equalsIgnoreCase("NULL") )
       #set ( $quote = '' )
@@ -108,7 +108,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
   #foreach ($col in $table.Columns)
     #set ( $cfc=$col.JavaName )
-    #set ( $clo=$col.Name.toLowerCase() )
+    #set ( $clo=$col.UncapitalisedJavaName )
     #set ( $cjtype = $col.JavaNative )
 
         /**
@@ -291,7 +291,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #foreach ($columnName in $fk.LocalColumns)
           #set ( $column = $table.getColumn($columnName) )
           #set ( $cjtype = $column.JavaNative )
-          #set ( $clo=$column.Name.toLowerCase() )
+          #set ( $clo=$column.UncapitalisedJavaName )
           #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long" || $cjtype == "byte" || $cjtype == "float" || $cjtype == "double")
             #set ( $conditional = "$conditional${and}this.${clo} > 0" )
           #else
@@ -1165,7 +1165,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         #set ( $throwsClause = "throws TorqueException" )
       #end
     #end
-    #set ( $clo=$col.Name.toLowerCase() )
+    #set ( $clo=$col.UncapitalisedJavaName )
     #set ( $cjtype = $col.JavaNative )
     #set ($argList = "${argList}$comma $cjtype $clo")
     #set ($argList2 = "${argList2}$comma String $clo")
@@ -1174,7 +1174,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 
   #if ($table.PrimaryKey.size() == 1)
     #set ($col = $table.PrimaryKey.get(0) )
-    #set ( $clo=$col.Name.toLowerCase() )
+    #set ( $clo=$col.UncapitalisedJavaName )
     #set ( $cjtype= $col.JavaNative )
     /**
      * Set the PrimaryKey using ObjectKey.
@@ -1316,7 +1316,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      * Set the PrimaryKey using SimpleKeys.
      *
     #foreach ($col in $table.PrimaryKey)
-      #set ( $clo=$col.Name.toLowerCase() )
+      #set ( $clo=$col.UncapitalisedJavaName )
       #set ( $cjtype= $col.JavaNative )
      * @param $cjtype $clo
     #end
@@ -1325,7 +1325,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         $throwsClause
     {
     #foreach ($col in $table.PrimaryKey)
-         set${col.JavaName}($col.Name.toLowerCase());
+         set${col.JavaName}($col.UncapitalisedJavaName);
     #end
     }
 
@@ -1410,7 +1410,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     protected $table.JavaName copyInto($table.JavaName copyObj) throws TorqueException
     {
   #foreach ($col in $table.Columns)
-        copyObj.set${col.JavaName}($col.Name.toLowerCase());
+        copyObj.set${col.JavaName}($col.UncapitalisedJavaName);
   #end
 
   #foreach ($col in $table.Columns)

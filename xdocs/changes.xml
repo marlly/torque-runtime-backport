@@ -40,6 +40,12 @@
       TRQS85: Torque.initialize not reentrant
     </li>
     <li>
+      TRQS87: name conflict in generated java sources when using java reserved 
+      words (like "class") as column names. <br/>
+      <code>Column.UncapitalisedJavaName</code> is now used as member name 
+      instead of <code>Column.Name.toLowerCase()</code> <br/>
+    </li>
+    <li>
       TRQS136: MySQL will not accept a size definition for TEXT and BLOB fields
     </li>
     <li>
