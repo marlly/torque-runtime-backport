@@ -3749,7 +3749,9 @@ public class Criteria extends Hashtable
             {
                 s.add(c.getTable());
                 for(int i=0;i<c.getClauses().size();i++)
+                {
                   addCriterionTable((Criterion)(c.getClauses().get(i)), s);
+                }
             }
         }
 
@@ -3780,7 +3782,9 @@ public class Criteria extends Hashtable
             {
                 a.add(c);
                 for(int i=0;i<c.getClauses().size();i++)
+                {
                   traverseCriterion((Criterion)(c.getClauses().get(i)), a);
+                }
             }
         }
     }
