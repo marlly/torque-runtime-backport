@@ -95,18 +95,38 @@ public class TorqueComponent
     /** The Avalon Context */
     private Context context = null;
 
-    /** The Configuration File for Torque */
+    /** The instance of Torque used by this component. */
+    private TorqueInstance torqueInstance = null;
+
+    /** The configuration file for Torque. */
     private String configFile = null;
 
 
     /**
-     * Get a reference to the actual Torque Core
+     * Creates a new instance.  Default constructor used by Avalon.
+     */
+    public TorqueComponent()
+    {
+        this(new TorqueInstance());
+    }
+
+    /**
+     * Creates a new instance.
      *
-     * @return A Torque Singleton reference
+     * @param torqueInstance The instance of the Torque core used by
+     * this component.
+     */
+    protected TorqueComponent(TorqueInstance torqueInstance)
+    {
+        this.torqueInstance = torqueInstance;
+    }
+
+    /**
+     * @return A reference to our instance of the Torque core.
      */
     private TorqueInstance getTorque()
     {
-        return TorqueInstance.getInstance();
+        return torqueInstance;
     }
 
     /*

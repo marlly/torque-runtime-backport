@@ -113,6 +113,12 @@ public class Torque
      */
     public static final String CACHE_KEY = "manager.useCache";
 
+    /**
+     * The single instance of {@link TorqueInstance} used by the
+     * static API presented by this class.
+     */
+    private static TorqueInstance torqueSingleton = null;
+
     /** 
      * This is a member variable of Torque objects created by the Stratum
      * lifecycle
@@ -137,7 +143,11 @@ public class Torque
      */
     private static TorqueInstance getInstance()
     {
-        return TorqueInstance.getInstance();
+        if (torqueSingleton == null)
+        {
+            torqueSingleton = new TorqueInstance();
+        }
+        return torqueSingleton;
     }
 
     /**

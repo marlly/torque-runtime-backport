@@ -81,11 +81,11 @@ import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.util.BasePeer;
 
 /**
- * The implementation of Torque.
- * <br/>
- * This is a singleton pattern so that Torque works both as a Avalon component
- * and as a standalone application by using the Torque facade.
- *
+ * The core of Torque's implementation.  Both the classic {@link
+ * org.apache.torque.Torque} static wrapper and the {@link
+ * org.apache.torque.avalon.TorqueComponent} <a
+ * href="http://avalon.apache.org/">Avalon</a> implementation leverage
+ * this class.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
@@ -145,42 +145,18 @@ public class TorqueInstance
      */
     private List mapBuilders = null;
 
-    /*
-     * ========================================================================
-     *
-     * Singleton Pattern
-     *
-     * ========================================================================
-     */
-
-    /** The only instance in this class */
-    private static TorqueInstance torqueSingleton = null;
-
     /**
-     * C'tor
+     * Creates a new instance with default configuration.
+     *
+     * @see #resetConfiguration()
      */
-    private TorqueInstance()
+    public TorqueInstance()
     {
         resetConfiguration();
     }
 
     /**
-     * Fetch the Torque Instance from the Singleton
-     *
-     * @return The only TorqueInstance Instance
-     */
-
-    public static synchronized TorqueInstance getInstance()
-    {
-        if (torqueSingleton == null)
-        {
-            torqueSingleton = new TorqueInstance();
-        }
-        return torqueSingleton;
-    }
-        
-    /**
-     * initialize Torque
+     * Initializes this instance of Torque.
      *
      * @see org.apache.stratum.lifecycle.Initializable
      * @throws TorqueException Any exceptions caught during processing will be
