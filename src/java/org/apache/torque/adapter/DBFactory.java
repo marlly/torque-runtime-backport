@@ -181,12 +181,12 @@ public class DBFactory
      * @param adapterClass The <code>Class</code> of the database
      * adapter associated with <code>driver</code>.
      */
-    private static void registerAdapter(String driver, Class apdaterClass)
+    private static void registerAdapter(String driver, Class adapterClass)
     {
         if (!adapters.containsKey(driver))
         {
             // Add this new adapter class to the list of known adapters.
-            adapters.put(driver, apdaterClass);
+            adapters.put(driver, adapterClass);
         }
     }
 
