@@ -418,7 +418,7 @@ public abstract class DB implements Serializable, IDMethod
         }
         else 
         {
-            new Timestamp(date.getTime());
+            ts = new Timestamp(date.getTime());
         }
         
         return "{ts '" + ts + "'}";
