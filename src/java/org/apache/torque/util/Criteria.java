@@ -3231,15 +3231,11 @@ public class Criteria extends Hashtable
         private DB db;
 
         /**
-         * Another Criterion connected to this one by an OR clause.
+         * other connected criteria and their conjunctions.
          */
-        private Criterion or;
-
-        /**
-         * Another criterion connected to this one by an AND clause.
-         */
-        private Criterion and;
-
+        private List clauses = new ArrayList(); 
+        private List conjunctions = new ArrayList(); 
+        
         /**
          * Creates a new instance, initializing a couple members.
          */
@@ -3412,13 +3408,10 @@ public class Criteria extends Hashtable
         public void setDB(DB  v)
         {
             this.db = v;
-            if ( and != null )
+            
+            for(int i=0;i<this.clauses.size();i++)
             {
-                and.setDB(v);
-            }
-            if ( or != null )
-            {
-                or.setDB(v);
+              ((Criterion)(clauses.get(i))).setDB(v);
             }
         }
 
@@ -3445,50 +3438,38 @@ public class Criteria extends Hashtable
          }
 
         /**
-         *  get the criterion from this Criterion's AND field.
+         *  get the list of clauses in this Criterion
          */
-        public Criterion getAnd()
+        private List getClauses()
         {
-            return and;
+            return clauses;
         }
 
         /**
-         * Append a Criteria onto this Criteria's AND field.
+         *  get the list of conjunctions in this Criterion
+         */
+        private List getConjunctions()
+        {
+            return conjunctions;
+        }
+
+        /**
+         * Append an AND Criterion onto this Criterion's list.
          */
         public Criterion and(Criterion criterion)
         {
-            if (this.and == null)
-            {
-                this.and = criterion;
-            }
-            else
-            {
-                this.and.and(criterion);
-            }
+            this.clauses.add(criterion);
+            this.conjunctions.add(AND);
             return this;
         }
 
         /**
-         *  get the criterion from this Criterion's AND field.
-         */
-        public Criterion getOr()
-        {
-            return or;
-        }
-
-        /**
-         * Append a Criterion onto this Criterion's OR field.
+         * Append an OR Criterion onto this Criterion's list.
          */
         public Criterion or(Criterion criterion)
         {
-            if (this.or == null)
-            {
-                this.or = criterion;
-            }
-            else
-            {
-                this.or.or(criterion);
-            }
+            this.clauses.add(criterion);
+            this.conjunctions.add(OR);
             return this;
         }
 
@@ -3506,7 +3487,9 @@ public class Criteria extends Hashtable
                 return;
             }
 
-            sb.append('(');
+            Criterion clause = null;
+            for(int j=0;j<this.clauses.size();j++)
+              sb.append('(');
             if ( CUSTOM == comparison )
             {
                 if ( value != null && ! "".equals(value) )
@@ -3532,18 +3515,13 @@ public class Criteria extends Hashtable
                                     ignoreStringCase, getDb(), sb);
             }
 
-            if (or != null)
+            for(int i=0;i<this.clauses.size();i++)
             {
-                sb.append(OR);
-                or.appendTo(sb);
+                sb.append(this.conjunctions.get(i));
+                clause = (Criterion)(this.clauses.get(i));
+                clause.appendTo(sb);
+                sb.append(')');
             }
-
-            if (and != null)
-            {
-                sb.append(AND);
-                and.appendTo(sb);
-            }
-            sb.append(')');
         }
 
         /**
@@ -3563,7 +3541,8 @@ public class Criteria extends Hashtable
 
             DB db = getDb();
 
-            sb.append('(');
+            for(int j=0;j<this.clauses.size();j++)
+              sb.append('(');
             if ( CUSTOM == comparison )
             {
                 if ( !"".equals(value) )
@@ -3640,18 +3619,13 @@ public class Criteria extends Hashtable
                 }
             }
 
-            if (or != null)
+            for(int i=0;i<this.clauses.size();i++)
             {
-                sb.append(OR);
-                or.appendPsTo(sb,params);
+                sb.append(this.conjunctions.get(i));
+                Criterion clause = (Criterion)(this.clauses.get(i));
+                clause.appendPsTo(sb,params);
+                sb.append(')');
             }
-
-            if (and != null)
-            {
-                sb.append(AND);
-                and.appendPsTo(sb,params);
-            }
-            sb.append(')');
         }
 
         /**
@@ -3717,12 +3691,16 @@ public class Criteria extends Hashtable
             }
 
             // check chained criterion
-            isEquiv &= (and == null && crit.getAnd() == null )
-                || (and != null && and.equals(crit.getAnd()));
-
-            isEquiv &= (or == null && crit.getOr() == null )
-                || (or != null && or.equals(crit.getOr()));
-
+            
+            isEquiv &= this.clauses.size() == crit.getClauses().size();
+            for(int i=0;i<this.clauses.size();i++)
+            {
+              isEquiv &=  ((String)(conjunctions.get(i)))
+                  .equals((String)(crit.getConjunctions().get(i))); 
+              isEquiv &=  ((Criterion)(clauses.get(i)))
+                  .equals((Criterion)(crit.getClauses().get(i))); 
+            }
+                
             return isEquiv;
         }
 
@@ -3743,19 +3721,17 @@ public class Criteria extends Hashtable
                 h ^= column.hashCode();
             }
 
-            if (and != null)
+            for(int i=0;i<this.clauses.size();i++)
             {
-                h ^= and.hashCode();
-            }
-
-            if (or != null)
-            {
-                h ^= or.hashCode();
+                h ^= ((Criterion)(clauses.get(i))).hashCode();
             }
 
             return h;
         }
 
+        /**
+         * get all tables from nested criterion objects
+         */
         public String[] getAllTables()
         {
             StringStack tables = new StringStack();
@@ -3763,16 +3739,24 @@ public class Criteria extends Hashtable
             return tables.toStringArray();
         }
 
+        /**
+         * method supporting recursion through all criterions to give
+         * us a StringStack of tables from each criterion
+         */
         private void addCriterionTable(Criterion c, StringStack s)
         {
             if ( c != null )
             {
                 s.add(c.getTable());
-                addCriterionTable(c.getAnd(), s);
-                addCriterionTable(c.getOr(), s);
+                for(int i=0;i<c.getClauses().size();i++)
+                  addCriterionTable((Criterion)(c.getClauses().get(i)), s);
             }
         }
 
+        /**
+         * get an array of all criterion attached to this
+         * recursing through all sub criterion
+         */
         public Criterion[] getAttachedCriterion()
         {
             ArrayList crits = new ArrayList();
@@ -3786,13 +3770,17 @@ public class Criteria extends Hashtable
             return crita;
         }
 
+        /**
+         * method supporting recursion through all criterions to give
+         * us an ArrayList of them
+         */
         private void traverseCriterion(Criterion c, ArrayList a)
         {
             if ( c != null )
             {
                 a.add(c);
-                traverseCriterion(c.getAnd(), a);
-                traverseCriterion(c.getOr(), a);
+                for(int i=0;i<c.getClauses().size();i++)
+                  traverseCriterion((Criterion)(c.getClauses().get(i)), a);
             }
         }
     }
