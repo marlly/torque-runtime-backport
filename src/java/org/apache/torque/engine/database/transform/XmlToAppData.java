@@ -58,10 +58,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.File;
-import java.util.List;
-import java.util.Iterator;
 
-import org.apache.torque.Torque;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
@@ -102,7 +99,6 @@ public class XmlToAppData extends DefaultHandler
     private Unique currUnique;
 
     private boolean firstPass;
-    private Table foreignTable;
     private String errorMessage;
     private boolean isExternalSchema;
     private String currentPackage;
@@ -111,7 +107,7 @@ public class XmlToAppData extends DefaultHandler
 
     private static SAXParserFactory saxFactory;
 
-    static 
+    static
     {
         saxFactory = SAXParserFactory.newInstance();
         saxFactory.setValidating(true);
@@ -121,10 +117,11 @@ public class XmlToAppData extends DefaultHandler
      * Creates a new instance for the specified database type.
      *
      * @param databaseType The type of database for the application.
+     * @param defaultPackage the default java package used for the om
      * @param basePropsFilePath The base of the path to the properties
      * file, including trailing slash.
      */
-    public XmlToAppData(String databaseType, String defaultPackage, 
+    public XmlToAppData(String databaseType, String defaultPackage,
                         String basePropsFilePath)
     {
         app = new AppData(databaseType, basePropsFilePath);
@@ -141,13 +138,13 @@ public class XmlToAppData extends DefaultHandler
      * @return AppData populated by <code>xmlFile</code>.
      */
     public AppData parseFile(String xmlFile)
-    {        
+    {
         try
         {
             // in case I am missing something, make it obvious
-            if (!firstPass) 
+            if (!firstPass)
             {
-                throw new Error("No more double pass");   
+                throw new Error("No more double pass");
             }
             currentXmlFile = xmlFile;
 
@@ -178,21 +175,22 @@ public class XmlToAppData extends DefaultHandler
         {
             e.printStackTrace();
         }
-        if (!isExternalSchema) 
+        if (!isExternalSchema)
         {
             firstPass = false;
-        }        
-        if ( errorMessage.length() > 0 )
+        }
+        if (errorMessage.length() > 0)
         {
             System.out.println("Error in XML schema: " + errorMessage);
         }
-
         return app;
     }
 
     /**
      * EntityResolver implementation. Called by the XML parser
      *
+     * @param publicId The public identifier of the external entity
+     * @param systemId The system identifier of the external entity
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
@@ -203,6 +201,13 @@ public class XmlToAppData extends DefaultHandler
 
     /**
      * Handles opening elements of the xml file.
+     *
+     * @param uri
+     * @param localName The local name (without prefix), or the empty string if
+     *         Namespace processing is not being performed.
+     * @param rawName The qualified name (with prefix), or the empty string if
+     *         qualified names are not available.
+     * @param attributes The specified or defaulted attributes
      */
     public void startElement(String uri, String localName, String rawName,
                              Attributes attributes)
@@ -214,10 +219,10 @@ public class XmlToAppData extends DefaultHandler
                     if (isExternalSchema)
                     {
                         currentPackage = attributes.getValue("package");
-                        if (currentPackage == null) 
+                        if (currentPackage == null)
                         {
                             currentPackage = defaultPackage;
-                        }                        
+                        }
                     }
                     else
                     {
@@ -228,19 +233,19 @@ public class XmlToAppData extends DefaultHandler
                 {
                     isExternalSchema = true;
                     String xmlFile = attributes.getValue("filename");
-                    if (xmlFile.charAt(0) != '/') 
+                    if (xmlFile.charAt(0) != '/')
                     {
                         File f = new File(currentXmlFile);
                         xmlFile = new File(f.getParent(), xmlFile).getPath();
                     }
-                    
+
                     parseFile(xmlFile);
                     isExternalSchema = false;
                 }
                 else if (rawName.equals("table"))
                 {
                     currTable = currDB.addTable(attributes);
-                    if (isExternalSchema) 
+                    if (isExternalSchema)
                     {
                         currTable.setForReferenceOnly(true);
                         currTable.setPackage(currentPackage);
@@ -291,13 +296,19 @@ public class XmlToAppData extends DefaultHandler
 
     /**
      * Handles closing elements of the xml file.
+     *
+     * @param uri
+     * @param localName The local name (without prefix), or the empty string if
+     *         Namespace processing is not being performed.
+     * @param rawName The qualified name (with prefix), or the empty string if
+     *         qualified names are not available.
      */
     public void endElement(String uri, String localName, String rawName)
     {
         if (DEBUG)
         {
-            System.out.println("endElement(" + uri + ", " + localName + ", " +
-                               rawName + ") called");
+            System.out.println("endElement(" + uri + ", " + localName + ", "
+                    + rawName + ") called");
         }
     }
 
@@ -333,8 +344,7 @@ public class XmlToAppData extends DefaultHandler
 
     private final void printParseError(String type, SAXParseException spe)
     {
-        System.err.println(type + " [line " + spe.getLineNumber() +
-                           ", row " + spe.getColumnNumber() + "]: " +
-                           spe.getMessage());
+        System.err.println(type + " [line " + spe.getLineNumber()
+                + ", row " + spe.getColumnNumber() + "]: " + spe.getMessage());
     }
 }

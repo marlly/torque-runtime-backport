@@ -98,7 +98,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
 
     private static SAXParserFactory saxFactory;
 
-
     static
     {
         saxFactory = SAXParserFactory.newInstance();
@@ -146,7 +145,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
             //System.out.println("Error : "+e);
             e.printStackTrace();
         }
-        if ( errorMessage.length() > 0 )
+        if (errorMessage.length() > 0)
         {
             System.out.println("ERROR in data file!!!\n" + errorMessage);
         }
@@ -180,7 +179,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
                 data.add(new DataRow(table, columnValues));
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -193,9 +192,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void warning(SAXParseException spe)
     {
-        System.out.println("Warning Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        System.out.println("Warning Line: " + spe.getLineNumber()
+                + " Row: " + spe.getColumnNumber()
+                + " Msg: " + spe.getMessage());
     }
 
     /**
@@ -205,9 +204,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void error(SAXParseException spe)
     {
-        System.out.println("Error Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        System.out.println("Error Line: " + spe.getLineNumber()
+                + " Row: " + spe.getColumnNumber()
+                + " Msg: " + spe.getMessage());
     }
 
     /**
@@ -217,9 +216,9 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void fatalError(SAXParseException spe)
     {
-        System.out.println("Fatal Error Line: " + spe.getLineNumber() +
-                           " Row: " + spe.getColumnNumber() +
-                           " Msg: " + spe.getMessage());
+        System.out.println("Fatal Error Line: " + spe.getLineNumber()
+                + " Row: " + spe.getColumnNumber()
+                + " Msg: " + spe.getMessage());
     }
 
     /**

@@ -92,6 +92,8 @@ public class SQLToAppData
 
     /**
      * Create a new class with an input Reader
+     *
+     * @param sqlFile the sql file
      */
     public SQLToAppData(String sqlFile)
     {
@@ -102,6 +104,10 @@ public class SQLToAppData
      * Create a new class with an input Reader.  This ctor is not used
      * but putting here in the event db.props properties are found to
      * be useful converting sql to xml, the infrastructure will exist
+     *
+     * @param sqlFile the sql file
+     * @param databaseType
+     * @param basePropsFilePath
      */
     public SQLToAppData(String sqlFile, String databaseType,
                         String basePropsFilePath)
@@ -110,7 +116,6 @@ public class SQLToAppData
         this.databaseType = databaseType;
         this.basePropsFilePath = basePropsFilePath;
     }
-
 
     /**
      * Get the current input sql file
@@ -122,8 +127,10 @@ public class SQLToAppData
 
     /**
      * Set the current input sql file
+     *
+     * @param sqlFile the sql file
      */
-    public void setSqlFile (String sqlFile)
+    public void setSqlFile(String sqlFile)
     {
         this.sqlFile = sqlFile;
     }
@@ -131,6 +138,8 @@ public class SQLToAppData
     /**
      * Move to the next token.  Throws an exception
      * if there is no more tokens available.
+     *
+     * @throws ParseException
      */
     private void next() throws ParseException
     {
@@ -140,7 +149,7 @@ public class SQLToAppData
         }
         else
         {
-            throw new ParseException ("No More Tokens");
+            throw new ParseException("No More Tokens");
         }
     }
 
@@ -148,11 +157,14 @@ public class SQLToAppData
      * Creates an error condition and adds the line and
      * column number of the current token to the error
      * message.
+     *
+     * @param name name of the error
+     * @throws ParseException
      */
-    private void err (String name) throws ParseException
+    private void err(String name) throws ParseException
     {
-        throw new ParseException (name + " at [ line: " + token.getLine() +
-            " col: " + token.getCol() + " ]");
+        throw new ParseException (name + " at [ line: " + token.getLine()
+                + " col: " + token.getCol() + " ]");
     }
 
     /**
@@ -165,6 +177,8 @@ public class SQLToAppData
 
     /**
      * Parses a CREATE TABLE FOO command.
+     *
+     * @throws ParseException
      */
     private void Create() throws ParseException
     {
@@ -223,19 +237,19 @@ public class SQLToAppData
 
         if (token.getStr().toUpperCase().equals("PRIMARY"))
         {
-            Create_Table_Column_Primary (tbl);
+            Create_Table_Column_Primary(tbl);
         }
         else if (token.getStr().toUpperCase().equals("FOREIGN"))
         {
-            Create_Table_Column_Foreign (tbl);
+            Create_Table_Column_Foreign(tbl);
         }
         else if (token.getStr().toUpperCase().equals("UNIQUE"))
         {
-            Create_Table_Column_Unique (tbl);
+            Create_Table_Column_Unique(tbl);
         }
         else
         {
-            Create_Table_Column_Data (tbl);
+            Create_Table_Column_Data(tbl);
         }
     }
 
@@ -247,12 +261,12 @@ public class SQLToAppData
         next();
         if (!token.getStr().toUpperCase().equals("KEY"))
         {
-            err ("KEY expected");
+            err("KEY expected");
         }
         next();
         if (!token.getStr().toUpperCase().equals("("))
         {
-            err ("( expected");
+            err("( expected");
         }
         next();
 
@@ -370,12 +384,12 @@ public class SQLToAppData
         {
             next();
             int i = 0;
-            fk.addReference((String) localColumns.get(i++),token.getStr());
+            fk.addReference((String) localColumns.get(i++), token.getStr());
             next();
             while (token.getStr().equals(","))
             {
                 next();
-                fk.addReference((String) localColumns.get(i++),token.getStr());
+                fk.addReference((String) localColumns.get(i++), token.getStr());
                 next();
             }
             if (!token.getStr().toUpperCase().equals(")"))
@@ -389,7 +403,7 @@ public class SQLToAppData
     /**
      * Parse the data definition of the column statement.
      */
-    private void Create_Table_Column_Data (Table tbl) throws ParseException
+    private void Create_Table_Column_Data(Table tbl) throws ParseException
     {
         String columnSize = null;
         String columnPrecision = null;
@@ -445,29 +459,29 @@ public class SQLToAppData
             next();
             columnSize = token.getStr();
             next();
-            if (token.getStr().equals (","))
+            if (token.getStr().equals(","))
             {
                 next();
                 columnPrecision = token.getStr();
                 next();
             }
 
-            if (!token.getStr().equals (")"))
+            if (!token.getStr().equals(")"))
             {
-                err (") expected");
+                err(") expected");
             }
             next();
         }
 
-        Column col = new Column (columnName);
+        Column col = new Column(columnName);
         if (columnPrecision != null)
         {
             columnSize = columnSize + columnPrecision;
         }
-        col.setTypeFromString (columnType,columnSize);
+        col.setTypeFromString(columnType, columnSize);
         tbl.addColumn(col);
 
-        if ( inEnum )
+        if (inEnum)
         {
             col.setNotNull(true);
             if (columnDefault != null)
@@ -484,7 +498,7 @@ public class SQLToAppData
                     next();
                     if (!token.getStr().toUpperCase().equals("NULL"))
                     {
-                        err ("NULL expected after NOT");
+                        err("NULL expected after NOT");
                     }
                     col.setNotNull(true);
                     next();
@@ -494,7 +508,7 @@ public class SQLToAppData
                     next();
                     if (!token.getStr().toUpperCase().equals("KEY"))
                     {
-                        err ("KEY expected after PRIMARY");
+                        err("KEY expected after PRIMARY");
                     }
                     col.setPrimaryKey(true);
                     next();
@@ -567,10 +581,8 @@ public class SQLToAppData
                 next();
             }
         }
-
         return appData;
     }
-
 
     /**
      * Just 4 testing.
