@@ -57,7 +57,7 @@ package org.apache.torque.engine.database.model;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang.Strings;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * A <code>NameGenerator</code> implementation for Java-esque names.
@@ -132,7 +132,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = ((String) tok.nextElement()).toLowerCase();
-            name.append(Strings.capitalise(namePart));
+            name.append(StringUtils.capitalise(namePart));
         }
         return name.toString();
     }
@@ -155,7 +155,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(Strings.capitalise(namePart));
+            name.append(StringUtils.capitalise(namePart));
         }
         return name.toString();
     }

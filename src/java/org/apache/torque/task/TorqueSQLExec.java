@@ -79,7 +79,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import org.apache.commons.lang.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -517,9 +517,9 @@ public class TorqueSQLExec extends Task
             {
                 String fileName = (String) eachFileName.next();
                 File file = new File(srcDir, fileName);
-                
+
                 if (file.exists())
-                {                
+                {
                     Transaction transaction = new Transaction();
                     transaction.setSrc(file);
                     transactions.add(transaction);
@@ -540,7 +540,7 @@ public class TorqueSQLExec extends Task
      */
     private void insertDatabaseSqlFiles(String url, String database, List transactions)
     {
-        url = Strings.replace(url, "@DB@", database);
+        url = StringUtils.replace(url, "@DB@", database);
         System.out.println("Our new url -> " + url);
 
         Driver driverInstance = null;

@@ -57,7 +57,7 @@ package org.apache.torque.om;
 import java.util.ArrayList;
 
 import org.apache.torque.TorqueException;
-import org.apache.commons.lang.Objects;
+import org.apache.commons.lang.ObjectUtils;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
@@ -133,15 +133,15 @@ public class ComboKey extends ObjectKey
      */
     public void setValue(SimpleKey[] keys)
     {
-        if ( this.key == null )
+        if (this.key == null)
         {
             this.key = keys;
         }
         else
         {
-            for ( int i = 0; i < this.key.length; i++ )
+            for (int i = 0; i < this.key.length; i++)
             {
-                if ( this.key[i] == null )
+                if (this.key[i] == null)
                 {
                     this.key[i] = keys[i];
                 }
@@ -154,7 +154,7 @@ public class ComboKey extends ObjectKey
      */
     public void setValue(String[] keys) throws TorqueException
     {
-        if ( this.key == null )
+        if (this.key == null)
         {
             throw new TorqueException(ERROR_MSG);
             /*
@@ -167,16 +167,16 @@ public class ComboKey extends ObjectKey
         }
         else
         {
-            for ( int i = 0; i < this.key.length; i++ )
+            for (int i = 0; i < this.key.length; i++)
             {
-                if ( this.key[i] == null && keys[i] != null )
+                if (this.key[i] == null && keys[i] != null)
                 {
                     throw new TorqueException(ERROR_MSG);
                     // this.key[i] = new SimpleKey( keys[i] );
                 }
                 else
                 {
-                    this.key[i].setValue( keys[i] );
+                    this.key[i].setValue(keys[i]);
                 }
             }
         }
@@ -190,24 +190,24 @@ public class ComboKey extends ObjectKey
     {
         int previousIndex = -1;
         int indexOfSep = keys.indexOf(SEPARATOR);
-        while ( indexOfSep != -1 )
+        while (indexOfSep != -1)
         {
-            if ( indexOfSep == 0)
+            if (indexOfSep == 0)
             {
                 tmpKeys.add(null);
             }
-            else if ( indexOfSep > 0 && indexOfSep < keys.length() - 1 )
+            else if (indexOfSep > 0 && indexOfSep < keys.length() - 1)
             {
-                tmpKeys.add( keys.substring(previousIndex + 1, indexOfSep) );
+                tmpKeys.add(keys.substring(previousIndex + 1, indexOfSep));
             }
-            else if ( indexOfSep == keys.length() - 1 )
+            else if (indexOfSep == keys.length() - 1)
             {
                 tmpKeys.add(null);
             }
             indexOfSep = keys.indexOf(SEPARATOR);
         }
 
-        if ( this.key == null )
+        if (this.key == null)
         {
             throw new TorqueException(ERROR_MSG);
             /*
@@ -220,9 +220,9 @@ public class ComboKey extends ObjectKey
         }
         else
         {
-            for ( int i = 0; i < this.key.length; i++ )
+            for (int i = 0; i < this.key.length; i++)
             {
-                if ( this.key[i] == null && tmpKeys.get(i) != null )
+                if (this.key[i] == null && tmpKeys.get(i) != null)
                 {
                     throw new TorqueException(ERROR_MSG);
                     // this.key[i] = new SimpleKey( (String)tmpKeys.get(i) );
@@ -259,12 +259,12 @@ public class ComboKey extends ObjectKey
     {
         boolean isEqual = false;
 
-        if ( key != null )
+        if (key != null)
         {
             // check that all keys are not null
             isEqual = true;
             SimpleKey[] keys = (SimpleKey []) key;
-            for ( int i = 0; i < keys.length && isEqual; i++ )
+            for (int i = 0; i < keys.length && isEqual; i++)
             {
                 isEqual &= keys[i] != null && keys[i].getValue() != null;
             }
@@ -294,7 +294,7 @@ public class ComboKey extends ObjectKey
     {
         boolean isEqual = false;
 
-        if ( key != null )
+        if (key != null)
         {
             // Checks  a compound key (ObjectKey[] or String[]
             // based) with the delimited String created by the
@@ -302,11 +302,11 @@ public class ComboKey extends ObjectKey
             // than parsing the String into its constituents.
             if (keyObj instanceof String)
             {
-                isEqual =  toString().equals(keyObj);
+                isEqual = toString().equals(keyObj);
             }
             // check against a ObjectKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof ComboKey)
+            else if (keyObj instanceof ComboKey)
             {
                 SimpleKey[] obj = (SimpleKey[])
                     ((ComboKey) keyObj).getValue();
@@ -314,20 +314,20 @@ public class ComboKey extends ObjectKey
                 SimpleKey[] keys1 = (SimpleKey[]) key;
                 SimpleKey[] keys2 = (SimpleKey[]) obj;
                 isEqual = keys1.length == keys2.length;
-                for ( int i = 0; i < keys1.length && isEqual; i++)
+                for (int i = 0; i < keys1.length && isEqual; i++)
                 {
-                    isEqual &= Objects.equals(keys1[i], keys2[i]);
+                    isEqual &= ObjectUtils.equals(keys1[i], keys2[i]);
                 }
             }
-            else if ( keyObj instanceof SimpleKey[]
-                      && key instanceof SimpleKey[] )
+            else if (keyObj instanceof SimpleKey[]
+                     && key instanceof SimpleKey[])
             {
                 SimpleKey[] keys1 = (SimpleKey[]) key;
                 SimpleKey[] keys2 = (SimpleKey[]) keyObj;
                 isEqual = keys1.length == keys2.length;
-                for ( int i = 0; i < keys1.length && isEqual; i++)
+                for (int i = 0; i < keys1.length && isEqual; i++)
                 {
-                    isEqual &= Objects.equals(keys1[i], keys2[i]);
+                    isEqual &= ObjectUtils.equals(keys1[i], keys2[i]);
                 }
             }
         }
@@ -336,16 +336,16 @@ public class ComboKey extends ObjectKey
 
     public void appendTo(StringBuffer sb)
     {
-        if ( key != null )
+        if (key != null)
         {
             SimpleKey[] keys = (SimpleKey[]) key;
-            for ( int i = 0; i < keys.length; i++)
+            for (int i = 0; i < keys.length; i++)
             {
-                if ( i != 0 )
+                if (i != 0)
                 {
                     sb.append(SEPARATOR);
                 }
-                if ( keys[i] != null )
+                if (keys[i] != null)
                 {
                     keys[i].appendTo(sb);
                 }
@@ -362,13 +362,13 @@ public class ComboKey extends ObjectKey
      */
     public int hashCode()
     {
-        if ( key == null )
+        if (key == null)
         {
             return super.hashCode();
         }
 
         SimpleKey sk = ((SimpleKey[]) key)[0];
-        if ( sk == null )
+        if (sk == null)
         {
             return super.hashCode();
         }
@@ -382,7 +382,7 @@ public class ComboKey extends ObjectKey
      */
     public String toString()
     {
-        if ( sbuf.length() > 0 )
+        if (sbuf.length() > 0)
         {
             sbuf.delete(0, sbuf.length());
         }

@@ -56,14 +56,13 @@ package org.apache.torque.manager;
  */
 
 import java.io.Serializable;
-import org.apache.commons.lang.Objects;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.torque.TorqueException;
 
-public class MethodCacheKey
-    implements Serializable
+public class MethodCacheKey implements Serializable
 {
-    //private static final Category log = 
+    //private static final Category log =
     //    Category.getInstance("org.apache.torque");
 
     int n;
@@ -78,13 +77,13 @@ public class MethodCacheKey
     public MethodCacheKey()
     {
     }
-    
+
     public MethodCacheKey(Serializable instanceOrClass, String method)
     {
         init(instanceOrClass, method);
     }
 
-    public MethodCacheKey(Serializable instanceOrClass, String method, 
+    public MethodCacheKey(Serializable instanceOrClass, String method,
                           Serializable arg1)
     {
         init(instanceOrClass, method, arg1);
@@ -97,7 +96,7 @@ public class MethodCacheKey
     }
 
     public MethodCacheKey(Serializable instanceOrClass, String method,
-                          Serializable arg1, Serializable arg2, 
+                          Serializable arg1, Serializable arg2,
                           Serializable arg3)
     {
         init(instanceOrClass, method, arg1, arg2, arg3);
@@ -111,11 +110,11 @@ public class MethodCacheKey
     /**
      * Initialize key for method with no arguments.
      *
-     * @param instanceOrClass the Object on which the method is invoked.  if 
+     * @param instanceOrClass the Object on which the method is invoked.  if
      * the method is static, a String representing the class name is used.
      * @param method the method name
      */
-    public void init(Serializable instanceOrClass, String method) 
+    public void init(Serializable instanceOrClass, String method)
     {
         n = 0;
         this.instanceOrClass = instanceOrClass;
@@ -126,12 +125,12 @@ public class MethodCacheKey
     /**
      * Initialize key for method with one argument.
      *
-     * @param instanceOrClass the Object on which the method is invoked.  if 
+     * @param instanceOrClass the Object on which the method is invoked.  if
      * the method is static, a String representing the class name is used.
      * @param method the method name
      * @param arg1 first method arg, may be null
      */
-    public void init(Serializable instanceOrClass, String method, 
+    public void init(Serializable instanceOrClass, String method,
                      Serializable arg1)
     {
         init(instanceOrClass, method);
@@ -142,13 +141,13 @@ public class MethodCacheKey
     /**
      * Initialize key for method with two arguments.
      *
-     * @param instanceOrClass the Object on which the method is invoked.  if 
+     * @param instanceOrClass the Object on which the method is invoked.  if
      * the method is static, a String representing the class name is used.
      * @param method the method name
      * @param arg1 first method arg, may be null
      * @param arg2 second method arg, may be null
      */
-    public void init(Serializable instanceOrClass, String method, 
+    public void init(Serializable instanceOrClass, String method,
                      Serializable arg1, Serializable arg2)
     {
         init(instanceOrClass, method);
@@ -161,13 +160,13 @@ public class MethodCacheKey
     /**
      * Initialize key for method with two arguments.
      *
-     * @param instanceOrClass the Object on which the method is invoked.  if 
+     * @param instanceOrClass the Object on which the method is invoked.  if
      * the method is static, a String representing the class name is used.
      * @param method the method name
      * @param arg1 first method arg, may be null
      * @param arg2 second method arg, may be null
      */
-    public void init(Serializable instanceOrClass, String method, 
+    public void init(Serializable instanceOrClass, String method,
                      Serializable arg1, Serializable arg2,
                      Serializable arg3)
     {
@@ -189,20 +188,20 @@ public class MethodCacheKey
      */
     public void init(Serializable[] keys)
     {
-        init(keys[0], (String)keys[1]);
-        n = keys.length-2;
-        if (n>0) 
+        init(keys[0], (String) keys[1]);
+        n = keys.length - 2;
+        if (n > 0)
         {
             this.arg1 = keys[2];
-            if (n>1) 
+            if (n > 1)
             {
                 this.arg2 = keys[3];
-                if (n>2) 
+                if (n > 2)
                 {
                     this.arg2 = keys[4];
-                    if (n>3) 
+                    if (n > 3)
                     {
-                        this.moreThanThree = keys;                
+                        this.moreThanThree = keys;
                     }
                 }
             }
@@ -217,33 +216,33 @@ public class MethodCacheKey
     public boolean equals(Object obj)
     {
         boolean equal = false;
-        if ( obj instanceof MethodCacheKey ) 
+        if (obj instanceof MethodCacheKey)
         {
-            MethodCacheKey sck = (MethodCacheKey)obj;
+            MethodCacheKey sck = (MethodCacheKey) obj;
             equal = (sck.n == n);
-            equal &= Objects.equals(sck.method, method);
-            equal &= Objects.equals(sck.instanceOrClass, instanceOrClass);
-            if (equal && n > 0) 
+            equal &= ObjectUtils.equals(sck.method, method);
+            equal &= ObjectUtils.equals(sck.instanceOrClass, instanceOrClass);
+            if (equal && n > 0)
             {
-                equal &= Objects.equals(sck.arg1, arg1);
-                if (equal && n > 1) 
+                equal &= ObjectUtils.equals(sck.arg1, arg1);
+                if (equal && n > 1)
                 {
-                    equal &= Objects.equals(sck.arg2, arg2);
-                    if (equal && n > 2) 
+                    equal &= ObjectUtils.equals(sck.arg2, arg2);
+                    if (equal && n > 2)
                     {
-                        equal &= Objects.equals(sck.arg3, arg3);
-                        if (equal && n > 3) 
+                        equal &= ObjectUtils.equals(sck.arg3, arg3);
+                        if (equal && n > 3)
                         {
-                            for (int i=5; i<n+2; i++) 
+                            for (int i = 5; i < n + 2; i++)
                             {
-                                equal &= Objects.equals(sck.moreThanThree[i], 
-                                                        moreThanThree[i]);
+                                equal &= ObjectUtils.equals(
+                                        sck.moreThanThree[i], moreThanThree[i]);
                             }
                         }
                     }
                 }
             }
-        }            
+        }
 
         return equal;
     }
@@ -252,24 +251,24 @@ public class MethodCacheKey
     {
         int h = instanceOrClass.hashCode();
         h += method.hashCode();
-        if (n > 0) 
+        if (n > 0)
         {
             h += (arg1 == null ? 0 : arg1.hashCode());
-            if (n > 1) 
+            if (n > 1)
             {
                 h += (arg2 == null ? 0 : arg2.hashCode());
-                if (n > 2) 
+                if (n > 2)
                 {
                     h += (arg3 == null ? 0 : arg3.hashCode());
-                    if (n > 3) 
+                    if (n > 3)
                     {
-                        for (int i=5; i<n+2; i++) 
+                        for (int i = 5; i < n + 2; i++)
                         {
                             h+= (moreThanThree[i] == null ?
                                  0 : moreThanThree[i].hashCode());
                         }
-                    }        
-                }    
+                    }
+                }
             }
         }
         return h;
@@ -281,18 +280,18 @@ public class MethodCacheKey
         sb.append(instanceOrClass);
         sb.append("::");
         sb.append(method).append('(');
-        if (n > 0) 
+        if (n > 0)
         {
            sb.append(arg1);
-           if (n > 1) 
+           if (n > 1)
            {
                sb.append(", ").append(arg2);
-               if (n > 2) 
+               if (n > 2)
                {
                    sb.append(", ").append(arg3);
-                   if (n > 3) 
+                   if (n > 3)
                    {
-                       for (int i=5; i<n+2; i++) 
+                       for (int i = 5; i < n + 2; i++)
                        {
                            sb.append(", ").append(moreThanThree[i]);
                        }
@@ -306,32 +305,32 @@ public class MethodCacheKey
 
     // ************* PoolableObjectFactory implementation *******************
 
-    public static class Factory 
+    public static class Factory
         extends BasePoolableObjectFactory
     {
         /**
          * Creates an instance that can be returned by the pool.
          * @return an instance that can be returned by the pool.
          */
-        public Object makeObject() 
+        public Object makeObject()
             throws Exception
         {
             return new MethodCacheKey();
         }
-        
+
         /**
          * Uninitialize an instance to be returned to the pool.
          * @param obj the instance to be passivated
          */
-        public void passivateObject(Object obj) 
+        public void passivateObject(Object obj)
             throws Exception
         {
             MethodCacheKey key = (MethodCacheKey)obj;
-            if (key.instanceOrClass == null && key.method == null) 
+            if (key.instanceOrClass == null && key.method == null)
             {
                 throw new TorqueException(
-                    "Attempted to return key to pool twice.");   
-            }            
+                    "Attempted to return key to pool twice.");
+            }
             key.instanceOrClass = null;
             key.method = null;
             key.arg1 = null;

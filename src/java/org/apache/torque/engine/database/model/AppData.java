@@ -65,7 +65,7 @@ import java.util.Properties;
 
 import org.xml.sax.Attributes;
 
-import org.apache.commons.lang.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.apache.torque.Torque;
 import org.apache.torque.engine.EngineException;
 
@@ -205,7 +205,7 @@ public class AppData
      */
     public String getShortName()
     {
-        return Strings.replace(name, "-schema", "");
+        return StringUtils.replace(name, "-schema", "");
     }
 
     /**

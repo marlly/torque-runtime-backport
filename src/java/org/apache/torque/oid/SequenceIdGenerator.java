@@ -182,6 +182,7 @@ public class SequenceIdGenerator
         throws Exception
     {
         String idSql = dbAdapter.getIDMethodSQL(keyInfo);
+        System.out.println(idSql);
 
         // Execute the query.
         QueryDataSet qds = new QueryDataSet( connection, idSql );

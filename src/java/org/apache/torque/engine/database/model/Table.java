@@ -59,7 +59,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.Strings;
+import org.apache.commons.lang.StringUtils;
 
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.adapter.IDMethod;
@@ -102,7 +102,7 @@ public class Table implements IDMethod
     private boolean abstractValue;
     private String alias;
     private String enterface;
-    private String pkg;    
+    private String pkg;
     private String baseClass;
     private String basePeer;
     private Hashtable columnsByName;
@@ -263,7 +263,7 @@ public class Table implements IDMethod
             {
                 ForeignKey fk = (ForeignKey) foreignKeys.get(i);
                 name = fk.getName();
-                if (Strings.isEmpty(name))
+                if (StringUtils.isEmpty(name))
                 {
                     name = acquireConstraintName("FK", i + 1);
                     fk.setName(name);
@@ -274,7 +274,7 @@ public class Table implements IDMethod
             {
                 Index index = (Index) indices.get(i);
                 name = index.getName();
-                if (Strings.isEmpty(name))
+                if (StringUtils.isEmpty(name))
                 {
                     name = acquireConstraintName("I", i + 1);
                     index.setName(name);
@@ -782,20 +782,20 @@ public class Table implements IDMethod
      * Get the value of package.
      * @return value of package.
      */
-    public String getPackage() 
+    public String getPackage()
     {
         return pkg;
     }
-    
+
     /**
      * Set the value of package.
      * @param v  Value to assign to package.
      */
-    public void setPackage(String  v) 
+    public void setPackage(String  v)
     {
         this.pkg = v;
     }
-    
+
     /**
      * Returns an Array containing all the columns in the table
      */
@@ -963,27 +963,27 @@ public class Table implements IDMethod
         return tableParent;
     }
 
-    
+
     /**
      * Flag to determine if code/sql gets created for this table.
      * Table will be skipped, if return true.
      * @return value of forReferenceOnly.
      */
-    public boolean isForReferenceOnly() 
+    public boolean isForReferenceOnly()
     {
         return forReferenceOnly;
     }
-    
+
     /**
      * Flag to determine if code/sql gets created for this table.
      * Table will be skipped, if set to true.
      * @param v  Value to assign to forReferenceOnly.
      */
-    public void setForReferenceOnly(boolean  v) 
+    public void setForReferenceOnly(boolean  v)
     {
         this.forReferenceOnly = v;
     }
-    
+
     /**
      * Returns a XML representation of this table.
      *
