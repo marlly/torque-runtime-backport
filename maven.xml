@@ -122,7 +122,7 @@
     description="runtime tests (set torque.testProfile in your build.properties)">
 
     <ant antfile="build-test.xml"
-         dir="${torque.distDir}"
+         target="test"
          inheritAll="false"/>
   </goal>
 
@@ -132,7 +132,6 @@
     description="runtime tests using useClasspath property (set torque.testProfile in your build.properties)">
 
     <ant antfile="build-test.xml"
-         dir="${torque.distDir}"
          target="test-classpath"
          inheritAll="false"/>
   </goal>
@@ -178,12 +177,6 @@
       <fileset dir="${rttest.dir}"/>
     </copy>
 
-    <!-- copy ant build files -->
-    <copy
-      tofile="${build.test}/rttest/build-test.xml"
-      file="${src.dir}/rttest/build-test.xml"
-      overwrite="yes"
-    />
     <copy
       tofile="${build.test}/rttest/build-torque.xml"
       file="${src.dir}/conf/build-torque.xml"
@@ -209,8 +202,8 @@
 
     <!-- copy Torque.properties -->
     <copy
-      todir="${build.test}/rttest"
-      file="src/rttest/Torque.properties"
+      tofile="${build.test}/rttest/Torque.properties"
+      file="src/conf/master/Torque.master"
       filtering="yes"
     />
 

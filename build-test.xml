@@ -299,8 +299,8 @@
 
     <!-- Copy test Torque.properties -->
     <copy
-      todir="${build.test}/rttest"
-      file="src/rttest/Torque.properties"
+      tofile="${build.test}/rttest/Torque.properties"
+      file="src/conf/master/Torque.master"
       filtering="yes"
     />
 
