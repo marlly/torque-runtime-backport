@@ -78,8 +78,7 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
  * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  */
-public class TorqueDataModelTask
-    extends TexenTask
+public class TorqueDataModelTask extends TexenTask
 {
     /**
      *  XML that describes the database model, this is transformed
@@ -143,6 +142,12 @@ public class TorqueDataModelTask
      */
     private String targetDatabase;
 
+    /**
+     * Target Java package to place the generated files in.
+     */
+    private String targetPackage;
+
+    
     /**
      * Set the sqldbmap.
      *
@@ -232,6 +237,27 @@ public class TorqueDataModelTask
     public void setTargetDatabase(String v)
     {
         targetDatabase = v;
+    }
+
+    /**
+     * Get the current target package.
+     *
+     * @return return target java package.
+     */
+    public String getTargetPackage ()
+    {
+        return targetPackage;
+    }
+
+    /**
+     * Set the current target package. This is where generated java classes will
+     * live.
+     *
+     * @param v target java package.
+     */
+    public void setTargetPackage (String v)
+    {
+        targetPackage = v;
     }
     
     /**
@@ -323,11 +349,11 @@ public class TorqueDataModelTask
         context = new VelocityContext();
         
         // Place our set of data models into the context along
-        // with the names of the databases as a convenience for
-        // now. 
+        // with the names of the databases as a convenience for now. 
         context.put("dataModels", dataModels);
         context.put("databaseNames", databaseNames);
         context.put("targetDatabase", targetDatabase);
+        context.put("targetPackage", targetPackage);
     
         return context;
     }

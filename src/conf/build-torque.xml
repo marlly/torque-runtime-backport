@@ -380,7 +380,7 @@
 
     <taskdef
       name="torque-om"
-      classname="org.apache.torque.task.TorqueObjectModelTask">
+      classname="org.apache.torque.task.TorqueDataModelTask">
       <classpath refid="torque-classpath"/>
     </taskdef>
 
