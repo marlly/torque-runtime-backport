@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+
+<database 
+  name="@DATABASE_DEFAULT@" 
+  defaultIdMethod="@DATABASE_ID_METHOD@">
+
+  <!-- =================================================== -->
+  <!-- J D B C  T Y P E  T A B L E                         -->
+  <!-- =================================================== -->
+
+  <table name="TYPES">
+
+    <column name="CHAR" type="CHAR"/>
+    <column name="VARCHAR" type="VARCHAR"/>
+    <column name="INTEGER" type="INTEGER"/>
+    <column name="DATE" type="DATE"/>
+    <column name="TIME" type="TIME"/>
+    <column name="TIMESTAMP" type="TIMESTAMP"/>
+    
+    <!--
+    
+    <column name="BIT" type="BIT"/>
+    <column name="TINYINT" type="TINYINT"/>
+    <column name="SMALLINT" type="SMALLINT"/>
+    <column name="BIGINT" type="BIGINT"/>
+    <column name="FLOAT" type="FLOAT"/>
+    <column name="REAL" type="REAL"/>
+    <column name="DOUBLE" type="DOUBLE"/>
+    <column name="NUMERIC" type="NUMERIC"/>
+    <column name="DECIMAL" type="DECIMAL"/>
+    <column name="LONGVARCHAR" type="LONGVARCHAR"/>
+    <column name="BINARY" type="BINARY"/>
+    <column name="VARBINARY" type="VARBINARY"/>
+    <column name="LONGVARBINARY" type="LONGVARBINARY"/>
+    <column name="NULL" type="NULL"/>
+    <column name="BLOB" type="BLOB"/>
+    <column name="CLOB" type="CLOB"/>
+  
+    -->
+  
+    <!-- These types have been left out intentionally for now
+         as I'm not sure how they map and dealing with the types
+         above will give the testbed a thorough workout I'm sure :-)
+    <column name="OTHER" type="OTHER"/>
+    <column name="JAVA_OBJECT" type="JAVA_OBJECT"/>
+    <column name="DISTINCT" type="DISTINCT"/>
+    <column name="STRUCT" type="STRUCT"/>
+    <column name="ARRAY" type="ARRAY"/>
+    <column name="REF" type="REF"/>
+    
+    -->
+  
+  </table>
+</database>
+
