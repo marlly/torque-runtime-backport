@@ -549,7 +549,7 @@
       </fileset>
     </copy>
 
-    <copy todir="${torque.dir}/src/templates" filtering="yes">
+    <copy todir="${torque.dir}/templates" filtering="yes">
       <fileset dir="./src/templates"/>
     </copy>
 
