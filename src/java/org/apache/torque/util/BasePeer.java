@@ -1131,8 +1131,14 @@ public abstract class BasePeer implements java.io.Serializable
                         "order by",
                         orderByColumn);
                 }
-                String table =
+                String tableName =
                     orderByColumn.substring(0, orderByColumn.indexOf('.'));
+                String table = criteria.getTableForAlias(tableName);
+                if (table == null)
+                {
+                    table = tableName;
+                }
+
                 // See if there's a space (between the column list and sort
                 // order in ORDER BY table.column DESC).
                 int spacePos = orderByColumn.indexOf(' ');
