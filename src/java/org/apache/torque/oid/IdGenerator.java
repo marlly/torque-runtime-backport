@@ -129,7 +129,7 @@ public interface IdGenerator
     /**
      * A flag to determine the timing of the id generation
      *
-     * @return a <code>boolean</code> value
+     * @return Whether id is availble post-<code>insert</code>.
      */
     boolean isPostInsert();
 
