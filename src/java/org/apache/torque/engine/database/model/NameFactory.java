@@ -141,4 +141,14 @@ public class NameFactory
         NameGenerator algorithm = instance.getAlgorithm(algorithmName);
         return algorithm.generateName(components);
     }
+
+    /**
+     * Produces a name using the default generator.
+     *
+     * @see #generateName(String algorithmName, List components)
+     */
+    public static String generateName(List components)
+    {
+        return generateName(DEFAULT_GENERATOR, components);
+    }
 }
