@@ -836,7 +836,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         else
         {
-            throw new TorqueException("Database insert attempted without " + 
+            throw new TorqueException("Database insert attempted without " +
                 "anything specified to insert");
         }
 
@@ -1064,7 +1064,7 @@ public abstract class BasePeer implements java.io.Serializable
      * Method to create an SQL query based on values in a Criteria.
      *
      * @param criteria A Criteria.
-     * @exception Exception Trouble creating the query string.
+     * @exception TorqueException Trouble creating the query string.
      */
     public static String createQueryString( Criteria criteria )
         throws TorqueException
@@ -2072,7 +2072,7 @@ public abstract class BasePeer implements java.io.Serializable
      * needed.
      *
      * @param ds The DataSet which contains multiple records.
-     * @exception Exception Couldn't handle multiple records.
+     * @exception TorqueException Couldn't handle multiple records.
      */
     protected static void handleMultipleRecords(DataSet ds)
         throws TorqueException
@@ -2182,7 +2182,7 @@ public abstract class BasePeer implements java.io.Serializable
     /**
      * Performs a SQL <code>select</code> using a PreparedStatement.
      *
-     * @exception Exception Error performing database query.
+     * @exception TorqueException Error performing database query.
      */
     public static Vector doPSSelect(Criteria criteria, DBConnection dbCon)
         throws TorqueException
