@@ -22,6 +22,11 @@
 
 <section name="Managers - Intro">
   <p>
+    Note: Managers and the caching they provide is fairly new (as this is
+    written on 2002-04-11).  Feedback is welcome and usage by the brave
+    is encouraged.  But the api should not be expected to be stable.
+  </p>
+  <p>
     A manager is responsible for instantiating new objects, retrieving stored
     objects, and possibly caching these objects.  Managers provide static 
     accessors for much of its functionality, so usage examples are:
@@ -29,9 +34,9 @@
 
   <source><![CDATA[
     Foo foo = FooManager.getInstance(); // gets a new Foo.
-    // an ObjectKey that identifies the object in the db
+    // id is an ObjectKey that identifies the object in the db
     foo = FooManager.getInstance(id);
-    // an List of ObjectKey's that identifies objects in the db
+    // ids is a List of ObjectKey's that identifies objects in the db
     List foos = FooManager.getInstances(ids); 
   ]]></source>
 
@@ -81,7 +86,7 @@ jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
   <p>
     It is a good idea to set a region for each manager, but this behavior 
     is optional.  There also will be no caching if JCS is 
-    not configured for the region given in the setter.
+    not configured for the region given in the Constructor.
   </p>
 
   <p>
@@ -189,30 +194,26 @@ public List getFoos(FooType type, boolean deleted)
 
   <p>
     An event model exists for invalidating cached method results.  Continuing
-    the example from above, bar should register itself as a listener with the 
-    FooManager.  Then FooManager will notify bar, if a foo.save() is called
-    that might affect its cached results.  Since the bar must have an id
-    before being registered as a listener, the setBarId() is a good place
-    to add the registration code.  The following code is added to Bar.java 
-    which implements the CacheListener interface.
+    the example from above, BarManager should register itself as a listener 
+    with the FooManager.
+    Then FooManager will notify BarManager, if a foo.save() is called
+    that might affect its cached results.  The following code is added to 
+    BarManager.java which implements the CacheListener interface.
   </p>
 
   <source><![CDATA[
 
-    /** overriding to handle caching */
-    public void setBarId(NumberKey id)
-        throws TorqueException
-    {
-        super.setBarId(id);
-        registerAsListener();
-    }
-
-    private void registerAsListener()
+    /**
+     * Method should be overridden to notify other managers with 
+     * relevant CacheEvents.
+     */
+    protected void registerAsListener()
     {
         FooManager.addCacheListener(this);
         XManager.addCacheListener(this);
         ...
     }
+
 
     // -------------------------------------------------------------------
     // CacheListener implementation
@@ -221,12 +222,12 @@ public List getFoos(FooType type, boolean deleted)
     {
         if (om instanceof Foo) 
         {
-            getMethodResult().removeAll(this, "getFoos");
+            getMethodResult().removeAll(om, "getFoos");
         }
         else if (om instanceof X) 
         {
-            getMethodResult().remove(this, GET_URLS);
-            getMethodResult().removeAll(this, GET_COMMENTS);
+            getMethodResult().remove(om, GET_URLS);
+            getMethodResult().removeAll(om, GET_COMMENTS);
         }
         ...
     }
@@ -239,20 +240,9 @@ public List getFoos(FooType type, boolean deleted)
     /** fields which interest us with respect to cache events */
     public List getInterestedFields()
     {
-        if (getIssueId() == null) 
-        {
-            throw new IllegalStateException(
-                "Cannot register a new Bar as a cache event listener.");
-        }
         List interestedCacheFields = new LinkedList();
-        Object[] key = new Object[2];
-        key[0] = FooPeer.BAR_ID;
-        key[1] = getIssueId();
-        interestedCacheFields.add(key);
-        key = new Object[2];
-        key[0] = XPeer.X_ID;
-        key[1] = getXId();
-        interestedCacheFields.add(key);
+        interestedCacheFields.add(FooPeer.BAR_ID);
+        interestedCacheFields.add(XPeer.X_ID);
         ...
         return interestedCacheFields;
     }
@@ -260,7 +250,8 @@ public List getFoos(FooType type, boolean deleted)
   ]]></source>
 
   <p>
-    When a foo which is of interest to bar is saved, the instance is passed
+    When a foo which is of interest to BarManager is saved, the instance is 
+    passed
     to the appropriate listener method.  This object may contain information
     that could result in no action or possibly more precise repair of the
     cached data.  In the above examples the cache is just cleared of all
@@ -285,26 +276,15 @@ public List getFoos(FooType type, boolean deleted)
         throws TorqueException
     {
         Persistent oldOm = super.putInstanceImpl(om);
-        // super method checks for correct class, so just cast it
-        Foo foo = (Foo)om;
-
-        Map subsetMap = (Map)listenersMap.get(FooPeer.BAR_ID);
-        if (subsetMap != null) 
-        {
-            ObjectKey bar_id = foo.getBarId();
-            List listeners = (List)subsetMap.get(bar_id);
-            notifyListeners(listeners, oldOm, om);
-        }
+        List listeners = (List)listenersMap.get(FooPeer.BAR_ID);
+        notifyListeners(listeners, oldOm, om);
         return oldOm;
     }                
 
   ]]></source>
 
   <p>
-    In the above code, if a Foo which is related to a Bar with id=2, 
-    is saved to the db, the Manager will look for objects which are registered
-    as being interested in foo's with a bar_id=2 and allow them to 
-    take appropriate action. 
+    Now FooManager will notify BarManager when foo's are modified.
   </p>
 
 </section>
