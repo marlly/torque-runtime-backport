@@ -350,14 +350,19 @@ public abstract class BasePeer
     public static void commitTransaction(DBConnection dbCon)
         throws Exception
     {
-        if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+        try
         {
-            dbCon.commit();
-            dbCon.setAutoCommit(true);
+            if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+            {
+                dbCon.commit();
+                dbCon.setAutoCommit(true);
+            }
         }
-
-        // Release the connection to the pool.
-        Torque.releaseConnection( dbCon );
+        finally
+        {
+            // Release the connection to the pool.
+            Torque.releaseConnection( dbCon );
+        }
     }
 
     /**
@@ -372,19 +377,24 @@ public abstract class BasePeer
     public static void rollBackTransaction(DBConnection dbCon)
         throws Exception
     {
-        if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+        try
         {
-            dbCon.rollback();
-            dbCon.setAutoCommit(true);
+            if ( dbCon.getConnection().getMetaData().supportsTransactions() )
+            {
+                dbCon.rollback();
+                dbCon.setAutoCommit(true);
+            }
+            else
+            {
+                category.error("An attempt was made to rollback a transaction but the"
+                               + " database did not allow the operation to be rolled back.");
+            }
         }
-        else
+        finally
         {
-            category.error("An attempt was made to rollback a transaction but the"
-                + " database did not allow the operation to be rolled back.");
+            // Release the connection to the pool.
+            Torque.releaseConnection( dbCon );
         }
-
-        // Release the connection to the pool.
-        Torque.releaseConnection( dbCon );
     }
 
 
@@ -1639,9 +1649,13 @@ public abstract class BasePeer
         finally
         {
             if (doTransaction)
+            {
                 commitTransaction(db);
+            }
             else
+            {
                 Torque.releaseConnection(db);
+            }
         }
     }
 
