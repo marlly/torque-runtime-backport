@@ -935,6 +935,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         catch(TorqueException e)
         {
             Transaction.safeRollback(con);
+            throw e;
         }
 
  #else
