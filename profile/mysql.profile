@@ -3,6 +3,7 @@
 
 torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.13-bin.jar
 torque.idMethod = idbroker
+#torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest

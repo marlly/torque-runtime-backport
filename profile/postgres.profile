@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/postgres7.2dev.jar
+torque.testDatabaseJar = ${lib.repo}/postgres-7.3-dev.jar
 torque.idMethod = idbroker
 #torque.idMethod = native
 torque.defaultDatabase = bookstore
@@ -70,8 +70,8 @@ createDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/template1
 buildDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
 databaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
 databaseDriver = org.postgresql.Driver
-databaseUser = mpoeschl
-databasePassword =
+databaseUser = torque
+databasePassword = torque
 databaseHost = 127.0.0.1
 
 # Tells JDBC task that javaName attribute for the tables and columns
