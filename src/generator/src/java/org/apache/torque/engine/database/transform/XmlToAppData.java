@@ -57,6 +57,7 @@ package org.apache.torque.engine.database.transform;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.File;
 import java.util.Vector;
 import java.util.Stack;
@@ -64,6 +65,7 @@ import java.util.Stack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
@@ -79,6 +81,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
 
 /**
  * A Class that is used to parse an input xml schema file and creates an AppData
@@ -104,7 +107,6 @@ public class XmlToAppData extends DefaultHandler
     private Unique currUnique;
 
     private boolean firstPass;
-    private String errorMessage;
     private boolean isExternalSchema;
     private String currentPackage;
     private String currentXmlFile;
@@ -138,7 +140,6 @@ public class XmlToAppData extends DefaultHandler
         app = new AppData(databaseType, basePropsFilePath);
         this.defaultPackage = defaultPackage;
         firstPass = true;
-        errorMessage = "";
     }
 
     /**
@@ -149,6 +150,7 @@ public class XmlToAppData extends DefaultHandler
      * @return AppData populated by <code>xmlFile</code>.
      */
     public AppData parseFile(String xmlFile)
+            throws EngineException
     {
         try
         {
@@ -167,14 +169,14 @@ public class XmlToAppData extends DefaultHandler
             {
                 alreadyReadFiles = new Vector(3, 1);
             }
-
+            
             // remember the file to avoid looping
             alreadyReadFiles.add(xmlFile);
-
+            
             currentXmlFile = xmlFile;
-
+            
             SAXParser parser = saxFactory.newSAXParser();
-
+            
             FileReader fr = null;
             try
             {
@@ -200,19 +202,15 @@ public class XmlToAppData extends DefaultHandler
         }
         catch (Exception e)
         {
-            log.error(e, e);
+            throw new EngineException(e);
         }
         if (!isExternalSchema)
         {
             firstPass = false;
         }
-        if (errorMessage.length() > 0)
-        {
-            log.error("Error in XML schema: " + errorMessage);
-        }
         return app;
     }
-
+    
     /**
      * EntityResolver implementation. Called by the XML parser
      *
@@ -221,6 +219,8 @@ public class XmlToAppData extends DefaultHandler
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
+            throws SAXException,
+                   IOException
     {
         return new DTDResolver().resolveEntity(publicId, systemId);
     }
@@ -238,6 +238,7 @@ public class XmlToAppData extends DefaultHandler
      */
     public void startElement(String uri, String localName, String rawName,
                              Attributes attributes)
+            throws SAXException
     {
         try
         {
@@ -326,7 +327,7 @@ public class XmlToAppData extends DefaultHandler
         }
         catch (Exception e)
         {
-            log.error(e, e);
+            throw new SAXException(e);
         }
     }
 
@@ -346,50 +347,6 @@ public class XmlToAppData extends DefaultHandler
             log.debug("endElement(" + uri + ", " + localName + ", "
                     + rawName + ") called");
         }
-    }
-
-    /**
-     * Warning callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void warning(SAXParseException spe)
-    {
-        printParseError("Warning", spe);
-    }
-
-    /**
-     * Error callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void error(SAXParseException spe)
-    {
-        printParseError("Error", spe);
-    }
-
-    /**
-     * Fatal error callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void fatalError(SAXParseException spe)
-    {
-        printParseError("Fatal Error", spe);
-    }
-
-    /**
-     * Write an error to System.err.
-     *
-     * @param type error type
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    private final void printParseError(String type, SAXParseException spe)
-    {
-        log.error(type + "[file '" + (new File(currentXmlFile)).getName() 
-                + "', line " + spe.getLineNumber() 
-                + ", row " + spe.getColumnNumber()
-                + "]: " + spe.getMessage());
     }
 
     /**

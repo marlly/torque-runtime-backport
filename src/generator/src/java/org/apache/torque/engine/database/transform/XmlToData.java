@@ -76,6 +76,7 @@ import org.apache.torque.engine.database.model.Table;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -95,7 +96,6 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /** Logging class from commons.logging */
     private static Log log = LogFactory.getLog(XmlToData.class);
     private Database database;
-    private String errorMessage;
     private List data;
     private String dtdFileName;
     private File dtdFile;
@@ -119,42 +119,29 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         dtdFile = new File(dtdFilePath);
         this.dtdFileName = "file://" + dtdFile.getName();
         dataDTD = new InputSource(dtdFile.toURL().openStream());
-        errorMessage = "";
     }
 
     /**
      *
      */
     public List parseFile(String xmlFile)
+            throws Exception
     {
+        data = new ArrayList();
+
+        SAXParser parser = saxFactory.newSAXParser();
+
+        FileReader fr = new FileReader (xmlFile);
+        BufferedReader br = new BufferedReader (fr);
         try
         {
-            data = new ArrayList();
-
-            SAXParser parser = saxFactory.newSAXParser();
-
-            FileReader fr = new FileReader (xmlFile);
-            BufferedReader br = new BufferedReader (fr);
-            try
-            {
-                InputSource is = new InputSource (br);
-                parser.parse(is, this);
-            }
-            finally
-            {
-                br.close();
-            }
+            InputSource is = new InputSource (br);
+            parser.parse(is, this);
         }
-        catch (Exception e)
+        finally
         {
-            //System.out.println("Error : "+e);
-            log.error(e, e);
+            br.close();
         }
-        if (errorMessage.length() > 0)
-        {
-            log.error("ERROR in data file!!!\n" + errorMessage);
-        }
-
         return data;
     }
 
@@ -163,6 +150,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      */
     public void startElement(String uri, String localName, String rawName,
                              Attributes attributes)
+            throws SAXException
     {
         try
         {
@@ -186,44 +174,8 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         }
         catch (Exception e)
         {
-            log.error(e, e);
+            throw new SAXException(e);
         }
-    }
-
-    /**
-     * Warning callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void warning(SAXParseException spe)
-    {
-        log.warn("Warning Line: " + spe.getLineNumber()
-                + " Row: " + spe.getColumnNumber()
-                + " Msg: " + spe.getMessage());
-    }
-
-    /**
-     * Error callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void error(SAXParseException spe)
-    {
-        log.error("Error Line: " + spe.getLineNumber()
-                + " Row: " + spe.getColumnNumber()
-                + " Msg: " + spe.getMessage());
-    }
-
-    /**
-     * Fatal error callback.
-     *
-     * @param spe The parse exception that caused the callback to be invoked.
-     */
-    public void fatalError(SAXParseException spe)
-    {
-        log.fatal("Fatal Error Line: " + spe.getLineNumber()
-                + " Row: " + spe.getColumnNumber()
-                + " Msg: " + spe.getMessage());
     }
 
     /**
@@ -232,6 +184,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
+            throws IOException
     {
         if (dataDTD != null && dtdFileName.equals(systemId))
         {
@@ -252,17 +205,11 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      * @return an InputSource for the URL String
      */
     public InputSource getInputSource(String urlString)
+            throws IOException
     {
-        try
-        {
-            URL url = new URL(urlString);
-            return new InputSource(url.openStream());
-        }
-        catch (IOException ex)
-        {
-            log.error(ex, ex);
-        }
-        return new InputSource();
+        URL url = new URL(urlString);
+        InputSource src = new InputSource(url.openStream());
+        return src;
     }
 
     /**

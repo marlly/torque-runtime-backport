@@ -63,6 +63,9 @@ import org.apache.commons.logging.LogFactory;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import org.apache.torque.engine.EngineException;
 
 /**
  * A resolver to get the database.dtd file for the XML parser from the jar.
@@ -88,6 +91,7 @@ public class DTDResolver implements EntityResolver
      * constructor
      */
     public DTDResolver()
+            throws SAXException
     {
         try
         {
@@ -108,7 +112,7 @@ public class DTDResolver implements EntityResolver
         }
         catch (Exception ex)
         {
-            log.error("Could not get stream for database.dtd", ex);
+            throw new SAXException("Could not get stream for database.dtd", ex);
         }
     }
 
@@ -120,6 +124,7 @@ public class DTDResolver implements EntityResolver
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
+            throws IOException
     {
         if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
@@ -150,16 +155,10 @@ public class DTDResolver implements EntityResolver
      * @return <code>InputSource</code> for the URL.
      */
     private InputSource getInputSource(String urlString)
+            throws IOException
     {
-        try
-        {
-            URL url = new URL(urlString);
-            return new InputSource(url.openStream());
-        }
-        catch (IOException ex)
-        {
-            log.error("Couldn't read DTD specified in XML schema: ", ex);
-            return new InputSource();
-        }
+        URL url = new URL(urlString);
+        InputSource src = new InputSource(url.openStream());
+        return src;
     }
 }
