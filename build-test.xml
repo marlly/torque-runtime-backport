@@ -195,6 +195,7 @@
     <pathelement location="${village.jar}"/>
     <pathelement location="${build.dest}"/>
     <pathelement location="${torque.destDir}"/>
+    <pathelement location="${torque.testDatabaseJar}"/>
   </path>
 
   <target
