@@ -9,6 +9,11 @@
 
     <release version="3.2-alpha" date="in CVS">
       <action dev='seade' type='fix'>
+        Multiple unique constraints and indexes on a single table are now 
+        allocated sequential names (previously duplicate names were being 
+        allocated).
+      </action>
+      <action dev='seade' type='fix'>
         Generate sequences correctly for PostgreSQL (i.e. leave it to 
         PostgreSQL).  Note that schemas produced from the database using
         the <code>torque:jdbc</code> goal are not yet handling sequences

@@ -73,7 +73,6 @@ public class Index
         if (!indexColumns.isEmpty())
         {
             this.indexColumns = indexColumns;
-            createName();
 
             if (log.isDebugEnabled())
             {
@@ -86,31 +85,6 @@ public class Index
             throw new EngineException("Cannot create a new Index using an "
                     + "empty list Column object");
         }
-    }
-
-    /**
-     * Creates a name for the index using the NameFactory.
-     *
-     * @throws EngineException if the name could not be created
-     */
-    private void createName() throws EngineException
-    {
-        Table table = getTable();
-        List inputs = new ArrayList(4);
-        inputs.add(table.getDatabase());
-        inputs.add(table.getName());
-        if (isUnique())
-        {
-            inputs.add("U");
-        }
-        else
-        {
-            inputs.add("I");
-        }
-        // ASSUMPTION: This Index not yet added to the list.
-        inputs.add(new Integer(table.getIndices().size() + 1));
-        indexName = NameFactory.generateName(
-                NameFactory.CONSTRAINT_GENERATOR, inputs);
     }
 
     /**
@@ -140,18 +114,6 @@ public class Index
      */
     public String getName()
     {
-        if (indexName == null)
-        {
-            try
-            {
-                // generate an index name if we don't have a supplied one
-                createName();
-            }
-            catch (EngineException e)
-            {
-                // still no name
-            }
-        }
         return indexName;
     }
 

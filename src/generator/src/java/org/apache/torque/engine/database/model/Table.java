@@ -237,10 +237,16 @@ public class Table implements IDMethod
                 }
             }
 
-            // NOTE: Most RDBMSes can apparently name unique column
-            // constraints/indices themselves (using MySQL and Oracle
-            // as test cases), so we'll assume that we needn't add an
-            // entry to the system name list for these.
+            for (i = 0, size = unices.size(); i < size; i++)
+            {
+                Unique unique = (Unique) unices.get(i);
+                name = unique.getName();
+                if (StringUtils.isEmpty(name))
+                {
+                    name = acquireConstraintName("U", i + 1);
+                    unique.setName(name);
+                }
+            }
         }
         catch (EngineException nameAlreadyInUse)
         {
