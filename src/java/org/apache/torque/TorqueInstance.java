@@ -16,7 +16,6 @@ package org.apache.torque;
  * limitations under the License.
  */
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import org.apache.commons.logging.Log;
@@ -303,7 +303,7 @@ public class TorqueInstance
             log.debug("Config Object is " + conf);
             init(conf);
         }
-        catch (IOException e)
+        catch (ConfigurationException e)
         {
             throw new TorqueException(e);
         }
