@@ -1255,16 +1255,29 @@ public abstract class BasePeer implements java.io.Serializable
                 int spacePos = orderByColumn.indexOf(' ');
                 String columnName;
                 if (spacePos == -1)
-                    columnName = orderByColumn.substring(orderByColumn.indexOf('.') + 1);
+                {
+                    columnName = orderByColumn
+                        .substring(orderByColumn.indexOf('.') + 1);
+                }
                 else
-                    columnName = orderByColumn.substring(orderByColumn.indexOf('.') + 1, spacePos);
+                {
+                    columnName = orderByColumn
+                        .substring(orderByColumn.indexOf('.') + 1, spacePos);
+                }
                 ColumnMap column = dbMap.getTable(table).getColumn( columnName );
                 if ( column.getType() instanceof String )
                 {
                     if (spacePos == -1)
+                    {
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn) );
+                    }
                     else
-                        orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) + orderByColumn.substring(spacePos) );
+                    {
+                        orderByClause.add( 
+                            db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) 
+                            + orderByColumn.substring(spacePos) );
+                    }
+                    selectClause.add( db.ignoreCaseInOrderBy(table + '.' + columnName) );
                 }
                 else
                 {
@@ -2438,16 +2451,29 @@ public abstract class BasePeer implements java.io.Serializable
                 int spacePos = orderByColumn.indexOf(' ');
                 String columnName;
                 if (spacePos == -1)
-                    columnName = orderByColumn.substring(orderByColumn.indexOf('.') + 1);
+                {
+                    columnName = orderByColumn
+                        .substring(orderByColumn.indexOf('.') + 1);
+                }
                 else
-                    columnName = orderByColumn.substring(orderByColumn.indexOf('.') + 1, spacePos);
+                {
+                    columnName = orderByColumn
+                        .substring(orderByColumn.indexOf('.') + 1, spacePos);
+                }
                 ColumnMap column = dbMap.getTable(table).getColumn( columnName );
                 if ( column.getType() instanceof String )
                 {
                     if (spacePos == -1)
+                    {
                         orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn) );
+                    }
                     else
-                        orderByClause.add( db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) + orderByColumn.substring(spacePos) );
+                    {
+                        orderByClause.add( 
+                            db.ignoreCaseInOrderBy(orderByColumn.substring(0, spacePos)) 
+                            + orderByColumn.substring(spacePos) );
+                    }
+                    selectClause.add( db.ignoreCaseInOrderBy(table + '.' + columnName) );
                 }
                 else
                 {
