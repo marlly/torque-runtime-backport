@@ -15,7 +15,7 @@
       <item name="News and Status"       href="/status.html"/>
       <item name="Downloads"             href="/status.html"/>
       <item name="Torque 3.1.x docs"     href="http://db.apache.org/torque-31/"/>
-      <item name="Torque Wiki"           href="http://nagoya.apache.org/wiki/apachewiki.cgi?TorqueProjectPages"/>
+      <item name="Torque Wiki"           href="http://wiki.apache.org/db-torque/"/>
     </menu>
     <menu name="Guides">
       <item name="Tutorial"              href="/tutorial/index.html" collapse="true">
