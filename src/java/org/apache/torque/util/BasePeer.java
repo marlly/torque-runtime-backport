@@ -1325,7 +1325,17 @@ public abstract class BasePeer implements java.io.Serializable
             criteria.setLimit(-1);
         }
 
-        if (limitString != null) query.setLimit(limitString);
+        if (limitString != null)
+        {
+            switch (db.getLimitStyle())
+            {
+                case DB.LIMIT_STYLE_ORACLE:
+                    whereClause.add("rownum <= " + limitString);
+                    break;
+                default:
+                    query.setLimit(limitString);
+            }
+        }
 
         String sql = query.toString();
         category.debug(sql);
