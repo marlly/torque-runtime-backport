@@ -1,4 +1,3 @@
-#set ( $database = $dataModel.database )
 #set ( $unknownTorqueTypes = [  'NULL', 'OTHER',  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'REF', 'BOOLEANINT', 'BOOLEANCHAR' ] )
 #set ( $mappedJdbcTypes = ['INTEGER', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'INTEGER', 'CHAR' ] )
 #set ( $fieldsWithNoSize = ['INTEGER', 'BLOB', 'CLOB', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'BIGINT', 'SMALLINT', 'TINYINT' ] )

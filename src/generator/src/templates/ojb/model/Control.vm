@@ -1,7 +1,6 @@
 #set ($basePath = $generator.OutputPath)
 
-#foreach ($dataModel in $dataModels)
-  #foreach ($database in $dataModel.Databases)
+#foreach ($database in $dataModels)
 
     #if ($database.Package)
       #set ($package = $database.Package)
@@ -38,5 +37,4 @@
         $generator.parse("ojb/model/BaseManager.vm",$path,"table",$tbl)
       #end
     #end
-  #end
 #end

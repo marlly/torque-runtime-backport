@@ -12,7 +12,7 @@
 [
 <!ENTITY internal SYSTEM "repository_internal.xml">
 #foreach ($dataModel in $dataModels)
-<!ENTITY $dataModel.shortName SYSTEM "repository_${dataModel.shortName}.xml">
+<!ENTITY $dataModel.shortName SYSTEM "repository_${dataModel.Name}.xml">
 #end
 ]>
 
@@ -49,7 +49,7 @@
 
   <!-- include mappings here -->
 #foreach ($dataModel in $dataModels)
-  &${dataModel.shortName};
+  &${dataModel.Name};
 #end
 
 </descriptor-repository>
