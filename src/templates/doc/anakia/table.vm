@@ -22,9 +22,9 @@
       <td>$col.printSize()</td>
       <td>$!col.DefaultValue</td>
       <td>$col.JavaName</td>
-      <td>$col.isPrimaryKey()</td>
-      <td>$col.isForeignKey()</td>
-      <td>$col.isNotNull()</td>
+      <td>#if ($col.isPrimaryKey()==true)X#end</td>
+      <td>#if ($col.isForeignKey()==true)X#end</td>
+      <td>#if ($col.isNotNull()==true)X#end</td>
       <td>$!col.Description</td>
     </tr>
   #end
