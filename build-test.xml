@@ -9,6 +9,9 @@
   <!-- Set default values for the build -->
   <property file="default.properties" />
 
+  <!-- Set values in test profile -->
+  <property file="${torque.testProfile}"/>
+
   <!-- ============================================================== -->
   <!-- T O R Q U E  T E S T S                                         -->
   <!-- ============================================================== -->
@@ -20,12 +23,19 @@
 
     <copy 
       todir="${torque.distDir}/lib"
-      file="${mysql.jar}"
+      file="${torque.testDatabaseJar}"
     />
 
+    <!-- Use the profile as the build.properties file
+         in the dist directory so that it is customizable
+         by each tester. -->
+
+    <echo message="Copying profile into distribution directory: ${torque.testProfile}"/>
+
     <copy 
-      todir="${torque.distDir}/lib"
-      file="${postgresql.jar}"
+      tofile="${torque.distDir}/build.properties"
+      file="${torque.testProfile}"
+      overwrite="yes"
     />
 
     <copy 
