@@ -81,6 +81,11 @@ public class DBFactory
      */
     private static Hashtable drivers = null;
 
+    /**
+     * The package name in which known adapters are stored.
+     */
+    private static String adapterPackage = null;
+
     private static ExtendedProperties configuration;
 
     private static Category category;
@@ -132,11 +137,7 @@ public class DBFactory
             Class c = null;
             try
             {
-                //!! bad bad bad bad hardcoding!!!
-                // This needs to be configurable, or set
-                // in a hidden property file.
-                c = Class.forName(
-                    "org.apache.torque.adapter." + adapter);
+                c = Class.forName(getAdapterPackageName() + adapter);
             }
             catch (ClassNotFoundException ignored)
             {
@@ -156,6 +157,22 @@ public class DBFactory
                 registerDriver(driver, c);
             }
         }
+    }
+
+    /**
+     * Returns the package name in which adapters are usually kept.
+     * Divines name from package of adapter description
+     * <code>DB</code>.
+     */
+    private static final String getAdapterPackageName()
+    {
+        if (adapterPackage == null)
+        {
+            String clue = DB.class.getName();
+            int i = clue.lastIndexOf('.');
+            adapterPackage = (i > 0 ? clue.substring(0, i) : "");
+        }
+        return adapterPackage;
     }
 
     /**
