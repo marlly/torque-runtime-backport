@@ -58,10 +58,6 @@ import java.sql.Connection;
 
 import org.apache.commons.configuration.Configuration;
 
-import org.apache.stratum.lifecycle.Configurable;
-import org.apache.stratum.lifecycle.Disposable;
-import org.apache.stratum.lifecycle.Initializable;
-
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
@@ -71,9 +67,8 @@ import org.apache.torque.map.DatabaseMap;
  * {@link org.apache.torque.TorqueInstance}).
  * <br/>
  * For historical reasons this class also contains a thin object which can
- * be used to configure Torque with the Stratum Lifecycle. This is deprecated
- * and will be removed in the future in favour of using Torque as an Avalon
- * Component.
+ * be used to configure Torque. This is deprecated and will be removed in the 
+ * future in favour of using Torque as an Avalon Component.
  *
  * @todo This class will be made abstract once Stratum is removed.
  *
@@ -87,9 +82,6 @@ import org.apache.torque.map.DatabaseMap;
  * @version $Id$
  */
 public class Torque
-    implements Initializable,
-               Configurable,
-               Disposable
 {
     /**
      * Name of property that specifies the default map builder and map.
@@ -369,9 +361,9 @@ public class Torque
      * configure torque
      *
      * @param conf Configuration
-     * @see org.apache.stratum.lifecycle.Configurable
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated 
      */
     public void configure(Configuration conf) throws TorqueException
     {
@@ -381,9 +373,9 @@ public class Torque
     /**
      * initialize Torque
      *
-     * @see org.apache.stratum.lifecycle.Initializable
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated 
      */
     public void initialize() throws TorqueException
     {
@@ -392,7 +384,7 @@ public class Torque
 
     /**
      * Shuts down the service, Lifecycle style
-     * @see org.apache.stratum.lifecycle.Disposable
+     * @deprecated 
      */
     public void dispose()
     {

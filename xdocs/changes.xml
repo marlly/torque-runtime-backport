@@ -9,6 +9,9 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='remove'>
+        Remove support for stratum lifecycle interfaces.
+      </action>
       <action dev='mpoeschl' type='add'>
         TRQS163: Add domain element to schema.xml. Domains are used to define 
         attributes for columns.

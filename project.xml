@@ -84,11 +84,6 @@
       <url>http://jakarta.apache.org/avalon/logkit/</url>
     </dependency>
     <dependency>
-      <id>stratum</id>
-      <version>1.0-b3</version>
-      <url>http://jakarta.apache.org/turbine/stratum/</url>
-    </dependency>
-    <dependency>
       <id>village</id>
       <version>2.0-dev-20030825</version>
       <url>http://share.whichever.com/index.php?SCREEN=village</url>
