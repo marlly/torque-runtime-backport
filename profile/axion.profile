@@ -1,14 +1,14 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/axiondb-1.0-dev.jar
+torque.testDatabaseJar = ${maven.home}/repository/axion/jars/axion-1.0-dev.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:axiondb:sqltest:target/test
 
-lib.dir = ../lib
+lib.dir = lib
 
 # -------------------------------------------------------------------
 #
@@ -44,6 +44,8 @@ torque.database = axion
 #
 # addIntakeRetrievable=implement Intake's Retrievable interface
 # -------------------------------------------------------------------
+
+torque.generateDeprecated = false
 
 torque.targetPackage=org.apache.torque.test
 torque.basePrefix=Base
