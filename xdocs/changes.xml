@@ -26,6 +26,11 @@
       The generator was separated. The docs for the generator can be found
       <a href="generator">here</a>
     </li>
+    <li>
+      TRQS145: Replace StringStack as it is deprecated. The return type for some
+      public methods changed (but as they are only used internally you should
+      not need to change anything in your code).
+    </li>
   </ul>
 </p>
 </subsection>
