@@ -15,7 +15,7 @@
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${log4j.jar}"/>
-    <pathelement location="${commens-util.jar}"/>
+    <pathelement location="${commons-util.jar}"/>
   </path>
 
   <!-- ================================================================== -->
@@ -31,7 +31,7 @@
     <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
-    <echo message="commens-util.jar = ${commens-util.jar}"/>
+    <echo message="commons-util.jar = ${commons-util.jar}"/>
   </target>
 
   <!-- ================================================================== -->
@@ -79,7 +79,7 @@
 
     <available
       classname="org.apache.commons.util.exception.NestableException"
-      property="commens-util.present"
+      property="commons-util.present"
       classpathref="classpath"
     />
 
@@ -122,10 +122,10 @@
     </antcall>
   </target>
 
-  <target name="check.commens-util" unless="commens-util.present">
+  <target name="check.commons-util" unless="commons-util.present">
     <antcall target="property-warning">
-      <param name="name" value="commens-util.jar"/>
-      <param name="value" value="${commens-util.jar}"/>
+      <param name="name" value="commons-util.jar"/>
+      <param name="value" value="${commons-util.jar}"/>
     </antcall>
   </target>
 
@@ -159,7 +159,7 @@
   <!-- ================================================================== -->
   
   <target name="prepare" 
-    depends="init,check.velocity,check.xerces,check.log4j,check.commens-util,check.jdbc,env">
+    depends="init,check.velocity,check.xerces,check.log4j,check.commons-util,check.jdbc,env">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
@@ -347,7 +347,7 @@
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commens-util.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-util.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
 
     <filter token="TORQUE_HOME" value="."/>
