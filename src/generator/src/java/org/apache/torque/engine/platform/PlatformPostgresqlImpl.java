@@ -101,7 +101,15 @@ public class PlatformPostgresqlImpl extends PlatformDefaultImpl
      */
     public String getNativeIdMethod()
     {
-        return "sequence";
+        return Platform.SEQUENCE;
     }
 
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "SERIAL";
+    }
+    
 }

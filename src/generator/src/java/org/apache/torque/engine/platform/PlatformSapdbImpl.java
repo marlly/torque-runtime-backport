@@ -100,7 +100,15 @@ public class PlatformSapdbImpl extends PlatformDefaultImpl
      */
     public String getNativeIdMethod()
     {
-        return "sequence";
+        return Platform.SEQUENCE;
     }
 
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "DEFAULT SERIAL";
+    }
+    
 }

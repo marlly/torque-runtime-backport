@@ -95,4 +95,12 @@ public class PlatformDb2Impl extends PlatformDefaultImpl
         return 18;
     }
 
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "GENERATED ALWAYS AS IDENTITY";
+    }
+    
 }

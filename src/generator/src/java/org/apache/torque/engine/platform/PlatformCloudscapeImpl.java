@@ -88,4 +88,13 @@ public class PlatformCloudscapeImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG VARBINARY"));
         setSchemaDomainMapping(new Domain(SchemaType.JAVA_OBJECT, "SERIALIZE"));    
     }
+
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "DEFAULT AUTOINCREMENT";
+    }
+    
 }

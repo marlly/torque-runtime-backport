@@ -109,7 +109,7 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
      */
     public String getNativeIdMethod()
     {
-        return "sequence";
+        return Platform.SEQUENCE;
     }
 
 }

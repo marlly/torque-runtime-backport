@@ -110,7 +110,7 @@ public class PlatformDefaultImpl implements Platform
      */
     public String getNativeIdMethod()
     {
-        return "identity";
+        return Platform.IDENTITY;
     }
 
     /**
@@ -131,6 +131,14 @@ public class PlatformDefaultImpl implements Platform
         // TODO: Check whether this is true for all DBs.  Also verify
         // the old Sybase templates.
         return (notNull ? "NOT NULL" : "");
+    }
+
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "IDENTITY";
     }
 
 }

@@ -83,4 +83,5 @@ public class PlatformHypersonicImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BINARY"));
     }
+
 }

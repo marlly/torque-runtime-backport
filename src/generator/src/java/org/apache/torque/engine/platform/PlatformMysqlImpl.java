@@ -88,5 +88,13 @@ public class PlatformMysqlImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.BLOB, "LONGBLOB"));
         setSchemaDomainMapping(new Domain(SchemaType.CLOB, "LONGTEXT"));
     }
-    
+
+    /**
+     * @see Platform#getAutoIncrement()
+     */
+    public String getAutoIncrement()
+    {
+        return "AUTO_INCREMENT";
+    }
+
 }

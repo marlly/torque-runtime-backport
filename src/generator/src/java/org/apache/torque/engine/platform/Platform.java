@@ -65,6 +65,11 @@ import org.apache.torque.engine.database.model.SchemaType;
  */
 public interface Platform
 {
+    /** constant for native id method */
+    static final String IDENTITY = "identity";
+    /** constant for native id method */
+    static final String SEQUENCE = "sequence";
+    
     /**
      * Returns the native IdMethod (sequence|identity)
      *
@@ -93,4 +98,9 @@ public interface Platform
      */
     String getNullString(boolean notNull);
 
+    /**
+     * @return The RDBMS-specific SQL fragment for autoincrement.
+     */
+    String getAutoIncrement();
+    
 }
