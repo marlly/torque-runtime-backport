@@ -48,7 +48,7 @@
     name="maven:jar">
     <!-- copy database.dtd to the right place -->
     <copy file="src/dtd/database.dtd"
-      todir="target/org/apache/torque/engine/database/transform"/>
+      todir="target/classes/org/apache/torque/engine/database/transform"/>
 
     <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
