@@ -76,7 +76,7 @@ $!col.getDescription()
     #end
 
     <field-descriptor id="$velocityCount"
-      name="$col.JavaName"
+      name="$col.UncapitalisedJavaName"
       column="$col.Name"
       jdbc-type="$jdbcFieldType"
 #if ($col.isNotNull()) ${space}nullable="false"
