@@ -161,9 +161,7 @@ public class TorqueSingleton
      */
     private TorqueSingleton()
     {
-        mapBuilders = Collections.synchronizedList(new ArrayList());
-        managers = new HashMap();
-        isInit = false;
+        resetConfiguration();
     }
 
     /**
@@ -568,7 +566,7 @@ public class TorqueSingleton
      * This method halts the IDBroker's daemon thread in all of
      * the DatabaseMap's.
      */
-    public void shutdown()
+    public synchronized void shutdown()
     {
         if (dbMaps != null)
         {
@@ -583,6 +581,18 @@ public class TorqueSingleton
                 }
             }
         }
+        resetConfiguration();
+    }
+
+    /**
+     * Resets some internal configuration variables to
+     * their defaults.
+     */
+    private void resetConfiguration()
+    {
+        mapBuilders = Collections.synchronizedList(new ArrayList());
+        managers = new HashMap();
+        isInit = false;
     }
 
     /**
