@@ -347,7 +347,10 @@
   <td><code> torque.initialID </code></td>
   <td><code> 101 </code></td>
   <td>
-    Controls where the idbroker starts id numbers at.
+    Controls the starting id of table entries when creating SQL for the id-table. If you
+    have two projects that use the same id-table in the same database with different tables,
+    make sure that they have different initialID settings and the ranges (initialID is incremented
+    for every new table) don't overlap.
   </td>
 </tr>
 
