@@ -74,22 +74,14 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     /** 
      * The doBuild() method builds the DatabaseMap 
      */
-    public void doBuild ( ) throws Exception
+    public void doBuild() throws Exception
     {
         dbMap = Torque.getDatabaseMap("$table.Database.Name");
 
         dbMap.addTable(getTable());
         TableMap tMap = dbMap.getTable(getTable());
 
-        #if ($table.IdMethod == "autoincrement")
-        tMap.setPrimaryKeyMethod(TableMap.AUTOINCREMENT);
-        #elseif ($table.IdMethod == "sequence")
-        tMap.setPrimaryKeyMethod(TableMap.SEQUENCE);
-        #elseif ($table.IdMethod == "idbroker")
-        tMap.setPrimaryKeyMethod(TableMap.IDBROKERTABLE);
-        #else
-        tMap.setPrimaryKeyMethod(TableMap.NONE);
-        #end
+        tMap.setPrimaryKeyMethod($table.IdMethod);
 
         #if ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
