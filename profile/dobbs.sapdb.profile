@@ -6,7 +6,7 @@ torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
+torque.sqlTest.databaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
 
 lib.dir = ../lib
 
@@ -64,11 +64,11 @@ addIntakeRetrievable=false
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
-databaseUrl = jdbc:sapdb://edobbs/SUITEX?sqlmode=oracle
+createDatabaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
+databaseUrl = jdbc:sapdb://edobbs/TDK?sqlmode=oracle
 databaseDriver = com.sap.dbtech.jdbc.DriverSapDB
-databaseUser = dobbs
-databasePassword = dobbs
+databaseUser = tdk
+databasePassword = tdk
 databaseHost = edobbs
 
 # Tells JDBC task that javaName attribute for the tables and columns
