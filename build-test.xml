@@ -255,6 +255,7 @@
     <pathelement location="${log4j.jar}"/>
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-configuration.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${build.dest}"/>
@@ -272,6 +273,7 @@
       ${log4j.jar}
       ${jdbc.jar}
       ${commons-collections.jar}
+      ${commons-configuration.jar}
       ${commons-lang.jar}
       ${village.jar}
       ${jcs.jar}
@@ -306,6 +308,7 @@
     <copy file="${village.jar}" todir="${test.libDir}"/>
     <copy file="${log4j.jar}" todir="${test.libDir}"/>
     <copy file="${commons-collections.jar}" todir="${test.libDir}"/>
+    <copy file="${commons-configuration.jar}" todir="${test.libDir}"/>
     <copy file="${commons-lang.jar}" todir="${test.libDir}"/>
     <copy file="${jdbc.jar}" todir="${test.libDir}"/>
     <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>

@@ -158,7 +158,7 @@
     />
 
     <available
-      classname="org.apache.stratum.configuration.Configuration"
+      classname="org.apache.stratum.component.Component"
       property="stratum.present"
       classpathref="classpath"
     />
