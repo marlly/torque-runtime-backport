@@ -104,37 +104,25 @@ public class TorqueInstance
     /** A constant for <code>default</code>. */
     private static final String DEFAULT_NAME = "default";
 
-    /**
-     * The db name that is specified as the default in the property file
-     */
+    /** The db name that is specified as the default in the property file */
     private String defaultDBName;
 
-    /**
-     * The global cache of database maps
-     */
+    /** The global cache of database maps */
     private Map dbMaps;
 
-    /**
-     * The cache of DataSourceFactory's
-     */
+    /** The cache of DataSourceFactory's */
     private Map dsFactoryMap;
 
-    /**
-     * The cache of DB adapter keys
-     */
+    /** The cache of DB adapter keys */
     private Map adapterMap;
 
     /** A repository of Manager instances. */
     private Map managers;
 
-    /**
-     * Torque-specific configuration.
-     */
+    /** Torque-specific configuration. */
     private Configuration conf;
 
-    /**
-     * flag to set to true once this class has been initialized
-     */
+    /** flag to set to true once this class has been initialized */
     private boolean isInit = false;
 
     /**

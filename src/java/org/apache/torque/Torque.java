@@ -97,8 +97,7 @@ public class Torque
     public static final String DATABASE_DEFAULT = "database.default";
 
     /**
-     * A prefix for <code>Manager</code> properties in
-     * the configuration.
+     * A prefix for <code>Manager</code> properties in the configuration.
      */
     public static final String MANAGER_PREFIX = "managed_class.";
 
@@ -128,8 +127,7 @@ public class Torque
     /**
      * C'tor for usage with the Stratum Lifecycle.
      *
-     * @todo Should be made private or protected once Stratum is
-     * removed.
+     * @todo Should be made private or protected once Stratum is removed.
      */
     public Torque()
     {
@@ -295,6 +293,7 @@ public class Torque
     }
 
     /**
+     * This method returns a Connecton using the given database name.
      *
      * @param name The database name.
      * @return a database connection
@@ -393,7 +392,7 @@ public class Torque
 
     /**
      * Shuts down the service, Lifecycle style
-     *
+     * @see org.apache.stratum.lifecycle.Disposable
      */
     public void dispose()
     {
