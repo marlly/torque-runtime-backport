@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 -- $table.Name
 -----------------------------------------------------------------------------
-##$generator.parse("$basepath/drop.vm", "", "table", $tbl)
+#$generator.parse("$basepath/drop.vm", "", "table", $tbl)
 CREATE TABLE $table.Name
 (
 #set ( $cols = $generator.parse("$basepath/columns.vm", "", "table", $tbl) )

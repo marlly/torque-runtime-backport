@@ -26,4 +26,4 @@ BEGIN
      DEALLOCATE refcursor
      DROP TABLE $table.Name
 END
-
+;
