@@ -4,7 +4,8 @@
 
 <database 
   name="@DATABASE_DEFAULT@" 
-  defaultIdMethod="@DATABASE_ID_METHOD@">
+  defaultIdMethod="@DATABASE_ID_METHOD@"
+  baseClass="">
 
   <!-- =================================================== -->
   <!-- B O O K  T A B L E                                  -->
@@ -20,17 +21,28 @@
   </table>
   -->
 
-  <table name="Artikel">
-    <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"/>
-    <column name="Artikelname" type="VARCHAR" size="60"/>
-    <column name="Lieferanten_Nr" type="INTEGER"/>
-    <column name="Kategorie_Nr" type="INTEGER"/>
-    <column name="Liefereinheit" type="VARCHAR" size="30"/>
-    <column name="Einzelpreis" type="FLOAT"/>
-    <column name="Lagerbestand" type="INTEGER"/>
-    <column name="BestellteEinheiten" type="INTEGER"/>
-    <column name="MindestBestand" type="INTEGER"/>
-    <column name="Auslaufartikel" type="INTEGER"/>
+  <table name="Artikel"
+         javaName="Article">
+    <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"
+            javaName="articleId"/>
+    <column name="Artikelname" type="VARCHAR" size="60"
+            javaName="articleName"/>
+    <column name="Lieferanten_Nr" type="INTEGER"
+            javaName="supplierId"/>
+    <column name="Kategorie_Nr" type="INTEGER"
+            javaName="productGroupId"/>
+    <column name="Liefereinheit" type="VARCHAR" size="30"
+            javaName="unit"/>
+    <column name="Einzelpreis" type="FLOAT"
+            javaName="price"/>
+    <column name="Lagerbestand" type="INTEGER"
+            javaName="stock"/>
+    <column name="BestellteEinheiten" type="INTEGER"
+            javaName="orderedUnits"/>
+    <column name="MindestBestand" type="INTEGER"
+            javaName="minimumStock"/>
+    <column name="Auslaufartikel" type="INTEGER"
+            javaName="inSelloutArticle"/>
   </table>
   
   <table name="BOOKS">
@@ -96,7 +108,8 @@
 
   <!-- Product Table for Tutorial 1 & 2 -->
   <table name="PRODUCT">
-    <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
+    <column name="ID" required="true" primaryKey="true" type="INTEGER"
+            javaName="_id"/>
     <column name="NAME" type="VARCHAR" size="100"/>
     <column name="PRICE" type="FLOAT"/>
     <column name="STOCK" type="INTEGER"/>
@@ -168,99 +181,5 @@ e CREATE TABLE MDTEST_DETAIL_FKNOPK (
     DETAIL_TEXT VARCHAR(255),
     FOREIGN KEY (MASTERID) REFERENCES MDTEST_MASTER(MASTERID)
   );
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;
-; OJB internal tables, do not modify !!!
-
-; create the OJB SequenceManager table
-e CREATE TABLE OJB_SEQ (
-    CLASSNAME    VARCHAR(175) NOT NULL,
-    FIELDNAME    VARCHAR(70) NOT NULL,
-    LAST_NUM     INT,
-    PRIMARY KEY (CLASSNAME, FIELDNAME)
-);
-
-; create the HIGH/LOW SequenceManager table
-e CREATE TABLE OJB_HL_SEQ (
-    CLASSNAME    VARCHAR(175) NOT NULL,
-    FIELDNAME    VARCHAR(70) NOT NULL,
-    MAX_KEY      INT,
-    GRAB_SIZE    INT,
-    PRIMARY KEY (CLASSNAME, FIELDNAME)
-);
-
-
-; create the OJB Lock table
-e CREATE TABLE OJB_LOCKENTRY (
-    OID_           VARCHAR(250) NOT NULL,
-    TX_ID          VARCHAR(50) NOT NULL,
-
-    TIMESTAMP_     DECIMAL,
-    ISOLATIONLEVEL INT,
-    LOCKTYPE       INT,
-
-    PRIMARY KEY (OID_, TX_ID)
-);
-
-
-; create the OJB NAMED ROOTS Table
-e CREATE TABLE OJB_NRM (
-    NAME         VARCHAR(250) NOT NULL PRIMARY KEY,
-
-    OID_         VARCHAR(1024)
-);
-
-
-;;;; THE DLIST IMPLEMENTATION
-;;;;
-; create DList table
-e CREATE TABLE OJB_DLIST (
-    ID          INT NOT NULL PRIMARY KEY,
-    SIZE_        INT
-);
-
-; create DList entry table
-e CREATE TABLE OJB_DLIST_ENTRIES (
-    ID          INT NOT NULL PRIMARY KEY,
-    DLIST_ID    INT NOT NULL,
-    POSITION_   INT,
-    OID_         VARCHAR(1024)
-
-);
-
-;;;; THE DSET IMPLEMENTATION
-;;;;
-; create DSet table
-e CREATE TABLE OJB_DSET (
-    ID          INT NOT NULL PRIMARY KEY,
-    SIZE_        INT
-);
-
-; create DSet entry table
-e CREATE TABLE OJB_DSET_ENTRIES (
-    ID          INT NOT NULL PRIMARY KEY,
-    DLIST_ID    INT NOT NULL,
-    POSITION_   INT,
-    OID_         VARCHAR(1024)
-);
-
-;;;; THE DMAP IMPLEMENTATION
-;;;;
-; create DMap table
-e CREATE TABLE OJB_DMAP (
-    ID          INT NOT NULL PRIMARY KEY,
-    SIZE_        INT
-);
-
-; create DMap entry table
-e CREATE TABLE OJB_DMAP_ENTRIES (
-    ID          INT NOT NULL PRIMARY KEY,
-    DMAP_ID     INT NOT NULL,
-
-    KEY_OID     VARCHAR(1024),
-    VALUE_OID   VARCHAR(1024)
-);
-
 -->
 </database>
