@@ -12,6 +12,12 @@ package ${package};
     #set ($extendsBaseClass = "extends $table.BaseClass" )
 #end
 
+#if ($table.Interface == "")
+    #set ($interface = "Serializable" )
+#else
+    #set ($interface = "Serializable, $table.Interface" )
+#end
+
 import java.io.Serializable;
 
 /**
@@ -19,12 +25,12 @@ import java.io.Serializable;
  *
  * [$now]
  */
-public class $table.JavaName $extendsBaseClass 
-        implements Serializable
+public class $table.JavaName $extendsBaseClass
+        implements $interface
 {
 
     #foreach ($col in $table.Columns)
-    private $col.JavaPrimitive $col.Name.toLowerCase() = null; 
+    private $col.JavaPrimitive $col.Name.toLowerCase() = null;
     #end
 
     #foreach ($col in $table.Columns)
@@ -48,6 +54,6 @@ public class $table.JavaName $extendsBaseClass
     {
         this.$clo = v;
     }
-    
+
     #end
 }
