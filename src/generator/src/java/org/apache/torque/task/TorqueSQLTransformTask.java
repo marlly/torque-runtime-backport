@@ -61,7 +61,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
-import org.apache.torque.engine.database.model.AppData;
+import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.SQLToAppData;
 
 /**
@@ -134,7 +134,7 @@ public class TorqueSQLTransformTask extends Task
             log("Parsing SQL Schema", Project.MSG_INFO);
 
             SQLToAppData sqlParser = new SQLToAppData(inputFile);
-            AppData app = sqlParser.execute();
+            Database app = sqlParser.execute();
 
             log("Preparing to write xml schema", Project.MSG_INFO);
             FileWriter fr = new FileWriter(outputFile);

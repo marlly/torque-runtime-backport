@@ -1,4 +1,4 @@
-#set ( $database = $dataModel.database )
+#set ( $database = $dataModel )
 <html>
 <header>
   <title>$dataModel.name</title>

@@ -5,8 +5,7 @@ targetdatabase = $targetDatabase
 dbprops.idMethod = $dbprops.get("idMethod")
 #include ( "sql/base/$targetDatabase/db.props" )
 
-#foreach ($dataModel in $dataModels)
-  #foreach ($database in $dataModel.Databases)
+#foreach ($database in $dataModels)
 
     #if ($database.Package)
       #set ($package = $database.Package)
@@ -107,5 +106,4 @@ dbprops.idMethod = $dbprops.get("idMethod")
         #end
       #end
     #end
-  #end
 #end

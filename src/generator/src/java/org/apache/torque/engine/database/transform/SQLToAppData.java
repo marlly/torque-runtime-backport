@@ -59,7 +59,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.ForeignKey;
@@ -84,7 +83,6 @@ public class SQLToAppData
     private String sqlFile;
     private List tokens;
     private Token token;
-    private AppData appData;
     private Database appDataDB;
     private int count;
     private String databaseType;
@@ -566,12 +564,10 @@ public class SQLToAppData
      * @throws IOException If an I/O error occurs
      * @throws ParseException error parsing the input file
      */
-    public AppData execute() throws IOException, ParseException
+    public Database execute() throws IOException, ParseException
     {
         count = 0;
-        appData = new AppData(databaseType);
-        appDataDB = new Database();
-        appData.addDatabase(appDataDB);
+        appDataDB = new Database(databaseType);
 
         FileReader fr = new FileReader(sqlFile);
         BufferedReader br = new BufferedReader(fr);
@@ -597,19 +593,6 @@ public class SQLToAppData
                 next();
             }
         }
-        return appData;
-    }
-
-    /**
-     * Just 4 testing.
-     *
-     * @param args commandline args
-     * @throws Exception an exception
-     */
-    public static void main(String args[]) throws Exception
-    {
-        SQLToAppData s2a = new SQLToAppData(args[0]);
-        AppData ad = s2a.execute();
-        System.out.println(ad);
+        return appDataDB;
     }
 }

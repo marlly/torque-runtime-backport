@@ -56,7 +56,6 @@ package org.apache.torque.engine.database;
 
 import junit.framework.TestCase;
 
-import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.database.transform.XmlToAppData;
@@ -70,7 +69,7 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
 public class TestPackageHandling extends TestCase
 {
     private XmlToAppData xmlToAppData = null;
-    private AppData appData = null;
+    private Database database = null;
 
     public TestPackageHandling(String name)
     {
@@ -95,11 +94,10 @@ public class TestPackageHandling extends TestCase
             throws Exception
     {
         xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
-        appData = xmlToAppData.parseFile(
+        database = xmlToAppData.parseFile(
             "src/test/org/apache/torque/engine/database/package-schema.xml");
-        Database db = appData.getDatabase("packagedb");
-        assertEquals("defaultpackage", db.getPackage());
-        Table table = db.getTable("table_a");
+        assertEquals("defaultpackage", database.getPackage());
+        Table table = database.getTable("table_a");
         assertEquals("defaultpackage", table.getPackage());
     }
 
@@ -110,11 +108,10 @@ public class TestPackageHandling extends TestCase
             throws Exception
     {
         xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
-        appData = xmlToAppData.parseFile(
+        database = xmlToAppData.parseFile(
             "src/test/org/apache/torque/engine/database/package2-schema.xml");
-        Database db = appData.getDatabase("packagedb2");
-        assertEquals("packagefromdb", db.getPackage());
-        Table table = db.getTable("table_a");
+        assertEquals("packagefromdb", database.getPackage());
+        Table table = database.getTable("table_a");
         assertEquals("packagefromdb", table.getPackage());
     }
 

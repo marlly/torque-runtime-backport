@@ -3,8 +3,7 @@
 #set ( $bfname= "data/dump/bottom.vm" )
 #set ($q = '"')
 
-#foreach ($dataModel in $dataModels)
-#foreach ($database in $dataModel.Databases)
+#foreach ($database in $dataModels)
 
 #if ($project)
     #if ($database.Name)
@@ -33,5 +32,4 @@ fetching table $tbl.Name
 #end
 $generator.parse($bfname,$outFile,"tables",$database.Tables)
 
-#end
 #end

@@ -4,13 +4,12 @@
 #set ( $fnamekeys= "sql/base/$targetDatabase/tablefk.vm" )
 #set ( $idname = "sql/id-table/idtable.$targetDatabase" )
 
-#foreach ($dataModel in $dataModels)
+#foreach ($database in $dataModels)
         
-  #set ( $outFile = "${dataModel.name}.sql" )
+  #set ( $outFile = "${database.FileName}.sql" )
 
   File to be created: $outFile
   
-  #set ( $database = $dataModel.database )
   #foreach ($tbl in $database.tables)
     Primary Key:#if ($tbl.hasPrimaryKey()) Yes #else No #end
     #if (!$tbl.isSkipSql())
@@ -28,7 +27,7 @@
 
     Creating id-table
 
-    #set ($tbl = $idmodel.database.getTable("ID_TABLE"))
+    #set ($tbl = $idmodel.getTable("ID_TABLE"))
     $generator.parse($fname,$outFile,"table",$tbl)
  
     ## Generate inserts into ID-TABLE for initial ids.

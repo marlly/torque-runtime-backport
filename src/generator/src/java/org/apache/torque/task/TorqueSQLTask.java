@@ -61,13 +61,14 @@ import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 
 import org.apache.velocity.context.Context;
 
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.transform.XmlToAppData;
-import org.apache.torque.engine.database.model.AppData;
+import org.apache.torque.engine.database.model.Database;
 
 
 /**
@@ -208,7 +209,7 @@ public class TorqueSQLTask extends TorqueDataModelTask
         // Transform the XML database schema into
         // data model object.
         XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(), null);
-        AppData ad = xmlParser.parseFile(getIdTableXMLFile());
+        Database ad = xmlParser.parseFile(getIdTableXMLFile());
 
         ad.setName("idmodel");
         context.put("idmodel", ad);

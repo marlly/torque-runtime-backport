@@ -160,10 +160,8 @@ public class NameFactoryTest extends TestCase
     /** Sets up the Torque model. */
     public void setUp()
     {
-        AppData appData = new AppData(DATABASE_TYPE);
-        database = new Database();
+        database = new Database(DATABASE_TYPE);
         database.setDatabaseType(DATABASE_TYPE);
-        appData.addDatabase(database);
     }
 
     /**

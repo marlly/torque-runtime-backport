@@ -67,7 +67,6 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.engine.EngineException;
-import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.ForeignKey;
@@ -94,8 +93,7 @@ public class XmlToAppData extends DefaultHandler
     /** Logging class from commons.logging */
     private static Log log = LogFactory.getLog(XmlToAppData.class);
 
-    private AppData app;
-    private Database currDB;
+    private Database database;
     private Table currTable;
     private Column currColumn;
     private ForeignKey currFK;
@@ -126,11 +124,22 @@ public class XmlToAppData extends DefaultHandler
      * Creates a new instance for the specified database type.
      *
      * @param databaseType The type of database for the application.
+     */
+    public XmlToAppData(String databaseType)
+    {
+        database = new Database(databaseType);
+        firstPass = true;
+    }
+
+    /**
+     * Creates a new instance for the specified database type.
+     *
+     * @param databaseType The type of database for the application.
      * @param defaultPackage the default java package used for the om
      */
     public XmlToAppData(String databaseType, String defaultPackage)
     {
-        app = new AppData(databaseType);
+        database = new Database(databaseType);
         this.defaultPackage = defaultPackage;
         firstPass = true;
     }
@@ -142,7 +151,7 @@ public class XmlToAppData extends DefaultHandler
      * @param xmlFile The input file to parse.
      * @return AppData populated by <code>xmlFile</code>.
      */
-    public AppData parseFile(String xmlFile)
+    public Database parseFile(String xmlFile)
             throws EngineException
     {
         try
@@ -156,7 +165,7 @@ public class XmlToAppData extends DefaultHandler
             if ((alreadyReadFiles != null)
                     && alreadyReadFiles.contains(xmlFile))
             {
-                return app;
+                return database;
             }
             else if (alreadyReadFiles == null)
             {
@@ -201,7 +210,8 @@ public class XmlToAppData extends DefaultHandler
         {
             firstPass = false;
         }
-        return app;
+        database.doFinalInitialization();
+        return database;
     }
     
     /**
@@ -253,10 +263,10 @@ public class XmlToAppData extends DefaultHandler
                 }
                 else
                 {
-                    currDB = app.addDatabase(attributes);
-                    if (currDB.getPackage() == null)
+                    database.loadFromXML(attributes);
+                    if (database.getPackage() == null)
                     {
-                        currDB.setPackage(defaultPackage);
+                        database.setPackage(defaultPackage);
                     }
                 }
             }
@@ -280,7 +290,7 @@ public class XmlToAppData extends DefaultHandler
             }
             else if (rawName.equals("table"))
             {
-                currTable = currDB.addTable(attributes);
+                currTable = database.addTable(attributes);
                 if (isExternalSchema)
                 {
                     currTable.setForReferenceOnly(true);

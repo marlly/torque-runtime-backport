@@ -3,9 +3,9 @@
 #foreach ($dataModel in $dataModels)
 
   #if ($outputFormat=="html")
-    #set ( $outFile = "${dataModel.name}.html" )
+    #set ( $outFile = "${dataModel.FileName}.html" )
   #else
-    #set ( $outFile = "${dataModel.name}.xml" )
+    #set ( $outFile = "${dataModel.FileName}.xml" )
   #end
 
   File to be created: $outFile

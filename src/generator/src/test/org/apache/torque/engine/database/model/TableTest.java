@@ -69,7 +69,7 @@ import org.apache.torque.engine.database.transform.XmlToAppData;
 public class TableTest extends TestCase
 {
     private XmlToAppData xmlToAppData = null;
-    private AppData appData = null;
+    private Database db = null;
 
     public TableTest(String name)
     {
@@ -80,7 +80,7 @@ public class TableTest extends TestCase
     {
         super.setUp();
         xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
-        appData = xmlToAppData.parseFile(
+        db = xmlToAppData.parseFile(
             "src/test/org/apache/torque/engine/database/model/tabletest-schema.xml");
     }
 
@@ -95,7 +95,6 @@ public class TableTest extends TestCase
      */
     public void testIdMethodHandling() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         assertEquals(IDMethod.ID_BROKER, db.getDefaultIdMethod());
         Table table = db.getTable("table_idbroker");
         assertEquals(IDMethod.ID_BROKER, table.getIdMethod());
@@ -105,7 +104,6 @@ public class TableTest extends TestCase
     
     public void testNoPk() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("nopk");
         assertFalse(table.hasPrimaryKey());
         List pks = table.getPrimaryKey();
@@ -114,7 +112,6 @@ public class TableTest extends TestCase
     
     public void testSinglePk() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("singlepk");
         assertTrue(table.hasPrimaryKey());
         List pks = table.getPrimaryKey();
@@ -125,7 +122,6 @@ public class TableTest extends TestCase
     
     public void testMultiPk() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("multipk");
         assertTrue(table.hasPrimaryKey());
         List pks = table.getPrimaryKey();
@@ -139,7 +135,6 @@ public class TableTest extends TestCase
  
     public void testSingleFk() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("singlefk");
         ForeignKey[] fks = table.getForeignKeys();
         assertTrue(fks.length == 1);
@@ -150,7 +145,6 @@ public class TableTest extends TestCase
 
     public void testMultiFk() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("multifk");
         ForeignKey[] fks = table.getForeignKeys();
         assertTrue(fks.length == 1);
@@ -161,7 +155,6 @@ public class TableTest extends TestCase
     
     public void testReferrers() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("singlepk");
         List refs = table.getReferrers();
         assertTrue(refs.size() == 1);
@@ -171,7 +164,6 @@ public class TableTest extends TestCase
     
     public void testUnique() throws Exception
     {
-        Database db = appData.getDatabase("iddb");
         Table table = db.getTable("unique_test");
         Unique[] unices = table.getUnices();
         assertTrue(unices.length == 1);

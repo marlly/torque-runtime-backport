@@ -87,11 +87,22 @@ public class Database
     private String defaultIdMethod;
     private String defaultJavaType;
     private String defaultJavaNamingMethod;
-    private AppData dbParent;
     private Hashtable tablesByName = new Hashtable();
     private Hashtable tablesByJavaName = new Hashtable();
     private boolean heavyIndexing;
+    /** the name of the definition file */
+    private String fileName;
 
+    /**
+     * Creates a new instance for the specified database type.
+     *
+     * @param databaseType The default type for this database.
+     */
+    public Database(String databaseType)
+    {
+        this.databaseType = databaseType;
+    }
+    
     /**
      * Load the database object from an xml tag.
      *
@@ -133,6 +144,16 @@ public class Database
         /** @task check this */
 //        this.name = (name == null ? Torque.getDefaultDB() : name);
         this.name = (name == null ? "default" : name);
+    }
+    
+    public String getFileName()
+    {
+        return fileName;
+    }
+    
+    public void setFileName(String name)
+    {
+        this.fileName = name;
     }
 
     /**
@@ -328,26 +349,6 @@ public class Database
         tablesByName.put(tbl.getName(), tbl);
         tablesByJavaName.put(tbl.getJavaName(), tbl);
         tbl.setPackage(getPackage());
-    }
-
-    /**
-     * Set the parent of the database
-     *
-     * @param parent the parent
-     */
-    public void setAppData(AppData parent)
-    {
-        dbParent = parent;
-    }
-
-    /**
-     * Get the parent of the table
-     *
-     * @return the parent
-     */
-    public AppData getAppData()
-    {
-        return dbParent;
     }
 
     protected String getDatabaseType()

@@ -68,7 +68,6 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
 
 import org.apache.torque.engine.EngineException;
-import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 
@@ -316,8 +315,8 @@ public class TorqueDataModelTask extends TexenTask
                 // data model object.
                 xmlParser = new XmlToAppData(getTargetDatabase(),
                         getTargetPackage());
-                AppData ad = xmlParser.parseFile(xmlFile);
-                ad.setName(grokName(xmlFile));
+                Database ad = xmlParser.parseFile(xmlFile);
+                ad.setFileName(grokName(xmlFile));
                 dataModels.add(ad);
             }
             else
@@ -337,8 +336,8 @@ public class TorqueDataModelTask extends TexenTask
                         File f = new File(srcDir, dataModelFiles[j]);
                         xmlParser = new XmlToAppData(getTargetDatabase(),
                                 getTargetPackage());
-                        AppData ad = xmlParser.parseFile(f.toString());
-                        ad.setName(grokName(f.toString()));
+                        Database ad = xmlParser.parseFile(f.toString());
+                        ad.setFileName(grokName(f.toString()));
                         dataModels.add(ad);
                     }
                 }
@@ -352,10 +351,9 @@ public class TorqueDataModelTask extends TexenTask
             // names, we just want the unique names of databases.
             while (i.hasNext())
             {
-                AppData ad = (AppData) i.next();
-                Database database = ad.getDatabase();
+                Database database = (Database) i.next();
                 databaseNames.put(database.getName(), database.getName());
-                dataModelDbMap.put(ad.getName(), database.getName());
+                dataModelDbMap.put(database.getFileName(), database.getName());
             }
         }
         catch (EngineException ee)

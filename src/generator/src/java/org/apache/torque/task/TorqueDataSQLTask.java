@@ -72,7 +72,6 @@ import org.apache.velocity.context.Context;
 import org.xml.sax.SAXException;
 
 import org.apache.torque.engine.EngineException;
-import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToData;
 
@@ -177,8 +176,7 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
 
         try
         {
-            AppData app = (AppData) getDataModels().get(0);
-            Database db = app.getDatabase();
+            Database db = (Database) getDataModels().get(0);
             
             List data;
             
@@ -217,7 +215,7 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
             context.put("data", data);
 
             // Place our model in the context.
-            context.put("appData", app);
+            context.put("appData", db);
 
             // Place the target database in the context.
             context.put("targetDatabase", targetDatabase);
