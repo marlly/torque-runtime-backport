@@ -908,7 +908,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @exception TorqueException Trouble creating the query string.
      */
-    public static String createQueryDisplayString(Criteria criteria)
+    static String createQueryDisplayString(Criteria criteria)
         throws TorqueException
     {
         return createQuery(criteria).toString();
@@ -958,7 +958,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param criteria A Criteria.
      * @exception TorqueException Trouble creating the query string.
      */
-    public static Query createQuery(Criteria criteria)
+    static Query createQuery(Criteria criteria)
         throws TorqueException
     {
         Query query = new Query();
