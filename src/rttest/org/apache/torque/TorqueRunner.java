@@ -54,6 +54,7 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import org.apache.log4j.Category;
 
 /**
  * Runtime tests for Torque.
@@ -64,6 +65,12 @@ package org.apache.torque;
  */
 public class TorqueRunner
 {
+    /**
+     * Category used for logging in the runtime test class.
+     */
+    private static Category category = 
+        Category.getInstance(TorqueRunner.class.getName());
+
     public static void main(String[] args)
         throws TorqueException
     {
@@ -78,7 +85,9 @@ public class TorqueRunner
         {
             throw new TorqueException("Can't initialize Torque!", e);
         }
-
+        
+        category.debug("Default Map/Pool: " + Torque.getDefaultDB());
+        
         // run the tests
         TorqueRunner tr = new TorqueRunner();
         tr.insertData();
