@@ -55,8 +55,6 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -76,6 +74,7 @@ import org.xml.sax.Attributes;
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
+ * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @version $Id$
  */
 public class Column
@@ -93,7 +92,6 @@ public class Column
     /** type as defined in schema.xml */
     private String torqueType;
     private String javaType;
-    private Object columnType;
     private Table parentTable;
     private int position;
     private boolean isPrimaryKey = false;
@@ -599,10 +597,12 @@ public class Column
 
     /**
      * Utility method to see if the column is a string
+     * 
+     * @deprecated will be removed after the 3.2 release
      */
     public boolean isString()
     {
-        return (columnType instanceof String);
+        return (torqueType.indexOf ("CHAR") != -1);
     }
 
     /**
@@ -809,37 +809,30 @@ public class Column
         if (tn.indexOf ("CHAR") != -1)
         {
             torqueType = "VARCHAR";
-            columnType = "";
         }
         else if (tn.indexOf ("INT") != -1)
         {
             torqueType = "INTEGER";
-            columnType = new Integer (0);
         }
         else if (tn.indexOf ("FLOAT") != -1)
         {
             torqueType = "FLOAT";
-            columnType = new Float (0);
         }
         else if (tn.indexOf ("DATE") != -1)
         {
             torqueType = "DATE";
-            columnType = new Date();
         }
         else if (tn.indexOf ("TIME") != -1)
         {
             torqueType = "TIMESTAMP";
-            columnType = new Date();
         }
         else if (tn.indexOf ("BINARY") != -1)
         {
             torqueType = "LONGVARBINARY";
-            columnType = new Hashtable();
         }
         else
         {
             torqueType = "VARCHAR";
-            columnType = "";
         }
     }
 
