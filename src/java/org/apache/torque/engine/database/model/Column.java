@@ -128,7 +128,7 @@ public class Column
         boolean isColumnList = (obj instanceof Column);
         if (isColumnList)
         {
-            obj = ((Column) columns.get(0)).getName();
+            obj = ((Column) obj).getName();
         }
         StringBuffer buf = new StringBuffer((String) obj);
         for (int i = 1; i < columns.size(); i++)
