@@ -21,6 +21,7 @@
   <extend>../../project-base.xml</extend>
   <pomVersion>3</pomVersion>
   <id>maven-torque-plugin</id>
+  <groupId>torque</groupId>
   <name>Maven Torque Plug-in</name>
 
   <description>Maven Plugin for Torque</description>

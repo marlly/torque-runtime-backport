@@ -21,6 +21,7 @@
   <extend>../../project-base.xml</extend>
   <pomVersion>3</pomVersion>
   <id>torque-gen</id>
+  <groupId>torque</groupId>
   <name>Torque generator</name>
 
   <!-- Gump integration -->

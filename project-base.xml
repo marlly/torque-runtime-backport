@@ -40,7 +40,8 @@
   <issueTrackingUrl>http://issues.apache.org/scarab/issues</issueTrackingUrl>
   <siteAddress>db.apache.org</siteAddress>
   <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
-  <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
+  <distributionSite>www.apache.org</distributionSite>
+  <distributionDirectory>/www/www.apache.org/dist/java-repository</distributionDirectory>
 
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
