@@ -82,8 +82,7 @@ public class DBNone
      * @return null.
      * @exception SQLException
      */
-    public Connection getConnection()
-        throws SQLException
+    public Connection getConnection() throws SQLException
     {
         return null;
     }
@@ -148,11 +147,9 @@ public class DBNone
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
     }
 
@@ -161,11 +158,9 @@ public class DBNone
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
     }
 }

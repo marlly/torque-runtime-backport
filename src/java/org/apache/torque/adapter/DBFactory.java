@@ -101,6 +101,8 @@ public class DBFactory
      * the "NO DATABASE" adapter to this list.  After all the
      * configuration is queried to get a list of JDBC drivers and
      * their associated adapters.
+     *
+     * @param configuration the configuration
      */
     public static void init(Configuration configuration)
     {
@@ -118,7 +120,7 @@ public class DBFactory
             {
                 String mapKey = configuration.getString(key);
                 Class adapterClass = null;
-                String adapterClassName = (String) adapterPackage + "." + 
+                String adapterClassName = (String) adapterPackage + "." +
                     driverToAdapterMap.get(mapKey);
 
                 category.debug("Using " + adapterClassName);
@@ -213,6 +215,8 @@ public class DBFactory
      * @param driver The fully-qualified name of the JDBC driver to
      * create a new adapter instance for or a shorter form adapter key.
      * @return An instance of a Turbine database adapter.
+     * @throws InstantiationException throws if the JDBC driver could not be
+     *      instantiated
      */
     public static DB create(String driver)
         throws InstantiationException

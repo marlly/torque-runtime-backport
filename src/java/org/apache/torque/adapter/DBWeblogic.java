@@ -55,7 +55,6 @@ package org.apache.torque.adapter;
  */
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
@@ -73,6 +72,7 @@ public class DBWeblogic extends DB
     protected DBWeblogic()
     {
     }
+
     /**
      * This method is used to ignore case.
      *
@@ -116,11 +116,9 @@ public class DBWeblogic extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
     }
 
@@ -129,11 +127,9 @@ public class DBWeblogic extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
     }
 }

@@ -64,8 +64,7 @@ import java.sql.Statement;
  * @author <a href="mailto:frank@opticode.co.za">Frank Conradie</a>
  * @version $Id$
  */
-public class DBInterbase
-    extends DB
+public class DBInterbase extends DB
 {
     /**
      * This method is used to ignore case.
@@ -134,23 +133,21 @@ public class DBInterbase
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
 
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "SET TRANSACTION " )
-        .append( "ISOLATION LEVEL READ COMMITTED " )
-        .append( "NO RECORD_VERSION WAIT " )
-        .append( "RESERVING " )
-        .append( table )
-        .append( " FOR PROTECTED WRITE" );
+        stmt.append("SET TRANSACTION ")
+                .append("ISOLATION LEVEL READ COMMITTED ")
+                .append("NO RECORD_VERSION WAIT ")
+                .append("RESERVING ")
+                .append(table)
+                .append(" FOR PROTECTED WRITE");
 
-        statement.executeQuery( stmt.toString() );
+        statement.executeQuery(stmt.toString());
     }
 
     /**
@@ -158,11 +155,9 @@ public class DBInterbase
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
         // Tables in Interbase are unlocked when a commit is issued.
         // The user may have issued a commit but do it here to be

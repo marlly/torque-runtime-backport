@@ -55,7 +55,6 @@ package org.apache.torque.adapter;
  */
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.StringTokenizer;
 
@@ -65,8 +64,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @version $Id$
  */
-public class DBCloudscape
-    extends DB
+public class DBCloudscape extends DB
 {
     private static final String QUALIFIER = ".";
 
@@ -114,9 +112,10 @@ public class DBCloudscape
         StringBuffer sql = new StringBuffer(132);
         sql.append("select distinct ConnectionInfo.lastAutoincrementValue(");
 
-        String qualifiedIdentifier = (String)obj;
+        String qualifiedIdentifier = (String) obj;
 
-        StringTokenizer tokenizer = new StringTokenizer(qualifiedIdentifier, QUALIFIER);
+        StringTokenizer tokenizer = new StringTokenizer(qualifiedIdentifier,
+                QUALIFIER);
         int count = tokenizer.countTokens();
 
         String schema, table, column;
@@ -126,7 +125,7 @@ public class DBCloudscape
         switch (count)
         {
         case 0:
-            return ""; // not valid -- we need the column name and table name 
+            return ""; // not valid -- we need the column name and table name
         case 1:
             return ""; // not valid -- we need the table name to select from
 
@@ -155,7 +154,7 @@ public class DBCloudscape
         sql.append(column);
         sql.append("') FROM ");
         sql.append(table);
-        
+
         System.out.println(sql.toString());
         return sql.toString();
     }
@@ -165,11 +164,9 @@ public class DBCloudscape
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
     }
 
@@ -178,11 +175,9 @@ public class DBCloudscape
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
     }
 }

@@ -121,20 +121,18 @@ public class DBInformix extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
 
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "LOCK TABLE " )
-        .append( table )
-        .append( " IN EXCLUSIVE MODE" );
+        stmt.append("LOCK TABLE ")
+        .append(table)
+        .append(" IN EXCLUSIVE MODE");
 
-        statement.executeQuery( stmt.toString() );
+        statement.executeQuery(stmt.toString());
     }
 
     /**
@@ -142,11 +140,9 @@ public class DBInformix extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
         // Tables in Informix are unlocked when a commit is issued.
         // The user may have issued a commit but do it here to be

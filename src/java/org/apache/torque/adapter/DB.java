@@ -138,6 +138,8 @@ public abstract class DB implements Serializable, IDMethod
      * Returns the constant from the {@link
      * org.apache.torque.adapter.IDMethod} interface denoting which
      * type of primary key generation method this type of RDBMS uses.
+     *
+     * @return IDMethod constant
      */
     public abstract String getIDMethodType();
 
@@ -174,22 +176,20 @@ public abstract class DB implements Serializable, IDMethod
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public abstract void lockTable(Connection con,
-                                   String table)
-        throws SQLException;
+    public abstract void lockTable(Connection con, String table)
+            throws SQLException;
 
     /**
      * Unlocks the specified table.
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public abstract void unlockTable(Connection con,
-                                     String table)
-        throws SQLException;
+    public abstract void unlockTable(Connection con, String table)
+            throws SQLException;
 
     /**
      * This method is used to ignore case.
@@ -223,6 +223,7 @@ public abstract class DB implements Serializable, IDMethod
     {
         JDBCDriver = newDriver;
     }
+    */
 
     /**
      * This method is used to chek whether writing large objects to
@@ -293,6 +294,7 @@ public abstract class DB implements Serializable, IDMethod
      * This method is used to format any date string.
      * Database can use different default date formats.
      *
+     * @param dateString the date string to format
      * @return The proper date formated String.
      * @deprecated use getDateString(java.util.Date)
      */
@@ -305,14 +307,15 @@ public abstract class DB implements Serializable, IDMethod
      * This method is used to format any date string.
      * Database can use different default date formats.
      *
+     * @param date the Date to format
      * @return The proper date formatted String.
      */
     public String getDateString(Date date)
     {
         Timestamp ts = null;
-        if ( date instanceof Timestamp )
+        if (date instanceof Timestamp)
         {
-            ts = (Timestamp)date;
+            ts = (Timestamp) date;
         }
         else
         {
@@ -325,6 +328,7 @@ public abstract class DB implements Serializable, IDMethod
     /**
      * This method is used to format a boolean string.
      *
+     * @param b the Boolean to format
      * @return The proper date formatted String.
      */
     public String getBooleanString(Boolean b)

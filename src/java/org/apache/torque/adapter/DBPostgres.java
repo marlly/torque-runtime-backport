@@ -107,7 +107,7 @@ public class DBPostgres extends DB
     }
 
     /**
-     * @param name The name of the field (should be of type 
+     * @param name The name of the field (should be of type
      *      <code>String</code>).
      * @return SQL to retreive the next database key.
      * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object)
@@ -134,10 +134,9 @@ public class DBPostgres extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con, String table)
-            throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
     }
 
@@ -146,10 +145,9 @@ public class DBPostgres extends DB
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con, String table)
-            throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
     }
 

@@ -67,8 +67,7 @@ import java.sql.Statement;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class DBOracle
-    extends DB
+public class DBOracle extends DB
 {
     /**
      * Empty constructor.
@@ -132,18 +131,16 @@ public class DBOracle
      * @param table The name of the table to lock.
      * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
 
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "SELECT next_id FROM " )
-                .append( table )
-                .append( " FOR UPDATE" );
+        stmt.append("SELECT next_id FROM ")
+                .append(table)
+                .append(" FOR UPDATE");
 
-        statement.executeQuery( stmt.toString() );
+        statement.executeQuery(stmt.toString());
     }
 
     /**
@@ -151,8 +148,7 @@ public class DBOracle
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException No Statement could be created or
-     * executed.
+     * @exception SQLException No Statement could be created or executed.
      */
     public void unlockTable(Connection con, String table) throws SQLException
     {

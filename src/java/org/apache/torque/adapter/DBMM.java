@@ -76,8 +76,7 @@ import java.text.SimpleDateFormat;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class DBMM
-    extends DB
+public class DBMM extends DB
 {
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
@@ -135,17 +134,15 @@ public class DBMM
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException, No Statement could be created or
+     * @exception SQLException No Statement could be created or
      * executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "LOCK TABLE " ).append( table ).append( " WRITE" );
-        statement.executeUpdate( stmt.toString() );
+        stmt.append("LOCK TABLE ").append(table).append(" WRITE");
+        statement.executeUpdate(stmt.toString());
     }
 
     /**
@@ -156,12 +153,10 @@ public class DBMM
      * @exception SQLException No Statement could be created or
      * executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
-        statement.executeUpdate( "UNLOCK TABLES" );
+        statement.executeUpdate("UNLOCK TABLES");
     }
 
     /**

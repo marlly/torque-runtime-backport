@@ -68,8 +68,7 @@ import java.sql.SQLException;
  * @author <a href="mailto:hakan42@gmx.de">Hakan Tandogan</a>
  * @version $Id$
  */
-public class DBDB2App
-    extends DB
+public class DBDB2App extends DB
 {
     /**
      * Empty constructor.
@@ -86,9 +85,7 @@ public class DBDB2App
      */
     public String toUpperCase(String in)
     {
-        String s =
-            new StringBuffer("UPPER(").append(in).append(")").toString();
-
+        String s = new StringBuffer("UPPER(").append(in).append(")").toString();
         return s;
     }
 
@@ -100,9 +97,7 @@ public class DBDB2App
      */
     public String ignoreCase(String in)
     {
-        String s =
-            new StringBuffer("UPPER(").append(in).append(")").toString();
-
+        String s = new StringBuffer("UPPER(").append(in).append(")").toString();
         return s;
     }
 
@@ -127,11 +122,9 @@ public class DBDB2App
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
     }
 
@@ -140,11 +133,9 @@ public class DBDB2App
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @exception SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
     }
 }

@@ -69,8 +69,7 @@ import java.sql.Statement;
  * @author <a href="mailto:ekkerbj@netscape.net">Jeff Brekke</a>
  * @version $Id$
  */
-public class DBSybase
-    extends DB
+public class DBSybase extends DB
 {
     /**
      * Empty constructor.
@@ -126,20 +125,18 @@ public class DBSybase
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to lock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table) throws SQLException
     {
         Statement statement = con.createStatement();
 
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "SELECT next_id FROM " )
-        .append( table )
-        .append( " FOR UPDATE" );
+        stmt.append("SELECT next_id FROM ")
+        .append(table)
+        .append(" FOR UPDATE");
 
-        statement.executeQuery( stmt.toString() );
+        statement.executeQuery(stmt.toString());
     }
 
     /**
@@ -147,11 +144,9 @@ public class DBSybase
      *
      * @param con The JDBC connection to use.
      * @param table The name of the table to unlock.
-     * @exception SQLException
+     * @throws SQLException No Statement could be created or executed.
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table) throws SQLException
     {
         // Tables in Sybase are unlocked when a commit is issued.  The
         // user may have issued a commit but do it here to be sure.
