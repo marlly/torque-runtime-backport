@@ -188,9 +188,7 @@
       <sourceDirectory>src/java</sourceDirectory>
     </sourceDirectories>
 
-    <unitTestSourceDirectories>
-      <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-    </unitTestSourceDirectories>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
     
     <aspectSourceDirectories>
     </aspectSourceDirectories>
