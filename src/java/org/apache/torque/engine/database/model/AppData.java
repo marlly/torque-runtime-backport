@@ -237,7 +237,7 @@ public class AppData
     /**
      * Returns whether this application has multiple databases.
      */
-    public boolean getMultipleDatabases()
+    public boolean hasMultipleDatabases()
     {
         return (dbList.size() > 1);
     }
