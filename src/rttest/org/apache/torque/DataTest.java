@@ -117,7 +117,7 @@ public class DataTest extends BaseTestCase
         catch (Exception ex)
         {
             ex.printStackTrace();
-            fail("cleaning table : Exception caught : " 
+            fail("Exception caught : " 
                     + ex.getClass().getName() 
                     + " : " + ex.getMessage());
         }
