@@ -132,7 +132,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = ((String) tok.nextElement()).toLowerCase();
-            name.append(Strings.firstLetterCaps(namePart));
+            name.append(Strings.capitalise(namePart));
         }
         return name.toString();
     }
@@ -155,7 +155,7 @@ public class JavaNameGenerator implements NameGenerator
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(Strings.firstLetterCaps(namePart));
+            name.append(Strings.capitalise(namePart));
         }
         return name.toString();
     }
@@ -164,6 +164,7 @@ public class JavaNameGenerator implements NameGenerator
      * Converts a database schema name to java object name.  In this
      * case no conversion is made.
      *
+     * @param name name to be converted.
      * @return The <code>name</code> parameter, unchanged.
      */
     protected final String nochangeMethod(String name)
