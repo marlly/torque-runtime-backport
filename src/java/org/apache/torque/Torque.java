@@ -77,8 +77,8 @@ import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.manager.AbstractBaseManager;
-import org.apache.stratum.configuration.Configuration;
-import org.apache.stratum.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
 

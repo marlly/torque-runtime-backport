@@ -65,7 +65,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.log4j.Category;
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -286,7 +286,7 @@ public class IDBroker
      * property torque.idbroker.usenewconnection = false 
      *
      * @param connection A Connection.
-     * @param keyInfo, an Object that contains additional info.
+     * @param tableName, an Object that contains additional info.
      * @return An int with the value for the id.
      * @exception Exception Database error.
      */
@@ -631,7 +631,7 @@ public class IDBroker
      *
      * @param tableName The name of the table for which we want an id.
      * @param adjustQuantity True if amount should be adjusted.
-     * @exception Exception, a generic exception.
+     * @exception Exception a generic exception.
      */
     private void storeIDs(String tableName,
                           boolean adjustQuantity,
@@ -806,7 +806,7 @@ public class IDBroker
      * @param tableName The properly escaped name of the table to
      * identify the row.
      * @return A BigDecimal[].
-     * @exception Exception, a generic exception.
+     * @exception Exception a generic exception.
      */
     private BigDecimal[] selectRow(Connection con,
                                    String tableName)
@@ -896,7 +896,7 @@ public class IDBroker
      * @param con A Connection.
      * @param tableName The properly escaped name of the table to identify the
      * row.
-     * @param id An int with the value to set for the id.
+     * @param quantity An int with the value of the quantity.
      * @exception Exception Database error.
      */
     private void updateQuantity(Connection con,

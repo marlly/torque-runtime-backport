@@ -25,6 +25,16 @@
           </li>
           -->
           <li>
+            <strong>16 Apr 2002</strong>
+            <ul>
+              <li>
+                Use JCS instead of stratum.JCS and
+                commons.configuration instead of
+                stratum.configuration. (ks)
+              </li>
+            </ul>
+          </li>
+          <li>
             <strong>17 Mar 2002</strong>
             <ul>
               <li>

@@ -57,7 +57,7 @@ package org.apache.torque.adapter;
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.apache.log4j.Category;
-import org.apache.stratum.configuration.Configuration;
+import org.apache.commons.configuration.Configuration;
 
 
 /**
