@@ -54,33 +54,29 @@
   </p>
 
   <source><![CDATA[
-
     public FooManager()
         throws TorqueException
     {
         setRegion("net_bar_om_Foo");
     }
-
   ]]></source>
 
   <p>
     The key given for the region is used in a JCS
     configuration file, cache.ccf, to set up a cache that the manager uses
-    to store objects for which it is responsible. See the Stratum JCS 
-    <a href="http://jakarta.apache.org/turbine/stratum/index.html">
+    to store objects for which it is responsible. See the JCS 
+    <a href="http://jakarta.apache.org/turbine/jcs/">
     documentation</a> for details on configuring JCS.  But here is a 
     simple section that creates an in-memory only LRU cache for FooManager.
   </p>
 
   <source><![CDATA[
-
 jcs.region.net_bar_om_Foo=
 jcs.region.net_bar_om_Foo.cacheattributes=
-    org.apache.stratum.jcs.engine.CompositeCacheAttributes
+    org.apache.jcs.engine.CompositeCacheAttributes
 jcs.region.net_bar_om_Foo.cacheattributes.MaxObjects=1200
 jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
-    org.apache.stratum.jcs.engine.memory.lru.LRUMemoryCache
-
+    org.apache.jcs.engine.memory.lru.LRUMemoryCache
   ]]></source>
 
   <p>
@@ -123,7 +119,6 @@ jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
   </p>
 
   <source><![CDATA[
-
 public List getFoos(FooType type, boolean deleted)
 {
     List result = null;
@@ -144,7 +139,6 @@ public List getFoos(FooType type, boolean deleted)
   </p>
 
   <source><![CDATA[
-
 public List getFoos(FooType type, boolean deleted)
 {
     List result = null;
@@ -165,7 +159,6 @@ public List getFoos(FooType type, boolean deleted)
     }
     return result;
 }
-
   ]]></source>
 
   <p>
@@ -202,7 +195,6 @@ public List getFoos(FooType type, boolean deleted)
   </p>
 
   <source><![CDATA[
-
     /**
      * Method should be overridden to notify other managers with 
      * relevant CacheEvents.
@@ -213,7 +205,6 @@ public List getFoos(FooType type, boolean deleted)
         XManager.addCacheListener(this);
         ...
     }
-
 
     // -------------------------------------------------------------------
     // CacheListener implementation
@@ -246,7 +237,6 @@ public List getFoos(FooType type, boolean deleted)
         ...
         return interestedCacheFields;
     }
-
   ]]></source>
 
   <p>
@@ -260,7 +250,6 @@ public List getFoos(FooType type, boolean deleted)
   </p>
 
   <source><![CDATA[
-
     /**
      * Creates a new <code>FooManager</code> instance.
      */
@@ -280,7 +269,6 @@ public List getFoos(FooType type, boolean deleted)
         notifyListeners(listeners, oldOm, om);
         return oldOm;
     }                
-
   ]]></source>
 
   <p>

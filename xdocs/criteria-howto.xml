@@ -23,7 +23,8 @@
   <section name="Using Criteria to create Joins ">
 
    <p>
-    This example will use the related tables in the Turbine Security system
+    This example will use the related tables in the 
+    <a href="http://jakarta.apache.org/turbine/">Turbine</a> Security system
     between the Turbine_Role and Turbine_Permission tables, with the bridging
     table, Turbine_Role_Permission. The relationship between these tables are in
     the Core Schema document, with Turbine_Role and Turbine_Permission both
@@ -99,8 +100,10 @@ List roles = RolePeer.doSelect(criteria);
 
    <p>
      One of the common clauses in an SQL Query is the ORDER BY clause. This can
-     be emulated with the Criteria Object via the addOrderByColumn(String
-     columnname) method. For the Role example, the Role OM Objects in the
+     be emulated with the Criteria Object via the 
+     addAscendingOrderByColumn(String columnname) and 
+     addDescendingOrderByColumn(String columnname) methods. For the Role 
+     example, the Role OM Objects in the
      returned Vector can be ordered by the TURBINE_ROLE columns, ROLE_ID or
      NAME. If the column chosen to order by is the ROLE_ID, the returned Vector
      is ordered in numbers, if the NAME is the ordered column, the Vector
@@ -112,7 +115,7 @@ Criteria criteria = new Criteria();
 criteria.addJoin(PermissionPeer.PERMISSION_ID,RolePermissionPeer.PERMISSION_ID);
 criteria.addJoin(RolePermissionPeer.ROLE_ID, RolePeer.ROLE_ID);
 criteria.setDistinct();
-criteria.addOrderByColumn(RolePeer.NAME);
+criteria.addAscendingOrderByColumn(RolePeer.NAME);
 
 List roles = RolePeer.doSelect(criteria);
 </source>
@@ -144,7 +147,7 @@ public List allUsersGroups(RunData data) throws Exception
         criteria.addJoin(GroupPeer.GROUP_ID, UserGroupRolePeer.GROUP_ID);
         criteria.addJoin(UserGroupRolePeer.USER_ID, TurbineUserPeer.USER_ID);
         criteria.add(TurbineUserPeer.USERNAME, user.getUserName());
-        criteria.addOrderByColumn(GroupPeer.NAME);
+        criteria.addAscendingOrderByColumn(GroupPeer.NAME);
         criteria.setDistinct();
 
         groups = GroupPeer.doSelect(criteria);
@@ -398,18 +401,15 @@ List invoices = InvoicePeer.doSelect(criteria);
 
    <p>
     Criteria contains a toString() method which will output a representation of
-    the Criteria as a String. As the Criteria to a large extent represents the
-    statements in a WHERE clause of SQL, the LoggingService can output the SQL.
-    In the TurbineResources.properties file, under the directive;
+    the Criteria as a String. A Criteria to a large extent represents the
+    statements in a WHERE clause of SQL.  To see the queries being processed by
+    your application you can configure the logging system to capture the SQL
+    by adding the following to your <code>log4j.properties</code> file:
    </p>
 
 <source>
-services.LogginService.sql.level = DEBUG
+log4j.logger.org.apache.torque.util.BasePeer = DEBUG
 </source>
-
-   <p>
-    Set the level to DEBUG.
-   </p>
 
   </section>
 

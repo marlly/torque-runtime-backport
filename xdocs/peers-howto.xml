@@ -5,6 +5,7 @@
   <title>Peers Howto</title>
   <author email="leon@opticode.co.za">Leon Messerschmidt</author>
   <author email="jvanzyl@periapt.com">Jason van Zyl</author>
+  <author email="seade@backstagetech.com.au">Scott Eade</author>
  </properties>
 
  <body>
@@ -12,9 +13,12 @@
 <section name="Working With Peers">
 
 <p>
-Peers are an Object Relation mapping tool, built on top of Village that gives
+Peers are an Object Relation mapping tool, built on top of 
+<a href="http://share.whichever.com/village/">Village</a> that gives
 you access to a relational database via Java objects.  Peers act on a somewhat
-lower level than other O-R mapping tools like Castor or Osage. This means that
+lower level than other O-R mapping tools like
+<a href="http://www.castor.org/">Castor</a> or 
+<a href="http://osage.sourceforge.net/">Osage</a>. This means that
 you have to do some coding by hand, but it allows for the most flexible
 solution.
 </p>
@@ -24,14 +28,6 @@ Peers use Torque's Database adaptor classes that make uniform connection
 to a wide range of databases possible.  If your database is not supported
 you can read the <a href="./db-adapters.html">Database Adapter</a> docs on
 how to create a new adaptor for your database.
-</p>
-
-<p>
-NOTE: If you would like to use Peers outside of the Turbine Servlet
-(this is very common), then you need to use the TurbineConfig object to
-initialize Turbine's code with the right TurbineResources.properties
-file <strong>before</strong> you execute your Peer code. Please see the
-javadoc for the TurbineConfig object for more details.
 </p>
 
 </section>
@@ -126,12 +122,8 @@ databases.
 </p>
 
 <p>
-DatabaseMaps are constructed by classes called MapBuilders.  Turbine has
-a default MapBuilder,  called TurbineMapBuilder, that creates a
-DatabaseMap for Turbine's internal database structure.  Again you should
-seldom work with MapBuilder classes.  They are used internally by Peers.
-Usually there is a MapBuilder for each table in your database.
-MapBuilder classes for new schemas can be generated for you automatically.
+DatabaseMaps are constructed by classes called MapBuilders.  Torque 
+generates MapBuilder classes for each of the tables in your schema.
 </p>
 </section>
 
@@ -140,7 +132,7 @@ MapBuilder classes for new schemas can be generated for you automatically.
 <p>
 Everything in Peers resolve around Peer classes.  A Peer class has a
 one-to-one mapping to a Database table.  You use each table's associated
-Peer class to do operations on that table.  Peer classes can be generated
+Peer class to do operations on that table.  Peer classes are generated
 for you automatically.
 </p>
 
@@ -186,7 +178,7 @@ will be translated to different flavours of sql.
 <p>
 Criteria is in effect a map of field names and values that forms the
 criteria of a query.  By default the comparison  is equals (=) but you
-can define any comparison operator (&lt;,&gt;,&lt;=,&gt;=,IN,etc.).
+can define any comparison operator (&lt;, &gt;, &lt;=, &gt; =, IN, etc.).
 </p>
 
 <p>
@@ -213,28 +205,14 @@ table called id_table.
 </p>
 
 <p>
-You use the MapBuilder to specify which of the techniques you want to use
-with your system.  By default the id_table is used, because it is the
-only common denominator.
+Of course Torque also supports using the ID generation provided by the
+underlying database system - just set the <code>idMethod</code> attributes
+as desired in your schema.
 </p>
 
 <p>
-For example if you wish to set up the MapBuilder to take advantage of an
-auto-incrementing Primary Key, you can change the entry in your MapBuilder class
-from:
-</p>
-
-<source>
-tMap.setPrimaryKeyMethod(TableMap.IDBROKERTABLE);
-
-to
-
-tMap.setPrimaryKeyMethod(TableMap.AUTOINCREMENT);
-</source>
-
-<p>
-The ID Broker is used in the underlying Peer code.  After you have set it
-up you need not worry about it anymore.
+The ID Broker is used in the underlying Peer code.  After you have generated 
+your object model classes you need not worry about it anymore.
 </p>
 
 
@@ -246,38 +224,36 @@ All the examples on this section will be based on the following schema:
 </p>
 
 <source>
-create table category (
-    category_id     int not null,
-    name            varchar (100) not null,
-primary key (category_id));
+CREATE TABLE category
+(
+    category_id INTEGER NOT NULL AUTO_INCREMENT,
+    name VARCHAR (100),
+    PRIMARY KEY(category_id)
+);
 
-create table item (
-    item_id         int not null,
-    name            varchar (100) not null,
-    price           int not null,
-    category_id     int,
-primary key (item_id),
-foreign key (category_id) references category (category_id)
-        on delete set null
-        on update cascade);
+CREATE TABLE item
+(
+    item_id INTEGER NOT NULL AUTO_INCREMENT,
+    name VARCHAR (100),
+    price INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    PRIMARY KEY(item_id),
+    FOREIGN KEY (category_id) REFERENCES category (category_id)
+);
 </source>
 
 </section>
 
 <section name="Schema Definition">
 <p>
-Peer classes are typically generated by invoking the init task in
-the ant build file (build.xml) provided with an application generated by
-the TDK. This file is located in the WEB-INF/build directory of a generated
-application.
+Peer classes are typically generated by invoking the <code>torque:om</code>
+goal using the Torque maven-plugin.
 </p>
 
 <p>
 Peer class source code is generated based on the project database
 schema.  The definition of this schema is in XML, and the associated DTD
-is included with the TDK. In the TDK, the project schema is located in
-the WEB-INF/conf directory of the project in a file called
-<i>project</i>-schema.xml.
+is included with the Torque generator.
 </p>
 
 <p>
@@ -286,12 +262,12 @@ For the schema described above, the XML would look something like
 
 <source><![CDATA[
 <database>
-  <table name="category" idMethod="autoincrement">
+  <table name="category" idMethod="native">
     <column name="category_id" required="true" autoIncrement="true"
         primaryKey="true" type="INTEGER"/>
     <column name="name" size="100" type="VARCHAR"/>
   </table>
-  <table name="item" idMethod="autoincrement">
+  <table name="item" idMethod="native">
     <column name="item_id" required="true" autoIncrement="true"
         primaryKey="true" type="INTEGER"/>
     <column name="name" size="100" type="VARCHAR"/>
@@ -305,14 +281,6 @@ For the schema described above, the XML would look something like
 ]]>
 </source>
 
-<p>
-Note that the XML will vary according to the target database - for
-example, the autoincrement value may be used with mysql, and causes
-generation of peer source which keeps keys up to date in the associated
-java objects during inserts, etc.  For more information, refer to the
-DTD which is shipped with Turbine and the TDK.
-</p>
-
 </section>
 
 <section name="Selects">
@@ -325,7 +293,7 @@ anything special to the Criteria.
 
 <source>
 Criteria crit = new Criteria();
-Vector v = CategoryPeer.doSelect (crit);
+List categories = CategoryPeer.doSelect(crit);
 </source>
 
 <p>
@@ -340,12 +308,6 @@ crit.add(ItemPeer.CATEGORY_ID,2);
 List items = ItemPeer.doSelect(crit);
 </source>
 
-<p>
-After you obtained the Vector of Data Objects you can add it to the
-Context if you're using WebMacro or Velocity.  This will allow you to use
-#foreach in the template to display all the selected items.
-</p>
-
 </section>
 
 <section name="Inserts">
@@ -353,19 +315,19 @@ Context if you're using WebMacro or Velocity.  This will allow you to use
 <p>
 To do an insert we need to add all the fields to the criteria objects.
 Note that the id field is not added to the Criteria.  It is taken care of
-by the ID BROKER.  The object that is returned by doInsert is the id of
-the newly added row.
+by underlying database system (or perhaps the ID BROKER when it is in use).
+The object that is returned by doInsert is the id of the newly added row.
 </p>
 
 <source>
 Criteria crit = new Criteria();
-crit.add(CategoryPeer.NAME,"New Category");
+crit.add(CategoryPeer.NAME, "New Category");
 Object o = CategoryPeer.doInsert(crit);
 </source>
 
 <p>
 We can also use the overloaded method to add a new Data Object.  Note
-that once again we don't set the id - the ID BROKER does this for us.
+that once again we don't set the id - this is done for us automatically.
 </p>
 
 <source>
@@ -373,24 +335,6 @@ Item itm = new Item();
 itm.setName("New Item");
 itm.setPrice(100);
 itm.setCategoryId(1);
-Object o = ItemPeer.doInsert(itm);
-</source>
-
-<p>
-I saved the best for last.  Say that you want to create a new database
-entry from an html form.  You can use the ParameterParser object (see
-the getParameters method of RunData in the api docs) to automatically
-fill in your fields.  All that you need to do is to give your html form
-fields the same name as the corresponding property in the generated Data
-Object. For example a database field ITEM_ID will cause the generated
-Data Object to have getItemId and setItemId methods. Here the property
-name is ItemId, so that should be the form field name.  Then you can
-have code like this:
-</p>
-
-<source>
-Item itm =  new Item()
-data.getParameters().setProperties(itm);
 Object o = ItemPeer.doInsert(itm);
 </source>
 
@@ -410,7 +354,7 @@ Criteria and call doDelete.
 
 <source>
 Criteria crit = new Criteria();
-crit.add(ItemPeer.ITEM_ID,3);
+crit.add(ItemPeer.ITEM_ID, 3);
 ItemPeer.doDelete(crit);
 </source>
 </section>
@@ -424,26 +368,7 @@ ItemPeer.doDelete(crit);
      It is just some ideas that I have found to work well.
    </p>
 
-  </section>
-
-  <section name="Subclassing">
-   <p>
-     Usually when we begin to add extra code for Peer classes we end up with
-     the problem of where to add the code.  If we add it to the generated
-     BaseItemPeer and BaseCategoryPeer classes we will lose everything if
-     (and trust me this does happen) we need to regenerate these classes.
-   </p>
-
-   <p>
-     The solution is to add the extensions to the subclasses ItemPeer and
-     CategoryPeer. We can regenerate the Peer classes at any time and still
-     maintain any changes we add. Regenerating the Peers from the XML schema
-     only affects the Base classes. The other classes are left untouched.
-   </p>
-
-  </section>
-
-  <section name="Useful Methods">
+  <subsection name="Useful Methods">
     <p>
       I found that it saves a bit of duplicate work if you add some utility
       methods to your Peer class.  The first method is very straightforward.
@@ -474,14 +399,14 @@ public class ItemPeer extends BaseItemPeer
     static public List doSelectForCategory(int categoryid) throws Exception
     {
         Criteria crit = new Criteria();
-        crit.add(CATEGORY_ID,categoryid);
+        crit.add(CATEGORY_ID, categoryid);
         return doSelect(crit);
     }
 }
 </source>
-  </section>
+  </subsection>
 
-  <section name="Joins and linking objects">
+  <subsection name="Joins and linking objects">
     <p>
       Sometimes you would like to have relations between tables be available
       in the Peer objects. We defined a foreign key relationship
@@ -503,8 +428,8 @@ public class ItemPeer extends BaseItemPeer
 // select all Items with their associated Category
 Criteria crit = new Criteria();
 List items = ItemPeer.doSelectJoinCategory(crit);
-// access the Category associated with the first Item in the vector
-Item itm = (Item)items.get(0);
+// access the Category associated with the first Item in the list
+Item itm = (Item) items.get(0);
 Category cat = itm.getCategory();
 </source>
    <p>
@@ -517,20 +442,20 @@ Criteria crit = new Criteria();
 crit.add(Item.CATEGORY_ID, 2);
 List items = ItemPeer.doSelectJoinCategory(crit);
 // get the name of category 2
-Item itm = (Item)items.get(0);
+Item itm = (Item) items.get(0);
 Category cat = itm.getCategory();
 String name = cat.getName();
 </source>
-  </section>
+  </subsection>
 
-  <section name="Examples">
+  <subsection name="Examples">
   <p>
   This is an example of a complex SQL query and the code you should use
   to create it:
   </p>
 
 <source><![CDATA[
-select * from abc where (a < 1 and b > 2) or (  a > 5  and b < 3)
+select * from abc where (a < 1 and b > 2) or (a > 5 and b < 3)
 ]]></source>
 
 <source><![CDATA[
@@ -547,6 +472,8 @@ crit.add(a1.and(b2).or(a5.and(b3)));
   There are a lot more examples of how to use the Criteria class in the
   <a href ="./criteria-howto.html">Criteria Howto</a>.
   </p>
+
+  </subsection>
 
   </section>
 

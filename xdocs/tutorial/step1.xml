@@ -4,39 +4,47 @@
   <properties>
     <title>Torque Tutorial</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
   <body>
 
 <section name="Step 1: Obtaining the Torque Distribution">
 
 <p>
-  First, you need to obtain the Torque
-  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
-  distribution</a>.
-  Note that for this tutorial, you should NOT use the CVS version
-  of db-torque instead of the normal release version, since the
-  Torque CVS tree has a differing directory layout; thus it's unsuitable
-  for this example (at least if you're a newbie who doesn't know how to
-  configure the CVS version properly, which is probably true
-  for most people that are reading this tutorial).
+  For this tutorial we will be using the maven plugin for Torque 3.1.1 to
+  generate our object model classes and the Torque 3.1.1 runtime for our
+  application that makes use of the generated classes.
 </p>
 
 <p>
-  After you have obtained your copy of the Torque, you can either
-  unpack the jar and integrate all of the Torque files into your
-  source tree, or keep Torque in the jar and use it via the classpath.
+  If you have not already done so, download and install 
+  <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the 
+  Torque maven plugin.  The <a href="../maven-howto.html">Maven Howto</a> 
+  includes details of how to build the maven plugin from source, but you can 
+  easily install a binary distribution thus:
 </p>
 
-<p>
-  This tutorial will take the former approach. See <a href="../jar-guide.html">jar
-  guide</a> for a description of the latter approach.
-</p>
+<source><![CDATA[
+!!! TO DO - The binary plugn is yet to be deployed, in the mean time you must build the plugin from source. !!!
+!!! TO DO - Confirm these values !!!
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=maven-torque-plugin -Dversion=3.1.1
+]]></source>
 
 <p>
-  You need to unpack the Torque jar to a directory where
-  you want to develop your application.  This will create
-  a directory called <em>torque</em>.  It is here that you
-  will configure Torque and build your application.
+  At runtime the generated object model classes need access to the Torque 
+  runtime distribution and associated libraries - these are available from the
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
+  Downloads page</a> (the file to download is torque-3.1.1.tar.gz or 
+  torque-3.1.1.zip, depending on your development platform).  We will cover
+  what to do with this file in a later step.
+</p>
+
+</section>
+
+<section name="Where to next">
+
+<p>
+  Next we will look at <a href="step2.html">Configuring Torque</a>.
 </p>
 
 </section>

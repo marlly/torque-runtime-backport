@@ -4,6 +4,7 @@
   <properties>
     <title>Torque Tutorial - Step 3: Invoking Torque</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
   <body>
 
@@ -14,9 +15,15 @@ With the configuration of Torque completed, you can now
 generate the object model to support your database, and
 optionally create your database and all of its
 associated tables.  As mentioned earlier in this
-tutorial, Torque utilizes Ant to perform these tasks.
+tutorial, Torque utilizes Maven to perform these tasks.
 Each of these tasks is covered in the following
 sections.
+</p>
+
+<p>
+Note: If you are yet to jump aboard the Maven ship you can 
+download the torque-gen archive and make use of the Ant build 
+file <code>build-torque.xml</code> contained therein.
 </p>
 
 </section>
@@ -46,29 +53,32 @@ sections.
 </p>
 
 <p>
-  To generate your object model and the associated
-  SQL, type the following command in the top-level
-  <em>torque</em> directory:
+  To generate your object model and the associated SQL, type the
+  following command in your top-level project directory:
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml
+maven torque
 ]]></source>
-<p/>
 
 <p>
   Upon a successful build, indicated by the
   &#145;BUILD SUCCESSFUL&#146; message, you will find
-  a new <em>torque/src</em> directory.  It is here
-  that you will find the generated Java classes and
-  generated SQL.
+  the generated class files within the <code>src</code>
+  directory of your project (this is the default, you can 
+  alter where the files are generated to using the 
+  <code>torque.home</code>, <code>torque.output.dir</code>
+  and/or <code>torque.java.dir</code>
+  properties in your <code>project.properties</code> file - see
+  the <a href="../generator/properties-reference.html">properties 
+  reference</a> for more detail).
 </p>
 
 <p>
   The Java classes are located in the <em>java</em>
   directory and will be in a directory hierarchy
-  matching that of the <em>targetPackage</em> you
-  specified in your Torque <em>build.properties</em>.
+  matching that of the <code>torque.targetPackage</code> you
+  specified in <em>project.properties</em>.
   These are the files that will be compiled into your
   object model classes.
 </p>
@@ -76,7 +86,7 @@ ant -f build-torque.xml
 <p>
   The SQL files are located in the <em>sql</em>
   directory.  For each database schema in your
-  <em>torque/schema</em> directory, there will be a
+  <em>schema</em> directory, there will be a
   corresponding file with a <em>.sql</em> extension
   instead of <em>.xml</em> extension.  The contents of
   these files are the SQL commands that can be used to
@@ -89,8 +99,10 @@ ant -f build-torque.xml
   than likely a formatting error of your database
   schema file.  Check the format of the file and make
   sure it conforms to the
-  <a href="../schema-reference.html">
-  Torque Schema Reference</a>.
+  <a href="../generator/schema-reference.html">
+  Torque Schema Reference</a>.  Validating the file 
+  against the provided DTD will help ensure that it 
+  will be processed correctly.
 </p>
 
 </section>
@@ -102,13 +114,12 @@ ant -f build-torque.xml
   create your database and all of the associated
   tables for you.  However, you must first make sure
   that the appropriate database driver (the one you
-  defined in <em>build.properties</em>) is in your
+  defined in <em>project.properties</em>) is in your
   classpath so that Torque can connect to your
   database and execute the generated SQL commands.
   The easiest way to accomplish that is to add your
-  database driver to the <em>torque/lib</em>
-  directory.  Ant's build file automatically adds all
-  of the jar files in this directory to its classpath.
+  database driver as a dependency in your project 
+  (add it to your <code>project.xml</code>.
 </p>
 
 <p>
@@ -122,21 +133,21 @@ ant -f build-torque.xml
 
 <p>
   To create your database, type the following command
-  in the top-level <em>torque</em> directory:
+  in the top-level directory of your project:
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml create-db
+maven torque:create-db
 ]]></source>
 
 <p>
   To create your tables, type the following commands in
-  the top-level <em>torque</em> directory:
+  the top-level directory of your project:
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml id-table-init-sql
-ant -f build-torque.xml insert-sql
+maven torque:id-table-init-sql
+maven torque:insert-sql
 ]]></source>
 
 <p>
@@ -161,21 +172,28 @@ ant -f build-torque.xml insert-sql
 <p>
   If you encounter errors while creating your
   database, it is more than likely a misconfiguration
-  of your <em>build.properties</em>.  Another common
+  of your <em>project.properties</em>.  Another common
   problem is that the user specified in the
-  <em>build.properties</em> does not have sufficient
+  <em>project.properties</em> does not have sufficient
   privilege to create databases and tables.  In either
   case, refer to the section above that explains the
-  <em>build.properties</em> file.
+  <em>project.properties</em> file.
 </p>
 
 </section>
 
-<p>
-Now that you have generated all of your object model
-classes and created your database, you are now ready to
-build your first Torque application.
-</p>
+<section name="Where to next">
+
+  <p>
+    Now that you have generated all of your object model
+    classes and created your database, you are now ready to
+    build your first Torque application.
+  </p>
+  <p>
+    Next we will look <a href="step4.html">Writing a Sample Application</a>.
+  </p>
+
+</section>
 
   </body>
 </document>

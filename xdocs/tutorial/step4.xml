@@ -4,6 +4,7 @@
   <properties>
     <title>Torque Tutorial - Step 4 - Writing a Sample Application</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
   <body>
 
@@ -33,7 +34,7 @@ respectively.  The two Base classes (<em>BaseBook</em>
 and <em>BaseBookPeer</em>) contain Torque-generated
 logic and should <b>not</b> be modified because Torque
 will overwrite your changes if you happen to generate
-your object model again (via <em>ant</em>).  Any
+your object model again.  Any
 business logic that you might want to add should be
 placed in the <em>Book</em> and <em>BookPeer</em>
 classes.  This is covered later in the tutorial.
@@ -94,7 +95,7 @@ application are detailed.
   database schema): instantiate a new <em>Author</em>
   object, invoke the object's <em>setFirstName</em>
   and <em>setLastName</em> methods with appropriate
-  values, then call the <em>save</em> method.  Thats
+  values, then call the <em>save</em> method.  That's
   it.  The following is from the sample application:
 </p>
 
@@ -177,9 +178,9 @@ AuthorPeer.doInsert(stevens);
 
 <source><![CDATA[
 /*
-* Using the convenience methods to handle
-* the foreign keys.
-*/
+ * Using the convenience methods to handle
+ * the foreign keys.
+ */
 Book effective = new Book();
 effective.setTitle("Effective Java");
 effective.setISBN("0-618-12902-2");
@@ -188,8 +189,8 @@ effective.setAuthor(bloch);
 effective.save();
 
 /*
-* Inserting the foreign-keys manually.
-*/
+ * Inserting the foreign-keys manually.
+ */
 Book tcpip = new Book();
 tcpip.setTitle("TCP/IP Illustrated, Volume 1");
 tcpip.setISBN("0-201-63346-9");
@@ -216,7 +217,7 @@ tcpip.save();
   <em>Criteria</em> object.  It is this object that
   specifies the criteria to be used when selecting
   data from the database.  As a result of the query,
-  <em>doSelect</em> returns a vector of Data Objects
+  <em>doSelect</em> returns a <code>List</code> of Data Objects
   representing the rows of data selected.  To use
   these Data Objects in your application, you must
   cast them to the appropriate type in your object
@@ -226,7 +227,7 @@ tcpip.save();
 <p>
   For example, to select all of the rows from the
   <em>book</em> table that were inserted in the
-  previous section, you must first create an
+  previous section, you must first create a
   <em>Criteria</em> object.  Because we want to select
   everything from the table, no criteria will be
   specified (i.e. no WHERE clause in the underlying
@@ -237,11 +238,11 @@ tcpip.save();
 
 <source><![CDATA[
 Criteria crit = new Criteria();
-List v = BookPeer.doSelect(crit);
+List books = BookPeer.doSelect(crit);
 ]]></source>
 
 <p>
-  The results are stored in a vector which can then be
+  The results are stored in a <code>List</code> which can then be
   iterated over to access the individual <em>Book</em>
   objects retrieved from the table.  The following
   code prints the <em>Book</em> to standard output (a
@@ -249,17 +250,16 @@ List v = BookPeer.doSelect(crit);
 </p>
 
 <source><![CDATA[
-Iterator i = v.iterator();
-while (i.hasNext())
+for (Iterator i = book.iterator(); i.hasNext();)
 {
-Book book = (Book) i.next();
-System.out.println("Title: " + book.getTitle() + "\n");
-System.out.println("ISBN:  " + book.getISBN() + "\n");
-System.out.println("Publisher: " +
-book.getPublisher().getName() + "\n");
-System.out.println("Author: " +
-book.getAuthor().getLastName() + ", " +
-book.getAuthor().getFirstName() + "\n");
+    Book book = (Book) i.next();
+    System.out.println("Title: " + book.getTitle() + "\n");
+    System.out.println("ISBN:  " + book.getISBN() + "\n");
+    System.out.println("Publisher: " +
+            book.getPublisher().getName() + "\n");
+    System.out.println("Author: " +
+            book.getAuthor().getLastName() + ", " +
+            book.getAuthor().getFirstName() + "\n");
 }
 ]]></source>
 
@@ -330,7 +330,7 @@ book.getAuthor().getFirstName() + "\n");
 <source><![CDATA[
 Criteria crit = new Criteria();
 crit.add(BookPeer.ISBN, "0-618-12902-2");
-List v = BookPeer.doSelect(crit);
+List books = BookPeer.doSelect(crit);
 ]]></source>
 
 <p>
@@ -510,47 +510,49 @@ PublisherPeer.doDelete(addison);
 
 <source><![CDATA[
 // Book.java
-public class Book
-  extends com.kazmier.om.BaseBook
-  implements Persistent
+import org.apache.torque.TorqueException;
+
+public  class Book
+    extends com.kazmier.om.BaseBook
+    implements Persistent
 {
-  public String toString()
-  {
-    StringBuffer sb = new StringBuffer();
-    try
+    public String toString()
     {
-      sb.append("Title:    " + getTitle()   + "\n");
-      sb.append("ISBN:     " + getISBN()    + "\n");
-      sb.append("Publisher:  " + getPublisher() + "\n");
-      sb.append("Author:   " + getAuthor()  + "\n");
+        StringBuffer sb = new StringBuffer();
+        try
+        {
+            sb.append("Title:     " + getTitle() + "\n");
+            sb.append("ISBN:      " + getISBN() + "\n");
+            sb.append("Publisher: " + getPublisher() + "\n");
+            sb.append("Author:    " + getAuthor() + "\n");
+        }
+        catch (TorqueException ignored)
+        {
+        }
+        return sb.toString();
     }
-    catch (Exception ignored)
-    {
-    }
-    return sb.toString();
-  }
 }
 
 // Author.java
 public  class Author
-  extends com.kazmier.om.BaseAuthor
-  implements Persistent
+    extends com.kazmier.om.BaseAuthor
+    implements Persistent
 {
-  public String toString()
-  {
-    return getLastName() + ", " + getFirstName();
-  }
+    public String toString()
+    {
+        return getLastName() + ", " + getFirstName();
+    }
 }
 
 // Publisher.java
 public  class Publisher
-  extends com.kazmier.om.BasePublisher
-  implements Persistent
+    extends com.kazmier.om.BasePublisher
+    implements Persistent
 {
-  public String toString()
-  {
-    return getName();
-  }
+    public String toString()
+    {
+      return getName();
+    }
 }
 ]]></source>
 
@@ -569,42 +571,48 @@ public  class Publisher
 
 <source><![CDATA[
 // BookPeer.java
-import org.apache.torque.util.*;
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 public class BookPeer
-  extends com.kazmier.om.BaseBookPeer
+    extends com.kazmier.om.BaseBookPeer
 {
-  public static List doSelectAll() throws Exception
-  {
-    Criteria crit = new Criteria();
-    return doSelect(crit);
-  }
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
 }
 
 // AuthorPeer.java
-import org.apache.torque.util.*;
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 public class AuthorPeer
-  extends com.kazmier.om.BaseAuthorPeer
+    extends com.kazmier.om.BaseAuthorPeer
 {
-  public static List doSelectAll() throws Exception
-  {
-    Criteria crit = new Criteria();
-    return doSelect(crit);
-  }
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
 }
 
 // PublisherPeer.java
-import org.apache.torque.util.*;
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 
 public class PublisherPeer
   extends com.kazmier.om.BasePublisherPeer
 {
-  public static List doSelectAll() throws Exception
-  {
-    Criteria crit = new Criteria();
-    return doSelect(crit);
-  }
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
 }
 ]]></source>
 
@@ -625,7 +633,9 @@ public class PublisherPeer
   you've been following this tutorial.  In fact, its
   almost identical with the exception that it utilizes
   the new functionality that was added to the object
-  model in the previous section.
+  model in the previous section.  Note in particular the all-important
+  initialization of Torque using the <code>Torque.properties</code>
+  file we created earlier.
 </p>
 
 <source><![CDATA[
@@ -638,147 +648,138 @@ import org.apache.torque.util.Criteria;
 
 public class Bookstore
 {
-  public static void main(String[] args)
-  {
-    try
+    public static void main(String[] args)
     {
-      /*
-       * Initializing Torque
-       */
-      Torque.init("Torque.properties");
+        try
+        {
+            /*
+             * Initializing Torque
+             */
+            Torque.init("Torque.properties");
 
-      /*
-       * Creating new objects.  These will be inserted
-       * into your database automatically when the
-       * save method is called.
-       */
-      Publisher addison = new Publisher();
-      addison.setName("Addison Wesley Professional");
-      addison.save();
+            /*
+             * Creating new objects. These will be inserted into your database
+             * automatically when the save method is called.
+             */
+            Publisher addison = new Publisher();
+            addison.setName("Addison Wesley Professional");
+            addison.save();
 
-      Author bloch = new Author();
-      bloch.setFirstName("Joshua");
-      bloch.setLastName("Bloch");
-      bloch.save();
+            Author bloch = new Author();
+            bloch.setFirstName("Joshua");
+            bloch.setLastName("Bloch");
+            bloch.save();
 
-      /*
-       * An alternative method to inserting rows
-       * in your database.
-       */
-      Author stevens = new Author();
-      stevens.setFirstName("W.");
-      stevens.setLastName("Stevens");
-      AuthorPeer.doInsert(stevens);
+            /*
+             * An alternative method to inserting rows in your database.
+             */
+            Author stevens = new Author();
+            stevens.setFirstName("W.");
+            stevens.setLastName("Stevens");
+            AuthorPeer.doInsert(stevens);
 
-      /*
-       * Using the convenience methods to handle
-       * the foreign keys.
-       */
-      Book effective = new Book();
-      effective.setTitle("Effective Java");
-      effective.setISBN("0-618-12902-2");
-      effective.setPublisher(addison);
-      effective.setAuthor(bloch);
-      effective.save();
+            /*
+             * Using the convenience methods to handle the foreign keys.
+             */
+            Book effective = new Book();
+            effective.setTitle("Effective Java");
+            effective.setISBN("0-618-12902-2");
+            effective.setPublisher(addison);
+            effective.setAuthor(bloch);
+            effective.save();
 
-      /*
-       * Inserting the foreign-keys manually.
-       */
-      Book tcpip = new Book();
-      tcpip.setTitle("TCP/IP Illustrated, Volume 1");
-      tcpip.setISBN("0-201-63346-9");
-      tcpip.setPublisherId(addison.getPublisherId());
-      tcpip.setAuthorId(stevens.getAuthorId());
-      tcpip.save();
+            /*
+             * Inserting the foreign-keys manually.
+             */
+            Book tcpip = new Book();
+            tcpip.setTitle("TCP/IP Illustrated, Volume 1");
+            tcpip.setISBN("0-201-63346-9");
+            tcpip.setPublisherId(addison.getPublisherId());
+            tcpip.setAuthorId(stevens.getAuthorId());
+            tcpip.save();
 
-      /*
-       * Selecting all books from the database and
-       * printing the results to stdout using our
-       * helper method defined in BookPeer
-       * (doSelectAll).
-       */
-      System.out.println("Full booklist:\n");
-      List booklist = BookPeer.doSelectAll();
-      printBooklist(booklist);
+            /*
+             * Selecting all books from the database and printing the results to
+             * stdout using our helper method defined in BookPeer (doSelectAll).
+             */
+            System.out.println("Full booklist:\n");
+            List booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
 
-      /*
-       * Selecting specific objects.  Just search for
-       * objects that match this criteria (and print
-       * to stdout).
-       */
-      System.out.println("Booklist (specific ISBN):\n");
-      Criteria crit = new Criteria();
-      crit.add(BookPeer.ISBN, "0-201-63346-9");
-      booklist = BookPeer.doSelect(crit);
-      printBooklist(booklist);
+            /*
+             * Selecting specific objects. Just search for objects that match
+             * this criteria (and print to stdout).
+             */
+            System.out.println("Booklist (specific ISBN):\n");
+            Criteria crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            booklist = BookPeer.doSelect(crit);
+            printBooklist(booklist);
 
-      /*
-       * Updating data.  These lines will swap the
-       * authors of the two books.  The booklist is
-       * printed to stdout to verify the results.
-       */
-      effective.setAuthor(stevens);
-      effective.save();
+            /*
+             * Updating data. These lines will swap the authors of the two
+             * books. The booklist is printed to stdout to verify the results.
+             */
+            effective.setAuthor(stevens);
+            effective.save();
 
-      tcpip.setAuthor(bloch);
-      BookPeer.doUpdate(tcpip);
+            tcpip.setAuthor(bloch);
+            BookPeer.doUpdate(tcpip);
 
-      System.out.println("Booklist (authors swapped):\n");
-      booklist = BookPeer.doSelectAll();
-      printBooklist(booklist);
+            System.out.println("Booklist (authors swapped):\n");
+            booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
 
-      /*
-       * Deleting data.  These lines will delete the
-       * data that matches the specified criteria.
-       */
-      crit = new Criteria();
-      crit.add(BookPeer.ISBN, "0-618-12902-2");
-      BookPeer.doDelete(crit);
+            /*
+             * Deleting data. These lines will delete the data that matches the
+             * specified criteria.
+             */
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-618-12902-2");
+            BookPeer.doDelete(crit);
 
-      crit = new Criteria();
-      crit.add(BookPeer.ISBN, "0-201-63346-9");
-      crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
-      BookPeer.doDelete(crit);
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+            BookPeer.doDelete(crit);
 
-      /*
-       * Deleting data by passing Data Objects instead of
-       * specifying criteria.
-       */
-      AuthorPeer.doDelete(bloch);
-      AuthorPeer.doDelete(stevens);
-      PublisherPeer.doDelete(addison);
+            /*
+             * Deleting data by passing Data Objects instead of specifying
+             * criteria.
+             */
+            AuthorPeer.doDelete(bloch);
+            AuthorPeer.doDelete(stevens);
+            PublisherPeer.doDelete(addison);
 
-      System.out.println("Booklist (should be empty):\n");
-      booklist = BookPeer.doSelectAll();
-      printBooklist(booklist);
+            System.out.println("Booklist (should be empty):\n");
+            booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
-    catch (Exception e)
+
+    /*
+     * Helper method to print a booklist to standard out.
+     */
+    private static void printBooklist(List booklist)
     {
-      e.printStackTrace();
+        for (Iterator i = booklist.iterator(); i.hasNext();)
+        {
+            Book book = (Book) i.next();
+            System.out.println(book);
+        }
     }
-  }
-
-  /*
-   * Helper method to print a booklist to standard out.
-   */
-  private static void printBooklist(List booklist)
-    throws Exception
-  {
-    Iterator i = booklist.iterator();
-    while (i.hasNext())
-    {
-      Book book = (Book) i.next();
-      System.out.println(book);
-    }
-  }
 }
   ]]></source>
 
 <p>
-  Save this code in the <em>torque/src/java</em>
+  Save this code in the <em>src/java</em>
   directory hierarchy with a filename of
   <em>Bookstore.java</em>.  The above example must be
-  placed in <em>torque/src/java/com/kazmier</em>
+  placed in <em>src/java/com/kazmier</em>
   directory because of its package definition.  Your
   application might go elsewhere depending on the
   package that you've selected.
@@ -791,20 +792,20 @@ public class Bookstore
 <p>
   Now that you've generated your object model with
   Torque, and created a sample application, you are
-  now ready to compile everything.  Again, Ant is used
+  now ready to compile everything.  Again, Maven is used
   to control the build process.  To compile, type the
-  following in the Torque top-level directory:
+  following in the top-level directory of your project:
 </p>
 
 <source><![CDATA[
-ant -f build-torque.xml compile
+maven java:compile
 ]]></source>
 
 <p>
   If you've done everything correctly, this should
   build without any errors.  All of the resulting Java
   class files are placed in the
-  <em>torque/bin/classes</em> directory.  Should you
+  <em>target/classes</em> directory.  Should you
   encounter errors, go back and review your
   application code.
 </p>
@@ -812,26 +813,26 @@ ant -f build-torque.xml compile
 <p>
   Before you run the sample application, you must
   first set your classpath (this was done
-  automatically for you via Ant's build file when you
+  automatically for you by Maven when you
   compiled).  The classpath must include: all of the
-  jars in the <em>torque/lib</em> directory, the
+  jars from the <em>lib</em> directory of the Torque runtime archive, the
   driver for your database, and all of your
   application and object model classes located in
-  <em>torque/bin/classes</em>.
+  <em>target/classes</em>.
 </p>
 
 <p>
   An easy way to set your classpath (if you're using a
   bourne-shell or one of its derivatives on a
   un*x-based system) is to type the following in the
-  top-level Torque directory (first add your database
-  driver to the <em>torque/lib</em> directory if you
+  top-level project directory (first add your database
+  driver to the <em>lib</em> directory if you
   haven't already):
 </p>
 
 <source><![CDATA[
-  [kaz@coco torque]$ CLASSPATH=bin/classes
-  [kaz@coco torque]$ for i in lib/*
+  [kaz@coco bookstore]$ CLASSPATH=bin/classes
+  [kaz@coco bookstore]$ for i in lib/*
   > do
   > CLASSPATH=$CLASSPATH:$i
   > done
@@ -841,7 +842,7 @@ ant -f build-torque.xml compile
 <p>
   With your classpath set, you are now ready to
   finally run the application.  From the top-level
-  directory with your Torque run-time properties, type
+  directory with your project run-time properties, type
   the following, replacing the name of the class with
   your class:
 </p>
@@ -858,34 +859,34 @@ ant -f build-torque.xml compile
 <source><![CDATA[
   Full booklist:
 
-  Title:    Effective Java
-  ISBN:     0-618-12902-2
-  Publisher:  Addison Wesley Professional
-  Author:   Bloch, Joshua
+  Title:     TCP/IP Illustrated, Volume 1
+  ISBN:      0-201-63346-9
+  Publisher: Addison Wesley Professional
+  Author:    Stevens, W.
 
-  Title:    TCP/IP Illustrated, Volume 1
-  ISBN:     0-201-63346-9
-  Publisher:  Addison Wesley Professional
-  Author:   Stevens, W.
+  Title:     Effective Java
+  ISBN:      0-618-12902-2
+  Publisher: Addison Wesley Professional
+  Author:    Bloch, Joshua
 
   Booklist (specific ISBN):
 
-  Title:    TCP/IP Illustrated, Volume 1
-  ISBN:     0-201-63346-9
-  Publisher:  Addison Wesley Professional
-  Author:   Stevens, W.
+  Title:     TCP/IP Illustrated, Volume 1
+  ISBN:      0-201-63346-9
+  Publisher: Addison Wesley Professional
+  Author:    Stevens, W.
 
   Booklist (authors swapped):
 
-  Title:    Effective Java
-  ISBN:     0-618-12902-2
-  Publisher:  Addison Wesley Professional
-  Author:   Stevens, W.
+  Title:     TCP/IP Illustrated, Volume 1
+  ISBN:      0-201-63346-9
+  Publisher: Addison Wesley Professional
+  Author:    Bloch, Joshua
 
-  Title:    TCP/IP Illustrated, Volume 1
-  ISBN:     0-201-63346-9
-  Publisher:  Addison Wesley Professional
-  Author:   Bloch, Joshua
+  Title:     Effective Java
+  ISBN:      0-618-12902-2
+  Publisher: Addison Wesley Professional
+  Author:    Stevens, W.
 
   Booklist (should be empty):
   ]]></source>
@@ -900,8 +901,8 @@ ant -f build-torque.xml compile
     application does not run the first time.  Carefully
     retrace all of the steps outlined in this tutorial.
     If you are still not able to get your application to
-    run, use the Turbine
-    <a href="/mail.html">mailing list</a> to your
+    run, use the Torque user
+    <a href="../mail-lists.html">mailing list</a> to your
     advantage.
   </p>
 

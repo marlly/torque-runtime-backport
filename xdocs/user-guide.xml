@@ -6,6 +6,7 @@
     <title>Torque User's Guide</title>
     <author email="jvanzyl@apache.org">Jason van Zyl</author>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
@@ -18,13 +19,13 @@
       <a href="#About this Guide">About this Guide</a>
     </li>
     <li>
-      <a href="#Torque Directory Structure">Torque Directory Structure</a>
+      <a href="#Torque components">Torque components</a>
+    </li>
+    <li>
+      <a href="#Installing Torque">Installing Torque</a>
     </li>
     <li>
       <a href="#Quick Start Guide">Quick Start Guide</a>
-    </li>
-    <li>
-      <a href="#Configuring Torque">Configuring Torque</a>
     </li>
   </ol>
 </p>
@@ -34,39 +35,57 @@
 <section name="About this Guide">
 
 <p>
-  The Torque User's guide is intended to help those who intend
+  This User Guide is intended to help those who want
   to incorporate Torque into their project to provide a means
   of persistence for application objects.
 </p>
 
 </section>
 
-<section name="Torque Directory Structure">
+<section name="Torque components">
 
 <p>
-  Here is what the Torque directory structure looks like. There are slight
-  differences between the stand-alone and TDK versions but nothing
-  significant:
+  Torque consists of two main components:
+  <ul>
+    <li>
+      <a href="/generator/">Generator</a> - The Torque generator uses a single XML 
+      database schema file to generate the SQL for your target database and 
+      Torque's Peer-based object relational model.  The generator can be 
+      executed using the Torque <a href="/maven-plugin/">maven-plugin</a> or 
+      an <a href="http://ant.apache.org/">Ant</a> build file.
+    </li>
+    <li>
+      <a href="/">Runtime</a> - The Torque runtime is required in order to 
+      compile and use of the classes produced by the generator.
+    </li>
+  </ul>
+</p>
+
+</section>
+
+<section name="Installing Torque">
+
+<p>
+  If you have not already done so, download and install 
+  <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the 
+  Torque maven plugin.  The <a href="../maven-howto.html">Maven Howto</a> 
+  includes details of how to build the maven plugin from source, but you can 
+  easily install a binary distribution thus:
 </p>
 
 <source><![CDATA[
-torque/
-    lib/              <--  Jar files required by Torque (stand-alone version)
-    schema/           <--- Project specific XML database descriptor.
-    templates/        <--- Velocity templates used for source generation.
-    src/              <--- Target location for output (stand-alone version).
-
-    build-torque.xml  <--- Ant build file that controls Torque.
-                           (not named build.xml to make it easier to use it
-                           from your projects build.xml)
-    build.properties  <--- Properties file that controls Torque behaviour.
+!!! TO DO - The binary plugn is yet to be deployed, in the mean time you must build the plugin from source. !!!
+!!! TO DO - Confirm these values !!!
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=maven-torque-plugin -Dversion=3.1.1
 ]]></source>
 
 <p>
-  A typical user of Torque would really only ever need to edit the
-  <em>build.properties</em> file in base directory, and the
-  <em>project-schema.xml</em> in the <strong>schema</strong> directory. We'll
-  quickly go over each of these files and some of options you have using Torque.
+  At runtime the generated object model classes need access to the Torque 
+  runtime distribution and associated libraries - these are available from the
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
+  Downloads page</a> (the file to download is torque-3.1.1.tar.gz or 
+  torque-3.1.1.zip, depending on your development platform).  We will cover
+  what to do with this file in a later step.
 </p>
 
 </section>
@@ -74,36 +93,14 @@ torque/
 <section name="Quick Start Guide">
 
 <p>
-  For those who just want to see Torque go all you have to do is select your
-  target database and target package in <em>build.properties</em>, edit the
-  <em>project-schema.xml</em> to suit your needs, then type
-  <strong>ant -f build-torque.xml</strong>.
-  That's it!
+  For those who just want to see Torque here we will race our way through all
+  that needs to be done to define, generate and use a Torque object model.\
 </p>
 
-<p>
-  You will probably want to set the <em>project</em> property in the
-  <em>build.properties</em> file eventually so that your generated sources have names
-  that reflect your project name, but you can do that later :-). You also have to
-  remember that if you change the <em>project</em> property that you have to
-  change the name of your project XML database schema to match!
-</p>
+<subsection name="Configure Torque Generator (project.properties)">
 
 <p>
-  For example if you change the <em>project</em> property from the default
-  value of "project" to "killerapp" then you must change the name of the default
-  schema in the <strong>schema</strong> directory from <em>project-schema.xml</em>
-  to <em>killerapp-schema.xml</em>.
-</p>
-
-</section>
-
-<section name="Configuring Torque">
-
-<subsection name="build.properties">
-
-<p>
-  For a complete list of build properties, please refer to the
+  For a complete list of generator properties, please refer to the
   <a href="generator/properties-reference.html">properties reference</a>. Below
   is a short list of the primary properties you should be interested in.
 </p>
@@ -119,6 +116,12 @@ torque/
     <td>torque.targetPackage</td>
   </tr>
   <tr>
+    <td>torque.database.createUrl</td>
+  </tr>
+  <tr>
+    <td>torque.database.buildUrl</td>
+  </tr>
+  <tr>
     <td>torque.database.url</td>
   </tr>
   <tr>
@@ -130,11 +133,14 @@ torque/
   <tr>
     <td>torque.database.password</td>
   </tr>
+  <tr>
+    <td>torque.database.host</td>
+  </tr>
 </table>
 
 </subsection>
 
-<subsection name="project-schema.xml">
+<subsection name="Define Database Schema (project-schema.xml)">
 
 <p>
   This is an example of what the XML database schema might look like. This
@@ -143,7 +149,7 @@ torque/
 </p>
 
 <source><![CDATA[
-<database>
+<database name="my_project">
 
   <table name="ID_TABLE">
     <column name="ID_TABLE_ID" required="true" primaryKey="true" type="INTEGER"/>
@@ -184,11 +190,176 @@ torque/
 ]]></source>
 
 <p>
-  Please refer to <a href="schema-reference.html">Torque Schema Reference</a>
+  Please refer to <a href="generator/schema-reference.html">Torque Schema Reference</a>
   to find out more about the the different elements and attributes.
 </p>
 
 </subsection>
+
+<subsection name="Torque Runtime Configuration (Torque.properties)">
+
+<p>
+  The runtime distribution archive includes an Ant build file that can be used 
+  to generate your Torque runtime configuration - see the Torque
+  <a href="tutorial/step2.html#Torque_Run-Time_Properties">tutSorial</a> for 
+  details.
+</p>
+
+<source><![CDATA[
+torque.database.default = my_project
+torque.database.my_project.adapter = mysql
+
+# Using commons-dbcp 
+torque.dsfactory.my_project.factory = org.apache.torque.dsfactory.SharedPoolDataSourceFactory
+torque.dsfactory.my_project.connection.driver = org.gjt.mm.mysql.Driver
+torque.dsfactory.my_project.connection.url = jdbc:mysql://localhost:3306/my_project
+torque.dsfactory.my_project.connection.user = user
+torque.dsfactory.my_project.connection.password = password
+  ]]></source>
+
+  <p>
+    The above example uses the commons-dbcp connection pool - see 
+    <a href="configuration-howto.html">Pool-config Howto</a>
+    details of the available <code>DataSource</code> factories.
+  </p>
+
+</subsection>
+
+<subsection name="Add Libraries">
+
+  <p>
+    In order to be able to compile and use the generated class files it is 
+    necessary to include the Torque runtime jar file and jar files for all of
+    the necessary dependencies in the classpath of your project.  The necessary 
+    jars are included in the <code>torque/lib</code> directory of the Torque
+    runtime.  If you are using Maven to build your project it may be easiest to
+    copy the necessary <a href="../dependencies.html">dependencies</a> from the 
+    <a href="http://cvs.apache.org/viewcvs.cgi/db-torque/project.xml?only_with_tag=TORQUE_3_1_BRANCH">Torque
+    runtime POM</a>.
+  </p>
+
+</subsection>
+
+<subsection name="Object Model and SQL Generation">
+
+<p>
+  Generate the object model and associated SQL:
+</p>
+
+<source><![CDATA[
+maven torque
+]]></source>
+
+<p>
+  <b>
+    Note: Torque will <em>drop</em> the database and
+    tables that it is about to create if they exist!
+    You should skip the next two steps if you are working
+    with an existing database full of data.
+  </b>
+</p>
+
+<p>
+  To creating the database:
+</p>
+
+<source><![CDATA[
+maven torque:create-db
+]]></source>
+
+<p>
+  To create the tables:
+</p>
+
+<source><![CDATA[
+maven torque:id-table-init-sql
+maven torque:insert-sql
+]]></source>
+
+</subsection>
+
+<subsection name="Using the Torque Object Model Classes">
+
+<p>
+  The following is an example of using the Torque object model classes - it is
+  adapted from the Torque <a href="tutorial/">tutorial</a>.
+</p>
+
+<source><![CDATA[
+import java.util.*;
+import ...om.*;
+import org.apache.torque.Torque;
+import org.apache.torque.util.Criteria;
+
+public class Bookstore
+{
+    public static void main(String[] args)
+    {
+        try
+        {
+            /* Initialize Torque */
+            Torque.init("Torque.properties");
+
+            /* Creating new objects */
+            Publisher addison = new Publisher();
+            addison.setName("Addison Wesley Professional");
+            addison.save();
+
+            Author bloch = new Author();
+            bloch.setFirstName("Joshua");
+            bloch.setLastName("Bloch");
+            bloch.save();
+
+            /* Foreign keys provided using convenience methods and manually. */
+            Book tcpip = new Book();
+            tcpip.setTitle("TCP/IP Illustrated, Volume 1");
+            tcpip.setISBN("0-201-63346-9");
+            effective.setPublisher(addison);
+            tcpip.setAuthorId(stevens.getAuthorId());
+            tcpip.save();
+
+            /* Selecting all books */
+            List booklist = BookPeer.doSelectAll();
+            // iterate over booklist, casting the items to Book
+
+            /* Selecting specific objects */
+            Criteria crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            booklist = BookPeer.doSelect(crit);
+            // iterate over booklist, casting the items to Book
+
+            /* Updating data */
+            effective.setAuthor(stevens);
+            effective.save();
+
+            tcpip.setAuthor(bloch);
+            BookPeer.doUpdate(tcpip);
+
+            /* Deleting data */
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-618-12902-2");
+            BookPeer.doDelete(crit);
+
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+            BookPeer.doDelete(crit);
+
+            AuthorPeer.doDelete(bloch);
+            AuthorPeer.doDelete(stevens);
+            PublisherPeer.doDelete(addison);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
+  ]]></source>
+
+</subsection>
+
+</section>
 
 <!--
 
@@ -321,8 +492,6 @@ CREATE TABLE Jobentry
 
 </table>
 -->
-
-</section>
 
   </body>
 </document>
