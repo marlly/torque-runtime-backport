@@ -55,8 +55,13 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.torque.TorqueException;
+
 import org.xml.sax.Attributes;
 
 /**
@@ -64,15 +69,25 @@ import org.xml.sax.Attributes;
  *
  * @author <a href="mailto:leon@opticode.co.za>Leon Messerschmidt</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @version $Id$
  */
 public class AppData
 {
-
+    /**
+     * The list of databases for this application.
+     */
     private List dbList = new ArrayList(5);
 
     /**
-     * Default Constructor
+     * The list of unique names in use by a system.  Any time a
+     * foreign-key or index entity is added to the RDBMS installation,
+     * it must be added to this list as well.
+     */
+    private Set globalNames = new HashSet(32, 0.5f);
+
+    /**
+     * Creates a new instance.
      */
     public AppData()
     {
@@ -93,14 +108,13 @@ public class AppData
     }
 
     /**
-     *
+     * Returns whether this application has multiple databases.
      */
     public boolean getMultipleDatabases()
     {
         return (dbList.size() > 1);
     }
     
-
     /**
      * Return the database with the specified name.
      * @return A Database object.  If it does not exist it returns null
@@ -140,6 +154,33 @@ public class AppData
         dbList.add(db);
     }
 
+    /**
+     * Tests for existance of name in list of global names.
+     *
+     * @param name The name to check.
+     * @return Whether the name has already been used.
+     */
+    public boolean isUsedName(String name)
+    {
+        return globalNames.contains(name);
+    }
+
+    /**
+     * Adds a name to the list of globaly-scoped names used by the
+     * data storage system.
+     *
+     * @param name The system-scoped name.
+     * @exception TorqueException Globaly-scoped name already in use.
+     */
+    public void markNameAsUsed(String name)
+        throws TorqueException
+    {
+        if (!globalNames.add(name))
+        {
+            throw new TorqueException("Globaly-scoped name already in use: " +
+                                      name);
+        }
+    }
 
     /**
      * Creats a string representation of this AppData.
@@ -150,11 +191,11 @@ public class AppData
         StringBuffer result = new StringBuffer();
 
         result.append ("<app-data>\n");
-        for (Iterator i = dbList.iterator() ; i.hasNext() ;)
+        for (Iterator i = dbList.iterator(); i.hasNext(); )
         {
             result.append (i.next());
         }
         result.append ("</app-data>");
         return result.toString();
-  }
+    }
 }
