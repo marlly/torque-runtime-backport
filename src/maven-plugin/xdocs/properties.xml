@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Maven Torque Plugin</title>
+    <author email="stephenh@chase3000.com">Stephen Haberman</author>
+  </properties>
+
+  <body>
+    <section name="Plugin Settings">
+      <p>
+        Note that all of the <code>torque.*</code> properties that are defined
+        for use in the <code>build-torque.xml</code> still apply here. This
+        maven plugin just acts as a wrapper to delegate the
+        <code>torque:*</code> tasks into a <code>build-torque.xml</code>.
+      </p>
+      
+      <table>
+        <tr><th>Property</th><th>Optional?</th><th>Description</th></tr>
+        <tr>
+          <td>torque.mavenPlugin.antFile</td>
+          <td>Yes</td>
+          <td>
+            Specifies which <code>build-torque.xml</code> to use when calling
+            the various Torque targets. Defaults to
+            <code>${maven.home}/plugins/maven-torque-plugin-3.0-rc2-dev/build-torque.xml</code>.
+          </td>
+        </tr>
+      </table>
+    </section>
+  </body>
+</document>
+

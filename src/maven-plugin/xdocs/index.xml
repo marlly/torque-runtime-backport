@@ -9,10 +9,9 @@
   <body>
     <section name="Maven Torque Plugin">
       <p>
-        This plug-in simply delegates to the build-torque.xml file
-        shipped with the plug-in and will read the Torque templates
-        from the classpath instead of relying on copies of
-        templates in your source tree.
+        This plugin simply delegates to the <code>build-torque.xml</code> file
+        shipped with the plugin and will read the Torque templates from the
+        classpath instead of relying on copies of templates in your source tree.
       </p>
     </section>
  </body>
