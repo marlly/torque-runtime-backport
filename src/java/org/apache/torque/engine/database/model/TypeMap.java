@@ -390,7 +390,7 @@ public class TypeMap
             jdbcToVillageObjectMethodMap.put(DOUBLE,
                                              DOUBLE_VILLAGE_OBJECT_METHOD);
             jdbcToVillageObjectMethodMap.put(BOOLEANCHAR,
-                    BOOLEANCHAR_VILLAGE_OBJECT_METHOD);
+                                             BOOLEANCHAR_VILLAGE_OBJECT_METHOD);
             jdbcToVillageObjectMethodMap.put(BOOLEANINT,
                                              BOOLEANINT_VILLAGE_OBJECT_METHOD);
 
