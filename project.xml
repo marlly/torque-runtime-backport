@@ -181,12 +181,12 @@
     </dependency>
     <dependency>
       <id>commons-configuration</id>
-      <version>1.0-dev</version>
+      <version>SNAPSHOT</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
-      <version>1.1-dev-20021215</version>
+      <version>SNAPSHOT</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -230,9 +230,8 @@
       <url>http://jakarta.apache.org/turbine/stratum/</url>
     </dependency>
     <dependency>
-      <id>tomcat</id>
+      <id>tomcat:tomcat-naming</id>
       <version>1.0</version>
-      <jar>tomcat-naming-1.0.jar</jar>
       <url>http://jakarta.apache.org/tomcat/</url>
     </dependency>
     <dependency>
