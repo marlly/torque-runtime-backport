@@ -2,6 +2,8 @@
 
 targetdatabase = $targetDatabase
 
+correctGetters = $!correctGetters
+
 #foreach ($database in $dataModels)
 
     #if ($database.Package)
@@ -30,6 +32,8 @@ targetdatabase = $targetDatabase
     #foreach ($tbl in $database.Tables)
       #if (!$tbl.isForReferenceOnly())
         $tbl.Name
+
+        $!tbl.setCorrectGetters($!correctGetters)
         #set ( $firstcap=$tbl.JavaName )
 
         #set ( $fname = "$basePrefix${firstcap}Peer.java" )

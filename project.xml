@@ -25,8 +25,8 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque-32/</url>
-  <siteDirectory>/www/db.apache.org/torque-32/</siteDirectory>
+  <url>http://db.apache.org/torque/</url>
+  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
 
   <repository>
     <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
@@ -36,88 +36,120 @@
 
   <dependencies>
     <dependency>
-      <id>avalon-framework</id>
+      <artifactId>avalon-framework</artifactId>
+      <groupId>avalon-framework</groupId>
       <version>4.1.4</version>
       <url>http://avalon.apache.org/</url>
     </dependency>
+
     <dependency>
-      <id>commons-beanutils</id>
+      <artifactId>commons-beanutils</artifactId>
+      <groupId>commons-beanutils</groupId>
       <version>1.6.1</version>
       <url>http://jakarta.apache.org/commons/beanutils/</url>
     </dependency>
+
     <dependency>
-      <id>commons-collections</id>
+      <artifactId>commons-collections</artifactId>
+      <groupId>commons-collections</groupId>
       <version>3.0</version>
       <url>http://jakarta.apache.org/commons/collections/</url>
     </dependency>
+
     <dependency>
-      <id>commons-configuration</id>
-      <version>1.0-rc1</version>
+      <artifactId>commons-configuration</artifactId>
+      <groupId>commons-configuration</groupId>
+      <version>1.0</version>
       <url>http://jakarta.apache.org/commons/configuration/</url>
     </dependency>
+
     <dependency>
-      <id>commons-dbcp</id>
-      <version>1.1</version>
+      <artifactId>commons-dbcp</artifactId>
+      <groupId>commons-dbcp</groupId>
+      <version>1.2.1</version>
       <url>http://jakarta.apache.org/commons/dbcp/</url>
     </dependency>
+
     <dependency>
-      <id>commons-lang</id>
+      <artifactId>commons-lang</artifactId>
+      <groupId>commons-lang</groupId>
       <version>2.0</version>
       <url>http://jakarta.apache.org/commons/lang/</url>
     </dependency>
+
     <dependency>
-      <id>commons-logging</id>
+      <artifactId>commons-logging</artifactId>
+      <groupId>commons-logging</groupId>
       <version>1.0.4</version>
       <url>http://jakarta.apache.org/commons/logging/</url>
     </dependency>
+
     <dependency>
-      <id>commons-pool</id>
-      <version>1.1</version>
+      <artifactId>commons-pool</artifactId>
+      <groupId>commons-pool</groupId>
+      <version>1.2</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
     </dependency>
+
     <dependency>
-      <id>jcs</id>
+      <artifactId>jcs</artifactId>
+      <groupId>jcs</groupId>
       <version>20030822.182132</version>
       <url>http://jakarta.apache.org/turbine/jcs/</url>
     </dependency>
+
     <dependency>
-      <id>jdbc</id>
+      <artifactId>jdbc</artifactId>
+      <groupId>jdbc</groupId>
       <version>2.0</version>
       <url>http://java.sun.com/products/jdbc/download.html#spec</url>
     </dependency>
+
     <dependency>
-      <id>jndi</id>
+      <artifactId>jndi</artifactId>
+      <groupId>jndi</groupId>
       <version>1.2.1</version>
       <url>http://java.sun.com/products/jndi/</url>
     </dependency>
+
     <dependency>
-      <id>log4j</id>
+      <artifactId>log4j</artifactId>
+      <groupId>log4j</groupId>
       <version>1.2.8</version>
       <url>http://logging.apache.org/log4j/</url>
     </dependency>
+
     <dependency>
-      <id>logkit</id>
+      <artifactId>logkit</artifactId>
+      <groupId>logkit</groupId>
       <version>1.0.1</version>
       <url>http://avalon.apache.org/products/runtime/system/logging/</url>
     </dependency>
+
     <dependency>
-      <id>village</id>
+      <artifactId>village</artifactId>
+      <groupId>village</groupId>
       <version>2.0-dev-20030825</version>
       <url>http://share.whichever.com/index.php?SCREEN=village</url>
     </dependency>
+
     <dependency>
-      <id>xerces:xercesImpl</id>
+      <artifactId>xercesImpl</artifactId>
+      <groupId>xerces</groupId>
       <version>2.4.0</version>
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
+
     <dependency>
-      <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
+      <groupId>xml-apis</groupId>
       <version>1.0.b2</version>
       <url>http://xml.apache.org/commons/</url>
     </dependency>
+
     <dependency>
-      <id>junit</id>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
       <version>3.8.1</version>
       <url>http://www.junit.org</url>
     </dependency>

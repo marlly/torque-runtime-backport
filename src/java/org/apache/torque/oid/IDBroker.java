@@ -2,13 +2,13 @@ package org.apache.torque.oid;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,6 +73,7 @@ import org.apache.torque.util.Transaction;
  *
  * @author <a href="mailto:frank.kim@clearink.com">Frank Y. Kim</a>
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class IDBroker implements Runnable, IdGenerator
@@ -199,6 +200,7 @@ public class IDBroker implements Runnable, IdGenerator
             // internally by Torque as daemons allows commandline applications
             // using Torque terminate in an orderly manner.
             houseKeeperThread.setDaemon(true);
+            houseKeeperThread.setName("Torque - ID Broker thread");
             houseKeeperThread.start();
         }
 
@@ -498,7 +500,7 @@ public class IDBroker implements Runnable, IdGenerator
         {
             try
             {
-                houseKeeperThread.sleep(SLEEP_PERIOD);
+                Thread.sleep(SLEEP_PERIOD);
             }
             catch (InterruptedException exc)
             {

@@ -2,13 +2,13 @@ package org.apache.torque.dsfactory;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.apache.torque.dsfactory;
 import java.util.Iterator;
 
 import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
@@ -26,6 +27,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
+
+import org.apache.commons.lang.StringUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +45,7 @@ import org.apache.torque.TorqueException;
  * @version $Id$
  */
 public abstract class AbstractDataSourceFactory
+        implements DataSourceFactory
 {
     /** "pool" Key for the configuration */
     public static final String POOL_KEY = "pool";
@@ -49,14 +53,24 @@ public abstract class AbstractDataSourceFactory
     /** "connection" Key for the configuration */
     public static final String CONNECTION_KEY = "connection";
 
+    /** "schema" Key for the configuration */
+    public static final String SCHEMA_KEY = "schema";
+
     /** "default.pool" Key for the configuration */
     public static final String DEFAULT_POOL_KEY = "defaults.pool";
 
     /** "default.connection" Key for the configuration */
     public static final String DEFAULT_CONNECTION_KEY = "defaults.connection";
 
+    /** "default schema name" for the configuration */
+    public static final String DEFAULT_SCHEMA_KEY = "defaults.schema";
+
+
     /** The log */
     private static Log log = LogFactory.getLog(AbstractDataSourceFactory.class);
+
+    /** Internal Marker for the Schema name of this database connection */
+    private String schema = null;
 
     /**
      * Encapsulates setting configuration properties on
@@ -70,6 +84,11 @@ public abstract class AbstractDataSourceFactory
     protected void setProperty(String property, Configuration c, Object ds)
         throws Exception
     {
+        if (c == null || c.isEmpty())
+        {
+            return;
+        }
+
         String key = property;
         Class dsClass = ds.getClass();
         int dot = property.indexOf('.');
@@ -106,19 +125,39 @@ public abstract class AbstractDataSourceFactory
             }
             else
             {
-                Class propertyType =
-                    PropertyUtils.getPropertyType(ds, property);
-                Object value =
-                    ConvertUtils.convert(c.getString(property), propertyType);
-                PropertyUtils.setSimpleProperty(ds, property, value);
-
-                if (log.isDebugEnabled())
+                if ("password".equals(key)) 
                 {
-                    log.debug("setSimpleProperty("
-                                   + ds + ", "
-                                   + property + ", "
-                                   + value
-                                   + ")");
+                    // do not log value of password
+                    // for this, ConvertUtils.convert cannot be used
+                    // as it also logs the value of the converted property
+                    // so it is assumed here that the password is a String
+                    String value = c.getString(property);
+                    PropertyUtils.setSimpleProperty(ds, property, value);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("setSimpleProperty("
+                                       + ds + ", "
+                                       + property + ", "
+                                       + " (value not logged)"
+                                       + ")");
+                    }
+                }
+                else
+                {
+                    Class propertyType =
+                        PropertyUtils.getPropertyType(ds, property);
+                    Object value =
+                        ConvertUtils.convert(c.getString(property), propertyType);
+                    PropertyUtils.setSimpleProperty(ds, property, value);
+    
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("setSimpleProperty("
+                                       + ds + ", "
+                                       + property + ", "
+                                       + value
+                                       + ")");
+                    }
                 }
             }
         }
@@ -180,7 +219,7 @@ public abstract class AbstractDataSourceFactory
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = Torque.getConfiguration();
 
-        if (c == null)
+        if (c == null || c.isEmpty())
         {
             log.warn("Global Configuration not set,"
                     + " no Default connection pool data source configured!");
@@ -195,5 +234,61 @@ public abstract class AbstractDataSourceFactory
         applyConfiguration(conf, cpds);
         
         return cpds;
+    }
+
+    /**
+     * Sets the current schema for the database connection
+     *
+     * @param schema The current schema name
+     */
+    public void setSchema(String schema)
+    {
+        this.schema = schema;
+    }
+
+    /**
+     * This method returns the current schema for the database connection
+     *
+     * @return The current schema name. Null means, no schema has been set.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public String getSchema()
+    {
+        return schema;
+    }
+
+    /**
+     * @return the <code>DataSource</code> configured by the factory.
+     * @throws TorqueException if the source can't be returned
+     */
+    public abstract DataSource getDataSource()
+            throws TorqueException;
+
+    /**
+     * Initialize the factory.
+     *
+     * @param configuration where to load the factory settings from
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public void initialize(Configuration configuration) 
+        throws TorqueException
+    {
+        if (configuration == null)
+        {
+            throw new TorqueException(
+                "Torque cannot be initialized without "
+                    + "a valid configuration. Please check the log files "
+                    + "for further details.");
+        }
+
+        schema = configuration.getString(SCHEMA_KEY, null);
+
+        if (StringUtils.isEmpty(schema))
+        {
+            Configuration conf = Torque.getConfiguration();
+            schema = conf.getString(DEFAULT_SCHEMA_KEY, null);
+        }
     }
 }

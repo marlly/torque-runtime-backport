@@ -2,13 +2,13 @@ package org.apache.torque.util;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,6 +53,7 @@ import org.apache.torque.om.ObjectKey;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
 public class Criteria extends Hashtable
@@ -109,24 +110,33 @@ public class Criteria extends Hashtable
     /** Comparison type. */
     public static final SqlEnum JOIN = SqlEnum.JOIN;
 
-    /** "Order by" qualifier - ascending */
+    /** &quot;Order by&quot; qualifier - ascending */
     private static final SqlEnum ASC = SqlEnum.ASC;
 
-    /** "Order by" qualifier - descending */
+    /** &quot;Order by&quot; qualifier - descending */
     private static final SqlEnum DESC = SqlEnum.DESC;
 
-    /** "IS NULL" null comparison */
+    /** &quot;IS NULL&quot; null comparison */
     public static final SqlEnum ISNULL = SqlEnum.ISNULL;
 
-    /** "IS NOT NULL" null comparison */
+    /** &quot;IS NOT NULL&quot; null comparison */
     public static final SqlEnum ISNOTNULL = SqlEnum.ISNOTNULL;
 
-    /** "CURRENT_DATE" ANSI SQL function */
+    /** &quot;CURRENT_DATE&quot; ANSI SQL function */
     public static final SqlEnum CURRENT_DATE = SqlEnum.CURRENT_DATE;
 
-    /** "CURRENT_TIME" ANSI SQL function */
+    /** &quot;CURRENT_TIME&quot; ANSI SQL function */
     public static final SqlEnum CURRENT_TIME = SqlEnum.CURRENT_TIME;
 
+    /** &quot;LEFT JOIN&quot; SQL statement */
+    public static final SqlEnum LEFT_JOIN = SqlEnum.LEFT_JOIN;
+
+    /** &quot;RIGHT JOIN&quot; SQL statement */
+    public static final SqlEnum RIGHT_JOIN = SqlEnum.RIGHT_JOIN;
+  
+    /** &quot;INNER JOIN&quot; SQL statement */
+    public static final SqlEnum INNER_JOIN = SqlEnum.INNER_JOIN;
+    
     private static final int DEFAULT_CAPACITY = 10;
 
     private boolean ignoreCase = false;
@@ -138,8 +148,7 @@ public class Criteria extends Hashtable
     private UniqueList groupByColumns = new UniqueList();
     private Criterion having = null;
     private Hashtable asColumns = new Hashtable(8);
-    private ArrayList joinL = null;
-    private ArrayList joinR = null;
+    private List joins = null;
 
     /** The name of the database. */
     private String dbName;
@@ -223,8 +232,7 @@ public class Criteria extends Hashtable
         groupByColumns.clear();
         having = null;
         asColumns.clear();
-        joinL = null;
-        joinR = null;
+        joins = null;
         dbName = originalDbName;
         offset = 0;
         limit = -1;
@@ -238,7 +246,7 @@ public class Criteria extends Hashtable
      * <code>
      *
      * Criteria myCrit = new Criteria();
-     * myCrit.addAsColumn("alias", "ALIAS("+MyPeer.ID+")");
+     * myCrit.addAsColumn(&quot;alias&quot;, &quot;ALIAS(&quot;+MyPeer.ID+&quot;)&quot;);
      *
      * </code>
      *
@@ -406,7 +414,7 @@ public class Criteria extends Hashtable
      * @return A Criterion.
      */
     public Criterion getNewCriterion(String table, String column,
-                                     Object value, SqlEnum comparison)
+            Object value, SqlEnum comparison)
     {
         return new Criterion(table, column, value, comparison);
     }
@@ -642,9 +650,9 @@ public class Criteria extends Hashtable
     public int getInt(String table, String column)
     {
         return getInt(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -673,9 +681,9 @@ public class Criteria extends Hashtable
     public BigDecimal getBigDecimal(String table, String column)
     {
         return getBigDecimal(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -704,9 +712,9 @@ public class Criteria extends Hashtable
     public long getLong(String table, String column)
     {
         return getLong(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -730,9 +738,9 @@ public class Criteria extends Hashtable
     public String getString(String table, String column)
     {
         return getString(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -741,7 +749,7 @@ public class Criteria extends Hashtable
      * @param name A String with the name of the key.
      * @return A String with the value of object at key.
      */
-     public String getTableName(String name)
+    public String getTableName(String name)
     {
         return getCriterion(name).getTable();
     }
@@ -767,9 +775,9 @@ public class Criteria extends Hashtable
     public List getList(String table, String column)
     {
         return getList(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -793,9 +801,9 @@ public class Criteria extends Hashtable
     public Object getValue(String table, String column)
     {
         return getValue(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -819,9 +827,9 @@ public class Criteria extends Hashtable
     public ObjectKey getObjectKey(String table, String column)
     {
         return getObjectKey(
-            new StringBuffer(table.length() + column.length() + 1)
-            .append(table).append('.').append(column)
-            .toString());
+                new StringBuffer(table.length() + column.length() + 1)
+                .append(table).append('.').append(column)
+                .toString());
     }
 
     /**
@@ -856,7 +864,7 @@ public class Criteria extends Hashtable
         if (!(key instanceof String))
         {
             throw new NullPointerException(
-                            "Criteria: Key must be a String object.");
+                    "Criteria: Key must be a String object.");
         }
         return add((String) key, value);
     }
@@ -890,25 +898,24 @@ public class Criteria extends Hashtable
         if (t instanceof Criteria)
         {
             Criteria c = (Criteria) t;
-            this.joinL = c.joinL;
-            this.joinR = c.joinR;
+            this.joins = c.joins;
         }
         /* this would make a copy, not included
            but might want to use some of it.
-        if (t instanceof Criteria)
-        {
-            Criteria c = (Criteria)t;
-            this.ignoreCase = c.ignoreCase;
-            this.singleRecord = c.singleRecord;
-            this.cascade = c.cascade;
-            this.selectModifiers = c.selectModifiers;
-            this.selectColumns = c.selectColumns;
-            this.orderByColumns = c.orderByColumns;
-            this.dbName = c.dbName;
-            this.limit = c.limit;
-            this.offset = c.offset;
-            this.aliases = c.aliases;
-        }
+           if (t instanceof Criteria)
+           {
+           Criteria c = (Criteria)t;
+           this.ignoreCase = c.ignoreCase;
+           this.singleRecord = c.singleRecord;
+           this.cascade = c.cascade;
+           this.selectModifiers = c.selectModifiers;
+           this.selectColumns = c.selectColumns;
+           this.orderByColumns = c.orderByColumns;
+           this.dbName = c.dbName;
+           this.limit = c.limit;
+           this.offset = c.offset;
+           this.aliases = c.aliases;
+           }
         */
     }
 
@@ -1019,9 +1026,9 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria add(String table,
-                        String column,
-                        Object value,
-                        SqlEnum comparison)
+            String column,
+            Object value,
+            SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length()
                 + column.length() + 1);
@@ -1029,7 +1036,7 @@ public class Criteria extends Hashtable
         sb.append('.');
         sb.append(column);
         super.put(sb.toString(),
-                  new Criterion(table, column, value, comparison));
+                new Criterion(table, column, value, comparison));
         return this;
     }
 
@@ -1277,10 +1284,10 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria addDate(String column, int year, int month, int date,
-                            SqlEnum comparison)
+            SqlEnum comparison)
     {
         add(column, new GregorianCalendar(year, month, date).getTime(),
-            comparison);
+                comparison);
         return this;
     }
 
@@ -1301,33 +1308,69 @@ public class Criteria extends Hashtable
      */
     public Criteria addJoin(String left, String right)
     {
-        if (joinL == null)
-        {
-            joinL = new ArrayList(3);
-            joinR = new ArrayList(3);
-        }
-        joinL.add(left);
-        joinR.add(right);
+        return addJoin(left, right, null);
+    }
 
+    /**
+     * This is the way that you should add a join of two tables.  For
+     * example:
+     *
+     * <p>
+     * PROJECT LEFT JOIN FOO ON PROJECT.PROJECT_ID=FOO.PROJECT_ID
+     * <p>
+     *
+     * left = &quot;PROJECT.PROJECT_ID&quot;
+     * right = &quot;FOO.PROJECT_ID&quot;
+     * operator = Criteria.LEFT_JOIN
+     *
+     * @param left A String with the left side of the join.
+     * @param right A String with the right side of the join.
+     * @param operator The operator used for the join: must be one of null,
+     *        Criteria.LEFT_JOIN, Criteria.RIGHT_JOIN, Criteria.INNER_JOIN
+     * @return A modified Criteria object.
+     */
+    public Criteria addJoin(String left, String right, SqlEnum operator)
+    {
+        if (joins == null)
+        {
+            joins = new ArrayList(3);
+        }
+        joins.add(new Join(left,right, operator));
+  
         return this;
     }
 
     /**
-     * get one side of the set of possible joins.  This method is meant to
+     * get the List of Joins.  This method is meant to
      * be called by BasePeer.
+     * @return a List which contains objects of type Join,
+     *         or null if the criteria dies not contains any joins
      */
-    public List getJoinL()
+    public List getJoins()
     {
-        return joinL;
+        return joins;
     }
 
     /**
      * get one side of the set of possible joins.  This method is meant to
      * be called by BasePeer.
+     *
+     * @deprecated This method is no longer used by BasePeer.
+     */
+    public List getJoinL()
+    {
+        throw new RuntimeException("getJoinL() in Criteria is no longer supported!");
+    }
+
+    /**
+     * get one side of the set of possible joins.  This method is meant to
+     * be called by BasePeer.
+     *
+     * @deprecated This method is no longer used by BasePeer.
      */
     public List getJoinR()
     {
-        return joinR;
+        throw new RuntimeException("getJoinL() in Criteria is no longer supported!");
     }
 
     /**
@@ -1473,7 +1516,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds "ALL " to the SQL statement.
+     * Adds &quot;ALL &quot; to the SQL statement.
      */
     public void setAll()
     {
@@ -1481,7 +1524,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds "DISTINCT " to the SQL statement.
+     * Adds &quot;DISTINCT &quot; to the SQL statement.
      */
     public void setDistinct()
     {
@@ -1733,13 +1776,13 @@ public class Criteria extends Hashtable
         {
             String key = (String) it.next();
             sb.append(key).append("<=>")
-                .append(super.get(key).toString()).append(":  ");
+                    .append(super.get(key).toString()).append(":  ");
         }
 
         try
         {
             sb.append("\nCurrent Query SQL (may not be complete or applicable): ")
-              .append(BasePeer.createQueryDisplayString(this));
+                    .append(BasePeer.createQueryDisplayString(this));
         }
         catch (Exception exc)
         {
@@ -1767,15 +1810,15 @@ public class Criteria extends Hashtable
         {
             Criteria criteria = (Criteria) crit;
             if (this.offset == criteria.getOffset()
-                && this.limit == criteria.getLimit()
-                && ignoreCase == criteria.isIgnoreCase()
-                && singleRecord == criteria.isSingleRecord()
-                && cascade == criteria.isCascade()
-                && dbName.equals(criteria.getDbName())
-                && selectModifiers.equals(criteria.getSelectModifiers())
-                && selectColumns.equals(criteria.getSelectColumns())
-                && orderByColumns.equals(criteria.getOrderByColumns())
-               )
+                    && this.limit == criteria.getLimit()
+                    && ignoreCase == criteria.isIgnoreCase()
+                    && singleRecord == criteria.isSingleRecord()
+                    && cascade == criteria.isCascade()
+                    && dbName.equals(criteria.getDbName())
+                    && selectModifiers.equals(criteria.getSelectModifiers())
+                    && selectColumns.equals(criteria.getSelectColumns())
+                    && orderByColumns.equals(criteria.getOrderByColumns())
+                )
             {
                 isEquiv = true;
                 for (Iterator it = criteria.keySet().iterator(); it.hasNext();)
@@ -1836,7 +1879,7 @@ public class Criteria extends Hashtable
      * This method adds a prepared Criterion object to the Criteria.
      * You can get a new, empty Criterion object with the
      * getNewCriterion() method. If a criterion for the requested column
-     * already exists, it is "AND"ed to the existing criterion.
+     * already exists, it is &quot;AND&quot;ed to the existing criterion.
      * This is used as follows:
      *
      * <p>
@@ -1868,7 +1911,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias. If a
      * criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion. This is used as follows:
+     * &quot;AND&quot;ed to the existing criterion. This is used as follows:
      *
      * <p>
      * <code>
@@ -1896,7 +1939,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion. If is used as follow:
+     * &quot;AND&quot;ed to the existing criterion. If is used as follow:
      *
      * <p>
      * <code>
@@ -1936,7 +1979,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion. If is used as follows:
+     * &quot;AND&quot;ed to the existing criterion. If is used as follows:
      *
      * <p>
      * <code>
@@ -1961,7 +2004,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion. If is used as follows:
+     * &quot;AND&quot;ed to the existing criterion. If is used as follows:
      *
      * <p>
      * <code>
@@ -1981,7 +2024,7 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria and(String table, String column, Object value,
-                        SqlEnum comparison)
+            SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length()
                 + column.length() + 1);
@@ -2243,7 +2286,7 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria andDate(String column, int year, int month, int date,
-                            SqlEnum comparison)
+            SqlEnum comparison)
     {
         and(column, new GregorianCalendar(year, month, date), comparison);
         return this;
@@ -2261,7 +2304,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An Object[] with the allowed values.
@@ -2284,7 +2327,7 @@ public class Criteria extends Hashtable
      * where 'values' contains those three integers.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An int[] with the allowed values.
@@ -2308,7 +2351,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values A List with the allowed values.
@@ -2332,7 +2375,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An Object[] with the disallowed values.
@@ -2355,13 +2398,13 @@ public class Criteria extends Hashtable
      * where 'values' contains those three integers.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An int[] with the disallowed values.
      * @return A modified Criteria object.
      */
-     public Criteria andNotIn(String column, int[] values)
+    public Criteria andNotIn(String column, int[] values)
     {
         and(column, (Object) values, Criteria.NOT_IN);
         return this;
@@ -2379,7 +2422,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "AND"ed to the existing criterion.
+     * &quot;AND&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values A List with the disallowed values.
@@ -2403,7 +2446,7 @@ public class Criteria extends Hashtable
      * This method adds a prepared Criterion object to the Criteria.
      * You can get a new, empty Criterion object with the
      * getNewCriterion() method. If a criterion for the requested column
-     * already exists, it is "OR"ed to the existing criterion.
+     * already exists, it is &quot;OR&quot;ed to the existing criterion.
      * This is used as follows:
      *
      * <p>
@@ -2434,7 +2477,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias. If a
      * criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion. This is used as follows:
+     * &quot;OR&quot;ed to the existing criterion. This is used as follows:
      *
      * <p>
      * <code>
@@ -2462,7 +2505,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion. If is used as follow:
+     * &quot;OR&quot;ed to the existing criterion. If is used as follow:
      *
      * <p>
      * <code>
@@ -2501,7 +2544,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion. If is used as follows:
+     * &quot;OR&quot;ed to the existing criterion. If is used as follows:
      *
      * <p>
      * <code>
@@ -2526,7 +2569,7 @@ public class Criteria extends Hashtable
     /**
      * This method adds a new criterion to the list of criterias.
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion. If is used as follows:
+     * &quot;OR&quot;ed to the existing criterion. If is used as follows:
      *
      * <p>
      * <code>
@@ -2545,7 +2588,7 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria or(String table, String column, Object value,
-                       SqlEnum comparison)
+            SqlEnum comparison)
     {
         StringBuffer sb = new StringBuffer(table.length() + column.length() + 1);
         sb.append(table);
@@ -2808,7 +2851,7 @@ public class Criteria extends Hashtable
      * @return A modified Criteria object.
      */
     public Criteria orDate(String column, int year, int month, int date,
-                           SqlEnum comparison)
+            SqlEnum comparison)
     {
         or(column, new GregorianCalendar(year, month, date), comparison);
         return this;
@@ -2826,7 +2869,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An Object[] with the allowed values.
@@ -2849,7 +2892,7 @@ public class Criteria extends Hashtable
      * where 'values' contains those three integers.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An int[] with the allowed values.
@@ -2873,7 +2916,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values A List with the allowed values.
@@ -2897,7 +2940,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An Object[] with the disallowed values.
@@ -2920,7 +2963,7 @@ public class Criteria extends Hashtable
      * where 'values' contains those three integers.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values An int[] with the disallowed values.
@@ -2944,7 +2987,7 @@ public class Criteria extends Hashtable
      * respective strings above when .toString() is called.
      *
      * If a criterion for the requested column already exists, it is
-     * "OR"ed to the existing criterion.
+     * &quot;OR&quot;ed to the existing criterion.
      *
      * @param column The column to run the comparison on
      * @param values A List with the disallowed values.
@@ -2954,19 +2997,6 @@ public class Criteria extends Hashtable
     {
         or(column, (Object) values, Criteria.NOT_IN);
         return this;
-    }
-
-    /**
-     * Peers can set this flag to notify BasePeer that the table(s) involved
-     * in the Criteria contain Blobs, so that the operation can be placed
-     * in a transaction if the db requires it.
-     * This is primarily to support Postgresql.
-     * 
-     * @deprecated this flag is not used any longer
-     */
-    public void setBlobFlag(boolean b)
-    {
-        // do nothing as we don't use the flag any longer 
     }
 
     /**
@@ -3193,10 +3223,10 @@ public class Criteria extends Hashtable
          *
          * @return True if case is ignored.
          */
-         public boolean isIgnoreCase()
-         {
-             return ignoreStringCase;
-         }
+        public boolean isIgnoreCase()
+        {
+            return ignoreStringCase;
+        }
 
         /**
          *  get the list of clauses in this Criterion
@@ -3270,12 +3300,12 @@ public class Criteria extends Hashtable
                 else
                 {
                     field = new StringBuffer(
-                        table.length() + 1 + column.length())
-                        .append(table).append('.').append(column)
-                        .toString();
+                            table.length() + 1 + column.length())
+                            .append(table).append('.').append(column)
+                            .toString();
                 }
                 SqlExpression.build(field, value, comparison,
-                                    ignoreStringCase, getDb(), sb);
+                        ignoreStringCase, getDb(), sb);
             }
 
             for (int i = 0; i < this.clauses.size(); i++)
@@ -3325,16 +3355,16 @@ public class Criteria extends Hashtable
                 else
                 {
                     field = new StringBuffer(
-                        table.length() + 1 + column.length())
-                        .append(table).append('.').append(column)
-                        .toString();
+                            table.length() + 1 + column.length())
+                            .append(table).append('.').append(column)
+                            .toString();
                 }
 
                 if (comparison.equals(Criteria.IN)
-                     || comparison.equals(Criteria.NOT_IN))
+                        || comparison.equals(Criteria.NOT_IN))
                 {
                     sb.append(field)
-                      .append(comparison);
+                            .append(comparison);
 
                     UniqueList inClause = new UniqueList();
 
@@ -3348,13 +3378,13 @@ public class Criteria extends Hashtable
                         Object item = Array.get(value, i);
 
                         inClause.add(SqlExpression.processInValue(item,
-                                                                  ignoreCase,
-                                                                  db));
+                                             ignoreCase,
+                                             db));
                     }
 
                     StringBuffer inString = new StringBuffer();
                     inString.append('(').append(StringUtils.join(
-                            inClause.iterator(), (","))).append(')');
+                                                        inClause.iterator(), (","))).append(')');
                     sb.append(inString.toString());
                 }
                 else
@@ -3362,25 +3392,25 @@ public class Criteria extends Hashtable
                     if (ignoreCase)
                     {
                         sb.append(db.ignoreCase(field))
-                          .append(comparison)
-                          .append(db.ignoreCase("?"));
+                                .append(comparison)
+                                .append(db.ignoreCase("?"));
                     }
                     else
                     {
                         sb.append(field)
-                          .append(comparison)
-                          .append(" ? ");
+                                .append(comparison)
+                                .append(" ? ");
                     }
 
                     if (value instanceof java.util.Date)
                     {
                         params.add(new java.sql.Date(
-                            ((java.util.Date) value).getTime()));
+                                           ((java.util.Date) value).getTime()));
                     }
                     else if (value instanceof DateKey)
                     {
                         params.add(new java.sql.Date(
-                            ((DateKey) value).getDate().getTime()));
+                                           ((DateKey) value).getDate().getTime()));
                     }
                     else
                     {
@@ -3437,10 +3467,10 @@ public class Criteria extends Hashtable
             Criterion crit = (Criterion) obj;
 
             boolean isEquiv = ((table == null && crit.getTable() == null)
-                || (table != null && table.equals(crit.getTable()))
-                              )
-                && column.equals(crit.getColumn())
-                && comparison.equals(crit.getComparison());
+                    || (table != null && table.equals(crit.getTable()))
+                               )
+                    && column.equals(crit.getColumn())
+                    && comparison.equals(crit.getComparison());
 
             // we need to check for value equality
             if (isEquiv)
@@ -3465,10 +3495,10 @@ public class Criteria extends Hashtable
             isEquiv &= this.clauses.size() == crit.getClauses().size();
             for (int i = 0; i < this.clauses.size(); i++)
             {
-              isEquiv &=  ((String) (conjunctions.get(i)))
-                  .equals((String) (crit.getConjunctions().get(i)));
-              isEquiv &=  ((Criterion) (clauses.get(i)))
-                  .equals((Criterion) (crit.getClauses().get(i)));
+                isEquiv &=  ((String) (conjunctions.get(i)))
+                        .equals((String) (crit.getConjunctions().get(i)));
+                isEquiv &=  ((Criterion) (clauses.get(i)))
+                        .equals((Criterion) (crit.getClauses().get(i)));
             }
 
             return isEquiv;
@@ -3560,4 +3590,90 @@ public class Criteria extends Hashtable
             }
         }
     }
+    
+    /**
+     * Data object to describe a join between two tables, for example
+     * <pre>
+     * table_a LEFT JOIN table_b ON table_a.id = table_b.a_id
+     * </pre>
+     * The class is immutable. Because the class is also used by 
+     * {@link org.apache.torque.util.BasePeer}, it is visible from the package.
+     */
+    public static class Join
+    {
+        /** the left column of the join condition */
+        private String leftColumn = null;
+      
+        /** the right column of the join condition */
+        private String rightColumn = null;
+      
+        /** the type of the join (LEFT JOIN, ...), or null */
+        private SqlEnum joinType = null;
+      
+        /**
+         * Constructor
+         * @param leftColumn the left column of the join condition; 
+         *        might contain an alias name
+         * @param rightColumn the right column of the join condition
+         *        might contain an alias name
+         * @param joinType the type of the join. Valid join types are 
+         *        null (adding the join condition to the where clause),
+         *        SqlEnum.LEFT_JOIN, SqlEnum.RIGHT_JOIN, and SqlEnum.INNER_JOIN
+         */
+        public Join(
+                final String leftColumn, 
+                final String rightColumn, 
+                final SqlEnum joinType)
+        {
+            this.leftColumn = leftColumn;
+            this.rightColumn = rightColumn;
+            this.joinType = joinType;
+        }
+      
+        /**
+         * @return the type of the join, i.e. SqlEnum.LEFT_JOIN, ..., 
+         *         or null for adding the join condition to the where Clause
+         */
+        public final SqlEnum getJoinType() 
+        {
+            return joinType;
+        }
+  
+        /**
+         * @return the left column of the join condition
+         */
+        public final String getLeftColumn() 
+        {
+            return leftColumn;
+        }
+  
+        /**
+         * @return the right column of the join condition
+         */
+        public final String getRightColumn() 
+        {
+            return rightColumn;
+        }
+        
+        /**
+         * returns a String representation of the class,
+         * mainly for debuggung purposes
+         * @return a String representation of the class
+         */
+        public String toString() 
+        {
+            StringBuffer result = new StringBuffer();
+            if (joinType != null)
+            {
+                result.append(joinType)
+                        .append(" : ");
+            }
+            result.append(leftColumn)
+                    .append("=")
+                    .append(rightColumn)
+                    .append(" (ignoreCase not considered)");
+
+            return result.toString();
+        }
+    } // end of inner class Join
 }

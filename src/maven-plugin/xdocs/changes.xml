@@ -6,7 +6,16 @@
   </properties>
 
   <body>
-    <release version="3.3" date="in CVS">
+    <release version="3.1.1" date="in CVS">
+    </release>
+
+    <release version="3.1.1-RC3" date="2004-10-16">
+      <action dev="henning" type="update">
+       cleaned up versioning (sorry for that).
+      </action>
+    </release>
+
+    <release version="3.3" date="not released">
       <action dev="mpoeschl" type="update">
         update to torque-3.1
       </action>

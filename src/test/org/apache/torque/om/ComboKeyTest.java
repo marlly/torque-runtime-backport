@@ -2,13 +2,13 @@ package org.apache.torque.om;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  * TestCase for ComboKey
  *
  * @author <a href="mailto:drfish@cox.net">J. Russell Smyth</a>
- * @version $Revision$
+ * @version $Id$
  */
 public class ComboKeyTest extends TestCase
 {
@@ -52,19 +52,19 @@ public class ComboKeyTest extends TestCase
         super(name);
     }
 
-	/**
-	 * 
-	 * @param args
-	 */
+        /**
+         * 
+         * @param args
+         */
     public static void main(java.lang.String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
 
-	/**
-	 * 
-	 * @return Test
-	 */
+        /**
+         * 
+         * @return Test
+         */
     public static Test suite()
     {
         TestSuite suite = new TestSuite(ComboKeyTest.class);
@@ -72,10 +72,10 @@ public class ComboKeyTest extends TestCase
         return suite;
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testReflexive()
     {
         Assert.assertTrue(c1a.equals(c1a));
@@ -85,38 +85,38 @@ public class ComboKeyTest extends TestCase
         Assert.assertTrue(c3a.looseEquals(c3a));
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testSymmetric()
     {
         Assert.assertTrue(c1a.equals(c1b));
         Assert.assertTrue(c1b.equals(c1a));
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testNull()
     {
         Assert.assertTrue(!c1a.equals(null));
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testNotEqual()
     {
         Assert.assertTrue(!c1a.equals(c2a));
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testRoundTripWithStringKeys()
     {
         // two strings
@@ -137,10 +137,10 @@ public class ComboKeyTest extends TestCase
         Assert.assertEquals(oldKey,newKey);
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testRoundTripWithComplexKey()
     {
         // complex key
@@ -162,10 +162,10 @@ public class ComboKeyTest extends TestCase
         Assert.assertEquals(oldKey,newKey);
     }
 
-	/**
-	 * 
-	 *
-	 */
+        /**
+         * 
+         *
+         */
     public void testRoundTripWithNullKey()
     {
         // with null key

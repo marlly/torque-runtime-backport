@@ -344,6 +344,7 @@ public class Table implements IDMethod
     {
         Column col = new Column();
         col.setTable(this);
+        col.setCorrectGetters(false);
         col.loadFromXML(attrib);
         addColumn(col);
         return col;
@@ -1133,5 +1134,21 @@ public class Table implements IDMethod
             }
         }
         return result.toString();
+    }
+
+    /**
+     * Force all columns to set the correctGetters property.
+     *
+     * @param correctGetters The new value of the correctGetters property.
+     * @since 3.2
+     */
+    public void setCorrectGetters(Boolean value)
+    {
+        boolean correctGetters = value != null && value.booleanValue();
+        for (Iterator it = columnList.iterator(); it.hasNext(); )
+        {
+            Column col = (Column) it.next();
+            col.setCorrectGetters(correctGetters);
+        }
     }
 }

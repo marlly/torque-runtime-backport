@@ -2,13 +2,13 @@ package org.apache.torque;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,7 @@ import org.apache.torque.util.BasePeer;
  * this class.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:magnus@handtolvur.is">Magnï¿½s ï¿½ï¿½r Torfason</a>
+ * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
@@ -123,7 +123,7 @@ public class TorqueInstance
             return;
         }
 
-        if (conf == null)
+        if (conf == null || conf.isEmpty())
         {
             throw new TorqueException("Torque cannot be initialized without "
                     + "a valid configuration. Please check the log files "
@@ -138,7 +138,7 @@ public class TorqueInstance
 
         Configuration subConf = conf.subset("torque");
 
-        if (!subConf.isEmpty())
+        if (subConf != null && !subConf.isEmpty())
         {
             setConfiguration(subConf);
         }
@@ -174,7 +174,11 @@ public class TorqueInstance
         adapterMap = new HashMap();
         Configuration c = conf.subset("database");
 
-        if (c != null)
+        if (c == null || c.isEmpty())
+        {
+            log.warn("No Database definitions found!");
+        }
+        else
         {
             boolean foundAdapters = false;
 
@@ -207,11 +211,6 @@ public class TorqueInstance
                 throw new TorqueException(e);
             }
         }
-        else
-        {
-            log.warn("No Database definitions found!");
-        }
-
     }
 
     /**
@@ -298,8 +297,7 @@ public class TorqueInstance
         log.debug("init(" + configFile + ")");
         try
         {
-            Configuration conf = (Configuration)
-                    new PropertiesConfiguration(configFile);
+            Configuration conf = new PropertiesConfiguration(configFile);
 
             log.debug("Config Object is " + conf);
             init(conf);
@@ -612,7 +610,7 @@ public class TorqueInstance
                  i++)
             {
                 map.addIdGenerator(IDGeneratorFactory.ID_GENERATOR_METHODS[i],
-                        IDGeneratorFactory.create(db));
+                        IDGeneratorFactory.create(db, name));
             }
         }
         catch (java.lang.InstantiationException e)
@@ -700,25 +698,45 @@ public class TorqueInstance
     {
         Connection con = null;
         DataSourceFactory dsf = null;
+
+        try
+        {
+            return getDataSourceFactory(name).getDataSource().getConnection();
+        }
+        catch(SQLException se)
+        {
+            throw new TorqueException(se);
+        }
+    }
+
+    /**
+     * Returns a DataSourceFactory 
+     *
+     * @param name Name of the DSF to get
+     * @return A DataSourceFactory object
+     */
+    protected DataSourceFactory getDataSourceFactory(String name)
+            throws TorqueException
+    {
+        DataSourceFactory dsf = null;
+
         try
         {
             dsf = (DataSourceFactory) dsFactoryMap.get(name);
-            con = dsf.getDataSource().getConnection();
         }
         catch (Exception e)
         {
-            if (dsf == null && e instanceof NullPointerException)
-            {
-                throw new NullPointerException(
-                        "There was no DataSourceFactory "
-                        + "configured for the connection " + name);
-            }
-            else
-            {
-                throw new TorqueException(e);
-            }
+            throw new TorqueException(e);
         }
-        return con;
+            
+        if (dsf == null)
+        {
+            throw new NullPointerException(
+                    "There was no DataSourceFactory "
+                    + "configured for the connection " + name);
+        }
+
+        return dsf;
     }
 
     /**
@@ -737,27 +755,14 @@ public class TorqueInstance
             String password)
             throws TorqueException
     {
-        Connection con = null;
-        DataSourceFactory dsf = null;
         try
         {
-            dsf = (DataSourceFactory) dsFactoryMap.get(name);
-            con = dsf.getDataSource().getConnection(username, password);
+            return getDataSourceFactory(name).getDataSource().getConnection(username, password);
         }
-        catch (Exception e)
+        catch(SQLException se)
         {
-            if (dsf == null && e instanceof NullPointerException)
-            {
-                throw new NullPointerException(
-                        "There was no DataSourceFactory "
-                        + "configured for the connection " + name);
-            }
-            else
-            {
-                throw new TorqueException(e);
-            }
+            throw new TorqueException(se);
         }
-        return con;
     }
 
     /**
@@ -816,4 +821,33 @@ public class TorqueInstance
             }
         }
     }
+
+    /**
+     * Sets the current schema for a database connection
+     *
+     * @param name The database name.
+     * @param schema The current schema name
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public void setSchema(String name, String schema)
+            throws TorqueException
+    {
+        getDataSourceFactory(name).setSchema(schema);
+    }
+
+    /**
+     * This method returns the current schema for a database connection
+     *
+     * @param name The database name.
+     * @return The current schema name. Null means, no schema has been set.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public String getSchema(String name)
+        throws TorqueException
+    {
+        return getDataSourceFactory(name).getSchema();
+    }
+
 }

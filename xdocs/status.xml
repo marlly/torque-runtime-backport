@@ -5,6 +5,7 @@
   <properties>
     <title>News and Status</title>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
@@ -16,8 +17,57 @@
         Torque.
       </p>
       <p>
-        A list of changes can be found <a href="release-changes.html">here</a>.
+        A list of changes can be found <a href="changes-report.html">here</a>.
       </p>
+
+      <subsection name="26 October 2004 - Torque 3.1.1 is released!">
+        <p>
+          You can obtain the Torque 3.1.1 generator, runtime and
+          maven-plugin from our <a href="download.html">Download
+          page</a> or from the <a
+          href="http://ibiblio.org/maven/torque/">ibiblio maven
+          repository</a>. Please refer to <a
+          href="changes-report.html">the Changes report</a> for a full
+          list of changes.
+        </p>
+      </subsection>
+
+      <subsection name="16 October 2004 - Torque 3.1.1-rc3 is released!">
+        <p>
+          You can obtain the Torque 3.1.1-rc3 generator, runtime and
+          maven-plugin from the <a
+          href="http://ibiblio.org/maven/torque/">ibiblio maven
+          repository</a>. Please refer to <a
+          href="changes-report.html">the
+          Changes report</a> for a full list of changes.
+        </p>
+      </subsection>
+
+      <subsection name="27 August 2004 - Torque 3.1.1-rc2 is released!">
+        <p>
+          A problem handling limit and offset has been corrected.  You can 
+          obtain the Torque 3.1.1-rc2 generator, runtime and maven-plugin from
+          the <a href="http://ibiblio.org/maven/torque/">ibiblio maven 
+          repository</a>.
+        </p>
+      </subsection>
+
+      <subsection name="26 August 2004 - Torque 3.1.1-rc1 is released!">
+        <p>
+          We are working on setting up the mirrored download page for 3.1.1 
+          final.  In the mean time you can obtain the Torque 3.1.1-rc1
+          generator, runtime and maven-plugin from the
+          <a href="http://ibiblio.org/maven/torque/">ibiblio maven 
+          repository</a>.
+        </p>
+      </subsection>
+
+      <subsection name="In Memoriam">
+        <p>
+          <a href="http://www.apache.org/foundation/martin.html">Farewell to 
+          Martin Pöschl</a>.
+        </p>
+      </subsection>
 
       <subsection name="1 September 2003 - Torque 3.1 is released!">
         <p>

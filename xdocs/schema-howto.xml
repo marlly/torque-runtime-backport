@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<document>
+ <properties>
+  <title>Database Schema Howto</title>
+  <author email="hps@intermeta.de">Henning P. Schmiedehausen</author>
+ </properties>
+
+<body>
+
+<section name="Using Database Schemas (Namespaces)">
+
+<p>
+The word &quot;Schema&quot; is unfortunately quite overloaded with
+Torque. In this document, we will briefly talk about Database
+namespaces called Schema, as described <a
+href="http://www.postgresql.org/docs/7.3/static/ddl-schemas.html">in
+the PostgreSQL documentation</a>. According to the docs, Schemas are a
+part of the SQL standard. YMMV, however.</p>
+
+<p>
+Torque has some rudimentary support for Database schemas when
+accessing a database. The current generator can not create schema
+specific SQL files for you, all the table names will be unqualified
+(i.e. end up in the 'public' schema).
+</p>
+
+</section>
+
+<section name="Configuring Schema Names">
+
+<p>
+Schema support happens &quot;per-DataSourceFactory&quot;. This might
+look counter-intuitive to you but is actually the easiest way to get
+this done. In the <code>torque.properties</code> file you can add use
+the following statements:
+</p>
+
+<source><![CDATA[
+##
+## Selecting a database schema for all data sources:
+##
+
+# All data sources use the public schema unless overridden
+torque.defaults.schema = public
+
+##
+## Selecting the schema 'foo' for the datasource "bar"
+
+# use the foo datasource
+torque.dsfactory.bar.schema = foo
+]]>
+</source>
+
+<p>
+If no schema is configured in the torque properties, Torque will not
+qualify its table names. 
+</p>
+
+</section>
+
+<section name="Changing the current Schema on the fly">
+
+<p>
+The schema support happens per-Datasource. However, the schema name is
+queried dynamically whenever a Torque command accesses the database
+and can be changed (if you have the same table layout on multiple
+schemas, you can reuse your Peer classes thus reducing the number of
+classes used).
+</p>
+
+<source><![CDATA[
+
+/* Set the schema name for datasource "bar" to "foo" */
+
+Torque.setSchema("bar", "foo");
+
+/* Reset the schema names (no longer qualify 
+ * accesses to the tables of the "bar" datasource
+ */
+Torque.setSchema("bar", null);
+
+/* Get the current schema for the "bar" data source */
+String barSchema = Torque.getSchema("bar");
+]]>
+</source>
+
+</section>
+
+ </body>
+</document>

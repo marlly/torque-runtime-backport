@@ -43,31 +43,8 @@
   <!-- to include them in the binary dists                                -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-bin">
-
-    <!-- copy schema files to the right place -->
-<!--    
-    <copy todir="${maven.dist.bin.assembly.dir}/schema">
-      <fileset dir="${maven.src.dir}/schema" />
-    </copy>
--->
-    <!-- copy master files to the right place -->
-    <copy todir="${maven.dist.bin.assembly.dir}/master">
-      <fileset dir="${maven.src.dir}/conf/master" />
-    </copy>
-
-    <!-- copy config files to the right place -->
-    <copy todir="${maven.dist.bin.assembly.dir}">
-      <fileset dir="${maven.src.dir}/conf" />
-    </copy>
-
     <!-- include listed dependencies -->
-    <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib"/>
-
-    <!-- move torque.jar to /lib -->
-    <move
-      file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"
-      todir="${maven.dist.bin.assembly.dir}/lib"
-    />
+    <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib" excludes="jndi:jndi,jdbc" />
   </preGoal>
 
   <!-- ================================================================== -->
@@ -117,7 +94,9 @@
 
     <ant antfile="build-test.xml"
          target="test"
-         inheritAll="false"/>
+         inheritAll="false">
+      <property name="maven.repo.local" value="${maven.repo.local}" />
+    </ant>
   </goal>
 
   <goal

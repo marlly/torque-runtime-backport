@@ -2,13 +2,13 @@ package org.apache.torque.dsfactory;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,12 +61,7 @@ public class SharedPoolDataSourceFactory
      */
     public void initialize(Configuration configuration) throws TorqueException
     {
-        if (configuration == null)
-        {
-            throw new TorqueException(
-                "Torque cannot be initialized without a valid configuration. "
-                + "Please check the log files for further details.");
-        }
+        super.initialize(configuration);
 
         ConnectionPoolDataSource cpds = initCPDS(configuration);
         SharedPoolDataSource ds = initJdbc2Pool(configuration);
@@ -88,7 +83,7 @@ public class SharedPoolDataSourceFactory
         SharedPoolDataSource ds = new SharedPoolDataSource();
         Configuration c = Torque.getConfiguration();
 
-        if (c == null)
+        if (c == null || c.isEmpty())
         {
             log.warn("Global Configuration not set,"
                     + " no Default pool data source configured!");

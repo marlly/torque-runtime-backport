@@ -1,14 +1,14 @@
 package org.apache.torque.oid;
 
 /*
- * Copyright 2001,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,16 +47,16 @@ public class IDGeneratorFactory
      * @param dbAdapter The type of adapter to create an ID generator for.
      * @return The appropriate ID generator (possibly <code>null</code>).
      */
-    public static IdGenerator create(DB dbAdapter)
+    public static IdGenerator create(DB dbAdapter, String name)
     {
         String idMethod = dbAdapter.getIDMethodType();
         if (IDMethod.AUTO_INCREMENT.equals(idMethod))
         {
-            return new AutoIncrementIdGenerator(dbAdapter);
+            return new AutoIncrementIdGenerator(dbAdapter, name);
         }
         else if (IDMethod.SEQUENCE.equals(idMethod))
         {
-            return new SequenceIdGenerator(dbAdapter);
+            return new SequenceIdGenerator(dbAdapter, name);
         }
         else
         {

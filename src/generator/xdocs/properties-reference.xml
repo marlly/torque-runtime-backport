@@ -1,466 +1,418 @@
 <?xml version="1.0"?>
 
 <document>
-
   <properties>
     <title>Torque - Properties Reference</title>
     <author email="stephenh@chase3000.com">Stephen Haberman</author>
+    <author email="hps@intermeta.de">Henning P. Schmiedehausen</author>
   </properties>
 
   <body>
+    <section name="Build-time Properties">
+    <p>
+     These properties are set in the <code>build.properties</code>
+     file or the file of your chosing, specificed by the
+     <code>torque.contextProperties</code> property. They affect how
+     Torque generates Java and SQL code for your project.
+    </p>
 
-<section name="Build-time Properties">
+    <table>
+    <tr>
+      <th> Property </th>
+      <th> Default </th>
+      <th> Description </th>
+    </tr>
 
-<p>
-  These properties are set in the <code>build.properties</code> file or the
-  file of your chosing, specificed by the <code>torque.contextProperties</code>
-  property. They affect how Torque generates Java and SQL code for your project.
-</p>
+    <tr>
+      <td colspan="3"><strong> Basic Properties </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.project</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        The name of the project Torque will generate code for. After choosing the
+        project name, your XML schema file (originally <code>project-schema.xml</code>),
+        that Torque will read should be renamed to <code>${torque.project}-schema.xml</code>.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        Torque must know the target database platform in order to generate the
+        appropriate Java and SQL code. Currently supported values are:
+        axion, cloudscape, db2, db2400, hypersonic, interbase, mssql, mysql,
+        oracle, postgresql, sapdb, and sybase.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.targetPackage</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        The Java package that Torque will put the generated classes in. Generally
+        something like <code>com.company.project.om</code>.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.runOnlyOnSchemaChange</code></td>
+      <td><code>true</code></td>
+      <td>
+        When <code>true</code> the <code>om</code> goal will only be executed
+        when the schema has actually been updated.
+      </td>
+    </tr>
+    
+    <tr>
+      <td colspan="3"><strong> Directories and Paths </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.home</code></td>
+      <td><code>.</code></td>
+      <td>The base directory for the input and output of files.</td>
+    </tr>
+    <tr>
+      <td><code>torque.templatePath</code></td>
+      <td><code>templates</code></td>
+      <td>
+        The path relative to where Torque is being executed to load the
+        Velocity templates from.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.output.dir</code></td>
+      <td><code>${torque.home}/target</code></td>
+      <td>The base directory for the output files.</td>
+    </tr>
+    <tr>
+      <td><code>torque.schema.dir</code></td>
+      <td><code>${torque.home}/schema</code></td>
+      <td>The base directory to reading <code>*-schema.xml</code> files from.</td>
+    </tr>
+    <tr>
+      <td><code>torque.doc.dir</code></td>
+      <td><code>${torque.output.dir}/doc</code></td>
+      <td>The directory to place HTML documentation generated from the XML schema.</td>
+    </tr>
+    <tr>
+      <td><code>torque.java.dir</code></td>
+      <td><code>${maven.src.dir}/java</code></td>
+      <td>The directory to place all of the generated Java code in.</td>
+    </tr>
+    <tr>
+      <td><code>torque.sql.dir</code></td>
+      <td><code>${torque.output.dir}/sql</code></td>
+      <td>The directory to place all of the generated SQL in.</td>
+    </tr>
+    <tr>
+      <td><code>torque.javadoc.dir</code></td>
+      <td><code>${torque.output.dir}/javadoc</code></td>
+      <td>The directory to javadocs generated from the Java om files.</td>
+    </tr>
+    <tr>
+      <td><code>torque.ojb.dir</code></td>
+      <td><code>${maven.src.dir}/ojb</code></td>
+      <td>The directory to place all of the generated OJB code in.</td>
+    </tr>
+    <tr>
+      <td><code>torque.omzip.dir</code></td>
+      <td><code>${torque.output.dir}</code></td>
+      <td>The directory to place the jar files output by the om-zip goal.</td>
+    </tr>
 
-<table>
-<tr>
-  <th> Property </th>
-  <th> Default </th>
-  <th> Description </th>
-</tr>
-
-
-<tr>
-  <td colspan="3"><strong> Basic Properties </strong></td>
-</tr>
-<tr>
-  <td><code> torque.project </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The name of the project Torque will generate code for. After choosing the
-    project name, your XML schema file (originally <code>project-schema.xml</code>),
-    that Torque will read should be renamed to <code>${torque.project}-schema.xml</code>.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    Torque must know the target database platform in order to generate the
-    appropriate Java and SQL code. Currently supported values are:
-      axion, cloudscape, db2, db2400, hypersonic, interbase, mssql, mysql,
-      oracle, postgresql, sapdb, and sybase.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.targetPackage </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The Java package that Torque will put the generated classes in. Generally
-    something like <code>com.company.project.om</code>.
-  </td>
-</tr>
-
-
-<tr>
-  <td colspan="3"><strong> Directories and Paths </strong></td>
-</tr>
-<tr>
-  <td><code> torque.home </code></td>
-  <td><code> . </code></td>
-  <td>
-    The base directory for the input and output of files.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.templatePath </code></td>
-  <td><code> templates </code></td>
-  <td>
-    The path relative to where Torque is being executed to load the
-    Velocity templates from.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.output.dir </code></td>
-  <td><code> ${torque.home}/target </code></td>
-  <td>
-    The base directory for the output files.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.schema.dir </code></td>
-  <td><code> ${torque.home}/schema </code></td>
-  <td>
-    The base directory to reading <code>*-schema.xml</code> files from.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.doc.dir </code></td>
-  <td><code> ${torque.output.dir}/doc </code></td>
-  <td>
-    The directory to place HTML documentation generated from the XML schema.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.java.dir </code></td>
-  <td><code> ${maven.src.dir}/java </code></td>
-  <td>
-    The directory to place all of the generated Java code in.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.sql.dir </code></td>
-  <td><code> ${torque.output.dir}/sql </code></td>
-  <td>
-    The directory to place all of the generated SQL in.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.javadoc.dir </code></td>
-  <td><code> ${torque.output.dir}/javadoc </code></td>
-  <td>
-    The directory to javadocs generated from the Java om files.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.ojb.dir </code></td>
-  <td><code> ${maven.src.dir}/ojb </code></td>
-  <td>
-    The directory to place all of the generated OJB code in.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.omzip.dir </code></td>
-  <td><code> ${torque.output.dir} </code></td>
-  <td>
-    The directory to place the jar files output by the om-zip goal.
-  </td>
-</tr>
-
-
-<tr>
-  <td colspan="3"><strong> Database Settings </strong></td>
-</tr>
-<tr>
-  <td><code> torque.database.createUrl </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The JDBC URL that Torque can use to create and drop databases if instructed
-    to do so. This is typically an administrative URL.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.buildUrl </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The JDBC URL that will be used to access your database. Torque can use
-    this to create your tables if instructed to do so.  This value should
-    reflect the database name specified in the database schema file
-    (described in the next section).
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.url </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    This should contain the same value as <em>buildDatabaseURL</em>.
-    [not quite sure why both of these properties exist]
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.driver </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The JDBC database driver to use when connecting to your database.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.user </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The administrative username that has sufficient privileges to
-    create and drop databases and tables that Torque executes at build time.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.password </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The administrative password for the supplied username.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.host </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The hostname or IP address of your database server.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.schema </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    Used by the JDBC -> XML process, and by the SQL Ant Task
-    that will initialize your target database with the
-    generated SQL. This is only used by Oracle at this time.
-    This must be UPPERCASE!
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.name </code></td>
-  <td><code> N/A </code></td>
-  <td>
-    The database name to use in the <code>datadump</code> target.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.database.manualCreation </code></td>
-  <td><code> false </code></td>
-  <td>
-    When <code>false</code>, Torque can automatically execute the SQL to
-    create your database tables via the <code>create-db</code> target. This
-    will destroy old data, so manual creation is safer in non-dev environments.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.sameJavaName </code></td>
-  <td><code> false </code></td>
-  <td>
-  </td>
-</tr>
-
-
-<tr>
-  <td colspan="3"><strong> Template Variables </strong></td>
-</tr>
-<tr>
-  <td><code> torque.addGetByNameMethod </code></td>
-  <td><code> true </code></td>
-  <td>
-    If true, Torque adds methods to get database fields by name/position.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.addIntakeRetrievable </code></td>
-  <td><code> false </code></td>
-  <td>
-    If true, the data objects will implement Intake's Retrievable
-    interface
-  </td>
-</tr>
-<tr>
-  <td><code> torque.retrievableInterface </code></td>
-  <td><code> org.apache.turbine.om.Retrievable (for Turbine 2.2) </code></td>
-  <td>
-    Defines the Retrievable interface. (set to
-    org.apache.fulcrum.intake.Retrievable if you are using Fulcrum)
-  </td>
-</tr>
-<tr>
-  <td><code> torque.addSaveMethod </code></td>
-  <td><code> true </code></td>
-  <td>
-    If true, Torque adds tracking code to determine how to save objects.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.saveException </code></td>
-  <td><code> Exception </code></td>
-  <td>
-    Defines which Exception should be thrown by the Object.save() method.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.addTimeStamp </code></td>
-  <td><code> true </code></td>
-  <td>
-    If true, Torque puts time stamps in generated om files.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.basePrefix </code></td>
-  <td><code> Base </code></td>
-  <td>
-    A string to pre-pend to the file names of base data and peer objects.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.complexObjectModel </code></td>
-  <td><code> true </code></td>
-  <td>
-    If true, Torque generates data objects with collection support and
-    methods to easily retrieve foreign key relationships.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.useClasspath </code></td>
-  <td><code> false </code></td>
-  <td>
-    If true, Torque will not look in the <code>templatePath</code> directory,
-    for templates, but instead load them from the classpath, allowing you to
-    use Torque without extracting it from the jar.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.useManagers </code></td>
-  <td><code> false </code></td>
-  <td>
-    If true, Torque will generate Manager classes that use JCS for caching.
-    Still considered experimental.
-  </td>
-<tr>
-  <td><code> torque.objectIsCaching </code></td>
-  <td><code> true </code></td>
-  <td>
-    If true, Torque generates data objects that cache their foreign
-    key relationships. If this is not desired (because the underlying objects
-    can be manipulated from other code), set this property to false. This currently
-    cannot combined with the manager setting from above.
-  </td>
-</tr>
-</tr>
-
-
-<tr>
-  <td colspan="3"><strong> Misc. Settings </strong></td>
-</tr>
-<tr>
-  <td><code> torque.idTableXMLFile </code></td>
-  <td><code> N/A </code></td>
-  <td>
-
-  </td>
-</tr>
-<tr>
-  <td><code> torque.doc.format </code></td>
-  <td><code> html </code></td>
-  <td>
-    Possible values are html and anakia.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.doc.html.normalFont </code></td>
-  <td><code> font-family: Verdana; font-size: 10pt; </code></td>
-  <td>
-    The value for the CSS class <code>normalFont</code> that is used to format
-    the text of the HTML output.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.doc.html.fkColor </code></td>
-  <td><code> afe295 </code></td>
-  <td>
-    The color that the names of foreign key columns are highlighted with in the
-    HTML output.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.initialID </code></td>
-  <td><code> 101</code></td>
-  <td>
-    Controls the starting id of table entries when creating SQL for the id-table. If you
-    have two projects that use the same id-table in the same database with different tables,
-    make sure that they have different initialID settings and the ranges (initialID is incremented
-    for every new table) don't overlap.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.initialIDValue</code></td>
-  <td><code> 1000</code></td>
-  <td>
-    The start value of the ID broker for supplying IDs to Torque. This value is incremented every
-    time Torque requests ID keys from the broker. If you pre-load your table straight from SQL, 
-    make sure that you don't accidentially overlap with this setting, because Torque doesn't keep
-    record of what IDs are already taken in the database. If you overlap, inserting new objects
-    will fail because the ID assigned by Torque is already taken.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.initialIDStep</code></td>
-  <td><code> 10</code></td>
-  <td>
-    For performance reasons, the ID Broker does not request a single ID at a time but fetches a
-    whole range and increments the current next ID Value in the ID Table by this step. If you have
-    to do lots of inserts straight in a row, increment this value to get slightly better performance.
-  </td>
-</tr>
-
-<tr>
-  <td><code> torque.omzip.src.base </code></td>
-  <td><code> false </code></td>
-  <td>
-    Whether the om generated base src (BaseX.java) files should be included in 
-    the src jar produced by om-zip.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.omzip.src.extension </code></td>
-  <td><code> false </code></td>
-  <td>
-    Whether the om generated extension src (X.java) files should be included in 
-    the src jar produced by om-zip.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.omzip.bin.base </code></td>
-  <td><code> false </code></td>
-  <td>
-    Whether the om generated base class (BaseX.class) files should be included 
-    in the bin jar produced by om-zip.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.omzip.bin.extension </code></td>
-  <td><code> false </code></td>
-  <td>
-    Whether the om generated extension class (X.class) files should be included 
-    in the bin jar produced by om-zip.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.omzip.deleteFiles </code></td>
-  <td><code> false </code></td>
-  <td>
-    Whether the generated om files should be deleted following the om-zip.
-  </td>
-</tr>
-
-<tr>
-  <td colspan="3"><strong> Compile Settings </strong></td>
-</tr>
-<tr>
-  <td><code> torque.compile.src.dir </code></td>
-  <td><code> ${torque.java.dir} </code></td>
-  <td>
-    Where to read the Java om source files.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.compile.build.dir </code></td>
-  <td><code> bin/classes </code></td>
-  <td>
-    Where to put the compiled byte code for om classes.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.compile.debug </code></td>
-  <td><code> on </code></td>
-  <td>
-    Whether the om classes are compiled with debug code.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.compile.deprecation </code></td>
-  <td><code> off </code></td>
-  <td>
-    Whether the om classes are compiled with deprecation allowed.
-  </td>
-</tr>
-<tr>
-  <td><code> torque.compile.optimize </code></td>
-  <td><code> off </code></td>
-  <td>
-    Whether the om classes are optimized during compilation.
-  </td>
-</tr>
-</table>
-
-</section>
-
+    <tr>
+      <td colspan="3"><strong> Database Settings </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.database.createUrl</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        The JDBC URL that Torque can use to create and drop databases if instructed
+        to do so. This is typically an administrative URL.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database.buildUrl</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        The JDBC URL that will be used to access your database. Torque can use
+        this to create your tables if instructed to do so.  This value should
+        reflect the database name specified in the database schema file
+        (described in the next section).
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database.url</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        This should contain the same value as <em>buildDatabaseURL</em>.
+        [not quite sure why both of these properties exist]
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database.driver</code></td>
+      <td><code>N/A</code></td>
+      <td>The JDBC database driver to use when connecting to your database.</td>
+    </tr>
+    <tr>
+      <td><code>torque.database.user</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        The administrative username that has sufficient privileges to
+        create and drop databases and tables that Torque executes at build time.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database.password</code></td>
+      <td><code>N/A</code></td>
+      <td>The administrative password for the supplied username.</td>
+    </tr>
+    <tr>
+      <td><code>torque.database.host</code></td>
+      <td><code>N/A</code></td>
+      <td>The hostname or IP address of your database server.</td>
+    </tr>
+    <tr>
+      <td><code>torque.database.schema</code></td>
+      <td><code>N/A</code></td>
+      <td>
+        Used by the JDBC -> XML process, and by the SQL Ant Task
+        that will initialize your target database with the
+        generated SQL. This is only used by Oracle at this time.
+        This must be UPPERCASE!
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.database.name</code></td>
+      <td><code>N/A</code></td>
+      <td>The database name to use in the <code>datadump</code> target.</td>
+    </tr>
+    <tr>
+      <td><code>torque.database.manualCreation</code></td>
+      <td><code>false</code></td>
+      <td>
+        When <code>false</code>, Torque can automatically execute the SQL to
+        create your database tables via the <code>create-db</code> target. This
+        will destroy old data, so manual creation is safer in non-dev environments.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.sameJavaName</code></td>
+      <td><code>false</code></td>
+      <td/>
+    </tr>
+    
+    <tr>
+      <td colspan="3"><strong> Template Variables </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.addGetByNameMethod</code></td>
+      <td><code>true</code></td>
+      <td>If true, Torque adds methods to get database fields by name/position.</td>
+    </tr>
+    <tr>
+      <td><code>torque.addIntakeRetrievable</code></td>
+      <td><code>false</code></td>
+      <td>If true, the data objects will implement Intake's Retrievable interface</td>
+    </tr>
+    <tr>
+      <td><code>torque.retrievableInterface</code></td>
+      <td><code>org.apache.turbine.om.Retrievable (for Turbine 2.2)</code></td>
+      <td>
+        Defines the Retrievable interface. (set to
+        org.apache.fulcrum.intake.Retrievable if you are using Fulcrum)
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.addSaveMethod</code></td>
+      <td><code>true</code></td>
+      <td>If true, Torque adds tracking code to determine how to save objects.</td>
+    </tr>
+    <tr>
+      <td><code>torque.saveException</code></td>
+      <td><code>Exception</code></td>
+      <td>Defines which Exception should be thrown by the Object.save() method.</td>
+    </tr>
+    <tr>
+      <td><code>torque.addTimeStamp</code></td>
+      <td><code>true</code></td>
+      <td>If true, Torque puts time stamps in generated om files.</td>
+    </tr>
+    <tr>
+      <td><code>torque.basePrefix</code></td>
+      <td><code>Base</code></td>
+      <td>A string to pre-pend to the file names of base data and peer objects.</td>
+    </tr>
+    <tr>
+      <td><code>torque.complexObjectModel</code></td>
+      <td><code>true</code></td>
+      <td>
+        If true, Torque generates data objects with collection support and
+        methods to easily retrieve foreign key relationships.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.useClasspath</code></td>
+      <td><code>false</code></td>
+      <td>
+        If true, Torque will not look in the <code>templatePath</code> directory,
+        for templates, but instead load them from the classpath, allowing you to
+        use Torque without extracting it from the jar.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.useManagers</code></td>
+      <td><code>false</code></td>
+      <td>
+        If true, Torque will generate Manager classes that use JCS for caching.
+        Still considered experimental.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.objectIsCaching</code></td>
+      <td><code>true</code></td>
+      <td>
+        If true, Torque generates data objects that cache their foreign
+        key relationships. If this is not desired (because the underlying objects
+        can be manipulated from other code), set this property to false. This currently
+        cannot combined with the manager setting from above.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.correctGetters</code></td>
+      <td><code>false</code></td>
+      <td>
+        If true, Torque generates is&lt;xxx&gt; getter methods for boolean columns. These are
+        Bean-Spec compliant but break compatibility with all releases up to 3.1.1.
+      </td>
+    </tr>
+    
+    <tr>
+      <td colspan="3"><strong> Misc. Settings </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.idTableXMLFile</code></td>
+      <td><code>N/A</code></td>
+      <td/>
+    </tr>
+    <tr>
+      <td><code>torque.doc.format</code></td>
+      <td><code>html</code></td>
+      <td>Possible values are html and anakia.</td>
+    </tr>
+    <tr>
+      <td><code>torque.doc.html.normalFont</code></td>
+      <td><code>font-family: Verdana; font-size: 10pt;</code></td>
+      <td>
+        The value for the CSS class <code>normalFont</code> that is used to format
+        the text of the HTML output.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.doc.html.fkColor</code></td>
+      <td><code>afe295</code></td>
+      <td>
+        The color that the names of foreign key columns are highlighted with in the
+        HTML output.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.initialID</code></td>
+      <td><code>101</code></td>
+      <td>
+        Controls the starting id of table entries when creating SQL for the id-table. If you
+        have two projects that use the same id-table in the same database with different tables,
+        make sure that they have different initialID settings and the ranges (initialID is incremented
+        for every new table) don't overlap.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.initialIDValue</code></td>
+      <td><code>1000</code></td>
+      <td>
+        The start value of the ID broker for supplying IDs to Torque. This value is incremented every
+        time Torque requests ID keys from the broker. If you pre-load your table straight from SQL, 
+        make sure that you don't accidentially overlap with this setting, because Torque doesn't keep
+        record of what IDs are already taken in the database. If you overlap, inserting new objects
+        will fail because the ID assigned by Torque is already taken.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.initialIDStep</code></td>
+      <td><code>10</code></td>
+      <td>
+        For performance reasons, the ID Broker does not request a single ID at a time but fetches a
+        whole range and increments the current next ID Value in the ID Table by this step. If you have
+        to do lots of inserts straight in a row, increment this value to get slightly better performance.
+      </td>
+    </tr>
+    
+    <tr>
+      <td><code>torque.omzip.src.base</code></td>
+      <td><code>false</code></td>
+      <td>
+        Whether the om generated base src (BaseX.java) files should be included in 
+        the src jar produced by om-zip.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.omzip.src.extension</code></td>
+      <td><code>false</code></td>
+      <td>
+        Whether the om generated extension src (X.java) files should be included in 
+        the src jar produced by om-zip.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.omzip.bin.base</code></td>
+      <td><code>false</code></td>
+      <td>
+        Whether the om generated base class (BaseX.class) files should be included 
+        in the bin jar produced by om-zip.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.omzip.bin.extension</code></td>
+      <td><code>false</code></td>
+      <td>
+        Whether the om generated extension class (X.class) files should be included 
+        in the bin jar produced by om-zip.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.omzip.deleteFiles</code></td>
+      <td><code>false</code></td>
+      <td>Whether the generated om files should be deleted following the om-zip.</td>
+    </tr>
+    
+    <tr>
+      <td colspan="3"><strong> Compile Settings </strong></td>
+    </tr>
+    <tr>
+      <td><code>torque.compile.src.dir</code></td>
+      <td><code>${torque.java.dir}</code></td>
+      <td>Where to read the Java om source files.</td>
+    </tr>
+    <tr>
+      <td><code>torque.compile.build.dir</code></td>
+      <td><code>bin/classes</code></td>
+      <td>Where to put the compiled byte code for om classes.</td>
+    </tr>
+    <tr>
+      <td><code>torque.compile.debug</code></td>
+      <td><code>on</code></td>
+      <td>Whether the om classes are compiled with debug code.</td>
+    </tr>
+    <tr>
+      <td><code>torque.compile.deprecation</code></td>
+      <td><code>off</code></td>
+      <td>Whether the om classes are compiled with deprecation allowed.</td>
+    </tr>
+    <tr>
+      <td><code>torque.compile.optimize</code></td>
+      <td><code>off</code></td>
+      <td>Whether the om classes are optimized during compilation.</td>
+    </tr>
+    </table>
+    </section>
   </body>
 </document>

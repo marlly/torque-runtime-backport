@@ -1,14 +1,14 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,12 @@ package org.apache.torque.util;
  * to build queries.  Criteria also makes most of the constants available
  * in order to specify a criterion.
  *
- * @author <a href="mailto:jmcnally@collab,net"></a>
+ * @author <a href="mailto:jmcnally@collab.net"></a>
+ * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  * @since 3.0
  */
-class SqlEnum implements java.io.Serializable
+public class SqlEnum implements java.io.Serializable
 {
     private final String s;
     
@@ -86,4 +87,52 @@ class SqlEnum implements java.io.Serializable
         new SqlEnum("CURRENT_DATE");
     public static final SqlEnum CURRENT_TIME =
         new SqlEnum("CURRENT_TIME");
+    public static final SqlEnum LEFT_JOIN =
+        new SqlEnum(" LEFT JOIN ");
+    public static final SqlEnum RIGHT_JOIN =
+        new SqlEnum(" RIGHT JOIN ");
+    public static final SqlEnum INNER_JOIN =
+        new SqlEnum(" INNER JOIN ");
+    public static final SqlEnum ON =
+        new SqlEnum(" ON ");
+    public static final SqlEnum AS =
+        new SqlEnum(" AS ");
+    
+    /**
+     * returns whether o is the same SqlEnum as this object.
+     * Two SqlEnums are considered equal if they contain the same String.
+     * @param o the object to compare the SqlEnum with.
+     */
+    public boolean equals(Object o) 
+    {
+        if (o == null) 
+        {
+            return false;
+        }
+
+        if (! (o instanceof SqlEnum)) 
+        {
+            return false;
+        }
+
+        SqlEnum otherEnum = (SqlEnum) o;
+
+
+        // both null: true
+        // other null, this not null: false
+        // else compare
+        return (otherEnum.s == null) 
+                ? (s == null)
+                : otherEnum.s.equals(s);
+    }
+    
+    /**
+     * returns a hashcode for this object which is consistent with equals()
+     */
+    public int hashCode() 
+    {
+        return (s == null) 
+                ? 0
+                : s.hashCode();
+    }
 }

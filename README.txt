@@ -19,7 +19,11 @@ database/         <--- Contains database specific property files used
 docs/             <--- Contains a copy of the Torque documentation, 
                        including the API JavaDocs.
 lib/              <--- Contains the jar files required by the Torque 
-                       runtime.
+                       runtime. Note that the JNDI and JDBC jars are missing
+                       because we are not allowed to distribute them. Please
+                       get these files from:
+		       JDBC: http://java.sun.com/products/jdbc/download.html#spec
+		       JNDI: http://java.sun.com/products/jndi/
 master/build.xml  <--- The Ant build file for regenerating Torque.properties.
 master/default.prperties
                   <--- The properties that will be used when regenerating 

@@ -12,9 +12,9 @@
     <section name="Maven Torque Plugin">
       <p>
         This plugin provides easy intergration with 
-        <a href="../index.html">Torque</a> for your project.  This replaces 
-        using the build-torque.xml ant script that previously provided the same
-        functionality.
+        <a href="../index.html">Torque</a> for your project.
+        This replaces using the build-torque.xml ant script that previously 
+        provided the same functionality.
       </p>
       <p>
       	By default, the templates used for code generation are found in
@@ -26,6 +26,12 @@
         see the <a href="goals.html">Goals</a> document.  The various 
         properties used to configure the plugin are documented in the
         <a href="properties.html">Properties</a> document.
+      </p>
+      <p>
+        We are working on providing a release of the Torque maven-plugin
+        fairly soon - in the mean time, please see the 
+        <a href="../maven-howto.html">Maven Howto</a> for installation and
+        configuration instructions.
       </p>
     </section>
  </body>

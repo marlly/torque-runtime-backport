@@ -1,14 +1,14 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,7 @@ import java.util.Map;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:ralf@reswi.ruhr.de">Ralf Stranzenbach</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class DBFactory
@@ -64,6 +65,10 @@ public class DBFactory
         adapters.put("com.informix.jdbc.IfxDriver", DBInformix.class);
         adapters.put("sun.jdbc.odbc.JdbcOdbcDriver", DBOdbc.class);
 
+        adapters.put("com.ibm.db2.jcc.DB2Driver", DBDerby.class);
+        adapters.put("org.apache.derby.jdbc.EmbeddedDriver", DBDerby.class);
+
+
         // add some short names to be used when drivers are not used
         adapters.put("as400", DBDB2400.class);
         adapters.put("db2app", DBDB2App.class);
@@ -83,6 +88,8 @@ public class DBFactory
         adapters.put("informix", DBInformix.class);
         adapters.put("odbc", DBOdbc.class);
         adapters.put("msaccess", DBOdbc.class);
+
+        adapters.put("derby", DBDerby.class);
 
         adapters.put("", DBNone.class);
     }

@@ -1,9 +1,0 @@
-# ------------------------------------------------------------------------
-# D A T A B A S E  P R O P E R T I E S
-# ------------------------------------------------------------------------
-
-databaseDriver = org.postgresql.Driver
-createDatabaseUrl = jdbc:postgresql://localhost:5432/template1
-buildDatabaseUrl = jdbc:postgresql://localhost:5432/${tdk.project}
-databaseUrl = jdbc:postgresql://localhost:5432/${tdk.project}
-torque.database.validationQuery = SELECT 1

@@ -13,7 +13,7 @@
     <menu name="Torque">
       <item name="Overview"              href="/index.html"/>
       <item name="News and Status"       href="/status.html"/>
-      <item name="Downloads"             href="/status.html"/>
+      <item name="Downloads"             href="/download.html"/>
       <item name="Torque 3.1.x docs"     href="http://db.apache.org/torque/"/>
       <item name="Torque Wiki"           href="http://wiki.apache.org/db-torque/"/>
     </menu>
@@ -34,6 +34,7 @@
       <item name="Pool-config Howto"     href="/configuration-howto.html"/>
       <item name="Maven Howto"           href="/maven-howto.html"/>
       <item name="Peers Howto"           href="/peers-howto.html"/>
+      <item name="DB Schema Support"     href="/schema-howto.html"/>
     </menu>
     <menu name="Database Howto Guides">
       <item name="MS SQL Server Howto"   href="/mssql-howto.html"/>
@@ -46,6 +47,7 @@
       <item name="Changes"               href="/changes-report.html"/>
       <item name="References"            href="/references.html"/>
       <item name="Todo"                  href="/todo.html"/>
+      <item name="Historic Changes"      href="/release-changes.html"/>
     </menu>
   </body>
 </project>

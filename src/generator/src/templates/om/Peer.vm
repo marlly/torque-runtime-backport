@@ -89,7 +89,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             try
             {
-                getMapBuilder();
+                getMapBuilder(${table.JavaName}MapBuilder.CLASS_NAME);
             }
             catch (Exception e)
             {
@@ -362,7 +362,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
   #set ( $n=0 )
   #foreach ($col in $table.Columns)
-            obj.set${col.JavaName}(row.getValue(offset + $n).$col.VillageMethod);
+            obj.${col.SetterName}(row.getValue(offset + $n).$col.VillageMethod);
     #set ( $n = $n + 1 )
   #end
         }
@@ -744,7 +744,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
     public static List doSelect($table.JavaName obj) throws TorqueException
     {
-        return doSelect(buildCriteria(obj));
+        return doSelect(buildSelectCriteria(obj));
     }
 
     /**
@@ -782,7 +782,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
     public static void doDelete($table.JavaName obj) throws TorqueException
     {
-        doDelete(buildCriteria(obj));
+        doDelete(buildSelectCriteria(obj));
     }
 
     /**
@@ -837,7 +837,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doDelete($table.JavaName obj, Connection con)
         throws TorqueException
     {
-        doDelete(buildCriteria(obj), con);
+        doDelete(buildSelectCriteria(obj), con);
     }
 
     /**
@@ -897,7 +897,25 @@ public abstract class $basePrefix${table.JavaName}Peer
     #if ($col.isPrimaryKey() && !$table.IdMethod.equals("none"))
         if (!obj.isNew())
     #end
-            criteria.add($cup, obj.get${cfc}());
+        criteria.add($cup, obj.${col.GetterName}());
+  #end
+        return criteria;
+    }
+
+    /** Build a Criteria object from the data object for this peer, skipping all binary columns */
+    public static Criteria buildSelectCriteria( $table.JavaName obj )
+    {
+        Criteria criteria = new Criteria(DATABASE_NAME);
+  #foreach ($col in $table.Columns)
+    #set ( $cfc=$col.JavaName )
+    #set ( $cup=$col.Name.toUpperCase() )
+    #set ( $cjtype = $col.JavaNative )
+    #if ($col.isPrimaryKey() && !$table.IdMethod.equals("none"))
+        if (!obj.isNew())
+    #end
+    #if ( $cjtype != "byte[]" )
+            criteria.add($cup, obj.${col.GetterName}());
+    #end
   #end
         return criteria;
     }
@@ -926,6 +944,22 @@ public abstract class $basePrefix${table.JavaName}Peer
         throws TorqueException, NoRowsException, TooManyRowsException
     {
         return ${retrieveMethod}(SimpleKey.keyFor(pk));
+    }
+
+    /**
+     * Retrieve a single object by pk
+     *
+     * @param pk the primary key
+     * @param con the connection to use
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     * @throws NoRowsException Primary key was not found in database.
+     * @throws TooManyRowsException Primary key was not found in database.
+     */
+    public static $table.JavaName ${retrieveMethod}($pk.JavaNative pk, Connection con)
+        throws TorqueException, NoRowsException, TooManyRowsException
+    {
+        return ${retrieveMethod}(SimpleKey.keyFor(pk), con);
     }
   #end
 
@@ -1197,6 +1231,23 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static List doSelectJoin${joinColumnId}(Criteria criteria)
         throws TorqueException
     {
+		return doSelectJoin${joinColumnId}(criteria, null);
+	}
+	
+    /**
+     * selects a collection of $className objects pre-filled with their
+     * $joinClassName objects.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ${table.JavaName}Peer.
+     *
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    protected static List doSelectJoin${joinColumnId}(Criteria criteria, Connection conn)
+        throws TorqueException
+    {
         setDbName(criteria);
 
         ${table.JavaName}Peer.addSelectColumns(criteria);
@@ -1248,7 +1299,12 @@ public abstract class $basePrefix${table.JavaName}Peer
           #end
         #end
 
-        List rows = BasePeer.doSelect(criteria);
+		List rows;
+		if( conn == null )
+	        rows = BasePeer.doSelect(criteria);
+	    else
+	    	rows = BasePeer.doSelect(criteria,conn);
+	    	
         List results = new ArrayList();
 
         for (int i = 0; i < rows.size(); i++)
@@ -1339,7 +1395,6 @@ public abstract class $basePrefix${table.JavaName}Peer
           #set ( $collThisTableMs="${className}RelatedBy$relatedByCol" )
         #end
 
-
     /**
      * selects a collection of $className objects pre-filled with
      * all related objects.
@@ -1352,6 +1407,23 @@ public abstract class $basePrefix${table.JavaName}Peer
      *         rethrown wrapped into a TorqueException.
      */
     protected static List doSelectJoinAllExcept${excludeString}(Criteria criteria)
+        throws TorqueException
+    {
+    	return doSelectJoinAllExcept${excludeString}(criteria, null);
+    }
+    
+    /**
+     * selects a collection of $className objects pre-filled with
+     * all related objects.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in ${table.JavaName}Peer.
+     *
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    protected static List doSelectJoinAllExcept${excludeString}(Criteria criteria, Connection conn)
         throws TorqueException
     {
         setDbName(criteria);
@@ -1408,7 +1480,12 @@ public abstract class $basePrefix${table.JavaName}Peer
           #end
         #end
 
-        List rows = BasePeer.doSelect(criteria);
+        List rows; 
+        if( conn == null )
+	        rows = BasePeer.doSelect(criteria);
+	    else
+	    	rows = BasePeer.doSelect(criteria,conn);
+	    	
         List results = new ArrayList();
 
         for (int i = 0; i < rows.size(); i++)

@@ -25,7 +25,9 @@
 <!--                                                                          -->
 <!-- ======================================================================== -->
 
-<project xmlns:j="jelly:core">
+<project xmlns:j="jelly:core"
+         xmlns:ant="jelly:ant"
+         xmlns:doc="doc">
 
   <!-- ================================================================ -->
   <!-- M A I N  T A R G E T                                             -->
@@ -690,5 +692,46 @@
 
   </target>
 
+  <goal name="maven-torque-plugin:register">
 
+    <!--util:file var="tasks" name="${maven.docs.src}/tasks.xml"/-->
+    <!--j:if test="${tasks.exists()}"-->
+        <doc:registerReport name="Torque" 
+                            pluginName="maven-torque-plugin"
+                            link="torque/index"
+                            description="Torque documentation."/>
+    <!--/j:if-->
+
+  </goal>
+  
+  <goal name="maven-torque-plugin:deregister">
+    <doc:deregisterReport name="Torque"/>
+  </goal>
+
+  <goal name="maven-torque-plugin:report"
+        description="Generates documentation for your datamodel"
+        prereqs="torque:init">
+    <torque-doc
+      contextProperties="${torque.contextProperties}"
+      controlTemplate="${torque.template.doc}"
+      outputDirectory="${maven.gen.docs}/torque"
+      outputFile="report.${torque.project}.xdoc.generation"
+      outputFormat="anakia"
+      sqldbmap="${torque.sql.dir}/sqldb.map"
+      templatePath="${torque.templatePath}"
+      useClasspath="${torque.useClasspath}">
+      <fileset dir="${torque.schema.dir}"
+        includes="${torque.schema.doc.includes}"
+        excludes="${torque.schema.doc.excludes}"
+      />
+    </torque-doc>
+    <ant:mkdir dir="${maven.gen.docs}/torque"/>
+    <j:file name="${maven.gen.docs}/torque/index.xml"
+            prettyPrint="true"
+            outputMode="xml"
+            xmlns="dummy">
+      <j:import file="${plugin.resources}/templates/index.jelly" inherit="true"/>    
+    </j:file>
+  </goal>
+    
 </project>

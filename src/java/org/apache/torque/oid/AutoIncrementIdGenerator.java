@@ -1,14 +1,14 @@
 package org.apache.torque.oid;
 
 /*
- * Copyright 2001,2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright 2001-2004 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.apache.torque.oid;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import org.apache.torque.adapter.DB;
+import org.apache.torque.util.SQLBuilder;
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 import com.workingdogs.village.Value;
@@ -36,14 +37,19 @@ public class AutoIncrementIdGenerator implements IdGenerator
     /** the adapter that knows the correct sql syntax */
     private DB dbAdapter;
 
+    /** The internal name of the Database that this Generator is connected to */
+    private String name = null;
+
     /**
      * Creates an IdGenerator which will work with the specified database.
      *
-     * @param adapter the adapter that knows the correct sql syntax.
+     * @param dbAdapter the adapter that knows the correct sql syntax.
+     * @param name The name of the datasource to find the correct schema
      */
-    public AutoIncrementIdGenerator(DB adapter)
+    public AutoIncrementIdGenerator(final DB dbAdapter, final String name)
     {
-        dbAdapter = adapter;
+        this.dbAdapter = dbAdapter;
+        this.name = name;
     }
 
     /**
@@ -148,7 +154,8 @@ public class AutoIncrementIdGenerator implements IdGenerator
     private Value getIdAsVillageValue(Connection connection, Object keyInfo)
         throws Exception
     {
-        String idSQL = dbAdapter.getIDMethodSQL(keyInfo);
+        String tableName = SQLBuilder.getFullTableName(String.valueOf(keyInfo), name);
+        String idSQL = dbAdapter.getIDMethodSQL(tableName);
         Value id = null;
         QueryDataSet qds = null;
         try

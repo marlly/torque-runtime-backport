@@ -1,9 +1,0 @@
-# ------------------------------------------------------------------------
-# D A T A B A S E  P R O P E R T I E S
-# ------------------------------------------------------------------------
-
-databaseDriver = oracle.jdbc.driver.OracleDriver
-createDatabaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
-buildDatabaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
-databaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
-torque.database.validationQuery = SELECT 1 FROM DUAL

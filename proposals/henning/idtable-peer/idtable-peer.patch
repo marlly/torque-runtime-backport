@@ -344,14 +344,14 @@ diff -Nurb db-torque/src/java/org/apache/torque/TorqueInstance.java db-torque.p/
 -        map.setIdTable("ID_TABLE");
 +        map.setIdTable(IDBroker.ID_TABLE);
          TableMap tMap = map.getIdTable();
--        tMap.addPrimaryKey("ID_TABLE_ID", "IdTableId", new Integer(0));
--        tMap.addColumn("TABLE_NAME", "TableName", "");
--        tMap.addColumn("NEXT_ID", "NextId", new Integer(0));
--        tMap.addColumn("QUANTITY", "Quantity", new Integer(0));
-+        tMap.addPrimaryKey(IDBroker.COL_TABLE_ID,  "IdTableId", new Integer(0));
-+        tMap.addColumn(IDBroker.COL_TABLE_NAME,    "TableName", "");
-+        tMap.addColumn(IDBroker.COL_NEXT_ID, "NextId", new Integer(0));
-+        tMap.addColumn(IDBroker.COL_QUANTITY,      "Quantity", new Integer(0));
+-        tMap.addPrimaryKeyWithJavaName("ID_TABLE_ID", "IdTableId", new Integer(0));
+-        tMap.addColumnWithJavaName("TABLE_NAME", "TableName", "");
+-        tMap.addColumnWithJavaName("NEXT_ID", "NextId", new Integer(0));
+-        tMap.addColumnWithJavaName("QUANTITY", "Quantity", new Integer(0));
++        tMap.addPrimaryKeyWithJavaName(IDBroker.COL_TABLE_ID,  "IdTableId", new Integer(0));
++        tMap.addColumnWithJavaName(IDBroker.COL_TABLE_NAME,    "TableName", "");
++        tMap.addColumnWithJavaName(IDBroker.COL_NEXT_ID, "NextId", new Integer(0));
++        tMap.addColumnWithJavaName(IDBroker.COL_QUANTITY,      "Quantity", new Integer(0));
      }
  
      /**

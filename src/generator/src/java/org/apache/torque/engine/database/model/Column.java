@@ -67,6 +67,9 @@ public class Column
     private List inheritanceList;
     private boolean needsTransactionInPostgres;
 
+    /** generate is... setters for boolean columns if true */
+    private boolean correctGetters = false;
+
     /** class name to do input validation on this column */
     private String inputValidator = null;
 
@@ -250,6 +253,37 @@ public class Column
         return StringUtils.capitalize(javaName);
     }
     
+    /**
+     * Returns the name for the getter method to retrieve the value of this
+     * column
+     *
+     * @return A getter method name for this column.
+     * @since 3.2
+     */
+    public String getGetterName()
+    {
+        if (("boolean".equalsIgnoreCase(getJavaNative()) && isCorrectGetters()))
+        {
+            return "is" + StringUtils.capitalize(getJavaName());
+        }
+        else
+        {
+            return "get" + StringUtils.capitalize(getJavaName());
+        }
+    }
+
+    /**
+     * Returns the name for the setter method to set the value of this
+     * column
+     *
+     * @return A setter method name for this column.
+     * @since 3.2
+     */
+    public String getSetterName()
+    {
+        return "set" + StringUtils.capitalize(getJavaName());
+    }
+
     /**
      * Get variable name to use in Java sources (= uncapitalised java name)
      */    
@@ -983,5 +1017,29 @@ public class Column
         sb.append(' ');
         sb.append(getAutoIncrementString());
         return sb.toString();
+    }
+    
+    /**
+     * Return the correctGetters property of the column
+     *
+     * @return The currentValue of the correctGetters property.
+     * @since 3.2
+     */
+    public boolean isCorrectGetters()
+    {
+        return correctGetters;
+    }
+
+    /**
+     * Set the correctGetters property of the column. If set to true, the 
+     * column returns is&lt;xxx&gt; as the getter name which is correct for the
+     * Bean Specs but incompatible to pre-3.2 releases.
+     *
+     * @param correctGetters The new value of the correctGetters property.
+     * @since 3.2
+     */
+    public void setCorrectGetters(boolean correctGetters)
+    {
+        this.correctGetters = correctGetters;
     }
 }

@@ -2,13 +2,13 @@ package org.apache.torque.util;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import junit.framework.TestCase;
  * Tests for Query
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
 public class QueryTest extends TestCase
@@ -59,7 +60,7 @@ public class QueryTest extends TestCase
      */
     public void testToString()
     {
-        String expected	= "SELECT tableA.column1, tableA.column2, "
+        String expected = "SELECT tableA.column1, tableA.column2, "
                 + "tableB.column1 FROM tableA, tableB WHERE tableA.A = tableB.A"
                 + " AND tableA.B = 1234";
         Query query = new Query();
@@ -71,8 +72,8 @@ public class QueryTest extends TestCase
         query.setSelectClause(columns);
 
         UniqueList tables = new UniqueList();
-        tables.add("tableA");
-        tables.add("tableB");
+        tables.add(new Query.FromElement("tableA", null, null));
+        tables.add(new Query.FromElement("tableB", null, null));
         query.setFromClause(tables);
 
         UniqueList where = new UniqueList();

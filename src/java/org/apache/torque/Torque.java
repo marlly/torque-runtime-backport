@@ -2,13 +2,13 @@ package org.apache.torque;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,14 +28,9 @@ import org.apache.torque.map.DatabaseMap;
  * A static facade wrapper around the Torque implementation (which is in
  * {@link org.apache.torque.TorqueInstance}).
  * <br/>
- * For historical reasons this class also contains a thin object which can
- * be used to configure Torque. This is deprecated and will be removed in the 
- * future in favour of using Torque as an Avalon Component.
- *
- * @todo This class will be made abstract once Stratum is removed.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:magnus@handtolvur.is">Magnï¿½s ï¿½ï¿½r Torfason</a>
+ * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
@@ -43,7 +38,7 @@ import org.apache.torque.map.DatabaseMap;
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
-public class Torque
+public abstract class Torque
 {
     /**
      * Name of property that specifies the default map builder and map.
@@ -71,12 +66,6 @@ public class Torque
      * static API presented by this class.
      */
     private static TorqueInstance torqueSingleton = null;
-
-    /** 
-     * This is a member variable of Torque objects created by the Stratum
-     * lifecycle
-     */
-    private Configuration memberConfig = null;
 
     /**
      * C'tor for usage with the Stratum Lifecycle.
@@ -311,45 +300,31 @@ public class Torque
         getInstance().closeConnection(con);
     }
 
-    /*
-     * ========================================================================
-     *
-     * Stratum Lifecycle Interface (deprecated)
-     *
-     * ========================================================================
-     */
-
     /**
-     * configure torque
+     * Sets the current schema for a database connection
      *
-     * @param conf Configuration
+     * @param name The database name.
+     * @param schema The current schema name
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @deprecated 
      */
-    public void configure(Configuration conf) throws TorqueException
+    public static void setSchema(String name, String schema)
+            throws TorqueException
     {
-        this.memberConfig = conf;
+        getInstance().setSchema(name, schema);
     }
 
     /**
-     * initialize Torque
+     * This method returns the current schema for a database connection
      *
+     * @param name The database name.
+     * @return The current schema name. Null means, no schema has been set.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @deprecated 
      */
-    public void initialize() throws TorqueException
+    public static String getSchema(String name)
+        throws TorqueException
     {
-        getInstance().init(memberConfig);
-    }
-
-    /**
-     * Shuts down the service, Lifecycle style
-     * @deprecated 
-     */
-    public void dispose()
-    {
-        getInstance().shutdown();
+        return getInstance().getSchema(name);
     }
 }

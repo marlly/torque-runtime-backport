@@ -2,13 +2,13 @@ package org.apache.torque.util;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,12 +16,7 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -32,12 +27,11 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
@@ -73,9 +67,11 @@ import com.workingdogs.village.TableDataSet;
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class BasePeer implements java.io.Serializable
+public abstract class BasePeer 
+        implements Serializable
 {
     /** Constant criteria key to reference ORDER BY columns. */
     public static final String ORDER_BY = "ORDER BY";
@@ -95,96 +91,12 @@ public abstract class BasePeer implements java.io.Serializable
     /** the log */
     protected static Log log = LogFactory.getLog(BasePeer.class);
 
-    /**
-     * Converts a hashtable to a byte array for storage/serialization.
-     *
-     * @param hash The Hashtable to convert.
-     * @return A byte[] with the converted Hashtable.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public static byte[] hashtableToByteArray(Hashtable hash)
-        throws TorqueException
-    {
-        Hashtable saveData = new Hashtable(hash.size());
-        String key = null;
-        Object value = null;
-        byte[] byteArray = null;
-
-        Iterator keys = hash.keySet().iterator();
-        while (keys.hasNext())
-        {
-            key = (String) keys.next();
-            value = hash.get(key);
-            if (value instanceof Serializable)
-            {
-                saveData.put(key, value);
-            }
-        }
-
-        ByteArrayOutputStream baos = null;
-        BufferedOutputStream bos = null;
-        ObjectOutputStream out = null;
-        try
-        {
-            // These objects are closed in the finally.
-            baos = new ByteArrayOutputStream();
-            bos = new BufferedOutputStream(baos);
-            out = new ObjectOutputStream(bos);
-
-            out.writeObject(saveData);
-            out.flush();
-            bos.flush();
-            byteArray = baos.toByteArray();
-        }
-        catch (Exception e)
-        {
-            throwTorqueException(e);
-        }
-        finally
-        {
-            if (out != null)
-            {
-                try
-                {
-                    out.close();
-                }
-                catch (IOException ignored)
-                {
-                }
-            }
-
-            if (bos != null)
-            {
-                try
-                {
-                    bos.close();
-                }
-                catch (IOException ignored)
-                {
-                }
-            }
-
-            if (baos != null)
-            {
-                try
-                {
-                    baos.close();
-                }
-                catch (IOException ignored)
-                {
-                }
-            }
-        }
-        return byteArray;
-    }
-
     private static void throwTorqueException(Exception e)
         throws TorqueException
     {
         if (e instanceof TorqueException) 
         {
-            throw (TorqueException)e;
+            throw (TorqueException) e;
         }
         else 
         {
@@ -373,7 +285,7 @@ public abstract class BasePeer implements java.io.Serializable
         try
         {
             // Get a connection to the db.
-            con = Torque.getConnection("default");
+            con = Torque.getConnection(Torque.getDefaultDB());
             deleteAll(con, table, column, value);
         }
         finally
@@ -419,141 +331,60 @@ public abstract class BasePeer implements java.io.Serializable
     public static void doDelete(Criteria criteria, Connection con)
         throws TorqueException
     {
-        DB db = Torque.getDB(criteria.getDbName());
-        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
+        String dbName = criteria.getDbName();
+        final DB db = Torque.getDB(dbName);
+        final DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
-        // Set up a list of required tables and add extra entries to
-        // criteria if directed to delete all related records.
-        // StringStack.add() only adds element if it is unique.
-        HashSet tables = new HashSet();
-        Iterator it = criteria.keySet().iterator();
-        while (it.hasNext())
-        {
-            String key = (String) it.next();
-            Criteria.Criterion c = criteria.getCriterion(key);
-            List tableNames = c.getAllTables();
-            for (int i = 0; i < tableNames.size(); i++)
-            {
-                String name = (String) tableNames.get(i);
-                String tableName2 = criteria.getTableForAlias(name);
-                if (tableName2 != null)
+        // This Callback adds all tables to the Table set which 
+        // are referenced from a cascading criteria. As a result, all
+        // data that is referenced through foreign keys will also be
+        // deleted.
+        SQLBuilder.TableCallback tc = new SQLBuilder.TableCallback() {
+                public void process (Set tables, String key, Criteria crit)
                 {
-                    tables.add(new StringBuffer(
-                            name.length() + tableName2.length() + 1)
-                            .append(tableName2)
-                            .append(' ')
-                            .append(name)
-                            .toString());
-                }
-                else
-                {
-                    tables.add(name);
-                }
-            }
-
-            if (criteria.isCascade())
-            {
-                // This steps thru all the columns in the database.
-                TableMap[] tableMaps = dbMap.getTables();
-                for (int i = 0; i < tableMaps.length; i++)
-                {
-                    ColumnMap[] columnMaps = tableMaps[i].getColumns();
-                    for (int j = 0; j < columnMaps.length; j++)
+                    if (crit.isCascade())
                     {
-                        // Only delete rows where the foreign key is
-                        // also a primary key.  Other rows need
-                        // updating, but that is not implemented.
-                        if (columnMaps[j].isForeignKey()
-                            && columnMaps[j].isPrimaryKey()
-                            && key.equals(columnMaps[j].getRelatedName()))
+                        // This steps thru all the columns in the database.
+                        TableMap[] tableMaps = dbMap.getTables();
+                        for (int i = 0; i < tableMaps.length; i++)
                         {
-                            tables.add(tableMaps[i].getName());
-                            criteria.add(columnMaps[j].getFullyQualifiedName(),
-                                criteria.getValue(key));
+                            ColumnMap[] columnMaps = tableMaps[i].getColumns();
+
+                            for (int j = 0; j < columnMaps.length; j++)
+                            {
+                                // Only delete rows where the foreign key is
+                                // also a primary key.  Other rows need
+                                // updating, but that is not implemented.
+                                if (columnMaps[j].isForeignKey()
+                                        && columnMaps[j].isPrimaryKey()
+                                        && key.equals(columnMaps[j].getRelatedName()))
+                                {
+                                    tables.add(tableMaps[i].getName());
+                                    crit.add(columnMaps[j].getFullyQualifiedName(),
+                                            crit.getValue(key));
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-        Iterator tabIt = tables.iterator();
-        while (tabIt.hasNext())
+            };
+
+        Set tables = SQLBuilder.getTableSet(criteria, tc);
+
+        try
         {
-            String tab = (String) tabIt.next();
-            KeyDef kd = new KeyDef();
-            HashSet whereClause = new HashSet();
-
-            ColumnMap[] columnMaps = dbMap.getTable(tab).getColumns();
-            for (int j = 0; j < columnMaps.length; j++)
-            {
-                ColumnMap colMap = columnMaps[j];
-                if (colMap.isPrimaryKey())
-                {
-                    kd.addAttrib(colMap.getColumnName());
-                }
-                String key = new StringBuffer(colMap.getTableName())
-                        .append('.')
-                        .append(colMap.getColumnName())
-                        .toString();
-                if (criteria.containsKey(key))
-                {
-                    if (criteria.getComparison(key).equals(Criteria.CUSTOM))
+            processTables(criteria, tables, con, new ProcessCallback() {
+                    public void process(String table, String dbName, Record rec)
+                        throws Exception
                     {
-                        whereClause.add(criteria.getString(key));
+                        rec.markToBeDeleted();
+                        rec.save();
                     }
-                    else
-                    {
-                        whereClause.add(SqlExpression.build(
-                                colMap.getColumnName(),
-                                criteria.getValue(key),
-                                criteria.getComparison(key),
-                                criteria.isIgnoreCase(),
-                                db));
-                    }
-                }
-            }
-
-            // Execute the statement.
-            TableDataSet tds = null;
-            try
-            {
-                tds = new TableDataSet(con, tab, kd);
-                String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
-
-                if (log.isDebugEnabled())
-                {
-                    log.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
-                }
-
-                tds.where(sqlSnippet);
-                tds.fetchRecords();
-                if (tds.size() > 1 && criteria.isSingleRecord())
-                {
-                    handleMultipleRecords(tds);
-                }
-                for (int j = 0; j < tds.size(); j++)
-                {
-                    Record rec = tds.getRecord(j);
-                    rec.markToBeDeleted();
-                    rec.save();
-                }
-            }
-            catch (Exception e)
-            {
-                throwTorqueException(e);
-            }
-            finally
-            {
-                if (tds != null)
-                {
-                    try
-                    {
-                        tds.close();
-                    }
-                    catch (Exception ignored)
-                    {
-                    }
-                }
-            }
+                });
+        }
+        catch (Exception e)
+        {
+            throwTorqueException(e);
         }
     }
 
@@ -635,11 +466,11 @@ public abstract class BasePeer implements java.io.Serializable
 
         // Get the table name and method for determining the primary
         // key value.
-        String tableName = null;
+        String table = null;
         Iterator keys = criteria.keySet().iterator();
         if (keys.hasNext())
         {
-            tableName = criteria.getTableName((String) keys.next());
+            table = criteria.getTableName((String) keys.next());
         }
         else
         {
@@ -647,43 +478,29 @@ public abstract class BasePeer implements java.io.Serializable
                     + "anything specified to insert");
         }
 
-        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
-        TableMap tableMap = dbMap.getTable(tableName);
+        String dbName = criteria.getDbName();
+        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
+        TableMap tableMap = dbMap.getTable(table);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
         IdGenerator keyGen = tableMap.getIdGenerator();
 
         ColumnMap pk = getPrimaryKey(criteria);
 
-        // pk will be null if there is no primary key defined for the table
-        // we're inserting into.
-        if (pk != null && !criteria.containsKey(pk.getFullyQualifiedName()))
+        // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
+        // before the insert.
+        if (keyGen != null && keyGen.isPriorToInsert())
         {
-            if (keyGen == null)
+            // pk will be null if there is no primary key defined for the table
+            // we're inserting into.
+            if (pk != null && !criteria.containsKey(pk.getFullyQualifiedName()))
             {
-                throw new TorqueException(
-                    "IdGenerator for table '" + tableName + "' is null");
-            }
-            // If the keyMethod is SEQUENCE or IDBROKERTABLE, get the id
-            // before the insert.
-
-            if (keyGen.isPriorToInsert())
-            {
-                try
+                if (keyGen == null)
                 {
-                    if (pk.getType() instanceof Number)
-                    {
-                        id = new NumberKey(
-                                keyGen.getIdAsBigDecimal(con, keyInfo));
-                    }
-                    else
-                    {
-                        id = new StringKey(keyGen.getIdAsString(con, keyInfo));
-                    }
+                    throw new TorqueException(
+                            "IdGenerator for table '" + table + "' is null");
                 }
-                catch (Exception e)
-                {
-                    throwTorqueException(e);
-                }
+                
+                id = getId(pk, keyGen, con, keyInfo);
                 criteria.add(pk.getFullyQualifiedName(), id);
             }
         }
@@ -692,9 +509,11 @@ public abstract class BasePeer implements java.io.Serializable
         TableDataSet tds = null;
         try
         {
+            String tableName = SQLBuilder.getFullTableName(table, dbName);
             tds = new TableDataSet(con, tableName);
             Record rec = tds.addRecord();
-            BasePeer.insertOrUpdateRecord(rec, tableName, criteria);
+            // not the fully qualified name, insertOrUpdateRecord wants to use table as an index...
+            BasePeer.insertOrUpdateRecord(rec, table, dbName, criteria);
         }
         catch (Exception e)
         {
@@ -702,40 +521,54 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            if (tds != null)
-            {
-                try
-                {
-                    tds.close();
-                }
-                catch (Exception e)
-                {
-                    throwTorqueException(e);
-                }
-            }
+            VillageUtils.close(tds);
         }
 
         // If the primary key column is auto-incremented, get the id
         // now.
-        if (pk != null && keyGen != null && keyGen.isPostInsert())
+        if (keyGen != null && keyGen.isPostInsert())
         {
-            try
+            id = getId(pk, keyGen, con, keyInfo);
+        }
+
+        return id;
+    }
+
+    /**
+     * Create an Id for insertion in the Criteria
+     *
+     * @param pk ColumnMap for the Primary key
+     * @param keyGen The Id Generator object
+     * @param con The SQL Connection to run the id generation under
+     * @param keyInfo KeyInfo Parameter from the Table map
+     *
+     * @return A simple Key representing the new Id value
+     * @throws TorqueException Possible errors get wrapped in here.
+     */
+    private static SimpleKey getId(ColumnMap pk, IdGenerator keyGen, Connection con, Object keyInfo)
+            throws TorqueException
+    {
+        SimpleKey id = null;
+
+        try
+        {
+            if (pk != null && keyGen != null)
             {
                 if (pk.getType() instanceof Number)
                 {
-                    id = new NumberKey(keyGen.getIdAsBigDecimal(con, keyInfo));
+                    id = new NumberKey(
+                            keyGen.getIdAsBigDecimal(con, keyInfo));
                 }
                 else
                 {
                     id = new StringKey(keyGen.getIdAsString(con, keyInfo));
                 }
             }
-            catch (Exception e)
-            {
-                throwTorqueException(e);
-            }
         }
-
+        catch (Exception e)
+        {
+            throwTorqueException(e);
+        }
         return id;
     }
 
@@ -744,106 +577,41 @@ public abstract class BasePeer implements java.io.Serializable
      * methods.  Sets up a Record for saving.
      *
      * @param rec A Record.
-     * @param tableName Name of table.
+     * @param table Name of table.
      * @param criteria A Criteria.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
     private static void insertOrUpdateRecord(
         Record rec,
-        String tableName,
+        String table,
+        String dbName,
         Criteria criteria)
         throws TorqueException
     {
-        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
+        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
-        ColumnMap[] columnMaps = dbMap.getTable(tableName).getColumns();
+        ColumnMap[] columnMaps = dbMap.getTable(table).getColumns();
         boolean shouldSave = false;
         for (int j = 0; j < columnMaps.length; j++)
         {
             ColumnMap colMap = columnMaps[j];
+            String colName = colMap.getColumnName();
             String key = new StringBuffer(colMap.getTableName())
                     .append('.')
-                    .append(colMap.getColumnName())
+                    .append(colName)
                     .toString();
             if (criteria.containsKey(key))
             {
-                // A village Record.setValue( String, Object ) would
-                // be nice here.
-                Object obj = criteria.getValue(key);
-                if (obj instanceof SimpleKey)
-                {
-                    obj = ((SimpleKey) obj).getValue();
-                }
                 try
                 {
-                    if (obj == null)
-                    {
-                        rec.setValueNull(colMap.getColumnName());
-                    }
-                    else if (obj instanceof String)
-                    {
-                        rec.setValue(colMap.getColumnName(), (String) obj);
-                    }
-                    else if (obj instanceof Integer)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                                criteria.getInt(key));
-                    }
-                    else if (obj instanceof BigDecimal)
-                    {
-                        rec.setValue(colMap.getColumnName(), (BigDecimal) obj);
-                    }
-                    else if (obj instanceof Boolean)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            criteria.getBoolean(key) ? 1 : 0);
-                    }
-                    else if (obj instanceof java.util.Date)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            (java.util.Date) obj);
-                    }
-                    else if (obj instanceof Float)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            criteria.getFloat(key));
-                    }
-                    else if (obj instanceof Double)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            criteria.getDouble(key));
-                    }
-                    else if (obj instanceof Byte)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            ((Byte) obj).byteValue());
-                    }
-                    else if (obj instanceof Long)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            criteria.getLong(key));
-                    }
-                    else if (obj instanceof Short)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            ((Short) obj).shortValue());
-                    }
-                    else if (obj instanceof Hashtable)
-                    {
-                        rec.setValue(colMap.getColumnName(),
-                            hashtableToByteArray((Hashtable) obj));
-                    }
-                    else if (obj instanceof byte[])
-                    {
-                        rec.setValue(colMap.getColumnName(), (byte[]) obj);
-                    }
+                    VillageUtils.setVillageValue(criteria, key, rec, colName);
+                    shouldSave = true;
                 }
                 catch (Exception e)
                 {
                     throwTorqueException(e);
                 }
-                shouldSave = true;
             }
         }
 
@@ -879,100 +647,6 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Build Oracle-style query with limit or offset.
-     * If the original SQL is in variable: query then the requlting
-     * SQL looks like this:
-     * <pre>
-     * SELECT B.* FROM (
-     *          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
-     *                  query
-     *          ) A
-     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
-     *     <= offset + limit
-     * </pre>
-     * 
-     * @param query the query
-     * @param limit 
-     * @param offset
-     * @return oracle-style query
-     */ 
-    private static String createOracleLimitOffsetQuery(Query query, 
-            int limit, int offset)
-    {
-        StringBuffer buf = new StringBuffer();
-        buf.append("SELECT B.* FROM ( ");
-        buf.append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
-
-        buf.append(query.toString());
-        buf.append(" ) A ");
-        buf.append(" ) B WHERE ");
-
-        if (offset > 0)
-        {
-            buf.append(" B.TORQUE$ROWNUM > ");
-            buf.append(offset);
-            if (limit > 0)
-            {
-                buf.append(" AND B.TORQUE$ROWNUM <= ");
-                buf.append(offset + limit);
-            }
-        }
-        else
-        {
-            buf.append(" B.TORQUE$ROWNUM <= ");
-            buf.append(limit);
-        }
-        return buf.toString();
-    }
-
-    /**
-     * Build DB2 (OLAP) -style query with limit or offset.
-     * If the original SQL is in variable: query then the requlting
-     * SQL looks like this:
-     * <pre>
-     * SELECT B.* FROM (
-     *          SELECT A.*, row_number() over() as TORQUE$ROWNUM FROM (
-     *                  query
-     *          ) A
-     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
-     *     <= offset + limit
-     * </pre>
-     * 
-     * @param query the query
-     * @param limit 
-     * @param offset
-     * @return oracle-style query
-     */ 
-    private static String createDB2LimitOffsetQuery(Query query, 
-            int limit, int offset)
-    {
-        StringBuffer buf = new StringBuffer();
-        buf.append("SELECT B.* FROM ( ");
-        buf.append("SELECT A.*, row_number() over() AS TORQUE$ROWNUM FROM ( ");
-
-        buf.append(query.toString());
-        buf.append(" ) A ");
-        buf.append(" ) B WHERE ");
-
-        if (offset > 0)
-        {
-            buf.append(" B.TORQUE$ROWNUM > ");
-            buf.append(offset);
-            if (limit > 0)
-            {
-                buf.append(" AND B.TORQUE$ROWNUM <= ");
-                buf.append(offset + limit);
-            }
-        }
-        else
-        {
-            buf.append(" B.TORQUE$ROWNUM <= ");
-            buf.append(limit);
-        }
-        return buf.toString();
-    }
-
-    /**
      * Method to create an SQL query for actual execution based on values in a
      * Criteria.
      *
@@ -984,51 +658,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         Query query = createQuery(criteria);
-        DB db = Torque.getDB(criteria.getDbName());
-
-        // Limit the number of rows returned.
-        int limit = criteria.getLimit();
-        int offset = criteria.getOffset();
-
-        String sql = null;
-        if (limit > 0 || offset > 0)
-        {
-            if (db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
-            {
-                sql = createOracleLimitOffsetQuery(query, limit, offset);
-                criteria.setLimit(-1);
-                criteria.setOffset(0);
-            } 
-            else if (db.getLimitStyle() == DB.LIMIT_STYLE_DB2)
-            {
-                sql = createDB2LimitOffsetQuery(query, limit, offset);
-                criteria.setLimit(-1);
-                criteria.setOffset(0);
-            }
-        }
-        else
-        {
-            if (offset > 0 && db.supportsNativeOffset())
-            {
-                // Now set the criteria's limit and offset to return the
-                // full resultset since the results are limited on the
-                // server.
-                criteria.setLimit(-1);
-                criteria.setOffset(0);
-            }
-            else if (limit > 0 && db.supportsNativeLimit())
-            {
-                // Now set the criteria's limit to return the full
-                // resultset since the results are limited on the server.
-                criteria.setLimit(-1);
-            }
-            sql = query.toString();
-        }
-        if (log.isDebugEnabled())
-        {
-            log.debug(sql);
-        }
-        return sql;
+        return query.toString();
     }
 
     /**
@@ -1043,318 +673,12 @@ public abstract class BasePeer implements java.io.Serializable
     static Query createQuery(Criteria criteria)
         throws TorqueException
     {
-        Query query = new Query();
-        DB db = Torque.getDB(criteria.getDbName());
-        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
-
-        UniqueList selectModifiers = query.getSelectModifiers();
-        UniqueList selectClause = query.getSelectClause();
-        UniqueList fromClause = query.getFromClause();
-        UniqueList whereClause = query.getWhereClause();
-        UniqueList orderByClause = query.getOrderByClause();
-        UniqueList groupByClause = query.getGroupByClause();
-
-        UniqueList orderBy = criteria.getOrderByColumns();
-        UniqueList groupBy = criteria.getGroupByColumns();
-        UniqueList select = criteria.getSelectColumns();
-        Hashtable aliases = criteria.getAsColumns();
-        UniqueList modifiers = criteria.getSelectModifiers();
-
-        for (int i = 0; i < modifiers.size(); i++)
-        {
-            selectModifiers.add(modifiers.get(i));
-        }
-
-        for (int i = 0; i < select.size(); i++)
-        {
-            String columnName = (String) select.get(i);
-            if (columnName.indexOf('.') == -1  && columnName.indexOf('*') == -1)
-            {
-                throwMalformedColumnNameException("select", columnName);
-            }
-            String tableName = null;
-            selectClause.add(columnName);
-            int parenPos = columnName.indexOf('(');
-            if (parenPos == -1)
-            {
-                tableName = columnName.substring(0, columnName.indexOf('.'));
-            }
-            else if (columnName.indexOf('.') > -1)
-            {
-                tableName =
-                    columnName.substring(parenPos + 1, columnName.indexOf('.'));
-                // functions may contain qualifiers so only take the last
-                // word as the table name.
-                int lastSpace = tableName.lastIndexOf(' ');
-                if (lastSpace != -1)
+        return SQLBuilder.buildQueryClause(criteria, null, new SQLBuilder.QueryCallback() {
+                public String process(Criteria.Criterion criterion, List params)
                 {
-                    tableName = tableName.substring(lastSpace + 1);
+                    return criterion.toString();
                 }
-            }
-            String tableName2 = criteria.getTableForAlias(tableName);
-            if (tableName2 != null)
-            {
-                fromClause.add(new StringBuffer(
-                        tableName.length() + tableName2.length() + 1)
-                        .append(tableName2)
-                        .append(' ')
-                        .append(tableName)
-                        .toString());
-            }
-            else
-            {
-                fromClause.add(tableName);
-            }
-        }
-
-        Iterator it = aliases.keySet().iterator();
-        while (it.hasNext())
-        {
-            String key = (String) it.next();
-            selectClause.add((String) aliases.get(key) + " AS " + key);
-        }
-
-        Iterator critKeys = criteria.keySet().iterator();
-        while (critKeys.hasNext())
-        {
-            String key = (String) critKeys.next();
-            Criteria.Criterion criterion = criteria.getCriterion(key);
-            Criteria.Criterion[] someCriteria =
-                criterion.getAttachedCriterion();
-            String table = null;
-            for (int i = 0; i < someCriteria.length; i++)
-            {
-                String tableName = someCriteria[i].getTable();
-                table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(
-                            tableName.length() + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                    table = tableName;
-                }
-
-                boolean ignorCase = ((criteria.isIgnoreCase()
-                        || someCriteria[i].isIgnoreCase())
-                        && (dbMap
-                            .getTable(table)
-                            .getColumn(someCriteria[i].getColumn())
-                            .getType()
-                            instanceof String));
-
-                someCriteria[i].setIgnoreCase(ignorCase);
-            }
-
-            criterion.setDB(db);
-            whereClause.add(criterion.toString());
-        }
-
-        List join = criteria.getJoinL();
-        if (join != null)
-        {
-            for (int i = 0; i < join.size(); i++)
-            {
-                String join1 = (String) join.get(i);
-                String join2 = (String) criteria.getJoinR().get(i);
-                if (join1.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("join", join1);
-                }
-                if (join2.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("join", join2);
-                }
-
-                String tableName = join1.substring(0, join1.indexOf('.'));
-                String table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(
-                            tableName.length() + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                }
-
-                int dot = join2.indexOf('.');
-                tableName = join2.substring(0, dot);
-                table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(
-                            tableName.length() + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                    table = tableName;
-                }
-
-                boolean ignorCase = (criteria.isIgnoreCase()
-                        && (dbMap
-                            .getTable(table)
-                            .getColumn(join2.substring(dot + 1, join2.length()))
-                            .getType()
-                            instanceof String));
-
-                whereClause.add(
-                    SqlExpression.buildInnerJoin(join1, join2, ignorCase, db));
-            }
-        }
-
-        // need to allow for multiple group bys
-        if (groupBy != null && groupBy.size() > 0)
-        {
-            for (int i = 0; i < groupBy.size(); i++)
-            {
-                String groupByColumn = (String) groupBy.get(i);
-                if (groupByColumn.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("group by",
-                            groupByColumn);
-                }
-                groupByClause.add(groupByColumn);
-            }
-        }
-
-        Criteria.Criterion having = criteria.getHaving();
-        if (having != null)
-        {
-            //String groupByString = null;
-            query.setHaving(having.toString());
-        }
-
-        if (orderBy != null && orderBy.size() > 0)
-        {
-            // Check for each String/Character column and apply
-            // toUpperCase().
-            for (int i = 0; i < orderBy.size(); i++)
-            {
-                String orderByColumn = (String) orderBy.get(i);
-                if (orderByColumn.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("order by",
-                            orderByColumn);
-                }
-                String tableName =
-                    orderByColumn.substring(0, orderByColumn.indexOf('.'));
-                String table = criteria.getTableForAlias(tableName);
-                if (table == null)
-                {
-                    table = tableName;
-                }
-
-                // See if there's a space (between the column list and sort
-                // order in ORDER BY table.column DESC).
-                int spacePos = orderByColumn.indexOf(' ');
-                String columnName;
-                if (spacePos == -1)
-                {
-                    columnName =
-                        orderByColumn.substring(orderByColumn.indexOf('.') + 1);
-                }
-                else
-                {
-                    columnName = orderByColumn.substring(
-                            orderByColumn.indexOf('.') + 1, spacePos);
-                }
-                ColumnMap column = dbMap.getTable(table).getColumn(columnName);
-                if (column.getType() instanceof String)
-                {
-                    if (spacePos == -1)
-                    {
-                        orderByClause.add(
-                                db.ignoreCaseInOrderBy(orderByColumn));
-                    }
-                    else
-                    {
-                        orderByClause.add(db.ignoreCaseInOrderBy(
-                                orderByColumn.substring(0, spacePos))
-                                + orderByColumn.substring(spacePos));
-                    }
-                    selectClause.add(
-                        db.ignoreCaseInOrderBy(table + '.' + columnName));
-                }
-                else
-                {
-                    orderByClause.add(orderByColumn);
-                }
-            }
-        }
-
-        // Limit the number of rows returned.
-        int limit = criteria.getLimit();
-        int offset = criteria.getOffset();
-        String limitString = null;
-        if (offset > 0 && db.supportsNativeOffset())
-        {
-            switch (db.getLimitStyle())
-            {
-                case DB.LIMIT_STYLE_MYSQL :
-                    limitString = new StringBuffer()
-                            .append(offset)
-                            .append(", ")
-                            .append(limit)
-                            .toString();
-                    break;
-                case DB.LIMIT_STYLE_POSTGRES :
-                    limitString = new StringBuffer()
-                            .append(limit)
-                            .append(" offset ")
-                            .append(offset)
-                            .toString();
-                    break;
-            }
-
-            // The following is now done in createQueryString() to enable this
-            // method to be used as part of Criteria.toString() without altering
-            // the criteria itself.  The commented code is retained here to
-            // make it easier to understand how the criteria is built into a
-            // query.
-
-            // Now set the criteria's limit and offset to return the
-            // full resultset since the results are limited on the
-            // server.
-            //criteria.setLimit(-1);
-            //criteria.setOffset(0);
-        }
-        else if (limit > 0 && db.supportsNativeLimit()
-                 && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
-        {
-            limitString = String.valueOf(limit);
-
-            // The following is now done in createQueryString() to enable this
-            // method to be used as part of Criteria.toString() without altering
-            // the criteria itself.  The commented code is retained here to
-            // make it easier to understand how the criteria is built into a
-            // query.
-
-            // Now set the criteria's limit to return the full
-            // resultset since the results are limited on the server.
-            //criteria.setLimit(-1);
-        }
-
-        if (limitString != null)
-        {
-            query.setLimit(limitString);
-        }
-        return query;
+            });
     }
 
     /**
@@ -1378,10 +702,10 @@ public abstract class BasePeer implements java.io.Serializable
             results = doSelect(criteria, con);
             Transaction.commit(con);
         }
-        catch (Exception e)
+        catch (TorqueException e)
         {
             Transaction.safeRollback(con);
-            throwTorqueException(e);
+            throw e;
         }
         return results;
     }
@@ -1398,12 +722,27 @@ public abstract class BasePeer implements java.io.Serializable
     public static List doSelect(Criteria criteria, Connection con)
         throws TorqueException
     {
-        return executeQuery(
-            createQueryString(criteria),
-            criteria.getOffset(),
-            criteria.getLimit(),
-            criteria.isSingleRecord(),
-            con);
+        Query query = createQuery(criteria);
+
+        if (query.hasLimit())
+        {
+            // We don't need Village to limit the Query
+            return executeQuery(query.toString(),
+                    0,
+                    -1,
+                    criteria.isSingleRecord(),
+                    con);
+        }
+        else
+        {
+            // There is no limit string registered
+            // with the query. Let Village decide.
+            return executeQuery(query.toString(),
+                    criteria.getOffset(),
+                    criteria.getLimit(),
+                    criteria.isSingleRecord(),
+                    con);
+        }
     }
 
     /**
@@ -1499,22 +838,22 @@ public abstract class BasePeer implements java.io.Serializable
         boolean singleRecord)
         throws TorqueException
     {
-        Connection db = null;
+        Connection con = null;
         List results = null;
         try
         {
-            db = Torque.getConnection(dbName);
+            con = Torque.getConnection(dbName);
             // execute the query
             results = executeQuery(
                     queryString,
                     start,
                     numberOfResults,
                     singleRecord,
-                    db);
+                    con);
         }
         finally
         {
-            Torque.closeConnection(db);
+            Torque.closeConnection(con);
         }
         return results;
     }
@@ -1561,16 +900,7 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            if (qds != null)
-            {
-                try
-                {
-                    qds.close();
-                }
-                catch (Exception ignored)
-                {
-                }
-            }
+            VillageUtils.close(qds);
         }
         return results;
     }
@@ -1840,8 +1170,9 @@ public abstract class BasePeer implements java.io.Serializable
         Connection con = null;
         try
         {
-            con = Transaction.beginOptional(selectCriteria.getDbName(),
-                                            updateValues.isUseTransaction());
+            con = Transaction.beginOptional(
+                    selectCriteria.getDbName(),
+                    updateValues.isUseTransaction());
             doUpdate(selectCriteria, updateValues, con);
             Transaction.commit(con);
         }
@@ -1854,14 +1185,14 @@ public abstract class BasePeer implements java.io.Serializable
 
     /**
      * Method used to update rows in the DB.  Rows are selected based
-     * on selectCriteria and updated using values in updateValues.
+     * on criteria and updated using values in updateValues.
      * <p>
      * Use this method for performing an update of the kind:
      * <p>
      * WHERE some_column = some value AND could_have_another_column =
      * another value AND so on.
      *
-     * @param selectCriteria A Criteria object containing values used in where
+     * @param criteria A Criteria object containing values used in where
      *        clause.
      * @param updateValues A Criteria object containing values used in set
      *        clause.
@@ -1870,104 +1201,31 @@ public abstract class BasePeer implements java.io.Serializable
      *         rethrown wrapped into a TorqueException.
      */
     public static void doUpdate(
-        Criteria selectCriteria,
-        Criteria updateValues,
+        Criteria criteria,
+        final Criteria updateValues,
         Connection con)
         throws TorqueException
     {
-        DB db = Torque.getDB(selectCriteria.getDbName());
-        DatabaseMap dbMap = Torque.getDatabaseMap(selectCriteria.getDbName());
+        String dbName = criteria.getDbName();
+        DB db = Torque.getDB(dbName);
+        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
-        // Set up a list of required tables. StringStack.add()
-        // only adds element if it is unique.
-        HashSet tables = new HashSet();
-        Iterator it = selectCriteria.keySet().iterator();
-        while (it.hasNext())
+        Set tables = SQLBuilder.getTableSet(criteria, null);
+
+        try
         {
-            tables.add(selectCriteria.getTableName((String) it.next()));
+            processTables(criteria, tables, con, new ProcessCallback() {
+                    public void process (String table, String dbName, Record rec)
+                        throws Exception
+                    {
+                        // Callback must be called with table name without Schema!
+                        BasePeer.insertOrUpdateRecord(rec, table, dbName, updateValues);
+                    }
+                });
         }
-
-        Iterator tabIt = tables.iterator();
-        while (tabIt.hasNext())
+        catch (Exception e)
         {
-            String tab = (String) tabIt.next();
-            KeyDef kd = new KeyDef();
-            HashSet whereClause = new HashSet();
-            DatabaseMap tempDbMap = dbMap;
-
-            ColumnMap[] columnMaps = tempDbMap.getTable(tab).getColumns();
-            for (int j = 0; j < columnMaps.length; j++)
-            {
-                ColumnMap colMap = columnMaps[j];
-                if (colMap.isPrimaryKey())
-                {
-                    kd.addAttrib(colMap.getColumnName());
-                }
-                String key = new StringBuffer(colMap.getTableName())
-                        .append('.')
-                        .append(colMap.getColumnName())
-                        .toString();
-                if (selectCriteria.containsKey(key))
-                {
-                    if (selectCriteria
-                        .getComparison(key)
-                        .equals(Criteria.CUSTOM))
-                    {
-                        whereClause.add(selectCriteria.getString(key));
-                    }
-                    else
-                    {
-                        whereClause.add(
-                            SqlExpression.build(
-                                colMap.getColumnName(),
-                                selectCriteria.getValue(key),
-                                selectCriteria.getComparison(key),
-                                selectCriteria.isIgnoreCase(),
-                                db));
-                    }
-                }
-            }
-            TableDataSet tds = null;
-            try
-            {
-                // Get affected records.
-                tds = new TableDataSet(con, tab, kd);
-                String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
-                if (log.isDebugEnabled())
-                {
-                    log.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
-                }
-                tds.where(sqlSnippet);
-                tds.fetchRecords();
-
-                if (tds.size() > 1 && selectCriteria.isSingleRecord())
-                {
-                    handleMultipleRecords(tds);
-                }
-                for (int j = 0; j < tds.size(); j++)
-                {
-                    Record rec = tds.getRecord(j);
-                    BasePeer.insertOrUpdateRecord(rec, tab, updateValues);
-                }
-            }
-            catch (Exception e)
-            {
-                throwTorqueException(e);
-            }
-            finally
-            {
-                if (tds != null)
-                {
-                    try
-                    {
-                        tds.close();
-                    }
-                    catch (Exception e)
-                    {
-                        throwTorqueException(e);
-                    }
-                }
-            }
+            throwTorqueException(e);
         }
     }
 
@@ -1976,14 +1234,14 @@ public abstract class BasePeer implements java.io.Serializable
      * method should be used for update, insert, and delete
      * statements.  Use executeQuery() for selects.
      *
-     * @param stmt A String with the sql statement to execute.
+     * @param statementString A String with the sql statement to execute.
      * @return The number of rows affected.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static int executeStatement(String stmt) throws TorqueException
+    public static int executeStatement(String statementString) throws TorqueException
     {
-        return executeStatement(stmt, Torque.getDefaultDB());
+        return executeStatement(statementString, Torque.getDefaultDB());
     }
 
     /**
@@ -1991,25 +1249,25 @@ public abstract class BasePeer implements java.io.Serializable
      * method should be used for update, insert, and delete
      * statements.  Use executeQuery() for selects.
      *
-     * @param stmt A String with the sql statement to execute.
+     * @param statementString A String with the sql statement to execute.
      * @param dbName Name of database to connect to.
      * @return The number of rows affected.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static int executeStatement(String stmt, String dbName)
+    public static int executeStatement(String statementString, String dbName)
         throws TorqueException
     {
-        Connection db = null;
+        Connection con = null;
         int rowCount = -1;
         try
         {
-            db = Torque.getConnection(dbName);
-            rowCount = executeStatement(stmt, db);
+            con = Torque.getConnection(dbName);
+            rowCount = executeStatement(statementString, con);
         }
         finally
         {
-            Torque.closeConnection(db);
+            Torque.closeConnection(con);
         }
         return rowCount;
     }
@@ -2019,13 +1277,13 @@ public abstract class BasePeer implements java.io.Serializable
      * method should be used for update, insert, and delete
      * statements.  Use executeQuery() for selects.
      *
-     * @param stmt A String with the sql statement to execute.
+     * @param statementString A String with the sql statement to execute.
      * @param con A Connection.
      * @return The number of rows affected.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static int executeStatement(String stmt, Connection con)
+    public static int executeStatement(String statementString, Connection con)
         throws TorqueException
     {
         int rowCount = -1;
@@ -2033,7 +1291,7 @@ public abstract class BasePeer implements java.io.Serializable
         try
         {
             statement = con.createStatement();
-            rowCount = statement.executeUpdate(stmt);
+            rowCount = statement.executeUpdate(statementString);
         }
         catch (SQLException e)
         {
@@ -2085,59 +1343,54 @@ public abstract class BasePeer implements java.io.Serializable
      */
     public static MapBuilder getMapBuilder(String name)
     {
-        try
+        synchronized (mapBuilders)
         {
-            MapBuilder mb = (MapBuilder) mapBuilders.get(name);
-            // Use the 'double-check pattern' for syncing
-            //  caching of the MapBuilder.
-            if (mb == null)
+            try
             {
-                synchronized (mapBuilders)
-                {
-                    mb = (MapBuilder) mapBuilders.get(name);
-                    if (mb == null)
-                    {
-                        mb = (MapBuilder) Class.forName(name).newInstance();
-                        // Cache the MapBuilder before it is built.
-                        mapBuilders.put(name, mb);
-                    }
-                }
-            }
+                MapBuilder mb = (MapBuilder) mapBuilders.get(name);
 
-            // Build the MapBuilder in its own synchronized block to
-            //  avoid locking up the whole Hashtable while doing so.
-            // Note that *all* threads need to do a sync check on isBuilt()
-            //  to avoid grabing an uninitialized MapBuilder. This, however,
-            //  is a relatively fast operation.
-            synchronized (mb)
-            {
-                if (!mb.isBuilt())
+                if (mb == null)
                 {
-                    try
-                    {
-                        mb.doBuild();
-                    }
-                    catch (Exception e)
-                    {
-                        // need to think about whether we'd want to remove
-                        //  the MapBuilder from the cache if it can't be
-                        //  built correctly...?  pgo
-                        throw e;
-                    }
+                    mb = (MapBuilder) Class.forName(name).newInstance();
+                    // Cache the MapBuilder before it is built.
+                    mapBuilders.put(name, mb);
                 }
+
+                // Build the MapBuilder in its own synchronized block to
+                //  avoid locking up the whole Hashtable while doing so.
+                // Note that *all* threads need to do a sync check on isBuilt()
+                //  to avoid grabing an uninitialized MapBuilder. This, however,
+                //  is a relatively fast operation.
+
+                if (mb.isBuilt())
+                {
+                    return mb;
+                }
+
+                try
+                {
+                    mb.doBuild();
+                }
+                catch (Exception e)
+                {
+                    // need to think about whether we'd want to remove
+                    //  the MapBuilder from the cache if it can't be
+                    //  built correctly...?  pgo
+                    throw e;
+                }
+
+                return mb;
             }
-            return mb;
+            catch (Exception e)
+            {
+                // Have to catch possible exceptions because method is
+                // used in initialization of Peers.  Log the exception and
+                // return null.
+                log.error("BasePeer.MapBuilder failed trying to instantiate: " 
+                        + name, e);
+            }
+            return null;
         }
-        catch (Exception e)
-        {
-            // Have to catch possible exceptions because method is
-            // used in initialization of Peers.  Log the exception and
-            // return null.
-            String message =
-                "BasePeer.MapBuilder failed trying to instantiate: " + name;
-            log.error(message, e);
-        }
-        return null;
     }
 
     /**
@@ -2159,41 +1412,38 @@ public abstract class BasePeer implements java.io.Serializable
 
         createPreparedStatement(criteria, qry, params);
 
-        PreparedStatement stmt = null;
+        PreparedStatement statement = null;
         try
         {
-            stmt = con.prepareStatement(qry.toString());
+            statement = con.prepareStatement(qry.toString());
 
             for (int i = 0; i < params.size(); i++)
             {
                 Object param = params.get(i);
                 if (param instanceof java.sql.Date)
                 {
-                    stmt.setDate(i + 1, (java.sql.Date) param);
+                    statement.setDate(i + 1, (java.sql.Date) param);
                 }
                 else if (param instanceof NumberKey)
                 {
-                    stmt.setBigDecimal(i + 1,
+                    statement.setBigDecimal(i + 1,
                         ((NumberKey) param).getBigDecimal());
                 }
                 else
                 {
-                    stmt.setString(i + 1, param.toString());
+                    statement.setString(i + 1, param.toString());
                 }
             }
 
             QueryDataSet qds = null;
             try
             {
-                qds = new QueryDataSet(stmt.executeQuery());
+                qds = new QueryDataSet(statement.executeQuery());
                 v = getSelectResults(qds);
             }
             finally
             {
-                if (qds != null)
-                {
-                    qds.close();
-                }
+                VillageUtils.close(qds);
             }
         }
         catch (Exception e)
@@ -2202,11 +1452,11 @@ public abstract class BasePeer implements java.io.Serializable
         }
         finally
         {
-            if (stmt != null)
+            if (statement != null)
             {
                 try
                 {
-                    stmt.close();
+                    statement.close();
                 }
                 catch (SQLException e)
                 {
@@ -2257,342 +1507,133 @@ public abstract class BasePeer implements java.io.Serializable
         List params)
         throws TorqueException
     {
-        DB db = Torque.getDB(criteria.getDbName());
-        DatabaseMap dbMap = Torque.getDatabaseMap(criteria.getDbName());
-
-        Query query = new Query();
-
-        UniqueList selectModifiers = query.getSelectModifiers();
-        UniqueList selectClause = query.getSelectClause();
-        UniqueList fromClause = query.getFromClause();
-        UniqueList whereClause = query.getWhereClause();
-        UniqueList orderByClause = query.getOrderByClause();
-
-        UniqueList orderBy = criteria.getOrderByColumns();
-        UniqueList select = criteria.getSelectColumns();
-        Hashtable aliases = criteria.getAsColumns();
-        UniqueList modifiers = criteria.getSelectModifiers();
-
-        for (int i = 0; i < modifiers.size(); i++)
-        {
-            selectModifiers.add(modifiers.get(i));
-        }
-
-        for (int i = 0; i < select.size(); i++)
-        {
-            String columnName = (String) select.get(i);
-            if (columnName.indexOf('.') == -1)
-            {
-                throwMalformedColumnNameException("select", columnName);
-            }
-            String tableName = null;
-            selectClause.add(columnName);
-            int parenPos = columnName.indexOf('(');
-            if (parenPos == -1)
-            {
-                tableName = columnName.substring(0, columnName.indexOf('.'));
-            }
-            else
-            {
-                tableName =
-                    columnName.substring(parenPos + 1, columnName.indexOf('.'));
-                // functions may contain qualifiers so only take the last
-                // word as the table name.
-                int lastSpace = tableName.lastIndexOf(' ');
-                if (lastSpace != -1)
+        Query query = SQLBuilder.buildQueryClause(criteria, params, new SQLBuilder.QueryCallback() {
+                public String process(Criteria.Criterion criterion, List params)
                 {
-                    tableName = tableName.substring(lastSpace + 1);
+                    StringBuffer sb = new StringBuffer();
+                    criterion.appendPsTo(sb, params);
+                    return sb.toString();
                 }
-            }
-            String tableName2 = criteria.getTableForAlias(tableName);
-            if (tableName2 != null)
-            {
-                fromClause.add(new StringBuffer(tableName.length()
-                        + tableName2.length() + 1)
-                        .append(tableName2)
-                        .append(' ')
-                        .append(tableName)
-                        .toString());
-            }
-            else
-            {
-                fromClause.add(tableName);
-            }
-        }
+            });
 
-        Iterator it = aliases.keySet().iterator();
-        while (it.hasNext())
-        {
-            String key = (String) it.next();
-            selectClause.add((String) aliases.get(key) + " AS " + key);
-        }
+        String sql = query.toString();
+        log.debug(sql);
 
-        Iterator critKeys = criteria.keySet().iterator();
-        while (critKeys.hasNext())
-        {
-            String key = (String) critKeys.next();
-            Criteria.Criterion criterion = criteria.getCriterion(key);
-            Criteria.Criterion[] someCriteria =
-                criterion.getAttachedCriterion();
-
-            String table = null;
-            for (int i = 0; i < someCriteria.length; i++)
-            {
-                String tableName = someCriteria[i].getTable();
-                table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(tableName.length()
-                            + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                    table = tableName;
-                }
-
-                boolean ignorCase = ((criteria.isIgnoreCase()
-                        || someCriteria[i].isIgnoreCase())
-                        && (dbMap
-                            .getTable(table)
-                            .getColumn(someCriteria[i].getColumn())
-                            .getType()
-                            instanceof String));
-
-                someCriteria[i].setIgnoreCase(ignorCase);
-            }
-
-            criterion.setDB(db);
-            StringBuffer sb = new StringBuffer();
-            criterion.appendPsTo(sb, params);
-            whereClause.add(sb.toString());
-        }
-
-        List join = criteria.getJoinL();
-        if (join != null)
-        {
-            for (int i = 0; i < join.size(); i++)
-            {
-                String join1 = (String) join.get(i);
-                String join2 = (String) criteria.getJoinR().get(i);
-                if (join1.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("join", join1);
-                }
-                if (join2.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("join", join2);
-                }
-
-                String tableName = join1.substring(0, join1.indexOf('.'));
-                String table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(tableName.length()
-                            + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                }
-
-                int dot = join2.indexOf('.');
-                tableName = join2.substring(0, dot);
-                table = criteria.getTableForAlias(tableName);
-                if (table != null)
-                {
-                    fromClause.add(new StringBuffer(tableName.length()
-                            + table.length() + 1)
-                            .append(table)
-                            .append(' ')
-                            .append(tableName)
-                            .toString());
-                }
-                else
-                {
-                    fromClause.add(tableName);
-                    table = tableName;
-                }
-
-                boolean ignorCase = (criteria.isIgnoreCase()
-                        && (dbMap
-                            .getTable(table)
-                            .getColumn(join2.substring(dot + 1, join2.length()))
-                            .getType()
-                            instanceof String));
-
-                whereClause.add(
-                    SqlExpression.buildInnerJoin(join1, join2, ignorCase, db));
-            }
-        }
-
-        if (orderBy != null && orderBy.size() > 0)
-        {
-            // Check for each String/Character column and apply
-            // toUpperCase().
-            for (int i = 0; i < orderBy.size(); i++)
-            {
-                String orderByColumn = (String) orderBy.get(i);
-                if (orderByColumn.indexOf('.') == -1)
-                {
-                    throwMalformedColumnNameException("order by",
-                        orderByColumn);
-                }
-                String table =
-                    orderByColumn.substring(0, orderByColumn.indexOf('.'));
-                // See if there's a space (between the column list and sort
-                // order in ORDER BY table.column DESC).
-                int spacePos = orderByColumn.indexOf(' ');
-                String columnName;
-                if (spacePos == -1)
-                {
-                    columnName =
-                        orderByColumn.substring(orderByColumn.indexOf('.') + 1);
-                }
-                else
-                {
-                    columnName = orderByColumn.substring(
-                            orderByColumn.indexOf('.') + 1,
-                            spacePos);
-                }
-                ColumnMap column = dbMap.getTable(table).getColumn(columnName);
-                if (column.getType() instanceof String)
-                {
-                    if (spacePos == -1)
-                    {
-                        orderByClause.add(
-                            db.ignoreCaseInOrderBy(orderByColumn));
-                    }
-                    else
-                    {
-                        orderByClause.add(db.ignoreCaseInOrderBy(
-                                orderByColumn.substring(0, spacePos))
-                                + orderByColumn.substring(spacePos));
-                    }
-                    selectClause.add(
-                        db.ignoreCaseInOrderBy(table + '.' + columnName));
-                }
-                else
-                {
-                    orderByClause.add(orderByColumn);
-                }
-            }
-        }
-
-        // Limit the number of rows returned.
-        int limit = criteria.getLimit();
-        int offset = criteria.getOffset();
-        String limitString = null;
-        if (offset > 0 && db.supportsNativeOffset()
-            && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
-        {
-            switch (db.getLimitStyle())
-            {
-                case DB.LIMIT_STYLE_MYSQL :
-                    limitString = new StringBuffer()
-                            .append(offset)
-                            .append(", ")
-                            .append(limit)
-                            .toString();
-                    break;
-                case DB.LIMIT_STYLE_POSTGRES :
-                    limitString = new StringBuffer()
-                            .append(limit)
-                            .append(" offset ")
-                            .append(offset)
-                            .toString();
-                    break;
-            }
-
-            // Now set the criteria's limit and offset to return the
-            // full resultset since the results are limited on the
-            // server.
-            criteria.setLimit(-1);
-            criteria.setOffset(0);
-        }
-        else if (limit > 0 && db.supportsNativeLimit()
-                 && db.getLimitStyle() != DB.LIMIT_STYLE_ORACLE)
-        {
-            limitString = String.valueOf(limit);
-
-            // Now set the criteria's limit to return the full
-            // resultset since the results are limited on the server.
-            criteria.setLimit(-1);
-        }
-
-        if (limitString != null)
-        {
-            switch (db.getLimitStyle())
-            {
-                    /* Don't have a Sybase install to validate this against(dlr)
-                    case DB.LIMIT_STYLE_SYBASE:
-                        query.setRowcount(limitString);
-                        break;
-                    */
-                default :
-                    query.setLimit(limitString);
-            }
-        }
-
-        String sql = null;
-        if (limit > 0 || offset > 0) 
-        {
-            if ( db.getLimitStyle() == DB.LIMIT_STYLE_ORACLE)
-            {
-                sql = createOracleLimitOffsetQuery(query, limit, offset);
-                criteria.setLimit(-1);
-                criteria.setOffset(0);
-            }
-            else if ( db.getLimitStyle() == DB.LIMIT_STYLE_DB2)
-            {
-                sql = createDB2LimitOffsetQuery(query, limit, offset);
-                criteria.setLimit(-1);
-                criteria.setOffset(0);
-            }
-        }
-        else
-        {
-            sql = query.toString();
-        }
-
-        if (log.isDebugEnabled())
-        {
-            log.debug(sql);
-        }
         queryString.append(sql);
     }
 
     /**
-     * Throws a TorqueException with the malformed column name error
-     * message.  The error message looks like this:<p>
+     * Process the result of a Table list generation. 
+     * This runs the statements onto the list of tables and
+     * provides a callback hook to add functionality.
      *
-     * <code>
-     *     Malformed column name in Criteria [criteriaPhrase]:
-     *     '[columnName]' is not of the form 'table.column'
-     * </code>
+     * This method should've been in SQLBuilder, but is uses the handleMultipleRecords callback thingie..
      *
-     * @param criteriaPhrase a String, one of "select", "join", or "order by"
-     * @param columnName a String containing the offending column name
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @param crit The criteria
+     * @param tables A set of Tables to run on
+     * @param con The SQL Connection to run the statements on
+     * @param pc A ProcessCallback object
+     *
+     * @throws Exception An Error occured (should be wrapped into TorqueException)
      */
-    private static void throwMalformedColumnNameException(
-        String criteriaPhrase,
-        String columnName)
-        throws TorqueException
+    private static void processTables(Criteria crit, Set tables, Connection con, ProcessCallback pc)
+            throws Exception
     {
-        throw new TorqueException("Malformed column name in Criteria "
-                + criteriaPhrase
-                + ": '"
-                + columnName
-                + "' is not of the form 'table.column'");
+        String dbName = crit.getDbName();
+        DB db = Torque.getDB(dbName);
+        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
+
+        // create the statements for the tables
+        for (Iterator it = tables.iterator(); it.hasNext(); )
+        {
+            String table = (String) it.next();
+            KeyDef kd = new KeyDef();
+            Set whereClause = new HashSet();
+
+            ColumnMap[] columnMaps = dbMap.getTable(table).getColumns();
+
+            for (int j = 0; j < columnMaps.length; j++)
+            {
+                ColumnMap colMap = columnMaps[j];
+                if (colMap.isPrimaryKey())
+                {
+                    kd.addAttrib(colMap.getColumnName());
+                }
+
+                String key = new StringBuffer(colMap.getTableName())
+                        .append('.')
+                        .append(colMap.getColumnName())
+                        .toString();
+
+                if (crit.containsKey(key))
+                {
+                    if (crit
+                            .getComparison(key)
+                            .equals(Criteria.CUSTOM))
+                    {
+                        whereClause.add(crit.getString(key));
+                    }
+                    else
+                    {
+                        whereClause.add(
+                                SqlExpression.build(
+                                        colMap.getColumnName(),
+                                        crit.getValue(key),
+                                        crit.getComparison(key),
+                                        crit.isIgnoreCase(),
+                                        db));
+                    }
+                }
+            }
+
+            // Execute the statement for each table
+            TableDataSet tds = null;
+            try
+            {
+                String tableName = SQLBuilder.getFullTableName(table, dbName);
+
+                // Get affected records.
+                tds = new TableDataSet(con, tableName, kd);
+                String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
+
+                if (log.isDebugEnabled())
+                {
+                    log.debug("BasePeer: whereClause=" + sqlSnippet);
+                }
+
+                tds.where(sqlSnippet);
+                tds.fetchRecords();
+
+                if (tds.size() > 1 && crit.isSingleRecord())
+                {
+                    handleMultipleRecords(tds);
+                }
+
+                for (int j = 0; j < tds.size(); j++)
+                {
+                    Record rec = tds.getRecord(j);
+
+                    if (pc != null)
+                    {
+                        // Table name _without_ schema!
+                        pc.process(table, dbName, rec);
+                    }
+                }
+            }
+            finally
+            {
+                VillageUtils.close(tds);
+            }
+        }
+    }
+    
+    /**
+     * Inner Interface that defines the Callback method for 
+     * the Record Processing
+     */
+    protected interface ProcessCallback
+    {
+        void process (String table, String dbName, Record rec)
+                throws Exception;
     }
 }

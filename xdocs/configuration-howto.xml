@@ -159,7 +159,7 @@ Please see the commons-dbcp javadoc for more info.
 This factory is used if the <code>DataSource</code> is to be available via
 jndi.  It is possible to use this factory to deploy a <code>DataSource</code>
 into jndi, but in many cases for using this factory the <code>DataSource</code>
-is already deployed.  This factory is specified with the following property:
+is already deployed. This factory is specified with the following property:
 </p>
 
 <source><![CDATA[
@@ -199,6 +199,24 @@ torque.dsfactory.bookstore.jndi.java.naming.factory.url.pkgs = org.apache.naming
 Such environment settings will likely not be necessary when running within
 a J2EE container, but they are useful in other cases.  One such case is when
 running torque's unit/run-time tests
+</p>
+
+<p>
+One of the advantages of jndi is that it supports changing
+the <code>DataSource</code> on the fly. On the other hand this means that the
+actual <code>DataSource</code> object must be looked up in the context with 
+every database operation. To avoid this, the factory provides a simple
+caching mechanism, which stores the <code>DataSource</code> object for a
+configurable amount of time (im ms). The <b>t</b>ime between <b>t</b>wo 
+<b>l</b>ookups is specified as follows:
+</p>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.jndi.ttl=60000
+]]></source>
+
+<p>
+This property is optional. If not specified, it defaults to 0 (no caching).
 </p>
 
 </subsection>

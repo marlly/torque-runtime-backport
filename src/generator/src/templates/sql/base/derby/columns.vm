@@ -1,0 +1,23 @@
+#foreach ($col in $table.Columns)
+    #set ( $type = $dbprops.get($col.Type) )
+    #set ( $size = $col.printSize() )
+
+    #if ("$!col.Size" == "" || "$!col.Size" == "0" )
+      #if($type == 'BLOB' || $type == 'CLOB' )
+        #set ($size = "(1M)")
+      #else
+        #set ($size = "")
+      #end
+    #end
+
+    #set ( $default = $col.DefaultSetting )
+    #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
+    #if ($col.isAutoIncrement() || ($table.IdMethod == "native" && $col.isPrimaryKey()))
+      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
+    #else
+      #set ( $autoIncrement = " " )
+    #end    
+
+    #set ( $entry = "$col.Name $type $size $default $nullString $autoIncrement," )
+    $strings.sub($strings.collapseSpaces($entry)," ,",",")
+#end

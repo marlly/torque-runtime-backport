@@ -36,10 +36,10 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque-32/</url>
+  <url>http://db.apache.org/torque/</url>
   <issueTrackingUrl>http://issues.apache.org/scarab/issues</issueTrackingUrl>
   <siteAddress>db.apache.org</siteAddress>
-  <siteDirectory>/www/db.apache.org/torque-32/</siteDirectory>
+  <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository</distributionDirectory>
 
@@ -63,6 +63,41 @@
       <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
     </mailingList>
   </mailingLists>
+
+  <releases>
+    <release>
+      <version>3.1.1</version>
+      <tag>TORQUE_3_1_1</tag>
+    </release>
+    <release>
+      <version>3.1.1-RC3</version>
+      <tag>TORQUE_3_1_1_RC3</tag>
+    </release>
+    <release>
+      <version>3.1.1-RC2</version>
+      <tag>TORQUE_3_1_1_RC2</tag>
+    </release>
+    <release>
+      <version>3.1.1-RC1</version>
+      <tag>TORQUE_3_1_1_RC1</tag>
+    </release>
+    <release>
+      <version>3.1</version>
+      <tag>TORQUE_3_1</tag>
+    </release>
+    <release>
+      <version>3.0_2</version>
+      <tag>TORQUE_3_0_2</tag>
+    </release>
+    <release>
+      <version>3.0_1</version>
+      <tag>TORQUE_3_0_1</tag>
+    </release>
+    <release>
+      <version>3.0</version>
+      <tag>TORQUE_3_0</tag>
+    </release>
+  </releases>
 
   <developers>
     <developer>
@@ -175,7 +210,7 @@
       <roles>
         <role>Java Developer</role>
       </roles>
-      <timezone>+18</timezone>
+      <timezone>+2</timezone>
     </developer>
     <developer>
       <name>Kurt Schrader</name>
@@ -208,8 +243,28 @@
 
   <contributors>
     <contributor>
+      <name>Patrick Carl</name>
+      <email>patrick.carl@coi.de</email>
+    </contributor>
+    <contributor>
+      <name>Roger A. Caron</name>
+      <email>roger.caron@pw.utc.com</email>
+    </contributor>
+    <contributor>
+      <name>Martin Goulet</name>
+      <email>martin.goulet@sungard.com</email>
+    </contributor>
+    <contributor>
+      <name>M. Sean Gilligan</name>
+      <email>Sean_Gilligan@catalla.com</email>
+    </contributor>
+    <contributor>
       <name>James Hillyerd</name>
       <email>james@hillyerd.com</email>
+    </contributor>
+    <contributor>
+      <name>Thierry Lach</name>
+      <email>thierry.lach@bbdodetroit.com</email>
     </contributor>
     <contributor>
       <name>Markus M. May</name>
@@ -218,6 +273,14 @@
     <contributor>
       <name>J. Russell Smyth</name>
       <email>drfish@cox.net</email>
+    </contributor>
+    <contributor>
+      <name>Tarlika Elisabeth Schmitz</name>
+      <email>tes@numerixtechnology.de</email>
+    </contributor>
+    <contributor>
+      <name>Thomas Vandahl</name>
+      <email>thomas@vandahl.org</email>
     </contributor>
   </contributors>
 

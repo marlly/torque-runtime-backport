@@ -2,13 +2,13 @@ package org.apache.torque.dsfactory;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,11 @@ import org.apache.torque.TorqueException;
  * to deploy the DataSource based on properties found in the
  * configuration.
  *
+ * This factory tries to avoid excessive context lookups to improve speed.
+ * The time between two lookups can be configured. The default is 0 (no cache).
+ *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @author <a href="mailto:thomas@vandahl.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class JndiDataSourceFactory
@@ -55,20 +59,35 @@ public class JndiDataSourceFactory
     /** The context to get the resource from. */
     private Context ctx;
 
+    /** A locally cached copy of the DataSource */
+    private DataSource ds = null;
+
+    /** Time of last actual lookup action */
+    private long lastLookup = 0;
+
+    /** Time between two lookups */
+    private long ttl = 0; // ms
+
     /**
      * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
      */
     public DataSource getDataSource() throws TorqueException
     {
-        DataSource ds = null;
-        try
+        long time = System.currentTimeMillis();
+        
+        if (ds == null || time - lastLookup > ttl)
         {
-            ds = ((DataSource) ctx.lookup(path));
+            try
+            {
+                ds = ((DataSource) ctx.lookup(path));
+                lastLookup = time;
+            }
+            catch (Exception e)
+            {
+                throw new TorqueException(e);
+            }
         }
-        catch (Exception e)
-        {
-            throw new TorqueException(e);
-        }
+
         return ds;
     }
 
@@ -77,13 +96,8 @@ public class JndiDataSourceFactory
      */
     public void initialize(Configuration configuration) throws TorqueException
     {
-        if (configuration == null)
-        {
-            throw new TorqueException(
-                "Torque cannot be initialized without "
-                    + "a valid configuration. Please check the log files "
-                    + "for further details.");
-        }
+        super.initialize(configuration);
+
         initJNDI(configuration);
         initDataSource(configuration);
     }
@@ -97,44 +111,49 @@ public class JndiDataSourceFactory
     private void initJNDI(Configuration configuration) throws TorqueException
     {
         log.debug("Starting initJNDI");
-        Hashtable env = null;
+
         Configuration c = configuration.subset("jndi");
-        if (c == null)
+        if (c == null || c.isEmpty())
         {
             throw new TorqueException(
                 "JndiDataSourceFactory requires a jndi "
                     + "path property to lookup the DataSource in JNDI.");
         }
+
         try
         {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
+            Hashtable env = new Hashtable();
+            for (Iterator i = c.getKeys(); i.hasNext(); )
             {
                 String key = (String) i.next();
                 if (key.equals("path"))
                 {
                     path = c.getString(key);
-                    log.debug("JNDI path: " + path);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("JNDI path: " + path);
+                    }
+                }
+                else if (key.equals("ttl"))
+                {
+                    ttl = c.getLong(key, ttl);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("Time between context lookups: " + ttl);
+                    }
                 }
                 else
                 {
-                    if (env == null)
-                    {
-                        env = new Hashtable();
-                    }
                     String value = c.getString(key);
                     env.put(key, value);
-                    log.debug("Set jndi property: " + key + "=" + value);
+                    if (log.isDebugEnabled())
+                    {
+                        log.debug("Set jndi property: " + key + "=" + value);
+                    }
                 }
             }
-            if (env == null)
-            {
-                ctx = new InitialContext();
-            }
-            else
-            {
-                ctx = new InitialContext(env);
-            }
+
+            ctx = new InitialContext(env);
             log.debug("Created new InitialContext");
             debugCtx(ctx);
         }
@@ -154,32 +173,48 @@ public class JndiDataSourceFactory
     private void initDataSource(Configuration configuration)
         throws TorqueException
     {
-        log.debug("Starting initDataSources");
-        Configuration c = configuration.subset("datasource");
+        log.debug("Starting initDataSource");
         try
         {
+            Object ds = null;
+
+            Configuration c = configuration.subset("datasource");
             if (c != null)
             {
-                Object ds = null;
-                Iterator i = c.getKeys();
-                while (i.hasNext())
+                for (Iterator i = c.getKeys(); i.hasNext(); )
                 {
                     String key = (String) i.next();
                     if (key.equals("classname"))
                     {
                         String classname = c.getString(key);
-                        log.debug("Datasource class: " + classname);
-
+                        if (log.isDebugEnabled())
+                        {
+                            log.debug("Datasource class: " + classname);
+                        }
+                        
                         Class dsClass = Class.forName(classname);
                         ds = dsClass.newInstance();
                     }
                     else
                     {
-                        log.debug("Setting datasource property: " + key);
-                        setProperty(key, c, ds);
+                        if (ds != null)
+                        {
+                            if (log.isDebugEnabled())
+                            {
+                                log.debug("Setting datasource property: " + key);
+                            }
+                            setProperty(key, c, ds);
+                        }
+                        else
+                        {
+                            log.error("Tried to set property " + key + " without Datasource definition!");
+                        }
                     }
                 }
+            }
 
+            if (ds != null)
+            {
                 bindDStoJndi(ctx, path, ds);
             }
         }

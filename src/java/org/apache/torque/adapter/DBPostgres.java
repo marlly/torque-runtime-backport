@@ -2,13 +2,13 @@ package org.apache.torque.adapter;
 
 /*
  * Copyright 2001-2004 The Apache Software Foundation.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,8 @@ package org.apache.torque.adapter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This is used to connect to PostgresQL databases.
@@ -25,15 +27,23 @@ import java.sql.SQLException;
  * <a href="http://www.postgresql.org/">http://www.postgresql.org/</a>
  *
  * @author <a href="mailto:hakan42@gmx.de">Hakan Tandogan</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class DBPostgres extends DB
 {
+
+    /** A specialized date format for PostgreSQL. */
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    private SimpleDateFormat sdf = null;
+
     /**
      * Empty constructor.
      */
     protected DBPostgres()
     {
+        sdf = new SimpleDateFormat(DATE_FORMAT);
     }
 
     /**
@@ -65,7 +75,7 @@ public class DBPostgres extends DB
      */
     public String getIDMethodType()
     {
-        return AUTO_INCREMENT;
+        return SEQUENCE;
     }
 
     /**
@@ -76,7 +86,7 @@ public class DBPostgres extends DB
      */
     public String getIDMethodSQL(Object name)
     {
-        return ("select currval('" + name + "')");
+        return ("select nextval('" + name + "')");
     }
 
     /**
@@ -143,5 +153,25 @@ public class DBPostgres extends DB
     public String getBooleanString(Boolean b)
     {
         return (b == null) ? "0" : (Boolean.TRUE.equals(b) ? "1" : "0");
+    }
+
+    /**
+     * This method overrides the JDBC escapes used to format dates
+     * using a <code>DateFormat</code>. 
+     *
+     * This generates the timedate format defined in 
+     * http://www.postgresql.org/docs/7.3/static/datatype-datetime.html
+     * which defined PostgreSQL dates as YYYY-MM-DD hh:mm:ss
+     * @param date the date to format
+     * @return The properly formatted date String.
+     */
+    public String getDateString(Date date)
+    {
+        StringBuffer dateBuf = new StringBuffer();
+        char delim = getStringDelimiter();
+        dateBuf.append(delim);
+        dateBuf.append(sdf.format(date));
+        dateBuf.append(delim);
+        return dateBuf.toString();
     }
 }
