@@ -58,7 +58,6 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -130,7 +129,7 @@ public abstract class AbstractBaseManager
     protected Persistent getOMInstance()
         throws InstantiationException, IllegalAccessException
     {
-        return (Persistent)omClass.newInstance();
+        return (Persistent) omClass.newInstance();
     }
 
     /**
@@ -153,11 +152,11 @@ public abstract class AbstractBaseManager
 
         try
         {
-            setOMClass( Class.forName(getClassName()) );
+            setOMClass(Class.forName(getClassName()));
         }
         catch (ClassNotFoundException cnfe)
         {
-            throw new TorqueException("Could not load "+getClassName());
+            throw new TorqueException("Could not load " + getClassName());
         }
     }
 
@@ -204,13 +203,13 @@ public abstract class AbstractBaseManager
             {
                 synchronized (this)
                 {
-                    om = (Persistent)cache.get(key);  
+                    om = (Persistent) cache.get(key);
                 }
             }
             else
             {
                 inGet++;
-                om = (Persistent)cache.get(key);  
+                om = (Persistent) cache.get(key);
                 inGet--;
             }
         }
@@ -246,8 +245,8 @@ public abstract class AbstractBaseManager
                 lockCache = true;
                 try
                 {
-                    oldOm = (Persistent)cache.get(key);
-                    while (inGet > 0) 
+                    oldOm = (Persistent) cache.get(key);
+                    while (inGet > 0)
                     {
                         Thread.yield();
                     }
@@ -257,7 +256,7 @@ public abstract class AbstractBaseManager
                 {
                     lockCache = false;
                     throw new TorqueException(
-                    "Could not remove from cache due to internal JCS error.", 
+                    "Could not remove from cache due to internal JCS error.",
                         ce);
                 }
                 finally
@@ -296,11 +295,11 @@ public abstract class AbstractBaseManager
                 lockCache = true;
                 try
                 {
-                    oldOm = (Persistent)cache.get(key);
-                    while (inGet > 0) 
+                    oldOm = (Persistent) cache.get(key);
+                    while (inGet > 0)
                     {
                         Thread.yield();
-                    }                    
+                    }
                     cache.put(key, om);
                 }
                 catch (CacheException ce)
@@ -363,9 +362,9 @@ public abstract class AbstractBaseManager
             // start a new list where we will replace the id's with om's
             oms = new ArrayList(ids);
             List newIds = new ArrayList(ids.size());
-            for ( int i=0; i<ids.size(); i++ )
+            for (int i = 0; i < ids.size(); i++)
             {
-                ObjectKey key = (ObjectKey)ids.get(i);
+                ObjectKey key = (ObjectKey) ids.get(i);
                 Persistent om = null;
                 if (fromCache)
                 {
@@ -384,14 +383,14 @@ public abstract class AbstractBaseManager
             if ( newIds.size() > 0 )
             {
                 List newOms = retrieveStoredOMs(newIds);
-                for ( int i=0; i<oms.size(); i++ )
+                for (int i = 0; i < oms.size(); i++)
                 {
-                    if ( oms.get(i) instanceof ObjectKey )
+                    if (oms.get(i) instanceof ObjectKey)
                     {
-                        for ( int j=newOms.size()-1; j>=0; j-- )
+                        for (int j=newOms.size() - 1; j >= 0; j--)
                         {
-                            Persistent om = (Persistent)newOms.get(j);
-                            if ( om.getPrimaryKey().equals(oms.get(i)) )
+                            Persistent om = (Persistent) newOms.get(j);
+                            if (om.getPrimaryKey().equals(oms.get(i)))
                             {
                                 // replace the id with the om and add the om
                                 // to the cache
@@ -427,7 +426,7 @@ public abstract class AbstractBaseManager
      * Set the value of region.
      * @param v  Value to assign to region.
      */
-    public void setRegion(String  v)
+    public void setRegion(String v)
         throws TorqueException
     {
         this.region = v;
@@ -438,8 +437,7 @@ public abstract class AbstractBaseManager
         }
         catch (Exception e)
         {
-            throw new TorqueException(
-                "Cache could not be initialized", e);
+            throw new TorqueException("Cache could not be initialized", e);
         }
         if (cache == null)
         {
@@ -449,15 +447,15 @@ public abstract class AbstractBaseManager
 
     public MethodResultCache getMethodResultCache()
     {
-        if (isNew) 
+        if (isNew)
         {
             synchronized (this)
             {
-                if (isNew) 
+                if (isNew)
                 {
                     registerAsListener();
-                    isNew = false;   
-                }        
+                    isNew = false;
+                }
             }
         }
         return mrCache;
@@ -476,25 +474,25 @@ public abstract class AbstractBaseManager
     {
         List keys = listener.getInterestedFields();
         Iterator i = keys.iterator();
-        while (i.hasNext()) 
+        while (i.hasNext())
         {
-            String key = (String)i.next();         
+            String key = (String) i.next();
             // Peer.column names are the fields
-            if (validFields != null && validFields.containsKey(key)) 
+            if (validFields != null && validFields.containsKey(key))
             {
-                List listeners = (List)listenersMap.get(key);
-                if (listeners == null) 
+                List listeners = (List) listenersMap.get(key);
+                if (listeners == null)
                 {
                     listeners = createSubsetList(key);
                 }
-                
+
                 boolean isNew = true;
                 Iterator j = listeners.iterator();
-                while (j.hasNext()) 
+                while (j.hasNext())
                 {
-                    Object listener2 = 
-                        ((WeakReference)j.next()).get();
-                    if (listener2 == null) 
+                    Object listener2 =
+                        ((WeakReference) j.next()).get();
+                    if (listener2 == null)
                     {
                         // do a little cleanup while checking for dupes
                         // not thread-safe, not likely to be many nulls
@@ -507,10 +505,10 @@ public abstract class AbstractBaseManager
                         break;
                     }
                 }
-                if (isNew) 
+                if (isNew)
                 {
                     listeners.add(new WeakReference(listener));
-                }                    
+                }
             }
         }
     }
@@ -518,11 +516,11 @@ public abstract class AbstractBaseManager
     synchronized private List createSubsetList(String key)
     {
         FastArrayList list = null;
-        if (listenersMap.containsKey(key)) 
+        if (listenersMap.containsKey(key))
         {
-            list = (FastArrayList)listenersMap.get(key);
+            list = (FastArrayList) listenersMap.get(key);
         }
-        else 
+        else
         {
             list = new FastArrayList();
             list.setFast(true);
@@ -532,31 +530,31 @@ public abstract class AbstractBaseManager
     }
 
 
-    protected void notifyListeners(List listeners, 
+    protected void notifyListeners(List listeners,
                                    Persistent oldOm, Persistent om)
     {
-        if (listeners != null) 
+        if (listeners != null)
         {
             synchronized (listeners)
             {
                 Iterator i = listeners.iterator();
-                while (i.hasNext()) 
+                while (i.hasNext())
                 {
                     CacheListener listener = (CacheListener)
-                        ((WeakReference)i.next()).get();
-                    if (listener == null) 
+                        ((WeakReference) i.next()).get();
+                    if (listener == null)
                     {
                         // remove reference as its object was cleared
                         i.remove();
                     }
-                    else 
+                    else
                     {
-                        if (oldOm == null) 
+                        if (oldOm == null)
                         {
                             // object was added
                             listener.addedObject(om);
                         }
-                        else 
+                        else
                         {
                             // object was refreshed
                             listener.refreshedObject(om);
@@ -581,14 +579,14 @@ public abstract class AbstractBaseManager
         // initialize the cache
         try
         {
-            if (region != null) 
+            if (region != null)
             {
-                setRegion(region);                
-            }            
+                setRegion(region);
+            }
         }
         catch (Exception e)
         {
-            category.error("Cache was not be initialized for region: " 
+            category.error("Cache was not be initialized for region: "
                            + region + "after deserialization");
         }
     }
