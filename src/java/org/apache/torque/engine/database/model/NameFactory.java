@@ -66,6 +66,12 @@ import java.util.List;
 public class NameFactory
 {
     /**
+     * The fully qualified class name of the default name generator.
+     */
+    public static final String DEFAULT_GENERATOR =
+        DefaultNameGenerator.class.getName();
+
+    /**
      * The single instance of this class.
      */
     private static NameFactory instance = new NameFactory();
