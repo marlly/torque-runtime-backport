@@ -2,11 +2,28 @@
 
 <document>
  <properties>
-  <title>Oracle 8i Howto</title>
-  <author email="turbine-torque-dev@jakarta.apache.org">Torque Documentation Team</author>
+  <title>Oracle Howto</title>
+  <author email="torque-dev@db.apache.org">Torque Documentation Team</author>
  </properties>
 
 <body>
+
+<section name="Introductory note">
+
+<p>
+This HOWTO was written some time ago and was targeted at Oracle 8i. If any of 
+the information below needs to be updated for later releases then please send
+a note to the <a href="mailto:turbine-dev@db.apache.org">Turbine Dev mailing 
+list</a>.
+</p>
+
+<p>
+Saravana Kannan is maintaining a patched version of Village that supports Oracle 
+LOBs: <a href="https://sweb.uky.edu/~skkann2/village/index.html">Village 2.0 
+Patched for Oracle LOBs - For use with Torque 3.1</a>
+</p>
+
+</section>
 
 <section name="Oracle Howto">
 

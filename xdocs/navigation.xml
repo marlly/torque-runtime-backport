@@ -37,7 +37,7 @@
     </menu>
     <menu name="Database Howto Guides">
       <item name="MS SQL Server Howto"   href="/mssql-howto.html"/>
-      <item name="Oracle 8i Howto"       href="/oracle-howto.html"/>
+      <item name="Oracle Howto"       href="/oracle-howto.html"/>
       <item name="Postgres Howto"        href="/postgres-howto.html"/>
       <item name="Sybase Howto"          href="/sybase-howto.html"/>
     </menu>
