@@ -388,7 +388,7 @@ public abstract class AbstractBaseManager
                 {
                     if ( oms.get(i) instanceof ObjectKey )
                     {
-                        for ( int j=newOms.size(); j>=0; j-- )
+                        for ( int j=newOms.size()-1; j>=0; j-- )
                         {
                             Persistent om = (Persistent)newOms.get(j);
                             if ( om.getPrimaryKey().equals(oms.get(i)) )
