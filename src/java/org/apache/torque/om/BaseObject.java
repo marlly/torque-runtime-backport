@@ -309,17 +309,6 @@ public abstract class BaseObject implements Persistent, Serializable
         modified = false;
     }
 
-    /**
-     * Saves this object to the data store.  Not implemented by
-     * default, so must be overridden if called.
-     *
-     * @exception Exception Problem saving this object.
-     */
-    public void save()
-        throws Exception
-    {
-        throw new Error("BaseObject.save: " + NOT_IMPLEMENTED);
-    }
 
     /**
      * Retrieves a field from the object by name. Must be overridden if called.

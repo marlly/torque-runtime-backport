@@ -1,4 +1,4 @@
-package org.apache.torque.om;
+package org.apache.torque.security;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,69 +54,17 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
-import org.apache.torque.pool.DBConnection;
-
 /**
- * This interface defines methods related to saving an object
+ * Business objects may require this interface to be passed into methods
+ * which need to pass authorization.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
- * @author <a href="mailto:fedor@apache.org">Fedor K.</a>
  * @version $Id$
  */
-public interface Persistent
+public interface SecurityInfo
 {
     /**
-     * getter for the object primaryKey.
-     *
-     * @return the object primaryKey as an Object
+     * method called by an om prior to sensitive operation (such as save).
      */
-    public ObjectKey getPrimaryKey();
-
-    /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param ObjectKey The new PrimaryKey for the object.
-     * @exception Exception, This method might throw an exceptions
-     */
-    public void setPrimaryKey(ObjectKey primaryKey) throws Exception;
-
-    /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param String, the String should be of the form produced by
-     *        ObjectKey.toString().
-     * @exception Exception, This method might throw an exceptions
-     */
-    public void setPrimaryKey(String primaryKey) throws Exception;
-    /**
-     * Returns whether the object has been modified, since it was
-     * last retrieved from storage.
-     *
-     * @return True if the object has been modified.
-     */
-    public boolean isModified();
-
-    /**
-     * Returns whether the object has ever been saved.  This will
-     * be false, if the object was retrieved from storage or was created
-     * and then saved.
-     *
-     * @return true, if the object has never been persisted.
-     */
-    public boolean isNew();
-
-    /**
-     * Setter for the isNew attribute.  This method will be called
-     * by Torque-generated children and Peers.
-     *
-     * @param b, the state of the object.
-     */
-    public void setNew(boolean b);
-
-    /**
-     * Sets the modified state for the object.
-     *
-     * @param m The new modified state for the object.
-     */
-    public void setModified(boolean m);
+    public boolean hasPermission();
 }

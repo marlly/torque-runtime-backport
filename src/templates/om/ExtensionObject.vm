@@ -10,7 +10,13 @@ package $package;
     #set ($abstract = "abstract")
 #end
 
-import org.apache.torque.om.Persistent;
+#if ($secureSaveMethod)
+#set ($interface = "SecurePersistent")
+import org.apache.torque.om.SecurePersistent;
+#else
+#set ($interface = "UnsecurePersistent")
+import org.apache.torque.om.UnsecurePersistent;
+#end
 
 /** 
 #if ($addTimeStamp)
@@ -25,6 +31,6 @@ import org.apache.torque.om.Persistent;
  */
 public $!abstract class $table.JavaName 
     extends ${package}.$basePrefix$table.JavaName
-    implements Persistent
+    implements $interface
 {
 }

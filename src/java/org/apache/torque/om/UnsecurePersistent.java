@@ -63,60 +63,26 @@ import org.apache.torque.pool.DBConnection;
  * @author <a href="mailto:fedor@apache.org">Fedor K.</a>
  * @version $Id$
  */
-public interface Persistent
+public interface UnsecurePersistent
+    extends Persistent
 {
     /**
-     * getter for the object primaryKey.
-     *
-     * @return the object primaryKey as an Object
+     * Saves the object.
      */
-    public ObjectKey getPrimaryKey();
+    public void save() throws Exception;
 
     /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param ObjectKey The new PrimaryKey for the object.
-     * @exception Exception, This method might throw an exceptions
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.
      */
-    public void setPrimaryKey(ObjectKey primaryKey) throws Exception;
+    public void save(String dbName) throws Exception;
 
     /**
-     * Sets the PrimaryKey for the object.
-     *
-     * @param String, the String should be of the form produced by
-     *        ObjectKey.toString().
-     * @exception Exception, This method might throw an exceptions
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.  This method
+     * is meant to be used as part of a transaction, otherwise use
+     * the save() method and the connection details will be handled
+     * internally
      */
-    public void setPrimaryKey(String primaryKey) throws Exception;
-    /**
-     * Returns whether the object has been modified, since it was
-     * last retrieved from storage.
-     *
-     * @return True if the object has been modified.
-     */
-    public boolean isModified();
-
-    /**
-     * Returns whether the object has ever been saved.  This will
-     * be false, if the object was retrieved from storage or was created
-     * and then saved.
-     *
-     * @return true, if the object has never been persisted.
-     */
-    public boolean isNew();
-
-    /**
-     * Setter for the isNew attribute.  This method will be called
-     * by Torque-generated children and Peers.
-     *
-     * @param b, the state of the object.
-     */
-    public void setNew(boolean b);
-
-    /**
-     * Sets the modified state for the object.
-     *
-     * @param m The new modified state for the object.
-     */
-    public void setModified(boolean m);
+    public void save(DBConnection dbCon) throws Exception;
 }

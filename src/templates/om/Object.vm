@@ -22,6 +22,10 @@ import org.apache.torque.pool.DBConnection;
 #if ($addSaveMethod)
 import org.apache.torque.util.ObjectUtils;
 #end
+#if ($secureSaveMethod)
+import org.apache.torque.security.SecurityInfo;
+import org.apache.torque.security.SecurityException;
+#end
 
 /** 
 #if ($addTimeStamp)
@@ -738,16 +742,54 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     
 
 #if (!$table.isAlias() && $addSaveMethod)
+  #if ($secureSaveMethod)
+      #set ($secInfosecInfo = "SecurityInfo securityInfo")
+      #set ($secInfo = "securityInfo")
+      #set ($secComma = ", ")
+    /**
+     * This method is called first thing in the save methods to allow
+     * objects the chance to throw a SecurityException before any changes
+     * to the persistent data will occur.  The default implementation throws
+     * the SecurityException on a false result from 
+     * SecurityInfo.hasPermission()
+     */
+    protected void checkSecurity($secInfosecInfo)
+        throws SecurityException
+    {
+        if (!securityInfo.hasPermission())
+        {
+            throw new SecurityException();
+        }
+    }
+  #else
+      #set ($secInfosecInfo = "")
+      #set ($secInfo = "")
+      #set ($secComma = "")
+  #end
+
+    /**
+     * Allows objects to perform any logic needed before saving.  This method
+     * is called after securityCheck.  The default implementation does nothing.
+     */
+    protected void doPreSave($secInfosecInfo)
+        throws Exception
+    {
+    }
+
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
      */
-    public void save() throws Exception
+    public void save($secInfosecInfo) throws Exception
     {
  #if ($complexObjectModel)
             save(${table.JavaName}Peer.getMapBuilder()
-                .getDatabaseMap().getName());
+                .getDatabaseMap().getName()${secComma}$secInfo);
  #else
+    #if ($secureSaveMethod)
+        checkSecurity($secInfo);
+    #end
+        doPreSave($secInfo);
         if (isModified())
         {
             if (isNew())
@@ -772,14 +814,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * in this file instead of in the super class, BaseObject.
 #end
      */
-    public void save(String dbName) throws Exception
+    public void save(String dbName${secComma}$secInfosecInfo) throws Exception
     {
         DBConnection dbCon = null;
  #if ($complexObjectModel)
         try
         {
             dbCon = BasePeer.beginTransaction(dbName);
-            save(dbCon);
+            save(dbCon${secComma}$secInfo);
         }
         catch(Exception e)
         {
@@ -789,7 +831,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         BasePeer.commitTransaction(dbCon);
 
  #else
-
+    #if ($secureSaveMethod)
+        checkSecurity($secInfo);
+    #end
+        doPreSave($secInfo);
         if (isModified())
         {
             try
@@ -828,8 +873,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the save() method and the connection details will be handled
      * internally
      */
-    public void save(DBConnection dbCon) throws Exception
+    public void save(DBConnection dbCon${secComma}$secInfosecInfo) throws Exception
     {
+    #if ($secureSaveMethod)
+        checkSecurity($secInfo);
+    #end
+        doPreSave($secInfo);
   #if ($complexObjectModel)
       if (!alreadyInSave)
       {
@@ -872,7 +921,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
           {
               for (int i=0; i<${collName}.size(); i++)
               {
-                  ((${className})${collName}.get(i)).save(dbCon);
+                  ((${className})${collName}.get(i)).save(dbCon${secComma}$secInfo);
               }
           }
      #end
