@@ -350,9 +350,13 @@ public class ConnectionPool
         throws SQLException
     {
         if ( cpds != null )
+        {
             return cpds.getLogWriter();
+        }
         else
+        {
             return null;
+        }
     }
 
     /**
@@ -373,7 +377,9 @@ public class ConnectionPool
         throws SQLException
     {
         if ( cpds != null )
+        {
             cpds.setLogWriter(out);
+        }
     }
 
     /**

@@ -223,8 +223,9 @@ public class DBConnection
             // to a ConnectionPool, it means that it was taken from a pool
             // and not returned.  We log this fact, close the underlying
             // Connection, and return it to the ConnectionPool.
-            Torque.getCategory().warn( "A DBConnection was finalized, without being returned "
-                      + "to the ConnectionPool it belonged to" );
+            Torque.getCategory().warn( 
+                    "A DBConnection was finalized, without being returned "
+                  + "to the ConnectionPool it belonged to" );
 
             // Closing the Connection ensures that if anyone tries to use it,
             // an error will occur.
@@ -235,7 +236,6 @@ public class DBConnection
             pool.releaseConnection(pool.getNewConnection());
         }
     }
-
 
     /**
      * Links this DBConnection with a ConnectionPool.
@@ -254,7 +254,7 @@ public class DBConnection
 
         //If we use a PooledConnection object, then request from it a Connection
         //object. This forces the PooledConnection to create a wrapper for the
-        //physical connection it represents and return a Torque.getCategory()ical Connection object
+        //physical connection it represents and return a local Connection object
         //that is currently in control of it.
         if ( pooledConnection != null )
         {
@@ -270,7 +270,6 @@ public class DBConnection
                 //ignore this
             }
         }
-
     }
 
     /**
@@ -294,16 +293,16 @@ public class DBConnection
         if ( pooledConnection != null )
         {
             if ( connection != null )
-                try
-                {
-                    //this will not close the physical connection, just the
-                    //logical connection
-                    connection.close();
-                }
-                catch (Exception ex)
-                {
-                    //ignore this exception
-                }
+            try
+            {
+                //this will not close the physical connection, just the
+                //logical connection
+                connection.close();
+            }
+            catch (Exception ex)
+            {
+                //ignore this exception
+            }
             connection = null;
         }
     }
@@ -510,8 +509,9 @@ public class DBConnection
     public void close()
         throws SQLException
     {
-            //if using pooledConnection, close this (not the connection
-        if ( pooledConnection != null ){
+        //if using pooledConnection, close this (not the connection
+        if ( pooledConnection != null )
+        {
             connection = null;
             pooledConnection.removeConnectionEventListener(this);
             pooledConnection.close();
@@ -539,7 +539,8 @@ public class DBConnection
      * method of this connection object. What we need to do here is to
      * release this DBConnection from our pool...
      */
-    public void connectionClosed(ConnectionEvent event) {
+    public void connectionClosed(ConnectionEvent event)
+    {
         try
         {
             pool.releaseConnection(this);
@@ -554,12 +555,15 @@ public class DBConnection
      * If a fatal error occurs, close the undelying physical connection so as not to
      * be returned in the future
      */
-    public void connectionErrorOccurred(ConnectionEvent e) {
-        try {
+    public void connectionErrorOccurred(ConnectionEvent e)
+    {
+        try
+        {
             System.err.println("CLOSING DOWN CONNECTION DUE TO INTERNAL ERROR");
                 //remove this from the listener list because we are no more interested in errors
                 //since we are about to close this connection
             ( (PooledConnection) e.getSource() ).removeConnectionEventListener(this);
+
             try
             {
                 //this one will close the underlying physical connection
@@ -570,8 +574,8 @@ public class DBConnection
                 //just ignore
             }
 
-                //this will also close the Torque.getCategory()ical Connection object so a future
-                //call to isClosed() will return true
+            //this will also close the Torque.getCategory()ical Connection object so a future
+            //call to isClosed() will return true
             try
             {
                 connection.close();
@@ -580,13 +584,12 @@ public class DBConnection
             {
                 //ignore
             }
-
         }
-        catch (Exception ignore) {
+        catch (Exception ignore)
+        {
             //just ignore
         }
     }
-
 
     /*
     public CallableStatement prepareCall(String sql) throws SQLException {
