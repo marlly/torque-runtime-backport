@@ -1010,7 +1010,7 @@ public class Table implements IDMethod
 
         if (javaName != null)
         {
-            result.append(" javaname=\"")
+            result.append(" javaName=\"")
                   .append(javaName)
                   .append('\"');
         }
