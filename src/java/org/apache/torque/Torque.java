@@ -97,17 +97,13 @@ public class Torque
     private static final String DEFAULT_NAME = "default";
 
     /**
-     * The property tag which specifies which
-     * log4j category to use for logging in BasePeer.
-     */
-    private static final String CATEGORY = "log4j.category";
-
-    /**
      * The db name that is specified as the default in the property file
      */
     private static String defaultDBName;
 
-    /** The global cache of database maps */
+    /** 
+     * The global cache of database maps 
+     */
     private static Map dbMaps;
 
     /**
