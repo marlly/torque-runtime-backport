@@ -431,6 +431,59 @@ public class CriteriaTest extends BaseTestCase
     }
 
     /**
+     * This test case verifies if the Criteria.LIKE comparison type will
+     * get replaced through Criteria.EQUAL if there are no SQL wildcards
+     * in the given value.
+     */
+    public void testLikeWithoutWildcards()
+    {
+        Criteria c = new Criteria();
+        c.add("TABLE.COLUMN", (Object) "no wildcards", Criteria.LIKE);
+
+        String expect = "SELECT  FROM TABLE WHERE TABLE.COLUMN = 'no wildcards'";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertEquals(expect, result);
+    }
+
+    /**
+     * This test case verifies if the Criteria.NOT_LIKE comparison type will
+     * get replaced through Criteria.NOT_EQUAL if there are no SQL wildcards
+     * in the given value.
+     */
+    public void testNotLikeWithoutWildcards()
+    {
+        Criteria c = new Criteria();
+        c.add("TABLE.COLUMN", (Object) "no wildcards", Criteria.NOT_LIKE);
+
+        String firstExpect = "SELECT  FROM TABLE WHERE TABLE.COLUMN != 'no wildcards'";
+        String secondExpect = "SELECT  FROM TABLE WHERE TABLE.COLUMN <> 'no wildcards'";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+
+        assertTrue(result.equals(firstExpect) || result.equals(secondExpect));
+    }
+
+    /**
      * test for TRQS25
      */
 /*

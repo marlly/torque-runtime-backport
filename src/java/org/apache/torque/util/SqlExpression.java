@@ -381,6 +381,11 @@ public class SqlExpression
         // use = (equals).  Wildcards can be escaped by prepending
         // them with \ (backslash).
         String equalsOrLike = " = ";
+        if (comparison.equals(Criteria.NOT_LIKE))
+        {
+            equalsOrLike = " " + Criteria.NOT_EQUAL + " ";
+        }
+
         int position = 0;
         StringBuffer sb = new StringBuffer();
         while (position < criteria.length())

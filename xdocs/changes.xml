@@ -8,6 +8,9 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='fix'>
+        Fix NOT_LIKE with no wildcard bug.
+      </action>
       <action dev='mpoeschl' type='fix'>
         TRQS97: Fix bad syntax in generated model when using primary keys of
         short or byte.
