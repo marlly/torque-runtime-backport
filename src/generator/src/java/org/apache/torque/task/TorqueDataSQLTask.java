@@ -69,6 +69,8 @@ import org.apache.tools.ant.types.FileSet;
 
 import org.apache.velocity.context.Context;
 
+import org.xml.sax.SAXException;
+
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
@@ -231,6 +233,10 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
         catch (EngineException ee)
         {
             throw new BuildException(ee);
+        }
+        catch (SAXException se)
+        {
+            throw new BuildException(se);
         }
 
         return context;
