@@ -31,10 +31,10 @@
 
 <p>
   The example used throughout this tutorial is based on an
-  email sent to the <a href="/site/mail.html">
+  email sent to the <a href="/mail.html">
   turbine-user</a> mailing list by Steven F. Davis
   called
-  <a href="http://archives.apache.org/eyebrowse/ReadMsg?listName=turbine-user@jakarta.apache.org&amp;msgNo=5287">
+  <a href="http://nagoya.apache.org/eyebrowse/ReadMsg?listName=turbine-user@jakarta.apache.org&amp;msgNo=5287">
   torque outside turbine - detailed example (long)</a>.
 </p>
 

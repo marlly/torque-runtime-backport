@@ -267,7 +267,7 @@
     <td>idbroker</td>
     <td>
       Instructs Torque to use its
-      <a href="peers-howto.html#ID%20Broker">IDBroker</a>
+      <a href="../peers-howto.html#ID%20Broker">IDBroker</a>
       service to generate IDs in a database agnostic
       manner.  This is the method that will be
       used in this tutorial.
@@ -365,7 +365,7 @@
   Another common mistake is to forget that XML is
   <b>case-sensitive</b>.  All of the elements and
   attributes must be specified according to the
-  <a href="/turbine/dtd/database_3_1.dtd">DTD</a>
+  <a href="/torque/dtd/database_3_1.dtd">DTD</a>
   for the database schema.  In addition, you must
   include the XML declaration and DTD specification in
   your database schema file.  Failure to do so can
@@ -422,7 +422,7 @@
   configuration of Torque by editing the Torque
   run-time properties.  For additional information on
   the XML elements and attributes, please refer to the
-  <a href="/turbine/torque/schema-reference.html">
+  <a href="../schema-reference.html">
   Torque Schema Reference</a>.
 </p>
 
@@ -478,7 +478,7 @@ torque.database.bookstore.password = password
     <tr>
       <td>log4j.rootCategory</td>
       <td>
-        Torque uses <a href="/log4j/index.html">Log4J</a>
+        Torque uses <a href="http://logging.apache.org/log4j/">Log4J</a>
         for a logging.  This parameter configures
         the Log4J system to log all messages (debug,
         info, warn, error, and fatal).

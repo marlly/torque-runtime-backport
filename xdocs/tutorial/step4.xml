@@ -339,7 +339,7 @@ List v = BookPeer.doSelect(crit);
   used to specify very simple to very complex queries.
   For a much more in-depth discussion of
   <em>Criteria</em>, please refer to the
-  <a href="criteria-howto.html">Criteria HOWTO</a>.
+  <a href="../criteria-howto.html">Criteria HOWTO</a>.
 </p>
 
 </section>
@@ -558,7 +558,7 @@ public  class Publisher
   The next change that we'll make is to the Peer
   classes.  For convenience (and based on the
   suggestion in the
-  <a href="peers-howto.html#Useful%20Methods">Peers
+  <a href="../peers-howto.html#Useful%20Methods">Peers
   Howto</a>) we'll add <em>doSelectAll</em>
   methods which will return a List of all the Data
   Objects in a table.  The following are the modified
@@ -901,7 +901,7 @@ ant -f build-torque.xml compile
     retrace all of the steps outlined in this tutorial.
     If you are still not able to get your application to
     run, use the Turbine
-    <a href="/site/mail.html">mailing list</a> to your
+    <a href="/mail.html">mailing list</a> to your
     advantage.
   </p>
 
