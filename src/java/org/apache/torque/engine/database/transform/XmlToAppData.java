@@ -96,11 +96,6 @@ public class XmlToAppData extends DefaultHandler
 {
     private static final boolean DEBUG = false;
 
-    /**
-     * The name for the default database.
-     */
-    private static final String DEFAULT_DB_NAME = "default";
-
     private AppData app;
     private Database currDB;
     private Table currTable;
@@ -202,13 +197,9 @@ public class XmlToAppData extends DefaultHandler
                 if (rawName.equals("database"))
                 {
                     String s = attributes.getValue("name");
-                    
                     if (s == null)
                     {
-                        //s =  TurbineDB.getDefaultDB();
-                        // !!Hard coding this for now it should
-                        // be a property.
-                        s = DEFAULT_DB_NAME;
+                        s = Torque.getDefaultDB();
                     }
                     currDB = app.getDatabase(s);
                 }
