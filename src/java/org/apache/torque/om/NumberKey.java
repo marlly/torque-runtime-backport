@@ -125,6 +125,14 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     */
+    public NumberKey(double key)
+    {
+        this.key = new BigDecimal(key);
+    }
+
+    /**
+     * Creates a NumberKey equivalent to <code>key</code>.
      * Convenience only. Not very efficient at all.
      *
      * @param key the key value

@@ -68,6 +68,9 @@
     <li>
       TRQS104: Use of null Object
     </li>
+    <li>
+      TRQS118: Generated OM doesn't compile when using FLOAT as primary key
+    </li>
   </ul>
 </p>
 </subsection>

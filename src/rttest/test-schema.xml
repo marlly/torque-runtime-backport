@@ -78,5 +78,9 @@
     </foreign-key>
   </table>
 
-</database>
+  <!-- TRQS118 primary key of type FLOAT -->
+  <table name="float_pk">
+    <column name="test_key" required="true" primaryKey="true" type="FLOAT" />
+  </table>
 
+</database>

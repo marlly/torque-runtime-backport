@@ -99,6 +99,16 @@ public abstract class SimpleKey extends ObjectKey
      * @param key the key value
      * @return a SimpleKey
      */    
+    public static SimpleKey keyFor(double key)
+    {
+        return new NumberKey(key);
+    }
+
+    /**
+     * Creates a SimpleKey equivalent to key
+     * @param key the key value
+     * @return a SimpleKey
+     */    
     public static SimpleKey keyFor(Number key)
     {
         return new NumberKey(key);
