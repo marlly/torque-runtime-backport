@@ -991,7 +991,7 @@ public class Table implements IDMethod
     /**
      * Determine whether this table has a primary key.
      *
-     * @return boolean
+     * @return Whether this table has any primary key parts.
      */
     public boolean hasPrimaryKey()
     {
