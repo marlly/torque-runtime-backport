@@ -33,7 +33,7 @@
     <li>
       Upgraded to latest commons-dbcp snapshot. The new 
       SharedPoolDatasourceFactory is now used by default. Don't forget to 
-      upgrade to your property file!
+      upgrade your property file!
     </li>
   </ul>
 </p>
