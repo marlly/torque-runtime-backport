@@ -49,10 +49,9 @@ package org.apache.torque.manager;
 import java.io.Serializable;
 import org.apache.commons.lang.Objects;
 import org.apache.log4j.Category;
-import org.apache.stratum.pool.AbstractPoolable;
+import org.apache.commons.pool.BasePoolableObjectFactory;
 
 public class MethodCacheKey
-    extends AbstractPoolable
     implements Serializable
 {
     //private static final Category log = 
@@ -296,22 +295,36 @@ public class MethodCacheKey
         return sb.toString();
     }
 
-    // ****************** Poolable implementation ************************
+    // ************* PoolableObjectFactory implementation *******************
 
-    /**
-     * Disposes the object after use. The method is called when the
-     * object is returned to its pool.  The dispose method must call
-     * its super.
-     */
-    public void dispose()
+    public static class Factory 
+        extends BasePoolableObjectFactory
     {
-        super.dispose();
-        instanceOrClass = null;
-        method = null;
-        arg1 = null;
-        arg2 = null;
-        arg3 = null;
-        moreThanThree = null;
-        groupKey = null;
+        /**
+         * Creates an instance that can be returned by the pool.
+         * @return an instance that can be returned by the pool.
+         */
+        public Object makeObject() 
+            throws Exception
+        {
+            return new MethodCacheKey();
+        }
+        
+        /**
+         * Uninitialize an instance to be returned to the pool.
+         * @param obj the instance to be passivated
+         */
+        public void passivateObject(Object obj) 
+            throws Exception
+        {
+            MethodCacheKey key = (MethodCacheKey)obj;
+            key.instanceOrClass = null;
+            key.method = null;
+            key.arg1 = null;
+            key.arg2 = null;
+            key.arg3 = null;
+            key.moreThanThree = null;
+            key.groupKey = null;
+        }
     }
 }

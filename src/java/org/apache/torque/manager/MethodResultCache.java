@@ -52,10 +52,11 @@ import java.util.WeakHashMap;
 import java.util.Iterator;
 import java.io.Serializable;
 import org.apache.log4j.Category;
-//import org.apache.stratum.configuration.Configuration;
-import org.apache.stratum.pool.DefaultPoolManager;
 import org.apache.stratum.jcs.access.GroupCacheAccess;
 import org.apache.stratum.jcs.access.exception.CacheException;
+import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.commons.pool.ObjectPool;
+import org.apache.commons.pool.impl.StackObjectPool;
 
 import org.apache.torque.TorqueException;
 
@@ -72,31 +73,30 @@ public class MethodResultCache
 
     private static final String keyClassName =
         "org.apache.torque.manager.MethodCacheKey";
-    private DefaultPoolManager pool;
+    private ObjectPool pool;
     private Map keys;
     private GroupCacheAccess jcsCache;
-    private Class keyClass;
     private boolean lockCache;
     private int inGet;
     private Map groups;
 
-    /*
-    public MethodResultCache()
-    {
-        keyClass = Class
-            .forName(keyClassName);
-    }
-    */
-
     public MethodResultCache(GroupCacheAccess cache)
-        throws ClassNotFoundException
+        throws TorqueException
     {
         keys = new WeakHashMap();            
-        keyClass = Class.forName(keyClassName);
         this.jcsCache = cache;            
-        pool =  new DefaultPoolManager();
-        pool.setCapacity(keyClassName, 10000);
         groups = new HashMap();
+
+        try
+        {
+            PoolableObjectFactory factory = 
+                    new MethodCacheKey.Factory();
+            pool = new StackObjectPool(factory, 10000);
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
     }
 
     public void clear()
@@ -111,7 +111,15 @@ public class MethodResultCache
                 Iterator i = keys.keySet().iterator();
                 while (i.hasNext()) 
                 {
-                    pool.putInstance(i.next());
+                    try
+                    {
+                        pool.returnObject(i.next());
+                    }
+                    catch (Exception e)
+                    {
+                        log.warn(
+                            "Nonfatal error. Could not return key to pool", e);
+                    }
                 }
                 keys.clear();
             }
@@ -223,7 +231,15 @@ public class MethodResultCache
                         Thread.yield();
                     }
                     jcsCache.remove(key, key.getGroupKey());
-                    pool.putInstance(key);
+                    try
+                    {
+                        pool.returnObject(key);
+                    }
+                    catch (Exception e)
+                    {
+                        log.warn(
+                            "Nonfatal error. Could not return key to pool", e);
+                    }
                 }
                 // jcs does not throw an exception here, might remove this
                 catch (Exception ce) 
@@ -250,10 +266,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = getImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -272,10 +296,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = getImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -294,10 +326,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = getImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -317,10 +357,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = getImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -338,10 +386,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(keys);
                 result = getImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -356,7 +412,7 @@ public class MethodResultCache
         try
         {
             MethodCacheKey key =  
-                (MethodCacheKey)pool.getInstance(keyClass);
+                (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method);
             putImpl(key, value);
         }
@@ -372,7 +428,7 @@ public class MethodResultCache
         try
         {
             MethodCacheKey key =  
-                (MethodCacheKey)pool.getInstance(keyClass);
+                (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1);
             putImpl(key, value);
         }
@@ -388,7 +444,7 @@ public class MethodResultCache
         try
         {
             MethodCacheKey key =  
-                (MethodCacheKey)pool.getInstance(keyClass);
+                (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2);
             putImpl(key, value);
         }
@@ -404,7 +460,7 @@ public class MethodResultCache
         try
         {
             MethodCacheKey key =  
-                (MethodCacheKey)pool.getInstance(keyClass);
+                (MethodCacheKey)pool.borrowObject();
             key.init(instanceOrClass, method, arg1, arg2, arg3);
             putImpl(key, value);
         }
@@ -419,7 +475,7 @@ public class MethodResultCache
         try
         {
             MethodCacheKey key =  
-                (MethodCacheKey)pool.getInstance(keyClass);
+                (MethodCacheKey)pool.borrowObject();
             key.init(keys);
             putImpl(key, value);
         }
@@ -437,10 +493,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 jcsCache.invalidateGroup(key.getGroupKey());
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -458,10 +522,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method);
                 result = removeImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -480,10 +552,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1);
                 result = removeImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -502,10 +582,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2);
                 result = removeImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -525,10 +613,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(instanceOrClass, method, arg1, arg2, arg3);
                 result = removeImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
@@ -546,10 +642,18 @@ public class MethodResultCache
             try
             {
                 MethodCacheKey key = 
-                    (MethodCacheKey)pool.getInstance(keyClass);
+                    (MethodCacheKey)pool.borrowObject();
                 key.init(keys);
                 result = removeImpl(key);
-                pool.putInstance(key);
+                try
+                {
+                    pool.returnObject(key);
+                }
+                catch (Exception e)
+                {
+                    log.warn(
+                        "Nonfatal error.  Could not return key to pool", e);
+                }
             }
             catch (Exception e)
             {
