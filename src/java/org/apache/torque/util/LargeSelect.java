@@ -57,9 +57,12 @@ package org.apache.torque.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Set;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
@@ -168,7 +171,7 @@ import com.workingdogs.village.DataSetException;
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
-public class LargeSelect implements Runnable
+public class LargeSelect implements Runnable, Serializable
 {
     /** The number of records that a page consists of.  */
     private int pageSize;
@@ -199,6 +202,8 @@ public class LargeSelect implements Runnable
      * longer required.
      */
     private volatile boolean killThread = false;
+    /** A flag that indicates whether or not the query thread is running. */
+    private volatile boolean threadRunning = false;
     /**
      * An indication of whether or not the current query has completed
      * processing.
@@ -581,7 +586,7 @@ public class LargeSelect implements Runnable
             {
                 try
                 {
-                    Thread.currentThread().sleep(500);
+                    Thread.sleep(500);
                 }
                 catch (InterruptedException e)
                 {
@@ -795,6 +800,7 @@ public class LargeSelect implements Runnable
             {
                 log.error(e);
             }
+            threadRunning = false;
         }
     }
 
@@ -803,13 +809,17 @@ public class LargeSelect implements Runnable
      *
      * @param initialSize the initial size for each block.
      */
-    private void startQuery(int initialSize)
+    private synchronized void startQuery(int initialSize)
     {
-        pageSize = initialSize;
-        currentlyFilledTo = -1;
-        queryCompleted = false;
-        thread = new Thread(this);
-        thread.start();
+        if (!threadRunning)
+        {
+            pageSize = initialSize;
+            currentlyFilledTo = -1;
+            queryCompleted = false;
+            thread = new Thread(this);
+            thread.start();
+            threadRunning = true;
+        }
     }
 
     /**
@@ -818,21 +828,24 @@ public class LargeSelect implements Runnable
      *
      * @throws TorqueException if a sleep is interrupted.
      */
-    private void stopQuery() throws TorqueException
+    private synchronized void stopQuery() throws TorqueException
     {
-        killThread = true;
-        while (thread.isAlive())
+        if (threadRunning)
         {
-            try
+            killThread = true;
+            while (thread.isAlive())
             {
-                Thread.currentThread().sleep(100);
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e)
+                {
+                    throw new TorqueException("Unexpected interruption", e);
+                }
             }
-            catch (InterruptedException e)
-            {
-                throw new TorqueException("Unexpected interruption", e);
-            }
+            killThread = false;
         }
-        killThread = false;
     }
 
     /**
@@ -1104,7 +1117,7 @@ public class LargeSelect implements Runnable
      *
      * @throws TorqueException if a sleep is interrupted.
      */
-    public void invalidateResult() throws TorqueException
+    public synchronized void invalidateResult() throws TorqueException
     {
         stopQuery();
         blockBegin = 0;
@@ -1136,28 +1149,66 @@ public class LargeSelect implements Runnable
      */
     public String getSearchParam(String name)
     {
-        if (null == params)
-        {
-            return "";
-        }
-        return (String) params.get(name);
+        return getSearchParam(name, null);
     }
 
     /**
-     * Set a parameter used to retrieve the last set of results.
+     * Retrieve a search parameter.  This acts as a convenient place to store
+     * parameters that relate to the LargeSelect to make it easy to get at them
+     * in order to repopulate search parameters on a form when the next page of
+     * results is retrieved - they in no way effect the operation of
+     * LargeSelect.
+     *
+     * @param name the search parameter key to retrieve.
+     * @param defaultValue the default value to return if the key is not found.
+     * @return the value of the search parameter.
+     */
+    public String getSearchParam(String name, String defaultValue)
+    {
+        if (null == params)
+        {
+            return defaultValue;
+        }
+        String value = (String) params.get(name);
+        return null == value ? defaultValue : value;
+    }
+
+    /**
+     * Set a search parameter.  If the value is <code>null</code> then the 
+     * key will be removed from the parameters.
      *
      * @param name the search parameter key to set.
      * @param value the value of the search parameter to store.
      */
     public void setSearchParam(String name, String value)
     {
-        if (null == params)
+        if (null == value)
         {
-            params = new Hashtable();
+            removeSearchParam(name);
         }
-        if (name != null && value != null)
+        else
         {
-            params.put(name, value);
+            if (null != name)
+            {
+                if (null == params)
+                {
+                    params = new Hashtable();
+                }
+                params.put(name, value);
+            }
+        }
+    }
+
+    /**
+     * Remove a value from the search parameters.
+     *
+     * @param name the search parameter key to remove.
+     */
+    public void removeSearchParam(String name)
+    {
+        if (null != params)
+        {
+            params.remove(name);
         }
     }
 
@@ -1168,8 +1219,27 @@ public class LargeSelect implements Runnable
      */
     public String toString()
     {
-        return "LargeSelect - TotalRecords: " + getTotalRecords() 
-                + " TotalsFinalised: " + getTotalsFinalized();
+        StringBuffer result = new StringBuffer();
+        result.append("LargeSelect - TotalRecords: ");
+        result.append(getTotalRecords());
+        result.append(" TotalsFinalised: ");
+        result.append(getTotalsFinalized());
+        result.append("\nParameters:");
+        if (null == params || params.size() == 0)
+        {
+            result.append(" No parameters have been set.");
+        }
+        else
+        {
+            Set keys = params.keySet();
+            for (Iterator iter = keys.iterator(); iter.hasNext();)
+            {
+                String key = (String) iter.next();
+                String val = (String) params.get(key);
+                result.append("\n ").append(key).append(": ").append(val);
+            }
+        }
+        return result.toString();
     }
 
 }
