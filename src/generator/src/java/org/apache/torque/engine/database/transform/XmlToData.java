@@ -60,26 +60,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.Table;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -199,18 +195,22 @@ public class XmlToData extends DefaultHandler implements EntityResolver
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
-            throws IOException
+            throws SAXException
     {
-        if (dataDTD != null && dtdFileName.equals(systemId))
-        {
-            log.info("Resolver: used " + dtdFile.getPath());
-            return dataDTD;
-        }
-        else
-        {
-            log.info("Resolver: used " + systemId);
-            return getInputSource(systemId);
-        }
+		try {
+			if (dataDTD != null && dtdFileName.equals(systemId))
+			{
+			    log.info("Resolver: used " + dtdFile.getPath());
+			    return dataDTD;
+			}
+			else
+			{
+			    log.info("Resolver: used " + systemId);
+			    return getInputSource(systemId);
+			}
+		} catch (IOException e) {
+			throw new SAXException(e);
+		}
     }
 
     /**

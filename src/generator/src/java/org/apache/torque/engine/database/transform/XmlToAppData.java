@@ -55,16 +55,17 @@ package org.apache.torque.engine.database.transform;
  */
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.File;
-import java.util.Vector;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Stack;
+import java.util.Vector;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.engine.EngineException;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
@@ -73,15 +74,10 @@ import org.apache.torque.engine.database.model.ForeignKey;
 import org.apache.torque.engine.database.model.Index;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.database.model.Unique;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * A Class that is used to parse an input xml schema file and creates an AppData
@@ -219,10 +215,13 @@ public class XmlToAppData extends DefaultHandler
      * @return an InputSource for the database.dtd file
      */
     public InputSource resolveEntity(String publicId, String systemId)
-            throws SAXException,
-                   IOException
+            throws SAXException
     {
-        return new DTDResolver().resolveEntity(publicId, systemId);
+		try {
+			return new DTDResolver().resolveEntity(publicId, systemId);
+		} catch (Exception e) {
+			throw new SAXException(e);
+		}
     }
 
 
