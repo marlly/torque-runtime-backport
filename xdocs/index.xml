@@ -116,8 +116,14 @@
         </tr>
         <tr>
           <td>DB2</td>
-          <td>COM.ibm.db2.jdbc.{app|net}.{DB2Driver|AS400JDBCDriver}</td>
+          <td>COM.ibm.db2.jdbc.{app|net}.DB2Driver</td>
           <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>DB2/AS400</td>
+          <td>COM.ibm.db2.jdbc.{app|net}.AS400JDBCDriver</td>
+          <td><a href="mailto:Sweaver@rippe.com">Scott Weaver</a></td>
           <td></td>
         </tr>
         <tr>
