@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.lang.ObjectUtils;
 #end
 #if ($addIntakeRetrievable)
-import org.apache.fulcrum.intake.Retrievable;
+import $retrievableInterface;
 #end
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.BaseObject;
@@ -63,7 +63,7 @@ import ${tblFK.Package}.${tblFK.JavaName}Peer;
  */
 public abstract class $basePrefix$table.JavaName $extendsBaseClass
 #if ($addIntakeRetrievable)
-    implements Retrievable
+    implements $retrievableInterface
 #end
 {
     /** The Peer class */

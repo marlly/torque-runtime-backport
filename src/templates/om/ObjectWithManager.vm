@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.commons.lang.ObjectUtils;
 #end
 #if ($addIntakeRetrievable)
-import org.apache.fulcrum.intake.Retrievable;
+import $retrievableInterface;
 #end
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.BaseObject;
@@ -63,7 +63,7 @@ import ${tblFK.Package}.${tblFK.JavaName}Peer;
  */
 public abstract class $basePrefix$table.JavaName $extendsBaseClass
 #if ($addIntakeRetrievable)
-    implements Retrievable
+    implements $retrievableInterface
 #end
 {
     /** The Peer class */
@@ -350,9 +350,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #set ($col = $table.getColumn($colName) )
 
             #set ($fktype = $col.JavaNative)
-            #if ($fktype == "short") 
+            #if ($fktype == "short")
                 set${col.JavaName}(((NumberKey) keys[$i]).shortValue());
-            #elseif($fktype == "int") 
+            #elseif($fktype == "int")
                 set${col.JavaName}(((NumberKey) keys[$i]).intValue());
             #elseif($fktype == "long")
                 set${col.JavaName}(((NumberKey) keys[$i]).longValue());
@@ -364,9 +364,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                 set${col.JavaName}(((NumberKey) keys[$i]).floatValue());
             #elseif($fktype == "double")
                 set${col.JavaName}(((NumberKey) keys[$i]).doubleValue());
-            #elseif($fktype == "Short") 
+            #elseif($fktype == "Short")
                 set${col.JavaName}(new Short(((NumberKey) keys[$i]).shortValue()));
-            #elseif($fktype == "Integer") 
+            #elseif($fktype == "Integer")
                 set${col.JavaName}(new Integer(((NumberKey) keys[$i]).intValue()));
             #elseif($fktype == "Long")
                 set${col.JavaName}(new Long(((NumberKey) keys[$i]).longValue()));
@@ -389,9 +389,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ($col = $table.getColumn($colName) )
 
         #set ($fktype = $col.JavaNative)
-        #if ($fktype == "short") 
+        #if ($fktype == "short")
             set${col.JavaName}(((NumberKey) key).shortValue());
-        #elseif($fktype == "int") 
+        #elseif($fktype == "int")
             set${col.JavaName}(((NumberKey) key).intValue());
         #elseif($fktype == "long")
             set${col.JavaName}(((NumberKey) key).longValue());
@@ -403,9 +403,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             set${col.JavaName}(((NumberKey) key).floatValue());
         #elseif($fktype == "double")
             set${col.JavaName}(((NumberKey) key).doubleValue());
-        #elseif($fktype == "Short") 
+        #elseif($fktype == "Short")
             set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
-        #elseif($fktype == "Integer") 
+        #elseif($fktype == "Integer")
             set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
         #elseif($fktype == "Long")
             set${col.JavaName}(new Long(((NumberKey) key).longValue()));
@@ -1174,9 +1174,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      */
     public void setPrimaryKey(ObjectKey $clo)
         $throwsClause {
-        #if ($cjtype == "short") 
+        #if ($cjtype == "short")
             set${col.JavaName}(((NumberKey)$clo).shortValue());
-        #elseif($cjtype == "int") 
+        #elseif($cjtype == "int")
             set${col.JavaName}(((NumberKey)$clo).intValue());
         #elseif($cjtype == "long")
             set${col.JavaName}(((NumberKey)$clo).longValue());
@@ -1188,9 +1188,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             set${col.JavaName}(((NumberKey)$clo).floatValue());
         #elseif($cjtype == "double")
             set${col.JavaName}(((NumberKey)$clo).doubleValue());
-        #elseif($cjtype == "Short") 
+        #elseif($cjtype == "Short")
             set${col.JavaName}(new Short(((NumberKey)$clo).shortValue()));
-        #elseif($cjtype == "Integer") 
+        #elseif($cjtype == "Integer")
             set${col.JavaName}(new Integer(((NumberKey)$clo).intValue()));
         #elseif($cjtype == "Long")
             set${col.JavaName}(new Long(((NumberKey)$clo).longValue()));
@@ -1214,9 +1214,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      */
     public void setPrimaryKey(String key) $throwsClause
     {
-        #if ($cjtype == "short") 
+        #if ($cjtype == "short")
             set${col.JavaName}(Short.parseShort(key));
-        #elseif($cjtype == "int") 
+        #elseif($cjtype == "int")
             set${col.JavaName}(Integer.parseInt(key));
         #elseif($cjtype == "long")
             set${col.JavaName}(Long.parseLong(key));
@@ -1228,9 +1228,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             set${col.JavaName}(Float.parseFloat(key));
         #elseif($cjtype == "double")
             set${col.JavaName}(Double.parseDouble(key));
-        #elseif($cjtype == "Short") 
+        #elseif($cjtype == "Short")
             set${col.JavaName}(new Short(key));
-        #elseif($cjtype == "Integer") 
+        #elseif($cjtype == "Integer")
             set${col.JavaName}(new Integer(key));
         #elseif($cjtype == "Long")
             set${col.JavaName}(new Long(key));
@@ -1261,11 +1261,11 @@ shows the infinite loop: System.out.println("Entering save for " + this);
          SimpleKey[] keys = (SimpleKey[]) key.getValue();
         SimpleKey tmpKey = null;
      #set ($i = 0)
-    #foreach ($pk in $table.PrimaryKeys) 
+    #foreach ($pk in $table.PrimaryKeys)
         #set ($pktype = $pk.JavaNative)
-        #if ($pktype == "short") 
+        #if ($pktype == "short")
             set${pk.JavaName}(((NumberKey)keys[$i]).shortValue());
-        #elseif($pktype == "int") 
+        #elseif($pktype == "int")
             set${pk.JavaName}(((NumberKey)keys[$i]).intValue());
         #elseif($pktype == "long")
             set${pk.JavaName}(((NumberKey)keys[$i]).longValue());
@@ -1277,9 +1277,9 @@ shows the infinite loop: System.out.println("Entering save for " + this);
             set${pk.JavaName}(((NumberKey)keys[$i]).floatValue());
         #elseif($pktype == "double")
             set${pk.JavaName}(((NumberKey)keys[$i]).doubleValue());
-        #elseif($pktype == "Short") 
+        #elseif($pktype == "Short")
             set${pk.JavaName}(new Short(((NumberKey)keys[$i]).shortValue()));
-        #elseif($pktype == "Integer") 
+        #elseif($pktype == "Integer")
             set${pk.JavaName}(new Integer(((NumberKey)keys[$i]).intValue()));
         #elseif($pktype == "Long")
             set${pk.JavaName}(new Long(((NumberKey)keys[$i]).longValue()));

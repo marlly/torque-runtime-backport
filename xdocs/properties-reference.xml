@@ -32,7 +32,7 @@
   <td><code> torque.project </code></td>
   <td><code> N/A </code></td>
   <td>
-    The name of the project Torque will generate code for. After choosing the 
+    The name of the project Torque will generate code for. After choosing the
     project name, your XML schema file (originally <code>project-schema.xml</code>),
     that Torque will read should be renamed to <code>${torque.project}-schema.xml</code>.
   </td>
@@ -40,9 +40,9 @@
 <tr>
   <td><code> torque.database </code></td>
   <td><code> N/A </code></td>
-  <td> 
+  <td>
     Torque must know the target database platform in order to generate the
-    appropriate Java and SQL code. Currently supported values are: 
+    appropriate Java and SQL code. Currently supported values are:
       axion, cloudscape, db2, db2400, hypersonic, interbase, mssql, mysql,
       oracle, postgresql, sapdb, and sybase.
   </td>
@@ -80,7 +80,7 @@
   <td><code> false </code></td>
   <td>
     If true, Torque will not look in the <code>templatePath</code> directory,
-    for templates, but instead load them from the classpath, allowing you to 
+    for templates, but instead load them from the classpath, allowing you to
     use Torque without extracting it from the jar.
   </td>
 </tr>
@@ -144,7 +144,7 @@
   <td><code> torque.database.createUrl </code></td>
   <td><code> N/A </code></td>
   <td>
-    The JDBC URL that Torque can use to create and drop databases if instructed 
+    The JDBC URL that Torque can use to create and drop databases if instructed
     to do so. This is typically an administrative URL.
   </td>
 </tr>
@@ -152,8 +152,8 @@
   <td><code> torque.database.buildUrl </code></td>
   <td><code> N/A </code></td>
   <td>
-    The JDBC URL that will be used to access yourdatabase. Torque can use 
-    this to create your tables if instructed to do so.  This value should 
+    The JDBC URL that will be used to access yourdatabase. Torque can use
+    this to create your tables if instructed to do so.  This value should
     reflect the database name specified in the database schema file
     (described in the next section).
   </td>
@@ -242,8 +242,16 @@
   <td><code> torque.addIntakeRetrievable </code></td>
   <td><code> false </code></td>
   <td>
-    If true, the data objects will implement Intake's Retrievable 
+    If true, the data objects will implement Intake's Retrievable
     interface
+  </td>
+</tr>
+<tr>
+  <td><code> torque.retrievableInterface </code></td>
+  <td><code> org.apache.turbine.om.Retrievable (for Turbine 2.2) </code></td>
+  <td>
+    Defines the Retrievable interface. (set to
+    org.apache.fulcrum.intake.Retrievable if you are using Fulcrum)
   </td>
 </tr>
 <tr>
@@ -271,7 +279,7 @@
   <td><code> torque.complexObjectModel </code></td>
   <td><code> true </code></td>
   <td>
-    If true, Torque generates data objects with collection support and 
+    If true, Torque generates data objects with collection support and
     methods to easily retreive foreign key relationships.
   </td>
 </tr>
@@ -280,7 +288,7 @@
   <td><code> false </code></td>
   <td>
     If true, Torque will not look in the <code>templatePath</code> directory,
-    for templates, but instead load them from the classpath, allowing you to 
+    for templates, but instead load them from the classpath, allowing you to
     use Torque without extracted it from the jar.
   </td>
 </tr>
@@ -301,7 +309,7 @@
   <td><code> torque.idTableXMLFile </code></td>
   <td><code> N/A </code></td>
   <td>
-    
+
   </td>
 </tr>
 <tr>
