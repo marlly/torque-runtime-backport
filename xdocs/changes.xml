@@ -44,6 +44,9 @@
 <p>
   <ul>
     <li>
+      TRQ18: Criteria.addDate is broken
+    </li>
+    <li>
       TRQ19: recursive external schemas fail
     </li>
     <li>

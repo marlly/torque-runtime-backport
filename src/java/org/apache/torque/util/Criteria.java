@@ -1278,13 +1278,14 @@ public class Criteria extends Hashtable
      *
      * @param column A String value to use as column.
      * @param year An int with the year.
-     * @param month An int with the month.
+     * @param month An int with the month. Month value is 0-based.
+     *        e.g., 0 for January
      * @param date An int with the date.
      * @return A modified Criteria object.
      */
     public Criteria addDate(String column, int year, int month, int date)
     {
-        add(column, new GregorianCalendar(year, month, date));
+        add(column, new GregorianCalendar(year, month, date).getTime());
         return this;
     }
 
@@ -1300,7 +1301,8 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param year An int with the year.
-     * @param month An int with the month.
+     * @param month An int with the month. Month value is 0-based.
+     *        e.g., 0 for January
      * @param date An int with the date.
      * @param comparison String describing how to compare the column with
      *        the value
@@ -1309,7 +1311,8 @@ public class Criteria extends Hashtable
     public Criteria addDate(String column, int year, int month, int date,
                             SqlEnum comparison)
     {
-        add(column, new GregorianCalendar(year, month, date), comparison);
+        add(column, new GregorianCalendar(year, month, date).getTime(),
+            comparison);
         return this;
     }
 

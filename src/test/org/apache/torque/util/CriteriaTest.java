@@ -312,6 +312,27 @@ public class CriteriaTest extends BaseTestCase
         assertEquals("TABLE.COLUMN=1", cc.toString());
     }
 
+    public void testAddDate()
+    {
+        Criteria c = new Criteria();
+        c.addDate("TABLE.DATE_COLUMN", 2003, 0, 22);
+
+        String expect = "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN='20030122000000'";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+        System.out.println(result);
+        assertEquals(expect, result);
+    }
+
     public void testCurrentDate()
     {
         Criteria c = new Criteria()
@@ -332,7 +353,6 @@ public class CriteriaTest extends BaseTestCase
         }
 
         assertEquals(expect,result);
-
     }
 
     public void testCountAster()
