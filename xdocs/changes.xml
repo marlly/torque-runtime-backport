@@ -19,11 +19,11 @@
       </action>
       <action dev='seade' type='add'>
         HSQL adapter enhancements: added support for case-insensitive queries
-        and cascading deletes.  Thanks to Partick Carl for the patch.
+        and cascading deletes.  Thanks to Patrick Carl for the patch.
       </action>
       <action dev='seade' type='fix'>
         HSQL adapter fix: correction to the generated CREATE TABLE DDL when 
-        using IDENTITY columns.  Thanks to Partick Carl for the patch.
+        using IDENTITY columns.  Thanks to Patrick Carl for the patch.
       </action>
       <action dev='seade' type='fix'>
         TRQS185: Corrected handling of BIT with PostgreSQL.  Note that the
