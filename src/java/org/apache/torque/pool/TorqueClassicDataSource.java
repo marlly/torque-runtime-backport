@@ -87,16 +87,20 @@ public class TorqueClassicDataSource
 {
     /** Pools keyed by username. */
     private static Map pools = new HashMap();
+
+    /** Counter used to create an internal unique name od the Data Source */
     private static int cpdsCounter;
 
     /** DataSource Name used to find the ConnectionPoolDataSource */
     private String dataSourceName;
+
     /** Description */
     private String description;
 
     /** Login TimeOut in seconds */
     private int loginTimeout;
 
+    /** Pool Data Source that is used to fetch connections */
     private ConnectionPoolDataSource cpds;
 
     /** Log stream */
@@ -105,12 +109,31 @@ public class TorqueClassicDataSource
     /** Environment that may be used to set up a jndi initial context. */
     private Properties jndiEnvironment;
 
+    /** Maximum Number of Connections cached in this Data Source */
     private int defaultMaxConnections;
+
+    /**
+     * Maximum Number of Connections for a specified User in this Data
+     * Source
+     */
     private Properties perUserMaxConnections;
+
+    /** Maximum lifetime of a database connection */
     private int maxExpiryTime;
+
+    /**
+     * time to wait when initiating a connection
+     * for the database to respond 
+     */
     private int connectionWaitTimeout;
+
+    /** Interval (in seconds) that the monitor thread reports the pool state */
     private int logInterval;
+
+    /** Do connections from this pool are auto-committing? */
     private boolean defaultAutoCommit;
+    
+    /** Are connections from this pool read-only? */
     private boolean defaultReadOnly;
 
     /**
