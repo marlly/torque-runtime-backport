@@ -81,7 +81,17 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         dbMap.addTable(getTable());
         TableMap tMap = dbMap.getTable(getTable());
 
-        tMap.setPrimaryKeyMethod($table.IdMethod);
+        #if ($table.IdMethod == "native")
+        tMap.setPrimaryKeyMethod(TableMap.NATIVE);
+        #elseif ($table.IdMethod == "autoincrement")
+        tMap.setPrimaryKeyMethod(TableMap.AUTO_INCREMENT);
+        #elseif ($table.IdMethod == "sequence")
+        tMap.setPrimaryKeyMethod(TableMap.SEQUENCE);
+        #elseif ($table.IdMethod == "idbroker")
+        tMap.setPrimaryKeyMethod(TableMap.ID_BROKER);
+        #else
+        tMap.setPrimaryKeyMethod("$table.IdMethod");
+        #end
 
         #if ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
