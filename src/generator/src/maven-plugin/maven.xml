@@ -23,8 +23,6 @@
       </fileset>
     </copy>
 
-    <copy todir="${assemblyDir}" file="../conf/build-torque.xml"/>
-
     <j:if test="${sourcesPresent == 'true'}">
       <copy todir="${assemblyDir}">
         <fileset dir="target/classes"/>
