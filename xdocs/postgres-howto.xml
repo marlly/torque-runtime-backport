@@ -58,7 +58,8 @@ to reference large objects, you don't need to worry about it.
 This patch may or may not be necessary. If you are having problems with
 the driver, please try it out. You may also wish to try upgrading to a
 more recent version of the Postgrest driver and also make sure that you
-are using the latest released version of Village.
+are using the latest released version of
+<a href="http://share.whichever.com/village/">Village</a>.
 </p>
 
 <source><![CDATA[
