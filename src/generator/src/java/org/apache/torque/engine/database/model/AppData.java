@@ -73,6 +73,7 @@ import org.xml.sax.Attributes;
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
  * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @version $Id$
+ * @deprecated use Database
  */
 public class AppData
 {
