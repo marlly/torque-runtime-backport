@@ -14,11 +14,9 @@ xdocs/      Torque documention in Anakia formatted tags.
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
-You must have ant version 1.5 or newer installed.
+Building Torque from CVS is now very easy. Torque has been Maven-enabled.
+Please refer to the Maven Getting Started document for instructions on building.
+This document is available here:
 
-Building the decoupled version of Torque from CVS is now very easy.  Torque
-has been Maven-enabled.  Please refer to the Maven Getting Started document
-for instructions on building.  This document is available here:
-
-http://jakarta.apache.org/turbine/maven/getting-started.html
+http://maven.apache.org/getting-started.html
 
