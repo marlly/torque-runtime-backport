@@ -290,11 +290,14 @@ public class Table implements IDMethod
         return fk;
     }
 
+    /**
+     * Gets the column that subclasses of the class representing this
+     * table can be produced from.
+     */
     public Column getChildrenColumn()
     {
         return inheritanceColumn;
     }
-
 
     /**
      * Get the objects that can be created from this table.
