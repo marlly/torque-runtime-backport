@@ -448,24 +448,20 @@
   <!-- ================================================================== -->
 
   <target
-    name="check_for_jdom">
+    name="check.jakarta-site2">
 
     <available
-      property="jdom.present"
-      classname="org.jdom.JDOMException">
-      <classpath>
-         <fileset dir="${jakarta.site2}/lib">
-           <include name="*.jar"/>
-         </fileset>
-      </classpath>
-    </available>
+      property="jakarta-site2.present"
+      file="${jakarta.site2}"
+    />
   </target>
 
-  <target depends="check_for_jdom" name="docs-prepare-error"
-          unless="jdom.present">
+  <target depends="check.jakarta-site2" name="docs-prepare-error"
+          unless="jakarta-site2.present">
     <echo>
-      The Jakarta-Site2 module is not present! Please check
-      to make sure that you have checked it out from CVS.
+      Generation of the Torque documentation was skipped because the
+      Jakarta-Site2 module is not present! Please check to make sure
+      that you have checked it out from CVS.
 
       &lt;http://jakarta.apache.org/site/jakarta-site2.html&gt;
     </echo>
@@ -475,7 +471,7 @@
     name="docs"
     depends="docs-prepare-error"
     description="==> generates the HTML documentation"
-    if="jdom.present">
+    if="jakarta-site2.present">
 
     <taskdef name="anakia"
        classname="org.apache.velocity.anakia.AnakiaTask">
@@ -558,7 +554,7 @@
 
   <target
     name="dist"
-    depends="jar,check.village,javadocs"
+    depends="jar,check.village,javadocs,docs"
     description="==> Creates torque.zip distribution">
 
     <property name="torque.dir" value="${build.dir}/torque/torque"/>
