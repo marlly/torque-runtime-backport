@@ -1,6 +1,6 @@
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/default.properties db-torque_BRANCH31.work/default.properties
---- db-torque_BRANCH31.p/default.properties	2003-08-18 17:21:03.000000000 +0200
-+++ db-torque_BRANCH31.work/default.properties	2003-10-17 13:31:31.000000000 +0200
+diff -Nurb db-torque/default.properties db-torque.p/default.properties
+--- db-torque/default.properties	2003-08-18 17:21:03.000000000 +0200
++++ db-torque.p/default.properties	2003-10-20 14:26:42.000000000 +0200
 @@ -16,6 +16,33 @@
  rttest.dir = ${src.dir}/rttest
  
@@ -35,9 +35,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/default.properties db-torque_BRANC
  # Standard Torque build file references used for testing.
  # -------------------------------------------------------------------
  torque.distDir = ${build.test}/rttest
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/maven.xml db-torque_BRANCH31.work/maven.xml
---- db-torque_BRANCH31.p/maven.xml	2003-08-18 17:20:09.000000000 +0200
-+++ db-torque_BRANCH31.work/maven.xml	2003-10-17 13:44:43.000000000 +0200
+diff -Nurb db-torque/maven.xml db-torque.p/maven.xml
+--- db-torque/maven.xml	2003-08-18 17:20:09.000000000 +0200
++++ db-torque.p/maven.xml	2003-10-20 14:53:25.000000000 +0200
 @@ -1,5 +1,16 @@
 +<?xml version="1.0" encoding="ISO-8859-1"?>
 +
@@ -55,7 +55,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/maven.xml db-torque_BRANCH31.work/
    xmlns:deploy="deploy">
  
    <!-- Allow any user specific values to override the defaults -->
-@@ -10,6 +21,50 @@
+@@ -10,6 +21,56 @@
    <property file="default.properties" />
  
    <!-- ================================================================== -->
@@ -65,20 +65,26 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/maven.xml db-torque_BRANCH31.work/
 +  <!-- for the id table                                                   -->
 +  <!-- ================================================================== -->
 +   <preGoal name="java:compile">
-+    <copy todir="target/src">
-+      <fileset dir="src/java"/>
-+    </copy>
 +
-+    <path id="maven.compile.src.set">
-+      <pathelement location="${pom.build.SourceDirectory}"/>
-+    </path>
++    <!-- Did you happen to see the most sucking buildtool in the world... -->
++    <j:if test="${pom.id == 'torque:torque'}"> 
++    <!-- ...and if you saw it, was it crashing? 
++                             (With apologies to Charlie Rich) -->
++      <copy todir="target/src">
++        <fileset dir="src/java"/>
++      </copy>
 +
-+    <j:if test="${omGenerated != 'true'}">
-+      <echo>Generating sources ...</echo>
-+      <attainGoal name="torque:om"/>
++      <path id="maven.compile.src.set">
++        <pathelement location="${pom.build.SourceDirectory}"/>
++      </path>
++
++      <j:if test="${omGenerated != 'true'}">
++        <echo>Generating sources ...</echo>
++        <attainGoal name="torque:om"/>
++      </j:if>
++
++      <property name="sourcesPresent" value="true"/>
 +    </j:if>
-+
-+    <property name="sourcesPresent" value="true"/>
 +  </preGoal>
 +
 +  <!-- ================================================== -->
@@ -106,9 +112,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/maven.xml db-torque_BRANCH31.work/
    <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->
    <!-- ================================================================== -->
    <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/project.xml db-torque_BRANCH31.work/project.xml
---- db-torque_BRANCH31.p/project.xml	2003-09-09 11:46:43.000000000 +0200
-+++ db-torque_BRANCH31.work/project.xml	2003-10-17 13:38:57.000000000 +0200
+diff -Nurb db-torque/project.xml db-torque.p/project.xml
+--- db-torque/project.xml	2003-09-09 11:46:43.000000000 +0200
++++ db-torque.p/project.xml	2003-10-20 14:26:42.000000000 +0200
 @@ -284,7 +284,7 @@
  
    <build>
@@ -118,133 +124,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/project.xml db-torque_BRANCH31.wor
      <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
      <aspectSourceDirectory></aspectSourceDirectory>
  
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/proposals/henning/idtable-peer/idtable-peer.patch db-torque_BRANCH31.work/proposals/henning/idtable-peer/idtable-peer.patch
---- db-torque_BRANCH31.p/proposals/henning/idtable-peer/idtable-peer.patch	1970-01-01 01:00:00.000000000 +0100
-+++ db-torque_BRANCH31.work/proposals/henning/idtable-peer/idtable-peer.patch	2003-10-17 15:05:51.000000000 +0200
-@@ -0,0 +1,120 @@
-+diff --exclude=CVS -Nurb db-torque_BRANCH31.p/default.properties db-torque_BRANCH31.work/default.properties
-+--- db-torque_BRANCH31.p/default.properties	2003-08-18 17:21:03.000000000 +0200
-++++ db-torque_BRANCH31.work/default.properties	2003-10-17 13:31:31.000000000 +0200
-+@@ -16,6 +16,33 @@
-+ rttest.dir = ${src.dir}/rttest
-+ 
-+ # -------------------------------------------------------------------
-++# Torque Plugin Properties
-++# -------------------------------------------------------------------
-++basePrefix = Base
-++addIntakeRetrievable = false
-++torque.saveException = TorqueException
-++torque.project       = default
-++#
-++# Dummy value. Is not actually used in the om generation but must
-++# be present and a valid database.
-++torque.database      = mysql
-++#
-++torque.java.dir   = target/src
-++torque.sql.dir    = target/sql
-++torque.output.dir = target/sql
-++torque.schema.dir = target/xml
-++torque.contextProperties = default.properties
-++#
-++torque.schema.om.includes = *-schema.xml
-++torque.schema.om.excludes = 
-++
-++# -------------------------------------------------------------------
-++# Default database name and package for the id-table peer and objects
-++# -------------------------------------------------------------------
-++idtable.database.name    = ${torque.project}
-++idtable.database.package = org.apache.torque.oid.om
-++
-++# -------------------------------------------------------------------
-+ # Standard Torque build file references used for testing.
-+ # -------------------------------------------------------------------
-+ torque.distDir = ${build.test}/rttest
-+diff --exclude=CVS -Nurb db-torque_BRANCH31.p/maven.xml db-torque_BRANCH31.work/maven.xml
-+--- db-torque_BRANCH31.p/maven.xml	2003-08-18 17:20:09.000000000 +0200
-++++ db-torque_BRANCH31.work/maven.xml	2003-10-17 13:44:43.000000000 +0200
-+@@ -1,5 +1,16 @@
-++<?xml version="1.0" encoding="ISO-8859-1"?>
-++
-++<!-- ======================================================================== -->
-++<!--                                                                          -->
-++<!--  maven Buildfile                                                         -->
-++<!--                                                                          -->
-++<!-- $Id$ -->
-++<!--                                                                          -->
-++<!-- ======================================================================== -->
-++
-+ <project
-+   default="java:jar"
-++  xmlns:j="jelly:core"
-+   xmlns:deploy="deploy">
-+ 
-+   <!-- Allow any user specific values to override the defaults -->
-+@@ -10,6 +21,50 @@
-+   <property file="default.properties" />
-+ 
-+   <!-- ================================================================== -->
-++  <!-- J A V A : C O M P I L E   P R E   G O A L                          -->
-++  <!-- ================================================================== -->
-++  <!-- copy the source to target/src so we can add the generated peers    -->
-++  <!-- for the id table                                                   -->
-++  <!-- ================================================================== -->
-++   <preGoal name="java:compile">
-++    <copy todir="target/src">
-++      <fileset dir="src/java"/>
-++    </copy>
-++
-++    <path id="maven.compile.src.set">
-++      <pathelement location="${pom.build.SourceDirectory}"/>
-++    </path>
-++
-++    <j:if test="${omGenerated != 'true'}">
-++      <echo>Generating sources ...</echo>
-++      <attainGoal name="torque:om"/>
-++    </j:if>
-++
-++    <property name="sourcesPresent" value="true"/>
-++  </preGoal>
-++
-++  <!-- ================================================== -->
-++  <!-- Create the Peers for the ID Table                  -->
-++  <!-- ================================================== -->
-++
-++  <preGoal name="torque:init">
-++    <attainGoal name="copy-om"/>
-++  </preGoal>
-++
-++  <!-- ================================================== -->
-++  <!-- Prepare the OM Sources for Torque                  -->
-++  <!-- ================================================== -->
-++
-++  <goal name="copy-om">
-++    <filter token="DATABASE_DEFAULT" value="${idtable.database.name}"/>
-++    <filter token="DATABASE_PACKAGE" value="${idtable.database.package}"/>
-++    <copy
-++      file="src/schema/id-table-schema.xml"
-++      tofile="${torque.schema.dir}/id-table-schema.xml"
-++      filtering="yes"/>
-++  </goal>
-++
-++  <!-- ================================================================== -->
-+   <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->
-+   <!-- ================================================================== -->
-+   <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
-+diff --exclude=CVS -Nurb db-torque_BRANCH31.p/project.xml db-torque_BRANCH31.work/project.xml
-+--- db-torque_BRANCH31.p/project.xml	2003-09-09 11:46:43.000000000 +0200
-++++ db-torque_BRANCH31.work/project.xml	2003-10-17 13:38:57.000000000 +0200
-+@@ -284,7 +284,7 @@
-+ 
-+   <build>
-+     <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>
-+-    <sourceDirectory>src/java</sourceDirectory>
-++    <sourceDirectory>target/src</sourceDirectory>
-+     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
-+     <aspectSourceDirectory></aspectSourceDirectory>
-+ 
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/schema/id-table-schema.xml db-torque_BRANCH31.work/src/generator/src/schema/id-table-schema.xml
---- db-torque_BRANCH31.p/src/generator/src/schema/id-table-schema.xml	2003-07-24 14:40:41.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/schema/id-table-schema.xml	2003-10-17 14:44:01.000000000 +0200
+diff -Nurb db-torque/src/generator/src/schema/id-table-schema.xml db-torque.p/src/generator/src/schema/id-table-schema.xml
+--- db-torque/src/generator/src/schema/id-table-schema.xml	2003-07-24 14:40:41.000000000 +0200
++++ db-torque.p/src/generator/src/schema/id-table-schema.xml	2003-10-20 14:26:46.000000000 +0200
 @@ -15,13 +15,13 @@
  
  <database name="@DATABASE_DEFAULT@">
@@ -264,36 +146,36 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/schema/id-table-
      </unique>
  
    </table>
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.axion db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.axion
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.axion	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.axion	2003-10-17 14:29:11.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.axion db-torque.p/src/generator/src/templates/sql/id-table/idtable.axion
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.axion	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.axion	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.cloudscape db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.cloudscape
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.cloudscape	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.cloudscape	2003-10-17 14:29:04.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.cloudscape db-torque.p/src/generator/src/templates/sql/id-table/idtable.cloudscape
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.cloudscape	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.cloudscape	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.db2 db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.db2
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.db2	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.db2	2003-10-17 14:28:56.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.db2 db-torque.p/src/generator/src/templates/sql/id-table/idtable.db2
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.db2	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.db2	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.db2400 db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.db2400
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.db2400	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.db2400	2003-10-17 14:28:49.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.db2400 db-torque.p/src/generator/src/templates/sql/id-table/idtable.db2400
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.db2400	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.db2400	2003-10-20 14:26:46.000000000 +0200
 @@ -1,5 +1,5 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
@@ -301,63 +183,63 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id
  #set ( $initialID = $initialID + 1 )
  #end
  
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.hypersonic db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.hypersonic
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.hypersonic	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.hypersonic	2003-10-17 14:28:40.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.hypersonic db-torque.p/src/generator/src/templates/sql/id-table/idtable.hypersonic
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.hypersonic	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.hypersonic	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.interbase db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.interbase
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.interbase	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.interbase	2003-10-17 14:28:32.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.interbase db-torque.p/src/generator/src/templates/sql/id-table/idtable.interbase
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.interbase	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.interbase	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.mssql db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.mssql
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.mssql	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.mssql	2003-10-17 14:28:24.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.mssql db-torque.p/src/generator/src/templates/sql/id-table/idtable.mssql
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.mssql	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.mssql	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.mysql db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.mysql
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.mysql	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.mysql	2003-10-17 14:28:15.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.mysql db-torque.p/src/generator/src/templates/sql/id-table/idtable.mysql
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.mysql	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.mysql	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.oracle db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.oracle
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.oracle	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.oracle	2003-10-17 14:28:07.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.oracle db-torque.p/src/generator/src/templates/sql/id-table/idtable.oracle
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.oracle	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.oracle	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.postgresql db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.postgresql
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.postgresql	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.postgresql	2003-10-17 14:27:57.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.postgresql db-torque.p/src/generator/src/templates/sql/id-table/idtable.postgresql
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.postgresql	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.postgresql	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
 +insert into ID_TABLE (id_table_id, id_table_table_name, id_table_next_id, id_table_quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.sapdb db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.sapdb
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.sapdb	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.sapdb	2003-10-17 14:27:49.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.sapdb db-torque.p/src/generator/src/templates/sql/id-table/idtable.sapdb
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.sapdb	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.sapdb	2003-10-20 14:26:46.000000000 +0200
 @@ -1,5 +1,5 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (id_table_id, table_name, next_id, quantity) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep);
@@ -365,18 +247,18 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id
  #set ( $initialID = $initialID + 1 )
  #end
  
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.sybase db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.sybase
---- db-torque_BRANCH31.p/src/generator/src/templates/sql/id-table/idtable.sybase	2003-07-16 11:47:33.000000000 +0200
-+++ db-torque_BRANCH31.work/src/generator/src/templates/sql/id-table/idtable.sybase	2003-10-17 14:27:31.000000000 +0200
+diff -Nurb db-torque/src/generator/src/templates/sql/id-table/idtable.sybase db-torque.p/src/generator/src/templates/sql/id-table/idtable.sybase
+--- db-torque/src/generator/src/templates/sql/id-table/idtable.sybase	2003-07-16 11:47:33.000000000 +0200
++++ db-torque.p/src/generator/src/templates/sql/id-table/idtable.sybase	2003-10-20 14:26:46.000000000 +0200
 @@ -1,4 +1,4 @@
  #foreach ($tbl in $tables)
 -insert into ID_TABLE (ID_TABLE_ID, TABLE_NAME, NEXT_ID, QUANTITY) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep); 
 +insert into ID_TABLE (ID_TABLE_ID, ID_TABLE_TABLE_NAME, ID_TABLE_NEXT_ID, ID_TABLE_QUANTITY) VALUES ($initialID, '$tbl.Name', $initialIDValue, $initialIDStep); 
  #set ( $initialID = $initialID + 1 )
  #end
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDBroker.java db-torque_BRANCH31.work/src/java/org/apache/torque/oid/IDBroker.java
---- db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDBroker.java	2003-10-17 15:03:15.000000000 +0200
-+++ db-torque_BRANCH31.work/src/java/org/apache/torque/oid/IDBroker.java	2003-10-17 14:59:51.000000000 +0200
+diff -Nurb db-torque/src/java/org/apache/torque/oid/IDBroker.java db-torque.p/src/java/org/apache/torque/oid/IDBroker.java
+--- db-torque/src/java/org/apache/torque/oid/IDBroker.java	2003-10-17 14:56:15.000000000 +0200
++++ db-torque.p/src/java/org/apache/torque/oid/IDBroker.java	2003-10-20 14:26:46.000000000 +0200
 @@ -90,17 +90,17 @@
   * follows:<br>
   *
@@ -400,15 +282,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
   * </pre>
   *
   * NOTE: When the ID_TABLE must be updated we must ensure that
-@@ -111,6 +111,7 @@
-  *
-  * @author <a href="mailto:frank.kim@clearink.com">Frank Y. Kim</a>
-  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
-+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
-  * @version $Id$
-  */
- public class IDBroker implements Runnable, IdGenerator
-@@ -119,7 +120,7 @@
+@@ -119,7 +119,7 @@
      public static final String ID_TABLE = "ID_TABLE";
  
      /** Table_Name column name */
@@ -417,7 +291,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
  
      /** Fully qualified Table_Name column name */
      public static final String TABLE_NAME = ID_TABLE + "." + COL_TABLE_NAME;
-@@ -131,13 +132,13 @@
+@@ -131,13 +131,13 @@
      public static final String TABLE_ID = ID_TABLE + "." + COL_TABLE_ID;
  
      /** Next_ID column name */
@@ -433,7 +307,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
  
      /** Fully qualified Quantity column name */
      public static final String QUANTITY = ID_TABLE + "." + COL_QUANTITY;
-@@ -686,7 +687,7 @@
+@@ -686,7 +686,7 @@
  
              // Read the next starting ID from the ID_TABLE.
              BigDecimal[] results = selectRow(connection, tableName);
@@ -442,7 +316,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
  
              // Update the row based on the quantity in the
              // ID_TABLE.
-@@ -727,7 +728,7 @@
+@@ -727,7 +727,7 @@
      /**
       * This method allows you to get the number of ids that are to be
       * cached in memory.  This is either stored in quantityStore or
@@ -451,7 +325,7 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
       *
       * Though this method returns a BigDecimal for the quantity, it is
       * unlikey the system could withstand whatever conditions would lead
-@@ -768,7 +769,7 @@
+@@ -768,7 +768,7 @@
                  // Read the row from the ID_TABLE.
                  BigDecimal[] results = selectRow(dbCon, tableName);
  
@@ -460,9 +334,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/oid/IDB
                  quantity = results[1];
                  quantityStore.put(tableName, quantity);
              }
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/TorqueInstance.java db-torque_BRANCH31.work/src/java/org/apache/torque/TorqueInstance.java
---- db-torque_BRANCH31.p/src/java/org/apache/torque/TorqueInstance.java	2003-10-17 14:18:20.000000000 +0200
-+++ db-torque_BRANCH31.work/src/java/org/apache/torque/TorqueInstance.java	2003-10-17 14:48:50.000000000 +0200
+diff -Nurb db-torque/src/java/org/apache/torque/TorqueInstance.java db-torque.p/src/java/org/apache/torque/TorqueInstance.java
+--- db-torque/src/java/org/apache/torque/TorqueInstance.java	2003-10-20 14:25:33.000000000 +0200
++++ db-torque.p/src/java/org/apache/torque/TorqueInstance.java	2003-10-20 14:26:46.000000000 +0200
 @@ -704,12 +704,12 @@
       */
      private final void setupIdTable(DatabaseMap map)
@@ -481,9 +355,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/java/org/apache/torque/TorqueI
      }
  
      /**
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/rttest/id-table-schema.xml db-torque_BRANCH31.work/src/rttest/id-table-schema.xml
---- db-torque_BRANCH31.p/src/rttest/id-table-schema.xml	2003-06-20 20:50:01.000000000 +0200
-+++ db-torque_BRANCH31.work/src/rttest/id-table-schema.xml	2003-10-17 14:26:18.000000000 +0200
+diff -Nurb db-torque/src/rttest/id-table-schema.xml db-torque.p/src/rttest/id-table-schema.xml
+--- db-torque/src/rttest/id-table-schema.xml	2003-06-20 20:50:01.000000000 +0200
++++ db-torque.p/src/rttest/id-table-schema.xml	2003-10-20 14:26:46.000000000 +0200
 @@ -16,12 +16,12 @@
  <database name="@DATABASE_DEFAULT@">
    <table name="ID_TABLE" idMethod="idbroker">
@@ -501,9 +375,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/rttest/id-table-schema.xml db-
      </unique>        
      
    </table>
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/schema/id-table-schema.xml db-torque_BRANCH31.work/src/schema/id-table-schema.xml
---- db-torque_BRANCH31.p/src/schema/id-table-schema.xml	1970-01-01 01:00:00.000000000 +0100
-+++ db-torque_BRANCH31.work/src/schema/id-table-schema.xml	2003-10-17 14:26:25.000000000 +0200
+diff -Nurb db-torque/src/schema/id-table-schema.xml db-torque.p/src/schema/id-table-schema.xml
+--- db-torque/src/schema/id-table-schema.xml	1970-01-01 01:00:00.000000000 +0100
++++ db-torque.p/src/schema/id-table-schema.xml	2003-10-20 14:26:46.000000000 +0200
 @@ -0,0 +1,32 @@
 +<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 +<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_1.dtd">
@@ -537,9 +411,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/src/schema/id-table-schema.xml db-
 +
 +  </table>
 +</database>
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/xdocs/tutorial/step2.xml db-torque_BRANCH31.work/xdocs/tutorial/step2.xml
---- db-torque_BRANCH31.p/xdocs/tutorial/step2.xml	2003-06-23 22:38:18.000000000 +0200
-+++ db-torque_BRANCH31.work/xdocs/tutorial/step2.xml	2003-10-17 14:25:20.000000000 +0200
+diff -Nurb db-torque/xdocs/tutorial/step2.xml db-torque.p/xdocs/tutorial/step2.xml
+--- db-torque/xdocs/tutorial/step2.xml	2003-06-23 22:38:18.000000000 +0200
++++ db-torque.p/xdocs/tutorial/step2.xml	2003-10-20 14:26:46.000000000 +0200
 @@ -396,15 +396,15 @@
        primaryKey="true"
        type="INTEGER"/>
@@ -559,9 +433,9 @@ diff --exclude=CVS -Nurb db-torque_BRANCH31.p/xdocs/tutorial/step2.xml db-torque
        type="INTEGER"/>
      <unique>
        <unique-column name="TABLE_NAME"/>
-diff --exclude=CVS -Nurb db-torque_BRANCH31.p/xdocs/user-guide.xml db-torque_BRANCH31.work/xdocs/user-guide.xml
---- db-torque_BRANCH31.p/xdocs/user-guide.xml	2003-01-08 17:05:27.000000000 +0100
-+++ db-torque_BRANCH31.work/xdocs/user-guide.xml	2003-10-17 14:26:04.000000000 +0200
+diff -Nurb db-torque/xdocs/user-guide.xml db-torque.p/xdocs/user-guide.xml
+--- db-torque/xdocs/user-guide.xml	2003-01-08 17:05:27.000000000 +0100
++++ db-torque.p/xdocs/user-guide.xml	2003-10-20 14:26:46.000000000 +0200
 @@ -147,9 +147,9 @@
  
    <table name="ID_TABLE">
