@@ -9,7 +9,7 @@ torque.defaultDatabase = bookstore
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:mysql://localhost:3306/sqltest
 
-lib.dir = ../lib
+lib.dir = lib
 
 # -------------------------------------------------------------------
 #
@@ -17,7 +17,7 @@ lib.dir = ../lib
 #
 # -------------------------------------------------------------------
 
-project = bookstore
+torque.project = bookstore
 
 # -------------------------------------------------------------------
 #
@@ -105,7 +105,7 @@ initialID = 101
 #
 # -------------------------------------------------------------------
 
-templatePath = ../templates
+templatePath = templates
 
 # -------------------------------------------------------------------
 #
@@ -135,4 +135,4 @@ outputDirectory=src
 #
 # -------------------------------------------------------------------
 
-schemaDirectory=schema
+torque.schema.dir=schema
