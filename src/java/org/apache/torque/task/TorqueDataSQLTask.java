@@ -89,11 +89,11 @@ public class TorqueDataSQLTask
     /**
      *  Sets the DataXmlFile attribute of the TorqueDataSQLTask object
      *
-     * @param  v The new DataXmlFile value
+     * @param  dataXmlFile The new DataXmlFile value
      */
-    public void setDataXmlFile(String v)
+    public void setDataXmlFile(String dataXmlFile)
     {
-        dataXmlFile = v;
+        this.dataXmlFile = project.resolveFile(dataXmlFile).toString();
     }
 
     /**
@@ -140,11 +140,11 @@ public class TorqueDataSQLTask
     /**
      *  Sets the DataDTD attribute of the TorqueDataSQLTask object
      *
-     * @param  v The new DataDTD value
+     * @param  dataDTD The new DataDTD value
      */
-    public void setDataDTD(String v)
+    public void setDataDTD(String dataDTD)
     {
-        dataDTD = v;
+        this.dataDTD = project.resolveFile(dataDTD).toString();
     }
 
     /**
