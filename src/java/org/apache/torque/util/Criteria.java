@@ -188,9 +188,6 @@ public class Criteria extends Hashtable
     /** To start the results at a row other than the first one. */
     private int offset = 0;
 
-    // flag to note that the criteria involves a blob.
-    private Boolean blobFlag = null;
-
     private HashMap aliases = null;
 
     private boolean useTransaction = false;
@@ -263,7 +260,6 @@ public class Criteria extends Hashtable
         dbName = originalDbName;
         offset = 0;
         limit = -1;
-        blobFlag = null;
         aliases = null;
         useTransaction = false;
     }
@@ -2997,10 +2993,12 @@ public class Criteria extends Hashtable
      * in the Criteria contain Blobs, so that the operation can be placed
      * in a transaction if the db requires it.
      * This is primarily to support Postgresql.
+     * 
+     * @deprecated this flag is not used any longer
      */
     public void setBlobFlag(boolean b)
     {
-        blobFlag = (b ? Boolean.TRUE : Boolean.FALSE);
+        // do nothing as we don't use the flag any longer 
     }
 
     /**
