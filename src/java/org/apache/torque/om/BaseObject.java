@@ -57,6 +57,8 @@ package org.apache.torque.om;
 import java.io.Serializable;
 import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
+import org.apache.torque.TorqueException;
+
 import java.sql.Connection;
 
 /**
@@ -158,11 +160,11 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception This method will not throw any exceptions
+     * @exception TorqueException This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
      */
-    public void setPrimaryKey(String primaryKey) throws Exception
+    public void setPrimaryKey(String primaryKey) throws TorqueException
     {
         this.primaryKey = new StringKey(primaryKey);
     }
@@ -171,10 +173,10 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object as an Object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception This method will not throw any exceptions
+     * @exception TorqueException This method will not throw any exceptions
      * but this allows for children to override the method more easily
      */
-    public void setPrimaryKey(SimpleKey[] primaryKey) throws Exception
+    public void setPrimaryKey(SimpleKey[] primaryKey) throws TorqueException
     {
         this.primaryKey = new ComboKey(primaryKey);
     }
@@ -183,10 +185,10 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object as an Object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception This method will not throw any exceptions
+     * @exception TorqueException This method will not throw any exceptions
      * but this allows for children to override the method more easily
      */
-    public void setPrimaryKey(ObjectKey primaryKey) throws Exception
+    public void setPrimaryKey(ObjectKey primaryKey) throws TorqueException
     {
         this.primaryKey = primaryKey;
     }
