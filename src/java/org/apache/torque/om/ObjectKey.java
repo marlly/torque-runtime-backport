@@ -62,6 +62,8 @@ import org.apache.torque.TorqueException;
  * an application.  There are four subclasses: StringKey, NumberKey,
  * and DateKey, and ComboKey which is a Key made up of a combination
  * ofthe first three.
+ *
+ * @version $Id$
  */
 public abstract class ObjectKey implements Serializable, Comparable
 {

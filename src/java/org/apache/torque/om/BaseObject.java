@@ -133,7 +133,9 @@ public abstract class BaseObject implements Persistent, Serializable
         {
             pkInt = Integer.parseInt(getPrimaryKey().toString());
         }
-        catch (Exception e) {}
+        catch (Exception e)
+        {
+        }
         return pkInt;
     }
 
@@ -150,12 +152,14 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public long getPrimaryKeyAsLong()
     {
-        long pkLong = (long)NEW_ID;
+        long pkLong = (long) NEW_ID;
         try
         {
             pkLong = Long.parseLong(getPrimaryKey().toString());
         }
-        catch (Exception e) {}
+        catch (Exception e)
+        {
+        }
         return pkLong;
     }
 
@@ -197,10 +201,12 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public String getPrimaryKeyAsString()
     {
-        if (getPrimaryKey() == null) return null;
+        if (getPrimaryKey() == null)
+        {
+            return null;
+        }
         return getPrimaryKey().toString();
     }
-
 
     /**
      * Returns whether the object has been modified.
@@ -224,12 +230,11 @@ public abstract class BaseObject implements Persistent, Serializable
         return is_new;
     }
 
-
     /**
      * Setter for the isNew attribute.  This method will be called
      * by Torque-generated children and Peers.
      *
-     * @param b, the state of the object.
+     * @param b the state of the object.
      */
     public void setNew(boolean b)
     {
@@ -247,13 +252,13 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public void setPrimaryKey(int primaryKey) throws Exception
     {
-        this.primaryKey = new NumberKey(BigDecimal.valueOf((long)primaryKey));
+        this.primaryKey = new NumberKey(BigDecimal.valueOf((long) primaryKey));
     }
 
     /**
      * Sets the PrimaryKey for the object as an long.
      *
-     * @param PrimaryKey The new PrimaryKey for the object.
+     * @param primaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
@@ -267,7 +272,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Sets the PrimaryKey for the object.
      *
-     * @param PrimaryKey The new PrimaryKey for the object.
+     * @param primaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
@@ -280,7 +285,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Sets the PrimaryKey for the object as an Object.
      *
-     * @param PrimaryKey The new PrimaryKey for the object.
+     * @param primaryKey The new PrimaryKey for the object.
      * @exception Exception, This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
@@ -293,7 +298,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Sets the PrimaryKey for the object as an Object.
      *
-     * @param ObjectKey The new PrimaryKey for the object.
+     * @param primaryKey The new PrimaryKey for the object.
      */
     public void setPrimaryKey(ObjectKey primaryKey) throws Exception
     {
@@ -317,7 +322,6 @@ public abstract class BaseObject implements Persistent, Serializable
     {
         modified = false;
     }
-
 
     /**
      * Retrieves a field from the object by name. Must be overridden if called.
@@ -364,7 +368,7 @@ public abstract class BaseObject implements Persistent, Serializable
     {
         if (obj != null && obj instanceof BaseObject)
         {
-            return equals((BaseObject)obj);
+            return equals((BaseObject) obj);
         }
         else
         {
@@ -423,7 +427,7 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     protected Category getCategory()
     {
-     	return Category.getInstance(getClass().getName());
+        return Category.getInstance(getClass().getName());
     }
 
     /**
@@ -433,11 +437,11 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     protected Category log()
     {
-        if (log == null) 
+        if (log == null)
         {
             log = Category.getInstance(getClass().getName());
         }
-     	return log;
+        return log;
     }
 
     /**
@@ -455,11 +459,3 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     public abstract void save(DBConnection dbCon) throws Exception;
 }
-
-
-
-
-
-
-
-

@@ -55,12 +55,13 @@ package org.apache.torque.om;
  */
 
 import java.math.BigDecimal;
-import org.apache.torque.TorqueException;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id  consists
  * of a single entity such a GUID or the value of a db row's primary key.
+ *
+ * @version $Id$
  */
 public class NumberKey extends SimpleKey
 {
@@ -146,7 +147,7 @@ public class NumberKey extends SimpleKey
      */
     public BigDecimal getBigDecimal()
     {
-        return (BigDecimal)key;
+        return (BigDecimal) key;
     }
 
     /**
@@ -166,9 +167,9 @@ public class NumberKey extends SimpleKey
             }
             // check against a NumberKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof NumberKey  )
+            else if (keyObj instanceof NumberKey)
             {
-                Object obj = ((NumberKey)keyObj).getValue();
+                Object obj = ((NumberKey) keyObj).getValue();
                 isEqual =  key.equals(obj);
             }
         }

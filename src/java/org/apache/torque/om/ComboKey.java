@@ -66,6 +66,7 @@ import org.apache.commons.lang.Objects;
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @version $Id$
  */
 public class ComboKey extends ObjectKey
 {
@@ -228,7 +229,7 @@ public class ComboKey extends ObjectKey
                 }
                 else
                 {
-                    this.key[i].setValue( (String)tmpKeys.get(i) );
+                    this.key[i].setValue((String) tmpKeys.get(i));
                 }
             }
         }
@@ -238,7 +239,7 @@ public class ComboKey extends ObjectKey
 
     public void setValue(ComboKey keys)
     {
-        setValue((SimpleKey[])keys.getValue());
+        setValue((SimpleKey[]) keys.getValue());
     }
 
 
@@ -308,10 +309,10 @@ public class ComboKey extends ObjectKey
             else if ( keyObj instanceof ComboKey)
             {
                 SimpleKey[] obj = (SimpleKey[])
-                    ((ComboKey)keyObj).getValue();
+                    ((ComboKey) keyObj).getValue();
 
-                SimpleKey[] keys1 = (SimpleKey[])key;
-                SimpleKey[] keys2 = (SimpleKey[])obj;
+                SimpleKey[] keys1 = (SimpleKey[]) key;
+                SimpleKey[] keys2 = (SimpleKey[]) obj;
                 isEqual = keys1.length == keys2.length;
                 for ( int i = 0; i < keys1.length && isEqual; i++)
                 {
@@ -321,8 +322,8 @@ public class ComboKey extends ObjectKey
             else if ( keyObj instanceof SimpleKey[]
                       && key instanceof SimpleKey[] )
             {
-                SimpleKey[] keys1 = (SimpleKey[])key;
-                SimpleKey[] keys2 = (SimpleKey[])keyObj;
+                SimpleKey[] keys1 = (SimpleKey[]) key;
+                SimpleKey[] keys2 = (SimpleKey[]) keyObj;
                 isEqual = keys1.length == keys2.length;
                 for ( int i = 0; i < keys1.length && isEqual; i++)
                 {
@@ -337,7 +338,7 @@ public class ComboKey extends ObjectKey
     {
         if ( key != null )
         {
-            SimpleKey[] keys = (SimpleKey[])key;
+            SimpleKey[] keys = (SimpleKey[]) key;
             for ( int i = 0; i < keys.length; i++)
             {
                 if ( i != 0 )
@@ -366,7 +367,7 @@ public class ComboKey extends ObjectKey
             return super.hashCode();
         }
 
-        SimpleKey sk = ((SimpleKey[])key)[0];
+        SimpleKey sk = ((SimpleKey[]) key)[0];
         if ( sk == null )
         {
             return super.hashCode();

@@ -54,12 +54,13 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
-import org.apache.torque.TorqueException;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id  consists
  * of a single entity such a GUID or the value of a db row's primary key.
+ *
+ * @version $Id$
  */
 public class StringKey extends SimpleKey
 {
@@ -102,9 +103,13 @@ public class StringKey extends SimpleKey
     public void setValue(StringKey key)
     {
         if (key != null)
+        {
             this.key = key.getValue();
+        }
         else
+        {
             this.key = null;
+        }
     }
 
     /**
@@ -114,7 +119,7 @@ public class StringKey extends SimpleKey
      */
     public String getString()
     {
-        return (String)key;
+        return (String) key;
     }
 
     /**
@@ -136,18 +141,21 @@ public class StringKey extends SimpleKey
             // internal keys equivalent.
             else if ( keyObj instanceof StringKey)
             {
-                Object obj = ((StringKey)keyObj).getValue();
+                Object obj = ((StringKey) keyObj).getValue();
                 isEqual =  key.equals(obj);
             }
         }
         return isEqual;
     }
 
+    /**
+     *
+     */
     public String toString()
     {
         if ( key != null )
         {
-            return (String)key;
+            return (String) key;
         }
         return "";
     }

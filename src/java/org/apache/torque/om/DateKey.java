@@ -55,11 +55,12 @@ package org.apache.torque.om;
  */
 
 import java.util.Date;
-import org.apache.torque.TorqueException;
 
 /**
  * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id is a Date.
+ *
+ * @version $Id$
  */
 public class DateKey extends SimpleKey
 {
@@ -112,9 +113,13 @@ public class DateKey extends SimpleKey
     public void setValue(DateKey key)
     {
         if (key != null)
+        {
             this.key = key.getValue();
+        }
         else
+        {
             this.key = null;
+        }
     }
 
     /**
@@ -124,7 +129,7 @@ public class DateKey extends SimpleKey
      */
     public Date getDate()
     {
-        return (Date)key;
+        return (Date) key;
     }
 
     /**
@@ -146,13 +151,19 @@ public class DateKey extends SimpleKey
             // internal keys equivalent.
             else if ( keyObj instanceof DateKey)
             {
-                Object obj = ((DateKey)keyObj).getValue();
+                Object obj = ((DateKey) keyObj).getValue();
                 isEqual =  key.equals(obj);
             }
         }
         return isEqual;
     }
 
+    /**
+     * get a String representation
+     *
+     * @return a String representation of the Date or an empty String if the
+     *          Date is null
+     */
     public String toString()
     {
         Date dt = getDate();

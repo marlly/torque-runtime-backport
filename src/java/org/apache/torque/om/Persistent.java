@@ -75,7 +75,7 @@ public interface Persistent
     /**
      * Sets the PrimaryKey for the object.
      *
-     * @param ObjectKey The new PrimaryKey for the object.
+     * @param primaryKey The new PrimaryKey for the object.
      * @exception Exception, This method might throw an exceptions
      */
     void setPrimaryKey(ObjectKey primaryKey) throws Exception;
@@ -83,7 +83,7 @@ public interface Persistent
     /**
      * Sets the PrimaryKey for the object.
      *
-     * @param String, the String should be of the form produced by
+     * @param primaryKey the String should be of the form produced by
      *        ObjectKey.toString().
      * @exception Exception, This method might throw an exceptions
      */
@@ -110,7 +110,7 @@ public interface Persistent
      * Setter for the isNew attribute.  This method will be called
      * by Torque-generated children and Peers.
      *
-     * @param b, the state of the object.
+     * @param b the state of the object.
      */
     void setNew(boolean b);
 
