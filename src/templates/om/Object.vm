@@ -854,8 +854,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       {
         alreadyInSave = true;
 
-#* the following code can cause an infinite loop, needs more thought
-System.out.println("Entering save for " + this);
+#* FIXME! the following code can cause an infinite loop, needs more thought
+shows the infinite loop: System.out.println("Entering save for " + this);
 	#if ($pVars.size() != 0)
 
         // We call the save method on the following object(s) if they
