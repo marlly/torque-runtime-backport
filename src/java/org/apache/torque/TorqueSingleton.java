@@ -246,14 +246,16 @@ public class TorqueSingleton
         log.debug("Starting initAdapters");
         adapterMap = new HashMap();
         Configuration c = conf.subset("database");
+
         if (c != null)
         {
+            boolean foundAdapters = false;
+
             try
             {
-                Iterator i = c.getKeys();
-                while (i.hasNext())
+                for (Iterator it = c.getKeys(); it.hasNext(); )
                 {
-                    String key = (String) i.next();
+                    String key = (String) it.next();
                     if (key.endsWith("adapter"))
                     {
                         String adapter = c.getString(key);
@@ -261,7 +263,12 @@ public class TorqueSingleton
                         DB db = DBFactory.create(adapter);
                         // register the adapter for this name
                         adapterMap.put(handle, db);
+                        foundAdapters = true;
                     }
+                }
+                if (!foundAdapters)
+                {
+                    log.warn("Databases defined but no adapters configurations found!");
                 }
             }
             catch (Exception e)
@@ -272,8 +279,9 @@ public class TorqueSingleton
         }
         else
         {
-            log.warn("There were no adapters in the configuration.");
+            log.warn("No Database definitions found!");
         }
+
     }
 
     /**
@@ -290,12 +298,13 @@ public class TorqueSingleton
         Configuration c = conf.subset("dsfactory");
         if (c != null)
         {
+            boolean foundFactories = false;
+
             try
             {
-                Iterator i = c.getKeys();
-                while (i.hasNext())
+                for (Iterator it = c.getKeys(); it.hasNext();)
                 {
-                    String key = (String) i.next();
+                    String key = (String) it.next();
                     if (key.endsWith("factory"))
                     {
                         String classname = c.getString(key);
@@ -307,7 +316,12 @@ public class TorqueSingleton
                                 (DataSourceFactory) dsfClass.newInstance();
                         dsf.initialize(c.subset(handle));
                         dsFactoryMap.put(handle, dsf);
+                        foundFactories = true;
                     }
+                }
+                if (!foundFactories)
+                {
+                    log.warn("Data Sources configured but no factories found!");
                 }
             }
             catch (Exception e)
@@ -406,11 +420,9 @@ public class TorqueSingleton
         int pref = Torque.MANAGER_PREFIX.length();
         int suff = Torque.MANAGER_SUFFIX.length();
 
-        Iterator keys = conf.getKeys();
-
-        while (keys.hasNext())
+        for (Iterator it = conf.getKeys(); it.hasNext();)
         {
-            String key = (String) keys.next();
+            String key = (String) it.next();
 
             if (key.startsWith(Torque.MANAGER_PREFIX)
                     && key.endsWith(Torque.MANAGER_SUFFIX))
@@ -562,10 +574,9 @@ public class TorqueSingleton
     {
         if (dbMaps != null)
         {
-            Iterator maps = dbMaps.values().iterator();
-            while (maps.hasNext())
+            for (Iterator it = dbMaps.values().iterator(); it.hasNext();)
             {
-                DatabaseMap map = (DatabaseMap) maps.next();
+                DatabaseMap map = (DatabaseMap) it.next();
                 IDBroker idBroker = map.getIDBroker();
                 if (idBroker != null)
                 {
