@@ -1,0 +1,575 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque Tutorial - Step 2: Configuring Torque</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+  </properties>
+  <body>
+
+<section name="Step 2: Configuring Torque">
+
+<p>
+  The following section outlines the necessary steps to
+  define your database schema and configure Torque to use
+  your schema.  Upon completion, you'll be able to use
+  Torque to create your object model and all of the Java
+  classes that support it.  In addition, Torque can
+  generate and execute all of the appropriate SQL commands
+  to create your database, freeing you from doing it
+  yourself.
+</p>
+
+<p>
+  To accomplish all of the above, you only need to
+  create/edit three files: the Torque build properties,
+  the Torque database schema, and the Torque run-time
+  properties.  Each of these files is covered in the
+  following sections.
+</p>
+
+</section>
+
+<section name="Torque Build Properties">
+
+<p>
+  Torque is a system that literally builds Java
+  source/class files representing your object model,
+  SQL statements for your specific database, and
+  documentation.  To accomplish these tasks, it uses
+  <a href="jakarta.apache.org/ant/index.html">Ant</a> to control its
+  build process, and ant uses the
+  <em>build.properties</em> file in the top-level
+  Torque directory to setup your development
+  environment.  It is this file that we will now edit.
+</p>
+
+<p>
+  Keep in mind, this tutorial is going to show you the
+  bare minimum to get your first Torque application up
+  and running.  However, the <em>build.properties</em>
+  file is thoroughly commented, so please refer to it
+  if you have a question regarding part of the file
+  that is not covered here.  Make the following
+  changes and edit appropriately for your environment.
+  The properties are described in the table following
+  (note: you'll need to add the
+  <em>torque.database.buildUrl</em> property):
+</p>
+
+<source><![CDATA[
+  torque.project = bookstore
+  torque.database = mysql
+  torque.targetPackage = com.kazmier.om
+  torque.database.createUrl = jdbc:mysql://127.0.0.1/mysql
+  torque.database.buildUrl = jdbc:mysql://127.0.0.1/bookstore
+  torque.database.url = jdbc:mysql://127.0.0.1/bookstore
+  torque.database.driver = org.gjt.mm.mysql.Driver
+  torque.database.user = adminuser
+  torque.database.password = adminpassword
+  torque.database.host = 127.0.0.1
+]]></source>
+
+<p>
+  For a reference as to what each property, and others, controls, please
+  see the <a href="properties-reference.html">properties reference</a>.
+</p>
+
+<p>
+  Setting these properties correctly is very
+  important.  These enable Torque to generate all of
+  the required sources and SQL for your specific
+  database.  If you experience problems later in this
+  tutorial, it would be wise to double-check these
+  values.
+</p>
+
+</section>
+
+<section name="Torque Database Schema">
+
+<p>
+  The second file that you must edit to configure
+  Torque is the database schema.  The database schema
+  is an XML file that represents your SQL database in
+  Torque.  This is where you define all of your
+  tables, column names and types, as well as the keys
+  used to index these tables.
+</p>
+
+<p>
+  The database schema file is located in the
+  <em>torque/schema</em> directory.  Here you will
+  find two XML files: <em>id-table-schema.xml</em> and
+  <em>project-schema.xml</em>.  The
+  <em>id-table-schema.xml</em> file is used internally
+  by Torque's IDBroker service (which is a database
+  independent method for generating unique IDs).
+  <em>project-schema.xml</em> is where you'll define
+  your database schema.  Historically, the name of
+  your database schema file was required to be in the
+  format of <em>name-schema.xml</em> where
+  <em>name</em> was the same as the <em>project</em>
+  property defined in <em>build.properties</em>;
+  otherwise, Torque was not be able to find your
+  database schema file.  This is no longer the case,
+  <em>name</em> is no longer restricted to the project
+  name. However, it must end with
+  &#145;-schema.xml&#146; because Torque will only
+  generate object models for files ending with that
+  pattern.
+</p>
+
+<p>
+  For this tutorial, we will use a simple database
+  that might be used to support a bookstore
+  application.  The database will contain three
+  tables: author, publisher, and book.  The first
+  table will contain author information (first
+  and last name).  The second table will
+  contain publisher information (name).  And the third
+  table will contain book information (title, and
+  ISBN).  The author id and publisher id will be
+  foreign keys in the book table.  The schema
+  representation for this database is as follows:
+</p>
+
+<source><![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE database SYSTEM
+ "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+<database
+  name="bookstore"
+  defaultIdMethod="idbroker">
+
+  <table name="book" description="Book Table">
+    <column
+      name="book_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Book Id"/>
+    <column
+      name="title"
+      required="true"
+      type="VARCHAR"
+      size="255"
+      description="Book Title"/>
+    <column
+      name="isbn"
+      required="true"
+      type="VARCHAR"
+      size="24"
+      javaName="ISBN"
+      description="ISBN Number"/>
+    <column
+      name="publisher_id"
+      required="true"
+      type="INTEGER"
+      description="Foreign Key Publisher"/>
+    <column
+      name="author_id"
+      required="true"
+      type="INTEGER"
+      description="Foreign Key Author"/>
+    <foreign-key foreignTable="publisher">
+      <reference
+        local="publisher_id"
+        foreign="publisher_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="author">
+      <reference
+        local="author_id"
+        foreign="author_id"/>
+    </foreign-key>
+  </table>
+  <table name="publisher" description="Publisher Table">
+    <column
+      name="publisher_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Publisher Id"/>
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="Publisher Name"/>
+  </table>
+  <table name="author" description="Author Table">
+    <column
+      name="author_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Author Id"/>
+    <column
+      name="first_name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="First Name"/>
+    <column
+      name="last_name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="Last Name"/>
+  </table>
+</database>
+]]></source>
+
+<p>
+  Edit <em>project-schema.xml</em> to reflect the
+  above database schema.  If you would rather create
+  your own schema file, be sure the filename ends in
+  &#145;-schema.xml&#146;, and delete
+  <em>project-schema.xml</em> because Torque will
+  generate an object model for that file as well.  Do
+  not delete <em>id-table-schema.xml</em> if you plan
+  on using Torque's IDBroker service, which is used in
+  this tutorial.
+</p>
+
+<p>
+  There are several items of importance to note.  The
+  <em>database</em> element's <em>name</em> attribute
+  must be the same as the database name specified by
+  the <em>databaseUrl</em> property in
+  <em>build.properties</em>; likewise, the run-time
+  properties (described in the next section) should
+  also reflect this value.  Failure to do so will
+  prevent Torque from creating your database tables
+  (if instructed to do so) or prevent your object
+  model from working properly.
+</p>
+
+<p>
+  Another item of importance is the <em>database</em>
+  element's <em>defaultIdMethod</em> attribute.  This
+  attribute specifies the default method that Torque
+  will use to generate IDs for primary keys (columns
+  with the <em>primaryKey</em> attribute set to
+  <em>true</em>: <em>book_id</em>,
+  <em>publisher_id</em>, and <em>author_id</em>) in
+  your database tables.  There are several possible
+  values:
+</p>
+
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>idbroker</td>
+    <td>
+      Instructs Torque to use its
+      <a href="peers-howto.html#ID%20Broker">IDBroker</a>
+      service to generate IDs in a database agnostic
+      manner.  This is the method that will be
+      used in this tutorial.
+    </td>
+  </tr>
+  <tr>
+    <td>native</td>
+    <td>
+      Instructs Torque to use the underlying
+      database's mechanism to generate IDs (varies
+      per database).
+    </td>
+  </tr>
+  <tr>
+    <td>none</td>
+    <td>
+      Instructs Torque to not generate IDs.  This
+      can be useful in some situations (an example
+      is described below).
+    </td>
+  </tr>
+  <tr>
+    <td>autoincrement</td>
+    <td>
+      This method has been deprecated.  Use the
+      <em>native</em> method instead.
+    </td>
+  </tr>
+  <tr>
+    <td>sequence</td>
+    <td>
+      This method has been deprecated.  Use the
+      <em>native</em> method instead.
+    </td>
+  </tr>
+</table>
+
+<p>
+  The <em>defaultIdMethod</em> selected will be used
+  for all tables in your schema unless an individual
+  <em>table</em> element contains the
+  <em>idMethod</em> attribute, in which case, its
+  value will override the <em>defaultIdMethod</em>.
+  <em>idMethod</em> takes the same values as
+  <em>defaultIdMethod</em>.
+</p>
+
+<p>
+  One common reason that a table might override the
+  <em>defaultIdMethod</em> is when a table is composed
+  only of foreign keys (i.e. a &#145;junction
+  entity&#146; in database-speak).  In this case, all
+  columns should be defined as primary keys because
+  they are all needed to declare a row as unique.
+  However, Torque should not generate primary key IDs
+  for objects in this table because the objects that
+  compose the table already have primary key IDs.
+  Thus, the <em>idMethod</em> attribute of the table
+  must be set to <em>none</em>.  For example, if the
+  <em>book</em> table defined above did not have any
+  additional attributes other than a
+  <em>publisher_id</em> and <em>author_id</em>, the
+  schema for the <em>book</em> table should be defined
+  as:
+</p>
+
+<source><![CDATA[
+  <table name="book" idMethod="none" description="Book Table">
+    <column
+      name="publisher_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Foreign Key Publisher"/>
+    <column
+      name="author_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Foreign Key Author"/>
+    <foreign-key foreignTable="publisher">
+      <reference
+        local="publisher_id"
+        foreign="publisher_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="author">
+      <reference
+        local="author_id"
+        foreign="author_id"/>
+    </foreign-key>
+  </table>
+]]></source>
+
+<p>
+  Another common mistake is to forget that XML is
+  <b>case-sensitive</b>.  All of the elements and
+  attributes must be specified according to the
+  <a href="/turbine/dtd/database.dtd">DTD</a>
+  for the database schema.  In addition, you must
+  include the XML declaration and DTD specification in
+  your database schema file.  Failure to do so can
+  result it errors.
+</p>
+
+<p>
+  Finally, you must also edit (or add if its not
+  present) the <em>name</em> attribute to the
+  <em>database</em> element in
+  <em>id-table-schema.xml</em>.  The value should be
+  identical to the value in your database schema file.
+  This will instruct Torque to create
+  <em>id-table</em> in the same database as your
+  schema.  Below is the file used in this example:
+</p>
+
+<source><![CDATA[
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE database SYSTEM
+ "http://jakarta.apache.org/turbine/dtd/database.dtd">
+
+<database name="bookstore">
+  <table name="ID_TABLE" idMethod="idbroker">
+    <column
+      name="ID_TABLE_ID"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"/>
+    <column
+      name="TABLE_NAME"
+      required="true"
+      size="255"
+      type="VARCHAR"/>
+    <column
+      name="NEXT_ID"
+      type="INTEGER"/>
+    <column
+      name="QUANTITY"
+      type="INTEGER"/>
+    <unique>
+      <unique-column name="TABLE_NAME"/>
+    </unique>
+  </table>
+</database>
+]]></source>
+
+<p>
+  Torque uses the database schema files to generate
+  your object model and Java classes to support it.
+  In addition, Torque generates SQL that can be used
+  to create your databases and tables from these
+  schemas.  In the next section, we will conclude the
+  configuration of Torque by editing the Torque
+  run-time properties.  For additional information on
+  the XML elements and attributes, please refer to the
+  <a href="/turbine/torque/schema-reference.html">
+  Torque Schema Reference</a>.
+</p>
+
+</section>
+
+<section name="Torque Run-Time Properties">
+
+<p>
+  The last step in the configuration of Torque are the
+  Torque run-time properties.  As the name suggests,
+  these properties are used when your application is
+  executing the object model code generated by Torque.
+  The run-time properties control logging and database
+  parameters such as drivers, usernames, and
+  passwords.  These properties can be saved in any
+  file because your application must explicitly
+  initialize Torque (as you'll see later in this
+  document).
+</p>
+
+<p>
+  There is a sample run-time properties file included
+  in the Torque distribution called
+  <em>Torque.properties</em> located in the
+  <em>torque/schema</em> directory.  However, for
+  simplicity, we'll just create our own.  Again, this
+  tutorial will guide you through the bare minimum to
+  get your application up and running.  For more
+  information regarding the Torque run-time
+  properties, refer to the comments in the sample file
+  included in the distribution.  Create a new file
+  called <em>Torque.properties</em> in the top-level
+  <em>torque</em> directory (to avoid overwriting the
+  sample property file) and add the following lines to
+  it:
+</p>
+
+<source><![CDATA[
+log4j.rootCategory = DEBUG, default
+log4j.appender.default = org.apache.log4j.FileAppender
+log4j.appender.default.file = ./torque.log
+log4j.appender.default.layout = org.apache.log4j.SimpleLayout
+
+torque.database.default=bookstore
+torque.database.bookstore.driver = org.gjt.mm.mysql.Driver
+torque.database.bookstore.url = jdbc:mysql://127.0.0.1/bookstore
+torque.database.bookstore.username = user
+torque.database.bookstore.password = password
+  ]]></source>
+  <p/>
+  <table>
+    <tr> <th>Property</th> <th>Description</th> </tr>
+    <tr>
+      <td>log4j.rootCategory</td>
+      <td>
+        Torque uses <a href="/log4j/index.html">Log4J</a>
+        for a logging.  This parameter configures
+        the Log4J system to log all messages (debug,
+        info, warn, error, and fatal).
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default</td>
+      <td>
+        Configures Log4J to send all logging
+        messages to a file in the filesystem.  Log4J
+        could just as easily send all logging to a
+        syslog server.
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default.file</td>
+      <td>
+        The name of the file where messages are
+        logged.  This is relative to the starting
+        point of the JVM.
+      </td>
+    </tr>
+    <tr>
+      <td>log4j.appender.default.layout</td>
+      <td>
+        Log4J logs messages using a layout.  Layouts
+        can be very simple or complicated.  This
+        tutorial uses the very rudimentary
+        SimpleLayout.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.default</td>
+      <td>
+        Torque has the ability to use multiple
+        databases.  This command specifies which
+        database is to be used as the default.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.driver</td>
+      <td>
+        The JDBC database driver to use when
+        connecting to your database.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.url</td>
+      <td>
+        The URL that will be used to access your
+        database.  Torque's generated object model
+        will perform all database operations using
+        this URL.  This value should reflect the
+        database name specified in your database
+        schema file (see the <em>database</em>
+        element's <em>name</em> attribute).
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.username</td>
+      <td>
+        The username that has sufficient privileges
+        to access your database.  This user does not
+        require privileges to create and drop
+        tables, unlike the username that was
+        specified in the Torque
+        <em>build.properties</em>.
+      </td>
+    </tr>
+    <tr>
+      <td>torque.database.bookstore.password</td>
+      <td>
+        The password for the specified username.
+      </td>
+    </tr>
+  </table>
+  <p>
+    It is worth re-iterating that these run-time
+    properties are not used by Torque when generating
+    your object model and creating your database.  They
+    are used only by the application utilizing the
+    Torque-generated object model classes at run-time.
+  </p>
+
+</section>
+
+<p>
+  That completes the configuration of Torque.  You are now
+  ready to start building your object model and creating
+  your database.
+</p>
+
+  </body>
+</document>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque Tutorial</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+  </properties>
+  <body>
+
+<section name="About this Tutorial">
+
+<p>
+  This tutorial is intended to give first-time users an
+  introduction to using Torque, an object-relational tool.
+  Torque was developed as part of the Turbine web
+  application framework.  Until recently, it was tightly
+  coupled in that framework, and could not be used
+  independently.  This tutorial is an introduction to the
+  decoupled version of Torque.
+</p>
+
+<p>
+  This will include how to obtain the Torque distribution,
+  setting up a database, and writing a sample application
+  to demonstrate the power of Torque.  The tutorial is not
+  meant to be an exhaustive introduction to Torque, please
+  refer to the documentation on the
+  <a href="index.html">Torque homepage</a> for more
+  detailed information.
+</p>
+
+<p>
+  The example used throughout this tutorial is based on an
+  email sent to the <a href="/site/mail.html">
+  turbine-user</a> mailing list by Steven F. Davis
+  called
+  <a href="http://www.mail-archive.com/turbine-user%40jakarta.apache.org/msg03639.html">
+  torque outside turbine - detailed example (long)</a>.
+</p>
+
+</section>
+
+
+  </body>
+</document>
+

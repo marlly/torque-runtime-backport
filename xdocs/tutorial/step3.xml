@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque Tutorial - Step 3: Invoking Torque</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+  </properties>
+  <body>
+
+<section name="Step 3: Invoking Torque">
+
+<p>
+With the configuration of Torque completed, you can now
+generate the object model to support your database, and
+optionally create your database and all of its
+associated tables.  As mentioned earlier in this
+tutorial, Torque utilizes Ant to perform these tasks.
+Each of these tasks is covered in the following
+sections.
+</p>
+
+</section>
+
+<section name="Generating the Object Model and Associated SQL">
+
+<p>
+  The generation of your object model will produce
+  Java source files that can be used to represent your
+  database.  These classes enable you to create, edit,
+  delete, and select objects that represent rows in
+  your database tables.  In addition, Torque will
+  generate SQL to create your database tables (you
+  have the option of executing the SQL as demonstrated
+  later in this tutorial).
+</p>
+
+<p>
+  The object model consists of four classes for each
+  table in your schema.  For example, the
+  <em>author</em> table, defined in this tutorial,
+  will result in the following four classes:
+  <em>Author</em>, <em>AuthorPeer</em>,
+  <em>BaseAuthor</em>, and <em>BaseAuthorPeer</em> (a
+  discussion on the use of these classes is deferred
+  until we write our sample application).
+</p>
+
+<p>
+  To generate your object model and the associated
+  SQL, type the following command in the top-level
+  <em>torque</em> directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml
+]]></source>
+<p/>
+
+<p>
+  Upon a successful build, indicated by the
+  &#145;BUILD SUCCESSFUL&#146; message, you will find
+  a new <em>torque/src</em> directory.  It is here
+  that you will find the generated Java classes and
+  generated SQL.
+</p>
+
+<p>
+  The Java classes are located in the <em>java</em>
+  directory and will be in a directory hierarchy
+  matching that of the <em>targetPackage</em> you
+  specified in your Torque <em>build.properties</em>.
+  These are the files that will be compiled into your
+  object model classes.
+</p>
+
+<p>
+  The SQL files are located in the <em>sql</em>
+  directory.  For each database schema in your
+  <em>torque/schema</em> directory, there will be a
+  corresponding file with a <em>.sql</em> extension
+  instead of <em>.xml</em> extension.  The contents of
+  these files are the SQL commands that can be used to
+  manually or automatically (see next section) create
+  your database tables.
+</p>
+
+<p>
+  If you encounter errors while building, it is more
+  than likely a formatting error of your database
+  schema file.  Check the format of the file and make
+  sure it conforms to the
+  <a href="/turbine/torque/schema-reference.html">
+  Torque Schema Reference</a>.
+</p>
+
+</section>
+
+<section name="Creating the Database and Tables">
+
+<p>
+  As mentioned previously, Torque can automatically
+  create your database and all of the associated
+  tables for you.  However, you must first make sure
+  that the appropriate database driver (the one you
+  defined in <em>build.properties</em>) is in your
+  classpath so that Torque can connect to your
+  database and execute the generated SQL commands.
+  The easiest way to accomplish that is to add your
+  database driver to the <em>torque/lib</em>
+  directory.  Ant's build file automatically adds all
+  of the jar files in this directory to its classpath.
+</p>
+
+<p>
+  <b>
+    Note: Torque will <em>drop</em> the database and
+    tables that it is about to create if they exist!
+    You should skip this step if you are working
+    with an existing database full of data.
+  </b>
+</p>
+
+<p>
+  To create your database, type the following command
+  in the top-level <em>torque</em> directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml create-db
+]]></source>
+
+<p>
+  To create your tables, type the following commands in
+  the top-level <em>torque</em> directory:
+</p>
+
+<source><![CDATA[
+ant -f build-torque.xml id-table-init-sql
+ant -f build-torque.xml insert-sql
+]]></source>
+
+<p>
+  Note: if this tutorial had not utilized Torque's
+  <em>idbroker</em> method (as described earlier), it
+  would not have been necessary to execute the
+  <em>id-table-init-sql</em> target.
+</p>
+
+<p>
+  Success will be indicated by the &#145;BUILD
+  SUCCESSFUL&#146; message.  You can also validate
+  this by checking your database.  For example, the
+  <em>bookstore-schema.xml</em> and
+  <em>id-table-schema.xml</em>, defined in this
+  tutorial, should have created a database called
+  <em>bookstore</em>, with the following tables:
+  <em>ID_TABLE</em>, <em>author</em>, <em>book</em>,
+  and <em>publisher</em>.
+</p>
+
+<p>
+  If you encounter errors while creating your
+  database, it is more than likely a misconfiguration
+  of your <em>build.properties</em>.  Another common
+  problem is that the user specified in the
+  <em>build.properties</em> does not have sufficient
+  privilege to create databases and tables.  In either
+  case, refer to the section above that explains the
+  <em>build.properties</em> file.
+</p>
+
+</section>
+
+<p>
+Now that you have generated all of your object model
+classes and created your database, you are now ready to
+build your first Torque application.
+</p>
+
+  </body>
+</document>

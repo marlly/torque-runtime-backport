@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque Tutorial</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+  </properties>
+  <body>
+
+<section name="Step 1: Obtaining the Torque Distribution">
+
+<p>
+  First, you need to obtain the Torque distribution.  As
+  of this writing, the standalone version of Torque has
+  not been released; however, there is a beta version
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/">
+  available</a>.
+</p>
+
+<p>
+  After you have obtained your copy of the Torque, you can either
+  unpack the jar and integrate all of the Torque files into your
+  source tree, or keep Torque in the jar and use it via the classpath.
+</p>
+
+<p>
+  This tutorial will take the former approach. See <a href="../jar-guide.html">jar
+  guide</a> for a description of the latter approach.
+</p>
+
+<p>
+  You need to unpack the Torque jar to a directory where
+  you want to develop your application.  This will create
+  a directory called <em>torque</em>.  It is here that you
+  will configure Torque and build your application.
+</p>
+
+</section>
+
+  </body>
+</document>
