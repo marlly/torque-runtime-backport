@@ -21,6 +21,9 @@
       JdbcTrasformTask: error fetching foreign keys using an ODBC source.
     </li>
     <li>
+      new version of village.jar fixes BOOLEANCHAR handling.
+    </li>
+    <li>
       TRQ4: Transaction mismanagement in IDBroker.
     </li>
   </ul>
