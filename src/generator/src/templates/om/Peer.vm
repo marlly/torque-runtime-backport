@@ -437,11 +437,6 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static List doSelectVillageRecords(Criteria criteria, Connection con)
         throws TorqueException
     {
-  #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
-         // stuff for postgresql problem.....
-         criteria.setBlobFlag(true);
-  #end
-
         if (criteria.getSelectColumns().size() == 0)
         {
             addSelectColumns(criteria);
@@ -1237,11 +1232,6 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static List doSelectJoin${joinColumnId}(Criteria c)
         throws TorqueException
     {
-        #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
-         // stuff for postgresql problem.....
-         c.setBlobFlag(true);
-        #end
-
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to
         // another value so == check is okay and faster
@@ -1405,11 +1395,6 @@ public abstract class $basePrefix${table.JavaName}Peer
     protected static List doSelectJoinAllExcept${excludeString}(Criteria c)
         throws TorqueException
     {
-        #if ($targetDatabase == "postgresql" && $table.requiresTransactionInPostgres())
-         // stuff for postgresql problem.....
-         c.setBlobFlag(true);
-        #end
-
         // Set the correct dbName if it has not been overridden
         // c.getDbName will return the same object if not set to another value
         // so == check is okay and faster
