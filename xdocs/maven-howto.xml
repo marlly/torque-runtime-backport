@@ -5,6 +5,7 @@
   <properties>
     <title>Torque - Example Configuration for a Mavenized Project</title>
     <author email="stephenh@chase3000.com">Stephen Haberman</author>
+    <author email="quintonm@bellsouth.net">Quinton McCombs</author>
   </properties>
 
   <body>
@@ -21,14 +22,6 @@
     </li>
     <li>
       <a href="#Configuration">Configuration</a>
-      <ul>
-        <li>
-          <a href="#project.properties">project.properties</a>
-        </li>
-        <li>
-          <a href="#project.xml">project.xml</a>
-        </li>
-      </ul>
     </li>
     <li>
       <a href="#Other Tips">Other Tips</a>
@@ -47,10 +40,11 @@
   </p>
 
   <p>
-    The advent of Maven allows Torque to be used in a much simpler manor. With
-    the Maven plugin, absolutely no Torque-related resources are required to be
-    locally installed in each project. Instead, Maven goals like "torque:om" are
-    mapped to their respective build-torque.xml commands like "om".
+    The advent of Maven allows Torque to be used in a much simpler manner. With
+    the Maven plugin, absolutely no Torque-related resources (except the Torque
+    jar file iteself) are required to be locally installed in each project. 
+    Instead, the plugin will automatically download any required resources for
+    you.
   </p>
 </section>
 
@@ -58,15 +52,10 @@
 
   <p>
     Currently you must manually build the plugin by checking out Torque from CVS
-    and running <code>maven plugin:deploy</code> from the
-    <code>src/maven-plugin</code> directory. This will jar together the various
-    plugin styles and extract it into your <code>${maven.home}/plugins</code>
-    directory.
-  </p>
-
-  <p>
-    In future releases, a jar will be available that you can simply drop in
-    <code>${maven.home}/plugins</code>.
+    and running <code>maven plugin:install</code> from the
+    <code>src/generator/src/maven-plugin</code> directory. This will jar together 
+    the various plugin files copy it into your <code>${maven.home}/plugins</code>
+    directory.  
   </p>
 
 </section>
@@ -74,12 +63,10 @@
 <section name="Configuration">
 
   <p>
-    The Torque Maven plugin is configured via two standard Maven files:
-
-    <ul>
-      <li><code>project.properties</code></li>
-      <li><code>project.xml</code></li>
-    </ul>
+    The Torque Maven plugin is configured via properties defined in your 
+    project.properties file.  See the 
+    <a href="/torque/properties-reference.html">properties reference</a> for
+    details on the various properties that can be configured.
   </p>
 
 <subsection name="project.properties">
@@ -87,27 +74,17 @@
   <p>
     Instead of relying on the typical <code>build.properties</code>, the Maven
     plugin uses the project-wide settings in the <code>project.properties</code>
-    file.
+    file.  
   </p>
 
   <p>
     The Torque settings in <code>project.properties</code> follow the same
-    format as they would in the old <code>build.properties</code> except for two
-    things:
-    <ul>
-      <li>
-        Torque should use the <code>project.properties</code> file for loading
-        its settings instead of <code>build.properties</code>. This is done via
-        the <code>torque.contextProperties</code> property.
-      </li>
-      <li>
-        The various <code>torque.*.dir</code> properties are set to have Torque
-        fit into the Mavenized directory structure.
-      </li>
-    </ul>
+    format as they would in the old <code>build.properties</code> except the
+    default directories are different to better fit a maven-ized project.
   </p>
 
   <p>
+    
     Here is a sample configuration from <code>project.properties</code>:
 
 <source><![CDATA[
@@ -121,24 +98,6 @@
 
 torque.project = yourproject
 torque.database = mysql
-torque.contextProperties = project.properties
-torque.runOnlyOnSchemaChange = true
-
-torque.schema.dir = src/schema
-torque.sql.dir = target/sql
-torque.java.dir = src/java
-torque.doc.dir = target/sql
-torque.lib.dir = ${maven.repo.local}
-torque.doc.format = html
-
-# Hypothetical configuration...only need to set properties
-# when we don't want the default value
-torque.targetPackage = com.company.yourproject.om
-torque.addGetByNameMethod = false
-torque.addTimeStamp = false
-torque.addIntakeRetrievable = true
-torque.useManagers = true
-torque.useClasspath = true
 
 torque.database.createUrl = jdbc:mysql://localhost:3306/
 torque.database.buildUrl = jdbc:mysql://localhost:3306/yourprojectdb
@@ -148,117 +107,12 @@ torque.database.user = user
 torque.database.password = password
 torque.database.host = localhost
 
-torque.initialID = 1001
 ]]></source>
 
   </p>
-
+  
 </subsection>
 
-<subsection name="project.xml">
-
-  <p>
-    Currently in Maven b7, you have to list all of the Torque dependencies
-    within your own <code>project.xml</code> for the jars to be included in your
-    project's classpath. Currently the list of Torque dependencies is:
-  </p>
-
-<source><![CDATA[
-<dependencies>
-  <dependency>
-    <id>ant</id>
-    <version>1.5</version>
-  </dependency>
-  <dependency>
-    <id>commons-beanutils</id>
-    <version>1.4.1</version>
-  </dependency>
-  <dependency>
-    <id>commons-collections</id>
-    <version>2.0</version>
-    <url>http://jakarta.apache.org/commons/collections.html</url>
-  </dependency>
-  <dependency>
-    <id>commons-configuration</id>
-    <version>1.0-dev</version>
-    <url>http://jakarta.apache.org/commons/</url>
-  </dependency>
-  <dependency>
-    <id>commons-dbcp</id>
-    <version>1.0-dev-20020806</version>
-    <url>http://jakarta.apache.org/commons/</url>
-  </dependency>
-  <dependency>
-    <id>commons-lang</id>
-    <version>1.0</version>
-    <url>http://jakarta.apache.org/commons/</url>
-  </dependency>
-  <dependency>
-    <id>commons-logging</id>
-    <version>1.0.2</version>
-    <url>http://jakarta.apache.org/commons/</url>
-  </dependency>
-  <dependency>
-    <id>commons-pool</id>
-    <version>1.0</version>
-    <url>http://jakarta.apache.org/commons/pool/</url>
-  </dependency>
-  <dependency>
-    <id>jcs</id>
-    <version>1.0-dev</version>
-    <url>http://jakarta.apache.org/turbine/jcs/</url>
-  </dependency>
-  <dependency>
-    <id>jdbc</id>
-    <version>2.0</version>
-    <url>http://java.sun.com/products/jdbc/download.html#spec</url>
-  </dependency>
-  <dependency>
-    <id>jndi</id>
-    <version>1.2.1</version>
-    <url>http://java.sun.com/products/jndi/</url>
-  </dependency>
-  <dependency>
-    <id>log4j</id>
-    <version>1.2.6</version>
-    <url>http://jakarta.apache.org/log4j/</url>
-  </dependency>
-  <dependency>
-    <id>stratum</id>
-    <version>1.0-b3-dev</version>
-    <url>http://jakarta.apache.org/turbine/stratum/</url>
-  </dependency>
-  <dependency>
-    <id>tomcat-naming</id>
-    <version>1.0</version>
-    <url>http://jakarta.apache.org/tomcat/</url>
-  </dependency>
-  <dependency>
-    <id>velocity</id>
-    <version>1.3</version>
-    <url>http://jakarta.apache.org/velocity/</url>
-  </dependency>
-  <dependency>
-    <id>village</id>
-    <version>1.5.3</version>
-    <url>http://share.whichever.com/index.php?SCREEN=village</url>
-  </dependency>
-  <dependency>
-    <id>xerces</id>
-    <version>2.0.2</version>
-    <jar>xercesImpl-2.0.2.jar</jar>
-    <url>http://xml.apache.org/xerces2-j/</url>
-  </dependency>
-  <dependency>
-    <id>xml-apis</id>
-    <version>2.0.2</version>
-    <jar>xmlParserAPIs-2.0.2.jar</jar>
-    <url>http://xml.apache.org/xerces2-j/</url>
-  </dependency>
-</dependencies>
-]]></source>
-
-</subsection>
 
 </section>
 
@@ -268,12 +122,6 @@ torque.initialID = 1001
     If you run into problems, try the following tips:
 
     <ul>
-      <li>
-        Make sure that you set the <code>torque.jar</code> property to the
-        version of Torque that you are using (and hence will be in the
-        <code>${maven.home}/repository/torque/jars</code> directory for the
-        plugin to find).
-      </li>
       <li>
         Don't place your <code>project-schema.xml</code> file in a directory
         with other files. This can lead to various DTD errors.
