@@ -326,42 +326,5 @@ public class ForeignKey
         result.append("    </foreign-key>\n");
         return result.toString();
     }
-
-    /*
-    private void checkState()
-    {
-        if ( getForeignTableName() == null || getLocalColumns() == null
-            || getLocalColumns().isEmpty() || getTable() == null) 
-        {
-            throw new IllegalStateException("Foreign key was not initialized.");
-        }        
-    }
-
-    public boolean equals(Object obj)
-    {
-        boolean equals = false;
-        if (obj instanceof ForeignKey) 
-        {
-            checkState();
-            ForeignKey fk = (ForeignKey)obj;
-            fk.checkState();
-
-            equals = fk.getForeignTableName().equals(getForeignTableName())
-                && fk.getTable().getName().equals(getTable().getName())
-                && fk.getLocalColumns().equals(getLocalColumns())
-                && fk.getForeignColumns().equals(getForeignColumns());
-        }
-        
-        return equals;
-    }
-
-    public int hashCode()
-    {
-        checkState();
-        return getForeignTableName().hashCode() + 
-            getTable().getName().hashCode() + 
-            getLocalColumns().hashCode() + getForeignColumns().hashCode();
-    }
-    */
 }
 
