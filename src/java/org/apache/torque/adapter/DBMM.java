@@ -78,8 +78,7 @@ import java.text.SimpleDateFormat;
 public class DBMM
     extends DB
 {
-    private static final SimpleDateFormat DATE_FORMATTER = 
-        new SimpleDateFormat("yyyyMMddHHmmss");
+    private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 
     /**
      * Empty constructor.
@@ -216,6 +215,6 @@ public class DBMM
      */
     public String getDateString(Date date)
     {
-       return '\'' + DATE_FORMATTER.format(date) + '\'';
+       return '\'' + new SimpleDateFormat(DATE_FORMAT).format(date) + '\'';
     }
 }
