@@ -90,11 +90,13 @@ public abstract class BaseObject implements Persistent, Serializable
     private ObjectKey primaryKey = null;
 
     /**
-     * A flag which can be set to indicate that an object has been
-     * modified, since it was last retrieved from the persistence
-     * mechanism.
+     * A flag that indicates an object has been modified since it was
+     * last retrieved from the persistence mechanism.  This flag is
+     * used to determine if this object should be saved to the
+     * database.  We initialize it to true to force new objects to be
+     * saved.
      */
-    private boolean modified = false;
+    private boolean modified = true;
 
     /**
      * getter for the object primaryKey.
