@@ -109,9 +109,9 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
         tMap.setPrimaryKeyMethodInfo("$imp.Value");
 #elseif ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
-#elseif ($table.IdMethod == "sequence" ||  ($table.IdMethod == "native" && $dbprops.get("idMethod") == "sequence"))
+#elseif ($table.IdMethod == "sequence" || ($table.IdMethod == "native" && $table.Database.Platform.NativeIdMethod == "sequence"))
         tMap.setPrimaryKeyMethodInfo("$table.SequenceName");
-#elseif ($table.IdMethod == "native" && $dbprops.get("idMethod") == "identity")
+#elseif ($table.IdMethod == "native" && $table.Database.Platform.NativeIdMethod == "identity")
         tMap.setPrimaryKeyMethodInfo("$table.Name");
 #end
 
