@@ -87,6 +87,16 @@
     </developer>
 
     <developer>
+      <name>Humberto Hernandez</name>
+      <id>hhernandez</id>
+      <email>hhernandez@itweb.com.mx</email>
+      <organization>Integrated Technology S.C.</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
       <name>Fedor Karpelevitch</name>
       <id>fedor</id>
       <email>fedor@karpelevitch.net</email>
