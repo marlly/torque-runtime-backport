@@ -55,205 +55,488 @@ package org.apache.torque.util;
  */
 
 import java.sql.Connection;
+
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.reflect.Method;
+
+import org.apache.log4j.Category;
 import org.apache.torque.Torque;
+import org.apache.torque.util.BasePeer;
+import org.apache.torque.util.Criteria;
+
 import com.workingdogs.village.QueryDataSet;
 
 /**
- * This class can be used to retrieve a large result set from a
- * database query.  The query is started and then a small number of
- * rows are returned at any one time.  The LargeSelect is meant to be
- * placed into the Session, so that it can be used in response to
- * several related requests.
+ * This class can be used to retrieve a large result set from a database query.
+ * The query is started and then rows are returned a page at a time.  The <code>
+ * LargeSelect</code> is meant to be placed into the Session or User.Temp, so
+ * that it can be used in response to several related requests.  Note that in
+ * order to use <code>LargeSelect</code> you need to be willing to accept the
+ * fact that the result set may become inconsistent with the database if updates
+ * are processed subsequent to the queries being executed.  Specifying a memory
+ * page limit of 1 will give you a consistent view of the records but the totals
+ * may not be accurate and the performance will be terrible.  In most cases
+ * the potential for inconsistencies data should not cause any serious problems
+ * and performance should be pretty good (but read on for further warnings).
  *
- * It was written as an example in response to questions regarding
- * Village's and Turbine's ability to handle large queries.  The
- * author hoped that the people who were asking for the feature
- * would comment and improve the code, but has received no comments.
- * As the author has had no need for such a class, it remains
- * untested and in all likelihood contains several bugs.
+ * <p>The idea here is that the full query result would consume too much memory
+ * and if displayed to a user the page would be too long to be useful.  Rather
+ * than loading the full result set into memory, a window of data (the memory
+ * limit) is loaded and retrieved a page at a time.  If a request occurs for
+ * data that falls outside the currently loaded window of data then a new query
+ * is executed to fetch the required data.  Performance is optimized by
+ * starting a thread to execute the database query and fetch the results.  This
+ * will perform best when paging forwards through the data, but a minor
+ * optimization where the window is moved backwards by two rather than one page
+ * is included for when a user pages past the beginning of the window.
  *
- * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * <p>As the query is performed in in steps, it is often the case that the total
+ * number of records and pages of data is unknown.  <code>LargeSelect</code>
+ * provides various methods for indicating how many records and pages it is
+ * currently aware of and for presenting this information to users.
+ *
+ * <p><code>LargeSelect</code> utilises the <code>Criteria</code> methods
+ * <code>setOffset()</code> and <code>setLimit()</code> to limit the amount of
+ * data retrieved from the database - these values are either passed through to
+ * the DBMS when supported (efficient with the caveat below) or handled by
+ * the Village API when it is not (not so efficient).  At time of writing
+ * <code>Criteria</code> will only pass the offset and limit through to MySQL
+ * and PostgreSQL (with a few changes to <code>DBOracle</code> and <code>
+ * BasePeer</code> Oracle support can be implemented by utilising the <code>
+ * rownum</code> pseudo column).
+ *
+ * <p>As <code>LargeSelect</code> must re-execute the query each time the user
+ * pages out of the window of loaded data, you should consider the impact of
+ * non-index sort orderings and other criteria that will require the DBMS to
+ * execute the entire query before filtering down to the offset and limit either
+ * internally or via Village.
+ *
+ * <p>The memory limit defaults to 5 times the page size you specify, but
+ * alternative constructors and the class method <code>setMemoryPageLimit()
+ * </code> allow you to override this for a specific instance of
+ * <code>LargeSelect</code> or future instances respectively.
+ *
+ * <p>Some of the constructors allow you to specify the name of the class to use
+ * to build the returnd rows.  This works by using reflection to find <code>
+ * addSelectColumns(Criteria)</code> and <code>populateObjects(List)</code>
+ * methods to add the necessary select columns to the criteria (only if it
+ * doesn't already contain any) and to convert query results from Village
+ * <code>Record</code> objects to a class defined within the builder class.
+ * This allows you to use any of the Torque generated Peer classes, but also
+ * makes it fairly simple to construct business object classes that can be used
+ * for this purpose (simply copy and customise the <code>addSelectColumns()
+ * </code>, <code>populateObjects()</code>, <code>row2Object()</code> and <code>
+ * populateObject()</code> methods from an existing Peer class).
+ *
+ * <p>Typically you will create a <code>LargeSelect</code> using your <code>
+ * Criteria</code> (perhaps created from the results of a search parameter
+ * page), page size, memory page limit and return class name (for which you may
+ * have defined a business object class before hand) and place this in user.Temp
+ * thus:
+ *
+ * <pre>
+ *     data.getUser().setTemp("someName", largeSelect);
+ * </pre>
+ *
+ * <p>In your template you will then use something along the lines of:
+ *
+ * <pre>
+ *    #set ($largeSelect = $data.User.getTemp("someName"))
+ *    #set ($searchop = $data.Parameters.getString("searchop"))
+ *    #if ($searchop.equals("prev"))
+ *      #set ($recs = $largeSelect.PreviousResults)
+ *    #else
+ *      #if ($searchop.equals("goto"))
+ *        #set ($recs
+ *                = $largeSelect.getPage($data.Parameters.getInt("page", 1)))
+ *      #else
+ *        #set ($recs = $largeSelect.NextResults)
+ *      #end
+ *    #end
+ * </pre>
+ *
+ * <p>...to move through the records.  <code>LargeSelect</code> implements a
+ * number of convenience methods that make it easy to add all of the necessary
+ * bells and whistles to your template.
+ *
+ * @author <a href="mailto:john.mcnally@clearink.com">John D. McNally</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class LargeSelect implements Runnable
 {
-    private int miniblock;
+
+    /** The log. */
+    private static final Category log = Category.getInstance(LargeSelect.class);
+
+    /** The number of records that a page consists of.  */
+    private int pageSize;
+    /** The maximum number of records to maintain in memory. */
     private int memoryLimit;
-    private String name;
+    
+    /** The record number of the first record in memory. */
     private int blockBegin = 0;
+    /** The record number of the last record in memory. */
     private int blockEnd;
+    /** How much of the memory block is currently occupied with result data. */
     private int currentlyFilledTo = -1;
+    
+    /** The SQL query that this <code>LargeSelect</code> represents. */
     private String query;
+    /** The database name to get from Torque. */
     private String dbName;
+    /** The connection to the database. */
     private Connection db = null;
+    /** Used to retrieve query results from Village. */
     private QueryDataSet qds = null;
+
+    // I have a nagging feeling that results should be a 
+    // Vector so that access is synchronised. (scott)
+    /** The memory store of records. */
     private List results = null;
+
+    /** The thread that executes the query. */
     private Thread thread = null;
+    /** A flag used to kill the thread when the currently executing query is no longer required. */
     private boolean killThread = false;
+    /** An indication of whether or not the current query has completed processing. */
+    private boolean queryCompleted = false;
+    /** An indication of whether or not the totals (records and pages) are at their final values. */
+    private boolean totalsFinalized = false;
+    
+    /** The cursor position in the result set. */
     private int position;
+    /** The total number of pages known to exist. */
+    private int totalPages = -1;
+    /** The total number of records known to exist. */
+    private int totalRecords = 0;
+    /** The number of the page that was last retrieved. */
+    private int currentPageNumber = 0;
 
-    /**
-     * Key which may be used to store and retrieve the LargeSelect
-     * from the session.
+    /** The criteria used for the query. */    
+    private Criteria criteria = null;
+    /** The last page of results that were returned. */
+    private List lastResults;
+
+    /** 
+     * The class that is possibly used to construct the criteria and used 
+     * to transform the Village Records into the desired OM or business objects. 
      */
-    public static final String DEFAULT_NAME = "default.large.select";
+    private Class returnBuilderClass = null;    
+    /**
+     * A reference to the method in the return builder class that will 
+     * convert the Village Records to the desired class. 
+     */
+    private Method populateObjectsMethod = null;
 
     /**
-     * Creates a LargeSelect whose results are broken up into smaller
-     * chunks of approximately 1/100 the maximum number allowed in
-     * memory or 100, whichever is smaller.  The LargeSelect is stored
-     * in the session under the default name "default.large.select".
+     * The default value ("&gt;") used to indicate that the total number of
+     * records or pages is unknown. You can use <code>setMoreIndicator()</code>
+     * to change this to whatever value you like (e.g. "more than").
+     */
+    public static final String DEFAULT_MORE_INDICATOR = "&gt;";
+
+    private static String moreIndicator = DEFAULT_MORE_INDICATOR;
+
+    /**
+     * The default value for the maximum number of pages of data to be retained
+     * in memory - you can provide your own default value using
+     * <code>setMemoryPageLimit()</code>.
+     */
+    public static final int DEFAULT_MEMORY_LIMIT_PAGES = 5;
+
+    private static int memoryPageLimit = DEFAULT_MEMORY_LIMIT_PAGES;
+
+    /**
+     * Creates a LargeSelect whose results are returned as a <code>List</code>
+     * containing a maximum of <code>pageSize</code> Village <code>Record</code>
+     * objects at a time, maintaining a maximum of
+     * <code>LargeSelect.memoryPageLimit</code> pages of results in memory.
      *
-     * @param criteria Object used by BasePeer to build the query.
-     * @param memoryLimit Maximum number of rows to be in memory at
-     * one time.
-     * @exception Exception, a generic exception.
+     * @param criteria object used by BasePeer to build the query.  In order to
+     * allow this class to utilise database server implemented offsets and
+     * limits (when available), the provided criteria must not have any limit or
+     * offset defined.
+     * @param pageSize number of rows to return in one block.
+     * @throws IllegalArgumentException if <code>criteria</code> uses one or
+     * both of offset and limit, or if <code>pageSize</code> is less than 1;
+     * @throws Exception a generic exception.
      */
-    public LargeSelect(Criteria criteria, int memoryLimit)
-        throws Exception
+    public LargeSelect(Criteria criteria, int pageSize) throws Exception
     {
-        miniblock = Math.min(100, memoryLimit / 100 + 1);
-        name = DEFAULT_NAME;
-        init(name, criteria, memoryLimit);
+        this(criteria, pageSize, LargeSelect.memoryPageLimit);
     }
 
     /**
-     * Creates a LargeSelect whose results are broken up into smaller
-     * chunks of approximately 1/100 the maximum number allowed in
-     * memory or 100, whichever is smaller.
+     * Creates a LargeSelect whose results are returned as a <code>List</code>
+     * containing a maximum of <code>pageSize</code> Village <code>Record</code>
+     * objects at a time, maintaining a maximum of <code>memoryPageLimit</code>
+     * pages of results in memory.
      *
-     * @param name Key used to store the LargeSelect in the session.
-     * @param criteria Object used by BasePeer to build the query.
-     * @param memoryLimit Maximum number of rows to be in memory at
-     * one time.
-     * @exception Exception, a generic exception.
+     * @param criteria object used by BasePeer to build the query.  In order to
+     * allow this class to utilise database server implemented offsets and
+     * limits (when available), the provided criteria must not have any limit or
+     * offset defined.
+     * @param pageSize number of rows to return in one block.
+     * @param memoryPageLimit maximum number of pages worth of rows to be held
+     * in memory at one time.
+     * @throws IllegalArgumentException if <code>criteria</code> uses one or
+     * both of offset and limit, or if <code>pageSize</code> or
+     * <code>memoryLimitPages</code> are less than 1;
+     * @throws Exception a generic exception.
      */
-    public LargeSelect(String name,
-                       Criteria criteria,
-                       int memoryLimit)
+    public LargeSelect(Criteria criteria, int pageSize, int memoryPageLimit)
         throws Exception
     {
-        miniblock = Math.min(100, memoryLimit / 100);
-        init(name, criteria, memoryLimit);
+        init(criteria, pageSize, memoryPageLimit);
     }
 
     /**
-     * Creates a LargeSelect whose results are returned a page at a
-     * time.  The LargeSelect is stored in the session under the
-     * default name "default.large.select".
+     * Creates a LargeSelect whose results are returned as a <code>List</code>
+     * containing a maximum of <code>pageSize</code> objects of the type
+     * defined within the class named <code>returnBuilderClassName</code> at a
+     * time, maintaining a maximum of <code>LargeSelect.memoryPageLimit</code>
+     * pages of results in memory.
      *
-     * @param criteria Object used by BasePeer to build the query.
-     * @param memoryLimit Maximum number of rows to be in memory at
-     * one time.
-     * @param pageSize Number of rows to return in one block.
-     * @exception Exception, a generic exception.
+     * @param criteria object used by BasePeer to build the query.  In order to
+     * allow this class to utilise database server implemented offsets and
+     * limits (when available), the provided criteria must not have any limit or
+     * offset defined.  If the criteria does not include the definition of any
+     * select columns the <code>addSelectColumns(Criteria)</code> method of
+     * the class named as <code>returnBuilderClassName</code> will be used to
+     * add them.
+     * @param pageSize number of rows to return in one block.
+     * @param returnBuilderClassName The name of the class that will be used to
+     * build the result records (may implement <code>addSelectColumns(Criteria)
+     * </code> and must implement <code>populateObjects(List)</code>).
+     * @throws IllegalArgumentException if <code>criteria</code> uses one or
+     * both of offset and limit, or if <code>pageSize</code> is less than 1;
+     * @throws NoSuchMethodException when a one or both of <code>
+     * addSelectColumns(Criteria)</code> and <code>populateObjects(List)</code>
+     * are not found in the class named <code>returnBuilderClassName</code>.
+     * @throws Exception a generic exception.
      */
-    public LargeSelect(Criteria criteria,
-                       int memoryLimit,
-                       int pageSize)
+    public LargeSelect(
+        Criteria criteria,
+        int pageSize,
+        String returnBuilderClassName)
         throws Exception
     {
-        miniblock = pageSize;
-        name = DEFAULT_NAME;
-        init(name, criteria, memoryLimit);
+        this(
+            criteria,
+            pageSize,
+            LargeSelect.memoryPageLimit,
+            returnBuilderClassName);
     }
 
     /**
-     * Creates a LargeSelect whose results are returned a page at a
-     * time.
+     * Creates a LargeSelect whose results are returned as a <code>List</code>
+     * containing a maximum of <code>pageSize</code> objects of the type
+     * defined within the class named <code>returnBuilderClassName</code> at a
+     * time, maintaining a maximum of <code>memoryPageLimit</code> pages of
+     * results in memory.
      *
-     * @param name Key used to store the LargeSelect in the session.
-     * @param criteria Object used by BasePeer to build the query.
-     * @param memoryLimit Maximum number of rows to be in memory at
-     * one time.
-     * @param pageSize Number of rows to return in one block.
-     * @exception Exception, a generic exception.
+     * @param criteria object used by BasePeer to build the query.  In order to
+     * allow this class to utilise database server implemented offsets and
+     * limits (when available), the provided criteria must not have any limit or
+     * offset defined.  If the criteria does not include the definition of any
+     * select columns the <code>addSelectColumns(Criteria)</code> method of
+     * the class named as <code>returnBuilderClassName</code> will be used to
+     * add them.
+     * @param pageSize number of rows to return in one block.
+     * @param memoryPageLimit maximum number of pages worth of rows to be held
+     * in memory at one time.
+     * @param returnBuilderClassName The name of the class that will be used to
+     * build the result records (may implement <code>addSelectColumns(Criteria)
+     * </code> and must implement <code>populateObjects(List)</code>).
+     * @throws IllegalArgumentException if <code>criteria</code> uses one or
+     * both of offset and limit, or if <code>pageSize</code> or
+     * <code>memoryLimitPages</code> are less than 1;
+     * @throws NoSuchMethodException when a one or both of <code>
+     * addSelectColumns(Criteria)</code> and <code>populateObjects(List)</code>
+     * are not found in the class named <code>returnBuilderClassName</code>.
+     * @throws Exception a generic exception.
      */
-    public LargeSelect(String name,
-                       Criteria criteria,
-                       int memoryLimit,
-                       int pageSize)
+    public LargeSelect(
+        Criteria criteria,
+        int pageSize,
+        int memoryPageLimit,
+        String returnBuilderClassName)
         throws Exception
     {
-        miniblock = pageSize;
-        init(name, criteria, memoryLimit);
+        this.returnBuilderClass = Class.forName(returnBuilderClassName);
+
+        // Add the select columns if necessary.
+        if (criteria.getSelectColumns().size() == 0)
+        {
+            Class[] argTypes = { Criteria.class };
+            Method selectColumnAdder =
+                returnBuilderClass.getMethod("addSelectColumns", argTypes);
+            Object[] theArgs = { criteria };
+            selectColumnAdder.invoke(returnBuilderClass.newInstance(), theArgs);
+        }
+
+        // Locate the populateObjects() method - this will be used later
+        Class[] argTypes = { List.class };
+        populateObjectsMethod =
+            returnBuilderClass.getMethod("populateObjects", argTypes);
+
+        init(criteria, pageSize, memoryPageLimit);
     }
 
     /**
      * Called by the constructors to start the query.
      *
-     * @param name Key used to store the LargeSelect in the session.
-     * @param criteria Object used by BasePeer to build the query.
-     * @param memoryLimit Maximum number of rows to be in memory at
-     * one time.
-     * @exception Exception, a generic exception.
+     * @param criteria Object used by <code>BasePeer</code> to build the query.
+     * In order to allow this class to utilise database server implemented
+     * offsets and limits (when available), the provided criteria must not have
+     * any limit or offset defined.
+     * @param pageSize number of rows to return in one block.
+     * @param memoryLimitPages maximum number of pages worth of rows to be held
+     * in memory at one time.
+     * @throws IllegalArgumentException if <code>criteria</code> uses one or
+     * both of offset and limit and if <code>pageSize</code> or
+     * <code>memoryLimitPages</code> are less than 1;
+     * @throws Exception a generic exception.
      */
-    private void init(String name,
-                      Criteria criteria,
-                      int memoryLimit)
+    private void init(Criteria criteria, int pageSize, int memoryLimitPages)
         throws Exception
     {
-        this.memoryLimit = memoryLimit;
-        this.name = name;
-        results = new ArrayList();
-        query = BasePeer.createQueryString(criteria);
+        if (criteria.getOffset() != 0 || criteria.getLimit() != -1)
+        {
+            throw new IllegalArgumentException(
+                "Criteria passed to " + " must not use Offset and/or Limit.");
+        }
+
+        if (pageSize < 1)
+        {
+            throw new IllegalArgumentException("pageSize must be greater than zero.");
+        }
+
+        if (memoryLimitPages < 1)
+        {
+            throw new IllegalArgumentException("memoryPageLimit must be greater than zero.");
+        }
+
+        this.pageSize = pageSize;
+        this.memoryLimit = pageSize * memoryLimitPages;
+        this.criteria = criteria;
         dbName = criteria.getDbName();
         blockEnd = blockBegin + memoryLimit - 1;
-        startQuery(miniblock);
+        startQuery(pageSize);
     }
 
     /**
-     * Gets the next block of rows.
+     * Retrieve a specific page, if it exists.
      *
-     * @return A List of query results.
-     * @exception Exception, a generic exception.
+     * @param pageNumber the number of the page to be retrieved - must be greater
+     * than zero.  An empty <code>List</code> will be returned if <code>pageNumber
+     * </code> exceeds the total number of pages that exist.
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> results.
+     * @throws IllegalArgumentException when <code>pageNo</code> is not
+     * greater than zero.
+     * @throws Exception a generic exception.
      */
-    public List getNextResults()
-        throws Exception
+    public List getPage(int pageNumber) throws Exception
     {
-        return getResults(position, miniblock);
+        if (pageNumber < 1)
+        {
+            throw new IllegalArgumentException("pageNumber must be greater than zero.");
+        }
+        currentPageNumber = pageNumber;
+        return getResults((pageNumber - 1) * pageSize, pageSize);
     }
 
     /**
-     * Gets a block of rows which have previously been retrieved.
+     * Gets the next page of rows.
      *
-     * @return a List of query results.
-     * @exception Exception, a generic exception.
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> reslts.
+     * @throws Exception a generic exception.
      */
-    public List getPreviousResults()
-        throws Exception
+    public List getNextResults() throws Exception
     {
-        return getResults(position - 2 * miniblock, miniblock);
+        if (!getNextResultsAvailable())
+        {
+            return getCurrentPageResults();
+        }
+        currentPageNumber++;
+        return getResults(position, pageSize);
     }
 
     /**
-     * Gets a block of rows starting at a specified row.  Number of
-     * rows in the block was specified in the constructor.
+     * Provide access to the results from the current page.
      *
-     * @param start The starting row.
-     * @return a List of query results.
-     * @exception Exception, a generic exception.
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> reslts.
+     */
+    public List getCurrentPageResults()
+    {
+        return lastResults;
+    }
+
+    /**
+     * Gets the previous page of rows.
+     *
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> reslts.
+     * @throws Exception a generic exception.
+     */
+    public List getPreviousResults() throws Exception
+    {
+        if (!getPreviousResultsAvailable())
+        {
+            return getCurrentPageResults();
+        }
+
+        int start;
+        if (position - 2 * pageSize < 0)
+        {
+            start = 0;
+            currentPageNumber = 1;
+        }
+        else
+        {
+            start = position - 2 * pageSize;
+            currentPageNumber--;
+        }
+        return getResults(start, pageSize);
+    }
+
+    /**
+     * Gets a page of rows starting at a specified row.
+     *
+     * @param start the starting row.
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> reslts.
+     * @throws Exception a generic exception.
      */
     public List getResults(int start) throws Exception
     {
-        return getResults(start, miniblock);
+        return getResults(start, pageSize);
     }
 
     /**
-     * Gets a block of rows starting at a specified row and containing
-     * a specified number of rows.
+     * Gets a block of rows starting at a specified row and containing a
+     * specified number of rows.
      *
-     * @param start The starting row.
-     * @param size The number of rows.
-     * @return a List of query results.
-     * @exception Exception, a generic exception.
+     * @param start the starting row.
+     * @param size the number of rows.
+     * @return a <code>List</code> of query results containing a maximum of
+     * <code>pageSize</code> reslts.
+     * @throws Exception a generic exception.
      */
-    synchronized public List getResults(int start,
-                                        int size)
-        throws Exception
+    synchronized public List getResults(int start, int size) throws Exception
     {
+        log.debug(
+            "LargeSelect.getResults(start: "
+                + start
+                + ", size: "
+                + size
+                + ") invoked.");
+
         if (size > memoryLimit)
         {
             throw new Exception("Memory limit does not permit a range this large.");
@@ -262,54 +545,97 @@ public class LargeSelect implements Runnable
         // Request was for a block of rows which should be in progess.
         // If the rows have not yet been returned, wait for them to be
         // retrieved.
-        if ( start >= blockBegin  &&  (start + size - 1) < blockEnd )
+        if (start >= blockBegin && (start + size - 1) <= blockEnd)
         {
-            while ( (start + size - 1) > currentlyFilledTo )
+            log.debug(
+                "LargeSelect.getResults(): Sleeping until start+size-1 ("
+                    + (start + size - 1)
+                    + ") > currentlyFilledTo ("
+                    + currentlyFilledTo
+                    + ") && !queryCompleted (!"
+                    + queryCompleted
+                    + ")");
+            while (((start + size - 1) > currentlyFilledTo) && !queryCompleted)
             {
                 Thread.currentThread().sleep(500);
             }
         }
 
-        // Going in reverse direction, trying to limit db hits so
-        // assume user might want at least 2 sets of data.
-        else if ( start < blockBegin  &&  start >= 0 )
+        // Going in reverse direction, trying to limit db hits so assume user
+        // might want at least 2 sets of data.
+        else if (start < blockBegin && start >= 0)
         {
+            log.debug(
+                "LargeSelect.getResults(): Paging backwards as start ("
+                    + start
+                    + ") < blockBegin ("
+                    + blockBegin
+                    + ") && start >= 0");
             stopQuery();
             if (memoryLimit >= 2 * size)
             {
                 blockBegin = start - size;
-                blockEnd = blockBegin + memoryLimit - 1;
-                startQuery(size);
+                if (blockBegin < 0)
+                {
+                    blockBegin = 0;
+                }
             }
             else
             {
                 blockBegin = start;
-                blockEnd = blockBegin + memoryLimit - 1;
-                startQuery(size);
             }
+            blockEnd = blockBegin + memoryLimit - 1;
+            startQuery(size);
+            // Re-invoke getResults() to provide the wait processing.
+            return getResults(start, size);
         }
 
-        // Assume we are moving on, do not retrieve any records prior
-        // to start.
-        else if ( (start + size - 1) >= blockEnd )
+        // Assume we are moving on, do not retrieve any records prior to start.
+        else if ((start + size - 1) > blockEnd)
         {
+            log.debug(
+                "LargeSelect.getResults(): "
+                    + "Paging past end of loaded data as start+size-1 ("
+                    + (start + size - 1)
+                    + ") > blockEnd ("
+                    + blockEnd
+                    + ")");
             stopQuery();
             blockBegin = start;
             blockEnd = blockBegin + memoryLimit - 1;
             startQuery(size);
+            // Re-invoke getResults() to provide the wait processing.
+            return getResults(start, size);
         }
 
         else
         {
-            throw new Exception("parameter configuration not accounted for");
+            throw new Exception("Parameter configuration not accounted for.");
         }
 
-        List returnResults = new ArrayList(size);
-        for (int i = (start - blockBegin); i < (start - blockBegin + size); i++)
+        int fromIndex = start - blockBegin;
+        int toIndex = fromIndex + Math.min(size, results.size() - fromIndex);
+        log.debug(
+            "LargeSelect.getResults(): "
+                + "Retrieving records from results elements start-blockBegin ("
+                + fromIndex
+                + ") through "
+                + "fromIndex + Math.min(size, results.size() - fromIndex) ("
+                + toIndex
+                + ")");
+        List returnResults = results.subList(fromIndex, toIndex);
+
+        if (null != returnBuilderClass)
         {
-            returnResults.add( results.get(i) );
+            // Invoke the populateObjects() method
+            Object[] theArgs = { returnResults };
+            returnResults =
+                (List) populateObjectsMethod.invoke(
+                    returnBuilderClass.newInstance(),
+                    theArgs);
         }
         position = start + size;
+        lastResults = returnResults;
         return returnResults;
     }
 
@@ -318,41 +644,110 @@ public class LargeSelect implements Runnable
      */
     public void run()
     {
-        int size = miniblock;
         try
         {
+            // Add 1 to memory limit to check if the query ends on a page break.
+            results = new ArrayList(memoryLimit + 1);
+            currentlyFilledTo = -1;
+            queryCompleted = false;
+
+            // Use the criteria to limit the rows that are retrieved to the
+            // block of records that fit in the predefined memoryLimit.
+            criteria.setOffset(blockBegin);
+            // Add 1 to memory limit to check if the query ends on a page break.
+            criteria.setLimit(memoryLimit + 1);
+            query = BasePeer.createQueryString(criteria);
+
             // Get a connection to the db.
             db = Torque.getConnection(dbName);
 
             // Execute the query.
-            qds = new QueryDataSet( db, query );
+            log.debug("LargeSelect.run(): query = " + query);
+            log.debug("LargeSelect.run(): memoryLimit = " + memoryLimit);
+            log.debug("LargeSelect.run(): blockBegin = " + blockBegin);
+            log.debug("LargeSelect.run(): blockEnd = " + blockEnd);
+            qds = new QueryDataSet(db, query);
 
-            // Continue getting rows until the memory limit is
-            // reached, all results have been retrieved, or the rest
+            // Continue getting rows one page at a time until the memory limit
+            // is reached, all results have been retrieved, or the rest
             // of the results have been determined to be irrelevant.
-            while( !killThread &&
-                   !qds.allRecordsRetrieved() &&
-                   currentlyFilledTo + size  <= blockEnd )
+            while (!killThread
+                && !qds.allRecordsRetrieved()
+                && currentlyFilledTo + pageSize <= blockEnd)
             {
-                if ( (currentlyFilledTo + size)  > blockEnd )
+                // This caters for when memoryLimit is not a multiple of
+                //  pageSize which it never is because we always add 1 above.
+                if ((currentlyFilledTo + pageSize) >= blockEnd)
                 {
-                    size = blockEnd - currentlyFilledTo;
+                    // Add 1 to check if the query ends on a page break.
+                    pageSize = blockEnd - currentlyFilledTo + 1;
                 }
-                List tempResults = BasePeer.getSelectResults( qds,
-                                                              size,
-                                                              false);
+
+                log.debug(
+                    "LargeSelect.run(): "
+                        + "Invoking BasePeer.getSelectResults(qds, "
+                        + pageSize
+                        + ", false)");
+                List tempResults = BasePeer.getSelectResults(qds, pageSize, false);
+
                 for (int i = 0; i < tempResults.size(); i++)
                 {
-                    results.add( tempResults.get(i) );
+                    results.add(tempResults.get(i));
                 }
-                currentlyFilledTo += miniblock;
+
+                currentlyFilledTo += tempResults.size();
+                boolean perhapsLastPage = true;
+
+                // If the extra record was indeed found then we know we are not
+                // on the last page but we must now get rid of it.
+                if (results.size() == memoryLimit + 1)
+                {
+                    results.remove(currentlyFilledTo--);
+                    perhapsLastPage = false;
+                }
+
+                if (results.size() > 0
+                    && blockBegin + currentlyFilledTo > totalRecords)
+                {
+                    // Add 1 because index starts at 0
+                    totalRecords = blockBegin + currentlyFilledTo + 1;
+                }
+
+                if (qds.allRecordsRetrieved())
+                {
+                    queryCompleted = true;
+                    // The following ugly condition ensures that the totals are
+                    // not finalized when a user does something like requesting
+                    // a page greater than what exists in the database.
+                    if (perhapsLastPage
+                        && getCurrentPageNumber() <= getTotalPages())
+                    {
+                        totalsFinalized = true;
+                    }
+                }
                 qds.clearRecords();
             }
+            
+            log.debug(
+                "LargeSelect.run(): While loop terminated "
+                    + "because either:");
+            log.debug(
+                "LargeSelect.run(): 1. qds.allRecordsRetrieved(): "
+                    + qds.allRecordsRetrieved());
+            log.debug("LargeSelect.run(): 2. killThread: " + killThread);
+            log.debug(
+                "LargeSelect.run(): 3. !(currentlyFilledTo + "
+                    + "size <= blockEnd): !"
+                    + (currentlyFilledTo + pageSize <= blockEnd));
+            log.debug(
+                "LargeSelect.run(): - currentlyFilledTo: " + currentlyFilledTo);
+            log.debug("LargeSelect.run(): - size: " + pageSize);
+            log.debug("LargeSelect.run(): - blockEnd: " + blockEnd);
+            log.debug("LargeSelect.run(): - results.size(): " + results.size());
         }
         catch (Exception e)
         {
-            //Torque.getCategory().error(e);
-            e.printStackTrace();
+            log.error(e);
         }
         finally
         {
@@ -364,10 +759,9 @@ public class LargeSelect implements Runnable
                 }
                 db.close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                //Torque.getCategory().error(e);
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }
@@ -375,26 +769,23 @@ public class LargeSelect implements Runnable
     /**
      * Starts a new thread to retrieve the result set.
      *
-     * @param initialSize The initial size for each block.
-     * @exception Exception, a generic exception.
+     * @param initialSize the initial size for each block.
+     * @throws Exception a generic exception.
      */
-    private void startQuery(int initialSize)
-        throws Exception
+    private void startQuery(int initialSize) throws Exception
     {
-        miniblock = initialSize;
+        pageSize = initialSize;
         thread = new Thread(this);
         thread.start();
     }
 
     /**
-     * Used to stop filling the memory with the current block of
-     * results, if it has been determined that they are no longer
-     * relevant.
+     * Used to stop filling the memory with the current block of results, if it
+     * has been determined that they are no longer relevant.
      *
-     * @exception Exception, a generic exception.
+     * @throws Exception a generic exception.
      */
-    private void stopQuery()
-        throws Exception
+    private void stopQuery() throws Exception
     {
         killThread = true;
         while (thread.isAlive())
@@ -403,4 +794,235 @@ public class LargeSelect implements Runnable
         }
         killThread = false;
     }
+
+    /**
+     * Retrieve the number of the current page.
+     *
+     * @return the current page number.
+     */
+    public int getCurrentPageNumber()
+    {
+        return currentPageNumber;
+    }
+
+    /**
+     * Retrieve the total number of search result records that are known to
+     * exist (this will be the actual value when the query has completeted (see
+     * <code>getTotalsFinalized()</code>).  The convenience method
+     * <code>getRecordProgressText()</code> may be more useful for presenting to
+     * users.
+     *
+     * @return the number of result records known to exist (not accurate until
+     * <code>getTotalsFinalized()</code> returns <code>true</code>).
+     */
+    public int getTotalRecords()
+    {
+        return totalRecords;
+    }
+
+    /**
+     * Provide an indication of whether or not paging of results will be
+     * required.
+     *
+     * @return <code>true</code> when multiple pages of results exist.
+     */
+    public boolean getPaginated()
+    {
+        // Handle a page memory limit of 1 page.
+        if (!getTotalsFinalized())
+        {
+            return true;
+        }
+        return blockBegin + currentlyFilledTo > pageSize;
+    }
+
+    /**
+     * Retrieve the total number of pages of search results that are known to
+     * exist (this will be the actual value when the query has completeted (see
+     * <code>getQyeryCompleted()</code>).  The convenience method
+     * <code>getPageProgressText()</code> may be more useful for presenting to
+     * users.
+     *
+     * @return the number of pages of results known to exist (not accurate until
+     * <code>getTotalsFinalized()</code> returns <code>true</code>).
+     */
+    public int getTotalPages()
+    {
+        if (totalPages > -1)
+        {
+            return totalPages;
+        }
+
+        int tempPageCount =
+            getTotalRecords() / pageSize
+                + (getTotalRecords() % pageSize > 0 ? 1 : 0);
+
+        if (getTotalsFinalized())
+        {
+            totalPages = tempPageCount;
+        }
+
+        return tempPageCount;
+    }
+
+    /**
+     * Retrieve the page size.
+     *
+     * @return the number of records returned on each invocation of
+     * <code>getNextResults()</code>/<code>getPreviousResults()</code>.
+     */
+    public int getPageSize()
+    {
+        return pageSize;
+    }
+
+    /**
+     * Provide access to indicator that the total values for the number of
+     * records and pages are now accurate as opposed to known upper limits.
+     *
+     * @return <code>true</code> when the totals are known to have been fully
+     * computed.
+     */
+    public boolean getTotalsFinalized()
+    {
+        return totalsFinalized;
+    }
+
+    /**
+     * Provide a way of changing the more pages/records indicator.
+     *
+     * @param moreIndicator the indicator to use in place of the default
+     * ("&gt;").
+      */
+    public static void setMoreIndicator(String moreIndicator)
+    {
+        LargeSelect.moreIndicator = moreIndicator;
+    }
+
+    /**
+     * Sets the multiplier that will be used to compute the memory limit when a
+     * constructor with no memory page limit is used - the memory limit will be
+     * this number multiplied by the page size.
+     *
+     * @param memoryPageLimit the maximum number of pages to be in memory
+     * at one time.
+     */
+    public static void setMemoryPageLimit(int memoryPageLimit)
+    {
+        LargeSelect.memoryPageLimit = memoryPageLimit;
+    }
+
+    /**
+     * A convenience method that provides text showing progress through the
+     * selected rows on a page basis.
+     *
+     * @return progress text in the form of "1 of &gt; 5" where "&gt;" can be
+     * configured using <code>setMoreIndicator()</code>.
+     */
+    public String getPageProgressText()
+    {
+        StringBuffer result = new StringBuffer();
+        result.append(getCurrentPageNumber());
+        result.append(" of ");
+        if (!totalsFinalized)
+        {
+            result.append(moreIndicator);
+            result.append(" ");
+        }
+        result.append(getTotalPages());
+        return result.toString();
+    }
+
+    /**
+     * Provides a count of the number of rows to be displayed on the current
+     * page - for the last page this may be less than the configured page size.
+     *
+     * @return the number of records that are included on the current page of
+     * results.
+     */
+    public int getCurrentPageSize()
+    {
+        if (getCurrentPageNumber() < getTotalPages()
+            || getTotalRecords() % getPageSize() == 0)
+        {
+            return getPageSize();
+        }
+        return getTotalRecords() % getPageSize();
+    }
+
+    /**
+     * Provide the record number of the first row included on the current page.
+     *
+     * @return The record number of the first row of the current page.
+     */
+    public int getFirstRecordNoForPage()
+    {
+        if (getCurrentPageNumber() < 1)
+        {
+            return 0;
+        }
+        return getCurrentPageNumber() * getPageSize() - getPageSize() + 1;
+    }
+
+    /**
+     * Provide the record number of the last row included on the current page.
+     *
+     * @return the record number of the last row of the current page.
+     */
+    public int getLastRecordNoForPage()
+    {
+        return (getCurrentPageNumber() - 1) * getPageSize() + getCurrentPageSize();
+    }
+
+    /**
+     * A convenience method that provides text showing progress through the
+     * selected rows on a record basis.
+     *
+     * @return progress text in the form of "26 - 50 of &gt; 250" where "&gt;"
+     * can be configured using <code>setMoreIndicator()</code>.
+     */
+    public String getRecordProgressText()
+    {
+        StringBuffer result = new StringBuffer();
+        result.append(getFirstRecordNoForPage());
+        result.append(" - ");
+        result.append(getLastRecordNoForPage());
+        result.append(" of ");
+        if (!totalsFinalized)
+        {
+            result.append(moreIndicator);
+            result.append(" ");
+        }
+        result.append(getTotalRecords());
+        return result.toString();
+    }
+
+    /**
+     * Indicates if further result pages are available.
+     *
+     * @return <code>true</code> when further results are available.
+     */
+    public boolean getNextResultsAvailable()
+    {
+        if (!totalsFinalized || getCurrentPageNumber() < getTotalPages())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Indicates if previous results pages are available.
+     *
+     * @return <code>true</code> when previous results are available.
+     */
+    public boolean getPreviousResultsAvailable()
+    {
+        if (getCurrentPageNumber() <= 1)
+        {
+            return false;
+        }
+        return true;
+    }
+
 }
