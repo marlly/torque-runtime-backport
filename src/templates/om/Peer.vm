@@ -371,28 +371,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         try
         {
         #set ( $n=0 )
-        #set ( $boolean = "boolean" )
         #foreach ($col in $table.Columns)
-            #if ($col.isBooleanChar())
-            $boolean b = "Y".equals(row.getValue(offset + $n).$col.VillageMethod);
-            #set ( $boolean = "" )
-                #if ($col.isUsePrimitive())
-            obj.set${col.JavaName}(b);
-                #else
-            obj.set${col.JavaName}(b ? Boolean.TRUE : Boolean.FALSE);
-                #end
-            #elseif ($col.isBooleanInt())
-            $boolean b = (row.getValue(offset + $n).$col.VillageMethod != 0);
-                #set ( $boolean = "" )
-                #if ($col.isUsePrimitive())
-            obj.set${col.JavaName}(b);
-                #else
-            obj.set${col.JavaName}(b ? Boolean.TRUE : Boolean.FALSE);
-                #end
-            #else
             obj.set${col.JavaName}(row.getValue(offset + $n).$col.VillageMethod);
-            #end
-                #set ( $n = $n + 1 )
+            #set ( $n = $n + 1 )
         #end
         }
         catch (DataSetException e)
