@@ -54,16 +54,14 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 /**
- * This is a base class of runtime exeptions thrown by Torque.
+ * This is a base class of runtime exeptions thrown by Torque. <p>
  *
  * This class represents a non-checked type exception (see
  * {@link java.lang.RuntimeException}).
@@ -155,7 +153,7 @@ public class TorqueRuntimeException
     {
         synchronized(out)
         {
-            PrintWriter pw=new PrintWriter(out, false);
+            PrintWriter pw = new PrintWriter(out, false);
             printStackTrace(pw);
             // flush the PrintWriter before it's GCed
             pw.flush();
@@ -189,23 +187,24 @@ public class TorqueRuntimeException
         {
             if(nested instanceof TorqueRuntimeException)
             {
-                ((TorqueRuntimeException)nested).printStackTrace(out, st.length - 2);
+                ((TorqueRuntimeException) nested)
+                        .printStackTrace(out, st.length - 2);
             }
             else if(nested instanceof TorqueException)
             {
-                ((TorqueException)nested).printStackTrace(out);
+                ((TorqueException) nested).printStackTrace(out);
             }
             else
             {
                 String[] nst = captureStackTrace(nested);
-                for(int i = 0; i<nst.length - st.length + 2; i++)
+                for(int i = 0; i < nst.length - st.length + 2; i++)
                 {
                     out.println(nst[i]);
                 }
             }
             out.print("rethrown as ");
         }
-        for(int i=0; i<st.length - skip; i++)
+        for(int i = 0; i < st.length - skip; i++)
         {
             out.println(st[i]);
         }
@@ -253,6 +252,6 @@ public class TorqueRuntimeException
         {
             list.add(st.nextToken());
         }
-        return (String [])list.toArray(new String[] {});
+        return (String[]) list.toArray(new String[] {});
     }
 }
