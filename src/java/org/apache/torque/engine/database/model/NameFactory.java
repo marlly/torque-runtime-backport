@@ -68,6 +68,12 @@ import org.apache.torque.TorqueException;
 public class NameFactory
 {
     /**
+     * The fully qualified class name of the Java name generator.
+     */
+    public static final String JAVA_GENERATOR =
+        JavaNameGenerator.class.getName();
+
+    /**
      * The fully qualified class name of the constraint name
      * generator.
      */
@@ -91,7 +97,7 @@ public class NameFactory
      */
     protected NameFactory()
     {
-        algorithms = new Hashtable(3);
+        algorithms = new Hashtable(5);
     }
 
     /**
