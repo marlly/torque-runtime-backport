@@ -38,6 +38,9 @@
     <li>
       Added support for MS Access (using the JDBC-ODBC Bridge driver).
     </li>
+    <li>
+      Upgraded village to 2.0-dev.
+    </li>
   </ul>
 </p>
 </subsection>

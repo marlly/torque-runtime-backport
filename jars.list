@@ -18,6 +18,6 @@ log4j/jars/log4j-1.2.6.jar
 stratum/jars/stratum-1.0-b3-dev.jar
 tomcat/jars/tomcat-naming-1.0.jar
 velocity/jars/velocity-1.3.jar
-village/jars/village-1.5.3.jar
+village/jars/village-2.0-dev-20021111.jar
 xerces/jars/xercesImpl-2.0.2.jar
 xml-apis/jars/xml-apis-2.0.2.jar
