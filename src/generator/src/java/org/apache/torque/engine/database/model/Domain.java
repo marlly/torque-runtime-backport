@@ -55,6 +55,7 @@ package org.apache.torque.engine.database.model;
  */
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.torque.engine.platform.Platform;
 import org.xml.sax.Attributes;
 
 /**
@@ -73,7 +74,6 @@ public class Domain
     private SchemaType torqueType;
     private String sqlType;
     private String defaultValue;
-
     
     /**
      * Creates a new instance with a <code>null</code> name.
@@ -138,6 +138,11 @@ public class Domain
     
     public Domain(Domain domain)
     {
+        copy(domain);
+    }
+    
+    public void copy(Domain domain)
+    {
         this.defaultValue = domain.getDefaultValue();
         this.description = domain.getDescription();
         this.name = domain.getName();
@@ -150,16 +155,16 @@ public class Domain
     /**
      * Imports a column from an XML specification
      */
-    public void loadFromXML(Attributes attrib)
+    public void loadFromXML(Attributes attrib, Platform platform)
     {
+        SchemaType schemaType = SchemaType.getEnum(attrib.getValue("type"));
+        copy(platform.getDomainForSchemaType(schemaType));
         //Name
         name = attrib.getValue("name");
         //Default column value.
         defaultValue = attrib.getValue("default");
         size = attrib.getValue("size");
         scale = attrib.getValue("scale");
-
-        setType(attrib.getValue("type"));
 
         description = attrib.getValue("description");
     }
@@ -292,6 +297,30 @@ public class Domain
     }
 
     /**
+     * Return a string that will give this column a default value.
+     * <p>
+     * TODO: Properly SQL-escape text values.
+     */
+    public String getDefaultSetting()
+    {
+        StringBuffer dflt = new StringBuffer(0);
+        if (getDefaultValue() != null)
+        {
+            dflt.append("default ");
+            if (TypeMap.isTextType(getType()))
+            {
+                // TODO: Properly SQL-escape the text.
+                dflt.append('\'').append(getDefaultValue()).append('\'');
+            }
+            else
+            {
+                dflt.append(getDefaultValue());
+            }
+        }
+        return dflt.toString();
+    } 
+     
+    /**
      * @param defaultValue The defaultValue to set.
      */
     public void setDefaultValue(String defaultValue)
@@ -346,5 +375,5 @@ public class Domain
             return "";
         }
     }
-    
+
 }

@@ -292,7 +292,7 @@ public class XmlToAppData extends DefaultHandler
             else if (rawName.equals("domain"))
             {
                 Domain domain = new Domain();
-                domain.loadFromXML(attributes);
+                domain.loadFromXML(attributes, database.getPlatform());
                 database.addDomain(domain);
             }
             else if (rawName.equals("table"))
