@@ -97,6 +97,7 @@ public class TorqueDocumentationTask extends TorqueDataModelTask
     {
         super.initControlContext();
         context.put("outputFormat", outputFormat);
+        context.put("escape", new org.apache.velocity.anakia.Escape());
         return context;
     }
 }

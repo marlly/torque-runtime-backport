@@ -20,7 +20,11 @@
       <td>$col.Name</td>
       <td>$col.Type</td>
       <td>$col.printSize()</td>
-      <td>$!col.DefaultValue</td>
+    #if ($col.DefaultValue && !$col.DefaultValue.equalsIgnoreCase("NULL") )
+      <td>$escape.getText($col.DefaultValue)</td>
+    #else
+      <td></td>
+    #end
       <td>$col.JavaName</td>
       <td>#if ($col.isPrimaryKey()==true)X#end</td>
       <td>#if ($col.isForeignKey()==true)X#end</td>
