@@ -189,13 +189,7 @@
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dest}"/>
-    <mkdir dir="${build.src}"/>
 
-    <filter token="VERSION" value="${version}"/>
-
-    <copy todir="${build.src}/org" filtering="yes">
-      <fileset dir="${src.dir}/java/org"/>
-    </copy>
   </target>
 
   <!-- ================================================================== -->
@@ -204,9 +198,8 @@
   
   <target name="compile" depends="prepare"
           description="==> compiles the source code">
-    <javac srcdir="${build.src}"
+    <javac srcdir="${src.dir}/java"
       destdir="${build.dest}"
-      excludes="**/package.html"
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
@@ -304,7 +297,7 @@
     <mkdir dir="${docs.dest}/api"/>
 
     <javadoc
-      sourcepath="${build.src}"
+      sourcepath="${src.dir}/java"
       packagenames="${package}.*"
       destdir="${javadoc.destdir}"
       author="true"

@@ -847,7 +847,16 @@ public abstract class BasePeer implements java.io.Serializable
         throws Exception
     {
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
-
+System.out.println ("tableName: " + tableName);
+System.out.println ("criteria.getDbName(): " + criteria.getDbName());
+if (dbMap == null)
+{
+System.out.println ("dbMap is null");
+}
+else
+{
+System.out.println ("dbMap is not null: " + dbMap.toString());
+}
         ColumnMap[] columnMaps = dbMap.getTable( tableName ).getColumns();
         boolean shouldSave = false;
         for (int j=0; j<columnMaps.length; j++)
