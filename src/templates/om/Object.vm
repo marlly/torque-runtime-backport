@@ -1110,14 +1110,17 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      * related objects to isNew=true.
 #end
      */
-#if ($table.ChildrenColumn || $table.isAbstract())
-    public $table.JavaName copyInto($table.JavaName copyObj) throws TorqueException
-    {
+#if ($table.isAbstract())
+    public abstract $table.JavaName copy() throws TorqueException;
 #else
     public $table.JavaName copy() throws TorqueException
     {
-        $table.JavaName copyObj = new ${table.JavaName}();
+        return copyInto(new ${table.JavaName}());
+    }
 #end
+
+    protected $table.JavaName copyInto($table.JavaName copyObj) throws TorqueException
+    {
 #foreach ($col in $table.Columns)
         copyObj.set${col.JavaName}($col.Name.toLowerCase());
 #end
