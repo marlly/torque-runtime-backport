@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.model;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -88,7 +88,7 @@ public class Column
     private String defaultValue;
     private List referrers;
     // only one type is supported currently, which assumes the
-    // column either contains the classnames or a key to 
+    // column either contains the classnames or a key to
     // classnames specified in the schema.  Others may be
     // supported later.
     private String inheritanceType;
@@ -99,7 +99,7 @@ public class Column
 
     // class name to do input validation on this column
     private String inputValidator = null;
-    
+
     /**
      * Creates a new instance with a <code>null</code> name.
      */
@@ -150,11 +150,11 @@ public class Column
         defaultValue = attrib.getValue("default");
 
         size = attrib.getValue("size");
-        
+
         setType(attrib.getValue("type"));
 
         inheritanceType = attrib.getValue("inheritance");
-        isInheritance = 
+        isInheritance =
             ( inheritanceType != null && !inheritanceType.equals("false") );
 
         this.inputValidator = attrib.getValue("inputValidator");
@@ -208,25 +208,25 @@ public class Column
         this.javaName = javaName;
     }
 
-    
+
     /**
      * Get the location of this column within the table (one-based).
      * @return value of position.
      */
-    public int getPosition() 
+    public int getPosition()
     {
         return position;
     }
-    
+
     /**
      * Get the location of this column within the table (one-based).
      * @param v  Value to assign to position.
      */
-    public void setPosition(int  v) 
+    public void setPosition(int  v)
     {
         this.position = v;
     }
-    
+
 
     /**
      * Set the parent Table of the column
@@ -272,7 +272,7 @@ public class Column
     public void addInheritance(Inheritance inh)
     {
         inh.setColumn(this);
-        if ( inheritanceList == null ) 
+        if ( inheritanceList == null )
         {
             inheritanceList = new ArrayList();
             isEnumeratedClasses = true;
@@ -289,7 +289,7 @@ public class Column
     }
 
     /**
-     * Determine if this column is a normal property or specifies a 
+     * Determine if this column is a normal property or specifies a
      * the classes that are represented in the table containing this column.
      */
     public boolean isInheritance()
@@ -377,7 +377,7 @@ public class Column
     public boolean isMultipleFK()
     {
         ForeignKey fk = getForeignKey();
-        if (fk != null) 
+        if (fk != null)
         {
             ForeignKey[] fks = parentTable.getForeignKeys();
             for (int i = 0; i < fks.length; i++)
@@ -457,7 +457,7 @@ public class Column
             referrers = new ArrayList(5);
         }
         return referrers;
-    }      
+    }
 
     /**
      * Returns the colunm type
@@ -465,9 +465,9 @@ public class Column
     public void setType(String torqueType)
     {
         this.torqueType = torqueType;
-        if ( torqueType.equals("VARBINARY") || torqueType.equals("BLOB") ) 
+        if ( torqueType.equals("VARBINARY") || torqueType.equals("BLOB") )
         {
-            needsTransactionInPostgres = true;   
+            needsTransactionInPostgres = true;
         }
     }
 
@@ -494,7 +494,7 @@ public class Column
     {
         return (columnType instanceof String);
     }
-    
+
     /**
      * String representation of the column. This
      * is an xml representation.
@@ -524,7 +524,7 @@ public class Column
         }
 
         result.append(" type=\"").append (torqueType).append('"');
-        
+
         if (size != null)
         {
             result.append(" size=\"").append(size).append('"');
@@ -712,30 +712,30 @@ public class Column
      */
     public String getJavaNative()
     {
-        String jtype = TypeMap.getJavaNative(torqueType); 
-        if ( isPrimaryKey() || isForeignKey() ) 
+        String jtype = TypeMap.getJavaNative(torqueType);
+        if ( isPrimaryKey() || isForeignKey() )
         {
-            if ( jtype.equals("String") ) 
+            if ( jtype.equals("String") )
             {
                 jtype = "StringKey";
             }
-            else if ( jtype.equals("Date") ) 
+            else if ( jtype.equals("Date") )
             {
                 jtype = "DateKey";
             }
             else if ( jtype.equals("short")
-                      || jtype.equals("int") 
-                      || jtype.equals("long") 
-                      || jtype.equals("BigDecimal") 
-                      || jtype.equals("byte") 
-                      || jtype.equals("float") 
-                      || jtype.equals("double") ) 
+                      || jtype.equals("int")
+                      || jtype.equals("long")
+                      || jtype.equals("BigDecimal")
+                      || jtype.equals("byte")
+                      || jtype.equals("float")
+                      || jtype.equals("double") )
             {
                 jtype = "NumberKey";
             }
-            
+
         }
-        
+
         return jtype;
     }
 
@@ -747,15 +747,15 @@ public class Column
     public String getVillageMethod()
     {
         String vmethod = TypeMap.getVillageMethod(torqueType);
-        String jtype = TypeMap.getJavaNative(torqueType); 
-        if ( isPrimaryKey() || isForeignKey() ) 
+        String jtype = TypeMap.getJavaNative(torqueType);
+        if ( isPrimaryKey() || isForeignKey() )
         {
             if ( jtype.equals("short")
-                 || jtype.equals("int") 
-                 || jtype.equals("long") 
-                 || jtype.equals("byte") 
-                 || jtype.equals("float") 
-                 || jtype.equals("double") ) 
+                 || jtype.equals("int")
+                 || jtype.equals("long")
+                 || jtype.equals("byte")
+                 || jtype.equals("float")
+                 || jtype.equals("double") )
             {
                 vmethod = "asBigDecimal()";
             }
@@ -773,7 +773,7 @@ public class Column
     }
 
     /**
-     * Returns true if the column type is boolean in the 
+     * Returns true if the column type is boolean in the
      * java object and a numeric (1 or 0) in the db.
      */
     public boolean isBooleanInt()
@@ -782,7 +782,7 @@ public class Column
     }
 
     /**
-     * Returns true if the column type is boolean in the 
+     * Returns true if the column type is boolean in the
      * java object and a String ("Y" or "N") in the db.
      */
     public boolean isBooleanChar()
@@ -805,5 +805,17 @@ public class Column
             || "float".equals(t)
             || "double".equals(t)
             || "char".equals(t);
+    }
+
+
+    /**
+     * Creates a list of columns delimited by commas
+     */
+    public static String makeList(List cols)
+    {
+        StringBuffer res = new StringBuffer(cols.get(0).toString());
+        for (int i = 1; i < cols.size(); i++)
+            res.append(", ").append(cols.get(i).toString());
+        return res.toString();
     }
 }
