@@ -84,7 +84,8 @@ public class DBNone extends DB
     }
 
     /**
-     * @see org.apache.torque.adapters.DB#init
+     * does nothing.
+     * @deprecated simply remove the call from your code
      */
     public void init(String url, String username, String password)
     {

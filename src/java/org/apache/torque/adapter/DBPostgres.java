@@ -176,7 +176,7 @@ public class DBPostgres extends DB
     /**
      * Override the default behavior to associate b with null?
      *
-     * @see org.apache.torque.adapters.DB#getBooleanString
+     * @see DB#getBooleanString(Boolean)
      */
     public String getBooleanString(Boolean b)
     {
