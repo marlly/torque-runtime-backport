@@ -1,4 +1,4 @@
-package org.apache.turbine.torque;
+package org.apache.torque;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -64,9 +64,9 @@ import org.apache.tools.ant.types.FileSet;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.texen.ant.TexenTask;
-import org.apache.turbine.torque.engine.database.model.AppData;
-import org.apache.turbine.torque.engine.database.model.Database;
-import org.apache.turbine.torque.engine.database.transform.XmlToAppData;
+import org.apache.torque.engine.database.model.AppData;
+import org.apache.torque.engine.database.model.Database;
+import org.apache.torque.engine.database.transform.XmlToAppData;
 
 /**
  * A base torque task that uses either a single XML schema
