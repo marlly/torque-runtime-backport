@@ -316,7 +316,7 @@ public class TorqueJDBCTransformTask extends Task
                         || type.intValue() == Types.DECIMAL
                         || type.intValue() == Types.NUMERIC))
                 {
-                    column.setAttribute("size", new Integer(size).toString());
+                    column.setAttribute("size", String.valueOf(size));
                 }
 
                 if (nullType.intValue() == 0)
