@@ -242,7 +242,7 @@
             depends="prepare"
             description="==> generates the API documentation">
     <mkdir dir="${docs.dest}/api"/>
-    
+
     <javadoc
       sourcepath="${build.src}"
       packagenames="${package}.*"
@@ -256,6 +256,7 @@
       bottom="Copyright &amp;copy; ${year} Apache Software Foundation. All Rights Reserved."
       >
       <classpath refid="classpath"/>
+      <classpath path="${ant.home}/lib/ant.jar"/>
     </javadoc>
   </target>
 
