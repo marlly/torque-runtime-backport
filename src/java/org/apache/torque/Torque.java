@@ -138,6 +138,7 @@ public class Torque
         dbMaps = (Map)new HashMap();
 
         pools = (Map) new HashMap();
+
         // Create monitor thread
         monitor = new Monitor();
         // Indicate that this is a system thread. JVM will quit only when there
@@ -150,19 +151,29 @@ public class Torque
         DBFactory.setConfiguration(configuration);
         DBFactory.setCategory(category);
         DBFactory.init();
+
         BasePeer.setCategory(category);
     }
 
+    /**
+     * Sets the logging category.
+     */
     public static void setCategory(Category c)
     {
         category = c;
     }
 
+    /**
+     * Retrieves the logging category.
+     */
     public static Category getCategory()
     {
         return category;
     }
 
+    /**
+     * Sets the configuration.
+     */
     public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
