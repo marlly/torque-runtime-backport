@@ -236,8 +236,11 @@ public class Table implements IDMethod
                 name = fk.getName();
                 if (StringUtils.isEmpty(name))
                 {
-                    name = acquireUnusedGlobalName(name, fk.getLocalColumns(),
-                                                   "FK");
+                    List columnNames = fk.getLocalColumns();
+                    List disposableList =
+                        new ArrayList(columnNames.size() + 2);
+                    disposableList.addAll(columnNames);
+                    name = acquireUnusedGlobalName(name, disposableList, "FK");
                     fk.setName(name);
                 }
                 else
