@@ -3325,6 +3325,28 @@ public class Criteria extends Hashtable
          */
         public DB getDb()
         {
+            DB db = null;
+            if ( this.db == null ) 
+            {
+                // db may not be set if generating preliminary sql for 
+                // debugging.
+                try
+                {
+                    db = Torque.getDB( getDbName() );
+                }
+                catch (Exception e)
+                {
+                    // we are only doing this to allow easier debugging, so
+                    // no need to throw up the exception, just make note of it.
+                    Torque.getCategory().error(
+                       "Could not get a DB adapter, so sql may be wrong");
+                }
+            }
+            else 
+            {
+                db = this.db;
+            }
+            
             return db;
         }
 
@@ -3454,7 +3476,7 @@ public class Criteria extends Hashtable
                         .toString();
                 }
                 SqlExpression.build(field, value, comparison,
-                                    ignoreStringCase, db, sb);
+                                    ignoreStringCase, getDb(), sb);
             }
 
             if (or != null)
@@ -3485,6 +3507,8 @@ public class Criteria extends Hashtable
             {
                 return;
             }
+
+            DB db = getDb();
 
             sb.append('(');
             if ( CUSTOM == comparison )
