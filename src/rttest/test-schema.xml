@@ -123,5 +123,27 @@
       <index-column name="invoice_id"/>
     </index>
   </table>
+
+  <!-- test for autoincrement -->
+  <table name="AUTOINCREMENT_NATIVE" idMethod="native">
+    <column name="AUTOINCREMENT_NATIVE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
+    <column name="NAME" type="VARCHAR" size="250"/>
+  </table>
+  <table name="AUTOINCREMENT_NONE" idMethod="none">
+    <column name="AUTOINCREMENT_NONE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
+    <column name="NAME" type="VARCHAR" size="250"/>
+  </table>
+  <table name="AUTOINCREMENT_IDBROKER" idMethod="idBroker">
+    <column name="AUTOINCREMENT_IDBROKER_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
+    <column name="NAME" type="VARCHAR" size="250"/>
+  </table>
   
+  <!-- TRQS87  -->
+<!--  
+  <table name="reserved_words">
+    <column name="reserved_words_id" required="false" type="INTEGER"/>
+    <column name="class" javaName="JavaClass" required="false" type="VARCHAR"/>
+    <column name="package" javaName="JavaPackage" required="false" type="VARCHAR"/>
+  </table>
+-->  
 </database>

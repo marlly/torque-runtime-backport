@@ -7,7 +7,11 @@
     #set ( $rawsize = $col.Size )
     #set ( $torquetype = $col.TorqueType )
     #set ( $default = $col.DefaultSetting )
-    #set ( $autoIncrement = $strings.select($col.isAutoIncrement(), $dbprops.get("AUTOINCREMENT"),"") )
+    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
+      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
+    #else
+      #set ( $autoIncrement = " " )
+    #end    
     #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
     #if ( $torquetype == "BINARY" )
         #set ( $entry = "$col.Name CHAR($rawsize) FOR BIT DATA $default $nullString $autoIncrement," )

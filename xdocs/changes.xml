@@ -48,6 +48,11 @@
     <li>
       TRQS174: Problems on DB2 with BINARY, VARBINARY and INTEGER.
     </li>
+    <li>
+      TRQS178: use sql autoincrement only if idMethod native.<br/>
+      So you have to set idMethod="native" (table) plus autoincrement="true" 
+      (column) to generate the autoincrement code in your sql.
+    </li>
   </ul>
 </p>
 </subsection>

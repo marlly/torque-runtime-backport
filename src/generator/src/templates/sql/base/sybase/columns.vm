@@ -15,7 +15,11 @@
     #else
        #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"NULL") )
     #end
-    #set ( $autoIncrement = $strings.select($col.isAutoIncrement(), $dbprops.get("AUTOINCREMENT"),"") )
+    #if ($col.isAutoIncrement() && $table.IdMethod == "native")
+      #set ( $autoIncrement = $dbprops.get("AUTOINCREMENT") )
+    #else
+      #set ( $autoIncrement = " " )
+    #end    
     #set ( $entry = "$col.Name $type $size $default $nullString $autoIncrement," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end
