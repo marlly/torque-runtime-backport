@@ -1,0 +1,17 @@
+The Torque team is pleased to announce the 3.0 release!
+
+http://jakarta.apache.org/turbine/torque/
+
+Torque is a persistence layer. Torque generates all the database resources
+(sql scripts + java om/peer classes) required by your application and includes a
+runtime environment to run the generated classes.
+
+Torque was developed as part of the Turbine Framework.
+It is now decoupled and can be used by itself.
+
+You can find a full list of changes here:
+http://jakarta.apache.org/turbine/torque/changes.html
+
+You can find the Torque distributions here:
+http://jakarta.apache.org/builds/jakarta-turbine/torque/release/
+
