@@ -24,12 +24,33 @@
             </ul>
           </li>
           -->
-
+          <li>
+            <strong>18 Dec 2001</strong>
+            <ul>
+              <li>
+                add 'description' attribute to &lt;table&gt; and &lt;column&gt;
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/dtd/database.dtd.diff?r1=1.7&amp;r2=1.8&amp;sortby=date&amp;diff_format=h">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/engine/database/model/Column.java.diff?r1=1.15&amp;r2=1.16&amp;sortby=date&amp;diff_format=h">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/engine/database/model/Table.java.diff?r1=1.19&amp;r2=1.20&amp;sortby=date&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+                Added TorqueDocumentationTask to generate schema docs in html or xml (anakia)
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/task/TorqueDocumentationTask.java?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/doc/Control.vm?rev=1.2&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/doc/html/datamodel.vm?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/doc/html/table.vm?rev=1.2&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/doc/anakia/datamodel.vm?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/doc/anakia/table.vm?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/conf/build.xml.diff?r1=1.20&amp;r2=1.21&amp;sortby=date&amp;diff_format=h">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/conf/build.properties.diff?r1=1.7&amp;r2=1.8&amp;sortby=date&amp;diff_format=h">Reference</a>.
+              </li>
+            </ul>
+          </li>
           <li>
             <strong>14 Dec 2001</strong>
             <ul>
               <li>
-	        From patch submitted by Byron Foster:  Updated DBFactory to know about the other Sybase jdbc driver name. 
+	        From patch submitted by Byron Foster:  Updated DBFactory to know about the other Sybase jdbc driver name.
 	        <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.18&amp;r2=1.19&amp;sortby=date&amp;diff_format=h">Reference</a>.
               </li>
               <li>
@@ -44,6 +65,16 @@
                 <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/sql/db-init/sybase/createdb.vm?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
                 <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/profile/sybase.profile?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
                 <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/notes/sybase-status.txt?rev=1.1&amp;content-type=text/vnd.viewcvs-markup">Reference</a>.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>13 Dec 2001</strong>
+            <ul>
+              <li>
+                added flag to shut off heavy indexing on a table by table basis or for the entire schema.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/dtd/database.dtd.diff?r1=1.6&amp;r2=1.7&amp;sortby=date&amp;diff_format=h">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/engine/database/model/Database.java.diff?r1=1.7&amp;r2=1.8&amp;sortby=date&amp;diff_format=h">Reference</a>.
               </li>
             </ul>
           </li>
