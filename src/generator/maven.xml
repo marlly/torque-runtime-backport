@@ -34,6 +34,10 @@
       file="${maven.src.dir}/conf/simplelog.properties"
       todir="${maven.build.dest}"
     />
+    <copy
+      file="${maven.src.dir}/conf/log4j.properties"
+      todir="${maven.build.dest}"
+    />
 
     <!-- copy templates to the right place -->
     <copy todir="${maven.build.dest}">
