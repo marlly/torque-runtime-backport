@@ -38,7 +38,7 @@
   >
     <sequence-manager className="org.apache.ojb.broker.util.sequence.SequenceManagerHighLowImpl">
       <attribute attribute-name="grabSize" attribute-value="5"/>
-      <attribute attribute-name="globalSequenceId" attribute-value="false"/>
+      <attribute attribute-name="globalSequenceId" attribute-value="true"/>
       <attribute attribute-name="globalSequenceStart" attribute-value="10000"/>
     </sequence-manager>
   </jdbc-connection-descriptor>
