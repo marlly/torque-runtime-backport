@@ -69,12 +69,16 @@ import java.util.Properties;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
+
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
+
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Disposable;
 import org.apache.stratum.lifecycle.Initializable;
+
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
 import org.apache.torque.dsfactory.DataSourceFactory;
@@ -620,7 +624,7 @@ public class Torque
         }
         else
         {
-            Enumeration cats = Logger.getCurrentCategories();
+            Enumeration cats = LogManager.getCurrentLoggers();
             while (cats.hasMoreElements())
             {
                 Logger c = (Logger) cats.nextElement();
