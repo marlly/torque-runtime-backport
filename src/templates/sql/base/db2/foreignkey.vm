@@ -2,6 +2,5 @@
 ALTER TABLE $table.Name
     ADD CONSTRAINT $fk.Name FOREIGN KEY ($fk.LocalColumnNames)
     REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
-USING INDEX;
-
+;
 #end

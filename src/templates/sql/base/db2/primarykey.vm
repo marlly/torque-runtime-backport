@@ -1,3 +1,2 @@
 ALTER TABLE $table.Name
-    ADD CONSTRAINT ${table.Name}_PK 
-PRIMARY KEY ($table.printPrimaryKey());
+    ADD PRIMARY KEY ($table.printPrimaryKey());

@@ -1,2 +1,6 @@
 drop table $table.Name;
-drop sequence if exists $table.SequenceName;
+#set ($seqName = "~~novalue~~")
+#set ($seqName = $table.SequenceName)
+#if(!$seqName == "~~novalue~~")
+drop sequence $seqName restrict;
+#end
