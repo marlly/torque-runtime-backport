@@ -1253,7 +1253,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a long to Criteria
+     * Convenience method to add a long to Criteria.
      * Equal to
      *
      * <p>
@@ -1299,7 +1299,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a float to Criteria
+     * Convenience method to add a float to Criteria.
      * Equal to
      *
      * <p>
@@ -1345,7 +1345,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a double to Criteria
+     * Convenience method to add a double to Criteria.
      * Equal to
      *
      * <p>
@@ -1396,7 +1396,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>
@@ -1421,7 +1421,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>
@@ -2251,7 +2251,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a long to Criteria
+     * Convenience method to add a long to Criteria.
      * Equal to
      *
      * <p>
@@ -2297,7 +2297,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a float to Criteria
+     * Convenience method to add a float to Criteria.
      * Equal to
      *
      * <p>
@@ -2343,7 +2343,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a double to Criteria
+     * Convenience method to add a double to Criteria.
      * Equal to
      *
      * <p>
@@ -2367,7 +2367,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>
@@ -2392,7 +2392,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>
@@ -2418,8 +2418,8 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Adds an 'IN' clause with the criteria supplied as an Object
-     * array.  For example:
+     * Adds an 'IN' clause with the criteria supplied as an Object array.
+     * For example:
      *
      * <p>
      * FOO.NAME IN ('FOO', 'BAR', 'ZOW')
@@ -2443,9 +2443,9 @@ public class Criteria extends Hashtable
     }
 
     /**
-       * Adds an 'IN' clause with the criteria supplied as an int array.
-       * For example:
-       *
+     * Adds an 'IN' clause with the criteria supplied as an int array.
+     * For example:
+     *
      * <p>
      * FOO.ID IN ('2', '3', '7')
      * <p>
@@ -2863,7 +2863,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a long to Criteria
+     * Convenience method to add a long to Criteria.
      * Equal to
      *
      * <p>
@@ -2909,7 +2909,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a float to Criteria
+     * Convenience method to add a float to Criteria.
      * Equal to
      *
      * <p>
@@ -2955,7 +2955,7 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Convenience method to add a double to Criteria
+     * Convenience method to add a double to Criteria.
      * Equal to
      *
      * <p>
@@ -2979,7 +2979,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>
@@ -3004,7 +3004,7 @@ public class Criteria extends Hashtable
 
     /**
      * Convenience method to add a Date object specified by
-     * year, month, and date into the Criteria
+     * year, month, and date into the Criteria.
      * Equal to
      *
      * <p>

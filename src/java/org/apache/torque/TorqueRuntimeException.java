@@ -66,7 +66,7 @@ import java.util.StringTokenizer;
  * This is a base class of runtime exeptions thrown by Torque.
  *
  * This class represents a non-checked type exception (see
- * {@see java.lang.RuntimeException}).
+ * {@link java.lang.RuntimeException}).
  * It is intended to ease the debugging by carrying on the information about the
  * exception which was caught and provoked throwing the current exception.
  * Catching and rethrowing may occur multiple times, and provided that all

@@ -713,30 +713,30 @@ public class Table implements IDMethod
         this.alias = v;
     }
 
-    
+
     /**
      * Interface which objects for this table will implement
      * @return value of interface.
      */
-    public String getInterface() 
+    public String getInterface()
     {
         return enterface;
     }
-    
+
     /**
      * Interface which objects for this table will implement
      * @param v  Value to assign to interface.
      */
-    public void setInterface(String  v) 
+    public void setInterface(String  v)
     {
         this.enterface = v;
     }
-    
+
 
     /**
      * When a table is abstract, it marks the business object class that is
-     * generated as being abstract. if you have a table called "FOO", then the
-     * Foo BO will be public abstract class Foo
+     * generated as being abstract. If you have a table called "FOO", then the
+     * Foo BO will be <code>public abstract class Foo</code>
      * This helps support class hierarchies
      *
      * @return value of abstractValue.
@@ -748,9 +748,9 @@ public class Table implements IDMethod
 
     /**
      * When a table is abstract, it marks the business object
-     * class that is generated as being abstract. if you have a
+     * class that is generated as being abstract. If you have a
      * table called "FOO", then the Foo BO will be
-     * public abstract class Foo
+     * <code>public abstract class Foo</code>
      * This helps support class hierarchies
      *
      * @param v  Value to assign to abstractValue.

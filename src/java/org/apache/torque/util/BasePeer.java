@@ -1686,26 +1686,20 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Use this method for performing an update of the kind:
-     *
-     * <p>
-     *
-     * "WHERE primary_key_id = an int"
-     *
-     * <p>
-     *
      * Convenience method used to update rows in the DB.  Checks if a
      * <i>single</i> int primary key is specified in the Criteria
      * object and uses it to perform the udpate.  If no primary key is
      * specified an Exception will be thrown.
-     *
      * <p>
-     *
+     * Use this method for performing an update of the kind:
+     * <p>
+     * "WHERE primary_key_id = an int"
+     * <p>
      * To perform an update with non-primary key fields in the WHERE
      * clause use doUpdate(criteria, criteria).
      *
      * @param updateValues A Criteria object containing values used in
-     * set clause.
+     *        set clause.
      * @exception TorqueException
      */
     public static void doUpdate(Criteria updateValues)
@@ -1741,28 +1735,21 @@ public abstract class BasePeer implements java.io.Serializable
         }
     }
 
-
     /**
-     * Use this method for performing an update of the kind:
-     *
-     * <p>
-     *
-     * "WHERE primary_key_id = an int"
-     *
-     * <p>
-     *
      * Convenience method used to update rows in the DB.  Checks if a
      * <i>single</i> int primary key is specified in the Criteria
      * object and uses it to perform the udpate.  If no primary key is
      * specified an Exception will be thrown.
-     *
      * <p>
-     *
+     * Use this method for performing an update of the kind:
+     * <p>
+     * "WHERE primary_key_id = an int"
+     * <p>
      * To perform an update with non-primary key fields in the WHERE
      * clause use doUpdate(criteria, criteria).
      *
      * @param updateValues A Criteria object containing values used in
-     * set clause.
+     *        set clause.
      * @param dbCon A DBConnection.
      * @exception TorqueException
      */
@@ -1789,22 +1776,18 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Use this method for performing an update of the kind:
-     *
+     * Method used to update rows in the DB.  Rows are selected based
+     * on selectCriteria and updated using values in updateValues.
      * <p>
-     *
+     * Use this method for performing an update of the kind:
+     * <p>
      * WHERE some_column = some value AND could_have_another_column =
      * another value AND so on...
      *
-     * <p>
-     *
-     * Method used to update rows in the DB.  Rows are selected based
-     * on selectCriteria and updated using values in updateValues.
-     *
-     * @param selectCriteria A Criteria object containing values used
-     * in where clause.
-     * @param updateValues A Criteria object containing values used in
-     * set clause.
+     * @param selectCriteria A Criteria object containing values used in where
+     *        clause.
+     * @param updateValues A Criteria object containing values used in set
+     *        clause.
      * @exception TorqueException
      */
     public static void doUpdate(Criteria selectCriteria,
@@ -1840,24 +1823,19 @@ public abstract class BasePeer implements java.io.Serializable
         }
     }
 
-
     /**
-     * Use this method for performing an update of the kind:
-     *
+     * Method used to update rows in the DB.  Rows are selected based
+     * on selectCriteria and updated using values in updateValues.
      * <p>
-     *
+     * Use this method for performing an update of the kind:
+     * <p>
      * WHERE some_column = some value AND could_have_another_column =
      * another value AND so on.
      *
-     * <p>
-     *
-     * Method used to update rows in the DB.  Rows are selected based
-     * on selectCriteria and updated using values in updateValues.
-     *
-     * @param selectCriteria A Criteria object containing values used
-     * in where clause.
-     * @param updateValues A Criteria object containing values used in
-     * set clause.
+     * @param selectCriteria A Criteria object containing values used in where
+     *        clause.
+     * @param updateValues A Criteria object containing values used in set
+     *        clause.
      * @param dbCon A DBConnection.
      * @exception TorqueException
      */
@@ -2009,7 +1987,6 @@ public abstract class BasePeer implements java.io.Serializable
         return rowCount;
     }
 
-
     /**
      * Utility method which executes a given sql statement.  This
      * method should be used for update, insert, and delete
@@ -2062,7 +2039,6 @@ public abstract class BasePeer implements java.io.Serializable
         return rowCount;
     }
 
-
     /**
      * If the user specified that (s)he only wants to retrieve a
      * single record and multiple records are retrieved, this method
@@ -2095,7 +2071,6 @@ public abstract class BasePeer implements java.io.Serializable
      * org.apache.torque.util.db.map.TurbineMapBuilder.
      *
      * @return A MapBuilder.
-     *
      */
     public static MapBuilder getMapBuilder()
         throws TorqueException
@@ -2177,7 +2152,6 @@ public abstract class BasePeer implements java.io.Serializable
         return null;
     }
 
-
     /**
      * Performs a SQL <code>select</code> using a PreparedStatement.
      *
@@ -2247,7 +2221,6 @@ public abstract class BasePeer implements java.io.Serializable
         return v;
     }
 
-
     /**
      * Do a Prepared Statement select according to the given criteria
      */
@@ -2267,7 +2240,6 @@ public abstract class BasePeer implements java.io.Serializable
 
         return v;
     }
-
 
     /**
      * Create a new PreparedStatement.  It builds a string representation
@@ -2339,7 +2311,6 @@ public abstract class BasePeer implements java.io.Serializable
                 fromClause.add(tableName);
             }
         }
-
 
         Iterator it = aliases.keySet().iterator();
         while(it.hasNext())
