@@ -18,7 +18,7 @@
   <cvsWebUrl>http://cvs.apache.org/viewcvs/jakarta-turbine-torque/</cvsWebUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/torque/</siteDirectory>
-  
+
   <mailingLists>
     <mailingList>
       <name>Turbine User List</name>
@@ -116,8 +116,8 @@
     <dependency>
       <name>jakarta-turbine-stratum</name>
       <type>required</type>
-      <version>0.1</version>
-      <jar>stratum-0.1-dev.jar</jar>
+      <version>1.0-b2-dev</version>
+      <jar>stratum-1.0-b2-dev.jar</jar>
     </dependency>
 
     <dependency>
@@ -178,6 +178,9 @@
     <!-- Resources that are packaged up inside the JAR file -->
 
     <jarResources>
+      <!-- doesn't work !!
+      <jarResource>include = src/templates/**</jarResource>
+      -->
     </jarResources>
 
     <jars>
