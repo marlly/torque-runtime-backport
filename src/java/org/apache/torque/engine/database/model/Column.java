@@ -99,7 +99,7 @@ public class Column
     private List inheritanceList;
     private boolean needsTransactionInPostgres;
 
-    // class name to do input validation on this column
+    /** class name to do input validation on this column */
     private String inputValidator = null;
 
     /**
@@ -163,7 +163,7 @@ public class Column
             javaNamingMethod =
                 parentTable.getDatabase().getDefaultJavaNamingMethod();
         }
-        
+
         //Primary Key
         String primaryKey = attrib.getValue("primaryKey");
         //Avoid NullPointerExceptions on string comparisons.
@@ -408,8 +408,7 @@ public class Column
     }
 
     /**
-     * Utility method to determine if this column
-     * is a foreign key.
+     * Utility method to determine if this column is a foreign key.
      */
     public boolean isForeignKey()
     {
@@ -451,9 +450,8 @@ public class Column
     }
 
     /**
-     * Utility method to get the related table of this
-     * column if it is a foreign key or part of a foreign
-     * key
+     * Utility method to get the related table of this column if it is a foreign
+     * key or part of a foreign key
      */
     public String getRelatedTableName()
     {
@@ -463,9 +461,8 @@ public class Column
 
 
     /**
-     * Utility method to get the related column of this
-     * local column if this column is a foreign key or
-     * part of a foreign key.
+     * Utility method to get the related column of this local column if this
+     * column is a foreign key or part of a foreign key.
      */
     public String getRelatedColumnName()
     {
@@ -481,8 +478,7 @@ public class Column
     }
 
     /**
-     * Adds the foreign key from another table that refers to
-     * this column.
+     * Adds the foreign key from another table that refers to this column.
      */
     public void addReferrer(ForeignKey fk)
     {
@@ -542,8 +538,7 @@ public class Column
     }
 
     /**
-     * String representation of the column. This
-     * is an xml representation.
+     * String representation of the column. This is an xml representation.
      */
     public String toString()
     {
@@ -611,8 +606,7 @@ public class Column
 
     /**
      * Return the size in brackets for use in an sql
-     * schema if the type is String.  Otherwise return
-     * an empty string
+     * schema if the type is String.  Otherwise return an empty string
      */
     public String printSize()
     {
@@ -644,43 +638,40 @@ public class Column
      }
 
     /**
-     * Set a string that will give this column
-     * a default value.
+     * Set a string that will give this column a default value.
      */
-     public void setDefaultValue(String def)
-     {
+    public void setDefaultValue(String def)
+    {
         defaultValue = def;
-     }
+    }
 
     /**
-     * Get a string that will give this column
-     * a default value.
+     * Get a string that will give this column a default value.
      */
-     public String getDefaultValue()
-     {
+    public String getDefaultValue()
+    {
         return defaultValue;
-     }
+    }
 
     /**
-    * Returns the class name to do input validation
-    */
+     * Returns the class name to do input validation
+     */
     public String getInputValidator()
     {
        return this.inputValidator;
     }
 
     /**
-     * Return auto increment/sequence string for
-     * the target database. We need to pass in the
-     * props for the target database!
+     * Return auto increment/sequence string for the target database. We need to
+     * pass in the props for the target database!
      */
-     public boolean isAutoIncrement()
-     {
+    public boolean isAutoIncrement()
+    {
         return isAutoIncrement;
-     }
+    }
 
     /**
-     * Set the auto increment value
+     * Set the auto increment value.
      * Use isAutoIncrement() to find out if it is set or not.
      */
     public void setAutoIncrement(boolean value)
@@ -786,8 +777,7 @@ public class Column
     }
 
     /**
-     * Return Village asX() method which
-     * corresponds to the JDBC type
+     * Return Village asX() method which corresponds to the JDBC type
      * which represents this column.
      */
     public String getVillageMethod()

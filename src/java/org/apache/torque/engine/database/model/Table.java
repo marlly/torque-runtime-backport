@@ -290,14 +290,13 @@ public class Table implements IDMethod
     }
 
     /**
-     * Gets the value of base class for classes produced from this
-     * table.
+     * Gets the value of base class for classes produced from this table.
      *
      * @return The base class for classes produced from this table.
      */
     public String getBaseClass()
     {
-        if ( isAlias() && baseClass == null ) 
+        if ( isAlias() && baseClass == null )
         {
             return alias;
         }
@@ -326,7 +325,7 @@ public class Table implements IDMethod
      */
     public String getBasePeer()
     {
-        if ( isAlias() && basePeer == null ) 
+        if ( isAlias() && basePeer == null )
         {
             return alias + "Peer";
         }
@@ -421,8 +420,7 @@ public class Table implements IDMethod
     }
 
     /**
-     * Adds the foreign key from another table that refers to
-     * this table.
+     * Adds the foreign key from another table that refers to this table.
      */
     public void addReferrer(ForeignKey fk)
     {
@@ -510,8 +508,7 @@ public class Table implements IDMethod
 
     /**
      * Adds a new ID method parameter to the list and sets the parent
-     * table of the column associated with the supplied parameter to
-     * this table.
+     * table of the column associated with the supplied parameter to this table.
      *
      * @param imp The column to add as an ID method parameter.
      */
@@ -567,7 +564,6 @@ public class Table implements IDMethod
         addUnique (unique);
         return unique;
     }
-
 
     /**
      * Get the name of the Table
@@ -688,10 +684,9 @@ public class Table implements IDMethod
     }
 
     /**
-     * When a table is abstract, it marks the business object
-     * class that is generated as being abstract. if you have a
-     * table called "FOO", then the Foo BO will be
-     * public abstract class Foo
+     * When a table is abstract, it marks the business object class that is
+     * generated as being abstract. if you have a table called "FOO", then the
+     * Foo BO will be public abstract class Foo
      * This helps support class hierarchies
      *
      * @return value of abstractValue.

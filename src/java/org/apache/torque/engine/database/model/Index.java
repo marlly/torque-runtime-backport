@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.model;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -230,8 +230,7 @@ public class Index
     }
 
     /**
-     * Return a comma delimited string of the columns which compose
-     * this index.
+     * Return a comma delimited string of the columns which compose this index.
      */
     public String getColumnList()
     {
@@ -248,8 +247,7 @@ public class Index
     }
 
     /**
-     * Return the list of local columns.  You should not edit
-     * this vector.
+     * Return the list of local columns. You should not edit this vector.
      */
     public List getColumns()
     {
@@ -275,8 +273,7 @@ public class Index
     }
 
     /**
-     * String representation of the index. This
-     * is an xml representation.
+     * String representation of the index. This is an xml representation.
      */
     public String toString()
     {

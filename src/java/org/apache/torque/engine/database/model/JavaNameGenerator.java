@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.model;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -85,7 +85,7 @@ public class JavaNameGenerator implements NameGenerator
      *
      * @param inputs list expected to contain two parameters, element
      * 0 contains name to convert, element 1 contains method for conversion.
-     * @return The generated name. 
+     * @return The generated name.
      * @see org.apache.torque.engine.database.model.NameGenerator
      */
     public String generateName(List inputs)
@@ -93,7 +93,7 @@ public class JavaNameGenerator implements NameGenerator
         String schemaName = (String)inputs.get(0);
         String method = (String)inputs.get(1);
         String javaName = null;
-        
+
         if (CONV_METHOD_UNDERSCORE.equals(method))
         {
             javaName = underscoreMethod(schemaName);
@@ -127,7 +127,6 @@ public class JavaNameGenerator implements NameGenerator
      * @see org.apache.torque.engine.database.model.NameGenerator
      * @see #underscoreMethod(String)
      */
-
     protected String underscoreMethod(String schemaName)
     {
         StringBuffer name = new StringBuffer();

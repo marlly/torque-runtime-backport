@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.model;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -60,7 +60,7 @@ import java.util.List;
 import org.xml.sax.Attributes;
 
 /**
- * A Class for information about foreign keys of a table
+ * A Class for information about foreign keys of a table.
  *
  * @author <a href="mailto:fedor.karpelevitch@home.com">Fedor</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
@@ -101,12 +101,11 @@ public class ForeignKey
     }
 
     /**
-     * normailizes the input of onDelete, onUpdate
-     * attributes
+     * normailizes the input of onDelete, onUpdate attributes
      */
     private String normalizeFKey(String attrib)
     {
-        if (attrib == null) 
+        if (attrib == null)
         {
             attrib = NONE;
         }
@@ -224,7 +223,7 @@ public class ForeignKey
     }
 
     /**
-     *  adds a new reference entry to the foreign key
+     * adds a new reference entry to the foreign key
      */
     public void addReference(Attributes attrib)
     {
@@ -232,7 +231,7 @@ public class ForeignKey
     }
 
     /**
-     *  adds a new reference entry to the foreign key
+     * adds a new reference entry to the foreign key
      */
     public void addReference(String local, String foreign)
     {
@@ -257,8 +256,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the vector of local columns.  You should not edit
-     * this vector.
+     * Return the vector of local columns. You should not edit this vector.
      */
     public List getLocalColumns()
     {
@@ -282,8 +280,7 @@ public class ForeignKey
     }
 
     /**
-     * Return the vector of local columns.  You should not edit
-     * this vector.
+     * Return the vector of local columns. You should not edit this vector.
      */
     public List getForeignColumns()
     {
@@ -307,8 +304,7 @@ public class ForeignKey
     }
 
     /**
-     * String representation of the foreign key. This
-     * is an xml representation.
+     * String representation of the foreign key. This is an xml representation.
      */
     public String toString()
     {

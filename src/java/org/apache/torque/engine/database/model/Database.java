@@ -157,7 +157,7 @@ public class Database
      */
     public String getBaseClass()
     {
-        if ( baseClass == null ) 
+        if ( baseClass == null )
         {
             return "BaseObject";
         }
@@ -179,7 +179,7 @@ public class Database
      */
     public String getBasePeer()
     {
-        if ( basePeer == null ) 
+        if ( basePeer == null )
         {
             return "BasePeer";
         }
@@ -215,8 +215,7 @@ public class Database
 
     /**
      * Get the value of defaultJavaNamingMethod which specifies the
-     * method for converting schema names for table and column
-     * to Java names.
+     * method for converting schema names for table and column to Java names.
      * @return The default naming conversion used by this database.
      */
     public String getDefaultJavaNamingMethod()
@@ -266,8 +265,7 @@ public class Database
     }
 
     /**
-     * An utility method to add a new table from
-     * an xml attribute.
+     * An utility method to add a new table from an xml attribute.
      */
     public Table addTable(Attributes attrib)
     {
@@ -279,8 +277,7 @@ public class Database
     }
 
     /**
-     * Add a table to the vector and sets the
-     * Database property to this Database
+     * Add a table to the vector and sets the Database property to this Database
      */
     public void addTable(Table tbl)
     {
