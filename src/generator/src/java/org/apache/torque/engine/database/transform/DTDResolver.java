@@ -114,11 +114,13 @@ public class DTDResolver implements EntityResolver
     }
 
     /**
-     * called by the XML parser
+     * An implementation of the SAX <code>EntityResolver</code>
+     * interface to be called by the XML parser.
      *
      * @param publicId The public identifier of the external entity
      * @param systemId The system identifier of the external entity
-     * @return an InputSource for the database.dtd file
+     * @return An <code>InputSource</code> for the
+     * <code>database.dtd</code> file.
      */
     public InputSource resolveEntity(String publicId, String systemId)
             throws IOException
@@ -126,21 +128,19 @@ public class DTDResolver implements EntityResolver
         if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
             String pkg = getClass().getName().substring(0,
-                    getClass().getName().lastIndexOf("."));
-
-            log.info("Resolver: used database.dtd from "
-                    + pkg + " package ");
-
+                    getClass().getName().lastIndexOf('.'));
+            log.info("Resolver: used database.dtd from '"
+                     + pkg + "' package");
             return databaseDTD;
         }
-        else if (systemId == null)
+        else if (systemId == null || "".equals(systemId.trim()))
         {
-            log.info("Resolver: used " + WEB_SITE_DTD);
+            log.info("Resolver: used '" + WEB_SITE_DTD + '\'');
             return getInputSource(WEB_SITE_DTD);
         }
         else
         {
-            log.info("Resolver: used " + systemId);
+            log.info("Resolver: used '" + systemId + '\'');
             return getInputSource(systemId);
         }
     }
@@ -155,7 +155,6 @@ public class DTDResolver implements EntityResolver
             throws IOException
     {
         URL url = new URL(urlString);
-        InputSource src = new InputSource(url.openStream());
-        return src;
+        return new InputSource(url.openStream());
     }
 }
