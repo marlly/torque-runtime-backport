@@ -67,6 +67,8 @@ import org.apache.torque.TorqueException;
 
 import org.apache.torque.engine.database.model.NameGenerator;
 
+import org.apache.torque.adapter.IDMethod;
+
 
 /**
  * A class for holding application data structures.
@@ -349,6 +351,28 @@ public class Database
         return (p == null ? null : p.getProperty(name));
     }
 
+    /**
+     * Determines if this database will be using the
+     * <code>IDMethod.ID_BROKER</code> to create ids for torque OM
+     * objects.
+     * @return true if there is at least one table in this database that
+     * uses the <code>IDMethod.ID_BROKER</code> method of generating
+     * ids. returns false otherwise.
+     */
+    public boolean requiresIdTable()
+    {
+        Table table[] = getTables();
+        for (int i=0; i<table.length; i++)
+        {
+            if (table[i].getIdMethod().equals(IDMethod.ID_BROKER))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+  
     /**
      * Creats a string representation of this Database.
      * The representation is given in xml format.

@@ -69,6 +69,7 @@
       templatePath="${templatePath}"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.sql.generation"
+      idTableXMLFile="${torque.home}/schema/id-table-schema.xml"
       targetDatabase="${database}">
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
@@ -430,6 +431,7 @@
       outputFile="report.${project}.sql.generation"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
       targetDatabase="${database}"
+      idTableXMLFile="${torque.home}/schema/id-table-schema.xml"
     />
 
   </target>

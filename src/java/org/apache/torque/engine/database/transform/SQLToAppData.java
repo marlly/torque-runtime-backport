@@ -69,6 +69,7 @@ import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.sql.ParseException;
 import org.apache.torque.engine.sql.SQLScanner;
 import org.apache.torque.engine.sql.Token;
+import org.apache.torque.adapter.IDMethod;
 
 /**
  * A Class that converts an sql input file to an AppData
@@ -190,11 +191,11 @@ public class SQLToAppData
         
         if (tbl.getPrimaryKey().size() == 1)
         {
-            tbl.setIdMethod("idbroker");
+            tbl.setIdMethod(IDMethod.ID_BROKER);
         }
         else
         {
-            tbl.setIdMethod("none");
+            tbl.setIdMethod(IDMethod.NO_ID_METHOD);
         }
         	
         

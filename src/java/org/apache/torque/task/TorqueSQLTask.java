@@ -61,6 +61,9 @@ import java.util.Properties;
 import java.util.Iterator;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
+import org.apache.torque.engine.database.transform.XmlToAppData;
+import org.apache.torque.engine.database.model.AppData;
+
 
 /**
  * An extended Texen task used for generating SQL source from
@@ -88,6 +91,8 @@ public class TorqueSQLTask
     private String database;
     private String suffix = "";
     
+    private String idTableXMLFile = null;
+    
     public void setDatabase(String database)
     {
         this.database = database;
@@ -108,6 +113,25 @@ public class TorqueSQLTask
         return suffix;
     }        
 
+    /**
+     * Set the path to the xml schema file that defines the id-table, used
+     * by the idbroker method.
+     * @param xml path to file.
+     */
+    public void setIdTableXMLFile(String idXmlFile)
+    {
+        idTableXMLFile = idXmlFile;
+    }
+
+    /**
+     * Gets the id-table xml schema file path.
+     * @return Path to file.
+     */
+    public String getIdTableXMLFile()
+    {
+        return idTableXMLFile;
+    }
+    
     /**
      * Get the current target package.
      *
@@ -175,6 +199,23 @@ public class TorqueSQLTask
     }
 
     /**
+     * Create the database model necessary for the IDBroker tables.
+     * We use the model to generate the necessary SQL to create
+     * these tables.  This method adds an AppData object containing
+     * the model to the context under the name "idmodel".
+     */
+    public void loadIdBrokerModel()
+    {
+        // Transform the XML database schema into
+        // data model object.
+        XmlToAppData xmlParser = new XmlToAppData();
+        AppData ad = xmlParser.parseFile(getIdTableXMLFile());
+        xmlParser.parseFile(getIdTableXMLFile());
+        ad.setName("idmodel");
+        context.put("idmodel", ad);
+    }
+
+    /**
      * Place our target database and target platform
      * values into the context for use in the
      * templates.
@@ -185,6 +226,14 @@ public class TorqueSQLTask
         super.initControlContext();
         context.put("targetDatabase", targetDatabase);
         createSqlDbMap();
+
+        // If the load path for the id broker table xml schema is
+        // defined then load it.
+        if (getIdTableXMLFile() != null)
+        {
+            loadIdBrokerModel();
+        }
+        
         return context;
     }
 }

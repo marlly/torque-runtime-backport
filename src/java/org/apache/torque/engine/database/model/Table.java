@@ -645,7 +645,7 @@ public class Table implements IDMethod
     {
         if (idMethod == null)
         {
-            return "none";
+            return IDMethod.NO_ID_METHOD;
         }
         else
         {
