@@ -112,4 +112,16 @@
     <column name="FK_ID" required="true" type="INTEGER"/>
   </table>
   
+  <!-- TRQS159 Invalid syntaxes for Hypersonic when using indexes. -->
+  <table name="payment_invoice_map" 
+         description="maps the many-to-many relationship between payments and invoices">
+    <column name="payment_id" required="false" type="INTEGER"/>
+    <column name="invoice_id" required="false" type="INTEGER"/>
+  	
+    <index name="ix_uq_payment_invoice_map_pa_in">
+      <index-column name="payment_id"/>
+      <index-column name="invoice_id"/>
+    </index>
+  </table>
+  
 </database>

@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${maven.home}/repository/hsqldb/jars/hsqldb.jar
+torque.testDatabaseJar = ${maven.home}/repository/hsqldb/jars/hsqldb-1.7.1.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 

@@ -74,6 +74,9 @@
       without offset and limit.
     </li>
     <li>
+      TRQS159: Invalid syntaxes for Hypersonic when using indexes.
+    </li>
+    <li>
       TRQS165: columns in an external schema caused Manager imports to be 
       generated
     </li>  
