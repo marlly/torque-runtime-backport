@@ -153,7 +153,7 @@
   <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
   <!-- ================================================================ -->
   <!-- Generate the SQL for your project, These are in addition         -->
-  <!-- to the base Turbine tables! The tables you require for your      -->
+  <!-- to the base Torque tables! The tables you require for your       -->
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
@@ -476,7 +476,7 @@
   <!-- G E N E R A T E  P R O J E C T  P E E R  B A S E D  O M          -->
   <!-- ================================================================ -->
   <!-- Generate the Peer-based object model for your project.           -->
-  <!-- These are in addition to the base Turbine OM!                    -->
+  <!-- These are in addition to the base Torque OM!                     -->
   <!-- ================================================================ -->
 
   <target

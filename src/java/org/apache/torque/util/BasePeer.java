@@ -121,7 +121,7 @@ public abstract class BasePeer implements java.io.Serializable
     /** Classes that implement this class should override this value. */
     public static final String TABLE_NAME = "TABLE_NAME";
 
-    /** The Turbine default MapBuilder. */
+    /** The Torque default MapBuilder. */
     public static final String DEFAULT_MAP_BUILDER =
         "org.apache.torque.util.db.map.TurbineMapBuilder";
 
@@ -232,7 +232,7 @@ public abstract class BasePeer implements java.io.Serializable
      * used as the argument for initTableColumns
      *
      * @param tableName The propery name for the database in the
-     * Turbineresources file.
+     * configuration file.
      * @param dbName The name of the database.
      * @return A Schema.
      */
@@ -308,7 +308,6 @@ public abstract class BasePeer implements java.io.Serializable
 
     /**
      * Convenience method to create a String array of criteria keys.
-     * Primary use is with TurbineUserPeer.
      *
      * @param tableName Name of table.
      * @param columnNames A String[].
@@ -2082,8 +2081,10 @@ public abstract class BasePeer implements java.io.Serializable
 
     /**
      * This method returns the MapBuilder specified in the
-     * TurbineResources.properties file. By default, this is
+     * configuration file. By default, this is
      * org.apache.torque.util.db.map.TurbineMapBuilder.
+     * FIXME! With the decoupled Torque there seem to be no
+     * default map builder anymore.
      *
      * @return A MapBuilder.
      * @throws TorqueException Any exceptions caught during processing will be

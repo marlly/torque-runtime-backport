@@ -7,7 +7,7 @@
 <!--                                                                      -->
 <!-- ==================================================================== -->
 <!-- This is the XML schema use by Torque to generate the SQL for         -->
-<!-- ID_TABLE table used by the id broker mechanism in Turbine.           -->
+<!-- ID_TABLE table used by the id broker mechanism in Torque.            -->
 <!-- ==================================================================== -->
 <!-- @author: <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>       -->
 <!-- @version $Id$ -->

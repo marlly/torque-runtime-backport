@@ -68,7 +68,7 @@ torque.useManagers=true
 # JDBC connection settings. This is used by the JDBCToXML task that
 # will create an XML database schema from JDBC metadata. These
 # settings are also used by the SQL Ant task to initialize your
-# Turbine system with the generated SQL.
+# Torque system with the generated SQL.
 # -------------------------------------------------------------------
 
 torque.database.createUrl = jdbc:mysql://localhost:3306/mysql

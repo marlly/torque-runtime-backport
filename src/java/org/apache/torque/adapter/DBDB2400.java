@@ -55,7 +55,7 @@ package org.apache.torque.adapter;
  */
 
 /**
- * Turbine Database Adapter for DB2/400 on the IBM AS400 platform.
+ * Torque Database Adapter for DB2/400 on the IBM AS400 platform.
  *
  * @author <a href="mailto:sweaver@rippe.com">Scott Weaver</a>
  * @version $Id$

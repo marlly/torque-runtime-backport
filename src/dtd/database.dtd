@@ -7,7 +7,7 @@
 For: database.defaultIdMethod and table.idMethod
 
 Do not use autoincrement or sequence. They are deprecated in favor of
-using native which will use the Turbine Connection pool to determine
+using native which will use the Connection pool to determine
 which database it is talking to (yes, it knows that) and then use
 whatever native database methodology for insert increments that it can.
 Otherwise, you should use idbroker or none. none is good if you have a

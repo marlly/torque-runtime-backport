@@ -107,12 +107,12 @@
          <table>
            <tr>
              <td>idbroker</td>
-             <td>This allows turbine to generate the IDs through its IDBroker
+             <td>This allows Torque to generate the IDs through its IDBroker
                  Service</td>
            </tr>
            <tr>
              <td>native</td>
-             <td>Turbine will determine how the database will auto-generate
+             <td>Torque will determine how the database will auto-generate
                  IDs</td>
            </tr>
            <tr>
@@ -168,7 +168,7 @@
      <subsection name="Attribute: baseClass">
        <p>
          The base class to use when generating the Object Model.
-         This class does not have to extend org.apache.turbine.om.BaseObject.
+         This class does not have to extend org.apache.torque.om.BaseObject.
        </p>
      </subsection>
      <subsection name="Attribute: basePeer">

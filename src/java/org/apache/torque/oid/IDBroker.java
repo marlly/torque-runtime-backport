@@ -73,9 +73,7 @@ import org.apache.torque.util.Transaction;
 
 //!!
 // NOTE:
-// This is another class that is coupled to Turbine. I removed
-// the use of TurbineResources but a configuration of some sort
-// must be set. It would also be nice to decouple this from
+// It would be nice to decouple this from
 // Torque. This is a great stand-alone utility.
 
 /**
@@ -225,8 +223,8 @@ public class IDBroker implements Runnable, IdGenerator
             houseKeeperThread = new Thread(this);
             // Indicate that this is a system thread. JVM will quit only when
             // there are no more active user threads. Settings threads spawned
-            // internally Turbine as daemons allows commandline applications
-            // using Turbine terminate in an orderly manner.
+            // internally by Torque as daemons allows commandline applications
+            // using Torque terminate in an orderly manner.
             houseKeeperThread.setDaemon(true);
             houseKeeperThread.start();
         }

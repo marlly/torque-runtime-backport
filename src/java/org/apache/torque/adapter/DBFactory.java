@@ -126,12 +126,12 @@ public class DBFactory
     }
 
     /**
-     * Creates a new instance of the Turbine database adapter associated
+     * Creates a new instance of the Torque database adapter associated
      * with the specified JDBC driver or adapter key.
      *
      * @param driver The fully-qualified name of the JDBC driver to
      * create a new adapter instance for or a shorter form adapter key.
-     * @return An instance of a Turbine database adapter.
+     * @return An instance of a Torque database adapter.
      * @throws InstantiationException throws if the JDBC driver could not be
      *      instantiated
      */

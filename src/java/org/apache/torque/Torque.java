@@ -114,7 +114,7 @@ public class Torque
 
     /**
      * A prefix for <code>Manager</code> properties in
-     * TurbineResource.properties.
+     * the configuration.
      */
     public static final String MANAGER_PREFIX = "managed_class.";
 
@@ -409,7 +409,7 @@ public class Torque
      * Creates a mapping between classes and their manager classes.
      *
      * The mapping is built according to settings present in
-     * TurbineResources.properties.  The entries should have the
+     * properties file.  The entries should have the
      * following form:
      *
      * <pre>

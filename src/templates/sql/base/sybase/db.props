@@ -33,7 +33,7 @@ REF =
 #
 # This is the autoincrement value if using native methods for
 # incrementing keys.  Most likely IDENTITIY wrt Sybase ASE.
-# Leaving the value blank should be used when Turbine's IDBroker
+# Leaving the value blank should be used when Torque's IDBroker
 # is used to autoincrement keys.
 #
 # Default: [blank]

@@ -198,7 +198,7 @@ class ConnectionPool implements ConnectionEventListener
         monitor = new Monitor();
         // Indicate that this is a system thread. JVM will quit only when there
         // are no more active user threads. Settings threads spawned internally
-        // by Turbine as daemons allows commandline applications using Turbine
+        // by Torque as daemons allows commandline applications using Torque
         // to terminate in an orderly manner.
         monitor.setDaemon(true);
         monitor.start();
@@ -354,7 +354,7 @@ class ConnectionPool implements ConnectionEventListener
         // The connection pool was empty to start with--don't call this
         // routine if there's no connection to pop!
         // TODO: Propose general Turbine assertion failure exception? -PGO
-        throw new Exception("Assertaion failure: Attempted to pop "
+        throw new Exception("Assertion failure: Attempted to pop "
                 + "connection from empty pool!");
     }
 

@@ -61,13 +61,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
- * <code>DB</code> defines the interface for a Turbine database
+ * <code>DB</code> defines the interface for a Torque database
  * adapter.  Support for new databases is added by subclassing
  * <code>DB</code> and implementing its abstract interface, and by
  * registering the new database adapter and its corresponding
  * JDBC driver in the service configuration file.
  *
- * <p>The Turbine database adapters exist to present a uniform
+ * <p>The Torque database adapters exist to present a uniform
  * interface to database access across all available databases.  Once
  * the necessary adapters have been written and configured,
  * transparent swapping of databases is theoretically supported with
