@@ -213,6 +213,7 @@ public class XmlToAppData extends DefaultHandler
      * @param publicId The public identifier of the external entity
      * @param systemId The system identifier of the external entity
      * @return an InputSource for the database.dtd file
+     * @see org.apache.torque.engine.database.transform.DTDResolver.resolveEntity(String, String)
      */
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
