@@ -298,6 +298,7 @@
 
     <copy file="${velocity.jar}" todir="${test.libDir}"/>
     <copy file="${xerces.jar}" todir="${test.libDir}"/>
+    <copy file="${xmlParserAPIs.jar}" todir="${test.libDir}"/>
     <copy file="${village.jar}" todir="${test.libDir}"/>
     <copy file="${log4j.jar}" todir="${test.libDir}"/>
     <copy file="${commons-collections.jar}" todir="${test.libDir}"/>

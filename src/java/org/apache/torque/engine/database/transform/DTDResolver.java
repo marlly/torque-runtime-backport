@@ -130,7 +130,7 @@ public class DTDResolver implements EntityResolver
      * @param urlString The URL of the input source.
      * @return <code>InputSource</code> for the URL.
      */
-    public InputSource getInputSource(String urlString)
+    private InputSource getInputSource(String urlString)
     {
         try
         {

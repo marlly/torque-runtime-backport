@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<!-- <!DOCTYPE database SYSTEM 
-"http://jakarta.apache.org/turbine/dtd/database.dtd"> -->
+<!DOCTYPE database SYSTEM 
+"http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 <!-- ==================================================================== -->
 <!--                                                                      -->
@@ -15,7 +15,7 @@
 <!-- ==================================================================== -->
 
 <database name="@DATABASE_DEFAULT@">
-  <table name="ID_TABLE" idMethod="idBroker">
+  <table name="ID_TABLE" idMethod="idbroker">
     <column name="ID_TABLE_ID" required="true" primaryKey="true" type="INTEGER"/>
     <column name="TABLE_NAME" required="true" size="255" type="VARCHAR"/>
     <column name="NEXT_ID" type="INTEGER"/>

@@ -12,6 +12,7 @@
   <!-- Construct compile classpath -->
   <path id="classpath">
     <pathelement location="${xerces.jar}"/>
+    <pathelement location="${xmlParserAPIs.jar}"/>
     <pathelement location="${velocity.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
@@ -58,6 +59,7 @@
     <echo message="village.jar = ${village.jar}"/>
     <echo message="velocity.jar = ${velocity.jar}"/>
     <echo message="xerces.jar = ${xerces.jar}"/>
+    <echo message="xmlParserAPIs.jar = ${xmlParserAPIs.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
     <echo message="junit.jar = ${junit.jar}"/>
@@ -109,6 +111,12 @@
     <available
       classname="org.apache.xerces.parsers.SAXParser"
       property="xerces.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org/w3c/dom/events/Event"
+      property="xmlParserAPIs.present"
       classpathref="classpath"
     />
 
@@ -167,9 +175,27 @@
     name="check.xerces"
     unless="xerces.present">
 
+    <antcall target="check.xercesImpl"/>
+    <antcall target="check.xmlParserAPIs"/>
+  </target>
+
+  <target
+    name="check.xercesImpl"
+    unless="xerces.present">
+
     <antcall target="property-warning">
       <param name="name" value="xerces.jar"/>
       <param name="value" value="${xerces.jar}"/>
+    </antcall>
+  </target>
+
+  <target
+    name="check.xmlParserAPIs"
+    unless="xmlParserAPIs.present">
+
+    <antcall target="property-warning">
+      <param name="name" value="xmlParserAPIs.jar"/>
+      <param name="value" value="${xmlParserAPIs.jar}"/>
     </antcall>
   </target>
 
@@ -531,6 +557,7 @@
 
     <copy file="${velocity.jar}" todir="${torque.dir}/lib"/>
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${xmlParserAPIs.jar}" todir="${torque.dir}/lib"/>
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>

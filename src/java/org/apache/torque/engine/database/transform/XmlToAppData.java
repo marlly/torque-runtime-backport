@@ -73,7 +73,9 @@ import org.apache.torque.engine.database.model.Inheritance;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.database.model.Unique;
 
-import org.apache.xerces.parsers.SAXParser;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -112,6 +114,13 @@ public class XmlToAppData extends DefaultHandler
     private boolean firstPass;
     private Table foreignTable;
     private String errorMessage;
+
+    private static SAXParserFactory saxFactory;
+
+    static {
+        saxFactory = SAXParserFactory.newInstance();
+        saxFactory.setValidating(true);
+    }
 
     /**
      * Creates a new instance.
@@ -162,7 +171,7 @@ public class XmlToAppData extends DefaultHandler
             try
             {
                 InputSource is = new InputSource (br);
-                parser.parse(is);
+                parser.parse(is, this);
             }
             finally
             {
@@ -188,25 +197,20 @@ public class XmlToAppData extends DefaultHandler
      * @return A validating XML parser.
      */
     protected SAXParser createParser()
-        throws SAXNotRecognizedException, SAXNotSupportedException
+        throws SAXException, ParserConfigurationException
     {
-        SAXParser parser = new SAXParser();
-
-        // We don't use an external handlers, instead implementing
-        // handler interfaces ourself.
-        parser.setContentHandler(this);
-        parser.setErrorHandler(this);
-
-        // Set the Resolver for the Torque's DTD.
-        DTDResolver dtdResolver = new DTDResolver();
-        parser.setEntityResolver(dtdResolver);
-
-        // Validate the input file
-        parser.setFeature
-            ("http://apache.org/xml/features/validation/dynamic", true);
-        parser.setFeature("http://xml.org/sax/features/validation", true);
-
+        SAXParser parser = saxFactory.newSAXParser();
         return parser;
+    }
+
+    /**
+     * called by the XML parser
+     *
+     * @return an InputSource for the database.dtd file
+     */
+    public InputSource resolveEntity(String publicId, String systemId)
+    {
+        return new DTDResolver().resolveEntity(publicId, systemId);
     }
 
     /**

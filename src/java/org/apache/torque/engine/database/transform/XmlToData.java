@@ -65,10 +65,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Vector;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.Table;
-import org.apache.xerces.parsers.SAXParser;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
@@ -98,6 +103,13 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     private File dtdFile;
     private InputSource dataDTD;
 
+    private static SAXParserFactory saxFactory;
+
+    static {
+        saxFactory = SAXParserFactory.newInstance();
+        saxFactory.setValidating(true);
+    }
+
     /**
      * Default custructor
      */
@@ -121,27 +133,14 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         {
             data = new Vector();
 
-            SAXParser parser = new SAXParser();
-
-            // set the Resolver for the DTD
-            parser.setEntityResolver(this);
-
-            // We don't use an external content handler - we use this object
-            parser.setContentHandler(this);
-
-            // Validate the input file
-            parser.setFeature
-                ("http://apache.org/xml/features/validation/dynamic", true);
-            parser.setFeature("http://xml.org/sax/features/validation", true);
-
-            parser.setErrorHandler(this);
+            SAXParser parser = saxFactory.newSAXParser();
 
             FileReader fr = new FileReader (xmlFile);
             BufferedReader br = new BufferedReader (fr);
             try
             {
                 InputSource is = new InputSource (br);
-                parser.parse(is);
+                parser.parse(is, this);
             }
             finally
             {
