@@ -76,7 +76,7 @@ public interface Persistent
      * Sets the PrimaryKey for the object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception, This method might throw an exceptions
+     * @throws Exception This method might throw an exception
      */
     void setPrimaryKey(ObjectKey primaryKey) throws Exception;
 
@@ -85,7 +85,7 @@ public interface Persistent
      *
      * @param primaryKey the String should be of the form produced by
      *        ObjectKey.toString().
-     * @exception Exception, This method might throw an exceptions
+     * @throws Exception This method might throw an exception
      */
     void setPrimaryKey(String primaryKey) throws Exception;
 
@@ -123,12 +123,17 @@ public interface Persistent
 
     /**
      * Saves the object.
+     *
+     * @throws Exception This method might throw an exception
      */
     void save() throws Exception;
 
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
+     *
+     * @param dbName the name of the database
+     * @throws Exception This method might throw an exception
      */
     void save(String dbName) throws Exception;
 
@@ -138,6 +143,9 @@ public interface Persistent
      * is meant to be used as part of a transaction, otherwise use
      * the save() method and the connection details will be handled
      * internally
+     *
+     * @param con the Connection used to store the object
+     * @throws Exception This method might throw an exception
      */
     void save(Connection con) throws Exception;
 }
