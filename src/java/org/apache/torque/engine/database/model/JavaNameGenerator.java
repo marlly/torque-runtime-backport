@@ -66,6 +66,7 @@ import org.apache.torque.TorqueException;
  * A <code>NameGenerator</code> implementation for Java-esque names.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
+ * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
  * @version $Id$
  */
 public class JavaNameGenerator implements NameGenerator
@@ -74,19 +75,19 @@ public class JavaNameGenerator implements NameGenerator
      * <code>inputs</code> should consist of two elements, the
      * original name of the database element and the method for
      * generating the name.  There are currently three methods:
-     * CONV_METHOD_NOCHANGE - xml names are converted directly to java
-     * names without modification.  CONV_METHOD_UNDERSCORE Will
-     * capitalize the first letter, remove underscores, and capitalize
-     * each letter before an underscore.  All other letters are
-     * lowercased. "javaname" works the same as the
-     * CONV_METHOD_JAVANAME method but will not lowercase any
-     * characters.
+     * <code>CONV_METHOD_NOCHANGE</code> - xml names are converted
+     * directly to java names without modification.
+     * <code>CONV_METHOD_UNDERSCORE</code> will capitalize the first
+     * letter, remove underscores, and capitalize each letter before
+     * an underscore.  All other letters are lowercased. "javaname"
+     * works the same as the <code>CONV_METHOD_JAVANAME</code> method
+     * but will not lowercase any characters.
      *
      * @param inputs list expected to contain two parameters, element
      * 0 contains name to convert, element 1 contains method for conversion.
-     * @return generated name. 
-     * @see org.apache.torque.engine.database.model.NameGenerator */
-    
+     * @return The generated name. 
+     * @see org.apache.torque.engine.database.model.NameGenerator
+     */
     public String generateName(List inputs)
     {
         String schemaName = (String)inputs.get(0);
@@ -114,19 +115,20 @@ public class JavaNameGenerator implements NameGenerator
 
         return javaName;
     }
-    
+
     /**
      * Converts a database schema name to java object name.  Removes
-     * STD_SEPARATOR_CHAR, capitilizes first letter of name and each
-     * letter after the STD_SEPERATOR, converts the rest of the
-     * letters to lowercase.
+     * <code>STD_SEPARATOR_CHAR</code>, capitilizes first letter of
+     * name and each letter after the <code>STD_SEPERATOR</code>,
+     * converts the rest of the letters to lowercase.
+     *
      * @param schemaName name to be converted.
      * @return converted name.
      * @see org.apache.torque.engine.database.model.NameGenerator
      * @see #underscoreMethod(String)
      */
 
-    public String underscoreMethod(String schemaName)
+    protected String underscoreMethod(String schemaName)
     {
         StringBuffer name = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
@@ -138,18 +140,18 @@ public class JavaNameGenerator implements NameGenerator
         }
         return name.toString();
     }
-    
+
     /**
      * Converts a database schema name to java object name.  Operates
      * same as underscoreMethod but does not convert anything to
      * lowercase.
+     *
      * @param schemaName name to be converted.
      * @return converted name.
      * @see org.apache.torque.engine.database.model.NameGenerator
      * @see #underscoreMethod(String)
      */
-
-    public String javanameMethod(String schemaName)
+    protected String javanameMethod(String schemaName)
     {
         StringBuffer name = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
@@ -165,12 +167,11 @@ public class JavaNameGenerator implements NameGenerator
     /**
      * Converts a database schema name to java object name.  In this
      * case no conversion is made.
+     *
+     * @return The <code>name</code> parameter, unchanged.
      */
-    
-    public String nochangeMethod(String name)
+    protected final String nochangeMethod(String name)
     {
         return name;
     }
-    
-
 }

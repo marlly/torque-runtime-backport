@@ -70,6 +70,7 @@ import org.apache.torque.TorqueException;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
  * @version $Id$
  */
 public class Column
@@ -159,8 +160,8 @@ public class Column
         nameConversion = attrib.getValue("nameConversion");
         if (nameConversion == null)
         {
-          nameConversion =
-            parentTable.getDatabase().getDefaultNameConversion();
+            nameConversion =
+                parentTable.getDatabase().getDefaultNameConversion();
         }
         
         //Primary Key

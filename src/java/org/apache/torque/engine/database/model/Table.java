@@ -74,6 +74,7 @@ import org.xml.sax.Attributes;
  * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @author <a href="mailto:dlr@collab.net>Daniel Rall</a>
+ * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
  * @version $Id$
  */
 public class Table implements IDMethod
@@ -141,9 +142,8 @@ public class Table implements IDMethod
         nameConversion = attrib.getValue("nameConversion");
         if (nameConversion == null)
         {
-          nameConversion = getDatabase().getDefaultNameConversion();
+            nameConversion = getDatabase().getDefaultNameConversion();
         }
-        
 
         if ("null".equals(idMethod))
         {

@@ -62,6 +62,7 @@ import org.apache.torque.TorqueException;
  * The generic interface to a name generation algorithm.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
+ * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
  * @version $Id$
  */
 public interface NameGenerator
@@ -74,28 +75,28 @@ public interface NameGenerator
 
     /**
      * Traditional method for converting schema table and column names
-     * to java names.  The CONV_METHOD_XXX constants define how names
-     * for columns and tables in the database schema will be converted
-     * to java source names.
-     * @see JavaNameGenerator#underscoreMethod(String) */
-
+     * to java names.  The <code>CONV_METHOD_XXX</code> constants
+     * define how names for columns and tables in the database schema
+     * will be converted to java source names.
+     *
+     * @see JavaNameGenerator#underscoreMethod(String)
+     */
     public static final String CONV_METHOD_UNDERSCORE = "underscore";
 
     /**
-     * Similar to CONV_METHOD_UNDERSCORE except nothing is converted
-     * to lowercase.
+     * Similar to {@link #CONV_METHOD_UNDERSCORE} except nothing is
+     * converted to lowercase.
+     *
      * @see JavaNameGenerator#javanameMethod(String)
      */
-
     public static final String CONV_METHOD_JAVANAME = "javaname";
 
     /**
      * Specifies no modification when converting from a schema column
-     * or table name to a java name.  to java names.
+     * or table name to a java name.
      */
-
     public static final String CONV_METHOD_NOCHANGE = "nochange";
-    
+
     /**
      * Given a list of <code>String</code> objects, implements an
      * algorithm which produces a name.

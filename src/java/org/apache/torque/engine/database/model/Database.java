@@ -75,6 +75,7 @@ import org.apache.torque.engine.database.model.NameGenerator;
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @author <a href="mailto:dlr@collab.net>Daniel Rall</a>
+ * @author <a href="mailto:byron_foster@byron_foster@yahoo.com>Byron Foster</a>
  * @version $Id$
  */
 public class Database
@@ -112,9 +113,8 @@ public class Database
         defaultNameConversion = attrib.getValue("defaultNameConversion");
         if (defaultNameConversion == null)
         {
-          defaultNameConversion = NameGenerator.CONV_METHOD_UNDERSCORE;
+            defaultNameConversion = NameGenerator.CONV_METHOD_UNDERSCORE;
         }
-        
     }
 
     /**
@@ -188,7 +188,7 @@ public class Database
 
     /**
      * Set the value of basePeer.
-     * @param v  Value to assign to basePeer.
+     * @param v Value to assign to basePeer.
      */
     public void setBasePeer(String  v)
     {
@@ -206,7 +206,7 @@ public class Database
 
     /**
      * Set the value of defaultIdMethod.
-     * @param v  Value to assign to defaultIdMethod.
+     * @param v Value to assign to defaultIdMethod.
      */
     public void setDefaultIdMethod(String  v)
     {
@@ -216,8 +216,9 @@ public class Database
     /**
      * Get the value of defaultNameConversion which specifies the
      * method for converting schema names for table and column
-     * to java names..
-     * @return value of defaultNameConversion.  */
+     * to Java names.
+     * @return The default naming conversion used by this database.
+     */
     public String getDefaultNameConversion()
     {
         return defaultNameConversion;
@@ -225,7 +226,7 @@ public class Database
 
     /**
      * Set the value of defaultNameConversion.
-     * @param v  Value to assign to defaultNameConversion.
+     * @param v The default naming conversion for this database to use.
      */
     public void setDefaultNameConversion(String  v)
     {
