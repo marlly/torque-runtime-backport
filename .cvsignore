@@ -3,3 +3,6 @@ target
 build.properties
 *.log
 logs
+.project
+.classpath
+jcoverage.ser
