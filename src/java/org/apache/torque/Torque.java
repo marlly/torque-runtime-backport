@@ -469,7 +469,7 @@ public class Torque
      * @throws Exception Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static  void registerPool( String name,
+    public static void registerPool( String name,
                               String driver,
                               String url,
                               String username,
@@ -506,7 +506,7 @@ public class Torque
      * @param password The password of the database user.
      * @exception Exception A generic exception.
      */
-    public static  void registerPool( String name,
+    public static void registerPool( String name,
                               String driver,
                               String url,
                               String username,
@@ -566,7 +566,7 @@ public class Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static  DB getDB(String name)
+    public static DB getDB(String name)
         throws Exception
     {
         return getPool(name).getDB();
