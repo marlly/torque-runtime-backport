@@ -13,6 +13,8 @@ xdocs/      Torque documention in Anakia formatted tags.
 --------------------------------------------------------------------------
 B U I L D I N G
 --------------------------------------------------------------------------
+You must have ant version 1.4 or newer installed.
+
 You must set the following properties in either your
 ${user.home}/build.properties file, or a build.properties file added
 by you to the Torque top-level directory:
