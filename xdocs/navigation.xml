@@ -7,14 +7,19 @@
     <links>
       <item name="runtime"               href="http://db.apache.org/torque/"/>
       <item name="generator"             href="http://db.apache.org/torque/generator/"/>
+      <item name="maven-plugin"          href="http://db.apache.org/torque/maven-plugin/"/>
     </links>
+
+    <menu>
+        <item href="http://apachecon.com/2003/US/index.html" img="http://jakarta.apache.org/images/logos/ac2003-150.gif"/>
+    </menu>
 
     <menu name="Torque">
       <item name="Overview"              href="/index.html"/>
       <item name="News and Status"       href="/status.html"/>
       <item name="Downloads"             href="/status.html"/>
+      <item name="Torque 3.1.x docs"     href="http://db.apache.org/torque-31/"/>
       <item name="Torque Wiki"           href="http://nagoya.apache.org/wiki/apachewiki.cgi?TorqueProjectPages"/>
-      
     </menu>
     <menu name="Guides">
       <item name="Tutorial"              href="/tutorial/index.html" collapse="true">
