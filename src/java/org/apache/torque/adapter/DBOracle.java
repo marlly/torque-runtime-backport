@@ -77,8 +77,6 @@ import javax.sql.ConnectionPoolDataSource;
 public class DBOracle
     extends DB
 {
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     /**
      * Empty constructor.
      */
@@ -226,39 +224,5 @@ public class DBOracle
     public boolean escapeText()
     {
         return false;
-    }
-
-    /**
-     * This method is used to format any date string using Oracle's
-     * <code>TO_DATE</code> built-in function.
-     *
-     * @see org.apache.torque.adapter.DB#getDateString(String)
-     * @deprecated use getDateString(java.util.Date)
-     */
-    public String getDateString(String dateString)
-    {
-        return formatDate(dateString);
-    }
-
-    /**
-     * This method is used to format any date string.
-     * Database can use different default date formats.
-     *
-     * @return The proper date formated String.
-     */
-    public String getDateString(Date date)
-    {
-        return formatDate(new SimpleDateFormat(DATE_FORMAT).format(date));
-    }
-
-    /**
-     * This method is used to format any date string using Oracle's
-     * <code>TO_DATE</code> built-in function.
-     */
-    private final String formatDate(String date)
-    {
-        char delim = getStringDelimiter();
-        return ("TO_DATE(" + delim + date + delim + ", " + delim +
-                "yyyy-mm-dd hh24:mi:ss" + delim + ')');
     }
 }
