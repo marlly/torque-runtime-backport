@@ -190,7 +190,7 @@ public class NumberKey extends SimpleKey
     {
         if (getValue() == null)
         {
-            super.hashCode();
+            return super.hashCode();
         }
         else
         {
