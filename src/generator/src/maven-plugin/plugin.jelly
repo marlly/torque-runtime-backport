@@ -14,7 +14,7 @@
     name="torque"
     description="Generates SQL files and Peer-based OM objects">
 
-    <!-- <attainGoal name="torque:sql"/> -->
+    <attainGoal name="torque:sql"/>
     <attainGoal name="torque:om"/>
 
   </goal>
@@ -382,7 +382,8 @@
 
   <goal
     name="torque:create-db"
-    description="generates the target database">
+    description="generates the target database"
+    prereqs="torque:init">
 
     <j:choose>
 
@@ -703,8 +704,7 @@
 
   <goal
     name="torque:ojb"
-    description="Generates the repository and om for ojb (experimental)"
-    prereqs="torque:init">
+    description="Generates the repository and om for ojb (experimental)">
 
     <attainGoal name="torque:ojb-repository"/>
     <attainGoal name="torque:ojb-model"/>
