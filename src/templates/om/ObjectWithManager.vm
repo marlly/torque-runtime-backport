@@ -836,7 +836,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         }
         catch(TorqueException e)
         {
-            BasePeer.rollBackTransaction(con);
+            try
+            {
+                BasePeer.rollBackTransaction(con);
+             }
+             catch (Exception rollBackEx)
+             {
+                 // Ignore because we've already got an exception
+             }
             throw e;
         }
         BasePeer.commitTransaction(con);
