@@ -121,7 +121,7 @@
   <target
     name="project-create-db"
     unless="database.manual.creation"
-    description="--> generates the target database">
+    description="==> generates the target database">
 
     <taskdef
       name="torque-create-db"
@@ -176,8 +176,8 @@
       password="${databasePassword}"
       autocommit="true"
       onerror="continue"
-      sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
-      srcDir="${basedir}/${outputDirectory}/sql">
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      srcDir="${torque.home}/${outputDirectory}/sql">
       <classpath refid="torque-classpath"/>
     </torque-insert-sql>
   </target>
@@ -405,7 +405,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-sql-classpath">
+    name="project-sql-classpath"
+    description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -436,6 +437,42 @@
   </target>
 
   <!-- ================================================================ -->
+  <!-- Generate SQL from XML data file                                  -->
+  <!-- ================================================================ -->
+
+  <target
+    name="project-datasql-classpath"
+    description="==> generates sql from data xml">
+
+    <echo message="+-----------------------------------------------+"/>
+    <echo message="|                                               |"/>
+    <echo message="| Generating SQL from data XML !                |"/>
+    <echo message="| Woo hoo!                                      |"/>
+    <echo message="|                                               |"/>
+    <echo message="+-----------------------------------------------+"/>
+    <echo message=" taking build.properties from: ${build.properties}"/>
+
+    <taskdef
+      name="torque-datasql"
+      classname="org.apache.torque.task.TorqueDataSQLTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <torque-datasql
+      contextProperties="${build.properties}"
+      controlTemplate="${DataSQLControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}"
+      useClasspath="true"
+      outputFile="${project}-data.sql"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      dataXmlFile="${torque.home}/${schemaDirectory}/${project}-data.xml"
+      dataDTD="${torque.home}/${schemaDirectory}/${project}-data.dtd"
+      targetDatabase="${database}"
+      sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
+    />
+  </target>
+
+  <!-- ================================================================ -->
   <!-- G E N E R A T E  P R O J E C T  P E E R  B A S E D  O M          -->
   <!-- ================================================================ -->
   <!-- Generate the Peer-based object model for your project.           -->
@@ -443,7 +480,8 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-om-classpath">
+    name="project-om-classpath"
+    description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -483,7 +521,7 @@
   <target
     name="project-create-db-classpath"
     unless="database.manual.creation"
-    description="--> generates the target database">
+    description="==> generates the target database">
 
     <taskdef
       name="torque-create-db"
