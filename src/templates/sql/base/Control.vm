@@ -11,6 +11,7 @@
   
   #set ( $database = $dataModel.database )
   #foreach ($tbl in $database.tables)
+    Primary Key:#if ($tbl.hasPrimaryKey()) Yes #else No #end
     #if (!$tbl.isSkipSql())
       $generator.parse($fname,$outFile,"table",$tbl)
     #end
