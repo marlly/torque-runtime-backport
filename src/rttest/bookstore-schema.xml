@@ -10,29 +10,33 @@
   <!-- B O O K  T A B L E                                  -->
   <!-- =================================================== -->
 
-  <table name="book">
+  <table name="book" description="Book table">
     <column
       name="book_id"
       required="true"
       primaryKey="true"
       type="INTEGER"
+      description="Book Id"
     />
     <column
       name="isbn"
       required="true"
       type="VARCHAR"
       size="15"
+      description="ISBN"
     />
     <column
       name="author_id"
       required="true"
       type="INTEGER"
+      description="Foreign Key Author"
     />
     <column
       name="title"
       required="true"
       type="VARCHAR"
       size="255"
+      description="Book Title"
     />
 
     <foreign-key foreignTable="author">
@@ -46,7 +50,7 @@
   <!-- A U T H O R  T A B L E                              -->
   <!-- =================================================== -->
 
-  <table name="author">
+  <table name="author" description="Author table">
     <column
       name="author_id"
       required="true"

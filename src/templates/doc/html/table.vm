@@ -11,17 +11,19 @@
     <th>PK</th>
     <th>FK</th>
     <th>not null</th>
+    <th>Description</th>
   </tr>
 #foreach ($col in $table.Columns)
   <tr>
     <td>$col.Name</td>
     <td>$col.Type</td>
     <td>$col.printSize()</td>
-    <td>$col.DefaultValue</td>
+    <td>$!col.DefaultValue</td>
     <td>$col.JavaName</td>
     <td>$col.isPrimaryKey()</td>
     <td>$col.isForeignKey()</td>
     <td>$col.isNotNull()</td>
+    <td>$!col.Description</td>
   </tr>
 #end
 </table>
