@@ -20,7 +20,7 @@ import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
 import java.sql.Connection;
 #if ($addSaveMethod)
-import org.apache.commons.lang.Objects;
+import org.apache.commons.lang.ObjectUtils;
 #end
 #if ($addIntakeRetrievable)
 import org.apache.fulcrum.intake.Retrievable;
@@ -31,7 +31,7 @@ import org.apache.fulcrum.intake.Retrievable;
    #set ( $className = $tblFK.JavaName )
    #if ($tblFK.Interface)
        #set ($className = $tblFK.Interface)
-   #end 
+   #end
 
    #if ($tblFK.Package != $package)
 import ${tblFK.Package}.${className};
@@ -155,7 +155,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         if (this.$clo != v)
         {
  #else
-        if (!Objects.equals(this.$clo, v))
+        if (!ObjectUtils.equals(this.$clo, v))
         {
  #end
             this.$clo = v;
@@ -171,7 +171,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
             #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
                 #set ( $relCol = "" )
-                  #foreach ($columnName in $col.foreignKey.LocalColumns)  
+                  #foreach ($columnName in $col.foreignKey.LocalColumns)
                       #set ( $column = $table.getColumn($columnName) )
                       #set ( $relCol = "$relCol$column.JavaName" )
                   #end
@@ -183,7 +183,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
               #set ( $varName = "a$tblFK.JavaName" )
             #end
 
-        if ($varName != null && !Objects.equals(${varName}.get${colFK.JavaName}(), v))
+        if ($varName != null && !ObjectUtils.equals(${varName}.get${colFK.JavaName}(), v))
         {
             $varName = null;
         }
@@ -287,7 +287,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long")
         #set ( $conditional = "$conditional${and}this.${clo}>0" )
     #else
-        #set ( $conditional = "$conditional${and}!Objects.equals(this.${clo}, null)" )
+        #set ( $conditional = "$conditional${and}!ObjectUtils.equals(this.${clo}, null)" )
     #end
     #set ( $arglist = "$arglist${comma}this.$clo" )
     #set ( $and = " && " )
@@ -487,7 +487,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria(),Connection)
      * This method takes in the Connection also as input so that
-     * referenced objects can also be obtained using a Connection 
+     * referenced objects can also be obtained using a Connection
      * that is taken as input
      */
     public List get${relCol}(Connection con) throws TorqueException
@@ -508,7 +508,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * an empty collection or the current collection, the criteria
      * is ignored on a new object.
      * This method takes in the Connection also as input so that
-     * referenced objects can also be obtained using a Connection 
+     * referenced objects can also be obtained using a Connection
      * that is taken as input
      */
     public List get${relCol}(Criteria criteria,Connection con) throws TorqueException
@@ -922,7 +922,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
              }
              catch (Exception rollBackEx)
              {
-                 throw new TorqueException(e.getMessage() 
+                 throw new TorqueException(e.getMessage()
                      + "; a rollback exception ocurred when rolling back the error: "
                      + rollBackEx.getMessage(),
                      e);
