@@ -595,9 +595,9 @@ public class TypeMap
      * @param type The type to check.
      * @return true if the type is BIT
      */
-    public static boolean isBit(String type)
+    public static boolean isBit(SchemaType type)
     {
-        return BIT.equals(type);
+        return SchemaType.BIT.equals(type);
     }
 
     /**

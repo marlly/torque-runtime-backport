@@ -896,7 +896,7 @@ public class Column
      */
     public boolean isBit()
     {
-        return TypeMap.isBit(torqueType);
+        return TypeMap.isBit(domain.getType());
     }
 
     /**
