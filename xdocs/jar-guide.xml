@@ -121,6 +121,24 @@
 </table>
 
 </section>
+
+<section name="Invoking Torque">
+
+<p>
+Once the build properties have been set, you can invoke torque via the
+<code>build-torque.xml</code>: <code>ant -f build-torque.xml</code>.
+</p>
+
+<p>
+Also, a few of the Torque targets, currently om and sql, are smart enough
+to not run unless the schema has changed. This would allow you to automatically
+call <code>ant -f build-torque.xml</code> on each compile and only worry about
+the time it takes to generate the templates being taken if the schema has
+changed.
+</p>
+
+</section>
+
 <section name="Example using Jar'd Torque and Maven">
 
 This section will give an example of using Torque from the jar with 
