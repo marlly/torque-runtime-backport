@@ -330,11 +330,24 @@ public class Torque implements Initializable, Configurable
             if(key.startsWith(MANAGER_PREFIX) && key.endsWith(CLASSNAME_SUFFIX))
             {
                 String managerKey = key.substring(pref, key.length() - suff);
-                category.info("Added Mapping for Manager: " + managerKey);
-
                 if (! managers.containsKey(managerKey))
                 {
-                    initManager(managerKey, configuration.getString(key));
+                    String managerClass = configuration.getString(key);
+                    category.info("Added Mapping for Manager: " + managerKey 
+                                  + " -> " + managerClass);
+                    try
+                    {
+                        initManager(managerKey, managerClass);
+                    }
+                    catch (TorqueException e)
+                    {
+                        // the exception thrown here seems to disappear.
+                        // At least when initialized by Turbine, should find
+                        // out why, but for now make sure it is noticed. 
+                        category.error(e);
+                        e.printStackTrace();
+                        throw e;
+                    }
                 }
             }
         }
