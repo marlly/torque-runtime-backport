@@ -125,13 +125,22 @@ public class Jdbc2PoolDataSourceFactory
     {
         log.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
-        Configuration c = null;
+        Configuration c = Torque.getConfiguration();
 
-        c = Torque.getConfiguration().subset(DEFAULT_CONNECTION_KEY);
-        applyConfiguration(c, cpds);
-
-        c = configuration.subset(CONNECTION_KEY);
-        applyConfiguration(c, cpds);
+        if (c == null)
+        {
+            log.warn("Global Configuration not set,"
+                    + " no Default connection pool data source configured!");
+        }
+        else
+        {
+            Configuration conf = c.subset(DEFAULT_CONNECTION_KEY);
+            applyConfiguration(conf, cpds);
+        }
+            
+        Configuration conf = configuration.subset(CONNECTION_KEY);
+        applyConfiguration(conf, cpds);
+        
         return cpds;
     }
 
@@ -147,13 +156,21 @@ public class Jdbc2PoolDataSourceFactory
     {
         log.debug("Starting initJdbc2Pool");
         Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
-        Configuration c = null;
+        Configuration c = Torque.getConfiguration();
 
-        c = Torque.getConfiguration().subset(DEFAULT_POOL_KEY);
-        applyConfiguration(c, ds);
+        if (c == null)
+        {
+            log.warn("Global Configuration not set,"
+                    + " no Default pool data source configured!");
+        }
+        else
+        {
+            Configuration conf = c.subset(DEFAULT_POOL_KEY);
+            applyConfiguration(conf, ds);
+        }
 
-        c = configuration.subset(POOL_KEY);
-        applyConfiguration(c, ds);
+        Configuration conf = configuration.subset(POOL_KEY);
+        applyConfiguration(conf, ds);
         return ds;
     }
 }
