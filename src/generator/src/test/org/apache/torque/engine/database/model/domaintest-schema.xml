@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_1.dtd">
+
+<database name="domaindb" defaultIdMethod="idbroker">
+  <domain name="amount" type="NUMERIC" size="10" scale="2" default="0" description="amount domain" />
+  
+  <table name="product">
+    <column name="product_id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="name" size="40" />
+    <column name="price" domain="amount" />
+  </table>
+</database>
