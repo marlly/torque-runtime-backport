@@ -81,19 +81,6 @@ public abstract class $basePrefix${interfaceName}Manager
     }
 
     /**
-     * Static accessor for the @see #getInstanceImpl(String).
-     *
-     * @param id an <code>String</code> value of the key
-     * @return a <code>${interfaceName}</code> value
-     * @exception TorqueException if an error occurs
-     */
-    public static ${interfaceName} getInstance(String id)
-        throws TorqueException
-    {
-        return getManager().getInstanceImpl(id);
-    }
-
-    /**
      * Static accessor for the @see #getInstanceImpl(ObjectKey, boolean).
      *
      * @param id an <code>ObjectKey</code> value
@@ -199,17 +186,6 @@ public abstract class $basePrefix${interfaceName}Manager
         throws TorqueException
     {
         return (${interfaceName}) getOMInstance(id);
-    }
-
-    /**
-     * Get a ${interfaceName} with the given id.
-     *
-     * @param id <code>String</code> value
-     */
-    protected ${interfaceName} getInstanceImpl(String id)
-        throws TorqueException
-    {
-        return getInstanceImpl(new ObjectKey(id));
     }
 
     /**
