@@ -25,13 +25,13 @@ package org.apache.torque.engine.sql;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -69,16 +69,16 @@ import java.util.ArrayList;
  */
 public class SQLScanner
 {
-    static private final String white = "\f\r\t\n ";
-    static private final String alfa = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static private final String numer = "0123456789";
-    static private final String alfanum = alfa+numer;
-    static private final String special = ";(),'";
-    static private final char commentPound = '#';
-    static private final char commentSlash = '/';
-    static private final char commentStar = '*';
-    static private final char commentDash = '-';
-    
+    private static final String white = "\f\r\t\n ";
+    private static final String alfa = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String numer = "0123456789";
+    private static final String alfanum = alfa + numer;
+    private static final String special = ";(),'";
+    private static final char commentPound = '#';
+    private static final char commentSlash = '/';
+    private static final char commentStar = '*';
+    private static final char commentDash = '-';
+
     private Reader in;
     private int chr;
     private String token;
@@ -119,9 +119,9 @@ public class SQLScanner
     private void readChar() throws IOException
     {
         chr = in.read();
-        if ((char)chr == '\n' || (char)chr == '\r' || (char)chr == '\f')
+        if ((char) chr == '\n' || (char) chr == '\r' || (char) chr == '\f')
         {
-            col=0;
+            col = 0;
             line++;
         } else col++;
     }
@@ -132,14 +132,14 @@ public class SQLScanner
     private void scanIdentifier () throws IOException
     {
         token = "";
-        char c = (char)chr;
+        char c = (char) chr;
         while (chr != -1 && white.indexOf(c) == -1 && special.indexOf(c) == -1)
         {
-            token = token+(char)chr;
+            token = token + (char) chr;
             readChar();
-            c = (char)chr;
+            c = (char) chr;
         }
-        tokens.add(new Token (token,line,col));
+        tokens.add(new Token(token,line,col));
     }
 
     /**
@@ -158,49 +158,49 @@ public class SQLScanner
         readChar();
         while (chr != -1)
         {
-            char c = (char)chr;
+            char c = (char) chr;
 
-            if ((char)c == commentDash)
+            if ((char) c == commentDash)
             {
                 readChar();
-                if ((char)chr == commentDash)
+                if ((char) chr == commentDash)
                 {
                     inCommentDash = true;
                 }
             }
-            
+
             if (inCommentDash)
             {
-                if ((char)c == '\n' || (char)c == '\r')
+                if ((char) c == '\n' || (char) c == '\r')
                 {
                     inCommentDash = false;
                 }
                 readChar();
             }
-            else if ((char)c == commentPound)
+            else if ((char) c == commentPound)
             {
                 inComment = true;
                 readChar();
             }
-            else if ((char)c == commentSlash)
+            else if ((char) c == commentSlash)
             {
                 readChar();
-                if ((char)chr == commentStar)
+                if ((char) chr == commentStar)
                 {
                     inCommentSlashStar = true;
                 }
             }
             else if (inComment || inCommentSlashStar)
             {
-                if ((char)c == '*')
+                if ((char) c == '*')
                 {
                     readChar();
-                    if ((char)chr == commentSlash)
+                    if ((char) chr == commentSlash)
                     {
                         inCommentSlashStar = false;
                     }
                 }
-                else if ((char)c == '\n' || (char)c == '\r')
+                else if ((char) c == '\n' || (char) c == '\r')
                 {
                     inComment = false;
                 }
@@ -212,7 +212,7 @@ public class SQLScanner
             }
             else if (special.indexOf(c) >= 0)
             {
-                tokens.add(new Token (""+c,line,col));
+                tokens.add(new Token ("" + c, line, col));
                 readChar();
             }
             else

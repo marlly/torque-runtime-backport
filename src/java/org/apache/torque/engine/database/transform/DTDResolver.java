@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.transform;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -56,7 +56,6 @@ package org.apache.torque.engine.database.transform;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.net.URL;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -85,11 +84,11 @@ public class DTDResolver implements EntityResolver
     {
         try
         {
-            InputStream dtdStream = 
+            InputStream dtdStream =
                 getClass().getResourceAsStream("database.dtd");
-            
+
             // getResource was buggy on many systems including Linux,
-            // OSX, and some versions of windows in jdk1.3.  
+            // OSX, and some versions of windows in jdk1.3.
             // getResourceAsStream works on linux, maybe others?
             if (dtdStream != null)
             {
@@ -113,7 +112,7 @@ public class DTDResolver implements EntityResolver
         {
             String pkg = getClass().getName()
                 .substring(0, getClass().getName().lastIndexOf("."));
-            System.out.println("Resolver: used database.dtd from " + 
+            System.out.println("Resolver: used database.dtd from " +
                  pkg + " package ");
             return databaseDTD;
         }

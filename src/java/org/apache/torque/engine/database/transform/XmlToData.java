@@ -63,7 +63,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -109,7 +108,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /**
      * Default custructor
      */
-    public XmlToData(Database database, String dtdFilePath) 
+    public XmlToData(Database database, String dtdFilePath)
             throws MalformedURLException, IOException
     {
         this.database = database;

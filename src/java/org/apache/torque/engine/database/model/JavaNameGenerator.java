@@ -59,9 +59,6 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang.Strings;
 
-import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
-
 /**
  * A <code>NameGenerator</code> implementation for Java-esque names.
  *
@@ -90,8 +87,8 @@ public class JavaNameGenerator implements NameGenerator
      */
     public String generateName(List inputs)
     {
-        String schemaName = (String)inputs.get(0);
-        String method = (String)inputs.get(1);
+        String schemaName = (String) inputs.get(0);
+        String method = (String) inputs.get(1);
         String javaName = null;
 
         if (CONV_METHOD_UNDERSCORE.equals(method))

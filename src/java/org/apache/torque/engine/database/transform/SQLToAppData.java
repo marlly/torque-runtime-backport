@@ -25,13 +25,13 @@ package org.apache.torque.engine.database.transform;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -74,7 +74,7 @@ import org.apache.torque.adapter.IDMethod;
  * structure.  The class makes use of SQL Scanner to get
  * sql tokens and the parses these to create the AppData
  * class. SQLToAppData is in effect a simplified sql parser.
- * 
+ *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  * @version $Id$
@@ -87,7 +87,7 @@ public class SQLToAppData
     private AppData appData;
     private Database appDataDB;
     private int count;
-    private String databaseType; 
+    private String databaseType;
     private String basePropsFilePath;
 
     /**
@@ -103,12 +103,12 @@ public class SQLToAppData
      * but putting here in the event db.props properties are found to
      * be useful converting sql to xml, the infrastructure will exist
      */
-    public SQLToAppData(String sqlFile, String databaseType, 
+    public SQLToAppData(String sqlFile, String databaseType,
                         String basePropsFilePath)
     {
         this.sqlFile = sqlFile;
         this.databaseType = databaseType;
-        this.basePropsFilePath = basePropsFilePath; 
+        this.basePropsFilePath = basePropsFilePath;
     }
 
 
@@ -151,7 +151,7 @@ public class SQLToAppData
      */
     private void err (String name) throws ParseException
     {
-        throw new ParseException (name + " at [ line: " + token.getLine() + 
+        throw new ParseException (name + " at [ line: " + token.getLine() +
             " col: " + token.getCol() + " ]");
     }
 
@@ -183,7 +183,7 @@ public class SQLToAppData
         next();
         String tableName = token.getStr(); // name of the table
         next();
-        if (! token.getStr().equals("(")) 
+        if (!token.getStr().equals("("))
         {
             err("( expected");
         }
@@ -191,11 +191,11 @@ public class SQLToAppData
 
         Table tbl = new Table (tableName);
         //tbl.setIdMethod("none");
-        while (! token.getStr().equals(";"))
+        while (!token.getStr().equals(";"))
         {
             Create_Table_Column(tbl);
         }
-        
+
         if (tbl.getPrimaryKey().size() == 1)
         {
             tbl.setIdMethod(IDMethod.ID_BROKER);
@@ -220,7 +220,7 @@ public class SQLToAppData
         {
             next();
         }
-        
+
         if (token.getStr().toUpperCase().equals("PRIMARY"))
         {
             Create_Table_Column_Primary (tbl);
@@ -277,7 +277,7 @@ public class SQLToAppData
             next();
         }
 
-        if (! token.getStr().toUpperCase().equals(")"))
+        if (!token.getStr().toUpperCase().equals(")"))
         {
             err(") expected");
         }
@@ -290,7 +290,7 @@ public class SQLToAppData
     private void Create_Table_Column_Unique(Table tbl) throws ParseException
     {
         next();
-        if (! token.getStr().toUpperCase().equals("("))
+        if (!token.getStr().toUpperCase().equals("("))
         {
             err("( expected");
         }
@@ -309,26 +309,26 @@ public class SQLToAppData
             }
             next();
         }
-        if (! token.getStr().toUpperCase().equals(")"))
+        if (!token.getStr().toUpperCase().equals(")"))
         {
             err(") expected got: " + token.getStr());
         }
 
         next(); // skip the )
     }
-    
+
     /**
      * Parses FOREIGN KEY (BAR) REFERENCES TABLE (BAR) statement
      */
     private void Create_Table_Column_Foreign (Table tbl) throws ParseException
     {
         next();
-        if (! token.getStr().toUpperCase().equals("KEY"))
+        if (!token.getStr().toUpperCase().equals("KEY"))
         {
             err("KEY expected");
         }
         next();
-        if (! token.getStr().toUpperCase().equals("("))
+        if (!token.getStr().toUpperCase().equals("("))
         {
             err("( expected");
         }
@@ -348,14 +348,14 @@ public class SQLToAppData
             localColumns.add(colName);
             next();
         }
-        if (! token.getStr().toUpperCase().equals(")"))
+        if (!token.getStr().toUpperCase().equals(")"))
         {
             err(") expected");
         }
 
         next();
 
-        if (! token.getStr().toUpperCase().equals("REFERENCES"))
+        if (!token.getStr().toUpperCase().equals("REFERENCES"))
         {
             err("REFERENCES expected");
         }
@@ -370,15 +370,15 @@ public class SQLToAppData
         {
             next();
             int i = 0;
-            fk.addReference((String)localColumns.get(i++),token.getStr());
+            fk.addReference((String) localColumns.get(i++),token.getStr());
             next();
             while (token.getStr().equals(","))
             {
                 next();
-                fk.addReference((String)localColumns.get(i++),token.getStr());
+                fk.addReference((String) localColumns.get(i++),token.getStr());
                 next();
             }
-            if (! token.getStr().toUpperCase().equals(")"))
+            if (!token.getStr().toUpperCase().equals(")"))
             {
                 err(") expected");
             }
@@ -413,12 +413,12 @@ public class SQLToAppData
         {
             inEnum = true;
             next(); // skip (
-            while (! token.getStr().equals(")"))
+            while (!token.getStr().equals(")"))
             {
                 // skip until )
                 next();
             }
-            while (! token.getStr().equals(","))
+            while (!token.getStr().equals(","))
             {
                 if (token.getStr().toUpperCase().equals("DEFAULT"))
                 {
@@ -465,8 +465,8 @@ public class SQLToAppData
             columnSize = columnSize + columnPrecision;
         }
         col.setTypeFromString (columnType,columnSize);
-        tbl.addColumn (col);
-        
+        tbl.addColumn(col);
+
         if ( inEnum )
         {
             col.setNotNull(true);
@@ -482,7 +482,7 @@ public class SQLToAppData
                 if (token.getStr().toUpperCase().equals("NOT"))
                 {
                     next();
-                    if (! token.getStr().toUpperCase().equals("NULL")) 
+                    if (!token.getStr().toUpperCase().equals("NULL"))
                     {
                         err ("NULL expected after NOT");
                     }
@@ -492,7 +492,7 @@ public class SQLToAppData
                 else if (token.getStr().toUpperCase().equals("PRIMARY"))
                 {
                     next();
-                    if (! token.getStr().toUpperCase().equals("KEY")) 
+                    if (!token.getStr().toUpperCase().equals("KEY"))
                     {
                         err ("KEY expected after PRIMARY");
                     }
@@ -543,8 +543,8 @@ public class SQLToAppData
         appDataDB = new Database();
         appData.addDatabase(appDataDB);
 
-        FileReader fr = new FileReader (sqlFile);
-        BufferedReader br = new BufferedReader (fr);
+        FileReader fr = new FileReader(sqlFile);
+        BufferedReader br = new BufferedReader(fr);
         SQLScanner scanner = new SQLScanner(br);
 
         tokens = scanner.scan();
@@ -575,10 +575,10 @@ public class SQLToAppData
     /**
      * Just 4 testing.
      */
-    public static void main (String args[]) throws Exception
+    public static void main(String args[]) throws Exception
     {
-        SQLToAppData s2a = new SQLToAppData (args[0]);
+        SQLToAppData s2a = new SQLToAppData(args[0]);
         AppData ad = s2a.execute();
-        System.out.println (ad);
+        System.out.println(ad);
     }
 }

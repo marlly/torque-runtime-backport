@@ -110,10 +110,10 @@ public class TorqueSQLExec extends Task
     /**
      *
      */
-    static public class DelimiterType extends EnumeratedAttribute
+    public static class DelimiterType extends EnumeratedAttribute
     {
-        static public final String NORMAL = "normal";
-        static public final String ROW = "row";
+        public static final String NORMAL = "normal";
+        public static final String ROW = "row";
 
         public String[] getValues()
         {
@@ -453,11 +453,13 @@ public class TorqueSQLExec extends Task
         }
         if (userId == null)
         {
-            throw new BuildException("User Id attribute must be set!", location);
+            throw new BuildException("User Id attribute must be set!",
+                    location);
         }
         if (password == null)
         {
-            throw new BuildException("Password attribute must be set!", location);
+            throw new BuildException("Password attribute must be set!",
+                    location);
         }
         if (url == null)
         {
@@ -540,33 +542,35 @@ public class TorqueSQLExec extends Task
             Class dc;
             if (classpath != null)
             {
-                log("Loading " + driver + " using AntClassLoader with classpath " + classpath,
-                     Project.MSG_VERBOSE );
+                log("Loading " + driver
+                        + " using AntClassLoader with classpath " + classpath,
+                        Project.MSG_VERBOSE );
 
                 loader = new AntClassLoader(project, classpath);
                 dc = loader.loadClass(driver);
             }
             else
             {
-                log("Loading " + driver + " using system loader.", Project.MSG_VERBOSE);
+                log("Loading " + driver + " using system loader.",
+                        Project.MSG_VERBOSE);
                 dc = Class.forName(driver);
             }
             driverInstance = (Driver) dc.newInstance();
         }
         catch (ClassNotFoundException e)
         {
-            throw new BuildException("Class Not Found: JDBC driver " + driver +
-                " could not be loaded", location);
+            throw new BuildException("Class Not Found: JDBC driver " + driver
+                    + " could not be loaded", location);
         }
         catch (IllegalAccessException e)
         {
-            throw new BuildException("Illegal Access: JDBC driver " + driver +
-                " could not be loaded", location);
+            throw new BuildException("Illegal Access: JDBC driver " + driver
+                    + " could not be loaded", location);
         }
         catch (InstantiationException e)
         {
-            throw new BuildException("Instantiation Exception: JDBC driver " +
-                driver + " could not be loaded", location);
+            throw new BuildException("Instantiation Exception: JDBC driver "
+                    + driver + " could not be loaded", location);
         }
 
         try
@@ -664,7 +668,9 @@ public class TorqueSQLExec extends Task
                     conn.close();
                 }
             }
-            catch (SQLException e) {}
+            catch (SQLException e)
+            {
+            }
         }
 
         log(goodSql + " of " + totalSql +
