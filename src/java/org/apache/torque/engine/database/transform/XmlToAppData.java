@@ -188,8 +188,7 @@ public class XmlToAppData extends DefaultHandler
         firstPass = false;
         if ( errorMessage.length() > 0 ) 
         {
-            System.out.println("ERROR in schema!!!\n" + errorMessage);
-            // Log.error("ERROR in schema!!!\n" + errorMessage);
+            System.out.println("Error in XML schema: " + errorMessage);
         }
 
         return app;
