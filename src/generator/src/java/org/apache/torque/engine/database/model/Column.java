@@ -691,7 +691,7 @@ public class Column
     }
 
     /**
-     * Returns the size of the column
+     * Returns the scale of the column
      */
     public String getScale()
     {
@@ -699,7 +699,7 @@ public class Column
     }
 
     /**
-     * Set the size of the column
+     * Set the scale of the column
      */
     public void setScale(String newScale)
     {
@@ -707,8 +707,10 @@ public class Column
     }
     
     /**
-     * Return the size and scale in brackets for use in an sql
-     * schema if the type is String.  Otherwise return an empty string
+     * Return the size and scale in brackets for use in an sql schema.
+     * 
+     * @return size and scale or an empty String if there are no values 
+     *         available.
      */
     public String printSize()
     {
