@@ -133,9 +133,6 @@ public abstract class BasePeer
     /** Hashtable that contains the cached mapBuilders. */
     private static Hashtable mapBuilders = new Hashtable(5);
 
-    /** logging category tag */
-    private final static String CATEGORY = "sql";
-
     protected static Category category;
 
     public static void setCategory(Category c)
@@ -620,8 +617,7 @@ public abstract class BasePeer
                 tds = new TableDataSet(connection, tables.get(i), kd);
                 String sqlSnippet = whereClause.toString(" AND ");
 
-                category.debug("BasePeer.doDelete: whereClause=" +
-                    sqlSnippet);
+                category.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
 
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
