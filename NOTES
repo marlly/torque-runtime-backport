@@ -110,3 +110,12 @@ o Same goes for the DatabaseMap. We definitely have information duplicated
 o Could the information in the adapters be coupled with information
   in the db.props file and combined into some XML descriptor for
   database specifics?
+
+----
+
+Get rid of ${torque.home} in the standard build.xml files and define
+all the possible values that can be set and document them so that
+people can use the standard build.xml file in a known way. Things
+are a little loosy-goosy and fragile right now. What I do could still
+potentially break scarab's build because I'm not sure how things
+are being used ... but I'm getting there :-)
