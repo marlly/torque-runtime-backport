@@ -65,6 +65,9 @@
     <li>
       TRQS98: Documentation changes in ForeignKey.java
     </li>
+    <li>
+      TRQS104: Use of null Object
+    </li>
   </ul>
 </p>
 </subsection>
