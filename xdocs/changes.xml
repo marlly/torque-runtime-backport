@@ -26,6 +26,24 @@
           -->
           
           <li>
+            <strong>9 Dec 2001</strong>
+            <ul>
+              <li>
+                Modified Peer classes so that they can be unserialized prior
+                to Torque being initialized.  This situation occurs when
+                restarting catalina for example.
+                <a href=""http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/Torque.java.diff?r1=1.40&r2=1.41&diff_format=h>Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/util/BasePeer.java.diff?r1=1.18&r2=1.19&diff_format=h">Reference</a>.
+                <a href="">http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/om/Peer.vm.diff?r1=1.11&r2=1.12&diff_format=hReference</a>.
+              </li>
+              <li>
+                deprecated getTable and get<columnName> methods in MapBuilder.vm
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/om/MapBuilder.vm.diff?r1=1.5&r2=1.6&diff_format=h">Reference</a>.
+              </li>
+            </ul>
+          </li>
+
+          <li>
             <strong>12 Nov 2001</strong>
             <ul>
               <li>
