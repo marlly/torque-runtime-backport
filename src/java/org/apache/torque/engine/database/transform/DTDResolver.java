@@ -67,6 +67,7 @@ import org.xml.sax.InputSource;
  * Bug 4337703</a>
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
+ * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
 public class DTDResolver implements EntityResolver
@@ -115,6 +116,11 @@ public class DTDResolver implements EntityResolver
             System.out.println("Resolver: used database.dtd from " +
                  pkg + " package ");
             return databaseDTD;
+        }
+        else if (systemId == null)
+        {
+            System.out.println("Resolver: used " + WEB_SITE_DTD);
+            return getInputSource(WEB_SITE_DTD);
         }
         else
         {
