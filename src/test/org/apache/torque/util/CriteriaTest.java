@@ -57,7 +57,7 @@ package org.apache.torque.util.db;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.turbine.BaseTestCase;
+import org.apache.torque.BaseTestCase;
 
 /**
  * Test class for Criteria.
