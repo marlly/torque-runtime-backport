@@ -70,7 +70,7 @@
   <p>
     The Torque Maven plugin is configured via properties defined in your 
     project.properties file.  See the 
-    <a href="/torque/properties-reference.html">properties reference</a> for
+    <a href="maven-plugin/properties.html">properties reference</a> for
     details on the various properties that can be configured.
   </p>
 

@@ -104,7 +104,7 @@ torque/
 
 <p>
   For a complete list of build properties, please refer to the
-  <a href="properties-reference.html">properties reference</a>. Below
+  <a href="generator/properties-reference.html">properties reference</a>. Below
   is a short list of the primary properties you should be interested in.
 </p>
 
