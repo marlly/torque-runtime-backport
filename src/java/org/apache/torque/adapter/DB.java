@@ -320,6 +320,9 @@ public abstract class DB implements Serializable, IDMethod
      * return true.
      *
      * @return True if writing large objects to the DB requires a transaction.
+     * @deprecated The hack involving an oid mapping for VARBINARY
+     * which necessitated use of this method for Postgres has been
+     * obviated by use of the Postgres bytea data type.
      */
     public boolean objectDataNeedsTrans()
     {
