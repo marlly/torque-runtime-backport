@@ -84,6 +84,16 @@ import org.apache.log4j.Category;
  */
 class ConnectionPool implements ConnectionEventListener
 {
+
+    /** Default maximum Number of connections from this pool: One */
+    public static final int DEFAULT_MAX_CONNECTIONS = 1;
+
+    /** Default Expiry Time for a pool: 1 hour */
+    public static final int DEFAULT_EXPIRY_TIME = 60 * 60 * 1000;
+
+    /** Default Connect Wait Timeout: 10 Seconds */
+    public static final int DEFAULT_CONNECTION_WAIT_TIMEOUT = 10 * 1000;
+
     /**
      * Pool containing database connections.
      */
@@ -112,12 +122,12 @@ class ConnectionPool implements ConnectionEventListener
     /**
      * The maximum number of database connections that can be created.
      */
-    private int maxConnections;
+    private int maxConnections = DEFAULT_MAX_CONNECTIONS;
 
     /**
      * The amount of time in milliseconds that a connection will be pooled.
      */
-    private int expiryTime; // 1 hour
+    private int expiryTime = DEFAULT_EXPIRY_TIME;
 
     /**
      * Counter that keeps track of the number of threads that are in
@@ -132,7 +142,7 @@ class ConnectionPool implements ConnectionEventListener
         = Category.getInstance(ConnectionPool.class.getName());
 
     /** Interval (in seconds) that the monitor thread reports the pool state */
-    private int logInterval;
+    private int logInterval = 0;
 
     /** Monitor thread reporting the pool state */
     private Monitor monitor;
@@ -141,7 +151,7 @@ class ConnectionPool implements ConnectionEventListener
      * Amount of time a thread asking the pool for a cached connection will
      * wait before timing out and throwing an error.
      */
-    private long connectionWaitTimeout;
+    private long connectionWaitTimeout = DEFAULT_CONNECTION_WAIT_TIMEOUT;
 
     /** The ConnectionPoolDataSource  */
     private ConnectionPoolDataSource cpds;
@@ -175,40 +185,35 @@ class ConnectionPool implements ConnectionEventListener
         this.cpds = cpds;
         this.username = username;
         this.password = password;
-        if (maxConnections > 0)
-        {
-            this.maxConnections = maxConnections;
-        }
-        else
-        {
-            this.maxConnections = 1;
-        }
-        if (expiryTime > 0)
-        {
-            this.expiryTime = expiryTime * 1000;
-        }
-        else
-        {
-            this.expiryTime = 3600 * 1000; // one hour
-        }
-        if (connectionWaitTimeout > 0)
-        {
-            this.connectionWaitTimeout = connectionWaitTimeout * 1000;
-        }
-        else
-        {
-            this.connectionWaitTimeout = 10 * 1000; // ten seconds
-        }
-        this.logInterval = logInterval * 1000;
 
-        // Create monitor thread
-        monitor = new Monitor();
-        // Indicate that this is a system thread. JVM will quit only when there
-        // are no more active user threads. Settings threads spawned internally
-        // by Torque as daemons allows commandline applications using Torque
-        // to terminate in an orderly manner.
-        monitor.setDaemon(true);
-        monitor.start();
+        this.maxConnections =
+            (maxConnections > 0) ? maxConnections : DEFAULT_MAX_CONNECTIONS;
+
+        this.expiryTime =
+            1000 * ((expiryTime > 0) ? expiryTime : DEFAULT_EXPIRY_TIME);
+
+        this.connectionWaitTimeout =
+            1000 * ((connectionWaitTimeout > 0)
+                    ? connectionWaitTimeout 
+                    : DEFAULT_CONNECTION_WAIT_TIMEOUT);
+
+        this.logInterval = 1000 * logInterval;
+
+        if (logInterval > 0)
+        {
+            category.debug("Starting Pool Monitor Thread with Log Interval " 
+                           + logInterval + " Milliseconds");
+
+            // Create monitor thread
+            monitor = new Monitor();
+
+            // Indicate that this is a system thread. JVM will quit only
+            // when there are no more active user threads. Settings threads
+            // spawned internally by Torque as daemons allows commandline
+            // applications using Torque to terminate in an orderly manner.
+            monitor.setDaemon(true);
+            monitor.start();
+        }
     }
 
     /**
