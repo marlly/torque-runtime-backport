@@ -271,17 +271,6 @@ public class TableMap implements IDMethod, java.io.Serializable
     }
 
     /**
-     * Get the information used to generate a primary key using a sequence.
-     *
-     * @return information used to generate a primary key
-     * @deprecated Use getPrimaryKeyMethodInfo
-     */
-    public Object getSequenceInfo()
-    {
-        return getPrimaryKeyMethodInfo();
-    }
-
-    /**
      * Get a ColumnMap[] of the columns in this table.
      *
      * @return A ColumnMap[].
@@ -312,8 +301,8 @@ public class TableMap implements IDMethod, java.io.Serializable
         }
         catch (Exception e)
         {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -501,17 +490,6 @@ public class TableMap implements IDMethod, java.io.Serializable
                 break;
             }
         }
-    }
-
-    /**
-     * Sets the sequence information needed to generate a key
-     *
-     * @param pkInfo information needed to generate a key
-     * @deprecated  Use setPrimaryKeyMethodInfo
-     */
-    public void setSequenceInfo(Object pkInfo)
-    {
-        setPrimaryKeyMethodInfo(pkInfo);
     }
 
     /**
