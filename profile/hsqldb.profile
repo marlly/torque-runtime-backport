@@ -8,7 +8,7 @@ torque.defaultDatabase = bookstore
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:hsqldb:sqltest
 
-lib.dir = ../lib
+lib.dir = lib
 
 # -------------------------------------------------------------------
 #

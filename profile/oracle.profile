@@ -1,15 +1,15 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/classes12.jar
-#torque.idMethod = idbroker
-torque.idMethod = native
+torque.testDatabaseJar = ${maven.home}/repository/oracle-jdbc14/jars/oracle-jdbc14-9.0.2.1.jar
+torque.idMethod = idbroker
+#torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
+torque.sqlTest.databaseUrl = jdbc:oracle:thin:@alpha.tucana.at:1521:oracle
 
-lib.dir = ../lib
+lib.dir = lib
 
 # -------------------------------------------------------------------
 #
@@ -66,13 +66,13 @@ torque.useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-torque.database.createUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
-torque.database.buildUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
-torque.database.url = jdbc:oracle:thin:@192.168.0.1:1521:oracle
+torque.database.createUrl = jdbc:oracle:thin:@alpha.tucana.at:1521:oracle
+torque.database.buildUrl = jdbc:oracle:thin:@alpha.tucana.at:1521:oracle
+torque.database.url = jdbc:oracle:thin:@alpha.tucana.at:1521:oracle
 torque.database.driver = oracle.jdbc.driver.OracleDriver
 torque.database.user = torque
 torque.database.password = torque
-torque.database.host = 192.168.0.1
+torque.database.host = alpha.tucana.at
 torque.database.schema = TORQUE
 
 # Tells JDBC task that javaName attribute for the tables and columns

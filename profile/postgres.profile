@@ -9,7 +9,7 @@ torque.defaultDatabase = bookstore
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:postgresql://127.0.0.1:5432/sqltest
 
-lib.dir = ../lib
+lib.dir = lib
 
 # -------------------------------------------------------------------
 #

@@ -53,9 +53,12 @@ torque.basePrefix=Base
 torque.addSaveMethod=true
 torque.addGetByNameMethod=true
 torque.complexObjectModel=true
+#torque.complexObjectModel=false
 torque.addTimeStamp=true
 torque.addIntakeRetrievable=false
+#torque.addIntakeRetrievable=true
 torque.useManagers=true
+#torque.useManagers=false
 
 # -------------------------------------------------------------------
 #
