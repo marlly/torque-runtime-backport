@@ -2,27 +2,46 @@
 
 <project name="Torque" default="test" basedir=".">
 
-  <!--
+  <!-- ============================================================== -->
+  <!-- T O R Q U E  T E S T S                                         -->
+  <!-- ============================================================== -->
+  <!-- These are meant to be the comprehensive tests for Torque.      -->
+  <!-- ============================================================== -->
+
+  <target 
+    name="test">
     
-    These are the targets that we need tests for:
-    
-    project-datadtd
-    project-datadump
-    project-datasql
-    project-jdbc
-    project-om
-    project-om-classpath
-    project-sql
-    project-sql-classpath
-    project-sql2xml
+    <antcall target="test-generative"/>
+    <antcall target="test-runtime"/>
   
-    The tests will be run from the distribution that is
-    produced by the build process.
-  
-  -->
+  </target>
+
+  <!-- ============================================================== -->
+  <!-- G E N E R A T I V E  T E S T S                                 -->
+  <!-- ============================================================== -->
+  <!-- These are the tests for the torque tests which are             -->
+  <!-- primarily generative in nature.                                -->
+  <!--                                                                -->
+  <!-- The tests will be run from the distribution that is            -->
+  <!-- produced by the build process. This is a test of Torque's      -->
+  <!-- generative abilities. We still need tests for Torque's         -->
+  <!-- runtime abilities.                                             -->
+  <!--                                                                -->
+  <!-- These are the tasks that we will be testing:                   -->
+  <!--                                                                -->
+  <!-- project-datadtd                                                -->
+  <!-- project-datadump                                               -->
+  <!-- project-datasql                                                -->
+  <!-- project-jdbc                                                   -->
+  <!-- project-om                                                     -->
+  <!-- project-om-classpath	                                        -->
+  <!-- project-sql                                                    -->
+  <!-- project-sql-classpath                                          -->
+  <!-- project-sql2xml                                                -->
+  <!-- ============================================================== -->
 
   <target
-    name="test">
+    name="test-generative">
     
     <antcall target="test-project-datadtd"/>
     <antcall target="test-project-datadump"/>
@@ -70,6 +89,15 @@
   
   <target
     name="test-project-sql2xml">
+  </target>
+
+  <!-- ============================================================== -->
+  <!-- R U N T I M E  T E S T S                                       -->
+  <!-- ============================================================== -->
+
+  <target
+    name="test-runtime">
+  
   </target>
 
 </project>
