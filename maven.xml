@@ -15,9 +15,7 @@
   <!-- copies the templates, dtd, .. to the ${maven.build.dest} to        -->
   <!-- include them in the jar file                                       -->
   <!-- ================================================================== -->
-
   <postGoal name="java:compile">
-
     <!-- copy database.dtd to the right place -->
     <copy
       file="${maven.src.dir}/dtd/database.dtd"
@@ -34,7 +32,6 @@
     <copy todir="${maven.build.dest}">
       <fileset dir="${maven.src.dir}/templates" />
     </copy>
-
   </postGoal>
 
   <!-- ================================================================== -->
@@ -43,9 +40,7 @@
   <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
   <!-- to include them in the binary dists                                -->
   <!-- ================================================================== -->
-
   <preGoal name="dist:build-bin">
-
     <!-- copy templates to the right place -->
     <copy todir="${maven.dist.bin.assembly.dir}/templates">
       <fileset dir="${maven.src.dir}/templates" />
@@ -74,8 +69,49 @@
       file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"
       todir="${maven.dist.bin.assembly.dir}/lib"
     />
-
   </preGoal>
+
+  <!-- ================================================================== -->
+  <!-- D I S T : L I T E                                                  -->
+  <!-- ================================================================== -->
+  <!-- binary distribution without jars used by scarab                    -->
+  <!-- ================================================================== -->
+  <goal name="dist:lite"
+        prereqs="java:jar"
+        description="distribution without dependency jars">
+
+    <!-- copy templates to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/templates">
+      <fileset dir="${maven.src.dir}/templates" />
+    </copy>
+
+    <!-- copy schema files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/schema">
+      <fileset dir="${maven.src.dir}/schema" />
+    </copy>
+
+    <!-- copy master files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}/master">
+      <fileset dir="${maven.src.dir}/conf/master" />
+    </copy>
+
+    <!-- copy config files to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}">
+      <fileset dir="${maven.src.dir}/conf" />
+    </copy>
+
+    <!-- Copy Jars -->
+    <copy todir="${maven.dist.bin.assembly.dir}/lib">
+      <fileset dir="${maven.build.dir}">
+        <include name="${maven.final.name}.jar"/>
+      </fileset>
+    </copy>
+
+    <!-- Create a zip file -->
+    <zip zipfile="${maven.build.dir}/${maven.final.name}.zip">
+      <zipfileset dir="${maven.dist.bin.assembly.dir}"/>
+    </zip>
+  </goal>
 
   <!-- ================================================================== -->
   <!-- R U N T I M E T E S T                                              -->
