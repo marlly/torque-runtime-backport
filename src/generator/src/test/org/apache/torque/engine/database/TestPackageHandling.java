@@ -29,6 +29,7 @@ public class TestPackageHandling extends TestCase
      * test if the tables get the package name from the properties file
      */
     public void testDefaultPackageName()
+            throws Exception
     {
         xmlToAppData = new XmlToAppData("mysql", "defaultpackage", null);
         appData = xmlToAppData.parseFile(
@@ -43,6 +44,7 @@ public class TestPackageHandling extends TestCase
      * test if the tables get the package name from the database tag
      */
     public void testDatabasePackageName()
+            throws Exception
     {
         xmlToAppData = new XmlToAppData("mysql", "defaultpackage", null);
         appData = xmlToAppData.parseFile(
