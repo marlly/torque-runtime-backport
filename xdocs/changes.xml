@@ -9,11 +9,6 @@
 
   <body>
 
-<section name="Torque 3.1-alpha2">
-<p>
-  Changes between Torque 3.1-alpha1 and 3.1-alpha2. <br/>
-</p>
-
 <section name="Torque 3.1-alpha3 dev">
 <p>
   Changes between Torque 3.1-alpha2 and the unreleased 3.1-alpha3. <br/>
@@ -27,10 +22,19 @@
       initialization woes and allow multiple instances of Torque per
       ClassLoader.
     </li>
+    <li>
+      The generated schema-data.dtd has been changed to allow any order of 
+      table data entries.
+    </li>
   </ul>
 </p>
 </subsection>
 </section>
+
+<section name="Torque 3.1-alpha2">
+<p>
+  Changes between Torque 3.1-alpha1 and 3.1-alpha2. <br/>
+</p>
 
 <subsection name="Changes that could (will) break older environments">
 <p>
