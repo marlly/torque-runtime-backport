@@ -145,5 +145,13 @@
     <column name="class" javaName="JavaClass" required="false" type="VARCHAR"/>
     <column name="package" javaName="JavaPackage" required="false" type="VARCHAR"/>
   </table>
--->  
+-->
+
+  <!-- BOOLEANCHAR not working? -->
+  <table name="boolean_check" idMethod="none">
+    <column name="test_key" required="true" primaryKey="true" type="CHAR" size="10" />
+    <column name="bint_value" required="true" type="BOOLEANINT" />
+    <column name="bchar_value" required="true" type="BOOLEANCHAR" />
+  </table>
+  
 </database>

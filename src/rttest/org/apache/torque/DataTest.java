@@ -58,9 +58,12 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
+import org.apache.torque.om.StringKey;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
+import org.apache.torque.test.BooleanCheck;
+import org.apache.torque.test.BooleanCheckPeer;
 import org.apache.torque.test.NullValueTable;
 import org.apache.torque.util.Criteria;
 import org.apache.torque.test.MultiPk;
@@ -109,6 +112,16 @@ public class DataTest extends BaseTestCase
                     book.save();
                 }
             }
+            BooleanCheck bc = new BooleanCheck();
+            bc.setTestKey("t1");
+            bc.setBintValue(true);
+            bc.setBcharValue(true);
+            bc.save();
+            bc = new BooleanCheck();
+            bc.setTestKey("f1");
+            bc.setBintValue(false);
+            bc.setBcharValue(false);
+            bc.save();
         }
         catch (Exception ex)
         {
@@ -193,4 +206,29 @@ public class DataTest extends BaseTestCase
 			ex.printStackTrace();
 		}
     }
+    
+    /**
+     * test boolean values
+     */
+    public void testBooleanValues()
+    {
+        try
+        {
+            BooleanCheck bc = BooleanCheckPeer.retrieveByPK(new StringKey("t1"));
+            assertTrue("BOOLEANINT should be true but is: " 
+                    + bc.getBintValue(), bc.getBintValue());
+            assertTrue("BOOLEANCHAR should be true but is: " 
+                    + bc.getBcharValue(), bc.getBcharValue());
+            bc = BooleanCheckPeer.retrieveByPK(new StringKey("f1"));
+            assertFalse("BOOLEANINT should be false but is: " 
+                    + bc.getBintValue(), bc.getBintValue());
+            assertFalse("BOOLEANCHAR should be false but is: " 
+                    + bc.getBcharValue(), bc.getBcharValue());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+    
 }
