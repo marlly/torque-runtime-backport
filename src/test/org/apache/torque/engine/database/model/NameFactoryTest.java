@@ -161,7 +161,7 @@ public class NameFactoryTest extends BaseTestCase
         return suite;
     }
 
-    protected void setUp()
+    public void setUp()
     {
         AppData appData =
             new AppData(DATABASE_TYPE, "src/templates/sql/base/");
