@@ -2,6 +2,10 @@
 ALTER TABLE $table.Name
     ADD CONSTRAINT $fk.Name FOREIGN KEY ($fk.LocalColumnNames)
     REFERENCES $fk.ForeignTableName ($fk.ForeignColumnNames)
+## Oracle only supports "on delete cascade"
+#if ($fk.hasOnDelete() && $fk.OnDelete.equalsIgnoreCase("cascade"))
+    ON DELETE $fk.OnDelete 
+#end
 #if ($fk.hasOnUpdate())
 ON UPDATE $fk.OnUpdate
 #end
