@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.transform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,12 +26,12 @@ package org.apache.torque.engine.database.transform;
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
+ *    "Apache Torque" must not be used to endorse or promote products
  *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    "Apache Torque", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -88,7 +88,6 @@ public class SQLToAppData
     private Database appDataDB;
     private int count;
     private String databaseType;
-    private String basePropsFilePath;
 
     /**
      * Create a new class with an input Reader
@@ -109,12 +108,10 @@ public class SQLToAppData
      * @param databaseType
      * @param basePropsFilePath
      */
-    public SQLToAppData(String sqlFile, String databaseType,
-                        String basePropsFilePath)
+    public SQLToAppData(String sqlFile, String databaseType)
     {
         this.sqlFile = sqlFile;
         this.databaseType = databaseType;
-        this.basePropsFilePath = basePropsFilePath;
     }
 
     /**
@@ -572,7 +569,7 @@ public class SQLToAppData
     public AppData execute() throws IOException, ParseException
     {
         count = 0;
-        appData = new AppData(databaseType, basePropsFilePath);
+        appData = new AppData(databaseType);
         appDataDB = new Database();
         appData.addDatabase(appDataDB);
 

@@ -26,12 +26,12 @@ package org.apache.torque.engine.database.model;
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
+ *    "Apache Torque" must not be used to endorse or promote products
  *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    "Apache Torque", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -58,9 +58,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.torque.engine.EngineException;
+import org.apache.torque.engine.platform.Platform;
+import org.apache.torque.engine.platform.PlatformFactory;
 
 import org.xml.sax.Attributes;
 
@@ -360,18 +361,13 @@ public class Database
     }
 
     /**
-     * Returns the value of the named property from this database's
-     * <code>db.props</code> file.
+     * Returns the Platform implementation for this database.
      *
-     * @param name The name of the property to retrieve the value of.
-     * @return The value of the specified property.
-     * @exception EngineException Couldn't access properties.
+     * @return a Platform implementation
      */
-    protected String getProperty(String name)
-        throws EngineException
+    protected Platform getPlatform()
     {
-        Properties p = getAppData().getIdiosyncrasies(databaseType);
-        return (p == null ? null : p.getProperty(name));
+        return PlatformFactory.getPlatformFor(databaseType);
     }
 
     /**

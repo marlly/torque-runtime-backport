@@ -26,12 +26,12 @@ package org.apache.torque.engine.database.model;
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
+ *    "Apache Torque" must not be used to endorse or promote products
  *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    "Apache Torque", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -91,7 +91,7 @@ public class TableTest extends TestCase
     public void testIdMethodHandling()
             throws Exception
     {
-        xmlToAppData = new XmlToAppData("mysql", "defaultpackage", null);
+        xmlToAppData = new XmlToAppData("mysql", "defaultpackage");
         appData = xmlToAppData.parseFile(
             "src/test/org/apache/torque/engine/database/model/tabletest-schema.xml");
         Database db = appData.getDatabase("iddb");

@@ -26,12 +26,12 @@ package org.apache.torque.engine.database.transform;
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "Apache" and "Apache Software Foundation" and
- *    "Apache Turbine" must not be used to endorse or promote products
+ *    "Apache Torque" must not be used to endorse or promote products
  *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without
+ *    "Apache Torque", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -127,13 +127,10 @@ public class XmlToAppData extends DefaultHandler
      *
      * @param databaseType The type of database for the application.
      * @param defaultPackage the default java package used for the om
-     * @param basePropsFilePath The base of the path to the properties
-     * file, including trailing slash.
      */
-    public XmlToAppData(String databaseType, String defaultPackage,
-                        String basePropsFilePath)
+    public XmlToAppData(String databaseType, String defaultPackage)
     {
-        app = new AppData(databaseType, basePropsFilePath);
+        app = new AppData(databaseType);
         this.defaultPackage = defaultPackage;
         firstPass = true;
     }
@@ -218,16 +215,15 @@ public class XmlToAppData extends DefaultHandler
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException
     {
-		try 
-		{
-			return new DTDResolver().resolveEntity(publicId, systemId);
-		} 
-		catch (Exception e) 
-		{
-			throw new SAXException(e);
-		}
+        try
+        {
+            return new DTDResolver().resolveEntity(publicId, systemId);
+        }
+        catch (Exception e)
+        {
+            throw new SAXException(e);
+        }
     }
-
 
     /**
      * Handles opening elements of the xml file.
