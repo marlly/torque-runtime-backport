@@ -57,6 +57,8 @@ package org.apache.torque.engine.database.model;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.torque.TorqueException;
+
 /**
  * A name generation factory.
  *
@@ -70,6 +72,12 @@ public class NameFactory
      */
     public static final String DEFAULT_GENERATOR =
         DefaultNameGenerator.class.getName();
+
+    /**
+     * The fully qualified class name of the global name generator.
+     */
+    public static final String GLOBAL_GENERATOR =
+        GlobalNameGenerator.class.getName();
 
     /**
      * The single instance of this class.
@@ -133,22 +141,24 @@ public class NameFactory
      * @param algorithmName The fully qualified class name of the
      * {@link org.apache.torque.engine.database.model.NameGenerator}
      * implementation to use to generate names.
-     * @param components Inputs used to generate a name.
+     * @param inputs Inputs used to generate a name.
      * @return The generated name.
      */
-    public static String generateName(String algorithmName, List components)
+    public static String generateName(String algorithmName, List inputs)
+        throws TorqueException
     {
         NameGenerator algorithm = instance.getAlgorithm(algorithmName);
-        return algorithm.generateName(components);
+        return algorithm.generateName(inputs);
     }
 
     /**
      * Produces a name using the default generator.
      *
-     * @see #generateName(String algorithmName, List components)
+     * @see #generateName(String algorithmName, List inputs)
      */
-    public static String generateName(List components)
+    public static String generateName(List inputs)
+        throws TorqueException
     {
-        return generateName(DEFAULT_GENERATOR, components);
+        return generateName(DEFAULT_GENERATOR, inputs);
     }
 }
