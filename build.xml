@@ -15,6 +15,7 @@
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${log4j.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-util.jar}"/>
     <pathelement location="${junit.jar}"/>
   </path>
@@ -33,6 +34,7 @@
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
     <echo message="junit.jar = ${junit.jar}"/>
+    <echo message="commons-collections.jar = ${commons-collections.jar}"/>
     <echo message="commons-util.jar = ${commons-util.jar}"/>
   </target>
 
@@ -76,6 +78,12 @@
     <available
       classname="org.apache.log4j.Category" 
       property="log4j.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org.apache.commons.collections.ExtendedProperties"
+      property="commons-collections.present"
       classpathref="classpath"
     />
 
@@ -130,6 +138,14 @@
     </antcall>
   </target>
 
+  <target name="check.commons-collections"
+          unless="commons-collections.present">
+    <antcall target="property-warning">
+      <param name="name" value="commons-collections.jar"/>
+      <param name="value" value="${commons-collections.jar}"/>
+    </antcall>
+  </target>
+
   <target name="check.commons-util" unless="commons-util.present">
     <antcall target="property-warning">
       <param name="name" value="commons-util.jar"/>
@@ -167,7 +183,8 @@
   <!-- ================================================================== -->
   
   <target name="prepare" 
-    depends="init,check.velocity,check.xerces,check.village,check.log4j,check.commons-util,check.jdbc,env">
+    depends="init,check.velocity,check.xerces,check.village,check.log4j,
+             check.commons-collections,check.commons-util,check.jdbc,env">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dest}"/>
@@ -424,6 +441,7 @@
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-collectiosn.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-util.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
 
