@@ -41,7 +41,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static final String TABLE_NAME = "$table.Name";
 
     /**
-     * @returns the map builder for this peer
+     * @return the map builder for this peer
      */
     public static MapBuilder getMapBuilder()
         throws TorqueException
@@ -174,36 +174,36 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         #foreach ($child in $col.Children)
     /** A key representing a particular subclass */
-    public static final $col.JavaNative CLASSKEY_$child.Key.toUpperCase() = 
+    public static final $col.JavaNative CLASSKEY_$child.Key.toUpperCase() =
         $quote$child.Key$quote;
 
     /** A class that can be returned by this peer. */
-    public static final String CLASSNAME_$child.Key.toUpperCase() = 
+    public static final String CLASSNAME_$child.Key.toUpperCase() =
         "${package}.$child.ClassName";
 
     /** A class that can be returned by this peer. */
-    public static final Class CLASS_$child.Key.toUpperCase() = 
+    public static final Class CLASS_$child.Key.toUpperCase() =
         initClass(CLASSNAME_$child.Key.toUpperCase());
         #end
     #end
 #end
 
-    /** 
-     * Method to do inserts 
+    /**
+     * Method to do inserts
      */
-    public static ObjectKey doInsert( Criteria criteria ) 
+    public static ObjectKey doInsert( Criteria criteria )
         throws TorqueException
     {
         return $basePrefix${table.JavaName}Peer
             .doInsert( criteria, (DBConnection) null );
     }
 
-    /** 
+    /**
      * Method to do inserts.  This method is to be used during a transaction,
-     * otherwise use the doInsert(Criteria) method.  It will take care of 
-     * the connection details internally. 
+     * otherwise use the doInsert(Criteria) method.  It will take care of
+     * the connection details internally.
      */
-    public static ObjectKey doInsert( Criteria criteria, DBConnection dbCon ) 
+    public static ObjectKey doInsert( Criteria criteria, DBConnection dbCon )
         throws TorqueException
     {
      #foreach ($col in $table.Columns)
@@ -548,7 +548,8 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * Method to do updates.
      *
-     * @param Criteria object containing data that is used to create the UPDATE statement.
+     * @param criteria object containing data that is used to create the UPDATE
+     *        statement.
      */
     public static void doUpdate(Criteria criteria) throws TorqueException
     {
@@ -561,9 +562,12 @@ public abstract class $basePrefix${table.JavaName}Peer
      * otherwise use the doUpdate(Criteria) method.  It will take care of
      * the connection details internally.
      *
-     * @param Criteria object containing data that is used to create the UPDATE statement.
+     * @param criteria object containing data that is used to create the UPDATE
+     *        statement.
+     * @param dbCon the connection to use
      */
-    public static void doUpdate(Criteria criteria, DBConnection dbCon) throws TorqueException
+    public static void doUpdate(Criteria criteria, DBConnection dbCon)
+            throws TorqueException
     {
         Criteria selectCriteria = new
             Criteria(DATABASE_NAME, 2);
@@ -629,7 +633,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * Method to do deletes.
      *
-     * @param Criteria object containing data that is used DELETE from database.
+     * @param criteria object containing data that is used DELETE from database.
      */
      public static void doDelete(Criteria criteria) throws TorqueException
      {
@@ -642,11 +646,12 @@ public abstract class $basePrefix${table.JavaName}Peer
      * otherwise use the doDelete(Criteria) method.  It will take care of
      * the connection details internally.
      *
-     * @param Criteria object containing data that is used DELETE from database.
+     * @param criteria object containing data that is used DELETE from database.
+     * @param dbCon the connection to use
      */
-     public static void doDelete(Criteria criteria, DBConnection dbCon)
+    public static void doDelete(Criteria criteria, DBConnection dbCon)
         throws TorqueException
-     {
+    {
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -809,7 +814,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * Retrieve a single object by pk
      *
-     * @param ObjectKey pk
+     * @param pk the primary key
      */
     public static $table.JavaName ${retrieveMethod}( ObjectKey pk )
         throws TorqueException
@@ -832,8 +837,8 @@ public abstract class $basePrefix${table.JavaName}Peer
     /**
      * Retrieve a single object by pk
      *
-     * @param ObjectKey pk
-     * @param DBConnection dbcon
+     * @param pk the primary key
+     * @param dbcon the connection to use
      */
     public static $table.JavaName ${retrieveMethod}( ObjectKey pk, DBConnection dbcon )
         throws TorqueException
@@ -862,11 +867,10 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
     }
 
-
-    /** 
+    /**
      * Retrieve a multiple objects by pk
      *
-     * @param ObjectKey pk
+     * @param pks List of primary keys
      */
     public static List ${retrieveMethod}s( List pks )
         throws TorqueException
@@ -886,11 +890,11 @@ public abstract class $basePrefix${table.JavaName}Peer
         return(retVal);
     }
 
-    /** 
+    /**
      * Retrieve a multiple objects by pk
      *
-     * @param List pks
-     * @param DBConnection dbcon
+     * @param pks List of primary keys
+     * @param dbcon the connection to use
      */
     public static List ${retrieveMethod}s( List pks, DBConnection dbcon )
         throws TorqueException
@@ -923,11 +927,11 @@ public abstract class $basePrefix${table.JavaName}Peer
                     #set ( $i = $i + 1 )
                 #end
                 criteria.or(c0);
-            }            
+            }
   #end
         objs = doSelect(criteria, dbcon);
         }
-        return objs;            
+        return objs;
     }
 
 #end ## ends if($table.PrimaryKeys.size() > 0)
@@ -940,7 +944,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 #foreach ($col in $table.PrimaryKeys)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
-     * @param $cjtype $clo
+     * @param $clo $cjtype
 #end
      */
     public static $table.JavaName ${retrieveMethod}(
@@ -981,9 +985,9 @@ public abstract class $basePrefix${table.JavaName}Peer
 #foreach ($col in $table.PrimaryKeys)
     #set ( $clo=$col.Name.toLowerCase() )
     #set ( $cjtype= $col.JavaNative )
-     * @param $cjtype $clo
+     * @param $clo $cjtype
 #end
-     * @param DBConnection dbcon
+     * @param dbcon DBConnection
      */
     public static $table.JavaName ${retrieveMethod}(
 #foreach ($col in $table.PrimaryKeys)
@@ -1043,7 +1047,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      #set ($interfaceName = $joinTable.JavaName)
      #if ($joinTable.Interface)
        #set ($interfaceName = $joinTable.Interface)
-     #end    
+     #end
 
      #if ($partJoinName == "")
         #set ( $joinColumnId = $joinClassName )
@@ -1328,7 +1332,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         #set ($interfaceName = $joinTable.JavaName)
         #if ($joinTable.Interface)
             #set ($interfaceName = $joinTable.Interface)
-        #end    
+        #end
 
         #if (!$joinClassName.equals($excludeClassName))
             #set ( $partJoinName = "" )
@@ -1381,9 +1385,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     #end
   #end
             results.add(obj1);
-
         }
-
         return results;
     }
  #end
@@ -1391,7 +1393,6 @@ public abstract class $basePrefix${table.JavaName}Peer
 #end
 
 ## ------------------------------------------------------------
-
 
 #if (!$table.isAlias())
     /**
@@ -1405,7 +1406,4 @@ public abstract class $basePrefix${table.JavaName}Peer
         return Torque.getDatabaseMap(DATABASE_NAME).getTable(TABLE_NAME);
     }
 #end ## ends if (!$table.isAlias())
-
-
 }
-
