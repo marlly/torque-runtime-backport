@@ -110,6 +110,16 @@ public abstract class AbstractDataSourceFactory
                     Object value = ConvertUtils.convert(propVal, propertyType);
                     PropertyUtils
                         .setMappedProperty(ds, property, subProp, value);
+
+                    if (category.isDebugEnabled())
+                    {
+                        category.debug("setMappedProperty(" 
+                                       + ds + ", "
+                                       + property + ", "
+                                       + subProp + ", "
+                                       + value 
+                                       + ")");
+                    }
                 }
             }
             else
@@ -119,6 +129,15 @@ public abstract class AbstractDataSourceFactory
                 Object value =
                     ConvertUtils.convert(c.getString(property), propertyType);
                 PropertyUtils.setSimpleProperty(ds, property, value);
+
+                if (category.isDebugEnabled())
+                {
+                    category.debug("setSimpleProperty(" 
+                                   + ds + ", "
+                                   + property + ", "
+                                   + value 
+                                   + ")");
+                }
             }
         }
         catch (Exception e)

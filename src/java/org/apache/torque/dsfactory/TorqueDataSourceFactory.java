@@ -123,22 +123,10 @@ public class TorqueDataSourceFactory
     {
         category.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
-        Configuration c = configuration.subset("connection");
-        try
-        {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
-            {
-                String key = (String) i.next();
-                category.debug("Setting datasource property: " + key);
-                setProperty(key, c, cpds);
-            }
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }
+        Configuration c = null;
+
+        c = configuration.subset("connection");
+        applyConfiguration(c, cpds);
         return cpds;
     }
 
@@ -155,22 +143,44 @@ public class TorqueDataSourceFactory
     {
         category.debug("Starting initTorqueClassic");
         TorqueClassicDataSource ds = new TorqueClassicDataSource();
-        Configuration c = configuration.subset("pool");
-        try
+
+        Configuration c = null;
+
+        c = configuration.subset("pool");
+        applyConfiguration(c, ds);
+        return ds;
+    }
+
+
+    /**
+     * Iterate over a Configuration subset and apply all
+     * properties to a passed object which must contain Bean
+     * setter and getter
+     *
+     * @param c The configuration subset
+     * @param o The object to apply the properties to
+     * @throws TorqueException if a property set fails
+     */
+    private void applyConfiguration(Configuration c, Object o)
+        throws TorqueException
+    {
+        category.debug("applyConfiguration(" + c + ", " + o + ")");
+        
+        if(c != null)
         {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
+            try
             {
-                String key = (String) i.next();
-                category.debug("Setting datasource property: " + key);
-                setProperty(key, c, ds);
+                for (Iterator i = c.getKeys(); i.hasNext();)
+                {
+                    String key = (String) i.next();
+                    setProperty(key, c, o);
+                }
+            }
+            catch (Exception e)
+            {
+                category.error(e);
+                throw new TorqueException(e);
             }
         }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }
-        return ds;
     }
 }
