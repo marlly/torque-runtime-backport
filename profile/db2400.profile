@@ -13,15 +13,15 @@ torque.sqlTest.databaseUrl = jdbc:as400://testhost/torquetest
 lib.dir = ../lib
 
 # -------------------------------------------------------------------
-# 
+#
 # T O R Q U E  C O N F I G U R A T I O N  F I L E
-# 
+#
 # -------------------------------------------------------------------
 
 project = bookstore
 
 # -------------------------------------------------------------------
-# 
+#
 #  T A R G E T  D A T A B A S E
 #
 # -------------------------------------------------------------------
@@ -29,7 +29,7 @@ project = bookstore
 database = db2400
 
 # -------------------------------------------------------------------
-# 
+#
 #  O B J E C T  M O D E L  I N F O R M A T I O N
 #
 # -------------------------------------------------------------------
@@ -57,7 +57,7 @@ addIntakeRetrievable=false
 useManagers=true
 
 # -------------------------------------------------------------------
-# 
+#
 #  D A T A B A S E  S E T T I N G S
 #
 # -------------------------------------------------------------------
@@ -71,8 +71,8 @@ createDatabaseUrl = jdbc:as400://testhost/torquetest
 buildDatabaseUrl = jdbc:as400://testhost/torquetest
 databaseUrl = jdbc:as400://testhost/torquetest
 databaseDriver = com.ibm.as400.access.AS400JDBCDriver
-databaseUser = 
-databasePassword = 
+databaseUser =
+databasePassword =
 databaseHost = testhost
 
 # Tells JDBC task that javaName attribute for the tables and columns
@@ -83,8 +83,14 @@ sameJavaName=false
 # You should NOT have to edit anything below here.
 # -------------------------------------------------------------------
 
+# -------------------------------------------------------------------------
+# The values for the ID_TABLE_ID column in the ID_TABLE start
+# at 101 for tables used in projects.
+# -------------------------------------------------------------------------
+initialID = 101
+
 # -------------------------------------------------------------------
-# 
+#
 #  T E M P L A T E  P A T H
 #
 # -------------------------------------------------------------------
@@ -92,7 +98,7 @@ sameJavaName=false
 templatePath = ../templates
 
 # -------------------------------------------------------------------
-# 
+#
 #  C O N T R O L  T E M P L A T E S
 #
 # -------------------------------------------------------------------
@@ -105,7 +111,7 @@ DataDumpControlTemplate = data/dump/Control.vm
 DataSQLControlTemplate = sql/load/Control.vm
 
 # -------------------------------------------------------------------
-# 
+#
 #  O U T P U T  D I R E C T O R Y
 #
 # -------------------------------------------------------------------
@@ -113,7 +119,7 @@ DataSQLControlTemplate = sql/load/Control.vm
 outputDirectory=src
 
 # -------------------------------------------------------------------
-# 
+#
 #  S C H E M A  D I R E C T O R Y
 #
 # -------------------------------------------------------------------

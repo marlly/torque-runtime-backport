@@ -7,20 +7,20 @@ torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
+torque.sqlTest.databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
 
 lib.dir = ../lib
 
 # -------------------------------------------------------------------
-# 
+#
 # T O R Q U E  C O N F I G U R A T I O N  F I L E
-# 
+#
 # -------------------------------------------------------------------
 
 project = bookstore
 
 # -------------------------------------------------------------------
-# 
+#
 #  T A R G E T  D A T A B A S E
 #
 # -------------------------------------------------------------------
@@ -28,7 +28,7 @@ project = bookstore
 database = oracle
 
 # -------------------------------------------------------------------
-# 
+#
 #  O B J E C T  M O D E L  I N F O R M A T I O N
 #
 # -------------------------------------------------------------------
@@ -56,7 +56,7 @@ addIntakeRetrievable=false
 useManagers=true
 
 # -------------------------------------------------------------------
-# 
+#
 #  D A T A B A S E  S E T T I N G S
 #
 # -------------------------------------------------------------------
@@ -66,9 +66,9 @@ useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
-buildDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
-databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:ORCL
+createDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
+buildDatabaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
+databaseUrl = jdbc:oracle:thin:@192.168.0.1:1521:oracle
 databaseDriver = oracle.jdbc.driver.OracleDriver
 databaseUser = torque
 databasePassword = torque
@@ -94,8 +94,14 @@ documentationFormat=html
 # You should NOT have to edit anything below here.
 # -------------------------------------------------------------------
 
+# -------------------------------------------------------------------------
+# The values for the ID_TABLE_ID column in the ID_TABLE start
+# at 101 for tables used in projects.
+# -------------------------------------------------------------------------
+initialID = 101
+
 # -------------------------------------------------------------------
-# 
+#
 #  T E M P L A T E  P A T H
 #
 # -------------------------------------------------------------------
@@ -103,7 +109,7 @@ documentationFormat=html
 templatePath = ../templates
 
 # -------------------------------------------------------------------
-# 
+#
 #  C O N T R O L  T E M P L A T E S
 #
 # -------------------------------------------------------------------
@@ -117,7 +123,7 @@ DataSQLControlTemplate = sql/load/Control.vm
 DocControlTemplate = doc/Control.vm
 
 # -------------------------------------------------------------------
-# 
+#
 #  O U T P U T  D I R E C T O R Y
 #
 # -------------------------------------------------------------------
@@ -125,7 +131,7 @@ DocControlTemplate = doc/Control.vm
 outputDirectory=src
 
 # -------------------------------------------------------------------
-# 
+#
 #  S C H E M A  D I R E C T O R Y
 #
 # -------------------------------------------------------------------

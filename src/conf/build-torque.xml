@@ -271,7 +271,7 @@
     </taskdef>
 
     <torque-sql
-      contextProperties="${templatePath}/sql/id-table/project.props"
+      contextProperties="${build.properties}"
       controlTemplate="${idTableControlTemplate}"
       suffix="-idtable-init"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
