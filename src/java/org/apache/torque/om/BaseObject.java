@@ -101,6 +101,11 @@ public abstract class BaseObject implements Persistent, Serializable
     private boolean modified = true;
 
     /**
+     * Cache the logger to avoid looking it up every time its needed.
+     */
+    private transient Category log = null;
+
+    /**
      * getter for the object primaryKey.
      *
      * @return the object primaryKey as an Object
@@ -428,7 +433,18 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     protected Category log()
     {
-     	return Category.getInstance(getClass().getName());
+        Category log = null;
+        if (this.log == null) 
+        {
+            log = Category.getInstance(getClass().getName());
+            this.log = log;
+        }
+        else 
+        {
+            log = this.log;
+        }
+        
+     	return log;
     }
 
     /**
