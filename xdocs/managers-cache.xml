@@ -40,26 +40,26 @@
 <section name="Business Object Cache">
 
   <p>
-    The no-arg constructor of BaseFooManager, the parent of FooManager, 
-    calls setRegion(region) where the String region is given by the fully 
-    qualified classname with dots replaced by underscores. 
+    If no-arg constructor of FooManager, 
+    calls setRegion(region) where the String region is the key used to
+    determine the cache, the manager will cache instances of Foo retrieved
+    via the getInstance(ObjectKey id) and getInstances(List ids) methods.
+    One possibility for the region key is the 
+    fully qualified classname with dots replaced by underscores. 
   </p>
 
   <source><![CDATA[
 
-    public BaseFooManager()
+    public FooManager()
         throws TorqueException
     {
         setRegion("net_bar_om_Foo");
-        setClassName("net.bar.om.Foo");
     }
 
   ]]></source>
 
   <p>
-    The classname setter allows the manager to instantiate alternate 
-    implementations of Foo assuming it is an interface or is subclassed.
-    (More on that later.)  The key given for the region is used in a JCS
+    The key given for the region is used in a JCS
     configuration file, cache.ccf, to set up a cache that the manager uses
     to store objects for which it is responsible. See the Stratum JCS 
     <a href="http://jakarta.apache.org/turbine/stratum/index.html">
@@ -79,10 +79,8 @@ jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
   ]]></source>
 
   <p>
-    The default is to set a region for each manager, but this behavior can be
-    modified.  A no-arg FooManager constructor could be created that does
-    not call setRegion, though it should still call setClassName, and the
-    manager will not use a cache.  There also will be no caching if JCS is 
+    It is a good idea to set a region for each manager, but this behavior 
+    is optional.  There also will be no caching if JCS is 
     not configured for the region given in the setter.
   </p>
 
@@ -180,7 +178,7 @@ public List getFoos(FooType type, boolean deleted)
     The reason for not just having the Object[] format is that keys are pooled
     and since most methods will be less than 4 arguments, object creation
     related to the cache is minimized.  Now the method will return cached
-    results as long as the results remain in the cache, there must be some
+    results as long as the results remain in the cache. So there must be some
     way to invalidate these results, if the database changes in a way that
     is likely to affect the result that should be returned by the method.
   </p>
@@ -278,7 +276,7 @@ public List getFoos(FooType type, boolean deleted)
     public FooManager()
         throws TorqueException
     {
-        super();
+        setRegion("net_bar_om_Foo");
         validFields = new HashMap();
         validFields.put(FooPeer.BAR_ID, null);
     }
