@@ -170,6 +170,7 @@ public class DBFactory
         driverToAdapterMap.put("com.sybase.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("com.sybase.jdbc2.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("weblogic.jdbc.pool.Driver", "DBWeblogic");
+        driverToAdapterMap.put("org.axiondb.jdbc.AxionDriver", "DBAxion");
 
         // add some short names to be used when drivers are not used
         driverToAdapterMap.put("as400", "DBDB2400");
@@ -186,6 +187,7 @@ public class DBFactory
         driverToAdapterMap.put("sapdb", "DBSapDB");
         driverToAdapterMap.put("sybase", "DBSybase");
         driverToAdapterMap.put("weblogic", "DBWeblogic");
+        driverToAdapterMap.put("axion", "DBAxion");
     }
 
     /**
