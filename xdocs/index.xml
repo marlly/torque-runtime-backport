@@ -32,60 +32,68 @@
         </p>
 
         <p>
-          Torque offers the following <a href="http://jakarta.apache.org/ant">
-          Ant</a> tasks:
+          Torque offers an <a href="http://jakarta.apache.org/ant">Ant</a> build
+          file (<code>build-torque.xml</code>) which could be added to your
+          project . It defines the following targets (-classpath targets load
+          the templates from the torque.jar file):
           <ul>
             <li>
-              <strong>TorqueCreateDatabase</strong><br/>
-              generates simple scripts for creating databases on various
-              platforms.
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueDataDTDTask</strong><br/>
-              generates data DTD from an XML schema describing a database
-              structure
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueDataDumpTask</strong><br/>
-              dumping data from db into XML
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueDataSQLTask</strong><br/>
-              generates SQL source from an XML data file
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueJDBCTransformTask</strong><br/>
-              generates an XML schema of an existing database from JDBC metadata
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueObjectModelTask</strong><br/>
-              generates output by using Velocity
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueSQLExecTask</strong><br/>
-              inserts a SQL file into its designated database
-            </li>
-            <p/>
-            <li>
-              <strong>TorqueSQLTask</strong><br/>
+              <strong>project-sql(-classpath)</strong><br/>
               generates SQL source from an XML schema describing a database
               structure
             </li>
             <p/>
             <li>
-              <strong>TorqueSQLTransformTask</strong><br/>
+              <strong>project-doc(-classpath)</strong><br/>
+              generates html or xml documentation for xml schemas
+            </li>
+            <p/>
+            <li>
+              <strong>project-create-db(-classpath)</strong><br/>
+              generates simple scripts for creating databases on various
+              platforms.
+            </li>
+            <p/>
+            <li>
+              <strong>project-datadtd</strong><br/>
+              generates data DTD from an XML schema describing a database
+              structure
+            </li>
+            <p/>
+            <li>
+              <strong>project-datadump</strong><br/>
+              dumping data from db into XML
+            </li>
+            <p/>
+            <li>
+              <strong>project-datasql(-classpath)</strong><br/>
+              generates SQL source from an XML data file
+            </li>
+            <p/>
+            <li>
+              <strong>project-jdbc</strong><br/>
+              generates an XML schema of an existing database from JDBC metadata
+            </li>
+            <p/>
+            <li>
+              <strong>project-om(-classpath)</strong><br/>
+              generates output by using Velocity
+            </li>
+            <p/>
+            <li>
+              <strong>project-insert-sql(-classpath)</strong><br/>
+              inserts a SQL file into its designated database
+            </li>
+            <p/>
+            <p/>
+            <li>
+              <strong>project-sql2xml</strong><br/>
               generates an xml schema from an sql schema
             </li>
             <p/>
             <li>
-              <strong>TorqueDocumentationTask</strong><br/>
-              generates html or xml documentation for xml schemas
+              <strong>id-table-init-sql(-classpath)</strong><br/>
+              generates the initialization sql for the id table
             </li>
           </ul>
         </p>
