@@ -106,7 +106,7 @@ public class Table implements IDMethod
     private Hashtable columnsByName;
     private Hashtable columnsByJavaName;
     private boolean needsTransactionInPostgres;
-    private boolean skipHeavyIndexing;
+    private boolean heavyIndexing;
 
 
     /**
@@ -167,8 +167,9 @@ public class Table implements IDMethod
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
         alias = attrib.getValue("alias");
-        skipHeavyIndexing = "true"
-            .equals(attrib.getValue("skipHeavyIndexing"));
+        heavyIndexing = "true".equals(attrib.getValue("heavyIndexing"))
+            || (!"false".equals(attrib.getValue("heavyIndexing")) && 
+                getDatabase().isHeavyIndexing());
         description = attrib.getValue("description");
     }
 
@@ -184,7 +185,7 @@ public class Table implements IDMethod
     {
         // Heavy indexing must wait until after all columns composing
         // a table's primary key have been parsed.
-        if (!skipHeavyIndexing && !getDatabase().isSkipHeavyIndexing())
+        if (heavyIndexing)
         {
             doHeavyIndexing();
         }
