@@ -29,6 +29,10 @@
 
   <release version="3.2-dev" date="in CVS">
     <action type="add" dev="tfischer">
+      It is now possible to generate simple Beans for Torque data objects.
+      Methods are supplied to create Beans from Data object and vice versa.
+    </action>
+    <action type="add" dev="tfischer">
       TRQS289: Added Thomas Vandahl's Patch to synchronize Object.vm
       with ObjectWithManager.vm.
       This contains the following:

@@ -15,10 +15,12 @@ correctGetters = $!correctGetters
     #set ( $pkbase = "${package}" )
     #set ( $pkpeer = "${package}" )
     #set ( $pkmap = "${package}.map" )
+    #set ( $pkbean = "${package}.bean" )
 
     $pkbase
     $pkpeer
     $pkmap
+    $pkbean
 
     #set ( $path = $strings.getPackageAsPath($pkpeer) )
     $files.mkdir("$outputDirectory/$path")
@@ -28,6 +30,11 @@ correctGetters = $!correctGetters
 
     #set ( $path = $strings.getPackageAsPath($pkbase) )
     $files.mkdir("$outputDirectory/$path")
+
+    #if ($generateBeans)
+      #set ( $path = $strings.getPackageAsPath($pkbean) )
+      $files.mkdir("$outputDirectory/$path")
+    #end
 
     #foreach ($tbl in $database.Tables)
       #if (!$tbl.isForReferenceOnly())
@@ -93,6 +100,20 @@ correctGetters = $!correctGetters
           #end
         #end
 
+        #if ($generateBeans)
+          #set ( $fname = "${basePrefix}${firstcap}${beanSuffix}.java" )
+          #set ( $path = "${strings.getPackageAsPath($pkbean)}$fname" )
+          $generator.parse("om/bean/Bean.vm",$path,"table",$tbl)
+        #end
+
+        #if ($generateBeans)
+          #set ( $fname = "${firstcap}${beanSuffix}.java" )
+          #set ( $path = "${strings.getPackageAsPath($pkbean)}$fname" )
+          #if (!$files.file($basePath,$path).exists())
+            $generator.parse("om/bean/ExtensionBean.vm",$path,"table",$tbl)
+          #end
+        #end
+
         #if ($tbl.ChildrenColumn)
           #set ($col = $tbl.ChildrenColumn)
           #if ($col.isEnumeratedClasses())
@@ -101,6 +122,14 @@ correctGetters = $!correctGetters
               #set ( $path = "${strings.getPackageAsPath($package)}$fname" )
               #if (!$files.file($basePath,$path).exists())
                 $generator.parse("om/MultiExtendObject.vm",$path,"child",$child)
+              #end
+
+              #if ($generateBeans)
+                #set ( $fname = "${child.ClassName}${beanSuffix}.java" )
+                #set ( $path = "${strings.getPackageAsPath($pkbean)}$fname" )
+                #if (!$files.file($basePath,$path).exists())
+                  $generator.parse("om/bean/MultiExtendBean.vm",$path,"child",$child)
+                #end
               #end
             #end
           #end

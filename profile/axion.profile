@@ -55,6 +55,7 @@ torque.complexObjectModel=true
 torque.addTimeStamp=true
 torque.addIntakeRetrievable=false
 torque.useManagers=true
+torque.generateBeans=true
 
 # -------------------------------------------------------------------
 #

@@ -285,6 +285,22 @@
         Bean-Spec compliant but break compatibility with all releases up to 3.1.1.
       </td>
     </tr>
+    <tr>
+      <td><code>torque.generateBeans</code></td>
+      <td><code>false</code></td>
+      <td>
+        If true, Torque generates a bean object for each data object,
+        plus methods to convert data objects to beans and vive versa
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.BeanSuffix</code></td>
+      <td><code>Bean</code></td>
+      <td>
+        A string to append to the name of generated Beans
+      </td>
+    </tr>
+    
     
     <tr>
       <td colspan="3"><strong> Misc. Settings </strong></td>
