@@ -71,7 +71,7 @@ import org.xml.sax.Attributes;
  */
 public class Index
 {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private String indexName;
     private Table parentTable;
