@@ -757,12 +757,19 @@ public abstract class BasePeer implements java.io.Serializable
         }
         else
         {
-            throw new Exception("Database insert attempted without anything specified to insert");
+            throw new Exception("Database insert attempted without " + 
+                "anything specified to insert");
         }
         DatabaseMap dbMap = Torque.getDatabaseMap( criteria.getDbName() );
         TableMap tableMap = dbMap.getTable(tableName);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
         IdGenerator keyGen = tableMap.getIdGenerator();
+
+        if (keyGen == null)
+        {
+            throw new Exception ("IdGenerator for: '" + tableName + 
+                "' is null.");
+        }
 
         ColumnMap pk = getPrimaryKey(criteria);
         // only get a new key value if you need to
@@ -781,12 +788,12 @@ public abstract class BasePeer implements java.io.Serializable
             {
                 if ( pk.getType() instanceof Number )
                 {
-                    id = new NumberKey( tableMap.getIdGenerator()
+                    id = new NumberKey( keyGen
                         .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) );
                 }
                 else
                 {
-                    id = new StringKey( tableMap.getIdGenerator()
+                    id = new StringKey( keyGen
                         .getIdAsString(dbCon.getConnection(), keyInfo) );
                 }
                 criteria.add( pk.getFullyQualifiedName(), id );
@@ -812,12 +819,12 @@ public abstract class BasePeer implements java.io.Serializable
         {
             if ( pk.getType() instanceof Number )
             {
-                id = new NumberKey( tableMap.getIdGenerator()
+                id = new NumberKey( keyGen
                     .getIdAsBigDecimal(dbCon.getConnection(), keyInfo) );
             }
             else
             {
-                id = new StringKey( tableMap.getIdGenerator()
+                id = new StringKey( keyGen
                     .getIdAsString(dbCon.getConnection(), keyInfo) );
             }
         }
