@@ -204,11 +204,12 @@
       controlTemplate="${DataSQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}"
       templatePath="${templatePath}"
-      outputFile="report.${project}.datasql.generation"
+      outputFile="${project}-data.sql"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
       dataXmlFile="${torque.home}/${schemaDirectory}/${project}-data.xml"
       dataDTD="${torque.home}/${schemaDirectory}/${project}-data.dtd"
       targetDatabase="${database}"
+      sqldbmap="${basedir}/${outputDirectory}/sql/sqldb.map"
     />
 
   </target>

@@ -101,9 +101,7 @@
 
     <antcall target="test-project-datadtd"/>
     <antcall target="test-project-datadump"/>
-    <!--
     <antcall target="test-project-datasql"/>
-    -->
     <antcall target="test-project-jdbc"/>
 
     <!--
@@ -193,6 +191,12 @@
   <!-- Still uses ${project} references. BAD!!! -->
   <target
     name="test-project-datasql">
+    <copy
+      todir="${torque.distDir}/schema/"
+      file="${torque.distDir}/src/bookstore-data.dtd"/>
+    <copy
+      tofile="${torque.distDir}/schema/bookstore-data.xml"
+      file="${torque.distDir}/src/bookstore-bookstore-all-data.xml"/>
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
