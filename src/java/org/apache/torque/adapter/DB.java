@@ -196,7 +196,7 @@ public abstract class DB implements Serializable, IDMethod
     }
 
     /**
-     * This method is used to chek whether the database natively
+     * This method is used to check whether the database natively
      * supports limiting the size of the resultset.
      *
      * @return True if the database natively supports limiting the
@@ -208,7 +208,7 @@ public abstract class DB implements Serializable, IDMethod
     }
 
     /**
-     * This method is used to chek whether the database natively
+     * This method is used to check whether the database natively
      * supports returning results starting at an offset position other
      * than 0.
      *
@@ -234,7 +234,7 @@ public abstract class DB implements Serializable, IDMethod
     }
 
     /**
-     * This method is used to chek whether the database supports
+     * This method is used to check whether the database supports
      * limiting the size of the resultset.
      *
      * @return The limit style for the database.

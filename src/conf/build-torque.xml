@@ -57,7 +57,7 @@
 
   <!--
     The default.properties file will map old properties to the new ones along
-    with setting the corret defaults.
+    with setting the correct defaults.
   -->
   <property resource="org/apache/torque/default.properties">
     <classpath>
