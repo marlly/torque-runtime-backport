@@ -69,6 +69,7 @@
     name="test-classpath"
     description="run the testbed using the useClasspath property">
     <property name="useClasspath" value="true"/>
+    <property name="templatePath" value="no_templatePath"/>
     <antcall target="test"/>
   </target>
 
@@ -241,7 +242,7 @@
     <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
     <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
-    <filter token="DATABASE_ADAPTER" value="${torque.databaseAdapter}"/>
+    <filter token="DATABASE_ADAPTER" value="${database}"/>
   </target>
 
   <!-- ============================================================== -->
