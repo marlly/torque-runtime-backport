@@ -245,7 +245,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the primaryKey for the object as an int.
      *
      * @param primaryKey The new primaryKey for the object.
-     * @exception Exception, This method will not throw any exceptions
+     * @exception Exception This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
      * @deprecated
@@ -259,7 +259,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object as an long.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception, This method will not throw any exceptions
+     * @exception Exception This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
      * @deprecated
@@ -273,7 +273,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception, This method will not throw any exceptions
+     * @exception Exception This method will not throw any exceptions
      * but this allows for children to override the method more easily
      *
      */
@@ -286,9 +286,8 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object as an Object.
      *
      * @param primaryKey The new PrimaryKey for the object.
-     * @exception Exception, This method will not throw any exceptions
+     * @exception Exception This method will not throw any exceptions
      * but this allows for children to override the method more easily
-     *
      */
     public void setPrimaryKey(SimpleKey[] primaryKey) throws Exception
     {
@@ -299,6 +298,8 @@ public abstract class BaseObject implements Persistent, Serializable
      * Sets the PrimaryKey for the object as an Object.
      *
      * @param primaryKey The new PrimaryKey for the object.
+     * @exception Exception This method will not throw any exceptions
+     * but this allows for children to override the method more easily
      */
     public void setPrimaryKey(ObjectKey primaryKey) throws Exception
     {
@@ -411,7 +412,7 @@ public abstract class BaseObject implements Persistent, Serializable
     public int hashCode()
     {
         ObjectKey ok = getPrimaryKey();
-        if ( ok == null)
+        if (ok == null)
         {
             return super.hashCode();
         }

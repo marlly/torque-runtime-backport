@@ -71,16 +71,13 @@ public class ComboKey extends ObjectKey
 {
     // might want to shift these to TR.props
 
-    /**
-     * The single character used to separate key values in a string.
-     */
+    /** The single character used to separate key values in a string. */
     public static final char SEPARATOR = ':';
 
-    /**
-     * The single character used to separate key values in a string.
-     */
+    /** The single character used to separate key values in a string. */
     public static final String SEPARATOR_STRING = ":";
 
+    /** The array of the keys */
     private SimpleKey[] key;
 
     /**
@@ -94,6 +91,8 @@ public class ComboKey extends ObjectKey
     /**
      * Creates a ComboKey whose internal representation is an
      * array of SimpleKeys.
+     *
+     * @param keys the key values
      */
     public ComboKey(SimpleKey[] keys)
     {
@@ -103,6 +102,8 @@ public class ComboKey extends ObjectKey
     /**
      * Creates a compound ComboKey whose internal representation is a
      * String array.
+     *
+     * @param keys the key values
      * @deprecated ambiguous unnecessary ctor will be removed.
      */
     public ComboKey(String[] keys)
@@ -113,6 +114,7 @@ public class ComboKey extends ObjectKey
     /**
      * Sets the internal representation to a String array.
      *
+     * @param keys the key values
      * @see toString()
      */
     public ComboKey(String keys)
@@ -122,6 +124,8 @@ public class ComboKey extends ObjectKey
 
     /**
      * Sets the internal representation using a SimpleKey array.
+     *
+     * @param keys the key values
      */
     public void setValue(SimpleKey[] keys)
     {
@@ -130,6 +134,8 @@ public class ComboKey extends ObjectKey
 
     /**
      * Sets the internal representation using a String array.
+     *
+     * @param keys the key values
      * @deprecated ambiguous unnecessary method will be removed.
      */
     public void setValue(String[] keys)
@@ -144,6 +150,8 @@ public class ComboKey extends ObjectKey
     /**
      * Sets the internal representation using a String of the
      * form produced by the toString method.
+     *
+     * @param keys the key values
      */
     public void setValue(String keys)
     {
@@ -196,14 +204,20 @@ public class ComboKey extends ObjectKey
         }
     }
 
+    /**
+     * Sets the internal representation using a ComboKey.
+     *
+     * @param keys the key values
+     */
     public void setValue(ComboKey keys)
     {
         setValue((SimpleKey[]) keys.getValue());
     }
 
-
     /**
      * Get the underlying object.
+     *
+     * @return the underlying object
      */
     public Object getValue()
     {
@@ -213,6 +227,9 @@ public class ComboKey extends ObjectKey
     /**
      * This method will return true if the conditions for a looseEquals
      * are met and in addition no parts of the keys are null.
+     *
+     * @param keyObj the comparison value
+     * @return whether the two objects are equal
      */
     public boolean equals(Object keyObj)
     {
@@ -248,6 +265,9 @@ public class ComboKey extends ObjectKey
      * allow any null keys parts, while the internal key may not be null
      * portions may be, and the two object will be considered equal if
      * their null portions match.
+     *
+     * @param keyObj the comparison value
+     * @return whether the two objects are equal
      */
     public boolean looseEquals(Object keyObj)
     {
@@ -295,7 +315,7 @@ public class ComboKey extends ObjectKey
 
     /**
      *
-     * @param sb
+     * @param sb the StringBuffer to append
      * @see toString()
      */
     public void appendTo(StringBuffer sb)
@@ -362,6 +382,8 @@ public class ComboKey extends ObjectKey
      * Example: <br/>
      * the ComboKey(StringKey("key1"), NumberKey(2)) is represented as
      * <code><b>Skey1:N2:</b></code>
+     *
+     * @return a String representation
      */
     public String toString()
     {

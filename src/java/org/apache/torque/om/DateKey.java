@@ -77,6 +77,9 @@ public class DateKey extends SimpleKey
     /**
      * Creates a DateKey whose internal representation is a Date
      * given by the long number given by the String
+     *
+     * @param key the key value
+     * @throws NumberFormatException if key is not valid
      */
     public DateKey(String key) throws NumberFormatException
     {
@@ -85,6 +88,8 @@ public class DateKey extends SimpleKey
 
     /**
      * Creates a DateKey
+     *
+     * @param key the key value
      */
     public DateKey(Date key)
     {
@@ -93,10 +98,12 @@ public class DateKey extends SimpleKey
 
     /**
      * Creates a DateKey that is equivalent to key.
+     *
+     * @param key the key value
      */
     public DateKey(DateKey key)
     {
-        if( key != null )
+        if (key != null)
         {
             this.key = key.getValue();
         }
@@ -108,6 +115,8 @@ public class DateKey extends SimpleKey
 
     /**
      * Sets the internal representation to a String
+     *
+     * @param key the key value
      */
     public void setValue(String key)
     {
@@ -115,8 +124,9 @@ public class DateKey extends SimpleKey
     }
 
     /**
-     * Sets the internal representation to the same object used
-     * by key.
+     * Sets the internal representation to the same object used by key.
+     *
+     * @param key the key value
      */
     public void setValue(DateKey key)
     {
@@ -144,12 +154,15 @@ public class DateKey extends SimpleKey
      * keyObj is equal to this DateKey if keyObj is a DateKey or String
      * that contains the same information this key contains.  Two ObjectKeys
      * that both contain null values are not considered equal.
+     *
+     * @param keyObj the comparison value
+     * @return whether the two objects are equal
      */
     public boolean equals(Object keyObj)
     {
         boolean isEqual = false;
 
-        if ( key != null )
+        if (key != null)
         {
             if (keyObj instanceof String)
             {
@@ -157,7 +170,7 @@ public class DateKey extends SimpleKey
             }
             // check against a DateKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof DateKey)
+            else if (keyObj instanceof DateKey)
             {
                 Object obj = ((DateKey) keyObj).getValue();
                 isEqual =  key.equals(obj);

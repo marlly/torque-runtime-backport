@@ -75,6 +75,8 @@ public class StringKey extends SimpleKey
 
     /**
      * Creates a StringKey whose internal representation is a String
+     *
+     * @param key the key value
      */
     public StringKey(String key)
     {
@@ -83,10 +85,12 @@ public class StringKey extends SimpleKey
 
     /**
      * Creates a StringKey that is equivalent to key.
+     *
+     * @param key the key value
      */
     public StringKey(StringKey key)
     {
-        if( key != null )
+        if (key != null)
         {
             this.key = key.getValue();
         }
@@ -98,6 +102,8 @@ public class StringKey extends SimpleKey
 
     /**
      * Sets the internal representation to a String
+     *
+     * @param key the key value
      */
     public void setValue(String key)
     {
@@ -105,8 +111,9 @@ public class StringKey extends SimpleKey
     }
 
     /**
-     * Sets the internal representation to the same object used
-     * by key.
+     * Sets the internal representation to the same object used by key.
+     *
+     * @param key the key value
      */
     public void setValue(StringKey key)
     {
@@ -134,12 +141,15 @@ public class StringKey extends SimpleKey
      * keyObj is equal to this StringKey if keyObj is a StringKey or String
      * that contains the same information this key contains.  Two ObjectKeys
      * that both contain null values are not considered equal.
+     *
+     * @param keyObj the comparison value
+     * @return whether the two objects are equal
      */
     public boolean equals(Object keyObj)
     {
         boolean isEqual = false;
 
-        if ( key != null )
+        if (key != null)
         {
             if (keyObj instanceof String)
             {
@@ -147,7 +157,7 @@ public class StringKey extends SimpleKey
             }
             // check against a StringKey. Two keys are equal, if their
             // internal keys equivalent.
-            else if ( keyObj instanceof StringKey)
+            else if (keyObj instanceof StringKey)
             {
                 Object obj = ((StringKey) keyObj).getValue();
                 isEqual =  key.equals(obj);
@@ -157,11 +167,13 @@ public class StringKey extends SimpleKey
     }
 
     /**
+     * get a String representation
      *
+     * @return a String representation of an empty String if the value is null
      */
     public String toString()
     {
-        if ( key != null )
+        if (key != null)
         {
             return (String) key;
         }

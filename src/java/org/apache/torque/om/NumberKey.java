@@ -78,6 +78,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     *
+     * @param key the key value
      */
     public NumberKey(String key)
     {
@@ -86,6 +88,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     *
+     * @param key the key value
      */
     public NumberKey(BigDecimal key)
     {
@@ -94,6 +98,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     *
+     * @param key the key value
      */
     public NumberKey(NumberKey key)
     {
@@ -109,6 +115,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     *
+     * @param key the key value
      */
     public NumberKey(long key)
     {
@@ -118,6 +126,8 @@ public class NumberKey extends SimpleKey
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
      * Convenience only. Not very efficient at all.
+     *
+     * @param key the key value
      */
     public NumberKey(int key)
     {
@@ -127,6 +137,8 @@ public class NumberKey extends SimpleKey
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
      * Convenience only.
+     *
+     * @param key the key value
      */
     public NumberKey(Number key)
     {
@@ -143,6 +155,9 @@ public class NumberKey extends SimpleKey
     /**
      * Sets the internal representation using a String representation
      * of a number
+     *
+     * @param key the key value
+     * @throws NumberFormatException if key is not a valid number
      */
     public void setValue(String key) throws NumberFormatException
     {
@@ -151,6 +166,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Sets the underlying object
+     *
+     * @param key the key value
      */
     public void setValue(BigDecimal key)
     {
@@ -158,8 +175,9 @@ public class NumberKey extends SimpleKey
     }
 
     /**
-     * Sets the internal representation to the same object used
-     * by key.
+     * Sets the internal representation to the same object used by key.
+     *
+     * @param key the key value
      */
     public void setValue(NumberKey key)
     {
@@ -177,7 +195,8 @@ public class NumberKey extends SimpleKey
     }
 
     /**
-     * Two ObjectKeys that both contain null values <strong>are not</strong> considered equal.
+     * Two ObjectKeys that both contain null values <strong>are not</strong>
+     * considered equal.
      *
      * @param keyObj the key to compare values to
      * @return whether the two objects are equal
@@ -230,6 +249,7 @@ public class NumberKey extends SimpleKey
     }
 
     /**
+     * @param o the comparison value
      * @return a numeric comparison of the two values
      * @throws NullPointerException when the value of the NumberKey or the
      *         comparison value is null
@@ -242,6 +262,8 @@ public class NumberKey extends SimpleKey
     /**
      * Invokes the toString() method on the object.  An empty string
      * is returned is the value is null.
+     *
+     * @return a String representation of the key value
      */
     public String toString()
     {

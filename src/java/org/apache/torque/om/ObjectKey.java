@@ -89,7 +89,7 @@ public abstract class ObjectKey implements Serializable, Comparable
      */
     public int hashCode()
     {
-        if ( key == null )
+        if (key == null)
         {
             return super.hashCode();
         }
@@ -98,6 +98,8 @@ public abstract class ObjectKey implements Serializable, Comparable
 
     /**
      * Get the underlying object.
+     *
+     * @return the underlying object
      */
     public Object getValue()
     {
@@ -118,6 +120,7 @@ public abstract class ObjectKey implements Serializable, Comparable
      * Implements the compareTo method.
      *
      * @param obj the object to compare to this object
+     * @return a numeric comparison of the two values
      */
     public int compareTo(Object obj)
     {
