@@ -22,7 +22,7 @@
   <property file="${torque.contextProperties}"/>
   <property name="lib.dir" value="lib"/>
   <property name="torque.lib.dir" value="${lib.dir}"/>
-  <property name="torque.jar" value="${torque.lib.dir}/torque-3.0-b4-dev.jar"/>
+  <property name="torque.jar" value="torque-3.0-b4-dev.jar"/>
 
   <!--
     Build the classpath. Specifically point to each file we're including to avoid 
@@ -32,25 +32,26 @@
     do a general inclusion of the torque.lib.dir to catch any drivers.
   -->
   <path id="torque-classpath">
-    <pathelement location="${torque.lib.dir}/commons-beanutils-1.4"/>
-    <pathelement location="${torque.lib.dir}/commons-collections-2.0.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-configuration-1.0-dev.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-dbcp-1.0-dev-20020806.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-lang-1.0-b1.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-logging-1.0.1.jar"/>
-    <pathelement location="${torque.lib.dir}/commons-pool-1.0.jar"/>
-    <pathelement location="${torque.lib.dir}/jcs-1.0-dev.jar"/>
-    <pathelement location="${torque.lib.dir}/jdbc-2.0.jar"/>
-    <pathelement location="${torque.lib.dir}/jndi-1.2.1.jar"/>
-    <pathelement location="${torque.lib.dir}/log4j-1.2.6.jar"/>
-    <pathelement location="${torque.lib.dir}/stratum-1.0-b3-dev.jar"/>
-    <pathelement location="${torque.lib.dir}/tomcat-naming-common.jar"/>
-    <pathelement location="${torque.jar}"/>
-    <pathelement location="${torque.lib.dir}/velocity-1.3.jar"/>
-    <pathelement location="${torque.lib.dir}/village-1.5.3.jar"/>
-    <pathelement location="${torque.lib.dir}/xercesImpl-2.0.2.jar"/>
-    <pathelement location="${torque.lib.dir}/xmlParserAPIs-2.0.2.jar"/>
+    <pathelement location="torque.jar.fullpath"/>
     <fileset dir="${torque.lib.dir}">
+      <include name="**/commons-beanutils-1.4.jar"/>
+      <include name="**/commons-collections-2.0.jar"/>
+      <include name="**/commons-configuration-1.0-dev.jar"/>
+      <include name="**/commons-dbcp-1.0-dev-20020806.jar"/>
+      <include name="**/commons-lang-1.0-b1.jar"/>
+      <include name="**/commons-logging-1.0.jar"/>
+      <include name="**/commons-pool-1.0.jar"/>
+      <include name="**/jcs-1.0-dev.jar"/>
+      <include name="**/jdbc-2.0.jar"/>
+      <include name="**/jndi-1.2.1.jar"/>
+      <include name="**/log4j-1.2.6.jar"/>
+      <include name="**/stratum-1.0-b3-dev.jar"/>
+      <include name="**/tomcat-naming-common.jar"/>
+      <include name="**/${torque.jar}"/>
+      <include name="**/velocity-1.3.jar"/>
+      <include name="**/village-1.5.3.jar"/>
+      <include name="**/xercesImpl-2.0.2.jar"/>
+      <include name="**/xmlParserAPIs-2.0.2.jar"/>
       <include name="**/*.jar"/>
     </fileset>
   </path>
@@ -59,9 +60,11 @@
     The default.properties file will map old properties to the new ones along
     with setting the corret defaults.
   -->
-  <property
-    classpath="${torque.jar}"
-    resource="org/apache/torque/default.properties"/>
+  <property resource="org/apache/torque/default.properties">
+    <classpath>
+      <path refid="torque-classpath"/>
+    </classpath>
+  </property>
 
   <!--
     Do forward declarations of all of our tasks to 
