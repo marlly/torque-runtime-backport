@@ -4,7 +4,7 @@
 torque.testDatabaseJar = ${lib.repo}/postgresql.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
-torque.databaseAdapter = DBPostgresql
+torque.databaseAdapter = DBPostgres
 
 # -------------------------------------------------------------------
 # 
