@@ -466,7 +466,7 @@
     <mkdir dir="${torque.home}/${outputDirectory}/javadoc"/>
 
     <javadoc
-      sourcepath="${torque.home}/${outputDirectory}"
+      sourcepath="${torque.home}/${outputDirectory}/java"
       packagenames="${targetPackage}.*"
       destdir="${outputDirectory}/javadoc"
       author="true"
