@@ -631,10 +631,10 @@ public class Torque implements Initializable, Configurable
             {
                 category.error(e.getMessage(), e);
             }
-        }
 
-        // Try again now that the default manager should be in the map
-        m = (AbstractBaseManager) managers.get(name);
+            // Try again now that the default manager should be in the map
+            m = (AbstractBaseManager) managers.get(name);
+        }
 
         return m;
     }
