@@ -148,6 +148,7 @@
          by each tester. -->
     <echo message="Copying profile into distribution directory: ${torque.testProfile}"/>
 
+    <filter token="APPLICATION_ROOT" value="."/>
     <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
     <filter token="DATABASE_URL" value="${torque.database.url}"/>
     <filter token="DATABASE_USER" value="${torque.database.user}"/>
@@ -205,6 +206,7 @@
       tofile="${build.test}/rttest/Torque.properties"
       file="src/conf/master/Torque.master"
       filtering="yes"
+      overwrite="yes"
     />
 
   </goal>
