@@ -68,7 +68,7 @@ import org.apache.commons.beanutils.MappedPropertyDescriptor;
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
-abstract class AbstractDataSourceFactory
+public abstract class AbstractDataSourceFactory
 {
     /**
      * The logging category.
