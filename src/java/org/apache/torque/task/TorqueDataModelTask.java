@@ -365,6 +365,37 @@ public class TorqueDataModelTask extends TexenTask
 
         return context;
     }
+    
+    /**
+     * Override Texen's behavior in that we'll map any 
+     * torque.xxx properties to just xxx so that the templates
+     * don't get over-whelmed with always doing torque.xxx.
+     * 
+     * @param file the file to load the context properties from
+     */
+    public void setContextProperties( String file )
+    {
+        super.setContextProperties(file);
+        
+        // Save the keys during iteration to avoid a ConcurrentModificationException
+        List keys = new ArrayList();
+        for (Iterator i = contextProperties.getKeys(); i.hasNext(); )
+        {
+            String key = (String) i.next();
+            if (key.startsWith("torque."))
+            {
+                keys.add(key);
+            }
+        }
+        
+        for (Iterator i = keys.iterator(); i.hasNext(); )
+        {
+            String key = (String) i.next();
+            contextProperties.setProperty(
+                key.substring("torque.".length()),
+                contextProperties.get(key));
+        }
+    }
 
     /**
      * Gets a name to use for the application's data model.
