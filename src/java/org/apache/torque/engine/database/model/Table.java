@@ -779,15 +779,24 @@ public class Table implements IDMethod
 
     /**
      * Get the value of package.
+     *
      * @return value of package.
      */
     public String getPackage()
     {
-        return pkg;
+        if (pkg != null)
+        {
+            return pkg;
+        }
+        else
+        {
+            return this.getDatabase().getPackage();
+        }
     }
 
     /**
      * Set the value of package.
+     *
      * @param v  Value to assign to package.
      */
     public void setPackage(String v)

@@ -227,6 +227,10 @@ public class XmlToAppData extends DefaultHandler
                     else
                     {
                         currDB = app.addDatabase(attributes);
+                        if (currDB.getPackage() == null)
+                        {
+                            currDB.setPackage(defaultPackage);
+                        }
                     }
                 }
                 else if (rawName.equals("external-schema"))

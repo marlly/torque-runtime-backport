@@ -2,7 +2,7 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 <!-- this schema is used to test problems users reported -->
 
-<database name="@DATABASE_DEFAULT@" defaultIdMethod="idbroker">
+<database name="@DATABASE_DEFAULT@" defaultIdMethod="idbroker" package="org.apache.torque.test">
   <!-- TRQS15 -->
   <table name="varchar_pk">
     <column name="test_key" required="true" primaryKey="true" type="VARCHAR" size="30" />
