@@ -3,8 +3,7 @@
 $generator.parse("ojb/repository/MainRepository.vm","repository.xml","dataModels",$dataModels)
 
 #foreach ($dataModel in $dataModels)
-
-  #set ( $outFile = "repository_${dataModel.name}.xml" )
+  #set ( $outFile = "repository_${dataModel.shortName}.xml" )
   #set ( $modelCount = $velocityCount )
   
   File to be created: $outFile
