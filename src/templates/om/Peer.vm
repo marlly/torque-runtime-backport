@@ -392,6 +392,13 @@ public abstract class $basePrefix${table.JavaName}Peer
         // order follows the order columns were placed in the Select clause.
         if ( dbCon == null)
         {
+            // Set the correct dbName if it has not been overridden
+            // criteria.getDbName will return the same object if not set to 
+            // another value so == check is okay and faster
+            if ( criteria.getDbName() == Torque.getDefaultDB() )
+            {
+                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+            }
             return BasePeer.doSelect(criteria);
         }
         else
