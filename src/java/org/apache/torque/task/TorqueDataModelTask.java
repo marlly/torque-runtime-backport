@@ -117,6 +117,11 @@ public class TorqueDataModelTask
      */
     protected Hashtable databaseNames;
 
+    //!! This is probably a crappy idea having the sql file -> db map
+    // here. I can't remember why I put it here at the moment ...
+    // maybe I was going to map something else. It can probably 
+    // move into the SQL task.
+
     /**
      * Name of the properties file that maps an SQL file
      * to a particular database.
@@ -130,7 +135,8 @@ public class TorqueDataModelTask
      */
     public void setSqlDbMap(String sqldbmap)
     {
-        this.sqldbmap = sqldbmap;
+        //!! Make all these references files not strings.
+        this.sqldbmap = project.resolveFile(sqldbmap).toString();
     }
     
     /**

@@ -108,8 +108,6 @@ public class TorqueSQLTask
         return suffix;
     }        
 
-
-
     /**
      * Get the current target package.
      *
