@@ -63,6 +63,7 @@ import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.apache.tools.ant.Project;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.texen.ant.TexenTask;
@@ -228,25 +229,23 @@ public class TorqueDataDumpTask
         
         context.put("dataset", "all");
 
-        // FIXME: Use Ant log() method
-        System.err.println("Your DB settings are:");
-        System.err.println("driver : " + databaseDriver);
-        System.err.println("URL : " + databaseUrl);
-        System.err.println("user : " + databaseUser);
-        System.err.println("password : " + databasePassword);
+        StringBuffer buf = new StringBuffer("Database settings:\n")
+            .append(" driver: ").append(databaseDriver).append('\n')
+            .append(" URL: ").append(databaseUrl).append('\n')
+            .append(" user: ").append(databaseUser).append('\n')
+            .append(" password: ").append(databasePassword).append('\n');
+        log(buf.toString(), Project.MSG_DEBUG);
 
         try
         {
             Class.forName(databaseDriver);
-            // FIXME: Use Ant log() method
-            System.err.println("DB driver sucessfuly instantiated");
+            log("DB driver instantiated sucessfuly", Project.MSG_DEBUG);
 
             conn = DriverManager.getConnection(
                     databaseUrl, databaseUser, databasePassword);
 
-            // FIXME: Use Ant log() method
-            System.err.println("DB connection established");
-            context.put("tableTool", new TableTool(conn));
+            log("DB connection established", Project.MSG_DEBUG);
+            context.put("tableTool", new TableTool());
         }
         catch (SQLException se)
         {
@@ -294,19 +293,15 @@ public class TorqueDataDumpTask
      */
     public class TableTool implements Iterator
     {
-        private Connection conn;
         private ResultSet rs;
         private boolean isEmpty;
 
 
         /**
          *  Constructor for the TableTool object
-         *
-         * @param  conn Description of Parameter
          */
-        public TableTool(Connection conn)
+        public TableTool()
         {
-            this.conn = conn;
         }
 
 
@@ -314,9 +309,10 @@ public class TorqueDataDumpTask
          *  Constructor for the TableTool object
          *
          * @param  rs Description of Parameter
-         * @exception  SQLException Description of Exception
+         * @exception SQLException Problem using database record set
+         * cursor.
          */
-        public TableTool(ResultSet rs) throws SQLException
+        protected TableTool(ResultSet rs) throws SQLException
         {
             this.rs = rs;
             this.isEmpty = !rs.isBeforeFirst();
@@ -328,13 +324,13 @@ public class TorqueDataDumpTask
          *  table.
          *
          * @param  tableName Description of Parameter
-         * @return  Description of the Returned Value
-         * @exception  SQLException Description of Exception
+         * @return <code>Iterator</code> for the fetched data.
+         * @exception SQLException Problem creating connection or
+         * executing query.
          */
         public TableTool fetch(String tableName) throws SQLException
         {
-            System.err.println();
-            System.err.print("fetching table " + tableName);
+            log("Fetching data for table " + tableName, Project.MSG_INFO);
             // Set Statement object in associated TorqueDataDump
             // instance
             stmt = conn.createStatement();
@@ -400,8 +396,8 @@ public class TorqueDataDumpTask
             }
             catch (SQLException se)
             {
-                System.err.println("SQLException fetching value " +
-                        columnName + ":" + se.getMessage());
+                log("SQLException fetching value " + columnName + ": " +
+                    se.getMessage(), Project.MSG_ERR);
             }
             return null;
         }
