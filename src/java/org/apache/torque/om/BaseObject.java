@@ -414,8 +414,19 @@ public abstract class BaseObject implements Persistent, Serializable
      * gets a log4j Category based on class name.
      *
      * @return a <code>Category</code> to write log to.
+     * @deprecated use log()
      */
     protected Category getCategory()
+    {
+     	return Category.getInstance(getClass().getName());
+    }
+
+    /**
+     * gets a log4j Category based on class name.
+     *
+     * @return a <code>Category</code> to write log to.
+     */
+    protected Category log()
     {
      	return Category.getInstance(getClass().getName());
     }
