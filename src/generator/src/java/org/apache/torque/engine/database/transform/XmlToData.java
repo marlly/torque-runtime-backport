@@ -171,6 +171,14 @@ public class XmlToData extends DefaultHandler implements EntityResolver
                 {
                     Column col = table
                         .getColumnByJavaName(attributes.getQName(i));
+
+                    if (col == null)
+                    {
+                        throw new SAXException("Column " 
+                                + attributes.getQName(i) + " in table " 
+                                + rawName + " unknown.");
+                    }
+                        
                     String value = attributes.getValue(i);
                     columnValues.add(new ColumnValue(col, value));
                 }
