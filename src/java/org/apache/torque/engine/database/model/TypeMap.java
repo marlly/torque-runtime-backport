@@ -75,7 +75,7 @@ import java.math.BigDecimal;
  * These are the official SQL type to Java type mappings.
  * These don't quite correspond to the way the peer
  * system works so we'll have to make some adjustments.
- *
+ * <pre>
  * -------------------------------------------------------
  * SQL Type      | Java Type            | Peer Type
  * -------------------------------------------------------
@@ -104,6 +104,7 @@ import java.math.BigDecimal;
  * that may arise, but are not covered above
  * BOOLEANCHAR   | boolean              | String
  * BOOLEANINT    | boolean              | Integer
+ * </pre>
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @version $Id$
@@ -451,8 +452,7 @@ public class TypeMap
 
     /**
      * Return native java type which corresponds to the
-     * JDBC type provided. Use in the base object class
-     * generation.
+     * JDBC type provided. Use in the base object class generation.
      */
     public static String getJavaNative(String jdbcType)
     {
@@ -465,8 +465,7 @@ public class TypeMap
 
     /**
      * Return Village asX() method which corresponds to the
-     * JDBC type provided. Use in the Peer class
-     * generation.
+     * JDBC type provided. Use in the Peer class generation.
      */
     public static String getVillageMethod(String jdbcType)
     {
@@ -479,8 +478,7 @@ public class TypeMap
 
     /**
      * Return ParameterParser getX() method which corresponds to the
-     * JDBC type provided. Use in the Object class
-     * generation.
+     * JDBC type provided. Use in the Object class generation.
      */
     public static String getPPMethod(String jdbcType)
     {
