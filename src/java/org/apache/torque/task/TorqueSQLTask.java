@@ -156,14 +156,10 @@ public class TorqueSQLTask
             (getTargetDatabase(), getTemplatePath() + "/sql/base/");
         app = xmlParser.parseFile(xmlFile);
 
-        /*
-         * Place our model in the context.
-         */
+        // Place our model in the context.
         context.put("appData", app);
 
-        /*
-         * Place the target database in the context.
-         */
+        // Place the target database in the context.
         context.put("targetDatabase", targetDatabase);
     }
 }
