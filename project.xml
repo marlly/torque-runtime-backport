@@ -5,7 +5,7 @@
   <id>torque</id>
   <groupId>torque</groupId>
   <name>Torque</name>
-  <currentVersion>3.1-rc-dev</currentVersion>
+  <currentVersion>3.1-rc</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>
@@ -210,7 +210,7 @@
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
-      <version>20030818.201141</version>
+      <version>20030825.184428</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -225,12 +225,12 @@
     </dependency>
     <dependency>
       <id>commons-pool</id>
-      <version>20030818.195203</version>
+      <version>20030825.183949</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
     </dependency>
     <dependency>
       <id>jcs</id>
-      <version>1.0-dev</version>
+      <version>20030822.182132</version>
       <url>http://jakarta.apache.org/turbine/jcs/</url>
     </dependency>
     <dependency>
