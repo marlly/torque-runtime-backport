@@ -162,7 +162,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
 
                 if (table == null)
                 {
-                    throw new SAXException("Table " + rawName + " unknown.");
+                    throw new SAXException("Table '" + rawName + "' unknown");
                 }
                 List columnValues = new ArrayList();
                 for (int i = 0; i < attributes.getLength(); i++)
