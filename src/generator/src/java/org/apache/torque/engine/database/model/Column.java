@@ -600,7 +600,8 @@ public class Column
                         || torqueType.equals("DATE")
                         || torqueType.equals("DATETIME")
                         || torqueType.equals("TIMESTAMP")
-                        || torqueType.equals("CHAR"));
+                        || torqueType.equals("CHAR")
+                        || torqueType.equals("CLOB"));
     }
 
     /**
