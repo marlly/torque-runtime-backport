@@ -202,6 +202,7 @@
     Used by the JDBC -> XML process, and by the SQL Ant Task
     that will initialize your target database with the
     generated SQL. This is only used by Oracle at this time.
+    This must be UPPERCASE!
   </td>
 </tr>
 <tr>
