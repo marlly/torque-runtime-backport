@@ -43,7 +43,7 @@
         <a href="http://www.apache.org/dev/version-control.html">documentation</a>).
       </p>
       <p>
-        <code>maven java:jar</code> builds the jar. <br/>
+        <code>maven jar:jar</code> builds the jar. <br/>
         Please refer to the Maven
         <a href="http://maven.apache.org/start/index.html">
         Getting Started</a> document for instructions on how to build the

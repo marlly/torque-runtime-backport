@@ -1,5 +1,5 @@
 <project
-  default="java:jar"
+  default="jar:jar"
   xmlns:pom="pom"
   xmlns:deploy="deploy">
 
@@ -101,7 +101,7 @@
   <!-- binary distribution without jars used by scarab                    -->
   <!-- ================================================================== -->
   <goal name="dist:lite"
-        prereqs="java:jar"
+        prereqs="jar:jar"
         description="distribution without dependency jars">
 
     <!-- copy templates to the right place -->
@@ -162,7 +162,7 @@
 
   <goal
     name="runtime:prepare"
-    prereqs="java:jar">
+    prereqs="jar:jar">
 
     <!-- Set values in test profile -->
     <property file="${torque.testProfile}"/>
