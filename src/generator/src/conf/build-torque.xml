@@ -167,7 +167,6 @@
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
     <echo message="| Generating SQL for YOUR Torque project!  |"/>
-    <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
@@ -176,6 +175,7 @@
   </target>
 
   <target name="sql-classpath" if="torque.internal.useClasspath">
+    <echo message="loading templates from classpath"/>
     <torque-sql
       basePathToDbProps="sql/base/"
       contextProperties="${torque.contextProperties}"
@@ -194,6 +194,7 @@
   </target>
 
   <target name="sql-template" unless="torque.internal.useClasspath">
+    <echo message="loading templates from ${torque.templatePath}"/>
     <torque-sql
       basePathToDbProps="sql/base/"
       contextProperties="${torque.contextProperties}"
@@ -226,7 +227,6 @@
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
     <echo message="| Generating docs for YOUR datamodel!      |"/>
-    <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
@@ -326,7 +326,6 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
     <echo message="| Generating XML from JDBC connection !         |"/>
-    <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
@@ -352,7 +351,6 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
     <echo message="| Generating SQL from data XML !                |"/>
-    <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
@@ -414,7 +412,6 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
     <echo message="| Dumping the data from database into XML       |"/>
-    <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
@@ -447,7 +444,6 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
     <echo message="| Generating Data DTD for YOUR Torque project!  |"/>
-    <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
@@ -489,7 +485,7 @@
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
     <echo message="| Generating Peer-based Object Model for   |"/>
-    <echo message="| YOUR Torque project! Woo hoo!            |"/>
+    <echo message="| YOUR Torque project!                     |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
@@ -563,7 +559,7 @@
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
     <echo message="| Zipping the Object Model files for YOUR  |"/>
-    <echo message="| Torque project! Woo hoo!                 |"/>
+    <echo message="| Torque project!                          |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
