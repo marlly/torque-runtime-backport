@@ -64,6 +64,11 @@
       <action dev='seade' type='update'>
         Case insensitive LIKE comparisons now use ILIKE for PostgreSQL.
       </action>
+      <action dev='seade' type='fix'>
+        A minor template change has been made to correctly allow 
+        Base[TableName]Peer.doDelete(criteria, connection) to be overridden in 
+        [TableName]Peer.
+      </action>
     </release>
   </body>
 </document>

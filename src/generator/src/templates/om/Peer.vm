@@ -698,7 +698,7 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
      public static void doDelete(Criteria criteria) throws TorqueException
      {
-         $basePrefix${table.JavaName}Peer
+         ${table.JavaName}Peer
             .doDelete(criteria, (Connection) null);
      }
 
