@@ -58,12 +58,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.torque.engine.EngineException;
-import org.apache.torque.adapter.IDMethod;
-
 import org.xml.sax.Attributes;
 
 /**

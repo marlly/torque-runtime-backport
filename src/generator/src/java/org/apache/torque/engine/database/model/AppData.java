@@ -62,12 +62,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import org.xml.sax.Attributes;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.torque.Torque;
 import org.apache.torque.engine.EngineException;
+import org.xml.sax.Attributes;
 
 /**
  * A class for holding application data structures.
@@ -294,7 +291,8 @@ public class AppData
         db.setAppData (this);
         if (db.getName() == null)
         {
-            db.setName(Torque.getDefaultDB());
+            /** @task check this */
+            db.setName("default"); // Torque.getDefaultDB());
         }
         if (db.getDatabaseType() == null)
         {

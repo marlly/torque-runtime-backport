@@ -59,12 +59,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-
-import org.xml.sax.Attributes;
-
-import org.apache.torque.Torque;
 import org.apache.torque.engine.EngineException;
-import org.apache.torque.adapter.IDMethod;
+import org.xml.sax.Attributes;
 
 
 /**
@@ -131,7 +127,9 @@ public class Database
      */
     public void setName(String name)
     {
-        this.name = (name == null ? Torque.getDefaultDB() : name);
+        /** @task check this */
+//        this.name = (name == null ? Torque.getDefaultDB() : name);
+        this.name = (name == null ? "default" : name);
     }
 
     /**

@@ -57,17 +57,17 @@ package org.apache.torque.engine.database.transform;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.ForeignKey;
+import org.apache.torque.engine.database.model.IDMethod;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.sql.ParseException;
 import org.apache.torque.engine.sql.SQLScanner;
 import org.apache.torque.engine.sql.Token;
-import org.apache.torque.adapter.IDMethod;
 
 /**
  * A Class that converts an sql input file to an AppData
