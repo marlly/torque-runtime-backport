@@ -146,4 +146,15 @@ public class TableTest extends TestCase
         assertEquals(fk.getForeignTableName(), "multipk");
         assertTrue(fk.getForeignColumns().size() == 2);
     }
+    
+    public void testReferrers() throws Exception
+    {
+        Database db = appData.getDatabase("iddb");
+        Table table = db.getTable("singlepk");
+        List refs = table.getReferrers();
+        assertTrue(refs.size() == 1);
+        ForeignKey fk = (ForeignKey) refs.get(0);
+        assertEquals(fk.getTableName(), "singlefk");        
+    }
+    
 }
