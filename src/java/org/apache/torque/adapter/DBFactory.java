@@ -113,7 +113,7 @@ public class DBFactory
         adapters = new Hashtable();
 
         // Add the null database adapter.
-        registerDriver("", DBNone.class);
+        registerAdapter("", DBNone.class);
 
         Enumeration adapters =
             configuration.getVector("database.adapter").elements();
@@ -156,7 +156,7 @@ public class DBFactory
 
             if (c != null && driver != null)
             {
-                registerDriver(driver, c);
+                registerAdapter(driver, c);
             }
         }
     }
@@ -188,7 +188,7 @@ public class DBFactory
      * @param adapterClass The <code>Class</code> of the database
      * adapter associated with <code>driver</code>.
      */
-    private static void registerDriver(String driver, Class apdaterClass)
+    private static void registerAdapter(String driver, Class apdaterClass)
     {
         if (!adapters.containsKey(driver))
         {
