@@ -4,7 +4,7 @@
   <property name="build.properties" value="build.properties"/>
   <property file="${build.properties}"/>
   <property name="lib.dir" value="lib"/>
-  
+
   <!-- Build classpath -->
   <path id="torque-classpath">
     <fileset dir="${lib.dir}">
@@ -237,7 +237,6 @@
       contextProperties="${templatePath}/sql/id-table/project.props"
       controlTemplate="${idTableControlTemplate}"
       templatePath="${templatePath}"
-      database="default"
       suffix="-idtable-init"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
@@ -247,7 +246,7 @@
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
-    </torque-sql>      
+    </torque-sql>
   </target>
 
   <!-- ================================================================ -->

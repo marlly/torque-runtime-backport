@@ -244,7 +244,6 @@
       contextProperties="${templatePath}/sql/id-table/project.props"
       controlTemplate="${idTableControlTemplate}"
       templatePath="${templatePath}"
-      database="default"
       suffix="-idtable-init"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
