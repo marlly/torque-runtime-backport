@@ -260,6 +260,64 @@
 
   </target>
 
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
+  <!-- ================================================================ -->
+  <!-- Generate the SQL for your project, these are in addition         -->
+  <!-- to the base Turbine tables! The tables you require for your      -->
+  <!-- project should be specified in project-schema.xml.               -->
+  <!-- ================================================================ -->
+
+  <target name="project-sql-classpath" depends="init-tasks">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating SQL for YOUR Turbine project! |"/>
+    <echo message="| Woo hoo!                                 |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <torque-sql
+      contextProperties="${build.properties}"
+      controlTemplate="${SQLControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      useClasspath="true"
+      outputFile="report.${project}.sql.generation"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
+    />
+
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- G E N E R A T E  P R O J E C T  P E E R  B A S E D  O M          -->
+  <!-- ================================================================ -->
+  <!-- Generate the Peer-based object model for your project.           -->
+  <!-- These are in addition to the base Turbine OM!                    -->
+  <!-- ================================================================ -->
+
+  <target name="project-om-classpath" depends="init-tasks">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating Peer-based Object Model for   |"/>
+    <echo message="| YOUR Turbine project! Woo hoo!           |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <torque-om
+      contextProperties="${build.properties}"
+      controlTemplate="${OMControlTemplate}"
+      outputDirectory="${torque.home}/${outputDirectory}/java"
+      useClasspath="true"
+      outputFile="report.${project}.om.generation"
+      targetPackage="${targetPackage}.om"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
+    />
+  
+  </target>
+
   <!-- =================================================================== -->
   <!-- C O M P I L E  O M                                                  -->
   <!-- =================================================================== -->
