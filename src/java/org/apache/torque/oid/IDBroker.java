@@ -288,7 +288,7 @@ public class IDBroker
     public int getIdAsInt(Connection connection, Object tableName)
         throws Exception
     {
-        return getIdAsBigDecimal(null, tableName).intValue();
+        return getIdAsBigDecimal(connection, tableName).intValue();
     }
 
 
@@ -305,7 +305,7 @@ public class IDBroker
     public long getIdAsLong(Connection connection, Object tableName)
         throws Exception
     {
-        return getIdAsBigDecimal(null, tableName).longValue();
+        return getIdAsBigDecimal(connection, tableName).longValue();
     }
 
     /**
@@ -322,7 +322,7 @@ public class IDBroker
                                         Object tableName)
         throws Exception
     {
-        BigDecimal[] id = getNextIds((String)tableName, 1);
+        BigDecimal[] id = getNextIds((String)tableName, 1, connection);
         return id[0];
     }
 
@@ -339,13 +339,12 @@ public class IDBroker
     public String getIdAsString(Connection connection, Object tableName)
         throws Exception
     {
-        return getIdAsBigDecimal(null, tableName).toString();
+        return getIdAsBigDecimal(connection, tableName).toString();
     }
 
 
     /**
-     * A flag to determine the timing of the id generation
-     *
+     * A flag to determine the timing of the id generation     *
      * @return a <code>boolean</code> value
      */
     public boolean isPriorToInsert()
@@ -386,6 +385,22 @@ public class IDBroker
                                                 int numOfIdsToReturn)
         throws Exception
     {
+        return getNextIds(tableName, numOfIdsToReturn, null);
+    }
+
+    /**
+     * This method returns x number of ids for the given table.
+     *
+     * @param tableName The name of the table for which we want an id.
+     * @param numOfIdsToReturn The desired number of ids.
+     * @return A BigDecimal.
+     * @exception Exception Database error.
+     */
+    public synchronized BigDecimal[] getNextIds(String tableName,
+                                                int numOfIdsToReturn,
+                                                Connection connection)
+        throws Exception
+    {
         if (tableName == null)
         {
             throw new Exception ("getNextIds(): tableName == null");
@@ -413,7 +428,7 @@ public class IDBroker
             {
                 category.info ("Forced id retrieval - " + availableIds.size());
             }
-            storeIDs(tableName, true);
+            storeIDs(tableName, true, connection);
             availableIds = (List)ids.get(tableName);
         }
 
@@ -515,7 +530,7 @@ public class IDBroker
                 category.info("IDBroker thread checking for more keys on table: " +
                          tableName);
                 List availableIds = (List)ids.get(tableName);
-                int quantity = getQuantity(tableName).intValue();
+                int quantity = getQuantity(tableName, null).intValue();
                 if ( quantity > availableIds.size() )
                 {
                     try
@@ -523,7 +538,7 @@ public class IDBroker
                         // Second parameter is false because we don't
                         // want the quantity to be adjusted for thread
                         // calls.
-                        storeIDs(tableName, false);
+                        storeIDs(tableName, false, null);
                         category.info("Retrieved more ids for table: " +
                                  tableName);
                     }
@@ -585,7 +600,7 @@ public class IDBroker
                          tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
-                float rate = getQuantity(tableName).floatValue()
+                float rate = getQuantity(tableName, null).floatValue()
                     / (float)timeLapse;
                 quantityStore.put(tableName,
                     new BigDecimal(Math.ceil(sleepPeriod*rate*safetyMargin)));
@@ -604,7 +619,8 @@ public class IDBroker
      * @exception Exception, a generic exception.
      */
     private void storeIDs(String tableName,
-                          boolean adjustQuantity)
+                          boolean adjustQuantity,
+                          Connection connection)
         throws Exception
     {
         BigDecimal nextId = null;
@@ -624,33 +640,29 @@ public class IDBroker
             DBConnection dbCon = null;
             try
             {
-                String databaseName = dbMap.getName();
-
-                // Get a connection to the db by starting a
-                // transaction.
-                if (transactionsSupported)
+                if (connection == null) 
                 {
-                    dbCon = BasePeer.beginTransaction(databaseName);
+                    String databaseName = dbMap.getName();
+                    // Get a connection to the db by starting a
+                    // transaction.
+                    if (transactionsSupported)
+                    {
+                        dbCon = BasePeer.beginTransaction(databaseName);
+                    }
+                    else
+                    {
+                        dbCon = Torque.getConnection(databaseName);
+                    }
+                    connection = dbCon.getConnection();    
                 }
-                else
-                {
-                    dbCon = Torque.getConnection(databaseName);
-                }
-                Connection connection = dbCon.getConnection();
-
+                
                 // Write the current value of quantity of keys to grab
                 // to the database, primarily to obtain a write lock
                 // on the table/row, but this value will also be used
                 // as the starting value when an IDBroker is
                 // instantiated.
-                quantity = getQuantity(tableName);
-                Criteria criteria = new Criteria(2)
-                    .add( QUANTITY, quantity );
-                Criteria selectCriteria = new Criteria(2)
-                    .add( TABLE_NAME, tableName );
-                criteria.setDbName(dbMap.getName());
-                selectCriteria.setDbName(dbMap.getName());
-                BasePeer.doUpdate( selectCriteria, criteria, dbCon );
+                quantity = getQuantity(tableName, connection);
+                updateQuantity(connection, tableName, quantity);
 
                 // Read the next starting ID from the ID_TABLE.
                 BigDecimal[] results = selectRow(connection, tableName);
@@ -659,16 +671,16 @@ public class IDBroker
                 // Update the row based on the quantity in the
                 // ID_TABLE.
                 BigDecimal newNextId = nextId.add(quantity);
-                updateRow(connection, tableName, newNextId.toString() );
+                updateNextId(connection, tableName, newNextId.toString() );
 
-                if (transactionsSupported)
+                if (transactionsSupported && dbCon != null)
                 {
                     BasePeer.commitTransaction(dbCon);
                 }
             }
             catch (Exception e)
             {
-                if (transactionsSupported)
+                if (transactionsSupported && dbCon != null)
                 {
                     BasePeer.rollBackTransaction(dbCon);
                 }
@@ -676,7 +688,7 @@ public class IDBroker
             }
             finally
             {
-                if (!transactionsSupported)
+                if (!transactionsSupported && dbCon != null)
                 {
                     // Return the connection to the pool.
                     Torque.releaseConnection(dbCon);
@@ -713,7 +725,7 @@ public class IDBroker
      * @param tableName The name of the table we want to query.
      * @return An int with the number of ids cached in memory.
      */
-    private BigDecimal getQuantity(String tableName)
+    private BigDecimal getQuantity(String tableName, Connection connection)
     {
         BigDecimal quantity = null;
 
@@ -732,11 +744,13 @@ public class IDBroker
             DBConnection dbCon = null;
             try
             {
-                String databaseName = tableMap.getDatabaseMap().getName();
-
-                // Get a connection to the db
-                dbCon = Torque.getConnection(databaseName);
-                Connection connection = dbCon.getConnection();
+                if (connection == null) 
+                {
+                    String databaseName = tableMap.getDatabaseMap().getName();
+                    // Get a connection to the db
+                    dbCon = Torque.getConnection(databaseName);
+                    connection = dbCon.getConnection();
+                }
 
                 // Read the row from the ID_TABLE.
                 BigDecimal[] results = selectRow(connection, tableName);
@@ -754,7 +768,10 @@ public class IDBroker
                 // Return the connection to the pool.
                 try
                 {
-                    Torque.releaseConnection(dbCon);
+                    if (dbCon != null) 
+                    {
+                        Torque.releaseConnection(dbCon);        
+                    }
                 }
                 catch (Exception e)
                 {
@@ -824,9 +841,9 @@ public class IDBroker
      * @param id An int with the value to set for the id.
      * @exception Exception Database error.
      */
-    private void updateRow(Connection con,
-                           String tableName,
-                           String id)
+    private void updateNextId(Connection con,
+                              String tableName,
+                              String id)
         throws Exception
     {
 
@@ -842,7 +859,49 @@ public class IDBroker
 
         Statement statement = null;
 
-        category.debug("updateRow: " + stmt.toString());
+        category.debug("updateNextId: " + stmt.toString());
+
+        try
+        {
+            statement = con.createStatement();
+            statement.executeUpdate( stmt.toString() );
+        }
+        finally
+        {
+            if (statement != null) statement.close();
+        }
+    }
+
+
+    /**
+     * Helper method to update a row in the ID_TABLE.
+     *
+     * @param con A Connection.
+     * @param tableName The properly escaped name of the table to identify the
+     * row.
+     * @param id An int with the value to set for the id.
+     * @exception Exception Database error.
+     */
+    private void updateQuantity(Connection con,
+                                String tableName,
+                                BigDecimal quantity)
+        throws Exception
+    {
+
+
+        StringBuffer stmt =
+            new StringBuffer(quantity.toString().length() + tableName.length()
+                             + 50);
+            stmt.append( "UPDATE " + ID_TABLE )
+            .append( " SET QUANTITY = " )
+            .append( quantity )
+            .append( " WHERE TABLE_NAME = '" )
+            .append( tableName )
+            .append( '\'' );
+
+        Statement statement = null;
+
+        category.debug("updateQuantity: " + stmt.toString());
 
         try
         {
