@@ -984,9 +984,10 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param pk the primary key
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @throws NoRowsException Primary key was not found in database.
      */
     public static $table.JavaName ${retrieveMethod}($pk.JavaNative pk)
-        throws TorqueException
+        throws TorqueException, NoRowsException
     {
         return ${retrieveMethod}(SimpleKey.keyFor(pk));
     }
@@ -998,9 +999,10 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param pk the primary key
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @throws NoRowsException Primary key was not found in database.
      */
     public static $table.JavaName ${retrieveMethod}(ObjectKey pk)
-        throws TorqueException
+        throws TorqueException, NoRowsException
     {
         Connection db = null;
         $table.JavaName retVal = null;
@@ -1023,15 +1025,16 @@ public abstract class $basePrefix${table.JavaName}Peer
      * @param con the connection to use
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @throws NoRowsException Primary key was not found in database.
      */
     public static $table.JavaName ${retrieveMethod}(ObjectKey pk, Connection con)
-        throws TorqueException
+        throws TorqueException, NoRowsException
     {
         Criteria criteria = buildCriteria(pk);
         List v = doSelect(criteria, con);
         if (v.size() != 1)
         {
-            throw new TorqueException("Failed to select one and only one row.");
+            throw new NoRowsException("Failed to select one and only one row.");
         }
         else
         {
