@@ -12,15 +12,23 @@ package ${package};
     #set ($extendsBaseClass = "" )
 #end
 
-#if ($table.Interface)
-    #set ($interface = "Serializable, $table.Interface" )    
+ #if ($table.Interface)
+    #if ($ojbUseInterface == true)
+    	#set ($interface = "Serializable, ${basePrefix}${table.JavaName}Interface, $table.Interface" )
+    #else
+    	#set ($interface = "Serializable, $table.Interface" )
+    #end	
 #else
-    #set ($interface = "Serializable" )
-#end
+    #if ($ojbUseInterface == true)	
+	#set ($interface = "Serializable, ${basePrefix}${table.JavaName}Interface" )
+    #else
+	#set ($interface = "Serializable" )
+    #end	
+ #end
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.math.BigDecimal;
 
 /** 
 #if ($addTimeStamp)
@@ -29,8 +37,10 @@ import java.util.Date;
  * [$now]
  *
 #end
+ * You should not use this class directly.  It should not even be
+ * extended all references should be to $table.JavaName
  */
-public class $table.JavaName $extendsBaseClass
+public class ${basePrefix}${table.JavaName} $extendsBaseClass
         implements $interface
 {
 
@@ -40,10 +50,10 @@ public class $table.JavaName $extendsBaseClass
       #set ( $defaultValue = "null" )
       #if ( $cjtype == "boolean")
         #set ( $defaultValue = "false" )
-      #elseif ($cjtype == "int" || $cjtype == "short" || $cjtype == "long" || $cjtype == "float" || $cjtype == "double")
+      #elseif ($cjtype == "int")
         #set ( $defaultValue = "0" )
       #end
-    protected $cjtype $clo = $defaultValue;
+    private $cjtype $clo = $defaultValue;
     #end
 
     #foreach ($col in $table.Columns)
