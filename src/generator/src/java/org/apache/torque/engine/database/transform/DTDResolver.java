@@ -107,7 +107,7 @@ public class DTDResolver implements EntityResolver
         }
         catch (Exception ex)
         {
-            log.error("Could not get stream for database.dtd", ex );
+            log.error("Could not get stream for database.dtd", ex);
         }
     }
 

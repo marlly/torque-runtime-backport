@@ -77,8 +77,8 @@ public class ForeignKey
     private List foreignColumns = new ArrayList(3);
 
     // the uppercase equivalent of the onDelete/onUpdate values in the dtd
-    private final String NONE    = "NONE";
-    private final String SETNULL = "SETNULL";
+    private static final String NONE    = "NONE";
+    private static final String SETNULL = "SETNULL";
 
     /**
      * Imports foreign key from an XML specification

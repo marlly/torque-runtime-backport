@@ -215,7 +215,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
      * Initializes initial context
      *
      * @return the context
-     * @throws Exception
+     * @throws Exception generic exception
      */
     public Context initControlContext() throws Exception
     {
@@ -286,9 +286,13 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
      */
     public class TableTool implements Iterator
     {
+        /** querydataset */
         private QueryDataSet qds;
+        /** is empty */
         private boolean isEmpty;
+        /** current index */
         private int curIndex = -1;
+        /** current record */
         private Record curRec = null;
 
         /**
@@ -382,8 +386,8 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
             }
             catch (Exception se)
             {
-                log("Exception fetching value " + columnName + ": " +
-                    se.getMessage(), Project.MSG_ERR);
+                log("Exception fetching value " + columnName + ": "
+                        + se.getMessage(), Project.MSG_ERR);
             }
             return null;
         }
@@ -391,7 +395,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         /**
          * unsupported! always throws Exception
          *
-         * @throws UnsupportedOperationException
+         * @throws UnsupportedOperationException unsupported
          */
         public void remove() throws UnsupportedOperationException
         {

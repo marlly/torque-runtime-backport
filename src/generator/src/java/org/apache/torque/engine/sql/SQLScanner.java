@@ -70,22 +70,37 @@ import java.util.ArrayList;
  */
 public class SQLScanner
 {
-    private static final String white = "\f\r\t\n ";
-    private static final String alfa = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final String numer = "0123456789";
-    private static final String alfanum = alfa + numer;
-    private static final String special = ";(),'";
-    private static final char commentPound = '#';
-    private static final char commentSlash = '/';
-    private static final char commentStar = '*';
-    private static final char commentDash = '-';
+    /** white spaces */
+    private static final String WHITE = "\f\r\t\n ";
+    /** alphabetic characters */
+    private static final String ALFA
+            = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    /** numbers */
+    private static final String NUMER = "0123456789";
+    /** alphanumeric */
+    private static final String ALFANUM = ALFA + NUMER;
+    /** special characters */
+    private static final String SPECIAL = ";(),'";
+    /** comment */
+    private static final char COMMENT_POUND = '#';
+    /** comment */
+    private static final char COMMENT_SLASH = '/';
+    /** comment */
+    private static final char COMMENT_STAR = '*';
+    /** comment */
+    private static final char COMMENT_DASH = '-';
 
+    /** the input reader */
     private Reader in;
+    /** character */
     private int chr;
+    /** token */
     private String token;
+    /** list of tokens */
     private List tokens;
-
+    /** line */
     private int line;
+    /** column */
     private int col;
 
     /**
@@ -98,6 +113,8 @@ public class SQLScanner
 
     /**
      * Creates a new scanner with an Input Reader
+     *
+     * @param input the input reader
      */
     public SQLScanner(Reader input)
     {
@@ -106,6 +123,8 @@ public class SQLScanner
 
     /**
      * Set the Input
+     *
+     * @param input the input reader
      */
     public void setInput(Reader input)
     {
@@ -114,8 +133,9 @@ public class SQLScanner
 
 
     /**
-     * Reads the next character and increments the line and
-     * column counters.
+     * Reads the next character and increments the line and column counters.
+     *
+     * @throws IOException If an I/O error occurs
      */
     private void readChar() throws IOException
     {
@@ -137,12 +157,14 @@ public class SQLScanner
 
     /**
      * Scans an identifier.
+     *
+     * @throws IOException If an I/O error occurs
      */
     private void scanIdentifier () throws IOException
     {
         token = "";
         char c = (char) chr;
-        while (chr != -1 && white.indexOf(c) == -1 && special.indexOf(c) == -1)
+        while (chr != -1 && WHITE.indexOf(c) == -1 && SPECIAL.indexOf(c) == -1)
         {
             token = token + (char) chr;
             readChar();
@@ -154,12 +176,14 @@ public class SQLScanner
 
     /**
      * Scans an identifier which had started with the negative sign.
+     *
+     * @throws IOException If an I/O error occurs
      */
     private void scanNegativeIdentifier () throws IOException
     {
         token = "-";
         char c = (char) chr;
-        while (chr != -1 && white.indexOf(c) == -1 && special.indexOf(c) == -1)
+        while (chr != -1 && WHITE.indexOf(c) == -1 && SPECIAL.indexOf(c) == -1)
         {
             token = token + (char) chr;
             readChar();
@@ -170,8 +194,10 @@ public class SQLScanner
     }
 
     /**
-     * Scan the input Reader and returns a list
-     * of tokens.
+     * Scan the input Reader and returns a list of tokens.
+     *
+     * @return a list of tokens
+     * @throws IOException If an I/O error occurs
      */
     public List scan () throws IOException
     {
@@ -188,12 +214,12 @@ public class SQLScanner
         while (chr != -1)
         {
             char c = (char) chr;
-            inNegative=false;
+            inNegative = false;
 
-            if ((char) c == commentDash)
+            if ((char) c == COMMENT_DASH)
             {
                 readChar();
-                if ((char) chr == commentDash)
+                if ((char) chr == COMMENT_DASH)
                 {
                     inCommentDash = true;
                 }
@@ -212,15 +238,15 @@ public class SQLScanner
                 }
                 readChar();
             }
-            else if ((char) c == commentPound)
+            else if ((char) c == COMMENT_POUND)
             {
                 inComment = true;
                 readChar();
             }
-            else if ((char) c == commentSlash)
+            else if ((char) c == COMMENT_SLASH)
             {
                 readChar();
-                if ((char) chr == commentStar)
+                if ((char) chr == COMMENT_STAR)
                 {
                     inCommentSlashStar = true;
                 }
@@ -230,7 +256,7 @@ public class SQLScanner
                 if ((char) c == '*')
                 {
                     readChar();
-                    if ((char) chr == commentSlash)
+                    if ((char) chr == COMMENT_SLASH)
                     {
                         inCommentSlashStar = false;
                     }
@@ -241,7 +267,7 @@ public class SQLScanner
                 }
                 readChar();
             }
-            else if (alfanum.indexOf(c) >= 0)
+            else if (ALFANUM.indexOf(c) >= 0)
             {
                 if (inNegative)
                 {
@@ -252,9 +278,9 @@ public class SQLScanner
                     scanIdentifier();
                 }
             }
-            else if (special.indexOf(c) >= 0)
+            else if (SPECIAL.indexOf(c) >= 0)
             {
-                tokens.add(new Token ("" + c, line, col));
+                tokens.add(new Token("" + c, line, col));
                 readChar();
             }
             else

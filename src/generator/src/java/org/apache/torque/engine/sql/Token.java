@@ -65,12 +65,17 @@ package org.apache.torque.engine.sql;
 
 public class Token
 {
+    /** string representation */
     private String str;
+    /** line number */
     private int line;
+    /** column number */
     private int col;
 
     /**
      * Creates a new token without positioning.
+     *
+     * @param str string representation
      */
     public Token(String str)
     {
@@ -79,6 +84,10 @@ public class Token
 
     /**
      * Creates a new token with positioning settings.
+     *
+     * @param str string representation
+     * @param line line number
+     * @param col column number
      */
     public Token(String str, int line, int col)
     {
@@ -89,6 +98,8 @@ public class Token
 
     /**
      * Returns the string representation of this token.
+     *
+     * @return the string representation
      */
     public String getStr()
     {
@@ -97,6 +108,8 @@ public class Token
 
     /**
      * Get the line number of this token.
+     *
+     * @return the line number
      */
     public int getLine()
     {
@@ -105,6 +118,8 @@ public class Token
 
     /**
      * Get the column number of this token.
+     *
+     * @return the column number
      */
     public int getCol()
     {
@@ -113,6 +128,8 @@ public class Token
 
     /**
      * The same as getStr()
+     *
+     * @return the string representation
      */
     public String toString()
     {

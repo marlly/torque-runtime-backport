@@ -119,6 +119,8 @@ public class SQLToAppData
 
     /**
      * Get the current input sql file
+     *
+     * @return the sql file
      */
     public String getSqlFile()
     {
@@ -169,6 +171,8 @@ public class SQLToAppData
 
     /**
      * Check if there is more tokens available for parsing.
+     *
+     * @return true if there are more tokens available
      */
     private boolean hasTokens()
     {
@@ -180,19 +184,21 @@ public class SQLToAppData
      *
      * @throws ParseException
      */
-    private void Create() throws ParseException
+    private void create() throws ParseException
     {
         next();
         if (token.getStr().toUpperCase().equals("TABLE"))
         {
-            Create_Table();
+            create_Table();
         }
     }
 
     /**
      * Parses a CREATE TABLE sql command
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table() throws ParseException
+    private void create_Table() throws ParseException
     {
         next();
         String tableName = token.getStr(); // name of the table
@@ -207,7 +213,7 @@ public class SQLToAppData
         //tbl.setIdMethod("none");
         while (!token.getStr().equals(";"))
         {
-            Create_Table_Column(tbl);
+            create_Table_Column(tbl);
         }
 
         if (tbl.getPrimaryKey().size() == 1)
@@ -224,8 +230,10 @@ public class SQLToAppData
     /**
      * Parses column information between the braces of a CREATE
      * TABLE () sql statement.
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table_Column(Table tbl) throws ParseException
+    private void create_Table_Column(Table tbl) throws ParseException
     {
         // The token should be the first item
         // which is the name of the column or
@@ -237,26 +245,28 @@ public class SQLToAppData
 
         if (token.getStr().toUpperCase().equals("PRIMARY"))
         {
-            Create_Table_Column_Primary(tbl);
+            create_Table_Column_Primary(tbl);
         }
         else if (token.getStr().toUpperCase().equals("FOREIGN"))
         {
-            Create_Table_Column_Foreign(tbl);
+            create_Table_Column_Foreign(tbl);
         }
         else if (token.getStr().toUpperCase().equals("UNIQUE"))
         {
-            Create_Table_Column_Unique(tbl);
+            create_Table_Column_Unique(tbl);
         }
         else
         {
-            Create_Table_Column_Data(tbl);
+            create_Table_Column_Data(tbl);
         }
     }
 
     /**
      * Parses PRIMARY KEY (FOO,BAR) statement
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table_Column_Primary (Table tbl) throws ParseException
+    private void create_Table_Column_Primary (Table tbl) throws ParseException
     {
         next();
         if (!token.getStr().toUpperCase().equals("KEY"))
@@ -300,8 +310,10 @@ public class SQLToAppData
 
     /**
      * Parses UNIQUE (NAME,FOO,BAR) statement
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table_Column_Unique(Table tbl) throws ParseException
+    private void create_Table_Column_Unique(Table tbl) throws ParseException
     {
         next();
         if (!token.getStr().toUpperCase().equals("("))
@@ -333,8 +345,10 @@ public class SQLToAppData
 
     /**
      * Parses FOREIGN KEY (BAR) REFERENCES TABLE (BAR) statement
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table_Column_Foreign (Table tbl) throws ParseException
+    private void create_Table_Column_Foreign(Table tbl) throws ParseException
     {
         next();
         if (!token.getStr().toUpperCase().equals("KEY"))
@@ -402,8 +416,10 @@ public class SQLToAppData
 
     /**
      * Parse the data definition of the column statement.
+     *
+     * @throws ParseException error parsing the input file
      */
-    private void Create_Table_Column_Data(Table tbl) throws ParseException
+    private void create_Table_Column_Data(Table tbl) throws ParseException
     {
         String columnSize = null;
         String columnPrecision = null;
@@ -549,6 +565,9 @@ public class SQLToAppData
 
     /**
      * Execute the parser.
+     *
+     * @throws IOException If an I/O error occurs
+     * @throws ParseException error parsing the input file
      */
     public AppData execute() throws IOException, ParseException
     {
@@ -574,7 +593,7 @@ public class SQLToAppData
 
             if (token.getStr().toUpperCase().equals("CREATE"))
             {
-                Create();
+                create();
             }
             if (hasTokens())
             {
@@ -586,6 +605,9 @@ public class SQLToAppData
 
     /**
      * Just 4 testing.
+     *
+     * @param args commandline args
+     * @throws Exception an exception
      */
     public static void main(String args[]) throws Exception
     {

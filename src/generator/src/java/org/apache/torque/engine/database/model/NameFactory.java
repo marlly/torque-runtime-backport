@@ -141,7 +141,7 @@ public class NameFactory
      * implementation to use to generate names.
      * @param inputs Inputs used to generate a name.
      * @return The generated name.
-     * @throws EngineException
+     * @throws EngineException an exception
      */
     public static String generateName(String algorithmName, List inputs)
         throws EngineException
