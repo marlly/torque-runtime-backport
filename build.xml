@@ -549,7 +549,7 @@
       </fileset>
     </copy>
 
-    <copy todir="${torque.dir}/templates" filtering="yes">
+    <copy todir="${torque.dir}/src/templates" filtering="yes">
       <fileset dir="./src/templates"/>
     </copy>
 
@@ -637,6 +637,13 @@
         <include name="${final.name}.jar"/>
       </fileset>
     </copy>
+  </target>
+
+  <target
+    name="maven:compile">
+    
+    <ant antfile="build-maven.xml" target="maven:compile"/>
+    
   </target>
 
 </project>
