@@ -2,8 +2,8 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 
-<database 
-  name="@DATABASE_DEFAULT@" 
+<database
+  name="@DATABASE_DEFAULT@"
   defaultIdMethod="@DATABASE_ID_METHOD@"
   baseClass="">
 
@@ -22,7 +22,8 @@
   -->
 
   <table name="Artikel"
-         javaName="Article">
+         javaName="Article"
+         interface="InterfaceArticle">
     <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"
             javaName="articleId"/>
     <column name="Artikelname" type="VARCHAR" size="60"
@@ -44,7 +45,7 @@
     <column name="Auslaufartikel" type="INTEGER"
             javaName="inSelloutArticle"/>
   </table>
-  
+
   <table name="BOOKS">
     <column name="Artikel_Nr" required="true" primaryKey="true" type="INTEGER"/>
     <column name="Artikelname" type="VARCHAR" size="60"/>
@@ -75,10 +76,14 @@
     <column name="MUSICIANS" type="VARCHAR" size="250"/>
   </table>
 
-  <table name="Kategorien">
-    <column name="Kategorie_Nr" required="true" primaryKey="true" type="INTEGER"/>
-    <column name="KategorieName" type="VARCHAR" size="20"/>
-    <column name="Beschreibung" type="VARCHAR" size="60"/>
+  <table name="Kategorien"
+         javaName="ProductGroup">
+    <column name="Kategorie_Nr" required="true" primaryKey="true" type="INTEGER"
+            javaName="groupId"/>
+    <column name="KategorieName" type="VARCHAR" size="20"
+            javaName="groupName"/>
+    <column name="Beschreibung" type="VARCHAR" size="60"
+            javaName="description"/>
   </table>
 
   <table name="ORDER_POSITION">
@@ -132,7 +137,7 @@
     <column name="PROJECT_ID" required="true" primaryKey="true" type="INTEGER"/>
     <column name="ROLENAME" type="VARCHAR" size="20"/>
   </table>
-  
+
   <table name="FAMILY_MEMBER">
     <column name="ID" required="true" primaryKey="true" type="INTEGER"/>
     <column name="FIRSTNAME" type="VARCHAR" size="50"/>
@@ -164,7 +169,7 @@ e CREATE TABLE MDTEST_MASTER (
     MASTERID    INT NOT NULL PRIMARY KEY,
     MASTER_TEXT VARCHAR(255)
   );
-;    
+;
 
 e CREATE TABLE MDTEST_DETAIL_FKINPK (
     MASTERID    INT NOT NULL,
@@ -173,7 +178,7 @@ e CREATE TABLE MDTEST_DETAIL_FKINPK (
     PRIMARY KEY (MASTERID, DETAILID),
     FOREIGN KEY (MASTERID) REFERENCES MDTEST_MASTER(MASTERID)
   );
-;   
+;
 
 e CREATE TABLE MDTEST_DETAIL_FKNOPK (
     DETAILID    INT NOT NULL PRIMARY KEY,
