@@ -45,6 +45,10 @@
     <li>
       TRQS141: Table with no primary key results an empty ADD PRIMARY KEY ()
     </li>  
+    <li>
+      TRQS165: columns in an external schema caused Manager imports to be 
+      generated
+    </li>  
   </ul>
 </p>
 </subsection>

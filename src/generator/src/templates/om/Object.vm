@@ -43,7 +43,6 @@ import org.apache.torque.util.Transaction;
 
    #if ($tblFK.Package != $package)
 import ${tblFK.Package}.${className};
-import ${tblFK.Package}.${className}Manager;
 import ${tblFK.Package}.${tblFK.JavaName}Peer;
    #end
 #end
