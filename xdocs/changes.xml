@@ -29,6 +29,9 @@
 <p>
   <ul>
     <li>
+      TRQ24: added doDelete(ObjectKey) methods to the generated Peers.
+    </li>
+    <li>
       Added a Maven plugin for executing Torque commands and updated the
       <a href="maven-howto.html">Maven Howto</a> to reflect the addition.
     </li>
@@ -47,6 +50,9 @@
     </li>
     <li>
       TRQD6: update README (ant 1.5 is required)
+    </li>
+    <li>
+      TRQS68: remove invalid pathelement in build-torque.xml
     </li>
     <li>
       Doc generation (anakia format): escape characters not allowed in XML
