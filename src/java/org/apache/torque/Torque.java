@@ -313,7 +313,31 @@ public class Torque implements Initializable, Configurable
                 throw new TorqueException(e);
             }
         }
-    }
+
+        //
+        // As there might be a default database configured
+        // to map "default" onto an existing datasource, we
+        // must check, whether there _is_ really an entry for
+        // the "default" in the dsFactoryMap or not. If it is
+        // not, then add a dummy entry for the "default"
+        //
+        // Without this, you can't actually access the "default"
+        // data-source, even if you have an entry like 
+        //
+        // database.default = bookstore 
+        //
+        // in your Torque.properties
+        //
+        String defaultDB = getDefaultDB();
+
+        if(dsFactoryMap.get(DEFAULT_NAME) == null 
+           && !defaultDB.equals(DEFAULT_NAME))
+        {
+            category.debug("Adding a dummy entry for "
+                           + DEFAULT_NAME + ", mapped onto " + defaultDB);
+            dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
+        }
+}
 
     /**
      * configure torque
