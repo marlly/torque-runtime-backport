@@ -55,19 +55,20 @@ package org.apache.torque.task;
  */
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.FileSet;
-import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.texen.ant.TexenTask;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToAppData;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.texen.ant.TexenTask;
 
 /**
  * A base torque task that uses either a single XML schema
@@ -353,8 +354,7 @@ public class TorqueDataModelTask extends TexenTask
             dataModelDbMap.put(ad.getName(), database.getName());
         }
 
-        // Create a new Velocity context.
-        context = new VelocityContext(this.getProject().getProperties());
+        context = new VelocityContext();
 
         // Place our set of data models into the context along
         // with the names of the databases as a convenience for now.
@@ -364,37 +364,6 @@ public class TorqueDataModelTask extends TexenTask
         context.put("targetPackage", targetPackage);
 
         return context;
-    }
-    
-    /**
-     * Override Texen's behavior in that we'll map any 
-     * torque.xxx properties to just xxx so that the templates
-     * don't get over-whelmed with always doing torque.xxx.
-     * 
-     * @param file the file to load the context properties from
-     */
-    public void setContextProperties( String file )
-    {
-        super.setContextProperties(file);
-        
-        // Save the keys during iteration to avoid a ConcurrentModificationException
-        List keys = new ArrayList();
-        for (Iterator i = contextProperties.keySet().iterator(); i.hasNext(); )
-        {
-            String key = (String) i.next();
-            if (key.startsWith("torque."))
-            {
-                keys.add(key);
-            }
-        }
-        
-        for (Iterator i = keys.iterator(); i.hasNext(); )
-        {
-            String key = (String) i.next();
-            contextProperties.put(
-                key.substring("torque.".length()),
-                contextProperties.get(key));
-        }
     }
 
     /**
@@ -429,4 +398,29 @@ public class TorqueDataModelTask extends TexenTask
         }
         return name;
     }
+    
+    /**
+     * Override Texen's context properties to map the
+     * torque.xxx properties (including defaults set by the
+     * org/apache/torque/defaults.properties) to just xxx.
+     * 
+     * @param file the file to read the properties from
+     */
+    public void setContextProperties(String file)
+    {
+        super.setContextProperties(file);
+        
+        // Map the torque.xxx elements from the env to the contextProperties
+        Hashtable env = super.getProject().getProperties();
+        for (Iterator i = env.keySet().iterator(); i.hasNext(); )
+        {
+            String key = (String) i.next();
+            if (key.startsWith("torque."))
+            {
+                contextProperties.setProperty(
+                    key.substring("torque.".length()),
+                    env.get(key));
+            }
+        }
+    }        
 }
