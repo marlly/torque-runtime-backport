@@ -67,7 +67,7 @@ import org.apache.torque.pool.TorqueClassicDataSource;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able
- * to deploy the DataSource based on properties found in the 
+ * to deploy the DataSource based on properties found in the
  * configuration.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
@@ -111,6 +111,13 @@ public class TorqueDataSourceFactory
         ds = tcds;
     }
 
+    /**
+     * Initializes the ConnectionPoolDataSource.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     * @return a configured <code>ConnectionPoolDataSource</code>
+     */
     protected ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
@@ -135,6 +142,13 @@ public class TorqueDataSourceFactory
         return cpds;
     }
 
+    /**
+     * Initializes the TorqueClassicDataSource.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     * @return a configured <code>TorqueClassicDataSource</code>
+     */
     protected TorqueClassicDataSource initTorqueClassic(
         Configuration configuration)
         throws TorqueException

@@ -67,21 +67,21 @@ import org.apache.torque.TorqueException;
 
 /**
  * A factory that looks up the DataSource from JNDI.  It is also able
- * to deploy the DataSource based on properties found in the 
+ * to deploy the DataSource based on properties found in the
  * configuration.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
-public class Jdbc2PoolDataSourceFactory 
+public class Jdbc2PoolDataSourceFactory
     extends AbstractDataSourceFactory
     implements DataSourceFactory
 {
-    
+
     /** The log. */
     private static Category category =
         Category.getInstance(Jdbc2PoolDataSourceFactory.class);
-        
+
     /** The wrapped <code>DataSource</code>. */
     private DataSource ds;
 
@@ -104,7 +104,7 @@ public class Jdbc2PoolDataSourceFactory
                 "Torque cannot be initialized without a valid configuration. "
                 + "Please check the log files for further details.");
         }
-        
+
         ConnectionPoolDataSource cpds = initCPDS(configuration);
         Jdbc2PoolDataSource ds = initJdbc2Pool(configuration);
         ds.setConnectionPoolDataSource(cpds);
@@ -113,7 +113,7 @@ public class Jdbc2PoolDataSourceFactory
 
     /**
      * Initializes the ConnectionPoolDataSource.
-     * 
+     *
      * @param configuration where to read the settings from
      * @throws TorqueException if a property set fails
      * @return a configured <code>ConnectionPoolDataSource</code>
@@ -121,7 +121,7 @@ public class Jdbc2PoolDataSourceFactory
     private ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initCPDS"); 
+        category.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = configuration.subset("connection");
         try
@@ -133,7 +133,7 @@ public class Jdbc2PoolDataSourceFactory
                 category.debug("Setting datasource property: " + key);
                 setProperty(key, c, cpds);
             }
-        }            
+        }
         catch (Exception e)
         {
             category.error("", e);
@@ -142,10 +142,17 @@ public class Jdbc2PoolDataSourceFactory
         return cpds;
     }
 
+    /**
+     * Initializes the Jdbc2PoolDataSource.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     * @return a configured <code>Jdbc2PoolDataSource</code>
+     */
     private Jdbc2PoolDataSource initJdbc2Pool(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initTorqueClassic"); 
+        category.debug("Starting initTorqueClassic");
         Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
         Configuration c = configuration.subset("pool");
         try
@@ -154,11 +161,11 @@ public class Jdbc2PoolDataSourceFactory
             while (i.hasNext())
             {
                 String key = (String) i.next();
-                category.debug("Setting datasource property: " 
+                category.debug("Setting datasource property: "
                                + key);
                 setProperty(key, c, ds);
             }
-        }            
+        }
         catch (Exception e)
         {
             category.error("", e);

@@ -124,6 +124,12 @@ public class JndiDataSourceFactory
         initDataSource(configuration);
     }
 
+    /**
+     * Initializes JNDI.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     */
     private void initJNDI(Configuration configuration) throws TorqueException
     {
         category.debug("Starting initJNDI");
@@ -175,6 +181,12 @@ public class JndiDataSourceFactory
         }
     }
 
+    /**
+     * Initializes the DataSource.
+     *
+     * @param configuration where to read the settings from
+     * @throws TorqueException if a property set fails
+     */
     private void initDataSource(Configuration configuration)
         throws TorqueException
     {
@@ -214,6 +226,11 @@ public class JndiDataSourceFactory
         }
     }
 
+    /**
+     *
+     * @param ctx the context
+     * @throws NamingException
+     */
     private void debugCtx(Context ctx) throws NamingException
     {
         category.debug("InitialContext -------------------------------");
@@ -228,6 +245,13 @@ public class JndiDataSourceFactory
         category.debug("----------------------------------------------");
     }
 
+    /**
+     *
+     * @param ctx
+     * @param path
+     * @param ds
+     * @throws Exception
+     */
     private void bindDStoJndi(Context ctx, String path, Object ds)
         throws Exception
     {
