@@ -122,3 +122,44 @@ are being used ... but I'm getting there :-)
 
 Scott Eade has found that Monitor threads appear to be living on past
 servlet restarts. Need to add a test for that.
+
+----
+
+Problems with Large Schema Files
+
+In some cases, large schema files can cause Torque to fail to generate
+the object model.  There appears to be a memory leak which affects
+only the generation of the object model.  It does NOT present any
+problems at runtime, only during generation and only for especially
+large or complex schema files.  (FIXME: measure what "large or
+complex" really means -- in units of tables or foreign keys or
+something.)
+
+An attempt has been made (unsuccessfully) to allow a schema to be
+split across multiple files.  These notes are intended to record the
+problems in hopes that solutions can be found later without having to
+rediscover the problems.
+
+A schema can be successfully split into multiple files provided that
+all foreign keys defined in one file refer only to tables that are
+also defined in the same file.  A schema could be sufficiently complex
+that even the split up files would be too big for Torque to generate.
+
+One solution would be to find a way for Torque to generate code using
+keys to tables defined outside of the schema file.  As of March 8,
+2002, this doesn't work.  Object.vm includes some complex logic for
+generating methods to get related objects, and even more complex logic
+for methods that get related objects by joining multiple tables.  In
+order to generate these methods, Object.vm currently goes to the
+corresponding Table objects to get their foreign keys.  That is what
+constrains the generation.  The ForeignKey object does not contain
+sufficient information for Object.vm to generate those methods without
+support from the Table objects.  Therefore the Tables must also be
+defined and in memory.  Hence the requirement for a single file.
+
+A couple possible areas for investigation.  Perhaps the graph package
+in Commons could be employed to capture the foreign key structure in a
+more memory efficient way.  Right now Torque uses Texen tasks and
+velocity templates to transform the xml schema into object models.
+Might be worth investigating DVSL to see if it can do what Texen does
+but with less memory (or with less complexity).
