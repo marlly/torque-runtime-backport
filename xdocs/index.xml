@@ -55,13 +55,13 @@
             </li>
             <p/>
             <li>
-              <strong>project-datadtd</strong><br/>
+              <strong>project-datadtd(-classpath)</strong><br/>
               generates data DTD from an XML schema describing a database
               structure
             </li>
             <p/>
             <li>
-              <strong>project-datadump</strong><br/>
+              <strong>project-datadump(-classpath)</strong><br/>
               dumping data from db into XML
             </li>
             <p/>
@@ -81,7 +81,7 @@
             </li>
             <p/>
             <li>
-              <strong>project-insert-sql(-classpath)</strong><br/>
+              <strong>project-insert-sql</strong><br/>
               inserts a SQL file into its designated database
             </li>
             <p/>
