@@ -16,8 +16,8 @@
   </path>
 
   <!--
-       Load the build.properties file. All the targets use the
-       information stored in the properties file.
+    Load the build.properties file. All the targets use the
+    information stored in the properties file.
   -->
 
   <property name="build.properties" value="build.properties"/>
@@ -32,76 +32,37 @@
   <!-- when you change your XML schema.                                 -->
   <!-- ================================================================ -->
 
-  <target name="main" description="==> generates sql + om classes">
+  <target 
+    name="main" 
+    description="==> generates sql + om classes">
+    
     <antcall target="project-sql"/>
     <antcall target="project-om"/>
   </target>
 
-  <target name="main-classpath" description="==> generates sql + om classes">
+  <target 
+    name="main-classpath" 
+    description="==> generates sql + om classes">
+    
     <antcall target="project-sql-classpath"/>
     <antcall target="project-om-classpath"/>
   </target>
 
   <!-- ================================================================ -->
-  <!-- I N I T  T A S K  T A R G E T                                    -->
-  <!-- ================================================================ -->
-  <!-- Taskdefs are defined inside this target as Ant seems to have     -->
-  <!-- problems defining them at the top level.                         -->
-  <!-- ================================================================ -->
-
-  <target name="init-tasks">
-
-    <taskdef name="torque-datasql"
-      classname="org.apache.torque.task.TorqueDataSQLTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="torque-datadump"
-      classname="org.apache.torque.task.TorqueDataDumpTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="torque-datadtd"
-      classname="org.apache.torque.task.TorqueDataDTDTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="torque-sql"
-      classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="torque-om"
-      classname="org.apache.torque.task.TorqueObjectModelTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="sql-xml"
-      classname="org.apache.torque.task.TorqueSQLTransformTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="texen"
-      classname="org.apache.velocity.texen.ant.TexenTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <taskdef name="torque-jdbc"
-      classname="org.apache.torque.task.TorqueJDBCTransformTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-  </target>
-
-
-  <!-- ================================================================ -->
   <!-- J D B C  TO  X M L                                               -->
   <!-- ================================================================ -->
 
-  <target name="project-jdbc" depends="init-tasks"
-          description="==> jbbc to xml">
+  <target 
+    name="project-jdbc" 
+    description="==> jbbc to xml">
 
     <echo message="JDBC transform"/>
+
+    <taskdef 
+      name="torque-jdbc"
+      classname="org.apache.torque.task.TorqueJDBCTransformTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-jdbc
       dbUrl="${databaseUrl}"
@@ -118,8 +79,9 @@
   <!-- Generate SQL from XML data file                                  -->
   <!-- ================================================================ -->
 
-  <target name="project-datasql" depends="init-tasks"
-          description="==> generates sql from data xml">
+  <target 
+    name="project-datasql" 
+    description="==> generates sql from data xml">
 
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
@@ -128,6 +90,12 @@
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
+
+    <taskdef 
+      name="torque-datasql"
+      classname="org.apache.torque.task.TorqueDataSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-datasql
       contextProperties="${build.properties}"
@@ -148,8 +116,9 @@
   <!-- Dump data from database into xml file                            -->
   <!-- ================================================================ -->
 
-  <target name="project-datadump" depends="init-tasks"
-          description="==> dump data from database into xml file">
+  <target 
+    name="project-datadump" 
+    description="==> dump data from database into xml file">
 
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
@@ -158,6 +127,12 @@
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
+
+    <taskdef 
+      name="torque-datadump"
+      classname="org.apache.torque.task.TorqueDataDumpTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-datadump
       contextProperties="${build.properties}"
@@ -181,8 +156,9 @@
   <!-- Generate the DATA DTD for your project                           -->
   <!-- ================================================================ -->
 
-  <target name="project-datadtd" depends="init-tasks"
-          description="==> generates the DATA DTD for your project">
+  <target 
+    name="project-datadtd" 
+    description="==> generates the DATA DTD for your project">
 
     <echo message="+-----------------------------------------------+"/>
     <echo message="|                                               |"/>
@@ -190,6 +166,12 @@
     <echo message="| Woo hoo!                                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-datadtd"
+      classname="org.apache.torque.task.TorqueDataDTDTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-datadtd
       contextProperties="${build.properties}"
@@ -211,8 +193,9 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target name="project-sql" depends="init-tasks"
-          description="==> generates the SQL for your project">
+  <target 
+    name="project-sql" 
+    description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -220,6 +203,12 @@
     <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-sql
       contextProperties="${build.properties}"
@@ -241,8 +230,9 @@
   <!-- ================================================================ -->
 
 
-  <target name="project-om" depends="init-tasks"
-          description="==> generates the Peer-based object model for your project">
+  <target 
+    name="project-om" 
+    description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -250,6 +240,12 @@
     <echo message="| YOUR Turbine project! Woo hoo!           |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-om"
+      classname="org.apache.torque.task.TorqueObjectModelTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-om
       contextProperties="${build.properties}"
@@ -259,7 +255,6 @@
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
-      targetDatabase="${database}"
     />
 
   </target>
@@ -272,7 +267,8 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target name="project-sql-classpath" depends="init-tasks">
+  <target 
+    name="project-sql-classpath">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -280,6 +276,12 @@
     <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-sql
       contextProperties="${build.properties}"
@@ -300,7 +302,8 @@
   <!-- These are in addition to the base Turbine OM!                    -->
   <!-- ================================================================ -->
 
-  <target name="project-om-classpath" depends="init-tasks">
+  <target 
+    name="project-om-classpath">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -308,6 +311,12 @@
     <echo message="| YOUR Turbine project! Woo hoo!           |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
+
+    <taskdef 
+      name="torque-om"
+      classname="org.apache.torque.task.TorqueObjectModelTask">
+      <classpath refid="classpath"/>
+    </taskdef>
 
     <torque-om
       contextProperties="${build.properties}"
@@ -325,7 +334,10 @@
   <!-- =================================================================== -->
   <!-- C O M P I L E  O M                                                  -->
   <!-- =================================================================== -->
-  <target name="compile" description="==> compiles the OM classes">
+  
+  <target 
+    name="compile" 
+    description="==> compiles the OM classes">
 
     <!--
       This should be moved to the top of the file, and
@@ -345,31 +357,12 @@
       debug="${debug}"
       deprecation="${deprecation}"
       optimize="${optimize}">
-
       <classpath refid="classpath"/>
-
     </javac>
   </target>
 
-
-  <!-- ================================================================ -->
-  <!-- G E N E R A T E  T U R B I N E  S E R V I C E                    -->
-  <!-- ================================================================ -->
-  <!-- Generate turbine service code.                                   -->
-  <!-- ================================================================ -->
-
-  <target name="turbine-service" depends="init-tasks">
-
-    <texen
-      contextProperties="service.props"
-      controlTemplate="${ServiceControlTemplate}"
-      outputDirectory="${outputDirectory}"
-      templatePath="${templatePath}"
-      outputFile="report.${project}.service.generation"
-    />
-
-  </target>
-
+  <!-- =================================================================== -->
+  <!-- S Q L  T O  X M L                                                   -->
   <!-- =================================================================== -->
   <!-- Create an xml schema from an sql schema.                            -->
   <!--                                                                     -->
@@ -378,8 +371,16 @@
   <!-- outputFile: The file where the xml schema will be written           -->
   <!-- =================================================================== -->
 
-  <target name="sql2xml" depends="init-tasks"
-          description="==> creates an xml schema from an sql schema">
+  <target 
+    name="project-sql2xml" 
+    description="==> creates an xml schema from an sql schema">
+
+    <taskdef 
+      name="sql-xml"
+      classname="org.apache.torque.task.TorqueSQLTransformTask">
+      <classpath refid="classpath"/>
+    </taskdef>
+
     <sql-xml
       inputFile="schema/schema.sql"
       outputFile="schema/schema.xml"
@@ -387,19 +388,23 @@
   </target>
 
   <!-- ================================================================== -->
-  <!-- Creates the API documentation                                      -->
+  <!-- J A V A D O C                                                      -->
   <!-- ================================================================== -->
-  <target name="javadocs"
-          description="==> generates the API documentation">
+  
+  <target 
+    name="javadocs"
+    description="==> generates the API documentation">
+    
     <mkdir dir="${torque.home}/${outputDirectory}/javadoc"/>
-    <javadoc sourcepath="${torque.home}/${outputDirectory}"
-             packagenames="${targetPackage}.*"
-             destdir="${outputDirectory}/javadoc"
-             author="true"
-             private="true"
-             version="true"
-             use="true"
-    >
+    
+    <javadoc 
+      sourcepath="${torque.home}/${outputDirectory}"
+      packagenames="${targetPackage}.*"
+      destdir="${outputDirectory}/javadoc"
+      author="true"
+      private="true"
+      version="true"
+      use="true">
       <classpath refid="classpath"/>
     </javadoc>
   </target>

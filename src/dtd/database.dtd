@@ -3,8 +3,6 @@
     $Id$
 -->
 
-<!ELEMENT app-data (database+)>
-
 <!--
 For: database.defaultIdMethod and table.idMethod
 
