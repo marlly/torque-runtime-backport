@@ -6,3 +6,4 @@ databaseDriver = org.enhydra.instantdb.jdbc.idbDriver
 createDatabaseUrl = 
 buildDatabaseUrl = 
 databaseUrl = C:/TurbineDB/Turbine.prp
+torque.database.validationQuery = SELECT 1

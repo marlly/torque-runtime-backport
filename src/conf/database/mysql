@@ -6,3 +6,4 @@ databaseDriver = org.gjt.mm.mysql.Driver
 createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
 buildDatabaseUrl = jdbc:mysql://localhost:3306/${tdk.project}
 databaseUrl = jdbc:mysql://localhost:3306/${tdk.project}
+torque.database.validationQuery = SELECT 1

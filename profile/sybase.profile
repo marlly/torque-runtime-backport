@@ -72,6 +72,7 @@ torque.database.driver = com.sybase.jdbc2.jdbc.SybDriver
 torque.database.user = sa
 torque.database.password =
 torque.database.host = localhost
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

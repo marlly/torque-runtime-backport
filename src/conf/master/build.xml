@@ -46,6 +46,7 @@
     <filter token="DATABASE_DEFAULT" value="${torque.database.name}"/>
     <filter token="PROJECT" value="${torque.project}"/>
     <filter token="APPLICATION_ROOT" value="${application.root}"/>
+    <filter token="VALIDATION_QUERY" value="${torque.database.validationQuery}"/>
 
   </target>
 

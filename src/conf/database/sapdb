@@ -6,3 +6,4 @@ databaseDriver = com.sap.dbtech.jdbc.DriverSapDB
 createDatabaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle
 buildDatabaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle
 databaseUrl = jdbc:sapdb://localhost/${tdk.project}?sqlmode=oracle
+torque.database.validationQuery = SELECT 1

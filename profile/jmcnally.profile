@@ -72,6 +72,7 @@ torque.database.url = jdbc:mysql://localhost:3306/bookstore
 torque.database.driver = org.gjt.mm.mysql.Driver
 torque.database.user = root
 torque.database.password =
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

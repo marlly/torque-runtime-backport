@@ -74,6 +74,7 @@ torque.database.driver = org.axiondb.jdbc.AxionDriver
 torque.database.user = sa
 torque.database.password =
 torque.database.host = 127.0.0.1
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

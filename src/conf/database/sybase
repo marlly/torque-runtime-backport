@@ -6,3 +6,4 @@ databaseDriver = com.sybase.jdbc.SybDriver
 createDatabaseUrl = jdbc:sybase:Tds:localhost:5000/${tdk.project}
 buildDatabaseUrl = jdbc:sybase:Tds:localhost:5000/${tdk.project}
 databaseUrl = jdbc:sybase:Tds:localhost:5000/${tdk.project}
+torque.database.validationQuery = SELECT 1

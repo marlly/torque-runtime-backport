@@ -6,3 +6,4 @@ databaseDriver = com.ibm.as400.access.AS400JDBCDriver
 createDatabaseUrl = jdbc:as400://yourAS400/${tdk.project}
 buildDatabaseUrl = jdbc:as400://yourAS400/${tdk.project}
 databaseUrl = jdbc:as400://yourAS400/${tdk.project}
+torque.database.validationQuery = SELECT 1

@@ -6,3 +6,4 @@ databaseDriver = org.postgresql.Driver
 createDatabaseUrl = jdbc:postgresql://localhost:5432/template1
 buildDatabaseUrl = jdbc:postgresql://localhost:5432/${tdk.project}
 databaseUrl = jdbc:postgresql://localhost:5432/${tdk.project}
+torque.database.validationQuery = SELECT 1

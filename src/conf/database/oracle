@@ -6,3 +6,4 @@ databaseDriver = oracle.jdbc.driver.OracleDriver
 createDatabaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
 buildDatabaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
 databaseUrl = jdbc:oracle:thin:@localhost:1521:${tdk.project}
+torque.database.validationQuery = SELECT 1 FROM DUAL

@@ -72,6 +72,7 @@ torque.database.driver = com.sap.dbtech.jdbc.DriverSapDB
 torque.database.user = tdk
 torque.database.password = tdk
 torque.database.host = edobbs
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

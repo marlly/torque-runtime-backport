@@ -73,6 +73,7 @@ torque.database.driver = oracle.jdbc.driver.OracleDriver
 torque.database.user = protot2
 torque.database.password = protot2protot2
 torque.database.host = cpddev2.engin.umich.edu
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

@@ -74,6 +74,7 @@ torque.database.driver = com.ibm.as400.access.AS400JDBCDriver
 torque.database.user =
 torque.database.password =
 torque.database.host = testhost
+torque.database.validationQuery = SELECT 1
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

@@ -74,6 +74,7 @@ torque.database.user = torque
 torque.database.password = torque
 torque.database.host = alpha.tucana.at
 torque.database.schema = TORQUE
+torque.database.validationQuery = SELECT 1 FROM DUAL
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

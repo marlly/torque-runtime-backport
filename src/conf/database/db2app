@@ -6,3 +6,4 @@ databaseDriver = COM.ibm.db2.jdbc.app.DB2Driver
 createDatabaseUrl = 
 buildDatabaseUrl = 
 databaseUrl =
+torque.database.validationQuery = SELECT 1
