@@ -103,8 +103,7 @@ public class Torque
                Disposable
 {
     /**
-     * Name of property that specifies the default
-     * map builder and map.
+     * Name of property that specifies the default map builder and map.
      */
     public static final String DATABASE_DEFAULT = "database.default";
 
@@ -129,7 +128,6 @@ public class Torque
      * property to determine whether caching is used.
      */
     public static final String CACHE_KEY = "manager.useCache";
-
 
     /**
      * The db name that is specified as the default in the property file
@@ -159,8 +157,8 @@ public class Torque
     /**
      * The logging category.
      */
-    private static Category category =
-        Category.getInstance(Torque.class.getName());
+    private static Category category
+            = Category.getInstance(Torque.class.getName());
 
     /**
      * Torque-specific configuration.
@@ -874,47 +872,6 @@ public class Torque
     }
 
     /**
-     * This method returns a Connecton using the given parameters.
-     *
-     * @param name The database name.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return A Connection.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     *
-     * @deprecated Database parameters should not be specified each
-     * time a Connection is fetched from the service.
-     */
-    public static Connection getConnection(String name,
-                                           String username,
-                                           String password)
-        throws TorqueException
-    {
-        Connection con = null;
-        DataSourceFactory dsf = null;
-        try
-        {
-            dsf = (DataSourceFactory) dsFactoryMap.get(name);
-            con = dsf.getDataSource().getConnection(username, password);
-        }
-        catch (Exception e)
-        {
-             if (dsf == null && e instanceof NullPointerException)
-             {
-                 throw new NullPointerException(
-                     "There was no DataSourceFactory "
-                     + "configured for the connection " + name);
-             }
-             else
-             {
-                 throw new TorqueException(e);
-             }
-        }
-        return con;
-    }
-
-    /**
      *
      * @param name The database name.
      * @return a database connection
@@ -981,15 +938,6 @@ public class Torque
         }
 
         return defaultDBName;
-    }
-
-    /**
-     * @return name of the default Map
-     * @deprecated Use getDefaultDB() instead.
-     */
-    public static String getDefaultMap()
-    {
-        return getDefaultDB();
     }
 
     /**
