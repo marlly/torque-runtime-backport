@@ -113,15 +113,27 @@ public class XmlToAppData extends DefaultHandler
     private String errorMessage;
     
     /**
-     * Default custructor
+     * Creates a new instance.
      */
     public XmlToAppData()
     {
-        app = null;
+        this(null, null);
+    }
+
+    /**
+     * Creates a new instance for the specified database type.
+     *
+     * @param databaseType The type of database for the application.
+     * @param basePropsFilePath The base of the path to the properties
+     * file, including trailing slash.
+     */
+    public XmlToAppData(String databaseType, String basePropsFilePath)
+    {
+        app = (databaseType == null ? new AppData() :
+               new AppData(databaseType, basePropsFilePath));
         firstPass = true;
         errorMessage = "";
     }
-
 
     /**
      * Parse and xml input file and returns a newly
@@ -131,11 +143,6 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
-            if ( firstPass ) 
-            {
-                app = new AppData();                
-            }
-            
             SAXParser parser = new SAXParser();
 
             // set the Resolver for the database DTD
