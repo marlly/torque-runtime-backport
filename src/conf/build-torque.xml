@@ -726,6 +726,13 @@
   <!-- =================================================================== -->
 
   <target
+    name="ojb"
+    description="==> generates the repository and om for ojb (experimental)">
+    <antcall target="ojb-repository"/>
+    <antcall target="ojb-model"/>
+  </target>
+
+  <target
     name="ojb-repository"
     description="==> generates the repository for ojb (experimental)">
 
@@ -779,57 +786,4 @@
     </torque-data-model>
   </target>
 
-  <!--
-    Deprecated targets with the project- prefix.
-  -->
-  <target name="project-sql">
-    <echo message="The 'project-sql' target is deprecated. Please use the 'sql' target instead."/>
-    <antcall target="sql"/>
-  </target>
-  <target name="project-om">
-    <echo message="The 'project-om' target is deprecated. Please use the 'om' target instead."/>
-    <antcall target="om"/>
-  </target>
-  <target name="project-doc">
-    <echo message="The 'project-doc' target is deprecated. Please use the 'doc' target instead."/>
-    <antcall target="doc"/>
-  </target>
-  <target name="project-create-db">
-    <echo message="The 'project-create-db' target is deprecated. Please use the 'create-db' target instead."/>
-    <antcall target="create-db"/>
-  </target>
-  <target name="project-insert-sql">
-    <echo message="The 'project-insert-sql' target is deprecated. Please use the 'insert-sql' target instead."/>
-    <antcall target="insert-sql"/>
-  </target>
-  <target name="project-jdbc">
-    <echo message="The 'project-jdbc' target is deprecated. Please use the 'jdbc' target instead."/>
-    <antcall target="jdbc"/>
-  </target>
-  <target name="project-datasql">
-    <echo message="The 'project-datasql' target is deprecated. Please use the 'datasql' target instead."/>
-    <antcall target="datasql"/>
-  </target>
-  <target name="project-datadump">
-    <echo message="The 'project-datadump' target is deprecated. Please use the 'datadump' target instead."/>
-    <antcall target="datadump"/>
-  </target>
-  <target name="project-datadtd">
-    <echo message="The 'project-datadtd' target is deprecated. Please use the 'datadtd' target instead."/>
-    <antcall target="datadtd"/>
-  </target>
-  <target name="project-sql2xml">
-    <echo message="The 'project-sql2xml' target is deprecated. Please use the 'sql2xml' target instead."/>
-    <antcall target="sql2xml"/>
-  </target>
-  <target name="project-ojb-repository">
-    <echo message="The 'project-ojb-repository' target is deprecated. Please use the 'ojb-repository' target instead."/>
-    <antcall target="ojb-repository"/>
-  </target>
-  <target name="project-ojb-model">
-    <echo message="The 'project-obj-model' target is deprecated. Please use the 'ojb-model' target instead."/>
-    <antcall target="ojb-model"/>
-  </target>
-
 </project>
-
