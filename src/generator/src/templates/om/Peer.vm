@@ -282,6 +282,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
+    #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (criteria.containsKey($cup))
+        {
+            Object possibleBoolean = criteria.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    criteria.add($cup, "1");
+                }
+                else
+                {
+                    criteria.add($cup, "0");
+                }
+            }
+         }
     #end
   #end
 
@@ -478,6 +495,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
+    #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (criteria.containsKey($cup))
+        {
+            Object possibleBoolean = criteria.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    criteria.add($cup, "1");
+                }
+                else
+                {
+                    criteria.add($cup, "0");
+                }
+            }
+         }
     #end
   #end
 
@@ -666,6 +700,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
+    #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (criteria.containsKey($cup))
+        {
+            Object possibleBoolean = criteria.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    criteria.add($cup, "1");
+                }
+                else
+                {
+                    criteria.add($cup, "0");
+                }
+            }
+         }
     #end
     #if($col.isPrimaryKey())
          selectCriteria.put($cup, criteria.remove($cup));
@@ -748,6 +799,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 else
                 {
                     criteria.add($cup, "N");
+                }
+            }
+         }
+    #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (criteria.containsKey($cup))
+        {
+            Object possibleBoolean = criteria.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    criteria.add($cup, "1");
+                }
+                else
+                {
+                    criteria.add($cup, "0");
                 }
             }
          }
@@ -1290,6 +1358,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 }
             }
          }
+          #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (c.containsKey($cup))
+        {
+            Object possibleBoolean = c.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    c.add($cup, "1");
+                }
+                else
+                {
+                    c.add($cup, "0");
+                }
+            }
+         }
           #end
         #end
 
@@ -1457,6 +1542,23 @@ public abstract class $basePrefix${table.JavaName}Peer
                 else
                 {
                     c.add($cup, "N");
+                }
+            }
+         }
+          #elseif ($col.isBit())
+        // check for conversion from boolean to bit (1/0)
+        if (c.containsKey($cup))
+        {
+            Object possibleBoolean = c.get($cup);
+            if (possibleBoolean instanceof Boolean)
+            {
+                if (((Boolean) possibleBoolean).booleanValue())
+                {
+                    c.add($cup, "1");
+                }
+                else
+                {
+                    c.add($cup, "0");
                 }
             }
          }

@@ -9,6 +9,10 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='fix'>
+        Corrected handling of BIT with PostgreSQL.  Note that the solution
+        implemented has been tested under MySLQ and PostgreSQL only.
+      </action>
       <action dev='seade' type='add'>
         The <code>adapter</code> property is now used in preference to 
         <code>driver</code> when building the database map.  This allows Torque

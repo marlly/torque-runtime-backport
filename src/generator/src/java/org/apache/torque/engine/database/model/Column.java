@@ -891,6 +891,15 @@ public class Column
     }
 
     /**
+     * Returns true if the column type is boolean in the
+     * java object and a Bit ("1" or "0") in the db.
+     */
+    public boolean isBit()
+    {
+        return TypeMap.isBit(torqueType);
+    }
+
+    /**
      * returns true, if the columns java native type is an
      * boolean, byte, short, int, long, float, double, char
      */

@@ -589,6 +589,18 @@ public class TypeMap
     }
 
     /**
+     * Returns true if the type is boolean in the
+     * java object and a Bit "1" or "0" in the db.
+     *
+     * @param type The type to check.
+     * @return true if the type is BIT
+     */
+    public static boolean isBit(String type)
+    {
+        return BIT.equals(type);
+    }
+
+    /**
      * Returns true if values for the type need to be quoted.
      *
      * @param type The type to check.
