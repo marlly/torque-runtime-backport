@@ -46,9 +46,6 @@
       overwrite="yes">
       <fileset dir="${rttest.dir}">
         <include name="**/*.xml"/>
-        <!-- exclude this for now because getting this
-             to work with all the databases will be a lot of work -->
-        <exclude name="**/type-test-schema.xml"/>
       </fileset>
     </copy>
 
