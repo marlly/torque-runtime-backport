@@ -54,12 +54,7 @@ package org.apache.torque.pool;
  * <http://www.apache.org/>.
  */
 
-import java.util.Properties;
-import java.io.FileInputStream;
-
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
-import org.apache.log4j.PropertyConfigurator;
 
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.Torque;
@@ -71,6 +66,8 @@ import junit.framework.TestSuite; */
 /**
  * 25 concurrent
  * 10-100 ms holding connections before release
+ *
+ * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
  */
 public class PoolTest implements Runnable
 {
@@ -111,19 +108,7 @@ public class PoolTest implements Runnable
     {
         try
         {
-            ExtendedProperties config = new ExtendedProperties(CONFIG_FILE);
-            config = config.subset ("services.DatabaseService");
-            System.out.println ("CONFIG: " +
-                                config.getString("database.default"));
-
-            Properties p = new Properties();
-            p.load(new FileInputStream(CONFIG_FILE));
-            PropertyConfigurator.configure(p);
-
-            Torque.setConfiguration(config);
-            category = Category.getInstance("ALL");
-            Torque.setCategory(category);
-            Torque.init();
+            Torque.init(CONFIG_FILE);
 
             for (int i = 0; i < NBR_THREADS; i++)
             {

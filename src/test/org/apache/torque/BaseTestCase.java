@@ -54,14 +54,6 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import org.apache.commons.collections.ExtendedProperties;
-
-import org.apache.log4j.Category;
-import org.apache.log4j.PropertyConfigurator;
-
 import junit.framework.TestCase;
 
 /**
@@ -102,39 +94,16 @@ public abstract class BaseTestCase extends TestCase
             {
                 if (!hasInitialized)
                 {
-                    initTorque();
+                    try
+                    {
+                        Torque.init(CONFIG_FILE);
+                    }
+                    catch (Exception e)
+                    {
+                        fail("Couldn't initialize Torque: " + e.getMessage());
+                    }
                 }
             }
-        }
-    }
-
-    /**
-     * Performs Torque initialization activities.
-     */
-    private final void initTorque()
-    {
-        try
-        {
-            ExtendedProperties config = new ExtendedProperties(CONFIG_FILE);
-            // HELP: What about the database.* properties?
-            config = config.subset("services.DatabaseService");
-            if (DEBUG)
-            {
-                System.out.println("Using configuration file: " +
-                                   config.getString(Torque.DATABASE_DEFAULT));
-            }
-
-            Properties p = new Properties();
-            p.load(new FileInputStream(CONFIG_FILE));
-            PropertyConfigurator.configure(p);
-
-            Torque.setConfiguration(config);
-            Torque.setCategory(Category.getInstance("ALL"));
-            Torque.init();
-        }
-        catch (Exception e)
-        {
-            fail("Couldn't initialize Torque: " + e.getMessage());
         }
     }
 }
