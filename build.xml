@@ -159,7 +159,7 @@
   <!-- ================================================================== -->
   
   <target name="prepare" 
-    depends="init,check.velocity,check.xerces,check.log4j,check.commons-util,check.jdbc,env">
+    depends="init,check.velocity,check.xerces,check.village,check.log4j,check.commons-util,check.jdbc,env">
     
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/classes"/>
