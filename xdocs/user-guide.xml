@@ -3,18 +3,28 @@
 <document>
 
   <properties>
-    <title>Torque Developer's Guide</title>
+    <title>Torque User's Guide</title>
     <author email="jvanzyl@apache.org">Jason van Zyl</author>
   </properties>
 
-<body>
-
-<section name="What is Torque?">
-
-<p>
-</p>
-
-</section>
-
-</body>
+  <body>
+    <section name="Table of Contents">
+      <p>
+        <ol>
+          <li>
+            <a href="#About this Guide">About this Guide</a>
+          </li>
+        </ol>
+      </p>
+    </section>
+  
+    <section name="About this Guide">
+      <p>
+        The Torque User's guide is intended to help those who intend
+        to incorporate Torque into their project to provide a means
+        of persistence for application objects.
+      </p>
+    </section>
+  
+  </body>
 </document>

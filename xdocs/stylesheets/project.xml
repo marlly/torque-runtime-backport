@@ -6,8 +6,12 @@
 
   <body>
     <menu name="Torque">
-      <item name="Overview"              href="/index.html"/>
-      <item name="Schema Reference"      href="/schema-reference.html"/>
+      <item name="Overview"         href="/index.html"/>
+      <item name="Schema Reference" href="/schema-reference.html"/>
+    </menu>
+    <menu name="Guides">
+      <item name="User Guide"       href="/user-guide.html"/>
+      <item name="Developer Guide"  href="/developer-guide.html"/>
     </menu>
   </body>
 </project>
