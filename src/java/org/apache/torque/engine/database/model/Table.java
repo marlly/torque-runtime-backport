@@ -209,7 +209,7 @@ public class Table implements IDMethod
             // it's a primary key.
             for (int i = 1; i < size; i++)
             {
-                addIndex(new Index(pk.subList(i, size)));
+                addIndex(new Index(this, pk.subList(i, size)));
             }
         }
         catch (TorqueException e)
@@ -224,45 +224,31 @@ public class Table implements IDMethod
      */
     private void doNaming()
     {
-        Iterator iter;
+        int i, size;
         String name;
 
         // Assure names are unique across all databases.
         try
         {
-            for (iter = foreignKeys.iterator(); iter.hasNext(); )
+            for (i = 0, size = foreignKeys.size(); i < size; i++)
             {
-                ForeignKey fk = (ForeignKey) iter.next();
+                ForeignKey fk = (ForeignKey) foreignKeys.get(i);
                 name = fk.getName();
                 if (StringUtils.isEmpty(name))
                 {
-                    List columnNames = fk.getLocalColumns();
-                    List disposableList =
-                        new ArrayList(columnNames.size() + 2);
-                    disposableList.addAll(columnNames);
-                    name = acquireUnusedGlobalName(name, disposableList, "FK");
+                    name = acquireConstraintName("FK", i + 1);
                     fk.setName(name);
-                }
-                else
-                {
-                    getDatabase().getAppData().markNameAsUsed(name);
                 }
             }
 
-            for (iter = indices.iterator(); iter.hasNext(); )
+            for (i = 0, size = indices.size(); i < size; i++)
             {
-                Index index = (Index) iter.next();
+                Index index = (Index) indices.get(i);
                 name = index.getName();
                 if (StringUtils.isEmpty(name))
                 {
-                    name = acquireUnusedGlobalName(name,
-                                                   index.getColumnNames(),
-                                                   "I");
+                    name = acquireConstraintName("I", i + 1);
                     index.setName(name);
-                }
-                else
-                {
-                    getDatabase().getAppData().markNameAsUsed(name);
                 }
             }
 
@@ -278,20 +264,25 @@ public class Table implements IDMethod
     }
 
     /**
-     * Macro to acquire an unused system name.
+     * Macro to a constraint name.
      */
-    private final String acquireUnusedGlobalName(String name, List inputs,
-                                                 String additionalPart)
+    private final String acquireConstraintName(String nameType, int nbr)
         throws TorqueException
     {
-        inputs.add(0, getDatabase().getAppData());
-        inputs.add(additionalPart);
-        return NameFactory.generateName(NameFactory.GLOBAL_GENERATOR, inputs);
+        List inputs = new ArrayList(4);
+        inputs.add(getDatabase());
+        inputs.add(getName());
+        inputs.add(nameType);
+        inputs.add(new Integer(nbr));
+        return NameFactory.generateName(NameFactory.CONSTRAINT_GENERATOR,
+                                        inputs);
     }
 
     /**
-     * Get the value of baseClass.
-     * @return value of baseClass.
+     * Gets the value of base class for classes produced from this
+     * table.
+     *
+     * @return The base class for classes produced from this table.
      */
     public String getBaseClass()
     {
