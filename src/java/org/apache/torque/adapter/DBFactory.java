@@ -105,24 +105,24 @@ public class DBFactory
     {
         adapters = new Hashtable();
         initializeDriverToAdapterMap();
-        
+
         // Add the null database adapter.
         registerAdapter("", DBNone.class);
         Iterator i = configuration.getKeys();
-        
+
         while (i.hasNext())
         {
             String key = (String) i.next();
-            
+
             if (key.endsWith("driver"))
             {
                 String driver = configuration.getString(key);
                 Class adapterClass = null;
-                String adapterClassName = 
+                String adapterClassName =
                     (String) adapterPackage + "." + driverToAdapterMap.get(driver);
-                
+
                 category.debug("Using " + adapterClassName);
-                
+
                 try
                 {
                     adapterClass = Class.forName(adapterClassName);
@@ -137,7 +137,7 @@ public class DBFactory
                     registerAdapter(driver, adapterClass);
                 }
             }
-        }            
+        }
     }
 
     /**
@@ -146,7 +146,7 @@ public class DBFactory
     private static void initializeDriverToAdapterMap()
     {
         driverToAdapterMap = new Hashtable();
-        
+
         driverToAdapterMap.put("com.ibm.as400.access.AS400JDBCDriver", "DBDB2400");
         driverToAdapterMap.put("COM.ibm.db2.jdbc.app.DB2Driver", "DBDB2App");
         driverToAdapterMap.put("COM.ibm.db2.jdbc.net.DB2Driver", "DBDB2Net");
@@ -154,14 +154,14 @@ public class DBFactory
         driverToAdapterMap.put("org.hsql.jdbcDriver", "DBHypersonicSQL");
         driverToAdapterMap.put("interbase.interclient.Driver", "DBInterbase");
         driverToAdapterMap.put("org.enhydra.instantdb.jdbc.idbDriver", "DBInstantDB");
-        //driverToAdapterMap.put("", "DBMSSQL");
+        driverToAdapterMap.put("com.microsoft.jdbc.sqlserver.SQLServerDriver", "DBMSSQL");
         driverToAdapterMap.put("org.gjt.mm.mysql.Driver", "DBMM");
         driverToAdapterMap.put("oracle.jdbc.driver.OracleDriver", "DBOracle");
         driverToAdapterMap.put("org.postgresql.Driver", "DBPostgres");
         driverToAdapterMap.put("com.sap.dbtech.jdbc.DriverSapDB", "DBSapDB");
         driverToAdapterMap.put("com.sybase.jdbc.SybDriver", "DBSybase");
         driverToAdapterMap.put("weblogic.jdbc.pool.Driver", "DBWeblogic");
-    }        
+    }
 
     /**
      * Registers the <code>Class</code> of a database adapter at the
