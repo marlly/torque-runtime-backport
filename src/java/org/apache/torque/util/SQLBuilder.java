@@ -470,17 +470,16 @@ public abstract class SQLBuilder
             for (int i = 0; i < orderBy.size(); i++)
             {
                 String orderByColumn = (String) orderBy.get(i);
-                if (orderByColumn.indexOf('.') == -1)
+                int dotPos = orderByColumn.lastIndexOf('.');
+                if (dotPos == -1)
                 {
                     throwMalformedColumnNameException(
                             "order by",
                             orderByColumn);
                 }
 
-                //String table =
-                //    orderByColumn.substring(0, orderByColumn.lastIndexOf('.'));
                 String tableName =
-                        orderByColumn.substring(0, orderByColumn.indexOf('.'));
+                        orderByColumn.substring(0, dotPos);
                 String table = crit.getTableForAlias(tableName);
                 if (table == null)
                 {
@@ -494,13 +493,11 @@ public abstract class SQLBuilder
                 if (spacePos == -1)
                 {
                     columnName =
-                            orderByColumn.substring(orderByColumn.indexOf('.') + 1);
+                            orderByColumn.substring(dotPos + 1);
                 }
                 else
                 {
-                    columnName = orderByColumn.substring(
-                            orderByColumn.indexOf('.') + 1,
-                            spacePos);
+                    columnName = orderByColumn.substring(dotPos + 1, spacePos);
                 }
                 ColumnMap column = dbMap.getTable(table).getColumn(columnName);
                 if (column.getType() instanceof String)

@@ -3070,7 +3070,7 @@ public class Criteria extends Hashtable
         Criterion(String tableColumn, Object val, SqlEnum comp)
         {
             this(val, comp);
-            int dot = tableColumn.indexOf('.');
+            int dot = tableColumn.lastIndexOf('.');
             if (dot == -1)
             {
                 table = "";
