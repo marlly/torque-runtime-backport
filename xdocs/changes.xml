@@ -28,6 +28,11 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="remove" dev="tfischer" issue="TRQS222">
+      Removed Oracle Update patch again. 
+      Creates invalid scripts and causes ant to fail. 
+      See Scarab for further details
+    </action>
     <action dev='mpoeschl' type='remove'>
       Remove support for old properties (properties without 'torque.' prefix)
     </action>
