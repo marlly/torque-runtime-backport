@@ -52,6 +52,9 @@
 <p>
   <ul>
     <li>
+      TRQS20: mysql: "on delete cascade" not generated 
+    </li>  
+    <li>
       TRQS121: native limit and offset breaks on postgresql 7.3
     </li>
     <li>
