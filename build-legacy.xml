@@ -345,6 +345,8 @@
     <!-- copy database.dtd to the right place -->
     <copy file="${src.dir}/dtd/database.dtd"
       todir="${build.dest}/org/apache/torque/engine/database/transform"/>
+
+     <copy file="src/conf/default.properties" todir="target/classes/org/apache/torque"/>
   </target>
 
   <!-- ================================================================== -->
