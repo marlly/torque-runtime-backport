@@ -54,57 +54,54 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
-import java.util.ArrayList;
-import junit.framework.*;
 import junit.framework.Assert;
+import junit.framework.Test;
 import junit.framework.TestCase;
-import org.apache.torque.TorqueException;
-import org.apache.commons.lang.ObjectUtils;
+import junit.framework.TestSuite;
 
 /**
  * TestCase for ComboKey
- * 
+ *
  * @author <a href="mailto:drfish@cox.net">J. Russell Smyth</a>
  * @version $Revision$
  */
 public class ComboKeyTest extends TestCase
-{    
+{
     private ComboKey c1a = new ComboKey(
-        new SimpleKey[]{new StringKey("key1"),new StringKey("key2")});
+        new SimpleKey[]{new StringKey("key1"), new StringKey("key2")});
     private ComboKey c1b = new ComboKey(
-        new SimpleKey[]{new StringKey("key1"),new StringKey("key2")});
-    private ComboKey c1c = new ComboKey(new String[]{"key1","key2"});
+        new SimpleKey[]{new StringKey("key1"), new StringKey("key2")});
     private ComboKey c2a = new ComboKey(
-        new SimpleKey[]{new StringKey("key3"),new StringKey("key4")});
+        new SimpleKey[]{new StringKey("key3"), new StringKey("key4")});
     // complex keys for test
     private java.util.Date now = new java.util.Date();
     private ComboKey c3a = new ComboKey(
-        new SimpleKey[]{new StringKey("key1"),null,new DateKey(now)});
+        new SimpleKey[]{new StringKey("key1"), null, new DateKey(now)});
     private ComboKey c3b = new ComboKey(new SimpleKey[]{
-        new StringKey("key1"),null,new DateKey(now)});
+        new StringKey("key1"), null, new DateKey(now)});
     private ComboKey c4a = new ComboKey(
-        new SimpleKey[]{new StringKey("key1"),null,new NumberKey(123456)});
-    
+        new SimpleKey[]{new StringKey("key1"), null, new NumberKey(123456)});
+
     /**
      * Simple constructor.
-     * 
+     *
      * @param name the name of the test to execute
      */
     public ComboKeyTest(String name)
     {
         super(name);
     }
-    
-    
-    public static void main(java.lang.String[] args) 
+
+
+    public static void main(java.lang.String[] args)
     {
         junit.textui.TestRunner.run(suite());
     }
-    
-    public static Test suite() 
+
+    public static Test suite()
     {
         TestSuite suite = new TestSuite(ComboKeyTest.class);
-        
+
         return suite;
     }
 
@@ -112,7 +109,7 @@ public class ComboKeyTest extends TestCase
     {
         Assert.assertTrue(c1a.equals(c1a));
         // Complex key using null and date
-        // This currently has to use looseEquals as ComboKey.equals(Obj) 
+        // This currently has to use looseEquals as ComboKey.equals(Obj)
         // does not accept null key values (WHY!)
         Assert.assertTrue(c3a.looseEquals(c3a));
     }
@@ -121,13 +118,13 @@ public class ComboKeyTest extends TestCase
 //    {
 //        Assert.assertTrue(c3a.equals(c3a));
 //    }
-    
+
     public void testSymmetric()
     {
         Assert.assertTrue(c1a.equals(c1b));
         Assert.assertTrue(c1b.equals(c1a));
     }
-    
+
     public void testNull()
     {
         Assert.assertTrue(!c1a.equals(null));
@@ -138,41 +135,44 @@ public class ComboKeyTest extends TestCase
         Assert.assertTrue(!c1a.equals(c2a));
     }
 
-    public void testRoundTripWithStringKeys(){
+    public void testRoundTripWithStringKeys()
+    {
         // two strings
         ComboKey oldKey = new ComboKey(
-            new SimpleKey[]{new StringKey("key1"),new StringKey("key2")});
+            new SimpleKey[]{new StringKey("key1"), new StringKey("key2")});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String="+stringValue);
+        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);
         }
         catch(Exception e)
         {
-            fail("Exception "+e.getClass().getName()+
-                " thrown on new ComboKey("+stringValue+"):"+e.getMessage());
+            fail("Exception " + e.getClass().getName()
+                     + " thrown on new ComboKey(" + stringValue + "):"
+                     + e.getMessage());
         }
         Assert.assertEquals(oldKey,newKey);
     }
 
-    public void testRoundTripWithComplexKey(){
+    public void testRoundTripWithComplexKey()
+    {
         // complex key
         ComboKey oldKey = new ComboKey(
-            new SimpleKey[]{new StringKey("key1"), new NumberKey(12345), 
+            new SimpleKey[]{new StringKey("key1"), new NumberKey(12345),
             new DateKey(new java.util.Date())});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String="+stringValue);
+        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);
         }
         catch(Exception e)
         {
-            fail("Exception "+e.getClass().getName()+" thrown on new ComboKey("
-                 +stringValue+"):"+e.getMessage());
+            fail("Exception " + e.getClass().getName() + " thrown on new ComboKey("
+                 + stringValue + "):" + e.getMessage());
         }
         Assert.assertEquals(oldKey,newKey);
     }
@@ -181,37 +181,37 @@ public class ComboKeyTest extends TestCase
     {
         // with null key
         ComboKey oldKey = new ComboKey(
-            new SimpleKey[]{new StringKey("key1"),null});
+            new SimpleKey[]{new StringKey("key1"), null});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String="+stringValue);
+        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);
         }
         catch(Exception e)
         {
-            fail("Exception "+e.getClass().getName()+" thrown on new ComboKey("
-                 +stringValue+"):"+e.getMessage());
+            fail("Exception " + e.getClass().getName() + " thrown on new ComboKey("
+                 + stringValue + "):" + e.getMessage());
         }
-        // This currently has to use looseEquals as ComboKey.equals(Obj) 
+        // This currently has to use looseEquals as ComboKey.equals(Obj)
         // does not accept null key values (WHY!)
         Assert.assertTrue(oldKey.looseEquals(newKey));
     }
-    
-    
+
+
     /** Test of appendTo method, of class org.apache.torque.om.ComboKey. */
-    public void testAppendTo() 
+    public void testAppendTo()
     {
         StringBuffer sb = new StringBuffer();
         c1a.appendTo(sb);
-        Assert.assertEquals("Skey1:Skey2:",sb.toString());
+        Assert.assertEquals("Skey1:Skey2:", sb.toString());
     }
 
     /** Test of toString method, of class org.apache.torque.om.ComboKey. */
-    public void testToString() 
+    public void testToString()
     {
-        Assert.assertEquals("Skey1::N123456:",c4a.toString());
-    }    
+        Assert.assertEquals("Skey1::N123456:", c4a.toString());
+    }
 }
 

@@ -100,18 +100,6 @@ public class ComboKey extends ObjectKey
     }
 
     /**
-     * Creates a compound ComboKey whose internal representation is a
-     * String array.
-     *
-     * @param keys the key values
-     * @deprecated ambiguous unnecessary ctor will be removed.
-     */
-    public ComboKey(String[] keys)
-    {
-        setValue(keys);
-    }
-
-    /**
      * Sets the internal representation to a String array.
      *
      * @param keys the key values
@@ -130,21 +118,6 @@ public class ComboKey extends ObjectKey
     public void setValue(SimpleKey[] keys)
     {
         this.key = keys;
-    }
-
-    /**
-     * Sets the internal representation using a String array.
-     *
-     * @param keys the key values
-     * @deprecated ambiguous unnecessary method will be removed.
-     */
-    public void setValue(String[] keys)
-    {
-        this.key = new SimpleKey[keys.length];
-        for (int i = 0; i < keys.length; i++)
-        {
-            this.key[i] = new StringKey(keys[i]);
-        }
     }
 
     /**
