@@ -54,34 +54,36 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.List;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
+import org.apache.stratum.lifecycle.Configurable;
+import org.apache.stratum.lifecycle.Disposable;
+import org.apache.stratum.lifecycle.Initializable;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
+import org.apache.torque.dsfactory.DataSourceFactory;
+import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
+import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.util.BasePeer;
-import org.apache.torque.manager.AbstractBaseManager;
-import org.apache.torque.dsfactory.DataSourceFactory;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.stratum.lifecycle.Configurable;
-import org.apache.stratum.lifecycle.Initializable;
-import org.apache.stratum.lifecycle.Disposable;
 
 /**
  * The implementation of Torque.
@@ -930,7 +932,7 @@ public class Torque
      * Returns database adapter for a specific connection pool.
      *
      * @param name A pool name.
-     * @return     The corresponding database adapter.
+     * @return The corresponding database adapter.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -968,4 +970,25 @@ public class Torque
     {
         return getDefaultDB();
     }
+
+    /**
+     * Closes a connection.
+     * 
+     * @param con A Connection to close.
+     */
+    public static void closeConnection(Connection con)
+    {
+        if (con != null)
+        {
+            try
+            {
+                con.close();
+            }
+            catch (SQLException e)
+            {
+                category.error("Error occured while closing connection.", e);
+            }
+        }
+    }
+
 }

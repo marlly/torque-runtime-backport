@@ -864,10 +864,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         finally
         {
-            if (db != null)
-            {
-                closeConnection(db);
-            }
+            Torque.closeConnection(db);
         }
         return(retVal);
     }
@@ -922,10 +919,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         finally
         {
-            if (db != null)
-            {
-                closeConnection(db);
-            }
+            Torque.closeConnection(db);
         }
         return(retVal);
     }
@@ -1012,10 +1006,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         }
         finally
         {
-            if (db != null)
-            {
-                closeConnection(db);
-            }
+            Torque.closeConnection(db);
         }
         return(retVal);
     }

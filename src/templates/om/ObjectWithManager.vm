@@ -19,6 +19,7 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.om.*;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.util.Criteria;
+import org.apache.torque.util.Transaction;
 import java.sql.Connection;
 #if ($addSaveMethod)
 import org.apache.commons.lang.ObjectUtils;
@@ -914,25 +915,14 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
  #if ($complexObjectModel)
         try
         {
-            con = BasePeer.beginTransaction(dbName);
+            con = Transaction.begin(dbName);
             save(con);
+            Transaction.commit(con);
         }
         catch(TorqueException e)
         {
-            try
-            {
-                BasePeer.rollBackTransaction(con);
-             }
-             catch (Exception rollBackEx)
-             {
-                 throw new TorqueException(e.getMessage()
-                     + "; a rollback exception ocurred when rolling back the error: "
-                     + rollBackEx.getMessage(),
-                     e);
-             }
-             throw e;
+            Transaction.safeRollback(con);
         }
-        BasePeer.commitTransaction(con);
 
  #else
         if (isModified())
@@ -954,7 +944,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
             }
             finally
             {
-                BasePeer.closeConnection(con);
+                Torque.closeConnection(con);
             }
         }
 

@@ -59,16 +59,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-import org.apache.log4j.Category;
+
 import org.apache.commons.configuration.Configuration;
+import org.apache.log4j.Category;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.util.BasePeer;
+import org.apache.torque.util.Transaction;
 
 //!!
 // NOTE:
@@ -653,16 +654,7 @@ public class IDBroker
                     .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
                 {
                     String databaseName = dbMap.getName();
-                    // Get a connection to the db by starting a
-                    // transaction.
-                    if (transactionsSupported)
-                    {
-                        connection = BasePeer.beginTransaction(databaseName);
-                    }
-                    else
-                    {
-                        connection = Torque.getConnection(databaseName);
-                    }
+                    connection = Transaction.beginOptional(dbMap.getName(), transactionsSupported);
                 }
 
                 // Write the current value of quantity of keys to grab
@@ -682,26 +674,12 @@ public class IDBroker
                 BigDecimal newNextId = nextId.add(quantity);
                 updateNextId(connection, tableName, newNextId.toString() );
 
-                if (transactionsSupported && connection != null)
-                {
-                    BasePeer.commitTransaction(connection);
-                }
+                Transaction.commit(connection);
             }
             catch (Exception e)
             {
-                if (transactionsSupported && connection != null)
-                {
-                    BasePeer.rollBackTransaction(connection);
-                }
+                Transaction.rollback(connection);
                 throw e;
-            }
-            finally
-            {
-                if (!transactionsSupported && connection != null)
-                {
-                    // Return the connection to the pool.
-                    BasePeer.closeConnection(connection);
-                }
             }
 
             List availableIds = (List) ids.get(tableName);
