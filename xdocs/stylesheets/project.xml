@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Torque" href="http://jakarta.apache.org/turbine/torque/">
+
+  <title>Torque</title>
+  <logo href="/images/logo.gif">Torque</logo>
+
+  <body>
+    <menu name="Torque">
+      <item name="Overview"              href="/index.html"/>
+      <item name="Schema Reference"      href="/schema-reference.html"/>
+    </menu>
+  </body>
+</project>

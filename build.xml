@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+
+<project name="Torque" default="jar" basedir=".">
+
+  <!-- Allow any user specific values to override the defaults -->
+  <property file="${user.home}/build.properties" />
+
+  <!-- Set default values for the build -->
+  <property file="build.properties" />
+
+  <!-- Construct compile classpath -->
+  <path id="classpath">
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${velocity.jar}"/>
+    <pathelement location="${village.jar}"/>
+    <pathelement location="${jdbc.jar}"/>
+    <pathelement location="${log4j.jar}"/>
+  </path>
+
+  <!-- ================================================================== -->
+  <!-- E N V I R O N M E N T                                             -->
+  <!-- ================================================================== -->
+  
+  <target name="env">
+    <echo message="java.home = ${java.home}"/>
+    <echo message="user.home = ${user.home}"/>
+    <echo message="lib.repo = ${lib.repo}"/>
+    <echo message="village.jar = ${village.jar}"/>
+    <echo message="velocity.jar = ${velocity.jar}"/>
+    <echo message="xerces.jar = ${xerces.jar}"/>
+    <echo message="log4j.jar = ${log4j.jar}"/>
+    <echo message="jdbc.jar = ${jdbc.jar}"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- U S A G E                                                          -->
+  <!-- ================================================================== -->
+  
+  <target name="usage">
+    <echo message="use -projecthelp to see the available targets"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- I N I T                                                            -->
+  <!-- ================================================================== -->
+
+  <target name="init">
+    <available 
+      classname="org.apache.velocity.anakia.AnakiaTask"
+      property="AnakiaTask.present"
+      classpathref="classpath"
+    />
+    
+    <available 
+      classname="org.apache.velocity.runtime.Runtime"
+      property="velocity.present"
+      classpathref="classpath"
+    />
+    
+    <available 
+      classname="org.apache.xerces.parsers.SAXParser"
+      property="xerces.present"
+      classpathref="classpath"
+    />
+
+    <available 
+      classname="com.workingdogs.village.Column"
+      property="village.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org.apache.log4j.Category" 
+      property="log4j.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="javax.sql.ConnectionPoolDataSource" 
+      property="jdbc.present"
+      classpathref="classpath"
+    />
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- P R O P E R T Y  C H E C K S  A N D  W A R N I N G S               -->
+  <!-- ================================================================== -->
+
+  <target name="check.velocity" unless="velocity.present">
+    <antcall target="property-warning">
+      <param name="name" value="velocity.jar"/>
+      <param name="value" value="${velocity.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.xerces" unless="xerces.present">
+    <antcall target="property-warning">
+      <param name="name" value="xerces.jar"/>
+      <param name="value" value="${xerces.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.village" unless="village.present">
+    <antcall target="property-warning">
+      <param name="name" value="village.jar"/>
+      <param name="value" value="${village.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.log4j" unless="log4j.present">
+    <antcall target="property-warning">
+      <param name="name" value="log4j.jar"/>
+      <param name="value" value="${log4j.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="check.jdbc" unless="jdbc.present">
+    <antcall target="property-warning">
+      <param name="name" value="jdbc.jar"/>
+      <param name="value" value="${jdbc.jar}"/>
+    </antcall>
+  </target>
+
+  <target name="property-warning">
+    <echo>
+      +----------------------------------------------------------------+
+      + F A I L E D  R E Q U I R E M E N T                             |
+      +----------------------------------------------------------------+
+      | You must define the following property in order                |
+      | to build Torque:                                               |
+      |                                                                |
+      | ${name} = ${value}
+      |                                                                |
+      | You can set this property in the provided build.properties     |
+      | file, or you may set this property in your                     |
+      | ${user.home}/build.properties file.                            
+      +----------------------------------------------------------------+
+    </echo>
+    <fail message="Failed Requirement"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- P R E P A R E                                                      -->
+  <!-- ================================================================== -->
+  
+  <target name="prepare" 
+    depends="init,check.velocity,check.xerces,check.log4j,check.jdbc,env">
+    
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/classes"/>
+    <mkdir dir="${build.dir}/src"/>
+
+    <filter token="VERSION" value="${version}"/>
+
+    <copy todir="${build.dir}/src/org" filtering="yes">
+      <fileset dir="${src.dir}/java/org"/>
+    </copy>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- C O M P I L E                                                      -->
+  <!-- ================================================================== -->
+  
+  <target name="compile" depends="prepare" description="--> compiles the source code">
+    <javac srcdir="${build.dir}/src"
+      destdir="${build.dir}/classes"
+      excludes="**/package.html"
+      debug="${debug}"
+      deprecation="${deprecation}"
+      optimize="${optimize}">
+      <classpath refid="classpath"/>
+    </javac>
+  
+    <!-- copy database.dtd to the right place -->
+    <copy file="${src.dir}/dtd/database.dtd"
+      todir="${build.dir}/classes/org/apache/torque/engine/database/transform"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                              -->
+  <!-- ================================================================== -->
+  
+  <target name="jar" depends="compile" description="--> generates the torque.jar">
+    <jar jarfile="${build.dir}/${final.name}.jar"
+         basedir="${build.dir}/classes"
+         excludes="**/package.html"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A V A D O C S                                                    -->
+  <!-- ================================================================== -->
+  
+  <target name="javadocs"
+            depends="prepare"
+            description="--> generates the API documentation">
+    <mkdir dir="${docs.dest}/api"/>
+    
+    <javadoc
+      sourcepath="${build.src}"
+      packagenames="${package}.*"
+      destdir="${javadoc.destdir}"
+      author="true"
+      private="true"
+      version="true"
+      use="true"
+      windowtitle="${name} ${version} API"
+      doctitle="${name} ${version} API"
+      bottom="Copyright &amp;copy; ${year} Apache Software Foundation. All Rights Reserved."
+      >
+      <classpath refid="classpath"/>
+    </javadoc>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- C L E A N                                                          -->
+  <!-- ================================================================== -->
+  
+  <target name="clean" description="--> cleans up the build directory">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- A N A K I A  D O C U M E N T A T I O N                             -->
+  <!-- ================================================================== -->
+  
+  <target name="check_for_jdom">
+    <available 
+      property="jdom.present"
+      classname="org.jdom.JDOMException">
+      <classpath>
+        <pathelement location="${jakarta.site2}/lib/${jdom.jar}"/>
+      </classpath>
+    </available>
+  </target>
+  
+  <target depends="check_for_jdom" name="docs-prepare-error"
+          unless="jdom.present">
+    <echo>
+      The Jakarta-Site2 module is not present! Please check
+      to make sure that you have checked it out from CVS.
+
+      &lt;http://jakarta.apache.org/site/jakarta-site2.html&gt;
+    </echo>
+  </target>
+
+  <target name="docs"
+          depends="docs-prepare-error"
+          description="--> generates the HTML documentation"
+          if="jdom.present">
+
+    <taskdef name="anakia"
+       classname="org.apache.velocity.anakia.AnakiaTask">
+       <classpath>
+         <fileset dir="${jakarta.site2}/lib">
+           <include name="*.jar"/>
+         </fileset>
+       </classpath>
+     </taskdef>
+
+     <anakia 
+       basedir="${docs.src}" 
+       destdir="${docs.dest}/"
+       extension=".html" style="./site.vsl"
+       projectFile="stylesheets/project.xml"
+       excludes="**/stylesheets/** empty.xml"
+       includes="**/*.xml"
+       lastModifiedCheck="true"
+       templatePath="${jakarta.site2}/xdocs/stylesheets">
+     </anakia>
+
+     <copy todir="${docs.dest}/images" filtering="no">
+       <fileset dir="${docs.src}/images">
+         <include name="**/*.gif"/>
+         <include name="**/*.jpeg"/>
+         <include name="**/*.jpg"/>
+       </fileset>
+     </copy>
+     
+     <!-- In case we have CSS someday
+     <copy todir="${docs.dest}" filtering="no">
+       <fileset dir="${docs.src}">
+         <include name="**/*.css"/>
+       </fileset>
+     </copy>
+     -->
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- D I S T                                                            -->
+  <!-- ================================================================== -->
+
+  <target name="dist" depends="jar,check.village" 
+          description="--> Creates torque.zip distribution">
+    <property name="torque.dir" value="${build.dir}/torque/torque"/>
+    <mkdir dir="${torque.dir}"/>
+    <mkdir dir="${torque.dir}/lib"/>
+
+    <copy file="${velocity.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${village.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
+
+    <filter token="TORQUE_HOME" value="."/>
+
+    <copy todir="${torque.dir}/lib" filtering="no">
+      <fileset dir="${build.dir}">
+        <include name="${final.name}.jar"/>
+      </fileset>
+    </copy>
+        
+    <copy todir="${torque.dir}/templates" filtering="yes">
+      <fileset dir="./src/templates"/>
+    </copy>
+
+    <copy todir="${torque.dir}" filtering="yes">
+      <fileset dir="./src/conf"/>
+    </copy>
+
+    <copy todir="${torque.dir}/schema" filtering="yes">
+      <fileset dir="./examples"/>
+    </copy>
+        
+    <zip zipfile="${build.dir}/${final.name}.zip"
+      basedir="${build.dir}/torque"
+    />
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- I N S T A L L J A R                                                -->
+  <!-- ================================================================== -->
+
+  <target name="install-jar" depends="jar" 
+          description="--> Installs .jar file in ${lib.repo}">
+    <copy todir="${lib.repo}" filtering="no">
+      <fileset dir="${build.dir}">
+        <include name="${final.name}.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+</project>

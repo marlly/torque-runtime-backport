@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Torque</title>
+  <author email="jvanzyl@apache.com">Jason van Zyl</author>
+ </properties>
+
+ <body>
+
+ <section name="What is Torque?">
+
+ <p>
+    Torque is a persistence layer.
+ </p>
+
+</section>
+
+ </body>
+ </document>

@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Torque Schema Reference</title>
+  <author email="warner@warneronstine.com">Warner Onstine</author>
+  <author email="jvanzyl@apache.org">Jason van Zyl</author>
+ </properties>
+
+<body>
+  <section name="Torque Schema Reference">
+    <p>
+      The Torque Database Schema Reference attempts to explain what the 
+      different elements and attributes are when defining your own database schema. 
+      In addition I will attempt to explain what attributes mean what in the 
+      different databases currently supported.
+    </p>
+   </section>
+
+   <section name="Elements and their attributes">
+     <p>
+       Some of the following examples are taken from the project-schema.xml 
+       document in the src/conf/torque/schema.
+     </p>
+     <subsection name="Element: database">
+       <p>
+         The database element and its relevant attributes.
+       </p>
+       <source><![CDATA[
+         <database 
+           name="MY_DATABASE" 
+           defaultIdMethod="idBroker" 
+           package="com.myapp.om" 
+           baseClass="com.myapp.om.BaseClass" 
+           basePeer="com.myapp.om.BasePeer">
+         
+           <table name="SIMPLE">
+             <!-- table info goes here -->
+           </table>
+         </database>]]>
+       </source>
+       <p>
+         The database element has 5 attributes associated with it, they are:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>name</td>
+             <td>The name of the database being referenced</td>
+           </tr>
+           <tr>
+             <td>defaultIdMethod</td>
+             <td>How will the primary keys be created, defaults to "none"</td>
+           </tr>
+           <tr>
+             <td>package</td>
+             <td>used for OM Peer generation</td>
+           </tr>
+           <tr>
+             <td>baseClass</td>
+             <td>used for OM generation</td>
+           </tr>
+           <tr>
+             <td>basePeer</td>
+             <td>used for OM Peer generation</td>
+           </tr>
+         </table>
+       </p>
+       
+       <p>
+         The last four will be explained in detail below.
+       </p>
+       <p>
+         The database element can contain the following elements:
+         <ul>
+           <li>table - one or more</li>
+         </ul>
+       </p>
+     </subsection>
+     
+     <subsection name="Attribute: defaultIdMethod">
+       <p>
+         By defining this attribute at the database level it applies the 
+         defaultIdMethod to those tables which do not have an idMethod 
+         attribute defined. The attribute defaultIdMethod has 5 possible 
+         values, they are:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>idbroker</td>
+             <td>This allows turbine to generate the IDs through its IDBroker Service</td>
+           </tr>
+           <tr>
+             <td>native</td>
+             <td>Turbine will determine how the database will auto-generate IDs</td>
+           </tr>
+           <tr>
+             <td>autoincrement</td>
+             <td>deprecated, please use native</td>
+           </tr>
+           <tr>
+             <td>sequence</td>
+             <td>deprecated, please use native</td>
+           </tr>
+           <tr>
+             <td>none</td>
+             <td>Typically used if you do not want IDs generated</td>
+           </tr>
+         </table>
+       </p>
+     </subsection>
+     <subsection name="Attribute: package">
+       <p>
+         The base package in which this database will generate the Object Models 
+         associated with it. This overrides the targetPackage property in 
+         the torque build.properties file.
+       </p>
+     </subsection>
+     <subsection name="Attribute: baseClass">
+       <p>
+         The base class to use when generating the Object Model. 
+         This class does not have to extend org.apache.turbine.om.BaseObject.
+       </p>
+     </subsection>
+     <subsection name="Attribute: basePeer">
+       <p>
+         The base peer to use when generating the Object Model Peers.
+         Unlike baseClass, basePeer should extend BasePeer at some point in the 
+         chain, i.e it needs to be the superclass.
+       </p>
+     </subsection>
+     <subsection name="Element: table">
+       <p>
+         The table element and its relevant attributes
+       </p>
+       <source><![CDATA[
+         <table 
+           name="MY_TABLE" 
+           javaName="table"
+           idMethod="idbroker"
+           skipSql="false"
+           baseClass="com.myapp.om.table.BaseClass"
+           basePeer="com.myapp.om.table.BasePeer">
+           
+           <!-- column information here -->
+    
+         </table>]]>
+       </source>
+       <p>
+         The table element has 8 attributes associated with it, they are:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>name</td>
+             <td>The name of the database being referenced</td>
+           </tr>
+           <tr>
+             <td>javaName</td>
+             <td>How this table will be referenced in java</td>
+           </tr>
+           <tr>
+             <td>idMethod</td>
+             <td>How will the primary keys be created, defaults to "none"</td>
+           </tr>
+           <tr>
+             <td>skipSql</td>
+             <td>Whether or not to skip SQL generation for this reference</td>
+           </tr>
+           <tr>
+             <td>abstract</td>
+             <td>Whether or not to generate the class as Abstract or not</td>
+           </tr>
+           <tr>
+             <td>alias</td>
+             <td>The table alias</td>
+           </tr>
+           <tr>
+             <td>baseClass</td>
+             <td>used for OM Peer generation</td>
+           </tr>
+           <tr>
+             <td>basePeer</td>
+             <td>used for OM Peer generation</td>
+           </tr>
+         </table>
+       </p>
+       
+       <p>
+         The table element can contain the following elements:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>column</td>
+             <td>one or more</td>
+           </tr>
+           <tr>
+             <td>foreign-key</td>
+             <td>0 or more</td>
+           </tr>
+           <tr>
+             <td>index</td>
+             <td>0 or more</td>
+           </tr>
+           <tr>
+             <td>unique</td>
+             <td>0 or more</td>
+           </tr>
+           <tr>
+             <td>id-method-parameter</td>
+             <td>0 or more</td>
+           </tr>
+         </table>
+       </p>
+     </subsection>
+     <subsection name="Attribute: javaName">
+       <p>
+         This is the java class name to use when generating the Table or 
+         column. If this is missing the java name is generated in the 
+         following manner:
+       </p>
+       <p>
+         Underscores are removed, first letter and first letter after each 
+         underscore is uppercased, all other letters are lowercased. 
+         So YOUR_TABLE_NAME would become YourTableName.
+       </p>
+     </subsection>
+     <subsection name="Element: column">
+       <p>
+         The column element and its relevant attributes
+       </p>
+       <source><![CDATA[
+         <column 
+           name="MY_COLUMN"
+           javaName="Column"
+           primaryKey="true"
+           required="true"
+           size="4"
+           type="VARCHAR">
+         
+           <!-- inheritance info if necessary -->
+         </column>]]>
+       </source>
+       <p>
+         The column element has 8 attributes associated with it, they are:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>name</td>
+             <td>The name of the column being referenced</td>
+           </tr>
+           <tr>
+             <td>javaName</td>
+             <td>How this column will be referred to in Java</td>
+           </tr>
+           <tr>
+             <td>primaryKey</td>
+             <td>Is this a primary key or not (true or false)</td>
+           </tr>
+           <tr>
+             <td>required</td>
+             <td>Whether a value is required in this field (true or false)</td>
+           </tr>
+           <tr>
+             <td>type</td>
+             <td>What type of column is it? (Covered below), defaults to VARCHAR</td>
+           </tr>
+           <tr>
+             <td>size</td>
+             <td>How many characters or digits can be stored?</td>
+           </tr>
+           <tr>
+             <td>default</td>
+             <td>Default value to insert into field if it is missing.</td>
+           </tr>
+           <tr>
+             <td>autoIncrement</td>
+             <td>Whether or not to auto-increment this field, defaults to "false"</td>
+           </tr>
+           <tr>
+             <td>inheritance</td>
+             <td>?</td>
+           </tr>
+         </table>
+       </p>
+       <p>
+         The column element can contain the following elements:
+         <ul>
+           <li>inheritance - 0 or more</li>
+         </ul>
+       </p>
+      </subsection>
+
+      <subsection name="Element: inheritance">
+        <p>
+          The inheritance element and its relevant attributes
+        </p>
+        <source><![CDATA[
+          <inheritance key="key"
+            class="classname"
+            extends="mybase"/>]]>
+        </source>
+      <p>
+        The inheritance element has 3 attributes associated with it, they are:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>key</td>
+            <td>?</td>
+          </tr>
+          <tr>
+            <td>class</td>
+            <td>?</td>
+          </tr>
+          <tr>
+            <td>extends</td>
+            <td>?</td>
+          </tr>
+        </table>
+      </p>
+    </subsection>
+    
+    <subsection name="Element: foreign-key">
+      <p>
+        The foreign-key element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <foreign-key foreignTable="MY_TABLE">
+          <!-- reference info -->
+        </foreign-key>]]>
+      </source>
+      <p>
+        The foreign-key element has 1 attribute associated with it, it is:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>foreignTable</td>
+            <td>The name of the table being referenced</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The foreign-key element can contain the following elements:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>reference</td>
+            <td>1 or more</td>
+          </tr>
+        </table>
+      </p>
+    </subsection>
+    
+    <subsection name="Element: reference">
+      <p>
+        The reference element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <reference local="FK_TABLE_ID" foreign="PK_COLUMN_ID"/>]]>
+      </source>
+      <p>
+        The reference element has 2 attributes associated with it, they are:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>local</td>
+            <td>the local reference</td>
+          </tr>
+          <tr>
+            <td>foreign</td>
+            <td>the foreign key reference</td>
+          </tr>
+        </table>
+      </p>
+    </subsection>
+  </section>
+</body>
+</document>

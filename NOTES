@@ -1,0 +1,34 @@
+--------------------------------------------------------------------------
+T O R Q U E
+--------------------------------------------------------------------------
+
+o Torque should be fully functional on its own, but right now
+  it doesn't work as a persistence layer without the DBService
+  in Fulcrum. The classes should be moved from Fulcrum into
+  this repository and Torque should be made to work on its own
+  and be embeddable in applications. The DBService in Fulcrum
+  should be a wrapper around Torque.
+
+o Separate the connection pool and make it pluggable
+  so that torque can easily be integrated into other application
+  that already use PoolMan, or the commons connection pool, or
+  the struts connection pool or whatever
+
+o XML an configuration
+
+o Use the digester to turn the datamodel into an object and
+  get rid of the dependency on xerces. It would be nice to 
+  use the digester with MinML so that the distribution can
+  be tiny
+
+o Get rid of the Log wrapper in all the code and use the log4j
+  Category c = Category.getInstance(classname) method so
+  that torque can easily be integrated into other apps. Either
+  log4j or the logging API will dominate and I'm going to take
+  log4j. But as Ceki has noted they are so similar it is very
+  easy to change from one to the other
+
+o Some analysis on what we actually have would be prudent. Torque
+  is somewhat based on the work of Scott Ambler and I would like
+  to know where it is the same and where it diverges so we know
+  what we're dealing with.
