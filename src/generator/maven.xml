@@ -4,10 +4,6 @@
 
   <!-- Allow any user specific values to override the defaults -->
   <property file="${user.home}/build.properties" />
-  <!-- Allow user defaults for this project -->
-  <property file="build.properties" />
-  <!-- Set default values for the build -->
-  <property file="default.properties" />
 
   <!-- ================================================================== -->
   <!-- C O M P I L E   P O S T   G O A L                                  -->
