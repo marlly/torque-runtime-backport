@@ -60,6 +60,7 @@ package org.apache.torque.pool;
  *
  * @author <a href="mailto:dlr@apache.org">Daniel Rall</a>
  * @version $Id$
+ * @deprecated as of version 3.1
  */
 public class ConnectionWaitTimeoutException extends Exception
 {

@@ -82,6 +82,7 @@ import org.apache.commons.lang.SerializationUtils;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
+ * @deprecated as of version 3.1
  */
 public class TorqueClassicDataSource
     implements DataSource, Referenceable, Serializable, ObjectFactory

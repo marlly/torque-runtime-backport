@@ -26,6 +26,9 @@
       The generated schema-data.dtd has been changed to allow any order of 
       table data entries.
     </li>
+    <li>
+      The old Torque connection pool is deprecated. You should use the commons-dbcp pool.
+    </li>
   </ul>
 </p>
 </subsection>

@@ -74,6 +74,7 @@ import org.apache.torque.pool.TorqueClassicDataSource;
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
+ * @deprecated as of version 3.1, use Jdbc2PoolDataSourceFactory
  */
 public class TorqueDataSourceFactory
     extends AbstractDataSourceFactory
