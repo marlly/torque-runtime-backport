@@ -155,10 +155,7 @@ public class DateKey extends SimpleKey
 
     public String toString()
     {
-        if ( key != null )
-        {
-            return key.toString();
-        }
-        return "";
+        Date dt = getDate();
+        return (dt == null ? "" : Long.toString(dt.getTime()));
     }
 }
