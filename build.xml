@@ -13,6 +13,7 @@
   <path id="classpath">
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${velocity.jar}"/>
+    <pathelement location="${logkit.jar}"/>
     <pathelement location="${village.jar}"/>
     <pathelement location="${jdbc.jar}"/>
     <pathelement location="${log4j.jar}"/>
@@ -31,6 +32,7 @@
     <echo message="lib.repo = ${lib.repo}"/>
     <echo message="village.jar = ${village.jar}"/>
     <echo message="velocity.jar = ${velocity.jar}"/>
+    <echo message="logkit.jar = ${logkit.jar}"/>
     <echo message="xerces.jar = ${xerces.jar}"/>
     <echo message="log4j.jar = ${log4j.jar}"/>
     <echo message="jdbc.jar = ${jdbc.jar}"/>
@@ -71,6 +73,12 @@
     <available
       classname="org.apache.velocity.anakia.AnakiaTask"
       property="AnakiaTask.present"
+      classpathref="classpath"
+    />
+
+    <available
+      classname="org.apache.log.LogKit"
+      property="logkit.present"
       classpathref="classpath"
     />
 
@@ -134,6 +142,16 @@
     <antcall target="property-warning">
       <param name="name" value="velocity.jar"/>
       <param name="value" value="${velocity.jar}"/>
+    </antcall>
+  </target>
+
+  <target
+    name="check.logkit"
+    unless="logkit.present">
+
+    <antcall target="property-warning">
+      <param name="name" value="logkit.jar"/>
+      <param name="value" value="${logkit.jar}"/>
     </antcall>
   </target>
 
@@ -218,8 +236,9 @@
 
   <target
     name="prepare"
-    depends="init,check.velocity,check.xerces,check.village,check.log4j,
-             check.commons-collections,check.commons-util,check.jdbc,env">
+    depends="init,check.velocity,check.logkit,check.xerces,check.village,
+             check.log4j,check.commons-collections,check.commons-util,
+             check.jdbc,env">
 
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dest}"/>
@@ -499,6 +518,7 @@
     <mkdir dir="${torque.dir}/lib"/>
 
     <copy file="${velocity.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${logkit.jar}" todir="${torque.dir}/lib"/>
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
