@@ -92,6 +92,15 @@ public class MethodResultCache
         pool = new StackObjectPool(new MethodCacheKey.Factory(), 10000);
     }
 
+    /**
+     * Allows subclasses to have ctors that do not require a cache.
+     * This is used by NullMethodResultCache which has no-op versions
+     * of all methods.
+     */
+    protected MethodResultCache()
+    {
+    }
+
     public void clear()
     {
         if (jcsCache != null)

@@ -69,6 +69,7 @@ import org.apache.jcs.JCS;
 import org.apache.jcs.access.GroupCacheAccess;
 import org.apache.jcs.access.exception.CacheException;
 
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.Persistent;
@@ -432,8 +433,15 @@ public abstract class AbstractBaseManager
         this.region = v;
         try
         {
-            cache = JCS.getInstance(getRegion());
-            mrCache = new MethodResultCache(cache);
+            if (Torque.getConfiguration().getBoolean(Torque.CACHE_KEY)) 
+            {
+                cache = JCS.getInstance(getRegion());
+                mrCache = new MethodResultCache(cache);              
+            }
+            else 
+            {
+                mrCache = new NoOpMethodResultCache(cache);
+            }
         }
         catch (Exception e)
         {

@@ -125,6 +125,11 @@ public class Torque
      */
     public static final String MANAGER_SUFFIX = ".manager";
 
+    /**
+     * property to determine whether caching is used.
+     */
+    public static final String CACHE_KEY = "manager.useCache";
+
 
     /**
      * The db name that is specified as the default in the property file
