@@ -114,7 +114,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * or could not be represented as an int.
      *
      * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.turbine.om.ObjectKey} for more information on type
+     * {@link org.apache.torque.om.ObjectKey} for more information on type
      * conversion.
      */
     public int getPrimaryKeyAsInt()
@@ -136,7 +136,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * or could not be represented as a long.
      *
      * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.turbine.om.ObjectKey} for more information on type
+     * {@link org.apache.torque.om.ObjectKey} for more information on type
      * conversion.
      */
     public long getPrimaryKeyAsLong()
@@ -158,7 +158,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * set or could not be represented as a BigDecimal.
      *
      * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.turbine.om.ObjectKey} for more information on type
+     * {@link org.apache.torque.om.ObjectKey} for more information on type
      * conversion.
      */
     public BigDecimal getPrimaryKeyAsBigDecimal()
@@ -183,7 +183,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * set.
      *
      * @deprecated Use getPrimaryKey() instead.  Refer to
-     * {@link org.apache.turbine.om.ObjectKey} for more information on type
+     * {@link org.apache.torque.om.ObjectKey} for more information on type
      * conversion.
      */
     public String getPrimaryKeyAsString()

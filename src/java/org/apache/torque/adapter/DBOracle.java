@@ -139,7 +139,7 @@ public class DBOracle
      * @param sequenceName The name of the sequence (should be of type
      * <code>String</code>).
      * @return SQL to retreive the next database key.
-     * @see org.apache.torque.adapter.DB#getIDMethodSQL()
+     * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object)
      */
     public String getIDMethodSQL(Object sequenceName)
     {

@@ -72,7 +72,7 @@ import org.apache.torque.util.StringStackBuffer;
  * column LIKE 'F%'
  * table.column < 3
  * </pre>
- * This class is used primarily by {@link org.apache.turbine.om.peer.BasePeer}.
+ * This class is used primarily by {@link org.apache.torque.util.BasePeer}.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>

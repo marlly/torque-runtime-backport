@@ -72,7 +72,7 @@ import org.apache.commons.collections.ExtendedProperties;
 import org.apache.log4j.Category;
 
 /**
- * Turbine's default implementation of {@link DatabaseService}.
+ * The implementation of Torque.
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
