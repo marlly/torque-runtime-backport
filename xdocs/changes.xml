@@ -9,8 +9,55 @@
 
   <body>
 
-<section name="Torque 3.0-b4">
+<section name="Torque HEAD">
+<p>
+  Changes between Torque 3.0-b4 and 3.0-b5. <br/>
+</p>
 
+<subsection name="Changes that could (will) break older environments">
+<p>
+  <ul>
+    <li>
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Other changes">
+<p>
+  <ul>
+    <li>
+      improved JDBC to DB2 mappings.
+    </li>
+    <li>
+      improved JDBC to SAPDB mappings.
+    </li>
+    <li>
+      peers: do not create the JoinAll method if any of the foreign keys
+      reference external tables.
+    </li>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      postgres: Unable to identify an operator '=' for types 'smallint' and 'boolean'
+    </li>
+    <li>
+      sapdb: generate valid sql for primary keys
+    </li>
+    <li>
+      objects: avoid npe and set id to null if the object was null
+    </li>
+  </ul>
+</p>
+</subsection>
+</section>
+
+<section name="Torque 3.0-b4">
 <p>
   Changes between Torque 3.0-b3 and 3.0-b4.
 </p>
@@ -22,17 +69,20 @@
       jdbc2pool package dissolved (the old Torque pool is back in the torque
       codebase, the new pool is part of commons-dbcp now)
     </li>
-    <li>
-    </li>
   </ul>
 </p>
 </subsection>
-
 
 <subsection name="Other changes">
 <p>
   <ul>
     <li>
+      torque uses maven-1.0-beta-6 as default build system.
+    </li>
+    <li>
+      renamed all properties (torque prefix added). <br/>
+      the old property names still work but they are deprecated and support will
+      be removed after the 3.0 release.
     </li>
   </ul>
 </p>
@@ -42,15 +92,14 @@
 <p>
   <ul>
     <li>
+      aliases not recognized in orderBy column
     </li>
   </ul>
 </p>
 </subsection>
-
 </section>
 
 <section name="Torque 3.0-b3">
-
 <p>
   Changes between Torque 2.1 (old version from turbine-2 repo) and 3.0-b3.
 </p>
@@ -59,7 +108,6 @@
   This list should help to move your application from Torque 2.1 to 3.0.
   If you find any other issues, please send an email to the developer list.
 </p>
-
 
 <subsection name="new package names">
 <table>
@@ -201,7 +249,6 @@
 </p>
 </subsection>
 
-
 <subsection name="Other changes">
 <p>
   <ul>
@@ -230,7 +277,6 @@
 <section name="Changes">
       <p>
         <ul>
-
           <li>
             <strong>16 Apr 2002</strong>
             <ul>
