@@ -108,7 +108,7 @@ public abstract class ObjectKey implements Serializable, Comparable
      */
     public void appendTo(StringBuffer sb)
     {
-        sb.append(key.toString());
+        sb.append(this.toString());
     }
 
     /**
