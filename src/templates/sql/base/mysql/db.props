@@ -39,3 +39,9 @@ NOTNULL = NOT NULL
 removeNotNullWithAutoIncrement = false
 suppressDefaults = false
 maxColumnNameLength = 64
+
+
+# See mysql docs for valid table type names.
+# For example, if you wanted to use the transactional type InnoDB,
+# then specify "tableType = InnoDB"
+#tableType = MyISAM
