@@ -10,6 +10,9 @@
     <release version="3.2-alpha" date="in CVS">
 
       <action dev='mpoeschl' type='remove'>
+        Remove support for old properties (properties without 'torque.' prefix)
+      </action>
+      <action dev='mpoeschl' type='remove'>
         Remove support for idMethod=sequence and autoincrement.
       </action>
       <action dev='mpoeschl' type='add'>
