@@ -1828,7 +1828,7 @@ public class Criteria extends Hashtable
      */
     public Criteria addAscendingOrderByColumn(String name)
     {
-        orderByColumns.add(name + " " + ASC);
+        orderByColumns.add(name + ' ' + ASC);
         return this;
     }
 
@@ -1840,7 +1840,7 @@ public class Criteria extends Hashtable
      */
     public Criteria addDescendingOrderByColumn(String name)
     {
-        orderByColumns.add(name + " " + DESC);
+        orderByColumns.add(name + ' ' + DESC);
         return this;
     }
 
@@ -1976,7 +1976,7 @@ public class Criteria extends Hashtable
      */
     public Criteria and(Criterion c)
     {
-        Criterion oc = getCriterion(c.getTable()+"."+c.getColumn());
+        Criterion oc = getCriterion(c.getTable()+'.'+c.getColumn());
 
         if(oc == null)
         {
@@ -2587,10 +2587,9 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    //FIXME NOW!!
     public Criteria or(Criterion c)
     {
-        Criterion oc = getCriterion(c.getTable()+"."+c.getColumn());
+        Criterion oc = getCriterion(c.getTable()+'.'+c.getColumn());
 
         if(oc == null)
         {
@@ -2724,7 +2723,6 @@ public class Criteria extends Hashtable
      *
      * @return A modified Criteria object.
      */
-    //FIXME NOW!!
     public Criteria or(String table,
                        String column,
                        Object value,
@@ -2780,7 +2778,8 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A Boolean.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
@@ -2966,7 +2965,8 @@ public class Criteria extends Hashtable
      *
      * @param column The column to run the comparison on
      * @param value A double.
-     * @param comparison String describing how to compare the column with the value
+     * @param comparison String describing how to compare the column
+     * with the value
      *
      * @return A modified Criteria object.
      */
