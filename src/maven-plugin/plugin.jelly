@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+<project xmlns:j="jelly:core">
+
+  <goal
+    name="torque" 
+    description="delegate to torque:main"
+    prereqs="torque:main"/>
+
+  <goal
+    name="torque:main"
+    description="delegate to torque:main">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="main"
+    />
+  </goal>
+
+  <goal
+    name="torque:sql"
+    description="delegate to torque:sql">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="sql"
+    />
+  </goal>
+
+  <goal
+    name="torque:doc"
+    description="delegate to torque:doc">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="doc"
+    />
+  </goal>
+
+  <goal
+    name="torque:create-db"
+    description="delegate to torque:create-db">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="create-db"
+    />
+  </goal>
+
+  <goal
+    name="torque:datadtd"
+    description="delegate to torque:datadtd">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="datadtd"
+    />
+  </goal>
+
+  <goal
+    name="torque:datadump"
+    description="delegate to torque:datadump">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="datadump"
+    />
+  </goal>
+
+  <goal
+    name="torque:datasql"
+    description="delegate to torque:datasql">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="datasql"
+    />
+  </goal>
+
+  <goal
+    name="torque:jdbc"
+    description="delegate to torque:jdbc">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="jdbc"
+    />
+  </goal>
+
+  <goal
+    name="torque:om"
+    description="delegate to torque:om">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="om"
+    />
+  </goal>
+
+  <goal
+    name="torque:insert-sql"
+    description="delegate to torque:insert-sql">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="insert-sql"
+    />
+  </goal>
+
+  <goal
+    name="torque:sql2xml"
+    description="delegate to torque:sql2xml">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="sql2xml"
+    />
+  </goal>
+
+  <goal
+    name="torque:id-table-init-sql"
+    description="delegate to torque:id-table-init-sql">
+    <ant
+      antfile="${maven.home}/plugins/maven-torque-plugin-1.0/build-torque.xml"
+      target="id-table-init-sql"
+    />
+  </goal>
+</project>

@@ -1,0 +1,67 @@
+<project default="plugin"
+  xmlns:j="jelly:core"
+  xmlns:m="maven">
+
+  <goal
+    name="plugin">
+    
+    <j:if test="${sourcesPresent == 'true'}">
+      <attainGoal name="java:compile"/>
+      <attainGoal name="test:test"/>
+    </j:if>
+    
+    <property name="assemblyDir" value="target/assemblyDir"/>
+    
+    <mkdir dir="${assemblyDir}"/>
+    
+    <copy todir="${assemblyDir}">
+      <fileset dir=".">
+        <exclude name="target/**"/>
+        <exclude name="src/**"/>
+        <exclude name="maven.xml"/>
+        <exclude name="maven.log"/>
+      </fileset>
+    </copy>
+
+    <j:if test="${sourcesPresent == 'true'}">
+      <copy todir="${assemblyDir}">
+        <fileset dir="target/classes"/>
+      </copy>
+    </j:if>
+
+    <jar
+      jarfile="${maven.build.dir}/${maven.final.name}.jar">
+      <fileset dir="${assemblyDir}"/>
+    </jar>
+
+    <copy
+      file="${maven.build.dir}/${maven.final.name}.jar"
+      todir="${maven.repo.local}/maven/jars"
+    />
+
+  </goal>
+
+  <goal name="plugin:install"
+        prereqs="plugin"
+        description="Install the plugin in Maven's plugins dir">
+
+    <copy
+      file="${maven.build.dir}/${maven.final.name}.jar"
+      todir="${maven.home}/plugins"
+    />
+
+  </goal>
+
+  <goal name="plugin:deploy"
+        prereqs="plugin"
+        description="Install an unpacked version of the plugin">
+
+    <mkdir dir="${maven.home}/plugins/${maven.final.name}"/>
+    <unzip 
+      src="${maven.build.dir}/${maven.final.name}.jar" 
+      dest="${maven.home}/plugins/${maven.final.name}"
+    />
+
+  </goal>
+
+</project>

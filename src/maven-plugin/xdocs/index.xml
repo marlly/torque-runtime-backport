@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <title>Maven Torque Plugin</title>
+    <author email="stephenh@chase3000.com">Stephen Haberman</author>
+  </properties>
+
+  <body>
+    <section name="Maven Torque Plugin">
+      <p>
+        This plug-in simply delegates to the build-torque.xml file
+        shipped with the plug-in and will read the Torque templates
+        from the classpath instead of relying on copies of
+        templates in your source tree.
+      </p>
+    </section>
+ </body>
+</document>
