@@ -16,6 +16,13 @@
             <strong>7 Nov 2001</strong>
             <ul>
               <li>
+                Using log4j correctly now instead of trying to fudge the
+                Category to use for logging. Property log4j configurations are
+                now required and there is no "default" category. All
+                categories are based on the name of the class using the category.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/Torque.java.diff?r1=1.29&amp;r2=1.30&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
                 Added DOUBLE as a valid type for a column in a datamodel
                 descriptor. <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/dtd/database.dtd.diff?r1=1.5&amp;r2=1.6&amp;diff_format=h">Reference</a>.
               </li>
