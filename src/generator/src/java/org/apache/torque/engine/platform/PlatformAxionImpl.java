@@ -81,6 +81,7 @@ public class PlatformAxionImpl extends PlatformDefaultImpl
     {
         setSchemaDomainMapping(new Domain(SchemaType.DECIMAL, "INTEGER"));
         setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BINARY"));
     }

@@ -81,9 +81,11 @@ public class PlatformDb2400Impl extends PlatformDefaultImpl
     {
         setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "SMALLINT"));
         setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "INT"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "INT"));
         setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "DOUBLE PRECISION"));
         setSchemaDomainMapping(new Domain(SchemaType.DECIMAL, "DEC"));
         setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "VARCHAR (32000) FOR BIT DATA"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG VARCHAR FOR BIT DATA"));

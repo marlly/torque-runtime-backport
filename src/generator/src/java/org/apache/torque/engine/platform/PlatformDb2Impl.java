@@ -80,6 +80,7 @@ public class PlatformDb2Impl extends PlatformDefaultImpl
     private void initialize()
     {
         setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.BINARY, "CHAR(n) FOR BIT DATA"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "VARCHAR(n) FOR BIT DATA"));

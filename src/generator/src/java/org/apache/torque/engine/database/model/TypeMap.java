@@ -559,6 +559,8 @@ public class TypeMap
      *
      * @param type the torque added type
      * @return name of the the correct jdbc type
+     * @deprecated the type conversion is handled by the platform package
+     *             (since torque 3.2)
      */
     public static SchemaType getJdbcType(SchemaType type)
     {

@@ -80,6 +80,7 @@ public class PlatformSybaseImpl extends PlatformDefaultImpl
     private void initialize()
     {
         setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "INT"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "INT"));
         setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "FLOAT"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "TEXT"));
         setSchemaDomainMapping(new Domain(SchemaType.DATE, "DATETIME"));

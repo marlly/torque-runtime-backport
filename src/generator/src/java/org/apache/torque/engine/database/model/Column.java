@@ -596,6 +596,9 @@ public class Column
     
     /**
      * Returns the column jdbc type as an object
+     * 
+     * @deprecated the type conversion is handled by the platform package
+     *             (since torque 3.2)
      */
     public Object getType()
     {

@@ -80,6 +80,7 @@ public class PlatformCloudscapeImpl extends PlatformDefaultImpl
     private void initialize()
     {
         setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "INT"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "INT"));
         setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "LONGINT"));
         setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "DOUBLE PRECISION"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));

@@ -90,6 +90,10 @@ public class PlatformDefaultImpl implements Platform
             SchemaType type = (SchemaType) iter.next();
             schemaDomainMap.put(type, new Domain(type));
         }
+        schemaDomainMap.put(SchemaType.BOOLEANCHAR, 
+                new Domain(SchemaType.BOOLEANCHAR, "CHAR"));
+        schemaDomainMap.put(SchemaType.BOOLEANINT, 
+                new Domain(SchemaType.BOOLEANINT, "INTEGER"));
     }
 
     protected void setSchemaDomainMapping(Domain domain) 

@@ -80,6 +80,7 @@ public class PlatformInterbaseImpl extends PlatformDefaultImpl
     private void initialize()
     {
         setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BLOB"));
     }

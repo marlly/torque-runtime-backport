@@ -178,4 +178,14 @@ public class DomainTest extends TestCase
         assertEquals("", col.getAutoIncrementString());
     }    
     
+    public void testBooleanint() throws Exception
+    {
+        Table table = db.getTable("types");
+        Column col = table.getColumn("cbooleanint");
+        assertEquals("", col.getAutoIncrementString());
+        assertEquals("BOOLEANINT", col.getTorqueType());
+        assertEquals("INTEGER", col.getType());
+        assertEquals("INTEGER", col.getDomain().getSqlType());
+       }    
+    
 }
