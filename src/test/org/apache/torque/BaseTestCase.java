@@ -77,7 +77,8 @@ public abstract class BaseTestCase extends TestCase
     /**
      * The path to the configuration file.
      */
-    private static final String CONFIG_FILE = "TurbineResources.properties";
+    private static final String CONFIG_FILE =
+        "src/test/TurbineResources.properties";
 
     /**
      * Whether torque has been initialized.
