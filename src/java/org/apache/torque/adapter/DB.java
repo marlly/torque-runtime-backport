@@ -267,7 +267,6 @@ public abstract class DB implements Serializable
                                      String table)
         throws SQLException;
 
-
     /**
      * This method is used to ignore case.
      *
