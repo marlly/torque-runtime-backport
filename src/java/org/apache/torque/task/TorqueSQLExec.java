@@ -68,9 +68,9 @@ import java.io.Reader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.TreeSet;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
@@ -479,14 +479,15 @@ public class TorqueSQLExec extends Task
             throw new BuildException("Cannot open and process the sqldbmap!");
         }
 
-        Hashtable databases = new Hashtable();
+        Map databases = new HashMap();
 
-        for (Iterator eachProperty = map.keySet().iterator(); eachProperty.hasNext(); )
+        Iterator eachFileName = map.keySet().iterator();
+        while (eachFileName.hasNext())
         {
-            String sqlfile = (String) eachProperty.next();
+            String sqlfile = (String) eachFileName.next();
             String database = map.getProperty(sqlfile);
 
-            ArrayList files = (ArrayList) databases.get(database);
+            List files = (List) databases.get(database);
 
             if (files == null)
             {
@@ -510,13 +511,11 @@ public class TorqueSQLExec extends Task
         while (eachDatabase.hasNext())
         {
             String db = (String) eachDatabase.next();
-            ArrayList files = (ArrayList) databases.get(db);
-            
-            Iterator eachFile = files.iterator();
             List transactions = new ArrayList();
-            while (eachFile.hasNext())
+            eachFileName = ((List) databases.get(db)).iterator();
+            while (eachFileName.hasNext())
             {
-                String fileName = (String) eachFile.next();
+                String fileName = (String) eachFileName.next();
                 File file = new File(srcDir, fileName);
                 
                 if (file.exists())
@@ -614,8 +613,7 @@ public class TorqueSQLExec extends Task
                 }
 
                 // Process all transactions
-                for (Iterator it = transactions.iterator();
-                        it.hasNext();)
+                for (Iterator it = transactions.iterator(); it.hasNext(); )
                 {
                     ((Transaction) it.next()).runTransaction(out);
                     if (!autocommit)
