@@ -231,14 +231,7 @@ public class Index
      */
     public String getColumnList()
     {
-        Column c = (Column) indexColumns.get(0);
-        StringBuffer res = new StringBuffer(c.getName());
-        for (int i = 1; i < indexColumns.size(); i++)
-        {
-            c = (Column) indexColumns.get(i);
-            res.append(", ").append(c.getName());
-        }
-        return res.toString();
+        return Column.makeList(getColumns());
     }
 
     /**
