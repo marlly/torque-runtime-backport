@@ -57,6 +57,9 @@ package org.apache.torque.engine.database.transform;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import org.apache.log4j.Logger;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
@@ -65,16 +68,20 @@ import org.xml.sax.InputSource;
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
+ * @author <a href="mailto:quintonm@bellsouth.net">Quinton McCombs</a>
  * @version $Id$
  */
 public class DTDResolver implements EntityResolver
 {
     /** Where the DTD is located on the web. */
     private static final String WEB_SITE_DTD
-            = "http://jakarta.apache.org/turbine/dtd/database.dtd";
+            = "http://jakarta.apache.org/turbine/dtd/database_3_1.dtd";
 
     /** InputSource for <code>database.dtd</code>. */
     private InputSource databaseDTD = null;
+
+    /** Logging */
+    private static Logger log = Logger.getLogger(DTDResolver.class);
 
     /**
      * constructor
@@ -93,10 +100,14 @@ public class DTDResolver implements EntityResolver
             {
                 databaseDTD = new InputSource(dtdStream);
             }
+            else
+            {
+                log.warn("Could not located the database.dtd");
+            }
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            log.error("Could not get stream for database.dtd", ex );
         }
     }
 
@@ -113,18 +124,20 @@ public class DTDResolver implements EntityResolver
         {
             String pkg = getClass().getName().substring(0,
                     getClass().getName().lastIndexOf("."));
-            System.out.println("Resolver: used database.dtd from "
+
+            log.info("Resolver: used database.dtd from "
                     + pkg + " package ");
+
             return databaseDTD;
         }
         else if (systemId == null)
         {
-            System.out.println("Resolver: used " + WEB_SITE_DTD);
+            log.info("Resolver: used " + WEB_SITE_DTD);
             return getInputSource(WEB_SITE_DTD);
         }
         else
         {
-            System.out.println("Resolver: used " + systemId);
+            log.info("Resolver: used " + systemId);
             return getInputSource(systemId);
         }
     }
@@ -144,9 +157,7 @@ public class DTDResolver implements EntityResolver
         }
         catch (IOException ex)
         {
-            System.err.println("Couldn't read DTD specified in XML schema: "
-                    + ex.getMessage());
-            //ex.printStackTrace();
+            log.error("Couldn't read DTD specified in XML schema: ", ex);
             return new InputSource();
         }
     }
