@@ -58,9 +58,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -75,11 +72,8 @@ import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.Table;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -115,8 +109,8 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /**
      * Default custructor
      */
-    public XmlToData(Database database, String dtdFilePath) throws
-            MalformedURLException, IOException
+    public XmlToData(Database database, String dtdFilePath) 
+            throws MalformedURLException, IOException
     {
         this.database = database;
         dtdFile = new File(dtdFilePath);
@@ -196,8 +190,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /**
      * Warning callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void warning(SAXParseException spe)
     {
@@ -209,8 +202,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /**
      * Error callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void error(SAXParseException spe)
     {
@@ -222,8 +214,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
     /**
      * Fatal error callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void fatalError(SAXParseException spe)
     {

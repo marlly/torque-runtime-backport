@@ -115,6 +115,8 @@ public class Column
 
     /**
      * Creates a new column and set the name
+     * 
+     * @param name column name
      */
     public Column(String name)
     {
@@ -305,7 +307,6 @@ public class Column
     {
         this.position = v;
     }
-
 
     /**
      * Set the parent Table of the column

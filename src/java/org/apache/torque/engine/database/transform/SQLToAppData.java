@@ -57,9 +57,6 @@ package org.apache.torque.engine.database.transform;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.util.List;
 import java.util.Vector;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
@@ -76,7 +73,6 @@ import org.apache.torque.adapter.IDMethod;
  * structure.  The class makes use of SQL Scanner to get
  * sql tokens and the parses these to create the AppData
  * class. SQLToAppData is in effect a simplified sql parser.
- *
  * 
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
@@ -155,7 +151,7 @@ public class SQLToAppData
     private void err (String name) throws ParseException
     {
         throw new ParseException (name + " at [ line: " + token.getLine() + 
-            " col: "+token.getCol()+" ]");
+            " col: " + token.getCol() + " ]");
     }
 
     /**
@@ -186,12 +182,15 @@ public class SQLToAppData
         next();
         String tableName = token.getStr(); // name of the table
         next();
-        if (!token.getStr().equals("(")) err ("( expected");
+        if (! token.getStr().equals("(")) 
+        {
+            err("( expected");
+        }
         next();
 
         Table tbl = new Table (tableName);
         //tbl.setIdMethod("none");
-        while (!token.getStr().equals(";"))
+        while (! token.getStr().equals(";"))
         {
             Create_Table_Column(tbl);
         }
@@ -204,8 +203,6 @@ public class SQLToAppData
         {
             tbl.setIdMethod(IDMethod.NO_ID_METHOD);
         }
-        	
-        
         appDataDB.addTable (tbl);
     }
 
@@ -219,16 +216,26 @@ public class SQLToAppData
         // which is the name of the column or
         // PRIMARY/FOREIGN/UNIQUE
         if (token.getStr().equals(","))
+        {
             next();
+        }
         
         if (token.getStr().toUpperCase().equals("PRIMARY"))
+        {
             Create_Table_Column_Primary (tbl);
+        }
         else if (token.getStr().toUpperCase().equals("FOREIGN"))
+        {
             Create_Table_Column_Foreign (tbl);
+        }
         else if (token.getStr().toUpperCase().equals("UNIQUE"))
+        {
             Create_Table_Column_Unique (tbl);
+        }
         else
+        {
             Create_Table_Column_Data (tbl);
+        }
     }
 
     /**
@@ -238,15 +245,22 @@ public class SQLToAppData
     {
         next();
         if (!token.getStr().toUpperCase().equals("KEY"))
+        {
             err ("KEY expected");
+        }
         next();
         if (!token.getStr().toUpperCase().equals("("))
+        {
             err ("( expected");
+        }
         next();
 
         String colName = token.getStr();
         Column c = tbl.getColumn(colName);
-        if (c == null) err ("Invalid column name: "+colName);
+        if (c == null)
+        {
+            err("Invalid column name: " + colName);
+        }
         c.setPrimaryKey(true);
         next();
         while (token.getStr().equals(","))
@@ -254,24 +268,31 @@ public class SQLToAppData
             next();
             colName = token.getStr();
             c = tbl.getColumn(colName);
-            if (c == null) err ("Invalid column name: "+colName);
+            if (c == null)
+            {
+                err("Invalid column name: " + colName);
+            }
             c.setPrimaryKey(true);
             next();
         }
 
-        if (!token.getStr().toUpperCase().equals(")"))
-            err (") expected");
+        if (! token.getStr().toUpperCase().equals(")"))
+        {
+            err(") expected");
+        }
         next(); // skip the )
     }
 
     /**
      * Parses UNIQUE (NAME,FOO,BAR) statement
      */
-    private void Create_Table_Column_Unique (Table tbl) throws ParseException
+    private void Create_Table_Column_Unique(Table tbl) throws ParseException
     {
         next();
-        if (!token.getStr().toUpperCase().equals("("))
-            err ("( expected");
+        if (! token.getStr().toUpperCase().equals("("))
+        {
+            err("( expected");
+        }
         next();
         while (!token.getStr().equals(")"))
         {
@@ -279,13 +300,18 @@ public class SQLToAppData
             {
                 String colName = token.getStr();
                 Column c = tbl.getColumn(colName);
-                if (c == null) err ("Invalid column name: "+colName);
-                    c.setUnique(true);
+                if (c == null)
+                {
+                    err("Invalid column name: " + colName);
+                }
+                c.setUnique(true);
             }
             next();
         }
-        if (!token.getStr().toUpperCase().equals(")"))
-            err (") expected got: " + token.getStr());
+        if (! token.getStr().toUpperCase().equals(")"))
+        {
+            err(") expected got: " + token.getStr());
+        }
 
         next(); // skip the )
     }
@@ -296,11 +322,15 @@ public class SQLToAppData
     private void Create_Table_Column_Foreign (Table tbl) throws ParseException
     {
         next();
-        if (!token.getStr().toUpperCase().equals("KEY"))
-            err ("KEY expected");
+        if (! token.getStr().toUpperCase().equals("KEY"))
+        {
+            err("KEY expected");
+        }
         next();
-        if (!token.getStr().toUpperCase().equals("("))
-            err ("( expected");
+        if (! token.getStr().toUpperCase().equals("("))
+        {
+            err("( expected");
+        }
         next();
 
         ForeignKey fk = new ForeignKey();
@@ -317,13 +347,17 @@ public class SQLToAppData
             localColumns.add(colName);
             next();
         }
-        if (!token.getStr().toUpperCase().equals(")"))
-            err (") expected");
+        if (! token.getStr().toUpperCase().equals(")"))
+        {
+            err(") expected");
+        }
 
         next();
 
-        if (!token.getStr().toUpperCase().equals("REFERENCES"))
-            err ("REFERENCES expected");
+        if (! token.getStr().toUpperCase().equals("REFERENCES"))
+        {
+            err("REFERENCES expected");
+        }
 
         next();
 
@@ -334,7 +368,7 @@ public class SQLToAppData
         if (token.getStr().toUpperCase().equals("("))
         {
             next();
-            int i=0;
+            int i = 0;
             fk.addReference((String)localColumns.get(i++),token.getStr());
             next();
             while (token.getStr().equals(","))
@@ -343,8 +377,10 @@ public class SQLToAppData
                 fk.addReference((String)localColumns.get(i++),token.getStr());
                 next();
             }
-            if (!token.getStr().toUpperCase().equals(")"))
-                err (") expected");
+            if (! token.getStr().toUpperCase().equals(")"))
+            {
+                err(") expected");
+            }
             next();
         }
     }
@@ -359,13 +395,14 @@ public class SQLToAppData
         String columnDefault = null;
         boolean inEnum = false;
 
-
         String columnName = token.getStr();
         next();
         String columnType = token.getStr();
 
         if (columnName.equals(")") && columnType.equals(";"))
+        {
             return;
+        }
 
         next();
 
@@ -375,12 +412,12 @@ public class SQLToAppData
         {
             inEnum = true;
             next(); // skip (
-            while (!token.getStr().equals(")"))
+            while (! token.getStr().equals(")"))
             {
                 // skip until )
                 next();
             }
-            while (!token.getStr().equals(","))
+            while (! token.getStr().equals(","))
             {
                 if (token.getStr().toUpperCase().equals("DEFAULT"))
                 {
@@ -423,7 +460,9 @@ public class SQLToAppData
 
         Column col = new Column (columnName);
         if (columnPrecision != null)
+        {
             columnSize = columnSize + columnPrecision;
+        }
         col.setTypeFromString (columnType,columnSize);
         tbl.addColumn (col);
         
@@ -442,16 +481,20 @@ public class SQLToAppData
                 if (token.getStr().toUpperCase().equals("NOT"))
                 {
                     next();
-                    if (!token.getStr().toUpperCase().equals("NULL")) 
+                    if (! token.getStr().toUpperCase().equals("NULL")) 
+                    {
                         err ("NULL expected after NOT");
+                    }
                     col.setNotNull(true);
                     next();
                 }
                 else if (token.getStr().toUpperCase().equals("PRIMARY"))
                 {
                     next();
-                    if (!token.getStr().toUpperCase().equals("KEY")) 
+                    if (! token.getStr().toUpperCase().equals("KEY")) 
+                    {
                         err ("KEY expected after PRIMARY");
+                    }
                     col.setPrimaryKey(true);
                     next();
                 }
@@ -510,14 +553,18 @@ public class SQLToAppData
         while (hasTokens())
         {
             if (token == null)
+            {
                 next();
+            }
 
             if (token.getStr().toUpperCase().equals("CREATE"))
             {
                 Create();
             }
             if (hasTokens())
+            {
                 next();
+            }
         }
 
         return appData;

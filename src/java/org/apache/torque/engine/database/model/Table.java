@@ -79,6 +79,7 @@ import org.xml.sax.Attributes;
  */
 public class Table implements IDMethod
 {
+    /** enables debug output */
     private static final boolean DEBUG = false;
 
     //private AttributeListImpl attributes;
@@ -120,6 +121,8 @@ public class Table implements IDMethod
 
     /**
      * Constructs a table object with a name
+     * 
+     * @param name table name
      */
     public Table(String name)
     {
@@ -134,6 +137,9 @@ public class Table implements IDMethod
 
     /**
      * Load the table object from an xml tag.
+     * 
+     * @param attrib xml attributes
+     * @param defaultIdMethod defined at db level
      */
     public void loadFromXML(Attributes attrib, String defaultIdMethod)
     {
@@ -153,8 +159,7 @@ public class Table implements IDMethod
         {
             idMethod = defaultIdMethod;
         }
-        if ("autoincrement".equals(idMethod) ||
-                 "sequence".equals(idMethod))
+        if ("autoincrement".equals(idMethod) || "sequence".equals(idMethod))
         {
             System.out.println("The value '" + idMethod + "' for Torque's " +
                      "table.idMethod attribute has been deprecated in favor " +
@@ -246,7 +251,8 @@ public class Table implements IDMethod
      */
     private void doNaming()
     {
-        int i, size;
+        int i;
+        int size;
         String name;
 
         // Assure names are unique across all databases.
@@ -287,9 +293,14 @@ public class Table implements IDMethod
 
     /**
      * Macro to a constraint name.
+     * 
+     * @param nameType constraint type
+     * @param nbr unique number for this constraint type
+     * @return unique name for constraint
+     * @throws TorqueException
      */
     private final String acquireConstraintName(String nameType, int nbr)
-        throws TorqueException
+            throws TorqueException
     {
         List inputs = new ArrayList(4);
         inputs.add(getDatabase());
@@ -360,8 +371,11 @@ public class Table implements IDMethod
     }
 
     /**
-     * A utility function to create a new column
-     * from attrib and add it to this table.
+     * A utility function to create a new column from attrib and add it to this
+     * table.
+     * 
+     * @param attrib xml attributes for the column to add
+     * @return the added column
      */
     public Column addColumn(Attributes attrib)
     {
@@ -375,6 +389,8 @@ public class Table implements IDMethod
     /**
      * Adds a new column to the column vector and set the
      * parent table of the column to the current table
+     * 
+     * @param col the column to add
      */
     public void addColumn(Column col)
     {
@@ -425,7 +441,7 @@ public class Table implements IDMethod
         List names = new ArrayList(children.size());
         for ( int i = 0; i < children.size(); i++ )
         {
-            names.add( ((Inheritance)children.get(i)).getClassName() );
+            names.add( ((Inheritance) children.get(i)).getClassName() );
         }
         return names;
     }
@@ -769,7 +785,7 @@ public class Table implements IDMethod
         Column[] tbls = new Column[size];
         for (int i = 0; i < size; i++)
         {
-            tbls[i] = (Column)columnList.get(i);
+            tbls[i] = (Column) columnList.get(i);
         }
         return tbls;
     }
@@ -791,7 +807,7 @@ public class Table implements IDMethod
         ForeignKey[] tbls = new ForeignKey[size];
         for (int i = 0; i < size; i++)
         {
-            tbls[i] = (ForeignKey)foreignKeys.get(i);
+            tbls[i] = (ForeignKey) foreignKeys.get(i);
         }
         return tbls;
     }
@@ -820,7 +836,7 @@ public class Table implements IDMethod
             }
             else
             {
-                result = ((IdMethodParameter)idMethodParams.get(0)).getValue();
+                result = ((IdMethodParameter) idMethodParams.get(0)).getValue();
             }
         }
         return result;
@@ -835,7 +851,7 @@ public class Table implements IDMethod
         Index[] tbls = new Index[size];
         for (int i = 0; i < size; i++)
         {
-            tbls[i] = (Index)indices.get(i);
+            tbls[i] = (Index) indices.get(i);
         }
         return tbls;
     }
@@ -849,7 +865,7 @@ public class Table implements IDMethod
         Unique[] tbls = new Unique[size];
         for (int i = 0; i < size; i++)
         {
-            tbls[i] = (Unique)unices.get(i);
+            tbls[i] = (Unique) unices.get(i);
         }
         return tbls;
     }
@@ -860,7 +876,7 @@ public class Table implements IDMethod
      */
     public Column getColumn(String name)
     {
-        return (Column)columnsByName.get(name);
+        return (Column) columnsByName.get(name);
     }
 
     /**
@@ -869,7 +885,7 @@ public class Table implements IDMethod
      */
     public Column getColumnByJavaName(String javaName)
     {
-        return (Column)columnsByJavaName.get(javaName);
+        return (Column) columnsByJavaName.get(javaName);
     }
 
     /**
@@ -883,7 +899,7 @@ public class Table implements IDMethod
         for (Iterator iter = foreignKeys.iterator(); iter.hasNext(); )
         {
             ForeignKey key = (ForeignKey) iter.next();
-            if (key.getLocalColumns().contains (col))
+            if (key.getLocalColumns().contains(col))
             {
                 return key;
             }
@@ -892,23 +908,25 @@ public class Table implements IDMethod
     }
 
     /**
-     * Returns true if the table contains a spesified column
+     * Returns true if the table contains a specified column
      */
     public boolean containsColumn(Column col)
     {
-        return columnList.contains (col);
+        return columnList.contains(col);
     }
 
     /**
-     * Returns true if the table contains a spesified column
+     * Returns true if the table contains a specified column
      */
     public boolean containsColumn(String name)
     {
-        return (getColumn (name) != null);
+        return (getColumn(name) != null);
     }
 
     /**
      * Set the parent of the table
+     * 
+     * @param parent the parant database
      */
     public void setDatabase(Database parent)
     {
@@ -917,6 +935,8 @@ public class Table implements IDMethod
 
     /**
      * Get the parent of the table
+     * 
+     * @return the parant database
      */
     public Database getDatabase()
     {
@@ -925,6 +945,8 @@ public class Table implements IDMethod
 
     /**
      * Returns a XML representation of this table.
+     * 
+     * @return XML representation of this table
      */
     public String toString()
     {
@@ -1021,7 +1043,7 @@ public class Table implements IDMethod
         Iterator iter = columnList.iterator();
         while (iter.hasNext())
         {
-            Column col = (Column)iter.next();
+            Column col = (Column) iter.next();
             if (col.isPrimaryKey())
             {
                 pk.add(col);
