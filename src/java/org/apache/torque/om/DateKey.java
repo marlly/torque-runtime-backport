@@ -156,7 +156,7 @@ public class DateKey extends SimpleKey
     {
         if ( key != null )
         {
-            return String.valueOf(((Date)key).getTime());
+            return key.toString();
         }
         return "";
     }
