@@ -79,7 +79,7 @@ public class Unique extends Index
     /**
      * Returns <code>true</code>.
      */
-    public final boolean getUnique()
+    public final boolean isUnique()
     {
         return true;
     }
