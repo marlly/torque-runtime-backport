@@ -433,17 +433,10 @@ public abstract class BaseObject implements Persistent, Serializable
      */
     protected Category log()
     {
-        Category log = null;
-        if (this.log == null) 
+        if (log == null) 
         {
             log = Category.getInstance(getClass().getName());
-            this.log = log;
         }
-        else 
-        {
-            log = this.log;
-        }
-        
      	return log;
     }
 
