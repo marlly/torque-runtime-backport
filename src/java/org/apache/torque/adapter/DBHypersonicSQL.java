@@ -45,7 +45,8 @@ public class DBHypersonicSQL
      */
     public String toUpperCase(String in)
     {
-        return in;
+        String s = new StringBuffer("UPPER(").append(in).append(")").toString();
+        return s;
     }
 
     /**
@@ -56,7 +57,7 @@ public class DBHypersonicSQL
      */
     public String ignoreCase(String in)
     {
-        return in;
+        return toUpperCase(in);
     }
 
     /**
