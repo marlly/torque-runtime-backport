@@ -386,18 +386,60 @@ This is what the HTML description of the database looks like:
 
 </section>
 
-<section name="The Object Relational Map">
+<section name="Inheritance and the Object Relational Map">
 
 <p>
 
-  The OM/Peer (Torque) system can map a class hierarchy into a single table.
-  This is 1 of 3 methods generally described in object-relational mapping
-  designs.  Its benefits include that it does not require joins in order to
-  gather the attributes for a single object.  It falls short in modelling a
-  class hierarchy where the related classes have a non intersecting collection
-  of attributes, as in this case a row in the table will have several null
-  columns.
+  Torque can handle object-oriented inheritance.  There are generally 
+  considered to be 3 methods of object-relational mapping designs.  Torque 
+  uses one of the fastest, mapping all objects in a class hierarchy to a 
+  single table.  All attributes for every class in the hierarchy are stored 
+  in the table.  Consider an abstract ComputerComponent class that has Monitor
+  and Keyboard subclasses. There would only be one table - both Monitor and 
+  Keyboard objects would be persisted to the same place. The table would 
+  consist of all ComputerComponent attributes, any unique Monitor attributes, 
+  and any unique Keyboard attributes. Keyboard table rows would have NULL for 
+  any unique Monitor data columns, and vice versa.
+  
+</p>
+<p>
 
+  The other fast method is to map each concrete class to a distinct 
+  table. Every object stores all attributes in a single row in the class table. 
+  An example would be that if we had a Kitchen class that inherited from Room, 
+  two tables would be needed for storage. The Kitchen table would contain all
+  of the columns of the Room table, plus any additional data columns needed to 
+  describe the additional Kitchen attributes.
+
+</p>
+<p>
+
+  The slowest, but most object-oriented method is to store each class in its 
+  own table. Only attributes that are added to a derived class are stored in 
+  its table. The persistence layer would need to join tables to read an object 
+  out of storage. Saving objects would be more complex, because objects will 
+  need to be distributed across multiple tables.  For our Kitchen and Room 
+  example, there would also be two tables, Kitchen and Room, but the Kitchen 
+  table would only contain those attributes which weren't part of the Room 
+  class.
+
+</p>
+<p>
+
+  One of the advantages of the first method (the one Torque uses) is that it 
+  does not require joins like the third method described above. Another 
+  advantage is that the data model is easier to maintain than the second 
+  method.  It falls short in modelling a class hierarchy where the related
+  classes have a non intersecting collection of attributes, as in this case
+  a row in the table will have several null columns.
+ 
+</p>
+<p>
+
+  For more information, visit Scott Ambler's excellent web site, 
+  <a href="http://www.ambysoft.com/">AmbySoft.com</A>, where he discusses 
+  object mapping to relational databases.
+  
 </p>
 
 </section>
