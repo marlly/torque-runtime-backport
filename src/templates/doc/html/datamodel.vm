@@ -15,7 +15,7 @@
       <th class="normalFont">Table Name</th>
       <th class="normalFont">OM Class</th>
       <th class="normalFont">Description</th>
-    <tr>
+    </tr>
   #foreach ($tbl in $database.tables)
     <tr>
       <td class="normalFont"><a href="#$tbl.Name">$tbl.Name</a></td>
