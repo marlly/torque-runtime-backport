@@ -52,6 +52,7 @@ addGetByNameMethod=true
 complexObjectModel=true
 addTimeStamp=true
 addIntakeRetrievable=false
+useManagers=true
 
 # -------------------------------------------------------------------
 # 
