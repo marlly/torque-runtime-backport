@@ -76,22 +76,10 @@ import javax.sql.ConnectionPoolDataSource;
  * <i>zero code changes</i> and minimal configuration file
  * modifications.
  *
- * <p>Your adapter must be added to the list of available adapters,
- * using a <code>database.adapter</code> entry.  The established
- * naming convention for adapters is the String "DB" prepended to a
- * mutation of the short class name of the driver (i.e. no package
- * name) or database name.  A JDBC driver corresponding to your
- * adapter should also be added, using the fullly-qualified class name
- * of the driver.  If no driver is specified for your adapter,
- * <code>driver.default</code> is used.
- *
- * <pre>
- * # Configuration for the Mysql/MM adapter.
- * database.adaptor=DBMM
- * database.adaptor.DBMM=org.gjt.mm.mysql.Driver
- * </pre>
- *
- * Hooks to make <i>your</i> adapter the default may also be added.
+ * <p>Torque uses the driver class name to find the right adapter.
+ * A JDBC driver corresponding to your adapter must be added to the properties
+ * file, using the fully-qualified class name of the driver. If no driver is
+ * specified for your database, <code>driver.default</code> is used.
  *
  * <pre>
  * #### MySQL MM Driver
@@ -141,8 +129,7 @@ public abstract class DB implements Serializable, IDMethod
      * Returns a JDBC <code>Connection</code> from the
      * <code>DriverManager</code>.
      *
-     * @return A JDBC <code>Connection</code> object for this
-     * database.
+     * @return A JDBC <code>Connection</code> object for this database.
      * @exception SQLException
      */
     public Connection getConnection()
@@ -171,8 +158,7 @@ public abstract class DB implements Serializable, IDMethod
      * of the JDBC driver that implements the PooledConnection interface
      * should be defined in the specific DB Adapter
      *
-     * @return A JDBC <code>PooledConnection</code> object for this
-     * database.
+     * @return A JDBC <code>PooledConnection</code> object for this database.
      * @exception SQLException if the driver does not support PooledConnection
      * objects
      */
@@ -190,8 +176,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param url The URL of the database to connect to.
      * @param username The name of the user to use when connecting.
      * @param password The user's password.
-     * @exception Exception The JDBC driver could not be loaded or
-     * instantiated.
+     * @exception Exception The JDBC driver could not be loaded or instantiated.
      */
     public void init(String url,
                      String username,
@@ -334,8 +319,7 @@ public abstract class DB implements Serializable, IDMethod
      * Postgres, only the DBPostgres needs to override this method and
      * return true.
      *
-     * @return True if writing large objects to the DB requires a
-     * transaction.
+     * @return True if writing large objects to the DB requires a transaction.
      */
     public boolean objectDataNeedsTrans()
     {
@@ -412,15 +396,15 @@ public abstract class DB implements Serializable, IDMethod
     public String getDateString(Date date)
     {
         Timestamp ts = null;
-        if ( date instanceof Timestamp ) 
+        if ( date instanceof Timestamp )
         {
             ts = (Timestamp)date;
         }
-        else 
+        else
         {
             ts = new Timestamp(date.getTime());
         }
-        
+
         return "{ts '" + ts + "'}";
     }
 }
