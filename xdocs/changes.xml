@@ -5,6 +5,7 @@
   <properties>
     <title>Torque</title>
     <author email="jvanzyl@apache.com">Jason van Zyl</author>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
   </properties>
 
   <body>
@@ -12,6 +13,18 @@
     <section name="Changes">
       <p>
         <ul>
+          <li>
+            <strong>8 Nov 2001</strong>
+            <ul>
+              <li>
+                Added support to specify the schema used to get data from jdbc
+                (TorqueJDBCTransforTask). Now you can get the data for one
+                schema instead of the whole database. (only effects oracle)<br/>
+                patch by Dan Bachelder (chowda@chowda.net)
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/task/TorqueJDBCTransformTask.java.diff?r1=1.4&amp;r2=1.5&amp;diff_format=h">Reference</a>.
+              </li>
+            </ul>
+          </li>
           <li>
             <strong>7 Nov 2001</strong>
             <ul>
