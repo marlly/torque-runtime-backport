@@ -434,15 +434,14 @@ public class Database
                 while (localColumnNames.hasNext())
                 {
                     Column local = currTable
-                        .getColumn((String)localColumnNames.next());
+                        .getColumn((String) localColumnNames.next());
                     // give notice of a schema inconsistency.
                     // note we do not prevent the npe as there is nothing
                     // that we can do, if it is to occur.
                     if (local == null)
                     {
                         System.out.println("ERROR!! Attempt to define foreign"
-                                + " key with nonexistent column, "
-                                + local.getName() + ", in table, "
+                                + " key with nonexistent column in table, "
                                 + currTable.getName() + "!");
                     }
                     //check for foreign pk's
