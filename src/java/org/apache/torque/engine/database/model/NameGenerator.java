@@ -73,6 +73,30 @@ public interface NameGenerator
     public static final char STD_SEPARATOR_CHAR = '_';
 
     /**
+     * Traditional method for converting schema table and column names
+     * to java names.  The CONV_METHOD_XXX constants define how names
+     * for columns and tables in the database schema will be converted
+     * to java source names.
+     * @see JavaNameGenerator#underscoreMethod(String) */
+
+    public static final String CONV_METHOD_UNDERSCORE = "underscore";
+
+    /**
+     * Similar to CONV_METHOD_UNDERSCORE except nothing is converted
+     * to lowercase.
+     * @see JavaNameGenerator#javanameMethod(String)
+     */
+
+    public static final String CONV_METHOD_JAVANAME = "javaname";
+
+    /**
+     * Specifies no modification when converting from a schema column
+     * or table name to a java name.  to java names.
+     */
+
+    public static final String CONV_METHOD_NOCHANGE = "nochange";
+    
+    /**
      * Given a list of <code>String</code> objects, implements an
      * algorithm which produces a name.
      *

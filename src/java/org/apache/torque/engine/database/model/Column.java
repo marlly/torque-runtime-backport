@@ -76,6 +76,7 @@ public class Column
 {
     private String name;
     private String javaName = null;
+    private String nameConversion;
     private boolean isNotNull = false;
     private String size;
     private String torqueType;
@@ -153,6 +154,15 @@ public class Column
 
         javaName = attrib.getValue("javaName");
 
+        // retrieves the method for converting from specified name to
+        // a java name.
+        nameConversion = attrib.getValue("nameConversion");
+        if (nameConversion == null)
+        {
+          nameConversion =
+            parentTable.getDatabase().getDefaultNameConversion();
+        }
+        
         //Primary Key
         String primaryKey = attrib.getValue("primaryKey");
         //Avoid NullPointerExceptions on string comparisons.
@@ -219,8 +229,9 @@ public class Column
     {
         if (javaName == null)
         {
-            List inputs = new ArrayList(1);
+            List inputs = new ArrayList(2);
             inputs.add(name);
+            inputs.add(nameConversion);
             try
             {
                 javaName = NameFactory.generateName(NameFactory.JAVA_GENERATOR,

@@ -17,6 +17,22 @@ table that is just a join table. idbroker is good if you want a
 centralized repository for brokering out clumps of id's in a database
 agnostic way.
 -->
+
+<!-- 
+
+defaultConversionMethod determines how a table or column name,
+from the name attribute in the xml database file, is converted to a
+Java class or method name.
+
+	 nochange   - indicates not change is performed.
+	 underscore - Underscores are removed, First letter is
+		      capitalized, first letter after an underscore
+		      is capitalized, the rest of the letters are
+		      converted to lowercase.
+	 javaname   - same as underscore, but no letters are converted
+		      to lowercase.
+-->
+
 <!ELEMENT database (table+)>
 <!ATTLIST database
   name CDATA #IMPLIED
@@ -24,6 +40,8 @@ agnostic way.
   package CDATA #IMPLIED
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
+
+  defaultNameConversion (nochange|underscore|javaname) "underscore"
 >
 
 <!ELEMENT table (column+,(foreign-key|index|unique|id-method-parameter)*)>
@@ -36,6 +54,7 @@ agnostic way.
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
+  nameConversion (nochange|underscore|javaname) #IMPLIED
 >
 
 <!ELEMENT id-method-parameter EMPTY>
@@ -63,6 +82,7 @@ agnostic way.
   autoIncrement (true|false) "false"
   inheritance (single|false) "false" 
   inputValidator CDATA #IMPLIED
+  nameConversion (nochange|underscore|javaname) #IMPLIED
 >
 
 <!ELEMENT inheritance EMPTY>

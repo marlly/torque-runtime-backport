@@ -71,18 +71,66 @@ import org.apache.torque.TorqueException;
 public class JavaNameGenerator implements NameGenerator
 {
     /**
-     * <code>inputs</code> should consist of one element, the original
-     * name of the database element.  The name is sectioned up using
-     * any contained underscores.  The first element of each section
-     * will be capitalized and the rest made lower case.
+     * <code>inputs</code> should consist of two elements, the
+     * original name of the database element and the method for
+     * generating the name.  There are currently three methods:
+     * CONV_METHOD_NOCHANGE - xml names are converted directly to java
+     * names without modification.  CONV_METHOD_UNDERSCORE Will
+     * capitalize the first letter, remove underscores, and capitalize
+     * each letter before an underscore.  All other letters are
+     * lowercased. "javaname" works the same as the
+     * CONV_METHOD_JAVANAME method but will not lowercase any
+     * characters.
      *
-     * @see org.apache.torque.engine.database.model.NameGenerator
-     */
+     * @param inputs list expected to contain two parameters, element
+     * 0 contains name to convert, element 1 contains method for conversion.
+     * @return generated name. 
+     * @see org.apache.torque.engine.database.model.NameGenerator */
+    
     public String generateName(List inputs)
+    {
+        String schemaName = (String)inputs.get(0);
+        String method = (String)inputs.get(1);
+        String javaName = null;
+        
+        if (CONV_METHOD_UNDERSCORE.equals(method))
+        {
+            javaName = underscoreMethod(schemaName);
+        }
+        else if (CONV_METHOD_JAVANAME.equals(method))
+        {
+            javaName = javanameMethod(schemaName);
+        }
+        else if (CONV_METHOD_NOCHANGE.equals(method))
+        {
+            javaName = nochangeMethod(schemaName);
+        }
+        else
+        {
+            // if for some reason nothing is defined then we default
+            // to the traditional method.
+            javaName = underscoreMethod(schemaName);
+        }
+
+        return javaName;
+    }
+    
+    /**
+     * Converts a database schema name to java object name.  Removes
+     * STD_SEPARATOR_CHAR, capitilizes first letter of name and each
+     * letter after the STD_SEPERATOR, converts the rest of the
+     * letters to lowercase.
+     * @param schemaName name to be converted.
+     * @return converted name.
+     * @see org.apache.torque.engine.database.model.NameGenerator
+     * @see #underscoreMethod(String)
+     */
+
+    public String underscoreMethod(String schemaName)
     {
         StringBuffer name = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
-            ((String) inputs.get(0), String.valueOf(STD_SEPARATOR_CHAR));
+            (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
         while (tok.hasMoreTokens())
         {
             String namePart = ((String) tok.nextElement()).toLowerCase();
@@ -90,4 +138,39 @@ public class JavaNameGenerator implements NameGenerator
         }
         return name.toString();
     }
+    
+    /**
+     * Converts a database schema name to java object name.  Operates
+     * same as underscoreMethod but does not convert anything to
+     * lowercase.
+     * @param schemaName name to be converted.
+     * @return converted name.
+     * @see org.apache.torque.engine.database.model.NameGenerator
+     * @see #underscoreMethod(String)
+     */
+
+    public String javanameMethod(String schemaName)
+    {
+        StringBuffer name = new StringBuffer();
+        StringTokenizer tok = new StringTokenizer
+            (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
+        while (tok.hasMoreTokens())
+        {
+            String namePart = (String) tok.nextElement();
+            name.append(StringUtils.firstLetterCaps(namePart));
+        }
+        return name.toString();
+    }
+
+    /**
+     * Converts a database schema name to java object name.  In this
+     * case no conversion is made.
+     */
+    
+    public String nochangeMethod(String name)
+    {
+        return name;
+    }
+    
+
 }

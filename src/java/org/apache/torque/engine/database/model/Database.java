@@ -65,6 +65,9 @@ import org.xml.sax.Attributes;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
+import org.apache.torque.engine.database.model.NameGenerator;
+
+
 /**
  * A class for holding application data structures.
  *
@@ -84,6 +87,7 @@ public class Database
     private String baseClass;
     private String basePeer;
     private String defaultIdMethod;
+    private String defaultNameConversion;
     private AppData dbParent;
     private Hashtable tablesByName = new Hashtable();
     private Hashtable tablesByJavaName = new Hashtable();
@@ -105,6 +109,12 @@ public class Database
         baseClass = attrib.getValue("baseClass");
         basePeer = attrib.getValue("basePeer");
         defaultIdMethod = attrib.getValue("defaultIdMethod");
+        defaultNameConversion = attrib.getValue("defaultNameConversion");
+        if (defaultNameConversion == null)
+        {
+          defaultNameConversion = NameGenerator.CONV_METHOD_UNDERSCORE;
+        }
+        
     }
 
     /**
@@ -204,6 +214,25 @@ public class Database
     }
 
     /**
+     * Get the value of defaultNameConversion which specifies the
+     * method for converting schema names for table and column
+     * to java names..
+     * @return value of defaultNameConversion.  */
+    public String getDefaultNameConversion()
+    {
+        return defaultNameConversion;
+    }
+
+    /**
+     * Set the value of defaultNameConversion.
+     * @param v  Value to assign to defaultNameConversion.
+     */
+    public void setDefaultNameConversion(String  v)
+    {
+        this.defaultNameConversion = v;
+    }
+
+    /**
      * Return an array of all tables
      */
     public Table[] getTables()
@@ -242,6 +271,7 @@ public class Database
     public Table addTable(Attributes attrib)
     {
         Table tbl = new Table();
+        tbl.setDatabase (this);
         tbl.loadFromXML (attrib, this.getDefaultIdMethod());
         addTable (tbl);
         return tbl;
