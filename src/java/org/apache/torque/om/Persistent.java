@@ -54,11 +54,13 @@ package org.apache.torque.om;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.pool.DBConnection;
 
 /**
  * This interface defines methods related to saving an object
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:fedor@apache.org">Fedor K.</a>
  * @version $Id$
  */
 public interface Persistent
@@ -122,4 +124,19 @@ public interface Persistent
      * Saves the object.
      */
     public void save() throws Exception;
+
+    /**
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.
+     */
+    public void save(String dbName) throws Exception;
+
+    /**
+     * Stores the object in the database.  If the object is new,
+     * it inserts it; otherwise an update is performed.  This method
+     * is meant to be used as part of a transaction, otherwise use
+     * the save() method and the connection details will be handled
+     * internally
+     */
+    public void save(DBConnection dbCon) throws Exception;
 }
