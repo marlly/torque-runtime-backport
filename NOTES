@@ -107,6 +107,6 @@ o Same goes for the DatabaseMap. We definitely have information duplicated
   used to produce the OM. Could use the datamodel to decouple which is
   what would be need to have pluggable connection pools.
   
-o Could the information in the adaptors be coupled with information
+o Could the information in the adapters be coupled with information
   in the db.props file and combined into some XML descriptor for
   database specifics?
