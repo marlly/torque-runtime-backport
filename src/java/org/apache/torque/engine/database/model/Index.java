@@ -135,18 +135,18 @@ public class Index
     }
 
     /**
-     * @see #getUnique()
-     * @deprecated Use getUnique() instead.
+     * @see #isUnique()
+     * @deprecated Use isUnique() instead.
      */
-     public boolean getIsUnique()
-     {
-         return getUnique();
-     }
+    public boolean getIsUnique()
+    {
+        return isUnique();
+    }
 
     /**
      * Returns the uniqueness of this index.
      */
-    public boolean getUnique()
+    public boolean isUnique()
     {
         return false;
     }
