@@ -13,5 +13,8 @@
       <item name="User Guide"       href="/user-guide.html"/>
       <item name="Developer Guide"  href="/developer-guide.html"/>
     </menu>
+    <menu name="Development">
+      <item name="Changes"          href="/changes.html"/>
+    </menu>
   </body>
 </project>
