@@ -112,7 +112,7 @@ public class SqlExpressionTest extends TestCase
         String result = SqlExpression.buildIn("COL", values, SqlEnum.IN, 
                 true, db);
         long end =  System.currentTimeMillis();
-        System.out.println("large buildIn: " + (end - start));
+        System.out.println("large buildIn took " + (end - start) + " milliseconds");
     }
     
 }
