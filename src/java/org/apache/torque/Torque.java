@@ -95,11 +95,20 @@ public class Torque
     /**
      * A constant for <code>default</code>.
      */
-    protected static final String DEFAULT_NAME = "default";
+    private static final String DEFAULT_NAME = "default";
 
-    /** 
-     * The global cache of database maps 
+    /**
+     * The property tag which specifies which
+     * log4j category to use for logging in BasePeer.
      */
+    private static final String CATEGORY = "log4j.category";
+
+    /**
+     * The db name that is specified as the default in the property file
+     */
+    private static String defaultDBName;
+
+    /** The global cache of database maps */
     private static Map dbMaps;
 
     /**
@@ -776,7 +785,15 @@ public class Torque
         {
             return DEFAULT_NAME;
         }
-        return configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
+        // save the property lookup, so that we can be sure it is always the
+        // same object.
+        else if (defaultDBName == null)
+        {
+            defaultDBName = 
+                configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
+        }
+        
+        return defaultDBName;
     }
 
     /**
