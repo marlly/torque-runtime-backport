@@ -56,7 +56,10 @@ package org.apache.torque.oid;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+
+import org.apache.log4j.Category;
 import org.apache.torque.adapter.DB;
+
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 import com.workingdogs.village.Value;
@@ -71,6 +74,10 @@ import com.workingdogs.village.Value;
 public class SequenceIdGenerator
     implements IdGenerator
 {
+    
+    /** The log. */
+    private static Category category = Category.getInstance(SequenceIdGenerator.class);
+    
     private DB dbAdapter;
 
     /**
@@ -182,7 +189,7 @@ public class SequenceIdGenerator
         throws Exception
     {
         String idSql = dbAdapter.getIDMethodSQL(keyInfo);
-        System.out.println(idSql);
+        category.debug(idSql);
 
         // Execute the query.
         QueryDataSet qds = new QueryDataSet( connection, idSql );
