@@ -33,15 +33,16 @@
   #end
     username="$databaseUser"
     password="$!databasePassword"
-  >
+  />
+
+  <!-- include internal mappings here -->
+  &internal;
 
   <!-- include mappings here -->
 #foreach ($dataModel in $dataModels)
   &${dataModel.shortName};
 #end
 
-  <!-- include internal mappings here -->
-  &internal;
 </descriptor-repository>
 
 
