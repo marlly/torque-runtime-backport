@@ -1638,9 +1638,16 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * Set single record?
+     * Set single record?  Set this to <code>true</code> if you expect the query
+     * to result in only a single result record (the default behaviour is to
+     * throw a TorqueException if multiple records are returned when the query
+     * is executed).  This should be used in situations where returning multiple
+     * rows would indicate an error of some sort.  If your query might return
+     * multiple records but you are only interested in the first one then you
+     * should be using setLimit(1).
      *
-     * @param b True if a single record should be returned.
+     * @param b set to <code>true</code> if you expect the query to select just
+     * one record.
      * @return A modified Criteria object.
      */
     public Criteria setSingleRecord(boolean b)
@@ -1865,17 +1872,12 @@ public class Criteria extends Hashtable
                 .append(super.get(key).toString()).append(":  ");
         }
 
-        /* createQueryString modifies the Criteria object, so we should not
-           call it during toString().  Commenting this out instead of removing
-           it because a better fix would fix createQueryString to not modify
-           the Criteria
         try
         {
             sb.append("\nCurrent Query SQL (may not be complete or applicable): ")
-              .append(BasePeer.createQueryString(this));
+              .append(BasePeer.createQueryDisplayString(this));
         }
         catch (Exception exc) {}
-        */
 
         return sb.toString();
     }

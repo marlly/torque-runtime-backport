@@ -359,4 +359,61 @@ public class CriteriaTest extends BaseTestCase
 
     }
 
+    /**
+     * This test case has been written to try out the fix applied to resolve
+     * TRQS73 - i.e. ensuring that Criteria.toString() does not alter any limit
+     * or offset that may be stored in the Criteria object.  This testcase
+     * could actually pass without the fix if the database in use does not
+     * support native limits and offsets.
+     */
+    public void testCriteriaToStringOffset()
+    {
+        Criteria c = new Criteria()
+                .add("TABLE.DATE_COLUMN", Criteria.CURRENT_DATE)
+                .setOffset(3)
+                .setLimit(5);
+
+        String toStringExpect = "Criteria:: TABLE.DATE_COLUMN<=>TABLE.DATE_COLUMN=CURRENT_DATE:  "
+                + "\nCurrent Query SQL (may not be complete or applicable): "
+                + "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN=CURRENT_DATE LIMIT 3, 5";
+
+        String cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(cString, toStringExpect);
+
+        // Note that this is intentially the same as above as the behaviour is
+        // only observed on subsequent invocations of toString().
+        cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(cString, toStringExpect);
+    }
+
+    /**
+     * This test case has been written to try out the fix applied to resolve
+     * TRQS73 - i.e. ensuring that Criteria.toString() does not alter any limit
+     * or offset that may be stored in the Criteria object.  This testcase
+     * could actually pass without the fix if the database in use does not
+     * support native limits and offsets.
+     */
+    public void testCriteriaToStringLimit()
+    {
+        Criteria c = new Criteria()
+                .add("TABLE.DATE_COLUMN", Criteria.CURRENT_DATE)
+                .setLimit(5);
+
+        String toStringExpect = "Criteria:: TABLE.DATE_COLUMN<=>TABLE.DATE_COLUMN=CURRENT_DATE:  "
+                + "\nCurrent Query SQL (may not be complete or applicable): "
+                + "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN=CURRENT_DATE LIMIT 5";
+
+        String cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(cString, toStringExpect);
+
+        // Note that this is intentially the same as above as the behaviour is
+        // only observed on subsequent invocations of toString().
+        cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(cString, toStringExpect);
+    }
+
 }

@@ -902,12 +902,63 @@ public abstract class BasePeer implements java.io.Serializable
     }
 
     /**
-     * Method to create an SQL query based on values in a Criteria.
+     * Method to create an SQL query for display only based on values in a
+     * Criteria.
+     *
+     * @param criteria A Criteria.
+     * @exception TorqueException Trouble creating the query string.
+     */
+    public static String createQueryDisplayString(Criteria criteria)
+        throws TorqueException
+    {
+        return createQuery(criteria).toString();
+    }
+
+    /**
+     * Method to create an SQL query for actual execution based on values in a
+     * Criteria.
      *
      * @param criteria A Criteria.
      * @exception TorqueException Trouble creating the query string.
      */
     public static String createQueryString(Criteria criteria)
+        throws TorqueException
+    {
+        Query query = createQuery(criteria);
+        DB db = Torque.getDB(criteria.getDbName());
+
+        // Limit the number of rows returned.
+        int limit = criteria.getLimit();
+        int offset = criteria.getOffset();
+        if (offset > 0 && db.supportsNativeOffset())
+        {
+            // Now set the criteria's limit and offset to return the
+            // full resultset since the results are limited on the
+            // server.
+            criteria.setLimit(-1);
+            criteria.setOffset(0);
+        }
+        else if (limit > 0 && db.supportsNativeLimit())
+        {
+            // Now set the criteria's limit to return the full
+            // resultset since the results are limited on the server.
+            criteria.setLimit(-1);
+        }
+
+        String sql = query.toString();
+        category.debug(sql);
+        return sql;
+    }
+
+    /**
+     * Method to create an SQL query based on values in a Criteria.  Note that
+     * final manipulation of the limit and offset are performed when the query
+     * is actually executed.
+     *
+     * @param criteria A Criteria.
+     * @exception TorqueException Trouble creating the query string.
+     */
+    public static Query createQuery(Criteria criteria)
         throws TorqueException
     {
         Query query = new Query();
@@ -1206,19 +1257,31 @@ public abstract class BasePeer implements java.io.Serializable
                     break;
             }
 
+            // The following is now done in createQueryString() to enable this
+            // method to be used as part of Criteria.toString() without altering
+            // the criteria itself.  The commented code is retained here to
+            // make it easier to understand how the criteria is built into a
+            // query.
+
             // Now set the criteria's limit and offset to return the
             // full resultset since the results are limited on the
             // server.
-            criteria.setLimit(-1);
-            criteria.setOffset(0);
+            //criteria.setLimit(-1);
+            //criteria.setOffset(0);
         }
         else if (limit > 0 && db.supportsNativeLimit())
         {
             limitString = String.valueOf(limit);
 
+            // The following is now done in createQueryString() to enable this
+            // method to be used as part of Criteria.toString() without altering
+            // the criteria itself.  The commented code is retained here to
+            // make it easier to understand how the criteria is built into a
+            // query.
+
             // Now set the criteria's limit to return the full
             // resultset since the results are limited on the server.
-            criteria.setLimit(-1);
+            //criteria.setLimit(-1);
         }
 
         if (limitString != null)
@@ -1233,9 +1296,7 @@ public abstract class BasePeer implements java.io.Serializable
             }
         }
 
-        String sql = query.toString();
-        category.debug(sql);
-        return sql;
+        return query;
     }
 
     /**
@@ -1858,7 +1919,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @param stmt A String with the sql statement to execute.
      * @param dbName Name of database to connect to.
      * @return The number of rows affected.
-     * @exception TorqueException, a generic exception.
+     * @exception TorqueException a generic exception.
      */
     public static int executeStatement(String stmt, String dbName)
         throws TorqueException
