@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+
+<document>
+
+ <properties>
+  <title>Jdbc2 Connection Pool</title>
+  <author email="jmcnally@apache.org">John McNally</author>
+ </properties>
+
+<body>
+
+<section name="Introduction">
+
+<p>
+This document is only relevant for Torque-3.0b3 and higher versions.  For
+instructions on configuring torque's built-in connection pool in earlier
+versions see <a href="tutorial.html">the tutorial</a>.
+</p>
+
+<p>
+Starting with Torque-3.0b3, torque no longer includes a built-in pool.  
+Torque's old pool has been updated to be a <code>javax.sql.DataSource</code>
+implementation and has been moved into the commons-sandbox/jdbc2pool package.
+Torque now expects to be able to lookup a connection pool using jndi.  Torque 
+also provides a simple property file based way to configure most
+<code>DataSource</code>'s, though in many cases a pool may already be 
+bound to jndi and torque only needs to use it. 
+</p>
+
+</section>
+
+
+<section name="Using pre-configured pool">
+
+<p>
+If a pool is known to already be available via jndi, the configuration for
+torque to use it can be very simple.  In all examples that follow we will
+use the handle, bookstore.  This is the name attribute that is used in the
+<database> tag in the schema.xml.  If the name attribute is not used, then the
+handle would be 'default'.
+</p>
+
+<source><![CDATA[
+torque.database.bookstore.adapter=mysql
+torque.jndi.bookstore.path=jdbc/bookstore
+]]></source>
+
+<p>
+The first line defines the adapter that will be used to compensate for
+the differences between databases.  The valid values are:
+
+<ul>
+  <li>as400</li>
+  <li>db2app</li>
+  <li>db2net</li>
+  <li>cloudscape</li>
+  <li>hypersonic</li>
+  <li>interbase</li>
+  <li>instantdb</li>
+  <li>mssql</li>
+  <li>mysql</li>
+  <li>oracle</li>
+  <li>postgresql</li>
+  <li>sapdb</li>
+  <li>sybase</li>
+  <li>weblogic.</li>
+</ul>
+
+The second line defines the string that will be used to lookup the 
+<code>DataSource</code> within the default jndi <code>InitialContext</code>.
+</p>
+<p>
+If everything is configured and the default <code>InitialContext</code> 
+contains the <code>DataSource</code>, the two lines above are all that is
+needed.  The default <code>InitialContext</code> is chosen according to the
+rules given in the class's javadoc.  If the default has not been configured,
+you can specify any other environment properties that are needed to instantiate
+the <code>InitialContext</code> as extra properties of the form,
+torque.jndi.<handle>.<env-var>.  A couple examples are shown below:
+
+<source><![CDATA[
+torque.jndi.bookstore.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
+torque.jndi.bookstore.java.naming.factory.url.pkgs = org.apache.naming
+]]></source>
+
+</p>
+
+</section>
+
+<section name="Using torque to bind pool">
+
+<p>
+Generally a J2EE environment such as a servlet engine or application server is
+expected to provide a jdbc2 compatible connection pool.  If your application 
+is not running within such an environment, or even if it is and torque is your
+only use of a connection pool, torque provides a simple properties file
+method of configuring a <code>DataSource</code> and deploying it via jndi.
+The one property that is necessary for all <code>DataSource</code>'s is the
+<code>ObjectFactory</code> classname that is used to instantiate the <code>DataSource</code>.  Beyond that the properties are implementation specific.
+<code>DataSource</code>'s contain getters/setters for configuration.  You
+can specify the values for these properties as shown below:
+</p>
+
+<source><![CDATA[
+torque.datasource.bookstore.factory=org.apache.commons.jdbc2pool.TorqueClassicDataSource
+torque.datasource.bookstore.dataSourceName=jdbc/DBbookstore
+torque.datasource.bookstore.defaultMaxConnections=10
+]]></source>
+
+<source><![CDATA[
+torque.datasource.DBbookstore.factory=org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS
+torque.datasource.DBbookstore.driver = @DATABASE_DRIVER@
+torque.datasource.DBbookstore.url = @DATABASE_URL@
+torque.datasource.DBbookstore.user = root
+torque.datasource.DBbookstore.password = 1234
+]]></source>
+
+<p>
+In the above example two objects are being configured.  One is a 
+<code>DataSource</code> that is used by the application (torque).  The other is
+a <code>ConnectionPoolDataSource</code> that is provided as part of a jdbc2
+driver.  If the jdbc driver implementation you are using does not fully
+implement the jdbc2 specification.  commons-sandbox/jdbc2pool provides an
+adapter for older <code>Driver</code> based drivers.  Another alternative is
+provided in commons/dbcp where <code>BasicDataSource</code> provides a
+<code>DataSource</code> frontend, and has properties to directly configure
+a jdbc1 <code>Driver</code>.  But regardless of the implementation torque
+uses commons-beanutils package to call the setters on the object using 
+reflection.
+</p>
+
+<p>Torque uses the jndi path properties to know where to deploy the 
+configured objects.  So you would have the two following properties in
+addition to the datasource props:
+
+<source><![CDATA[
+torque.jndi.bookstore.path=jdbc/bookstore
+torque.jndi.DBbookstore.path=jdbc/DBbookstore
+]]></source>
+
+where the second handle, DBbookstore, has no relevance to torque, other than 
+to uniquely identify this group of properties as belonging together.  Any 
+unique handle may be used.
+
+</section>
+
+<section name="Tomcat example of external configuration/binding">
+
+<p>
+If you have other parts of your application that need to use the same 
+connection pool and torque cannot be guaranteed to be initialized in time for
+these other uses, or if you just want to follow your j2ee environment's
+standard jndi deployment pattern, torque can just make use of these externally
+deployed pools.  Here is an example using catalina of deploying the pool that 
+used to come with torque, but is now part of commons-sandbox/jdbc2pool.
+</p>
+
+<p>In server.xml, the following would be added to the <Context> for your
+webapp:
+
+<source><![CDATA[
+
+ <Resource name="jdbc/ScarabDB" auth="Container"
+            type="org.apache.commons.jdbc2pool.TorqueClassicDataSource"/>
+  <ResourceParams name="jdbc/ScarabDB">
+    <parameter>
+      <name>factory</name>
+      <value>org.apache.commons.jdbc2pool.TorqueClassicDataSource</value>
+    </parameter>
+    <parameter>
+      <name>dataSourceName</name><value>java:comp/env/jdbc/DBbookstore</value>
+    </parameter>
+    <parameter>
+      <name>defaultMaxConnections</name><value>30</value>
+    </parameter>
+    <parameter>
+      <name>maxExpiryTime</name><value>3600</value>
+    </parameter>
+    <parameter>
+      <name>connectionWaitTimeout</name><value>10</value>
+    </parameter>
+    <parameter>
+      <name>logInterval</name><value>0</value>
+    </parameter>
+
+  </ResourceParams>
+
+]]></source>
+</p>
+
+
+<p>In web.xml.  Elements must be given in the order of the dtd described in 
+the servlet specification:
+
+<source><![CDATA[
+
+<resource-ref>
+  <description>
+    Resource reference to a factory for java.sql.Connection
+    instances that may be used for talking to a particular
+    database that is configured in the server.xml file.
+  </description>
+  <res-ref-name>
+    jdbc/ScarabDB
+  </res-ref-name>
+  <res-type>
+    org.apache.commons.jdbc2pool.TorqueClassicDataSource
+  </res-type>
+  <res-auth>
+    Container
+  </res-auth>
+</resource-ref>
+
+]]></source>
+</p>
+
+Catalina deploys all objects configured similarly to above within the
+<strong>java:comp/env</strong> namespace so the jndi path given in
+Torque.properties would be
+
+<source><![CDATA[
+torque.jndi.bookstore.path=java:comp/env/jdbc/bookstore
+]]></source>
+
+Remember that commons-sandbox/jdbc2pool pools expect a 
+<code>ConnectionPoolDataSource</code>
+available via jndi under the name given in the dataSourceName, so you will
+need entries in server.xml and web.xml for this object as well.
+
+Catalina provides a default <code>DataSource</code> that can be used as well
+and it is configured similarly, but detailed information on that
+implementation is <a href="http://jakarta.apache.org/tomcat/tomcat-4.1-doc/jndi-resources-howto.html">here</a>.  Note that the 
+"type attribute/ref-type element" value of "javax.sql.DataSource" appears to 
+be reserved for catalina's default implementation, which is why the
+implementation classname is used in our configuration example.
+
+</section>
+
+
+<section name="An example configuration from scarab">
+
+<p>
+The following example shows a complete working torque configuration from the 
+scarab, issue tracking application.  It is here to put together some of the 
+details shown above.
+</p>
+
+<source><![CDATA[
+torque.database.scarab.adapter=mysql
+
+# Jndi location
+torque.jndi.scarab.path=jdbc/scarab
+torque.jndi.DBscarabDB.path=jdbc/DBscarabDB
+
+# Connection properties for the pooling DataSource
+# These properties will vary from one datasource to another, see the class
+# javadoc for a description of which properties can be set.
+torque.datasource.scarab.factory=org.apache.commons.jdbc2pool.TorqueClassicDataSource
+torque.datasource.scarab.dataSourceName=jdbc/DBscarabDB
+torque.datasource.scarab.defaultMaxConnections=30
+torque.datasource.scarab.maxExpiryTime=3600
+torque.datasource.scarab.connectionWaitTimeout=10
+torque.datasource.scarab.logInterval=0
+
+# Connection properties for the ConnectionPoolDataSource
+torque.datasource.DBscarabDB.factory=org.apache.commons.jdbc2pool.adapter.DriverAdapterCPDS
+torque.datasource.DBscarabDB.driver=org.gjt.mm.mysql.Driver
+torque.datasource.DBscarabDB.url=jdbc:mysql://localhost:3306/scarab
+torque.datasource.DBscarabDB.user=xxx
+torque.datasource.DBscarabDB.password=yyy
+
+
+# Determines if the quantity column of the IDBroker's id_table should
+# be increased automatically if requests for ids reaches a high
+# volume.
+
+torque.idbroker.clever.quantity=false
+
+# Determines if IDBroker should prefetch IDs or not.  If set to false
+# this property has the effect of shutting off the housekeeping thread
+# that attempts to prefetch the id's.  It also sets the # of id's grabbed
+# per request to 1 regardless of the settings in the database.
+# Default: true
+
+torque.idbroker.prefetch=true
+
+# IDBroker can grab its own connection from the pool to use when retrieving
+# more id's to minimize the amount of time ID_TABLE will be locked. 
+# Some usage of IDBroker or assumptions made by connection pools or jdbc 
+# drivers may disallow this optimization in which case the property 
+# should be set to false.
+
+torque.idbroker.usenewconnection=true
+
+]]></source>
+
+</section>
+
+
+</body>
+</document>
