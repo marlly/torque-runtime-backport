@@ -76,7 +76,6 @@ public class Index
     private String indexName;
     private Table parentTable;
     private List indexColumns;
-    private boolean isUnique;
 
     /**
      * Creates a new instance with default characteristics (no name or
@@ -85,7 +84,6 @@ public class Index
     public Index()
     {
         indexColumns = new ArrayList(3);
-        isUnique = false;
     }
 
     /**
@@ -113,7 +111,7 @@ public class Index
             this.indexColumns = indexColumns;
             if (DEBUG)
             {
-                System.out.println("Created Index named " + indexName +
+                System.out.println("Created Index named " + getName() +
                                    " with " + indexColumns.size() +
                                    " columns");
             }
@@ -130,36 +128,60 @@ public class Index
     /**
      * Imports index from an XML specification
      */
-    public void loadFromXML (Attributes attrib)
+    public void loadFromXML(Attributes attrib)
     {
         indexName = attrib.getValue("name");
-        isUnique = "true".equalsIgnoreCase(attrib.getValue("unique"));
     }
 
     /**
-     * Get unique attribute of the index
-     *
+     * @see #getUnique()
+     * @deprecated Use getUnique() instead.
      */
      public boolean getIsUnique()
      {
-         return isUnique;
+         return getUnique();
      }
 
     /**
-     * Get the name of the index
-     *
+     * Returns the uniqueness of this index.
+     */
+    public boolean getUnique()
+    {
+        return false;
+    }
+
+    /**
+     * @see #getName()
+     * @deprecated Use getName() instead.
      */
     public String getIndexName()
+    {
+        return getName();
+    }
+
+    /**
+     * Gets the name of this index.
+     */
+    public String getName()
     {
         return indexName;
     }
 
     /**
-     * Set the name of the index
+     * @see #setName(String name)
+     * @deprecated Use setName(String name) instead.
      */
-    public void setIndexName(String indexName)
+    public void setIndexName(String name)
     {
-        this.indexName = indexName;
+        setName(name);
+    }
+
+    /**
+     * Set the name of this index.
+     */
+    public void setName(String name)
+    {
+        this.indexName = name;
     }
 
     /**
@@ -195,10 +217,19 @@ public class Index
     }
 
     /**
+     * @see #getColumnList()
+     * @deprecated Use getColumnList() instead.
+     */
+    public String getIndexColumnList()
+    {
+        return getColumnList();
+    }
+
+    /**
      * Return a comma delimited string of the columns which compose
      * this index.
      */
-    public String getIndexColumnList()
+    public String getColumnList()
     {
         Column c = (Column) indexColumns.get(0);
         StringBuffer res = new StringBuffer(c.getName());
@@ -211,10 +242,19 @@ public class Index
     }
 
     /**
+     * @see #getColumns()
+     * @deprecated Use getColumns() instead.
+     */
+    public List getIndexColumns()
+    {
+        return getColumns();
+    }
+
+    /**
      * Return the vector of local columns.  You should not edit
      * this vector.
      */
-    public List getIndexColumns()
+    public List getColumns()
     {
         return indexColumns;
     }
@@ -227,15 +267,17 @@ public class Index
     {
         StringBuffer result = new StringBuffer();
         result.append(" <index name=\"")
-              .append(indexName)
+              .append(getName())
               .append("\"");
 
         result.append(">\n");
 
-        for (int i=0; i<indexColumns.size(); i++)
+        for (int i = 0; i < indexColumns.size(); i++)
+        {
             result.append("  <index-column name=\"")
                 .append(indexColumns.get(i))
                 .append("\"/>\n");
+        }
         result.append(" </index>\n");
         return result.toString();
     }
