@@ -777,7 +777,7 @@ torque.database.bookstore.password = password
                     in the top-level <em>torque</em> directory:
                 </p>
                 <source><![CDATA[
-  ant -f build-torque.xml project-create-db  
+  ant -f build-torque.xml create-db  
                 ]]></source>
                 <p>
                     To create your tables, type the following commands in
@@ -785,7 +785,7 @@ torque.database.bookstore.password = password
                 </p>
                 <source><![CDATA[
   ant -f build-torque.xml id-table-init-sql
-  ant -f build-torque.xml project-insert-sql  
+  ant -f build-torque.xml insert-sql  
                 ]]></source>
                 <p>
                     Note: if this tutorial had not utilized Torque's

@@ -37,56 +37,56 @@
           project . It defines the following targets:
           <ul>
             <li>
-              <strong>project-sql</strong><br/>
+              <strong>sql</strong><br/>
               generates SQL source from an XML schema describing a database
               structure
             </li>
             <p/>
             <li>
-              <strong>project-doc</strong><br/>
+              <strong>doc</strong><br/>
               generates html or xml documentation for xml schemas
             </li>
             <p/>
             <li>
-              <strong>project-create-db</strong><br/>
+              <strong>create-db</strong><br/>
               generates simple scripts for creating databases on various
               platforms.
             </li>
             <p/>
             <li>
-              <strong>project-datadtd</strong><br/>
+              <strong>datadtd</strong><br/>
               generates data DTD from an XML schema describing a database
               structure
             </li>
             <p/>
             <li>
-              <strong>project-datadump</strong><br/>
+              <strong>datadump</strong><br/>
               dumping data from db into XML
             </li>
             <p/>
             <li>
-              <strong>project-datasql</strong><br/>
+              <strong>datasql</strong><br/>
               generates SQL source from an XML data file
             </li>
             <p/>
             <li>
-              <strong>project-jdbc</strong><br/>
+              <strong>jdbc</strong><br/>
               generates an XML schema of an existing database from JDBC metadata
             </li>
             <p/>
             <li>
-              <strong>project-om</strong><br/>
+              <strong>om</strong><br/>
               generates output by using Velocity
             </li>
             <p/>
             <li>
-              <strong>project-insert-sql</strong><br/>
+              <strong>insert-sql</strong><br/>
               inserts a SQL file into its designated database
             </li>
             <p/>
             <p/>
             <li>
-              <strong>project-sql2xml</strong><br/>
+              <strong>sql2xml</strong><br/>
               generates an xml schema from an sql schema
             </li>
             <p/>

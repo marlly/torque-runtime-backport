@@ -85,10 +85,10 @@
   <!--                                                                -->
   <!-- These are the tasks that we will be testing:                   -->
   <!--                                                                -->
-  <!-- project-sql                                                    -->
-  <!-- project-om                                                     -->
+  <!-- sql                                                            -->
+  <!-- om                                                             -->
   <!--                                                                -->
-  <!-- The project-sql is also another complete set of tests:         -->
+  <!-- The sql is also another complete set of tests:                 -->
   <!-- we need to run the task for each of the supported databases    -->
   <!-- to make sure that generated SQL remains coherent across        -->
   <!-- changes to the templates.                                      -->
@@ -97,12 +97,12 @@
   <target
     name="test-pre-runtime">
 
-    <antcall target="test-project-doc"/>
+    <antcall target="test-doc"/>
     <antcall target="test-create-db"/>
-    <antcall target="test-project-sql"/>
+    <antcall target="test-sql"/>
     <antcall target="test-id-table-init-sql"/>
-    <antcall target="test-project-insert-sql"/>
-    <antcall target="test-project-om"/>
+    <antcall target="test-insert-sql"/>
+    <antcall target="test-om"/>
   </target>
 
   <!-- ============================================================== -->
@@ -112,25 +112,25 @@
   <target
     name="test-post-runtime">
 
-    <antcall target="test-project-datadtd"/>
-    <antcall target="test-project-datadump"/>
-    <antcall target="test-project-datasql"/>
-    <antcall target="test-project-jdbc"/>
+    <antcall target="test-datadtd"/>
+    <antcall target="test-datadump"/>
+    <antcall target="test-datasql"/>
+    <antcall target="test-jdbc"/>
 
     <!--
-    <antcall target="test-project-sql-classpath"/>
-    <antcall target="test-project-om-classpath"/>
-    <antcall target="test-project-sql2xml"/>
+    <antcall target="test-sql-classpath"/>
+    <antcall target="test-om-classpath"/>
+    <antcall target="test-sql2xml"/>
     -->
 
   </target>
 
   <target
-    name="test-project-sql">
+    name="test-sql">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-sql">
+      target="sql">
     </ant>
   </target>
 
@@ -144,11 +144,11 @@
   </target>
 
   <target
-    name="test-project-doc">
+    name="test-doc">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-doc">
+      target="doc">
     </ant>
   </target>
 
@@ -157,25 +157,25 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-create-db">
+      target="create-db">
     </ant>
   </target>
 
   <target
-    name="test-project-insert-sql">
+    name="test-insert-sql">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-insert-sql">
+      target="insert-sql">
     </ant>
   </target>
 
   <target
-    name="test-project-om">
+    name="test-om">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-om">
+      target="om">
     </ant>
     <!-- Compile the classes -->
     <ant
@@ -188,29 +188,29 @@
 
   <!-- Still uses ${project} references. BAD!!! -->
   <target
-    name="test-project-datadtd">
+    name="test-datadtd">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-datadtd"
+      target="datadtd"
       inheritAll="false">
     </ant>
   </target>
 
   <!-- Still uses ${project} references. BAD!!! -->
   <target
-    name="test-project-datadump">
+    name="test-datadump">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-datadump"
+      target="datadump"
       inheritAll="false">
     </ant>
   </target>
 
   <!-- Still uses ${project} references. BAD!!! -->
   <target
-    name="test-project-datasql">
+    name="test-datasql">
     <copy
       todir="${torque.distDir}/schema/"
       file="${torque.distDir}/src/bookstore-data.dtd"/>
@@ -220,17 +220,17 @@
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-datasql"
+      target="datasql"
       inheritAll="false">
     </ant>
   </target>
 
   <target
-    name="test-project-jdbc">
+    name="test-jdbc">
     <ant
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
-      target="project-jdbc">
+      target="jdbc">
       <property name="torque.home" value="${torque.distDir}"/>
     </ant>
   </target>
@@ -359,7 +359,7 @@
   <!-- ============================================================== -->
 
   <target
-    name="test-sql"
+    name="sql-test"
     depends="test-libs,test-templates">
 
     <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
@@ -394,19 +394,19 @@
     <ant
       dir="${build.test}/sqltest"
       antfile="${torque.buildFile}"
-      target="project-create-db">
+      target="create-db">
     </ant>
 
     <ant
       dir="${build.test}/sqltest"
       antfile="${torque.buildFile}"
-      target="project-sql">
+      target="sql">
     </ant>
 
     <ant
       dir="${build.test}/sqltest"
       antfile="${torque.buildFile}"
-      target="project-insert-sql">
+      target="insert-sql">
     </ant>
 
   </target>

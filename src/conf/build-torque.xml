@@ -13,6 +13,43 @@
     </fileset>
   </path>
 
+  <!--
+    Do forward declarations of all of our tasks to 
+    centralize them and clean up the targets.
+  -->
+  <taskdef
+    name="torque-data-model"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueDataModelTask"/>
+  <taskdef
+    name="torque-data-dump"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueDataDumpTask"/>
+  <taskdef
+    name="torque-data-sql"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueDataSQLTask"/>
+  <taskdef
+    name="torque-doc"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueDocumentationTask"/>
+  <taskdef
+    name="torque-jdbc-transform"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueJDBCTransformTask"/>
+  <taskdef
+    name="torque-sql"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueSQLTask"/>
+  <taskdef
+    name="torque-sql-exec"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueSQLExec"/>
+  <taskdef
+    name="torque-sql-transform"
+    classpathref="torque-classpath"
+    classname="org.apache.torque.task.TorqueSQLTransformTask"/>
+
   <!-- ================================================================ -->
   <!-- M A I N  T A R G E T                                             -->
   <!-- ================================================================ -->
@@ -26,8 +63,8 @@
     name="main"
     description="==> generates sql + om classes">
 
-    <antcall target="project-sql"/>
-    <antcall target="project-om"/>
+    <antcall target="sql"/>
+    <antcall target="om"/>
   </target>
 
   <!-- ================================================================ -->
@@ -39,7 +76,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-sql"
+    name="sql"
     description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -49,21 +86,15 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <antcall target="project-sql-classpath"/>
-    <antcall target="project-sql-template"/>
+    <antcall target="sql-classpath"/>
+    <antcall target="sql-template"/>
   </target>
 
   <target
-    name="project-sql-classpath"
+    name="sql-classpath"
     if="useClasspath">
 
     <echo message="using classpath"/>
-
-    <taskdef
-      name="torque-sql"
-      classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
 
     <torque-sql
       contextProperties="${build.properties}"
@@ -82,16 +113,10 @@
   </target>
 
   <target
-    name="project-sql-template"
+    name="sql-template"
     unless="useClasspath">
 
     <echo message="using template path ${templatePath}"/>
-
-    <taskdef
-      name="torque-sql"
-      classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
 
     <torque-sql
       contextProperties="${build.properties}"
@@ -114,7 +139,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-doc"
+    name="doc"
     description="==> generates documentation for your datamodel">
 
     <echo message="+------------------------------------------+"/>
@@ -123,12 +148,6 @@
     <echo message="| Woo hoo!                                 |"/>
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
-
-    <taskdef
-      name="torque-doc"
-      classname="org.apache.torque.task.TorqueDocumentationTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
 
     <torque-doc
       contextProperties="${build.properties}"
@@ -153,17 +172,11 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-create-db"
+    name="create-db"
     unless="database.manual.creation"
     description="==> generates the target database">
 
-    <taskdef
-      name="torque-create-db"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-create-db
+    <torque-data-model
       controlTemplate="sql/db-init/Control.vm"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       useClasspath="${useClasspath}"
@@ -173,7 +186,7 @@
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>
-    </torque-create-db>
+    </torque-data-model>
 
     <echo>
       Executing the create-db.sql script ...
@@ -196,15 +209,9 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-insert-sql">
+    name="insert-sql">
 
-    <taskdef
-      name="torque-insert-sql"
-      classname="org.apache.torque.task.TorqueSQLExec">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-insert-sql
+    <torque-sql-exec
       driver="${databaseDriver}"
       url="${buildDatabaseUrl}"
       userid="${databaseUser}"
@@ -214,7 +221,7 @@
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       srcDir="${torque.home}/${outputDirectory}/sql">
       <classpath refid="torque-classpath"/>
-    </torque-insert-sql>
+    </torque-sql-exec>
   </target>
 
   <!-- ================================================================ -->
@@ -222,7 +229,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-jdbc"
+    name="jdbc"
     description="==> jdbc to xml">
 
     <echo message="+-----------------------------------------------+"/>
@@ -233,13 +240,7 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
 
-    <taskdef
-      name="torque-jdbc"
-      classname="org.apache.torque.task.TorqueJDBCTransformTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-jdbc
+    <torque-jdbc-transform
       dbUrl="${databaseUrl}"
       dbDriver="${databaseDriver}"
       dbUser="${databaseUser}"
@@ -255,7 +256,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-datasql"
+    name="datasql"
     description="==> generates sql from data xml">
 
     <echo message="+-----------------------------------------------+"/>
@@ -266,13 +267,7 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
 
-    <taskdef
-      name="torque-datasql"
-      classname="org.apache.torque.task.TorqueDataSQLTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-datasql
+    <torque-data-sql
       contextProperties="${build.properties}"
       controlTemplate="${DataSQLControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}"
@@ -301,12 +296,6 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef
-      name="torque-sql"
-      classname="org.apache.torque.task.TorqueSQLTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
     <torque-sql
       contextProperties="${build.properties}"
       controlTemplate="${idTableControlTemplate}"
@@ -329,7 +318,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-datadump"
+    name="datadump"
     description="==> dump data from database into xml file">
 
     <echo message="+-----------------------------------------------+"/>
@@ -340,13 +329,7 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
 
-    <taskdef
-      name="torque-datadump"
-      classname="org.apache.torque.task.TorqueDataDumpTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-datadump
+    <torque-data-dump
       contextProperties="${build.properties}"
       controlTemplate="${DataDumpControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}"
@@ -369,7 +352,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-datadtd"
+    name="datadtd"
     description="==> generates the DATA DTD for your project">
 
     <echo message="+-----------------------------------------------+"/>
@@ -379,13 +362,7 @@
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
-    <taskdef
-      name="torque-datadtd"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-datadtd
+    <torque-data-model
       contextProperties="${build.properties}"
       controlTemplate="${DataDTDControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}"
@@ -404,7 +381,7 @@
   <!-- ================================================================ -->
 
   <target
-    name="project-om"
+    name="om"
     description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -414,23 +391,17 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <antcall target="project-om-classpath"/>
-    <antcall target="project-om-template"/>
+    <antcall target="om-classpath"/>
+    <antcall target="om-template"/>
   </target>
 
   <target
-    name="project-om-classpath"
+    name="om-classpath"
     if="useClasspath">
 
     <echo message="using classpath"/>
 
-    <taskdef
-      name="torque-om"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-om
+    <torque-data-model
       contextProperties="${build.properties}"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/java"
@@ -442,22 +413,16 @@
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
-    </torque-om>
+    </torque-data-model>
   </target>
 
   <target
-    name="project-om-template"
+    name="om-template"
     unless="useClasspath">
 
     <echo message="using template path ${templatePath}"/>
 
-    <taskdef
-      name="torque-om"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <torque-om
+    <torque-data-model
       contextProperties="${build.properties}"
       controlTemplate="${OMControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/java"
@@ -469,7 +434,7 @@
         <include name="*-schema.xml"/>
         <exclude name="id-table-schema.xml"/>
       </fileset>
-    </torque-om>
+    </torque-data-model>
   </target>
 
   <!-- =================================================================== -->
@@ -513,16 +478,10 @@
   <!-- =================================================================== -->
 
   <target
-    name="project-sql2xml"
+    name="sql2xml"
     description="==> creates an xml schema from an sql schema">
 
-    <taskdef
-      name="sql-xml"
-      classname="org.apache.torque.task.TorqueSQLTransformTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <sql-xml
+    <torque-sql-transform
       inputFile="schema/schema.sql"
       outputFile="schema/schema.xml"
     />
@@ -557,7 +516,7 @@
   <!-- =================================================================== -->
 
   <target
-    name="project-ojb-repository">
+    name="ojb-repository">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -565,13 +524,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef
-      name="ojb-repository"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <ojb-repository
+    <torque-data-model
       contextProperties="${build.properties}"
       controlTemplate="ojb/repository/Control.vm"
       targetPackage="${targetPackage}"
@@ -584,11 +537,11 @@
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>
-    </ojb-repository>
+    </torque-data-model>
   </target>
 
   <target
-    name="project-ojb-model">
+    name="ojb-model">
 
     <echo message="+------------------------------------------+"/>
     <echo message="|                                          |"/>
@@ -596,13 +549,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef
-      name="ojb-model"
-      classname="org.apache.torque.task.TorqueDataModelTask">
-      <classpath refid="torque-classpath"/>
-    </taskdef>
-
-    <ojb-model
+    <torque-data-model
       contextProperties="${build.properties}"
       controlTemplate="ojb/model/Control.vm"
       targetPackage="${targetPackage}"
@@ -615,7 +562,60 @@
       <fileset dir="${torque.home}/${schemaDirectory}">
         <include name="*-schema.xml"/>
       </fileset>
-    </ojb-model>
+    </torque-data-model>
   </target>
+
+  <!--
+    Deprecated targets with the project- prefix.
+  -->
+  <target name="project-sql">
+    <echo message="The 'project-sql' target is deprecated. Please use the 'sql' target instead."/>
+    <antcall target="sql"/>
+  </target>
+  <target name="project-om">
+    <echo message="The 'project-om' target is deprecated. Please use the 'om' target instead."/>
+    <antcall target="om"/>
+  </target>
+  <target name="project-doc">
+    <echo message="The 'project-doc' target is deprecated. Please use the 'doc' target instead."/>
+    <antcall target="doc"/>
+  </target>
+  <target name="project-create-db">
+    <echo message="The 'project-create-db' target is deprecated. Please use the 'create-db' target instead."/>
+    <antcall target="create-db"/>
+  </target>
+  <target name="project-insert-sql">
+    <echo message="The 'project-insert-sql' target is deprecated. Please use the 'insert-sql' target instead."/>
+    <antcall target="insert-sql"/>
+  </target>
+  <target name="project-jdbc">
+    <echo message="The 'project-jdbc' target is deprecated. Please use the 'jdbc' target instead."/>
+    <antcall target="jdbc"/>
+  </target>
+  <target name="project-datasql">
+    <echo message="The 'project-datasql' target is deprecated. Please use the 'datasql' target instead."/>
+    <antcall target="datasql"/>
+  </target>
+  <target name="project-datadump">
+    <echo message="The 'project-datadump' target is deprecated. Please use the 'datadump' target instead."/>
+    <antcall target="datadump"/>
+  </target>
+  <target name="project-datadtd">
+    <echo message="The 'project-datadtd' target is deprecated. Please use the 'datadtd' target instead."/>
+    <antcall target="datadtd"/>
+  </target>
+  <target name="project-sql2xml">
+    <echo message="The 'project-sql2xml' target is deprecated. Please use the 'sql2xml' target instead."/>
+    <antcall target="sql2xml"/>
+  </target>
+  <target name="project-ojb-repository">
+    <echo message="The 'project-ojb-repository' target is deprecated. Please use the 'ojb-repository' target instead."/>
+    <antcall target="ojb-repository"/>
+  </target>
+  <target name="project-ojb-model">
+    <echo message="The 'project-obj-model' target is deprecated. Please use the 'ojb-model' target instead."/>
+    <antcall target="ojb-model"/>
+  </target>
+
 </project>
 
