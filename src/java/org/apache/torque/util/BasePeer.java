@@ -540,7 +540,7 @@ public abstract class BasePeer implements java.io.Serializable
         String dbName = criteria.getDbName();
 
         // Do the work, assuring the database connection is released.
-        if (criteria.containsObjectColumn(dbName))
+        if (criteria.isUseTransaction())
         {
             // For PostgreSQL and LOBs.
             try
@@ -758,7 +758,7 @@ public abstract class BasePeer implements java.io.Serializable
         ObjectKey id = null;
 
         boolean doTransaction =
-            criteria.containsObjectColumn(criteria.getDbName());
+            criteria.isUseTransaction();
 
         try
         {
@@ -1329,7 +1329,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         Vector results = null;
-        if (criteria.containsObjectColumn(criteria.getDbName()))
+        if (criteria.isUseTransaction())
         {
             DBConnection dbCon = beginTransaction(criteria.getDbName());
             try
@@ -1714,7 +1714,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         boolean doTransaction =
-            updateValues.containsObjectColumn(updateValues.getDbName());
+            updateValues.isUseTransaction();
         DBConnection db = null;
         try
         {
@@ -1814,7 +1814,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         boolean doTransaction =
-            updateValues.containsObjectColumn(selectCriteria.getDbName());
+            updateValues.isUseTransaction();
         DBConnection db = null;
         try
         {

@@ -223,6 +223,8 @@ public class Criteria extends Hashtable
 
     private HashMap aliases = null;
 
+    private boolean useTransaction = false;     
+
     /**
      * Log4j category used for logging.
      */
@@ -399,6 +401,10 @@ public class Criteria extends Hashtable
      * @return A boolean.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated not sure why anyone would need to use this outside of its
+     * use in BasePeer, but it was public, so its now deprecated.
+     * It was used to decide whether a transaction should be used, this can
+     * be done with the useTransaction() method.
      */
     public boolean containsObjectColumn(String databaseMapName)
         throws TorqueException
@@ -430,6 +436,28 @@ public class Criteria extends Hashtable
             }
         }
         return false;
+    }
+
+    /**
+     * Will force the sql represented by this criteria to be executed within 
+     * a transaction.  This is here primarily to support the oid type in
+     * postgresql.  Though it can be used to require any single sql statement 
+     * to use a transaction.
+     */
+    public void setUseTransaction(boolean v)
+    {
+        useTransaction = v;
+    }
+
+    /**
+     * called by BasePeer to determine whether the sql command specified by
+     * this criteria must be wrapped in a transaction.
+     *
+     * @return a <code>boolean</code> value
+     */
+    protected boolean isUseTransaction()
+    {
+        return useTransaction;
     }
 
     /**
