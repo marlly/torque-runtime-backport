@@ -4,7 +4,7 @@
 
   <property
     name="torque.mavenPlugin.antFile"
-    value="${maven.home}/plugins/maven-torque-plugin-3.0/build-torque.xml"/>
+    value="${maven.home}/plugins/maven-torque-plugin-3.1-dev/build-torque.xml"/>
 
   <goal
     name="torque"

@@ -22,7 +22,7 @@
   <property file="${torque.contextProperties}"/>
   <property name="lib.dir" value="lib"/>
   <property name="torque.lib.dir" value="${lib.dir}"/>
-  <property name="torque.jar" value="torque-3.0.jar"/>
+  <property name="torque.jar" value="torque-3.1-dev.jar"/>
 
   <!--
     Build the classpath. Specifically point to each file we're including to avoid
