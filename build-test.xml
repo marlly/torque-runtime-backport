@@ -20,19 +20,7 @@
 
   <target
     name="test-prepare"
-    depends="filterTokens,test-libs,test-templates">
-
-    <!-- Use the profile as the build.properties file
-         in the dist directory so that it is customizable
-         by each tester. -->
-
-    <echo message="Copying profile into distribution directory: ${torque.testProfile}"/>
-
-    <copy
-      tofile="${torque.distDir}/build.properties"
-      file="${torque.testProfile}"
-      overwrite="yes"
-    />
+    depends="filterTokens,test-libs">
 
     <!-- copy test schemas -->
     <copy
@@ -54,17 +42,6 @@
         <include name="*.ref.xml"/>
       </fileset>
     </copy>
-
-    <!-- copy test sources -->
-    <copy todir="${torque.distDir}/src/java">
-      <fileset dir="${rttest.dir}"/>
-    </copy>
-
-    <copy
-      tofile="${build.test}/rttest/build-torque.xml"
-      file="${torque.generator.home}/src/conf/build-torque.xml"
-      overwrite="yes"
-    />
   </target>
 
   <target
@@ -321,41 +298,9 @@
     <mkdir dir="${test.libDir}"/>
     <mkdir dir="${build.test}/logs"/>
 
-    <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-beanutils.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-collections.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-configuration.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-dbcp.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-lang.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-logging.jar}" todir="${test.libDir}"/>
-    <copy file="${commons-pool.jar}" todir="${test.libDir}"/>
-    <copy file="${jcs.jar}" todir="${test.libDir}"/>
-    <copy file="${jdbc.jar}" todir="${test.libDir}"/>
-    <copy file="${jndi.jar}" todir="${test.libDir}"/>
-    <copy file="${log4j.jar}" todir="${test.libDir}"/>
-    <copy file="${stratum.jar}" todir="${test.libDir}"/>
     <copy file="${tomcat-naming.jar}" todir="${test.libDir}"/>
     <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
     <copy file="${velocity.jar}" todir="${test.libDir}"/>
-    <copy file="${village.jar}" todir="${test.libDir}"/>
-    <copy file="${xerces.jar}" todir="${test.libDir}"/>
-    <copy file="${xmlParserAPIs.jar}" todir="${test.libDir}"/>
-  </target>
-
-  <!-- copy templates if they are not loaded from the classpath -->
-  <target
-    name="test-templates">
-<!--
-    FIXME!!
-    the id-table-init-sql loads ${templatePath}/sql/id-table/project.props
-    so the templates must be copied for now
-
-    unless="useClasspath">
--->
-    <copy todir="${test.templateDir}">
-      <fileset dir="${torque.generator.home}/src/templates"/>
-    </copy>
-
   </target>
 
   <!-- ============================================================== -->
@@ -364,7 +309,7 @@
 
   <target
     name="sql-test"
-    depends="test-libs,test-templates">
+    depends="test-libs">
 
     <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
     <filter token="DATABASE_URL" value="${torque.sqlTest.databaseUrl}"/>
@@ -412,7 +357,6 @@
       antfile="${torque.buildFile}"
       target="insert-sql">
     </ant>
-
   </target>
 
 </project>
