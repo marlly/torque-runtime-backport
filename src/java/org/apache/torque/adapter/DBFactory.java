@@ -161,6 +161,7 @@ public class DBFactory
                                "DBInstantDB");
         driverToAdapterMap.put("com.microsoft.jdbc.sqlserver.SQLServerDriver",
                                "DBMSSQL");
+        driverToAdapterMap.put("com.jnetdirect.jsql.JSQLDriver", "DBMSSQL");
         driverToAdapterMap.put("org.gjt.mm.mysql.Driver", "DBMM");
         driverToAdapterMap.put("oracle.jdbc.driver.OracleDriver", "DBOracle");
         driverToAdapterMap.put("org.postgresql.Driver", "DBPostgres");
