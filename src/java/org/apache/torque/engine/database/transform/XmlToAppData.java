@@ -185,7 +185,8 @@ public class XmlToAppData extends DefaultHandler
             BufferedReader br = new BufferedReader(fr);
             try
             {
-                System.err.println("Parsing file: '" + (new File(xmlFile)).getName() + "'");
+                System.out.println("Parsing file: '"
+                        + (new File(xmlFile)).getName() + "'");
                 InputSource is = new InputSource(br);
                 parser.parse(is, this);
             }
