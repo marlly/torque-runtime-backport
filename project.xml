@@ -47,6 +47,16 @@
 
   <developers>
     <developer>
+      <name>Jeffrey D. Brekke</name>
+      <id>brekke</id>
+      <email>brekke@apache.org</email>
+      <organization/>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
       <name>Eric Dobbs</name>
       <id>dobbs</id>
       <email>dobbs@apache.org</email>
@@ -155,6 +165,7 @@
         <role>Java Developer</role>
       </roles>
     </developer>
+
   </developers>
 
   <contributors>
