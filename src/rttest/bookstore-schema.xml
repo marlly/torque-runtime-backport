@@ -2,7 +2,7 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 
-<database name="bookstore" defaultIdMethod="native">
+<database name="bookstore" defaultIdMethod="idBroker">
 
   <!-- =================================================== -->
   <!-- B O O K  T A B L E                                  -->
