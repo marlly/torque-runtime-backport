@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.Vector;
 import java.util.Properties;
+import org.apache.commons.lang.exception.NestableException;
 import org.apache.log4j.Category;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.helpers.NullEnumeration;
@@ -78,7 +79,6 @@ import org.apache.torque.util.BasePeer;
 import org.apache.torque.om.AbstractBaseManager;
 import org.apache.stratum.configuration.Configuration;
 import org.apache.stratum.configuration.PropertiesConfiguration;
-import org.apache.stratum.exception.NestableException;
 import org.apache.stratum.lifecycle.Configurable;
 import org.apache.stratum.lifecycle.Initializable;
 

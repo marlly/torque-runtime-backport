@@ -54,7 +54,7 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
-import org.apache.stratum.exception.NestableException;
+import org.apache.commons.lang.exception.NestableException;
 
 /**
  * The base class of all exceptions thrown by Torque.
