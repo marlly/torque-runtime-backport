@@ -184,9 +184,6 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static ObjectKey doInsert( Criteria criteria, DBConnection dbCon ) 
         throws Exception
     {
-    #if ($table.Database.Name != "default")
-        criteria.setDbName(mapBuilder.getDatabaseMap().getName());
-    #end
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -225,8 +222,16 @@ public abstract class $basePrefix${table.JavaName}Peer
          }
          #end
      #end
+
         if ( dbCon == null )
         {
+            // Set the correct dbName if it has not been overridden
+            // criteria.getDbName will return the same object if not set to 
+            // another value so == check is okay and faster
+            if ( criteria.getDbName() == Torque.getDefaultDB() )
+            {
+                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+            }
             return BasePeer.doInsert( criteria );
         }
         else
@@ -501,9 +506,6 @@ public abstract class $basePrefix${table.JavaName}Peer
      */
     public static void doUpdate(Criteria criteria, DBConnection dbCon) throws Exception
     {
-    #if ($table.Database.Name != "default")
-        criteria.setDbName(mapBuilder.getDatabaseMap().getName());
-    #end
         Criteria selectCriteria = new
             Criteria(mapBuilder.getDatabaseMap().getName(), 2);
      #foreach ($col in $table.Columns)
@@ -550,6 +552,13 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         if ( dbCon == null )
         {
+            // Set the correct dbName if it has not been overridden
+            // criteria.getDbName will return the same object if not set to 
+            // another value so == check is okay and faster
+            if ( criteria.getDbName() == Torque.getDefaultDB() )
+            {
+                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+            }
             BasePeer.doUpdate( selectCriteria, criteria );
         }
         else
@@ -579,9 +588,6 @@ public abstract class $basePrefix${table.JavaName}Peer
      public static void doDelete(Criteria criteria, DBConnection dbCon) 
         throws Exception
      {
-    #if ($table.Database.Name != "default")
-        criteria.setDbName(mapBuilder.getDatabaseMap().getName());
-    #end
      #foreach ($col in $table.Columns)
          #set ( $cup=$col.Name.toUpperCase() )
          #if($col.isBooleanInt())
@@ -623,6 +629,13 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         if ( dbCon == null )
         {
+            // Set the correct dbName if it has not been overridden
+            // criteria.getDbName will return the same object if not set to 
+            // another value so == check is okay and faster
+            if ( criteria.getDbName() == Torque.getDefaultDB() )
+            {
+                criteria.setDbName(mapBuilder.getDatabaseMap().getName());
+            }
             BasePeer.doDelete ( criteria );
         }
         else
@@ -930,9 +943,13 @@ public abstract class $basePrefix${table.JavaName}Peer
          c.setBlobFlag();
     #end 
 
-    #if ($table.Database.Name != "default")
-         c.setDbName(mapBuilder.getDatabaseMap().getName());
-    #end
+        // Set the correct dbName if it has not been overridden
+        // c.getDbName will return the same object if not set to 
+        // another value so == check is okay and faster
+        if ( c.getDbName() == Torque.getDefaultDB() )
+        {
+            c.setDbName(mapBuilder.getDatabaseMap().getName());
+        }
 
         ${table.JavaName}Peer.addSelectColumns(c);
         int offset = numColumns + 1;
@@ -1086,9 +1103,13 @@ public abstract class $basePrefix${table.JavaName}Peer
          c.setBlobFlag();
     #end 
  
-    #if ($table.Database.Name != "default")
-         c.setDbName(mapBuilder.getDatabaseMap().getName());
-    #end
+        // Set the correct dbName if it has not been overridden
+        // c.getDbName will return the same object if not set to another value
+        // so == check is okay and faster
+        if ( c.getDbName() == Torque.getDefaultDB() )
+        {
+            c.setDbName(mapBuilder.getDatabaseMap().getName());
+        }
 
         addSelectColumns(c);
         int offset2 = numColumns + 1;
