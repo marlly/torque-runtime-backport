@@ -3,7 +3,7 @@ package org.apache.torque.engine.database.transform;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -80,8 +81,8 @@ public class DTDResolver implements EntityResolver
     /** InputSource for <code>database.dtd</code>. */
     private InputSource databaseDTD = null;
 
-    /** Logging */
-    private static Logger log = Logger.getLogger(DTDResolver.class);
+    /** Logging class from commons.logging */
+    private static Log log = LogFactory.getLog(DTDResolver.class);
 
     /**
      * constructor

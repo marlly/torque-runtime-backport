@@ -31,9 +31,9 @@
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
-      <id>log4j</id>
-      <version>1.2.7</version>
-      <url>http://jakarta.apache.org/log4j/</url>
+      <id>commons-logging</id>
+      <version>1.0.2</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>velocity</id>
