@@ -255,7 +255,7 @@
       name="DATE_TEST_ID"
       required="true"
       primaryKey="true"
-      type="INTEGER"
+      type="BIGINT"
     />
     <column
       name="DATE_VALUE"
@@ -274,5 +274,25 @@
     />
 
   </table>
+
+  <!-- =================================================== -->
+  <!-- L A R G E _ P K  T A B L E                          -->
+  <!-- =================================================== -->
+
+  <table name="LARGE_PK" idMethod="none" description="Table to test large Primary keys">
+    <column
+      name="LARGE_PK_ID"
+      required="true"
+      primaryKey="true"
+      type="BIGINT"
+    />
+    <column
+      name="NAME"
+      type="VARCHAR"
+      size="100"
+      required="false"
+    />
+  </table>
+
 
 </database>

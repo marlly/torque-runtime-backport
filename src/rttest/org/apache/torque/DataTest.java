@@ -25,15 +25,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.torque.om.StringKey;
+import org.apache.torque.test.A;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
 import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
 import org.apache.torque.test.BooleanCheck;
 import org.apache.torque.test.BooleanCheckPeer;
-import org.apache.torque.test.A;
 import org.apache.torque.test.DateTest;
 import org.apache.torque.test.DateTestPeer;
+import org.apache.torque.test.LargePk;
+import org.apache.torque.test.LargePkPeer;
 import org.apache.torque.test.MultiPk;
 import org.apache.torque.test.MultiPkPeer;
 import org.apache.torque.test.NullValueTable;
@@ -870,6 +872,36 @@ public class DataTest extends BaseRuntimeTestCase
     }
     
     /**
+     * tests whether large primary keys are inserted and read correctly 
+     */
+    public void testLargePk() throws Exception
+    {
+        // clean Date table
+        Criteria criteria = new Criteria();
+        criteria.add(
+        		LargePkPeer.LARGE_PK_ID, 
+                (Long) null, 
+                Criteria.NOT_EQUAL);
+        LargePkPeer.doDelete(criteria);
+
+        long longId = 8771507845873286l;
+        LargePk largePk = new LargePk();
+        largePk.setLargePkId(longId);
+        largePk.setName("testLargePk");
+        largePk.save();
+        
+        List largePkList = LargePkPeer.doSelect(new Criteria());
+        LargePk readLargePk = (LargePk) largePkList.get(0);
+        assertTrue("the inserted Id, " + largePk.getLargePkId()
+        		+ " , and the read id, " + readLargePk.getLargePkId()
+				+ " , should be equal",
+				readLargePk.getLargePkId() == largePk.getLargePkId());
+        assertTrue("the inserted Id, " + largePk.getLargePkId()
+        		+ " , should be equal to " + longId,
+        		longId == largePk.getLargePkId());
+    }
+    
+    /**
      * Deletes all authors and books in the bookstore tables
      */
     protected void cleanBookstore() 
@@ -1005,5 +1037,4 @@ public class DataTest extends BaseRuntimeTestCase
                 fullyQualifiedColumnName.length());
         return result;
     }
-
 }
