@@ -20,16 +20,14 @@
         Torque offers an <a href="http://ant.apache.org/">Ant</a> build
         file (<code>build-torque.xml</code>) which could be added to your
         project. It defines the following targets:
+      </p>
+      
+      <subsection name="SQL tasks">
         <ul>
           <li>
             <strong>sql</strong><br/>
             generates SQL source from an XML schema describing a database
             structure
-          </li>
-          <p/>
-          <li>
-            <strong>doc</strong><br/>
-            generates html or xml documentation for xml schemas
           </li>
           <p/>
           <li>
@@ -60,11 +58,6 @@
           </li>
           <p/>
           <li>
-            <strong>om</strong><br/>
-            generates output by using Velocity
-          </li>
-          <p/>
-          <li>
             <strong>insert-sql</strong><br/>
             inserts a SQL file into its designated database
           </li>
@@ -74,22 +67,47 @@
             generates an xml schema from an sql schema
           </li>
           <p/>
+        </ul>
+      </subsection>
+      <subsection name="Torque tasks">
+        <ul>
+          <li>
+            <strong>om</strong><br/>
+            generates the Object/Peer/Manager modell for Torque.
+          </li>
+          <p/>
           <li>
             <strong>id-table-init-sql</strong><br/>
             generates the initialization sql for the id table
           </li>
           <p/>
+        </ul>
+      </subsection>
+      <subsection name="OJB tasks">
+        <p>
+          The OJB support is new and will be enhanced in future versions.
+        </p>
+        <ul>
           <li>
             <strong>ojb-model</strong><br/>
-            generates an object model for ojb (experimental)
+            generates a simple object model for ojb
           </li>
           <p/>
           <li>
             <strong>ojb-repository</strong><br/>
-            generates the repository for ojb (experimental)
+            generates the repository for ojb
           </li>
         </ul>
-      </p>
+      </subsection>
+      <subsection name="other tasks">
+        <ul>
+          <li>
+            <strong>doc</strong><br/>
+            generates html or xml documentation for xml schemas
+          </li>
+          <p/>
+        </ul>
+      </subsection>
 
       <p>
         <a href="http://maven.apache.org">Maven</a> offers a plugin for Torque.
