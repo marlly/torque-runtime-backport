@@ -186,8 +186,16 @@ public class TorqueSingleton
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    private void initialize() throws TorqueException
+    private synchronized void initialize() throws TorqueException
     {
+        log.debug("initialize()");
+
+        if (isInit)
+        {
+            log.debug("Tried to initialize multiple times");
+            return;
+        }
+
         if (conf == null)
         {
             throw new TorqueException("Torque cannot be initialized without "
@@ -212,7 +220,6 @@ public class TorqueSingleton
         initAdapters(conf);
         initDataSourceFactories(conf);
 
-        isInit = true;
         for (Iterator i = mapBuilders.iterator(); i.hasNext();)
         {
             //this will add any maps in this builder to the proper database map
@@ -223,6 +230,8 @@ public class TorqueSingleton
 
         // setup manager mappings
         initManagerMappings(conf);
+
+        isInit = true;
     }
 
     /**
