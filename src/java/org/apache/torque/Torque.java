@@ -87,6 +87,7 @@ import org.apache.torque.oid.IDGeneratorFactory;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.util.BasePeer;
 import org.apache.torque.manager.AbstractBaseManager;
+import org.apache.torque.dsfactory.DataSourceFactory;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.stratum.lifecycle.Configurable;
@@ -142,14 +143,9 @@ public class Torque implements Initializable, Configurable
     private static Map dbMaps;
 
     /** 
-     * The cache of initial contexts that contain jdbc datasources 
+     * The cache of DataSourceFactory's 
      */
-    private static Map jndiContexts;
-
-    /** 
-     * The cache of jndi paths to jdbc datasources 
-     */
-    private static Map dsJndiPaths;
+    private static Map dsFactoryMap;
 
     /** 
      * The cache of datasources 
@@ -160,12 +156,6 @@ public class Torque implements Initializable, Configurable
      * The cache of DB adapter keys 
      */
     private static Map adapterMap;
-
-    /**
-     * The various connection pools this broker contains.  Keyed by
-     * database URL.
-     */
-    private static Map pools;
 
     /**
      * A repository of Manager instances.
@@ -248,11 +238,9 @@ public class Torque implements Initializable, Configurable
         }
 
         dbMaps = new HashMap();
-        pools = new HashMap();
         DBFactory.init(configuration);
         initAdapters(configuration);
-        initJNDI(configuration);
-        initDataSources(configuration);
+        initDataSourceFactories(configuration);
 
         isInit = true;
         for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
@@ -265,71 +253,6 @@ public class Torque implements Initializable, Configurable
 
         // setup manager mappings
         initManagerMappings(configuration);
-    }
-
-    private static final void initJNDI(Configuration configuration)
-        throws TorqueException
-    {
-        category.debug("Starting initJNDI"); 
-        jndiContexts = new HashMap();
-        dsJndiPaths = new HashMap();
-        Configuration c = configuration.subset("jndi");
-        //Map dsMap = new HashMap();
-        if (c != null) 
-        {
-            try
-            {
-                Iterator i = c.getKeys();
-                while (i.hasNext())
-                {
-                    String key = (String)i.next();                
-                    if (key.endsWith("path"))
-                    {
-                        String path = c.getString(key);
-                        String handle = key.substring(0, key.indexOf('.'));
-                        //dsMap.put(name, cpdsClassName);
-                        category.debug("JNDI handle: " + handle + 
-                                       " path: " + path);
-                        
-                        Configuration jndiProps = c.subset(handle);
-                        
-                        Hashtable env = new Hashtable();
-                        Iterator j = jndiProps.getKeys();
-                        while (j.hasNext())
-                        {
-                            String prop = (String)j.next();
-                            if ( !"path".equals(prop) ) 
-                            {
-                                category.debug("Setting jndi " + handle +
-                                               " property: " + prop);
-                                env.put(prop, jndiProps.getString(prop)); 
-                            }
-                        }
-                        if ( env.size() == 0 ) 
-                        {
-                            jndiContexts.put(handle, new InitialContext());
-                        }
-                        else 
-                        {
-                            jndiContexts.put(handle, new InitialContext(env));
-                        }
-                        
-                        dsJndiPaths.put(handle, path);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }        
-        }
-        else 
-        {
-            category.error(
-                "There were no datasource paths in the configuration");
-        }
-        
     }
 
     private static final void initAdapters(Configuration configuration)
@@ -369,173 +292,40 @@ public class Torque implements Initializable, Configurable
         }        
     }
 
-
-    private static final void initDataSources(Configuration configuration)
+    private static void initDataSourceFactories(Configuration configuration)
         throws TorqueException
     {
-        category.debug("Starting initDataSources"); 
-        Configuration c = configuration.subset("datasource");
-        try
+        category.debug("Starting initDSF"); 
+        dsFactoryMap = new HashMap();
+        Configuration c = configuration.subset("dsfactory");
+        if (c != null) 
         {
-            Class mapClass = Class.forName("java.util.Map");
-            if (c != null) 
-            {            
-            Iterator i = c.getKeys();
-            while (i.hasNext())
+            try
             {
-                String key = (String)i.next();                
-                if (key.endsWith("factory"))
+                Iterator i = c.getKeys();
+                while (i.hasNext())
                 {
-                    String classname = c.getString(key);
-                    String handle = key.substring(0, key.indexOf('.'));
-                    category.debug("Datasource handle: " + handle + 
-                                   " factory: " + classname);
-
-                    Class dsClass = Class.forName(classname);
-                    Object ds = dsClass.newInstance();
-                    Configuration dsProps = c.subset(handle);
-                    // use reflection to set properties
-                    Iterator j = dsProps.getKeys();
-                    while (j.hasNext())
+                    String key = (String)i.next();                
+                    if (key.endsWith("factory"))
                     {
-                        String property = (String)j.next();
-                        if ( !"factory".equals(property) ) 
-                        {
-                            category.debug("Setting datasource " + handle +
-                                           " property: " + property);
-                            setProperty(property, dsProps, ds);
-                        }
+                        String classname = c.getString(key);
+                        String handle = key.substring(0, key.indexOf('.'));
+                        category.debug("handle: " + handle + 
+                                       " DataSourceFactory: " + classname);
+                        
+                        Class dsfClass = Class.forName(classname);
+                        DataSourceFactory dsf = 
+                            (DataSourceFactory)dsfClass.newInstance();
+                        dsf.initialize(c.subset(handle));
+                        dsFactoryMap.put(handle, dsf);
                     }
-
-                    Context ctx = (Context)jndiContexts.get(handle);
-                    if ( ctx == null ) 
-                    {
-                        if ( dsMap == null) 
-                        {
-                            dsMap = new HashMap();
-                        }
-                        dsMap.put(handle, ds);
-                    }
-                    else 
-                    {
-                        // bind the datasource
-                        String path = (String)dsJndiPaths.get(handle);
-                        bindDStoJndi(ctx, path, ds);
-                    }                    
-                }
-            }   
-            }            
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }    
-    }
-
-    private static void bindDStoJndi(Context ctx, String path, Object ds) 
-        throws Exception
-    {
-                    // Start debugging
-                    category.debug("instantiated InitialContext");
-                    Map env = ctx.getEnvironment();
-                    Iterator qw = env.keySet().iterator();
-                    category.debug("Environment properties:" + env.size() );
-                    while ( qw.hasNext() ) 
-                    {
-                        Object prop = qw.next();
-                        category.debug("    " + prop + ": " + env.get(prop) );
-                    }
-                    // End debugging
-
-                    // add subcontexts, if not added already
-                    int start = path.indexOf(':') + 1;
-                    if ( start > 0 ) 
-                    {
-                        path = path.substring(start);
-                    }
-                    StringTokenizer st = new StringTokenizer(path, "/");
-                    while ( st.hasMoreTokens() ) 
-                    {
-                        String subctx = st.nextToken();
-                        if ( st.hasMoreTokens() ) 
-                        {
-                            try
-                            {
-                                ctx.createSubcontext(subctx);
-                                category.debug("Added sub context: "+subctx); 
-                            }
-                            catch(NameAlreadyBoundException nabe)
-                            {
-                                // ignore
-                            }
-                            catch(NamingException ne)
-                            {
-                                // even though there is a specific exception
-                                // for this condition, some implementations
-                                // throw the more general one.
-                                /*
-                                if (ne.getMessage().indexOf("already bound") == -1 ) 
-                                {
-                                    throw ne;
-                                }
-                                */
-                                // ignore
-                            }
-                            ctx = (Context)ctx.lookup(subctx);
-                        }
-                        else 
-                        {
-                            // not really a subctx, it is the ds name
-                            ctx.bind(subctx, ds);
-                        }                        
-                    }
-    }
-
-    private static void setProperty(String property, Configuration c, 
-                                    Object ds)
-        throws Exception
-    {
-        String key = property;
-        Class dsClass = ds.getClass();
-        int dot = property.indexOf('.');
-        try
-        {
-            if ( dot > 0 )
-            {
-                property = property.substring(0, dot);                
-
-                MappedPropertyDescriptor mappedPD = 
-                    new MappedPropertyDescriptor(property, dsClass);
-                Class propertyType = mappedPD.getMappedPropertyType();
-                Configuration subProps = c.subset(property);
-                // use reflection to set properties
-                Iterator j = subProps.getKeys();
-                while (j.hasNext())
-                {
-                    String subProp = (String)j.next();
-                    String propVal = subProps.getString(subProp);
-                    Object value = ConvertUtils.convert(propVal, propertyType);
-                    PropertyUtils
-                        .setMappedProperty(ds, property, subProp, value);
                 }
             }
-            else 
+            catch (Exception e)
             {
-                Class propertyType = 
-                    PropertyUtils.getPropertyType(ds, property);
-                Object value = 
-                    ConvertUtils.convert(c.getString(property), propertyType);
-                PropertyUtils.setSimpleProperty(ds, property, value);
+                category.error("", e);
+                throw new TorqueException(e);
             }
-        }
-        catch (Exception e)
-        {
-            category.error("Property: " + property + " value: "
-                           + c.getString(key) +
-                           " is not supported by DataSource: " + 
-                           ds.getClass().getName());
-            throw e;
         }
     }
 
@@ -1027,10 +817,8 @@ public class Torque implements Initializable, Configurable
         Connection con = null;
         try
         {
-            Context ctx = (Context)jndiContexts.get(name);
-            String jndiPath = (String)dsJndiPaths.get(name);
-            con = ((DataSource)ctx.lookup(jndiPath))
-                .getConnection(username, password);
+            DataSourceFactory dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            con = dsf.getDataSource().getConnection(username, password);
         }
         catch (Exception e)
         {
@@ -1042,7 +830,17 @@ public class Torque implements Initializable, Configurable
     public static Connection getConnection(String name)
         throws TorqueException
     {
-        return getConnection(name, null, null);
+        Connection con = null;
+        try
+        {
+            DataSourceFactory dsf = (DataSourceFactory)dsFactoryMap.get(name);
+            con = dsf.getDataSource().getConnection();
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException(e);
+        }
+        return con;
     }
 
     /**
