@@ -24,6 +24,26 @@
             </ul>
           </li>
           -->
+
+          <li>
+            <strong>28 Jan 2002</strong>
+            <ul>
+              <li>
+                Using JAXP api.  Lost feature of conditional validation.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/engine/database/transform/XmlToAppData.java.diff?r1=1.9&amp;r2=1.10">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/engine/database/transform/XmlToData.java.diff?r1=1.2&amp;r2=1.3">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/rttest/id-table-schema.xml.diff?r1=1.1&amp;r2=1.2">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/schema/id-table-schema.xml.diff?r1=1.3&amp;r2=1.4">Reference</a>.
+              </li>
+              <li>
+                Moved to Xerces2.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/build-test.diff?r1=1.21&amp;r2=1.22">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/build.diff?r1=1.30&amp;r2=1.31">Reference</a>.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/default.properties.diff?r1=1.14&amp;r2=1.15">Reference</a>.
+              </li>
+            </ul>
+          </li>
+
           <li>
             <strong>20 Jan 2002</strong>
             <ul>
