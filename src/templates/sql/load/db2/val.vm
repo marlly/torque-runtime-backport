@@ -1,0 +1,1 @@
+#if($column.Column.TorqueType=="VARCHAR" || $column.Column.TorqueType=="LONGVARCHAR"|| $column.Column.TorqueType=="DATE" || $column.Column.TorqueType=="CHAR")'$column.Value'#else$column.Value#end
