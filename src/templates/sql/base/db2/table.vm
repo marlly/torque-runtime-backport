@@ -15,8 +15,8 @@ CREATE TABLE $table.Name
 #set ( $pk = $generator.parse("$basepath/primarykey.vm", "", "table", $tbl) )
 #if($pk.length()>0)$pk#end
 
-#set ( $fk = $generator.parse("$basepath/foreignkey.vm", "", "table", $tbl) )
-#if ($fk.length()>0)$fk#end
+##set ( $fk = $generator.parse("$basepath/foreignkey.vm", "", "table", $tbl) )
+##if ($fk.length()>0)$fk#end
 
 #set ( $index = $generator.parse("$basepath/index.vm", "", "table", $tbl) )
 #if($index.length() > 0)$index#end
