@@ -17,6 +17,10 @@
 <subsection name="Changes that could (will) break older environments">
 <p>
   <ul>
+    <li>
+      TRQS2: use commons-logging. <br>
+      BaseObject.log() and .getLog() now return a Log object.
+    </li>
   </ul>
 </p>
 </subsection>
