@@ -1035,7 +1035,8 @@ public abstract class BasePeer implements java.io.Serializable
                     table = tableName;
                 }
 
-                boolean ignorCase = (criteria.isIgnoreCase() &&
+                boolean ignorCase = ( (criteria.isIgnoreCase() ||
+                                       someCriteria[i].isIgnoreCase()) &&
                     (dbMap.getTable(table).getColumn(
                     someCriteria[i].getColumn()).getType() instanceof String));
 
@@ -2154,7 +2155,8 @@ public abstract class BasePeer implements java.io.Serializable
                     table = tableName;
                 }
 
-                boolean ignorCase = (criteria.isIgnoreCase() &&
+                boolean ignorCase = ((criteria.isIgnoreCase() ||
+                                      someCriteria[i].isIgnoreCase()) &&
                     (dbMap.getTable(table).getColumn(
                     someCriteria[i].getColumn()).getType() instanceof String));
 
