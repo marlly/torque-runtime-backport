@@ -1,5 +1,3 @@
-#set ( $database = $dataModel.database )
-
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- defining entities for include-files -->
@@ -15,20 +13,19 @@
      the Connection specified here will be used. -->
 
   <jdbc-connection-descriptor id="default"
-    platform="${ojb.platform}"
+    platform="$ojbPlatform"
     jdbc-level="${jdbcLevel}"
-  #if (${ojb.useJNDI} == "true")
-    jndi-datasource-name="${ojb.JNDISource}"
+  #if ($ojbUseJNDI)
+    jndi-datasource-name="$ojbJNDISource"
   #else
-    driver="${databaseDriver}"
+    driver="$databaseDriver"
     protocol="jdbc"
-    subprotocol="${database}"
-    dbalias="${databaseName}"
+    subprotocol="$dataModel.database"
+    dbalias="$databaseName"
   #end
-    username="${databaseUser}"
-    password="$!{databasePassword}"
+    username="$databaseUser"
+    password="$!databasePassword"
   >
-
 
   <!-- include mappings here -->
 #foreach ($dataModel in $dataModels)

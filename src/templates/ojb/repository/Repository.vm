@@ -19,7 +19,10 @@
 ============================================================== 
 $!table.getDescription()
 -->
-  <class-descriptor proxy="dynamic"
+  <class-descriptor 
+    #if ($ojbUseProxy)
+    	proxy="dynamic"
+    #end	
     class="${package}.${table.JavaName}"
     table="$table.Name"
   >
@@ -84,7 +87,9 @@ $!col.getDescription()
 #end
 #if ($col.isAutoIncrement()) ${space}autoincrement="true" 
 #end
-#if ($size != "") ${space}length="${size}" 
+#if ($size != "" || $size != "0") 
+  ${space}length="${size}"
+  #set ($size = "0")
 #end
 #if ($precision != "") ${space}precision="${precision}" 
 #end
