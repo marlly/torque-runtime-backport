@@ -104,6 +104,18 @@ import javax.sql.ConnectionPoolDataSource;
  */
 public abstract class DB implements Serializable, IDMethod
 {
+    /** Database does not support limiting result sets. */
+    public static final int LIMIT_STYLE_NONE = 0;
+
+    /** <code>SELECT ... LIMIT <limit>, [&lt;offset&gt;]</code> */
+    public static final int LIMIT_STYLE_POSTGRES = 1;
+
+    /** <code>SELECT ... LIMIT [<offset>, ] &lt;offset&gt;</code> */
+    public static final int LIMIT_STYLE_MYSQL = 2;
+
+    /** <code>SET ROWCOUNT &lt;offset&gt; SELECT ... SET ROWCOUNT 0</code> */
+    public static final int LIMIT_STYLE_SYBASE = 3;
+
     /** The database user name. */
     protected String DB_USER;
 
@@ -115,19 +127,6 @@ public abstract class DB implements Serializable, IDMethod
 
     /** The JDBC driver. */
     private String JDBCDriver = null;
-
-    /** database does not support limiting resultsets */
-    public static final int LIMIT_STYLE_NONE = 0;
-
-    /** SELECT ... LIMIT <limit>, [<offset>] */
-    public static final int LIMIT_STYLE_POSTGRES = 1;
-
-    /** SELECT ... LIMIT [<offset>, ] <limit>  */
-    public static final int LIMIT_STYLE_MYSQL = 2;
-
-    /** SET ROWCOUNT <limit> SELECT ... SET ROWCOUNT 0 */
-    public static final int LIMIT_STYLE_SYBASE = 3;
-
 
     /**
      * Empty constructor.
