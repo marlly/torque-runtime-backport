@@ -23,10 +23,15 @@ from the name attribute in the xml database file, is converted to a
 Java class or method name.
 
      nochange   - indicates not change is performed.
-     underscore - Underscores are removed, First letter is
+     underscore - Underscores and dots are removed, first letter is
               capitalized, first letter after an underscore
-              is capitalized, the rest of the letters are
-              converted to lowercase.
+              is capitalized, first letter after a dot is capitalized,
+              the rest of the letters are converted to lowercase.
+     underscoreOmitSchema - The section of the name before and including
+              the last dot in the name is removed. For the remaining part,
+              underscores are removed, first letter is capitalized, 
+              first letter after an underscore is capitalized, 
+              the rest of the letters are converted to lowercase.
      javaname   - same as underscore, but no letters are converted
               to lowercase.
 -->
@@ -39,7 +44,7 @@ Java class or method name.
   package CDATA #IMPLIED
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
-  defaultJavaNamingMethod (nochange|underscore|javaname) "underscore"
+  defaultJavaNamingMethod (nochange|underscore|underscoreOmitSchema|javaname) "underscore"
   heavyIndexing (true|false) "false"
 >
 
@@ -82,7 +87,7 @@ Java class or method name.
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
   interface CDATA #IMPLIED
-  javaNamingMethod (nochange|underscore|javaname) #IMPLIED
+  javaNamingMethod (nochange|underscore|underscoreOmitSchema|javaname) #IMPLIED
   heavyIndexing (true|false) #IMPLIED
   description CDATA #IMPLIED
 >

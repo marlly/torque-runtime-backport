@@ -36,6 +36,11 @@ public interface NameGenerator
     char STD_SEPARATOR_CHAR = '_';
 
     /**
+     * The character which separates the schema name from the table name
+     */
+    char SCHEMA_SEPARATOR_CHAR = '.';
+
+    /**
      * Traditional method for converting schema table and column names
      * to java names.  The <code>CONV_METHOD_XXX</code> constants
      * define how names for columns and tables in the database schema
@@ -44,6 +49,14 @@ public interface NameGenerator
      * @see JavaNameGenerator#underscoreMethod(String)
      */
     String CONV_METHOD_UNDERSCORE = "underscore";
+
+    /**
+     * Similar to {@link #CONV_METHOD_UNDERSCORE} except a possible
+     * schema name (preceding a dot (.) )is omitted
+     *
+     * @see JavaNameGenerator#underscoreOmitSchemaMethod(String)
+     */
+    String CONV_METHOD_UNDERSCORE_OMIT_SCHEMA = "underscoreOmitSchema";
 
     /**
      * Similar to {@link #CONV_METHOD_UNDERSCORE} except nothing is

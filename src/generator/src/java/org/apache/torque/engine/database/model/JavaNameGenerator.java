@@ -57,6 +57,10 @@ public class JavaNameGenerator implements NameGenerator
         {
             javaName = underscoreMethod(schemaName);
         }
+        else if (CONV_METHOD_UNDERSCORE_OMIT_SCHEMA.equals(method))
+        {
+            javaName = underscoreOmitSchemaMethod(schemaName);
+        }
         else if (CONV_METHOD_JAVANAME.equals(method))
         {
             javaName = javanameMethod(schemaName);
@@ -77,8 +81,9 @@ public class JavaNameGenerator implements NameGenerator
 
     /**
      * Converts a database schema name to java object name.  Removes
-     * <code>STD_SEPARATOR_CHAR</code>, capitilizes first letter of
-     * name and each letter after the <code>STD_SEPERATOR</code>,
+     * <code>STD_SEPARATOR_CHAR</code> and <code>SCHEMA_SEPARATOR_CHAR</code>,
+     * capitilizes first letter of name and each letter after the 
+     * <code>STD_SEPERATOR</code> and <code>SCHEMA_SEPARATOR_CHAR</code>,
      * converts the rest of the letters to lowercase.
      *
      * @param schemaName name to be converted.
@@ -88,6 +93,52 @@ public class JavaNameGenerator implements NameGenerator
      */
     protected String underscoreMethod(String schemaName)
     {
+        StringBuffer name = new StringBuffer();
+        
+        // remove the STD_SEPARATOR_CHARs and capitalize 
+        // the tokens
+        StringTokenizer tok = new StringTokenizer
+            (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
+        while (tok.hasMoreTokens())
+        {
+            String namePart = ((String) tok.nextElement()).toLowerCase();
+            name.append(StringUtils.capitalize(namePart));
+        }
+        
+        // remove the SCHEMA_SEPARATOR_CHARs and capitalize 
+        // the tokens
+        schemaName = name.toString();
+        name = new StringBuffer();
+        tok = new StringTokenizer
+            (schemaName, String.valueOf(SCHEMA_SEPARATOR_CHAR));
+        while (tok.hasMoreTokens())
+        {
+            String namePart = (String) tok.nextElement();
+            name.append(StringUtils.capitalize(namePart));
+        }
+        return name.toString();
+    }
+
+    /**
+     * Converts a database schema name to java object name. 
+     * First, it removes all characters before the last occurence of 
+     * .<code>SCHEMA_SEPARATOR_CHAR</code>. Then, in a second step, removes
+     * <code>STD_SEPARATOR_CHAR</code>, capitilizes first letter of
+     * name and each letter after the <code>STD_SEPERATOR</code>,
+     * and converts the rest of the letters to lowercase.
+     *
+     * @param schemaName name to be converted.
+     * @return converted name.
+     * @see org.apache.torque.engine.database.model.NameGenerator
+     * @see #underscoreOmitSchemaMethod(String)
+     */
+    protected String underscoreOmitSchemaMethod(String schemaName)
+    {
+        // take only part after last dot
+        int lastDotPos = schemaName.lastIndexOf(SCHEMA_SEPARATOR_CHAR);
+        if (lastDotPos != -1) {
+            schemaName = schemaName.substring(lastDotPos + 1);
+        }
         StringBuffer name = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
             (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
@@ -114,6 +165,19 @@ public class JavaNameGenerator implements NameGenerator
         StringBuffer name = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
             (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
+        while (tok.hasMoreTokens())
+        {
+            String namePart = (String) tok.nextElement();
+            name.append(StringUtils.capitalize(namePart));
+        }
+
+        // remove the SCHEMA_SEPARATOR_CHARs and capitalize 
+        // the tokens
+        schemaName = name.toString();
+        name = new StringBuffer();
+        
+        tok = new StringTokenizer
+            (schemaName, String.valueOf(SCHEMA_SEPARATOR_CHAR));
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();

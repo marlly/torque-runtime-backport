@@ -28,6 +28,10 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="add" dev="tfischer">
+      Added support for schema support at generate time. 
+      See <a href="schema-howto.html">Schema Support Howto</a>.
+    </action>
     <action type="remove" dev="tfischer" issue="TRQS222">
       Removed Oracle Update patch again. 
       Creates invalid scripts and causes ant to fail. 

@@ -20,14 +20,15 @@ part of the SQL standard. YMMV, however.</p>
 
 <p>
 Torque has some rudimentary support for Database schemas when
-accessing a database. The current generator can not create schema
-specific SQL files for you, all the table names will be unqualified
-(i.e. end up in the 'public' schema).
+accessing a database. Schema names can either be specified when
+generating classes via the generator, or they can be specified
+in the runtime. Note that specifying explicit schema names both at 
+generate time and at runtime is not tested and most likely causes problems.
 </p>
 
 </section>
 
-<section name="Configuring Schema Names">
+<section name="Configuring Schema Names at Runtime">
 
 <p>
 Schema support happens &quot;per-DataSourceFactory&quot;. This might
@@ -86,6 +87,64 @@ String barSchema = Torque.getSchema("bar");
 </source>
 
 </section>
+
+  <section name="Using Schema Names at generate time">
+
+    <p>
+      To define the schema of a table in the schema.xml, use the 
+      fully qualified table name as name attribute in the &lt;table&gt; 
+      element of your schema.xml.
+      For example, to use the schema "bookstore" for the table "book", 
+      use the following table definition:
+    </p>
+
+    <source><![CDATA[
+...
+<table name="bookstore.book" description="Book table">
+...
+]]>
+    </source>
+
+    <p>
+      If the standard naming method is used, the resulting 
+      java class will be named BookstoreBook. If you want to omit 
+      the schema name in the java name 
+      (i.e. the resulting java class should be named "Book"),
+      you can either use the javaName attribute of the table definition:
+    </p>
+
+    <source><![CDATA[
+...
+<table name="bookstore.book" javaName="Book" description="Book table">
+...
+]]>
+    </source>
+
+    <p>
+      or you can use the attribute 
+      defaultJavaNamingMethod="underscoreOmitSchema"
+      in the database definition:
+    </p>
+
+    <source><![CDATA[
+...
+<database name="bookstore" defaultJavaNamingMethod="underscoreOmitSchema">
+...
+]]>
+      </source>
+
+    <p>
+      Note that the defaultJavaNamingMethod attribute of a table 
+      will only affect the column names in the table and cannot 
+      be used to change the name of the table itself.
+    </p>
+
+    <p>
+      If you use a sequence to autogenerate ids, the sequence will be generated in the same schema 
+      as the table.
+    </p>
+
+  </section>
 
  </body>
 </document>

@@ -68,9 +68,22 @@ public class NameFactoryTest extends TestCase
                 }
         }, {
             {
-                "MY_USER", NameGenerator.CONV_METHOD_UNDERSCORE }, {
-                "MY_USER", NameGenerator.CONV_METHOD_JAVANAME }, {
-                "MY_USER", NameGenerator.CONV_METHOD_NOCHANGE }
+                "MY_USER", 
+                        NameGenerator.CONV_METHOD_UNDERSCORE }, {
+                "MY_USER", 
+                        NameGenerator.CONV_METHOD_UNDERSCORE_OMIT_SCHEMA }, {
+                "MY_USER", 
+                        NameGenerator.CONV_METHOD_JAVANAME }, {
+                "MY_USER", 
+                        NameGenerator.CONV_METHOD_NOCHANGE }, {
+                "MY_SCHEMA.MY_USER", 
+                        NameGenerator.CONV_METHOD_UNDERSCORE }, {
+                "MY_SCHEMA.MY_USER",
+                        NameGenerator.CONV_METHOD_UNDERSCORE_OMIT_SCHEMA }, {
+                "MY_SCHEMA.MY_USER",
+                        NameGenerator.CONV_METHOD_JAVANAME } , {
+                "MY_SCHEMA.MY_USER",
+                        NameGenerator.CONV_METHOD_NOCHANGE }
         }
     };
 
@@ -86,7 +99,15 @@ public class NameFactoryTest extends TestCase
                 makeString(4) + "_FK_1",
                 makeString(5) + "_FK_2" },
             {
-            "MyUser", "MYUSER", "MY_USER" }
+                "MyUser", 
+                "MyUser", 
+                "MYUSER", 
+                "MY_USER", 
+                "MySchemaMyUser", 
+                "MyUser",
+                "MYSCHEMAMYUSER",
+                "MY_SCHEMA.MY_USER"
+            }
     };
 
     /**
