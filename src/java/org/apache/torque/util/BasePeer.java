@@ -1024,6 +1024,11 @@ public abstract class BasePeer implements java.io.Serializable
                         rec.setValue( colMap.getColumnName(),
                                       criteria.getLong(key) );
                     }
+                    else if ( obj instanceof Short)
+                    {
+                        rec.setValue( colMap.getColumnName(),
+                                      ((Short) obj).shortValue() );
+                    }
                     else if ( obj instanceof Hashtable )
                     {
                         rec.setValue( colMap.getColumnName(),
