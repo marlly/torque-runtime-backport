@@ -8,6 +8,12 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='fix'>
+        Generate sequences correctly for PostgreSQL (i.e. leave it to 
+        PostgreSQL).  Note that schemas produced from the database using
+        the <code>torque:jdbc</code> goal are not yet handling sequences
+        correctly.
+      </action>
       <action dev='henning' type='update'>
         Upgrade to commons-collections-3.0, commons-configuration-1.0-rc1 and
         commons-logging-1.0.4.
