@@ -432,6 +432,17 @@ public class Column
     {
         isNotNull = status;
     }
+    
+    /**
+     * Return NOT NULL String for this column
+     * 
+     * @return "NOT NULL" if null values are not allowed or an empty String.
+     */
+    public String getNotNullString()
+    {
+        return getTable().getDatabase().getPlatform()
+                .getNullString(this.isNotNull());
+    }
 
     /**
      * Set if the column is a primary key or not

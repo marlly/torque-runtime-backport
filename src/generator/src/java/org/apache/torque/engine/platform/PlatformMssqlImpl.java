@@ -97,4 +97,20 @@ public class PlatformMssqlImpl extends PlatformDefaultImpl
     {
         return 30;
     }
+    
+    /**
+     * Explicitly returns NULL if null values allowed 
+     * (as recomended by Microsoft).
+     * 
+     * @see Platform#getNullString(boolean)
+     */
+    public String getNullString(boolean notNull) 
+    {
+        if (notNull) 
+        {
+            return "NOT NULL";
+        }
+        return "NULL";
+    }
+
 }

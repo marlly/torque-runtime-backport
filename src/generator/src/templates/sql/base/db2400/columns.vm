@@ -7,7 +7,6 @@
     #else
       #set ( $autoIncrement = " " )
     #end    
-    #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
-    #set ( $entry = "$col.Name $type $size $default $nullString $autoIncrement," )
+    #set ( $entry = "$col.Name $type $size $default $col.NotNullString $autoIncrement," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

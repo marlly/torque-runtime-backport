@@ -415,6 +415,7 @@ public class Database
             // if idMethod="autoincrement", make sure a column is
             // specified as autoIncrement="true"
             // FIXME: Handle idMethod="native" via DB adapter.
+            // TODO autoincrement is no longer supported!!!
             if (currTable.getIdMethod().equals("autoincrement"))
             {
                 Column[] columns = currTable.getColumns();
@@ -450,6 +451,7 @@ public class Database
                 }
                 else
                 {
+                    // TODO check type and size 
                     List referrers = foreignTable.getReferrers();
                     if ((referrers == null || !referrers.contains(currFK)))
                     {

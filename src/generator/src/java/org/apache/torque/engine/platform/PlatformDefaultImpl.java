@@ -121,4 +121,20 @@ public class PlatformDefaultImpl implements Platform
         return (Domain) schemaDomainMap.get(jdbcType);
     }
 
+    /**
+     * 
+     * @param notNull
+     * @return
+     */
+    public String getNullString(boolean notNull)
+    {
+        if (notNull) 
+        {
+            // TODO check if this is true for all dbs 
+            // check old sybase templates!
+            return "NOT NULL";
+        }
+        return "";
+    }
+    
 }

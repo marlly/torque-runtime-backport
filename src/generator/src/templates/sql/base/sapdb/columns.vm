@@ -2,7 +2,6 @@
     #set ( $type = $dbprops.get($col.Type) )
     #set ( $size = $col.printSize() )
     #set ( $default = $col.DefaultSetting )
-    #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
-    #set ( $entry = "$col.Name $type $size $default $nullString," )
+    #set ( $entry = "$col.Name $type $size $default $col.NotNullString," )
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

@@ -5,7 +5,11 @@
 #set ( $idname = "sql/id-table/idtable.$targetDatabase" )
 
 #foreach ($database in $dataModels)
-        
+
+  #set ( $platform = $database.Platform )
+  
+  Platform used: $platform.class.Name
+  
   #set ( $outFile = "${database.FileName}.sql" )
 
   File to be created: $outFile

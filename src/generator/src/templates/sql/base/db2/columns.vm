@@ -12,13 +12,12 @@
     #else
       #set ( $autoIncrement = " " )
     #end    
-    #set ( $nullString = $strings.select($col.isNotNull(), $dbprops.get("NOTNULL"),"") )
     #if ( $torquetype == "BINARY" )
-        #set ( $entry = "$col.Name CHAR($rawsize) FOR BIT DATA $default $nullString $autoIncrement," )
+        #set ( $entry = "$col.Name CHAR($rawsize) FOR BIT DATA $default $col.NotNullString $autoIncrement," )
     #elseif ( $torquetype == "VARBINARY" )
-        #set ( $entry = "$col.Name VARCHAR($rawsize) FOR BIT DATA $default $nullString $autoIncrement," )
+        #set ( $entry = "$col.Name VARCHAR($rawsize) FOR BIT DATA $default $col.NotNullString $autoIncrement," )
     #else
-        #set ( $entry = "$col.Name $type $size $default $nullString $autoIncrement," )
+        #set ( $entry = "$col.Name $type $size $default $col.NotNullString $autoIncrement," )
     #end
     $strings.sub($strings.collapseSpaces($entry)," ,",",")
 #end

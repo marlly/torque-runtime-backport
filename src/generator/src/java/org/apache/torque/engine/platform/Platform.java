@@ -86,4 +86,12 @@ public interface Platform
      * @return the db specific domain
      */
     Domain getDomainForSchemaType(SchemaType jdbcType);
+    
+    /**
+     * Returns the db specific String for NULL or NOT NULL.
+     * 
+     * @return the db specific String
+     */
+    String getNullString(boolean notNull);
+    
 }

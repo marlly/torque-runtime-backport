@@ -162,14 +162,6 @@ public class Table implements IDMethod
         {
             idMethod = defaultIdMethod;
         }
-        if ("autoincrement".equals(idMethod) || "sequence".equals(idMethod))
-        {
-            log.warn("The value '" + idMethod + "' for Torque's "
-                    + "table.idMethod attribute has been deprecated in favor "
-                    + "of '" + NATIVE + "'.  Please adjust your "
-                    + "Torque XML schema accordingly.");
-            idMethod = NATIVE;
-        }
         skipSql = "true".equals(attrib.getValue("skipSql"));
         // pkg = attrib.getValue("package");
         abstractValue = "true".equals(attrib.getValue("abstract"));
