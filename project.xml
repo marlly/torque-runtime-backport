@@ -266,7 +266,7 @@
 
     <resources>
       <includes>
-        <include>include = **/*</include>
+        <include>src/templates/**/*</include>
       </includes>
     </resources>
     <jars></jars>
