@@ -95,10 +95,12 @@ public class DBFactory
         category = c;
     }
 
-    // This static code creates the list of possible drivers and adds
-    // the "NO DATABASE" adapter to this list.  After all the
-    // configuration is queried to get a list of JDBC drivers and
-    // their associated adapters.
+    /**
+     * This static code creates the list of possible drivers and adds
+     * the "NO DATABASE" adapter to this list.  After all the
+     * configuration is queried to get a list of JDBC drivers and
+     * their associated adapters.
+     */
     public static void init()
     {
         drivers = new Hashtable();
