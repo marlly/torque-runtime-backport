@@ -646,6 +646,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         obj.setPrimaryKey(doInsert(buildCriteria(obj)));
         #end
         obj.setNew(false);
+        obj.setModified(false);
     }
 
     /**
@@ -680,6 +681,7 @@ public abstract class $basePrefix${table.JavaName}Peer
         obj.setPrimaryKey(doInsert(buildCriteria(obj), dbCon));
         #end
         obj.setNew(false);
+        obj.setModified(false);
     }
 
     /**
