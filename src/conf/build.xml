@@ -10,6 +10,9 @@
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
+    <fileset dir="lib">
+      <include name="**/torque*.jar"/>
+    </fileset>
   </path>
 
   <!--
