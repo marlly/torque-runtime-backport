@@ -138,7 +138,7 @@ public class TorqueRuntimeException
      */
     public void printStackTrace()
     {
-        synchronized(System.err)
+        synchronized (System.err)
         {
             printStackTrace(System.err);
         }
@@ -151,7 +151,7 @@ public class TorqueRuntimeException
      */
     public void printStackTrace(PrintStream out)
     {
-        synchronized(out)
+        synchronized (out)
         {
             PrintWriter pw = new PrintWriter(out, false);
             printStackTrace(pw);
@@ -167,7 +167,7 @@ public class TorqueRuntimeException
      */
     public void printStackTrace(PrintWriter out)
     {
-        synchronized(out)
+        synchronized (out)
         {
             printStackTrace(out, 0);
         }
@@ -183,28 +183,28 @@ public class TorqueRuntimeException
     public void printStackTrace(PrintWriter out, int skip)
     {
         String[] st = captureStackTrace();
-        if(nested != null)
+        if (nested != null)
         {
-            if(nested instanceof TorqueRuntimeException)
+            if (nested instanceof TorqueRuntimeException)
             {
                 ((TorqueRuntimeException) nested)
                         .printStackTrace(out, st.length - 2);
             }
-            else if(nested instanceof TorqueException)
+            else if (nested instanceof TorqueException)
             {
                 ((TorqueException) nested).printStackTrace(out);
             }
             else
             {
                 String[] nst = captureStackTrace(nested);
-                for(int i = 0; i < nst.length - st.length + 2; i++)
+                for (int i = 0; i < nst.length - st.length + 2; i++)
                 {
                     out.println(nst[i]);
                 }
             }
             out.print("rethrown as ");
         }
-        for(int i = 0; i < st.length - skip; i++)
+        for (int i = 0; i < st.length - skip; i++)
         {
             out.println(st[i]);
         }
@@ -248,7 +248,7 @@ public class TorqueRuntimeException
         String linebreak = System.getProperty("line.separator");
         StringTokenizer st = new StringTokenizer(stackTrace, linebreak);
         LinkedList list = new LinkedList();
-        while(st.hasMoreTokens())
+        while (st.hasMoreTokens())
         {
             list.add(st.nextToken());
         }
