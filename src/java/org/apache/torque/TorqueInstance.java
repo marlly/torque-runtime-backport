@@ -29,6 +29,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -601,10 +602,10 @@ public class TorqueInstance
         // Setup other ID generators for this map.
         try
         {
-            String key = getDatabaseProperty(name, "driver");
-            if (key == null || key.length() == 0)
+            String key = getDatabaseProperty(name, "adapter");
+            if (StringUtils.isEmpty(key))
             {
-                key = getDatabaseProperty(name, "adapter");
+                key = getDatabaseProperty(name, "driver");
             }
             DB db = DBFactory.create(key);
             for (int i = 0; i < IDGeneratorFactory.ID_GENERATOR_METHODS.length;

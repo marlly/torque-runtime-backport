@@ -3,11 +3,21 @@
   <properties>
     <title>Changes</title>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
   </properties>
 
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='add'>
+        The <code>adapter</code> property is now used in preference to 
+        <code>driver</code> when building the database map.  This allows Torque
+        to work when the driver setting is not what it expects - e.g. if using 
+        <code>com.mysql</code> driver instead of the 
+        <code>org.gjt.mm.mysql</code> or when using 
+        <a http="http://www.p6spy.org/">P6Spy</a> pass through driver for 
+        performance monitoring.  Thanks to Ben Hogan for the patch.
+      </action>
       <action dev='seade' type='fix'>
         Multiple unique constraints and indexes on a single table are now 
         allocated sequential names (previously duplicate names were being 
