@@ -44,7 +44,7 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.BIT, "NUMBER", "1", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "NUMBER", "3", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "NUMBER", "5", "0"));
-        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "NUMBER"));
+        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "NUMBER", "10", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "NUMBER", "1", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "NUMBER", "20", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.REAL, "NUMBER"));
@@ -54,7 +54,7 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.VARCHAR, "VARCHAR2"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR2", "2000"));
         setSchemaDomainMapping(new Domain(SchemaType.TIME, "DATE"));
-        setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "DATE"));
+        setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "TIMESTAMP"));
         setSchemaDomainMapping(new Domain(SchemaType.BINARY, "LONG RAW"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BLOB"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG RAW"));
