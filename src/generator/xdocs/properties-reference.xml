@@ -76,15 +76,6 @@
   </td>
 </tr>
 <tr>
-  <td><code> torque.useClasspath </code></td>
-  <td><code> false </code></td>
-  <td>
-    If true, Torque will not look in the <code>templatePath</code> directory,
-    for templates, but instead load them from the classpath, allowing you to
-    use Torque without extracting it from the jar.
-  </td>
-</tr>
-<tr>
   <td><code> torque.output.dir </code></td>
   <td><code> ${torque.home}/src </code></td>
   <td>
@@ -297,7 +288,7 @@
   <td>
     If true, Torque will not look in the <code>templatePath</code> directory,
     for templates, but instead load them from the classpath, allowing you to
-    use Torque without extracted it from the jar.
+    use Torque without extracting it from the jar.
   </td>
 </tr>
 <tr>
