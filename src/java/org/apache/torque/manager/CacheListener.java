@@ -3,7 +3,7 @@ package org.apache.torque.manager;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -65,8 +65,22 @@ import org.apache.torque.om.Persistent;
  */
 public interface CacheListener
 {
+    /**
+     * 
+     * @param om
+     */
     void addedObject(Persistent om);
+    
+    /**
+     * 
+     * @param om
+     */
     void refreshedObject(Persistent om);
+    
     //public void removedObject(Persistent om);
+    
+    /**
+     * 
+     */
     List getInterestedFields();
 }

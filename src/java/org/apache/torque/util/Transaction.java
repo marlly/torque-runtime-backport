@@ -69,12 +69,12 @@ import org.apache.torque.TorqueException;
  *
  * <p>
  * This can be used to handle cases where transaction support is optional.
- * The second parameter of beginOptionalTransaction will determine with a transaction
- * is used or not. If a transaction is not used, the commit and rollback methods
+ * The second parameter of beginOptionalTransaction will determine with a 
+ * transaction is used or not. 
+ * If a transaction is not used, the commit and rollback methods
  * do not have any effect. Instead it simply makes the logic easier to follow
  * by cutting down on the if statements based solely on whether a transaction
  * is needed or not.
- *
  *
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @version $Id$
@@ -92,7 +92,8 @@ public class Transaction
      *
      * @param dbName Name of database.
      * @return The Connection for the transaction.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static Connection begin(String dbName) throws TorqueException
     {
@@ -107,7 +108,8 @@ public class Transaction
      * @param dbName Name of database.
      * @param useTransaction If false, a transaction won't be used.
      * @return The Connection for the transaction.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static Connection beginOptional(String dbName,
                                            boolean useTransaction)
@@ -134,16 +136,17 @@ public class Transaction
      * transactions, it only returns the connection.
      *
      * @param con The Connection for the transaction.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void commit(Connection con) throws TorqueException
     {
         if (con == null)
         {
             throw new NullPointerException("Connection object was null. "
-                                           + "This could be due to a misconfiguration of the "
-                                           + "DataSourceFactory. Check the logs and Torque.properties "
-                                           + "to better determine the cause.");
+                    + "This could be due to a misconfiguration of the "
+                    + "DataSourceFactory. Check the logs and Torque.properties "
+                    + "to better determine the cause.");
         }
 
         try
@@ -172,7 +175,8 @@ public class Transaction
      * connection.
      *
      * @param con The Connection for the transaction.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public static void rollback(Connection con) throws TorqueException
     {

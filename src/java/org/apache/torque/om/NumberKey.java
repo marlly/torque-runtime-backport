@@ -125,6 +125,8 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
+     *
+     * @param key the key value
      */
     public NumberKey(double key)
     {
@@ -259,8 +261,6 @@ public class NumberKey extends SimpleKey
     /**
      * @param o the comparison value
      * @return a numeric comparison of the two values
-     * @throws NullPointerException when the value of the NumberKey or the
-     *         comparison value is null
      */
     public int compareTo(Object o)
     {
@@ -288,7 +288,6 @@ public class NumberKey extends SimpleKey
      * {@link java.math.BigDecimal.byteValue()}
      *
      * @return the NumberKey converted to a byte
-     * @throws NullPointerException when the value of the NumberKey is null
      */
     public byte byteValue()
     {
@@ -306,7 +305,6 @@ public class NumberKey extends SimpleKey
      * opposite sign.
      *
      * @return the NumberKey converted to an int
-     * @throws NullPointerException when the value of the NumberKey is null
      */
     public int intValue()
     {
@@ -323,7 +321,6 @@ public class NumberKey extends SimpleKey
      * precision of the NumberKey value as well as return a result with the
      * opposite sign.
      *
-     * @throws NullPointerException when the value of the NumberKey is null
      * @return the NumberKey converted to a short
      */
     public short shortValue()
@@ -337,7 +334,6 @@ public class NumberKey extends SimpleKey
      * {@link java.math.BigDecimal.intValue()}
      *
      * @return the NumberKey converted to a long
-     * @throws NullPointerException when the value of the NumberKey is null
      */
     public long longValue()
     {
@@ -353,7 +349,6 @@ public class NumberKey extends SimpleKey
      * or Float.POSITIVE_INFINITY as appropriate.
      *
      * @return the NumberKey converted to a float
-     * @throws NullPointerException when the value of the NumberKey is null
      */
     public float floatValue()
     {
@@ -369,7 +364,6 @@ public class NumberKey extends SimpleKey
      * or Double.POSITIVE_INFINITY as appropriate.
      *
      * @return the NumberKey converted to a double
-     * @throws NullPointerException when the value of the NumberKey is null
      */
     public double doubleValue()
     {

@@ -88,8 +88,7 @@ public abstract class AbstractBaseManager
     implements Serializable
 {
     /** the log */
-    protected static final Log log 
-            = LogFactory.getLog(AbstractBaseManager.class);
+    protected static Log log = LogFactory.getLog(AbstractBaseManager.class);
 
     /** used to cache the om objects. cache is set by the region property */
     protected transient GroupCacheAccess cache;
@@ -156,7 +155,8 @@ public abstract class AbstractBaseManager
     /**
      * Set the classname to instantiate for getInstance()
      * @param v  Value to assign to className.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public void setClassName(String  v)
         throws TorqueException
@@ -178,7 +178,8 @@ public abstract class AbstractBaseManager
      * Return an instance of an om based on the id
      *
      * @param id
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected Persistent getOMInstance(ObjectKey id)
         throws TorqueException
@@ -189,7 +190,8 @@ public abstract class AbstractBaseManager
     /**
      * Return an instance of an om based on the id
      *
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected Persistent getOMInstance(ObjectKey key, boolean fromCache)
         throws TorqueException
@@ -234,6 +236,11 @@ public abstract class AbstractBaseManager
         return om;
     }
 
+    /**
+     * 
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected void clearImpl()
         throws TorqueException
     {
@@ -251,7 +258,13 @@ public abstract class AbstractBaseManager
         }
     }
 
-
+    /**
+     * 
+     * @param key
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected Persistent removeInstanceImpl(Serializable key)
         throws TorqueException
     {
@@ -286,7 +299,13 @@ public abstract class AbstractBaseManager
         return oldOm;
     }
 
-
+    /**
+     * 
+     * @param om
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected Persistent putInstanceImpl(Persistent om)
         throws TorqueException
     {
@@ -294,7 +313,14 @@ public abstract class AbstractBaseManager
         return putInstanceImpl(key, om);
     }
 
-
+    /**
+     * 
+     * @param key
+     * @param om
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected Persistent putInstanceImpl(Serializable key, Persistent om)
         throws TorqueException
     {
@@ -335,6 +361,13 @@ public abstract class AbstractBaseManager
         return oldOm;
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected abstract Persistent retrieveStoredOM(ObjectKey id)
         throws TorqueException;
 
@@ -343,7 +376,8 @@ public abstract class AbstractBaseManager
      *
      * @param ids a <code>ObjectKey[]</code> value
      * @return a <code>List</code> value
-     * @exception TorqueException if an error occurs
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected List getOMs(ObjectKey[] ids)
         throws TorqueException
@@ -356,7 +390,8 @@ public abstract class AbstractBaseManager
      *
      * @param ids a <code>List</code> of <code>ObjectKey</code>'s
      * @return a <code>List</code> value
-     * @exception TorqueException if an error occurs
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected List getOMs(List ids)
         throws TorqueException
@@ -369,7 +404,8 @@ public abstract class AbstractBaseManager
      *
      * @param ids a <code>List</code> of <code>ObjectKey</code>'s
      * @return a <code>List</code> value
-     * @exception TorqueException if an error occurs
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected List getOMs(List ids, boolean fromCache)
         throws TorqueException
@@ -428,11 +464,19 @@ public abstract class AbstractBaseManager
         return oms;
     }
 
+    /**
+     * 
+     * @param ids
+     * @return
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
     protected abstract List retrieveStoredOMs(List ids)
         throws TorqueException;
 
     /**
      * Get the value of region.
+     * 
      * @return value of region.
      */
     public String getRegion()
@@ -444,7 +488,8 @@ public abstract class AbstractBaseManager
      * Set the value of region.
      *
      * @param v  Value to assign to region.
-     * @throws TorqueException
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     public void setRegion(String v)
         throws TorqueException
@@ -496,7 +541,10 @@ public abstract class AbstractBaseManager
     {
     }
 
-
+    /**
+     * 
+     * @param listener
+     */
     public void addCacheListenerImpl(CacheListener listener)
     {
         List keys = listener.getInterestedFields();
@@ -540,6 +588,11 @@ public abstract class AbstractBaseManager
         }
     }
 
+    /**
+     * 
+     * @param key
+     * @return
+     */
     private synchronized List createSubsetList(String key)
     {
         FastArrayList list = null;
@@ -556,7 +609,12 @@ public abstract class AbstractBaseManager
         return list;
     }
 
-
+    /**
+     * 
+     * @param listeners
+     * @param oldOm
+     * @param om
+     */
     protected void notifyListeners(List listeners,
                                    Persistent oldOm, Persistent om)
     {
@@ -592,13 +650,26 @@ public abstract class AbstractBaseManager
         }
     }
 
-    // helper methods for the Serializable interface
+
+    /**
+     * helper methods for the Serializable interface
+     * 
+     * @param out
+     * @throws IOException
+     */
     private void writeObject(java.io.ObjectOutputStream out)
         throws IOException
     {
         out.defaultWriteObject();
     }
 
+    /**
+     * helper methods for the Serializable interface
+     * 
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void readObject(java.io.ObjectInputStream in)
         throws IOException, ClassNotFoundException
     {
