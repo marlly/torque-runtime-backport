@@ -156,7 +156,7 @@ deployed pools.  Here is an example using catalina of deploying the pool that
 used to come with torque, but is now part of commons-sandbox/jdbc2pool.
 </p>
 
-<p>In server.xml, the following would be added to the &lt;Context$gt; for your
+<p>In server.xml, the following would be added to the &lt;Context&gt; for your
 webapp:
 
 <source><![CDATA[
