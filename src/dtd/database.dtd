@@ -57,7 +57,7 @@ Java class or method name.
   baseClass CDATA #IMPLIED
   basePeer CDATA #IMPLIED
   alias CDATA #IMPLIED
-  interface (true|false) #IMPLIED
+  interface CDATA #IMPLIED
   javaNamingMethod (nochange|underscore|javaname) #IMPLIED
   heavyIndexing (true|false) #IMPLIED
   description CDATA #IMPLIED
