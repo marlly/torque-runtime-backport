@@ -224,7 +224,9 @@ public class Torque implements Initializable, Configurable
         // any further mapBuilders will be called/built on demand
         mapBuilders = null;
 
-
+        // setup manager mappings
+        initManagerMappings(configuration);
+ 
         // Create monitor thread
         monitor = new Monitor();
         // Indicate that this is a system thread. JVM will quit only when there
