@@ -162,7 +162,6 @@ public class ComboKeyTest extends TestCase
             new SimpleKey[]{new StringKey("key1"), new StringKey("key2")});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);
@@ -188,7 +187,6 @@ public class ComboKeyTest extends TestCase
             new DateKey(new java.util.Date())});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);
@@ -213,7 +211,6 @@ public class ComboKeyTest extends TestCase
             new SimpleKey[]{new StringKey("key1"), null});
         ComboKey newKey = null;
         String stringValue = oldKey.toString();
-        System.out.println("OldKey as String=" + stringValue);
         try
         {
             newKey = new ComboKey(stringValue);

@@ -267,12 +267,11 @@ public class CriteriaTest extends BaseTestCase
     {
         Criteria myCriteria = new Criteria();
 
-        Criteria.Criterion myCriterion = myCriteria.getNewCriterion(
+        Criteria.Criterion expected = myCriteria.getNewCriterion(
                 "TABLE.COLUMN", (Object)"FoObAr", Criteria.LIKE);
-        System.out.println("before setIgnoreCase: " + myCriterion);
-
-        Criteria.Criterion ignoreCriterion = myCriterion.setIgnoreCase(true);
-        System.out.println("after setIgnoreCase: " + ignoreCriterion);
+        Criteria.Criterion result = expected.setIgnoreCase(true);
+        assertEquals("Criterion mis-match after calling setIgnoreCase(true)",
+                     expected.toString(), result.toString());
     }
 
     /**
@@ -332,7 +331,6 @@ public class CriteriaTest extends BaseTestCase
             e.printStackTrace();
             fail("TorqueException thrown in BasePeer.createQueryString()");
         }
-        System.out.println(result);
         assertEquals(expect, result);
     }
 

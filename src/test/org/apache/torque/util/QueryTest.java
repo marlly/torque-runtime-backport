@@ -89,8 +89,6 @@ public class QueryTest extends TestCase
         columns.add("tableB.column1");
         query.setSelectClause(columns);
 
-        System.out.println(expected);
-        System.out.println(query.toString());
         assertEquals(expected, query.toString());
     }
 
@@ -120,8 +118,6 @@ public class QueryTest extends TestCase
         where.add("tableA.B = 1234");
         query.setWhereClause(where);
 
-        System.out.println(expected);
-        System.out.println(query.toString());
         assertEquals(expected, query.toString());
     }
 }
