@@ -885,7 +885,7 @@ public abstract class BasePeer implements java.io.Serializable
 
         // If the primary key column is auto-incremented, get the id
         // now.
-        if (keyGen != null && keyGen.isPostInsert())
+        if (pk != null && keyGen != null && keyGen.isPostInsert())
         {
             try
             {
