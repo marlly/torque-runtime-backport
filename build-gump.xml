@@ -1,19 +1,13 @@
-<!--
-
-  WARNING: This file is generated! Do not edit by hand!
-  
--->
-
 <project name="maven" default="jar" basedir=".">
 
   <target
     name="jar">
-    
+
     <property name="build.dir" value="target"/>
     <property name="build.dest" value="${maven.build.dir}/classes"/>
-    
+
     <mkdir dir="${maven.build.dest}"/>
-    
+
     <javac
       destdir="${maven.build.dest}"
       excludes="**/package.html"
@@ -25,12 +19,18 @@
       </src>
     </javac>
 
-    <jar
-      jarfile="${maven.build.dir}/${maven.final.name}.jar"
-      basedir="${maven.build.dest}"
-      excludes="**/package.html"
-    />
-    
+    <!-- copy database.dtd to the right place -->
+    <copy file="src/dtd/database.dtd"
+          todir="${maven.build.dest}/org/apache/torque/engine/database/transform"/>
+    <!-- copy default.properties to the right place -->
+    <copy file="src/conf/default.properties"
+          todir="${maven.build.dest}/org/apache/torque"/>
+
+    <!-- build the jar incl. the templates -->
+    <jar jarfile="${maven.build.dir}/${maven.final.name}.jar">
+      <fileset dir="${maven.build.dest}" excludes="**/package.html"/>
+      <fileset dir="src/templates"/>
+    </jar>
   </target>
 
 </project>
