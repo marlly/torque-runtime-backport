@@ -133,7 +133,7 @@
         </tr>
         <tr>
           <td><a href="mssql-howto.html">MS SQL</a></td>
-          <td>???</td>
+          <td>com.microsoft.jdbc.sqlserver.SQLServerDriver</td>
           <td>untested</td>
           <td></td>
         </tr>
