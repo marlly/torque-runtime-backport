@@ -249,6 +249,11 @@
       <url>http://jakarta.apache.org/log4j/</url>
     </dependency>
     <dependency>
+      <id>logkit</id>
+      <version>1.0.1</version>
+      <url>http://jakarta.apache.org/avalon/logkit/</url>
+    </dependency>
+    <dependency>
       <id>stratum</id>
       <version>1.0-b3</version>
       <url>http://jakarta.apache.org/turbine/stratum/</url>
