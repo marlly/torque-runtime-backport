@@ -54,13 +54,9 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.lang.reflect.Method;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.sql.ConnectionPoolDataSource;
 
 /**
  * This code should be used for an Oracle database pool.

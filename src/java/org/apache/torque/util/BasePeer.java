@@ -78,7 +78,6 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import org.apache.torque.TorqueException;
 import org.apache.torque.om.NumberKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.SimpleKey;
@@ -90,9 +89,6 @@ import org.apache.torque.map.ColumnMap;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.MapBuilder;
 import org.apache.torque.map.TableMap;
-import org.apache.torque.util.Criteria;
-import org.apache.torque.util.Query;
-import org.apache.torque.util.SqlExpression;
 
 //!! no good.
 import org.apache.commons.collections.StringStack;
@@ -1215,7 +1211,7 @@ public abstract class BasePeer implements java.io.Serializable
                                                  ignorCase, db) );
             }
         }
-        
+
         // need to allow for multiple group bys
         if ( groupBy != null && groupBy.size() > 0)
         {
@@ -1225,19 +1221,19 @@ public abstract class BasePeer implements java.io.Serializable
                 if (groupByColumn.indexOf('.') == -1)
                 {
                     throwMalformedColumnNameException("group by",groupByColumn);
-                }          
-                
+                }
+
                 groupByClause.add(groupByColumn);
             }
         }
-        
+
         Criteria.Criterion having = criteria.getHaving();
         if (having != null)
         {
-            //String groupByString = null; 
+            //String groupByString = null;
             query.setHaving(having.toString());
         }
-        
+
         if (orderBy != null && orderBy.size() > 0)
         {
             // Check for each String/Character column and apply

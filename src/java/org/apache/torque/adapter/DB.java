@@ -59,7 +59,6 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import javax.sql.ConnectionPoolDataSource;
 
 /**
  * <code>DB</code> defines the interface for a Turbine database
