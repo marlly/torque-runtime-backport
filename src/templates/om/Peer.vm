@@ -722,7 +722,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     /** Method to do inserts */
     public static void doInsert( $table.JavaName obj ) throws TorqueException
     {
-        #if ($table.IdMethod.equals("none"))
+        #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
         doInsert(buildCriteria(obj));
         #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj)));
@@ -757,7 +757,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doInsert( $table.JavaName obj, DBConnection dbCon)
         throws TorqueException
     {
-        #if ($table.IdMethod.equals("none"))
+        #if ($table.IdMethod.equals("none") || $table.PrimaryKeys.size() == 0)
         doInsert(buildCriteria(obj), dbCon);
         #else
         obj.setPrimaryKey(doInsert(buildCriteria(obj), dbCon));
