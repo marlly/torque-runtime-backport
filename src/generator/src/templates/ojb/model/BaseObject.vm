@@ -37,7 +37,7 @@ public class ${basePrefix}${table.JavaName}
     }
 
     /**
-     * Set the value of $cfc
+     * Set the value of $col.JavaName
      */
     public void set${col.JavaName}($col.JavaPrimitive v)
     {
