@@ -1,7 +1,7 @@
-# location of jar that you will be using for testing
+c# location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.13-bin.jar
+torque.testDatabaseJar = ${maven.home}/repository/mm.mysql/jars/mm.mysql-2.0.13-bin.jar
 torque.idMethod = idbroker
 #torque.idMethod = native
 torque.defaultDatabase = bookstore
