@@ -1,3 +1,4 @@
+
 <project name="Torque" default="main" basedir=".">
 
   <property name="torque.home" value="."/>
@@ -249,6 +250,9 @@
       contextProperties="${templatePath}/sql/id-table/project.props"
       controlTemplate="${idTableControlTemplate}"
       templatePath="${templatePath}"
+      database="default"
+      suffix="-idtable-init"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       outputFile="${database}-id-table-init.sql"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"

@@ -38,6 +38,7 @@
       overwrite="yes"
     />
 
+    <!-- copy test schema -->
     <copy
       todir="${torque.distDir}/schema"
       file="${torque.testSchema}"
@@ -73,7 +74,7 @@
   <!-- project-datasql                                                -->
   <!-- project-jdbc                                                   -->
   <!-- project-sql-classpath                                          -->
-  <!-- project-om-classpath	                                        -->
+  <!-- project-om-classpath	                                          -->
   <!-- project-sql2xml                                                -->
   <!--                                                                -->
   <!-- The project-sql is also another complete set of tests:         -->
@@ -85,8 +86,9 @@
   <target
     name="test-generative">
 
-    <antcall target="test-project-sql"/>
     <antcall target="test-create-db"/>
+    <antcall target="test-project-sql"/>
+    <antcall target="test-id-table-init-sql"/>
     <antcall target="test-project-insert-sql"/>
     <antcall target="test-project-om"/>
 
@@ -111,6 +113,16 @@
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="project-sql"
+      inheritAll="false">
+    </ant>
+  </target>
+
+  <target
+    name="test-id-table-init-sql">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="id-table-init-sql"
       inheritAll="false">
     </ant>
   </target>

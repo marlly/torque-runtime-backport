@@ -94,13 +94,13 @@
   <!-- Create the target database by executing a generated script       -->
   <!-- that is capable of performing the task.                          -->
   <!-- ================================================================ -->
-  
-  <target 
+
+  <target
     name="project-create-db"
     unless="database.manual.creation"
     description="--> generates the target database">
 
-    <taskdef 
+    <taskdef
       name="torque-create-db"
       classname="org.apache.torque.task.TorqueCreateDatabase">
       <classpath refid="classpath"/>
@@ -120,7 +120,7 @@
         <include name="*-schema.xml"/>
       </fileset>
     </torque-create-db>
-  
+
     <sql
       driver="${databaseDriver}"
       url="${createDatabaseUrl}"
@@ -131,17 +131,17 @@
       onerror="continue">
       <classpath refid="classpath"/>
     </sql>
-  
+
   </target>
 
   <!-- ================================================================ -->
   <!-- I N S E R T  S I N G L E  S Q L  F I L E S                       -->
   <!-- ================================================================ -->
 
-  <target 
+  <target
     name="project-insert-sql">
 
-    <taskdef 
+    <taskdef
       name="torque-insert-sql"
       classname="org.apache.torque.task.TorqueSQLExec">
       <classpath refid="classpath"/>
@@ -165,13 +165,13 @@
   <!-- J D B C  TO  X M L                                               -->
   <!-- ================================================================ -->
 
-  <target 
-    name="project-jdbc" 
+  <target
+    name="project-jdbc"
     description="==> jdbc to xml">
 
     <echo message="JDBC transform"/>
 
-    <taskdef 
+    <taskdef
       name="torque-jdbc"
       classname="org.apache.torque.task.TorqueJDBCTransformTask">
       <classpath refid="classpath"/>
@@ -192,8 +192,8 @@
   <!-- Generate SQL from XML data file                                  -->
   <!-- ================================================================ -->
 
-  <target 
-    name="project-datasql" 
+  <target
+    name="project-datasql"
     description="==> generates sql from data xml">
 
     <echo message="+-----------------------------------------------+"/>
@@ -204,7 +204,7 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
 
-    <taskdef 
+    <taskdef
       name="torque-datasql"
       classname="org.apache.torque.task.TorqueDataSQLTask">
       <classpath refid="classpath"/>
@@ -229,8 +229,8 @@
   <!-- Dump data from database into xml file                            -->
   <!-- ================================================================ -->
 
-  <target 
-    name="project-datadump" 
+  <target
+    name="project-datadump"
     description="==> dump data from database into xml file">
 
     <echo message="+-----------------------------------------------+"/>
@@ -241,7 +241,7 @@
     <echo message="+-----------------------------------------------+"/>
     <echo message=" taking build.properties from: ${build.properties}"/>
 
-    <taskdef 
+    <taskdef
       name="torque-datadump"
       classname="org.apache.torque.task.TorqueDataDumpTask">
       <classpath refid="classpath"/>
@@ -269,8 +269,8 @@
   <!-- Generate the DATA DTD for your project                           -->
   <!-- ================================================================ -->
 
-  <target 
-    name="project-datadtd" 
+  <target
+    name="project-datadtd"
     description="==> generates the DATA DTD for your project">
 
     <echo message="+-----------------------------------------------+"/>
@@ -280,7 +280,7 @@
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
 
-    <taskdef 
+    <taskdef
       name="torque-datadtd"
       classname="org.apache.torque.task.TorqueDataDTDTask">
       <classpath refid="classpath"/>
@@ -394,6 +394,9 @@
       contextProperties="${templatePath}/sql/id-table/project.props"
       controlTemplate="${idTableControlTemplate}"
       templatePath="${templatePath}"
+      database="default"
+      suffix="-idtable-init"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputDirectory="${torque.home}/${outputDirectory}/sql"
       outputFile="${database}-id-table-init.sql"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
