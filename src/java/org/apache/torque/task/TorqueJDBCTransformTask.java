@@ -111,6 +111,9 @@ public class TorqueJDBCTransformTask extends Task
     /** JDBC password. */
     protected String dbPassword;
 
+    /** DB schema to use. */
+    protected String dbSchema;
+
     /** DOM document produced. */
     protected DocumentImpl doc;
 
@@ -126,6 +129,15 @@ public class TorqueJDBCTransformTask extends Task
 
     XMLSerializer xmlSerializer;
 
+    public String getDbSchema()
+    {
+        return dbSchema;
+    }
+
+    public void setDbSchema(String dbSchema)
+    {
+        this.dbSchema = dbSchema;
+    }
 
     public void setDbUrl(String v)
     {
@@ -173,6 +185,7 @@ public class TorqueJDBCTransformTask extends Task
         System.err.println("URL : "+dbUrl);
         System.err.println("user : "+dbUser);
         System.err.println("password : "+dbPassword);
+        System.err.println("schema : "+dbSchema);
 
         DocumentTypeImpl docType= new DocumentTypeImpl(null,"app-data", null, "http://jakarta.apache.org/turbine/dtd/database.dtd");
         doc = new DocumentImpl(docType);
@@ -225,6 +238,7 @@ public class TorqueJDBCTransformTask extends Task
         // Build a database-wide column -> table map.
         columnTableMap = new Hashtable();
 
+        log("Building column/table map...");
         for (int i = 0; i < tableList.size(); i++)
         {
             String curTable = (String) tableList.get(i);
@@ -244,6 +258,7 @@ public class TorqueJDBCTransformTask extends Task
             // Add Table.
             String curTable = (String) tableList.get(i);
             // dbMap.addTable(curTable);
+            log("Processing table: " + curTable);
 
             Element table = doc.createElement("table");
             table.setAttribute("name", curTable);
@@ -348,7 +363,6 @@ public class TorqueJDBCTransformTask extends Task
                 fk.setAttribute("foreignTable", foreignKeyTable);
                 for (int m=0; m<refs.size(); m++)
                 {
-                    System.out.println(m);
                     Element ref = doc.createElement("reference");
                     String[] refData = (String[]) refs.get(m);
                     ref.setAttribute("local", refData[0]);
@@ -375,19 +389,19 @@ public class TorqueJDBCTransformTask extends Task
     public List getTableNames(DatabaseMetaData dbMeta)
         throws SQLException
     {
+        log("Getting table list...");
         List tables = new Vector();
         ResultSet tableNames = null;
+        // these are the entity types we want from the database
+        String[] types = {"TABLE", "VIEW"};
         try
         {
-            tableNames = dbMeta.getTables(null,null, "%",null);
+            tableNames = dbMeta.getTables(null, dbSchema, "%", types);
             while (tableNames.next())
             {
                 String name = tableNames.getString(3);
                 String type = tableNames.getString(4);
-                if (type.equals("TABLE"))
-                {
-                    tables.add(name);
-                }
+                tables.add(name);
             }
         }
         finally
@@ -422,7 +436,7 @@ public class TorqueJDBCTransformTask extends Task
         ResultSet columnSet = null;
         try
         {
-            columnSet = dbMeta.getColumns(null,null, tableName, null);
+            columnSet = dbMeta.getColumns(null, dbSchema, tableName, null);
             while (columnSet.next())
             {
                 String name = columnSet.getString(4);
@@ -465,7 +479,7 @@ public class TorqueJDBCTransformTask extends Task
         ResultSet parts = null;
         try
         {
-            parts = dbMeta.getPrimaryKeys(null, null, tableName);
+            parts = dbMeta.getPrimaryKeys(null, dbSchema, tableName);
             while (parts.next())
             {
                 pk.add(parts.getString(4));
@@ -495,7 +509,7 @@ public class TorqueJDBCTransformTask extends Task
         ResultSet foreignKeys = null;
         try
         {
-            foreignKeys = dbMeta.getImportedKeys(null, null, tableName);
+            foreignKeys = dbMeta.getImportedKeys(null, dbSchema, tableName);
             while (foreignKeys.next())
             {
                 String fkName = foreignKeys.getString(12);
