@@ -284,7 +284,6 @@
     <mkdir dir="${test.libDir}"/>
 
     <copy file="${velocity.jar}" todir="${test.libDir}"/>
-    <copy file="${logkit.jar}" todir="${test.libDir}"/>
     <copy file="${xerces.jar}" todir="${test.libDir}"/>
     <copy file="${village.jar}" todir="${test.libDir}"/>
     <copy file="${log4j.jar}" todir="${test.libDir}"/>
@@ -293,26 +292,26 @@
     <copy file="${jdbc.jar}" todir="${test.libDir}"/>
     <copy file="${build.dir}/${torque.jar}" todir="${test.libDir}"/>
     <copy file="${torque.testDatabaseJar}" todir="${test.libDir}"/>
-  
+
   </target>
-  
+
   <target
     name="test-templates">
-    
+
     <copy todir="${test.templateDir}">
       <fileset dir="${src.dir}/templates"/>
     </copy>
 
   </target>
-  
+
   <!-- ============================================================== -->
   <!-- S Q L  T E S T S                                               -->
   <!-- ============================================================== -->
-    
+
   <target
     name="test-sql"
     depends="test-libs,test-templates">
-    
+
     <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
     <filter token="DATABASE_URL" value="${torqe.sqlTest.databaseUrl}"/>
     <filter token="DATABASE_USER" value="${databaseUser}"/>
@@ -320,9 +319,9 @@
     <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
     <filter token="DATABASE_ADAPTER" value="${torque.databaseAdapter}"/>
-    
+
     <mkdir dir="${build.test}/sqltest"/>
-    
+
     <copy
       tofile="${build.test}/sqltest/build.properties"
       file="${torque.testProfile}"
