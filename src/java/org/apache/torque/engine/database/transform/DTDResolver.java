@@ -111,7 +111,10 @@ public class DTDResolver implements EntityResolver
     {
         if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
-            System.out.println("Resolver: used database.dtd");
+            String pkg = getClass().getName()
+                .substring(0, getClass().getName().lastIndexOf("."));
+            System.out.println("Resolver: used database.dtd from " + 
+                 pkg + " package ");
             return databaseDTD;
         }
         else
