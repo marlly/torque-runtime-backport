@@ -88,6 +88,11 @@ public class Torque
      */
     public static final String DATABASE_DEFAULT = "database.default";
 
+    /**
+     * A constant for <code>default</code>.
+     */
+    protected static final String DEFAULT_NAME = "default";
+
     /** The global cache of database maps */
     private static Map dbMaps;
 
@@ -109,9 +114,19 @@ public class Torque
      */
     private static final String DEFAULT_CATEGORY = "sql";
 
+    /**
+     * The logging category.
+     */
     private static Category category;
+
+    /**
+     * Torque-specific configuration.
+     */
     private static ExtendedProperties configuration;
 
+    /**
+     * The connection pool monitor.
+     */
     private static Monitor monitor;
 
     /**
@@ -201,7 +216,7 @@ public class Torque
         throws TorqueException
     {
         return getDatabaseMap(
-            configuration.getString(DATABASE_DEFAULT,"default"));
+            configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME));
     }
 
     /**
@@ -319,11 +334,10 @@ public class Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static  DBConnection getConnection()
+    public static DBConnection getConnection()
         throws Exception
     {
-        return getConnection(
-            configuration.getString(DATABASE_DEFAULT,"default"));
+        return getConnection(getDefaultDB());
     }
 
     /**
@@ -345,7 +359,7 @@ public class Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static  DBConnection getConnection(String name)
+    public static DBConnection getConnection(String name)
         throws Exception
     {
         // The getPool method ensures the validity of the returned pool.
@@ -367,7 +381,7 @@ public class Torque
      * @deprecated Database parameters should not be specified each
      * time a DBConnection is fetched from the service.
      */
-    public static  DBConnection getConnection(String driver,
+    public static DBConnection getConnection(String driver,
                                       String url,
                                       String username,
                                       String password)
@@ -508,7 +522,7 @@ public class Torque
     public static DB getDB()
         throws Exception
     {
-        return getDB(configuration.getString(DATABASE_DEFAULT,"default"));
+        return getDB(configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME));
     }
 
     /**
@@ -536,7 +550,8 @@ public class Torque
     private static ConnectionPool getPool()
         throws Exception
     {
-        return getPool(configuration.getString(DATABASE_DEFAULT,"default"));
+        return getPool(configuration.getString(DATABASE_DEFAULT,
+                                               DEFAULT_NAME));
     }
 
     /**
@@ -648,21 +663,27 @@ public class Torque
         }
     }
 
-    public static  String getDefaultDB()
+    /**
+     * Returns the name of the default database.
+     */
+    public static String getDefaultDB()
     {
         if (configuration == null)
         {
-            return "default";
+            return DEFAULT_NAME;
         }
-        return configuration.getString(DATABASE_DEFAULT,"default");
+        return configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
     }
 
-    public static  String getDefaultMap()
+    /**
+     * Returns the name of the default database map.
+     */
+    public static String getDefaultMap()
     {
         if (configuration == null)
         {
-            return "default";
+            return DEFAULT_NAME;
         }
-        return configuration.getString(DATABASE_DEFAULT,"default");
+        return configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
     }
 }
