@@ -80,7 +80,6 @@ public class MethodResultCache
 {
     private ObjectPool pool;
     private GroupCacheAccess jcsCache;
-    private int inGet;
     private Map groups;
 
     /** Logging */
