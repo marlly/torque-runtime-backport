@@ -102,6 +102,22 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
          */
         public void set${cfc}($cjtype v ) $throwsClause
         {
+          #if ( ($cjtype == "NumberKey") 
+               || ($cjtype == "StringKey")
+               || ($cjtype == "DateKey") )
+
+            if (v != null && v.getValue() == null)
+            {
+                // If this is an Objectkey than this set method is
+                // probably storing the id of this object or some
+                // associated object.  If the objectKey value is null
+                // then we convert the parameter to null so that this
+                // property is consistently null to indicate that no
+                // object is associated or defined.
+                v = null;
+            }
+          #end 
+
         #if ($complexObjectModel)
           #if ($col.isForeignKey())
             #set ( $tmp = $col.RelatedTableName )
@@ -152,20 +168,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         if ( !ObjectUtils.equals(this.$clo, v) )
         {
  #end
-          #if ( ($cjtype == "NumberKey") 
-               || ($cjtype == "StringKey")
-               || ($cjtype == "DateKey") )
-            if (this.$clo == null)
-            {
-                this.$clo = new $cjtype(v);
-            }
-            else
-            {
-                this.${clo}.setValue(v);
-            }
-          #else  
             this.$clo = v;
-          #end
             setModified(true);
         }
 #else
