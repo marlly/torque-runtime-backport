@@ -106,7 +106,7 @@ public class TorqueDataSourceFactory
         ds = tcds;
     }
 
-    private ConnectionPoolDataSource initCPDS(Configuration configuration)
+    protected ConnectionPoolDataSource initCPDS(Configuration configuration)
         throws TorqueException
     {
         category.debug("Starting initCPDS"); 
@@ -131,7 +131,7 @@ public class TorqueDataSourceFactory
         return cpds;
     }
 
-    private TorqueClassicDataSource 
+    protected TorqueClassicDataSource 
         initTorqueClassic(Configuration configuration)
         throws TorqueException
     {
