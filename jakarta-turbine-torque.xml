@@ -1,0 +1,52 @@
+<module name="jakarta-turbine-torque">
+
+
+  <description>Persistence Layer</description>
+  <url href="http://jakarta.apache.org/turbine/torque/"/>
+  
+  <cvs repository="jakarta"/>
+  
+  <!-- This is really the cvs module. We need to change this but -->
+  <!-- I will leave this for now until everything works.         -->
+  
+  <project name="jakarta-turbine-torque">
+    
+    <!-- Standard Maven target to produce Javadocs, source -->
+    <!-- and binary distributions.                         -->
+    
+    <ant buildfile="build-gump.xml" target="jar">
+      <property name="final.name" value="torque-@@DATE@@"/>
+    </ant>
+    
+    <!-- All Maven projects need Ant and Xerces to build. -->
+    <depend project="jakarta-ant"/>
+    <depend project="xml-xerces"/>
+
+    <depend project="commons-collections"/>
+    <depend project="commons-lang"/>
+    <depend project="jdbc"/>
+    <depend project="jakarta-log4j"/>
+    <depend project="jakarta-turbine-stratum"/>
+    <depend project="jakarta-velocity"/>
+    <depend project="village"/>
+    <depend project="xml-xerces"/>
+    <depend project="xml-apis"/>
+    <depend project="jakarta-velocity-dvsl"/>
+    <depend project="dom4j"/>
+    <depend project="commons-io"/>
+
+    <work nested="target/classes"/>
+    <home nested="target"/>
+    <jar name="torque-@@DATE@@.jar"/>
+    <javadoc nested="docs/apidocs"/>
+    
+  </project>
+  
+  <!-- Transform the Maven project descriptor into a form -->
+  <!-- that can be digested by Gump.                      -->
+  
+  <project name="jakarta-turbine-torque-gump-descriptor">
+    <ant buildfile="build-maven.xml" target="gump-descriptor"/>
+  </project>
+
+</module>
