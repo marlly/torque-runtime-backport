@@ -78,7 +78,8 @@ public class DBFactory
 {
     /**
      * A table of <code>Class</code> objects for registered adapters,
-     * key by fully qualified class names.
+     * keyed by the fully qualified class name of their associated
+     * JDBC driver.
      */
     private static Hashtable adapters = null;
 
