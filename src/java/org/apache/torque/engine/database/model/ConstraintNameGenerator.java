@@ -98,14 +98,13 @@ public class ConstraintNameGenerator implements NameGenerator
         {
             int maxColumnNameLength =
                 Integer.parseInt(db.getProperty("maxColumnNameLength"));
-            maxBodyLength = (maxColumnNameLength - namePostfix.length() -
-                             constraintNbr.length() - 2);
+            maxBodyLength = (maxColumnNameLength - namePostfix.length()
+                    - constraintNbr.length() - 2);
 
             if (DEBUG)
             {
-                System.out.println("maxColumnNameLength=" +
-                                   maxColumnNameLength + " maxBodyLength=" +
-                                   maxBodyLength);
+                System.out.println("maxColumnNameLength=" + maxColumnNameLength
+                        + " maxBodyLength=" + maxBodyLength);
             }
         }
         catch (EngineException e)

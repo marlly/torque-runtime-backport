@@ -71,6 +71,7 @@ import org.xml.sax.Attributes;
  */
 public class Index
 {
+    /** enables debug output */
     private static final boolean DEBUG = false;
 
     private String indexName;
@@ -109,15 +110,14 @@ public class Index
 
             if (DEBUG)
             {
-                System.out.println("Created Index named " + getName() +
-                                   " with " + indexColumns.size() +
-                                   " columns");
+                System.out.println("Created Index named " + getName()
+                        + " with " + indexColumns.size() + " columns");
             }
         }
         else
         {
-            throw new EngineException("Cannot create a new Index using an " +
-                                      "empty list Column object");
+            throw new EngineException("Cannot create a new Index using an "
+                    + "empty list Column object");
         }
     }
 
@@ -137,8 +137,8 @@ public class Index
         }
         // ASSUMPTION: This Index not yet added to the list.
         inputs.add(new Integer(table.getIndices().length + 1));
-        indexName = NameFactory.generateName
-          (NameFactory.CONSTRAINT_GENERATOR, inputs);
+        indexName = NameFactory.generateName(
+                NameFactory.CONSTRAINT_GENERATOR, inputs);
     }
 
     /**

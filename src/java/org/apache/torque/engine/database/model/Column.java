@@ -160,7 +160,7 @@ public class Column
 
         javaName = attrib.getValue("javaName");
         javaType = attrib.getValue("javaType");
-        if ( javaType != null && javaType.length() == 0 )
+        if (javaType != null && javaType.length() == 0)
         {
             javaType = null;
         }
@@ -170,8 +170,8 @@ public class Column
         javaNamingMethod = attrib.getValue("javaNamingMethod");
         if (javaNamingMethod == null)
         {
-            javaNamingMethod =
-                parentTable.getDatabase().getDefaultJavaNamingMethod();
+            javaNamingMethod
+                    = parentTable.getDatabase().getDefaultJavaNamingMethod();
         }
 
         //Primary Key
@@ -202,8 +202,8 @@ public class Column
         setType(attrib.getValue("type"));
 
         inheritanceType = attrib.getValue("inheritance");
-        isInheritance =
-            ( inheritanceType != null && !inheritanceType.equals("false") );
+        isInheritance = (inheritanceType != null
+                && !inheritanceType.equals("false"));
 
         this.inputValidator = attrib.getValue("inputValidator");
         description = attrib.getValue("description");
@@ -352,7 +352,7 @@ public class Column
     public void addInheritance(Inheritance inh)
     {
         inh.setColumn(this);
-        if ( inheritanceList == null )
+        if (inheritanceList == null)
         {
             inheritanceList = new ArrayList();
             isEnumeratedClasses = true;
@@ -461,9 +461,9 @@ public class Column
             ForeignKey[] fks = parentTable.getForeignKeys();
             for (int i = 0; i < fks.length; i++)
             {
-                if ( fks[i].getForeignTableName()
-                     .equals(fk.getForeignTableName())
-                     && !fks[i].getLocalColumns().contains(this.name) )
+                if (fks[i].getForeignTableName()
+                        .equals(fk.getForeignTableName())
+                        && !fks[i].getLocalColumns().contains(this.name))
                 {
                     return true;
                 }
@@ -541,7 +541,7 @@ public class Column
     public void setType(String torqueType)
     {
         this.torqueType = torqueType;
-        if ( torqueType.equals("VARBINARY") || torqueType.equals("BLOB") )
+        if (torqueType.equals("VARBINARY") || torqueType.equals("BLOB"))
         {
             needsTransactionInPostgres = true;
         }
@@ -742,7 +742,7 @@ public class Column
             torqueType = "FLOAT";
             columnType = new Float (0);
         }
-        else if (tn.indexOf ("DATE") != -1 )
+        else if (tn.indexOf ("DATE") != -1)
         {
             torqueType = "DATE";
             columnType = new Date();
@@ -797,7 +797,7 @@ public class Column
     public String getJavaNative()
     {
         String jtype = TypeMap.getJavaNativeObject(torqueType);
-        if ( isUsePrimitive() )
+        if (isUsePrimitive())
         {
             jtype = TypeMap.getJavaNative(torqueType);
         }
@@ -812,7 +812,7 @@ public class Column
     public String getVillageMethod()
     {
         String vmethod = TypeMap.getVillageObjectMethod(torqueType);
-        if ( isUsePrimitive() )
+        if (isUsePrimitive())
         {
             vmethod = TypeMap.getVillageMethod(torqueType);
         }

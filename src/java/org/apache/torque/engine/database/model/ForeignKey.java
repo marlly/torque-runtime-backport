@@ -123,7 +123,7 @@ public class ForeignKey
      */
     public boolean hasOnUpdate()
     {
-       return ! onUpdate.equals(NONE);
+       return !onUpdate.equals(NONE);
     }
 
     /**
@@ -131,7 +131,7 @@ public class ForeignKey
      */
     public boolean hasOnDelete()
     {
-       return ! onDelete.equals(NONE);
+       return !onDelete.equals(NONE);
     }
 
     /**
@@ -273,7 +273,7 @@ public class ForeignKey
 
         for (int i = 0; i < localColumns.size(); i++)
         {
-            h.put (localColumns.get(i),foreignColumns.get(i));
+            h.put(localColumns.get(i), foreignColumns.get(i));
         }
 
         return h;
@@ -297,7 +297,7 @@ public class ForeignKey
 
         for (int i = 0; i < localColumns.size(); i++)
         {
-            h.put (foreignColumns.get(i),localColumns.get(i));
+            h.put (foreignColumns.get(i), localColumns.get(i));
         }
 
         return h;

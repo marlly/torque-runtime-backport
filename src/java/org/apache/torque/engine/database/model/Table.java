@@ -117,7 +117,7 @@ public class Table implements IDMethod
      */
     public Table()
     {
-        this (null);
+        this(null);
     }
 
     /**
@@ -162,10 +162,10 @@ public class Table implements IDMethod
         }
         if ("autoincrement".equals(idMethod) || "sequence".equals(idMethod))
         {
-            System.out.println("The value '" + idMethod + "' for Torque's " +
-                     "table.idMethod attribute has been deprecated in favor " +
-                     "of '" + NATIVE + "'.  Please adjust your " +
-                     "Torque XML schema accordingly.");
+            System.out.println("The value '" + idMethod + "' for Torque's "
+                    + "table.idMethod attribute has been deprecated in favor "
+                    + "of '" + NATIVE + "'.  Please adjust your "
+                    + "Torque XML schema accordingly.");
             idMethod = NATIVE;
         }
         skipSql = "true".equals(attrib.getValue("skipSql"));
@@ -175,8 +175,8 @@ public class Table implements IDMethod
         basePeer = attrib.getValue("basePeer");
         alias = attrib.getValue("alias");
         heavyIndexing = "true".equals(attrib.getValue("heavyIndexing"))
-            || (!"false".equals(attrib.getValue("heavyIndexing")) &&
-                getDatabase().isHeavyIndexing());
+                || (!"false".equals(attrib.getValue("heavyIndexing"))
+                && getDatabase().isHeavyIndexing());
         description = attrib.getValue("description");
         enterface = attrib.getValue("interface");
     }
@@ -319,11 +319,11 @@ public class Table implements IDMethod
      */
     public String getBaseClass()
     {
-        if ( isAlias() && baseClass == null )
+        if (isAlias() && baseClass == null)
         {
             return alias;
         }
-        else if ( baseClass == null )
+        else if (baseClass == null)
         {
             return getDatabase().getBaseClass();
         }
@@ -337,7 +337,7 @@ public class Table implements IDMethod
      * Set the value of baseClass.
      * @param v  Value to assign to baseClass.
      */
-    public void setBaseClass(String  v)
+    public void setBaseClass(String v)
     {
         this.baseClass = v;
     }
@@ -348,11 +348,11 @@ public class Table implements IDMethod
      */
     public String getBasePeer()
     {
-        if ( isAlias() && basePeer == null )
+        if (isAlias() && basePeer == null)
         {
             return alias + "Peer";
         }
-        else if ( basePeer == null )
+        else if (basePeer == null)
         {
             return getDatabase().getBasePeer();
         }
@@ -366,7 +366,7 @@ public class Table implements IDMethod
      * Set the value of basePeer.
      * @param v  Value to assign to basePeer.
      */
-    public void setBasePeer(String  v)
+    public void setBasePeer(String v)
     {
         this.basePeer = v;
     }
@@ -396,7 +396,7 @@ public class Table implements IDMethod
     public void addColumn(Column col)
     {
         col.setTable (this);
-        if ( col.isInheritance() )
+        if (col.isInheritance())
         {
             inheritanceColumn = col;
         }
@@ -414,8 +414,8 @@ public class Table implements IDMethod
     public ForeignKey addForeignKey(Attributes attrib)
     {
         ForeignKey fk = new ForeignKey();
-        fk.loadFromXML (attrib);
-        addForeignKey (fk);
+        fk.loadFromXML(attrib);
+        addForeignKey(fk);
         return fk;
     }
 
@@ -433,16 +433,16 @@ public class Table implements IDMethod
      */
     public List getChildrenNames()
     {
-        if ( inheritanceColumn == null
-                || !inheritanceColumn.isEnumeratedClasses() )
+        if (inheritanceColumn == null
+                || !inheritanceColumn.isEnumeratedClasses())
         {
             return null;
         }
         List children = inheritanceColumn.getChildren();
         List names = new ArrayList(children.size());
-        for ( int i = 0; i < children.size(); i++ )
+        for (int i = 0; i < children.size(); i++)
         {
-            names.add( ((Inheritance) children.get(i)).getClassName() );
+            names.add(((Inheritance) children.get(i)).getClassName());
         }
         return names;
     }
@@ -488,7 +488,7 @@ public class Table implements IDMethod
      */
     public List getForeignTableNames()
     {
-        if ( foreignTableNames == null )
+        if (foreignTableNames == null)
         {
             foreignTableNames = new ArrayList(1);
         }
@@ -504,11 +504,11 @@ public class Table implements IDMethod
         fk.setTable (this);
         foreignKeys.add(fk);
 
-        if ( foreignTableNames == null )
+        if (foreignTableNames == null)
         {
             foreignTableNames = new ArrayList(5);
         }
-        if ( foreignTableNames.contains(fk.getForeignTableName()) )
+        if (foreignTableNames.contains(fk.getForeignTableName()))
         {
             foreignTableNames.add(fk.getForeignTableName());
         }
@@ -529,8 +529,8 @@ public class Table implements IDMethod
     public IdMethodParameter addIdMethodParameter(Attributes attrib)
     {
         IdMethodParameter imp = new IdMethodParameter();
-        imp.loadFromXML (attrib);
-        addIdMethodParameter (imp);
+        imp.loadFromXML(attrib);
+        addIdMethodParameter(imp);
         return imp;
     }
 
@@ -543,7 +543,7 @@ public class Table implements IDMethod
      */
     public void addIdMethodParameter(IdMethodParameter imp)
     {
-        imp.setTable (this);
+        imp.setTable(this);
         if (idMethodParameters == null)
         {
             idMethodParameters = new ArrayList(2);
@@ -568,8 +568,8 @@ public class Table implements IDMethod
     public Index addIndex(Attributes attrib)
     {
         Index index = new Index();
-        index.loadFromXML (attrib);
-        addIndex (index);
+        index.loadFromXML(attrib);
+        addIndex(index);
         return index;
     }
 
@@ -579,7 +579,7 @@ public class Table implements IDMethod
      */
     public void addUnique(Unique unique)
     {
-        unique.setTable (this);
+        unique.setTable(this);
         unices.add(unique);
     }
 
@@ -591,7 +591,7 @@ public class Table implements IDMethod
     {
         Unique unique = new Unique();
         unique.loadFromXML(attrib);
-        addUnique (unique);
+        addUnique(unique);
         return unique;
     }
 
@@ -750,7 +750,6 @@ public class Table implements IDMethod
         this.enterface = v;
     }
 
-
     /**
      * When a table is abstract, it marks the business object class that is
      * generated as being abstract. If you have a table called "FOO", then the
@@ -791,7 +790,7 @@ public class Table implements IDMethod
      * Set the value of package.
      * @param v  Value to assign to package.
      */
-    public void setPackage(String  v)
+    public void setPackage(String v)
     {
         this.pkg = v;
     }
@@ -917,16 +916,16 @@ public class Table implements IDMethod
     public ForeignKey getForeignKey (String col)
     {
         ForeignKey firstFK = null;
-        for (Iterator iter = foreignKeys.iterator(); iter.hasNext(); )
+        for (Iterator iter = foreignKeys.iterator(); iter.hasNext();)
         {
             ForeignKey key = (ForeignKey) iter.next();
             if (key.getLocalColumns().contains(col))
             {
-                if (firstFK == null) 
+                if (firstFK == null)
                 {
-                    firstFK = key;   
+                    firstFK = key;
                 }
-                else 
+                else
                 {
                     //System.out.println(col+" is in multiple FKs.  This is not"
                     //                   + " being handled properly.");
@@ -973,7 +972,6 @@ public class Table implements IDMethod
     {
         return tableParent;
     }
-
 
     /**
      * Flag to determine if code/sql gets created for this table.
@@ -1054,7 +1052,7 @@ public class Table implements IDMethod
 
         if (columnList != null)
         {
-            for (Iterator iter = columnList.iterator(); iter.hasNext(); )
+            for (Iterator iter = columnList.iterator(); iter.hasNext();)
             {
                 result.append(iter.next());
             }
@@ -1062,7 +1060,7 @@ public class Table implements IDMethod
 
         if (foreignKeys != null)
         {
-            for (Iterator iter = foreignKeys.iterator(); iter.hasNext(); )
+            for (Iterator iter = foreignKeys.iterator(); iter.hasNext();)
             {
                 result.append(iter.next());
             }
@@ -1149,7 +1147,7 @@ public class Table implements IDMethod
     {
         StringBuffer result = new StringBuffer();
         boolean comma = false;
-        for (Iterator iter = list.iterator(); iter.hasNext(); )
+        for (Iterator iter = list.iterator(); iter.hasNext();)
         {
             Column col = (Column) iter.next();
             if (col.isPrimaryKey())

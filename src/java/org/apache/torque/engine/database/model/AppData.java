@@ -134,13 +134,13 @@ public class AppData
     protected Properties getIdiosyncrasies(String databaseType)
         throws EngineException
     {
-        Properties idiosyncrasies =
-            (Properties) idiosyncrasyTable.get(databaseType);
+        Properties idiosyncrasies
+                = (Properties) idiosyncrasyTable.get(databaseType);
 
         // If we haven't yet loaded the properties and we have the
         // information to do so, proceed with loading.
-        if (idiosyncrasies == null &&
-            basePropsFilePath != null && databaseType != null)
+        if (idiosyncrasies == null && basePropsFilePath != null
+                && databaseType != null)
         {
             idiosyncrasies = new Properties();
             File propsFile = new File(basePropsFilePath + databaseType,
@@ -161,8 +161,8 @@ public class AppData
             {
                 try
                 {
-                    String path = '/' + basePropsFilePath + databaseType +
-                        "/db.props";
+                    String path = '/' + basePropsFilePath + databaseType
+                            + "/db.props";
                     idiosyncrasies.load(getClass().getResourceAsStream(path));
                 }
                 catch (Exception e)
@@ -173,9 +173,9 @@ public class AppData
 
             if (idiosyncrasies.isEmpty())
             {
-                throw new EngineException("Database-specific properties " +
-                                          "file does not exist: " +
-                                          propsFile.getAbsolutePath());
+                throw new EngineException("Database-specific properties "
+                        + "file does not exist: "
+                        + propsFile.getAbsolutePath());
             }
         }
         return idiosyncrasies;
@@ -241,6 +241,8 @@ public class AppData
 
     /**
      * Returns whether this application has multiple databases.
+     *
+     * @return true if the application has multiple databases
      */
     public boolean hasMultipleDatabases()
     {
@@ -250,12 +252,13 @@ public class AppData
     /**
      * Return the database with the specified name.
      *
+     * @param name database name
      * @return A Database object.  If it does not exist it returns null
      */
     public Database getDatabase (String name)
     {
         doFinalInitialization();
-        for (Iterator i = dbList.iterator() ; i.hasNext() ;)
+        for (Iterator i = dbList.iterator(); i.hasNext();)
         {
             Database db = (Database) i.next();
             if (db.getName().equals(name))
@@ -268,6 +271,9 @@ public class AppData
 
     /**
      * An utility method to add a new database from an xml attribute.
+     *
+     * @param attrib the xml attributes
+     * @return the database
      */
     public Database addDatabase(Attributes attrib)
     {
@@ -280,6 +286,8 @@ public class AppData
     /**
      * Add a database to the list and sets the AppData property to this
      * AppData
+     *
+     * @param db the database to add
      */
     public void addDatabase(Database db)
     {
@@ -297,27 +305,29 @@ public class AppData
 
     private void doFinalInitialization()
     {
-        if (!isInitialized) 
+        if (!isInitialized)
         {
             Iterator dbs = dbList.iterator();
-            while (dbs.hasNext()) 
+            while (dbs.hasNext())
             {
-                ((Database)dbs.next()).doFinalInitialization();
+                ((Database) dbs.next()).doFinalInitialization();
             }
             isInitialized = true;
-        }        
+        }
     }
 
     /**
      * Creats a string representation of this AppData.
      * The representation is given in xml format.
+     *
+     * @return representation in xml format
      */
     public String toString()
     {
         StringBuffer result = new StringBuffer();
 
         result.append ("<app-data>\n");
-        for (Iterator i = dbList.iterator(); i.hasNext(); )
+        for (Iterator i = dbList.iterator(); i.hasNext();)
         {
             result.append (i.next());
         }

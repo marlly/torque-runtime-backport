@@ -149,7 +149,7 @@ public class Database
      * Set the value of package.
      * @param v  Value to assign to package.
      */
-    public void setPackage(String  v)
+    public void setPackage(String v)
     {
         this.pkg = v;
     }
@@ -160,7 +160,7 @@ public class Database
      */
     public String getBaseClass()
     {
-        if ( baseClass == null )
+        if (baseClass == null)
         {
             return "BaseObject";
         }
@@ -171,7 +171,7 @@ public class Database
      * Set the value of baseClass.
      * @param v  Value to assign to baseClass.
      */
-    public void setBaseClass(String  v)
+    public void setBaseClass(String v)
     {
         this.baseClass = v;
     }
@@ -182,7 +182,7 @@ public class Database
      */
     public String getBasePeer()
     {
-        if ( basePeer == null )
+        if (basePeer == null)
         {
             return "BasePeer";
         }
@@ -193,7 +193,7 @@ public class Database
      * Set the value of basePeer.
      * @param v Value to assign to basePeer.
      */
-    public void setBasePeer(String  v)
+    public void setBasePeer(String v)
     {
         this.basePeer = v;
     }
@@ -211,7 +211,7 @@ public class Database
      * Set the value of defaultIdMethod.
      * @param v Value to assign to defaultIdMethod.
      */
-    public void setDefaultIdMethod(String  v)
+    public void setDefaultIdMethod(String v)
     {
         this.defaultIdMethod = v;
     }
@@ -238,7 +238,7 @@ public class Database
      * Set the value of defaultJavaNamingMethod.
      * @param v The default naming conversion for this database to use.
      */
-    public void setDefaultJavaNamingMethod(String  v)
+    public void setDefaultJavaNamingMethod(String v)
     {
         this.defaultJavaNamingMethod = v;
     }
@@ -256,7 +256,7 @@ public class Database
      * Set the value of heavyIndexing.
      * @param v  Value to assign to heavyIndexing.
      */
-    public void setHeavyIndexing(boolean  v)
+    public void setHeavyIndexing(boolean v)
     {
         this.heavyIndexing = v;
     }
@@ -382,7 +382,7 @@ public class Database
     public void doFinalInitialization()
     {
         Table[] tables = getTables();
-        for (int i=0; i<tables.length; i++) 
+        for (int i = 0; i < tables.length; i++)
         {
             Table currTable = tables[i];
 
@@ -390,7 +390,7 @@ public class Database
             // if idMethod="autoincrement", make sure a column is
             // specified as autoIncrement="true"
             // FIXME: Handle idMethod="native" via DB adapter.
-            if ( currTable.getIdMethod().equals("autoincrement") )
+            if (currTable.getIdMethod().equals("autoincrement"))
             {
                 Column[] columns = currTable.getColumns();
                 boolean foundOne = false;
@@ -398,13 +398,13 @@ public class Database
                 {
                     foundOne = columns[j].isAutoIncrement();
                 }
-                
-                if ( !foundOne )
+
+                if (!foundOne)
                 {
-                    String errorMessage = "Table '" + currTable.getName() +
-                        "' is marked as autoincrement, but it does not " +
-                        "have a column which declared as the one to " +
-                        "auto increment (i.e. autoIncrement=\"true\")\n";
+                    String errorMessage = "Table '" + currTable.getName()
+                            + "' is marked as autoincrement, but it does not "
+                            + "have a column which declared as the one to "
+                            + "auto increment (i.e. autoIncrement=\"true\")\n";
                     System.out.println("Error in XML schema: " + errorMessage);
                 }
             }
@@ -413,62 +413,62 @@ public class Database
 
             // setup reverse fk relations
             ForeignKey[] fks = currTable.getForeignKeys();
-            for (int j=0; j<fks.length; j++) 
+            for (int j = 0; j < fks.length; j++)
             {
                 ForeignKey currFK = fks[j];
                 Table foreignTable = getTable(currFK.getForeignTableName());
-                if ( foreignTable == null )
+                if (foreignTable == null)
                 {
                     System.out.println("ERROR!! Attempt to set foreign"
-                                       + " key to nonexistent table, " +
-                                       currFK.getForeignTableName() + "!");
+                            + " key to nonexistent table, "
+                            + currFK.getForeignTableName() + "!");
                 }
 
                 List referrers = foreignTable.getReferrers();
-                if ( (referrers == null || !referrers.contains(currFK)))
+                if ((referrers == null || !referrers.contains(currFK)))
                 {
                     foreignTable.addReferrer(currFK);
                 }
 
                 // local column references
                 Iterator localColumnNames = currFK.getLocalColumns().iterator();
-                while (localColumnNames.hasNext()) 
+                while (localColumnNames.hasNext())
                 {
                     Column local = currTable
                         .getColumn((String)localColumnNames.next());
                     // give notice of a schema inconsistency.
                     // note we do not prevent the npe as there is nothing
                     // that we can do, if it is to occur.
-                    if ( local == null )
+                    if (local == null)
                     {
                         System.out.println("ERROR!! Attempt to define foreign"
-                            + " key with nonexistent column, " +
-                            local.getName() + ", in table, " +
-                            currTable.getName() + "!" );
+                                + " key with nonexistent column, "
+                                + local.getName() + ", in table, "
+                                + currTable.getName() + "!");
                     }
                     //check for foreign pk's
                     if (local.isPrimaryKey())
                     {
                         currTable.setContainsForeignPK(true);
                     }
-                    
+
                 }
-                
+
                 // foreign column references
-                Iterator foreignColumnNames = 
-                    currFK.getForeignColumns().iterator();
-                while (foreignColumnNames.hasNext()) 
+                Iterator foreignColumnNames
+                        = currFK.getForeignColumns().iterator();
+                while (foreignColumnNames.hasNext())
                 {
                     Column foreign = foreignTable
-                        .getColumn((String)foreignColumnNames.next());
+                        .getColumn((String) foreignColumnNames.next());
                     // if the foreign column does not exist, we may have an
                     // external reference or a misspelling
-                    if ( foreign == null )
+                    if (foreign == null)
                     {
                         System.out.println("ERROR!! Attempt to set foreign"
-                                           + " key to nonexistent column, " +
-                                           foreign.getName() + ", in table, "
-                                           + foreignTable.getName() + "!" );
+                                + " key to nonexistent column, "
+                                + foreign.getName() + ", in table, "
+                                + foreignTable.getName() + "!");
                     }
                     foreign.addReferrer(currFK);
                 }
@@ -492,7 +492,7 @@ public class Database
             .append(" basePeer=\"").append(getBasePeer()).append('"')
             .append(">\n");
 
-        for (Iterator i = tableList.iterator(); i.hasNext(); )
+        for (Iterator i = tableList.iterator(); i.hasNext();)
         {
             result.append(i.next());
         }

@@ -118,9 +118,8 @@ public class NameFactory
                 }
                 catch (InstantiationException e)
                 {
-                    System.err.println("Unable to instantiate class " + name +
-                                       ": Make sure it's in your run-time " +
-                                       "classpath");
+                    System.err.println("Unable to instantiate class " + name
+                            + ": Make sure it's in your run-time classpath");
                 }
                 catch (Exception e)
                 {
