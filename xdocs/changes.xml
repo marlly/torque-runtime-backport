@@ -9,6 +9,37 @@
 
   <body>
 
+<section name="Torque 3.1-alpha2">
+<p>
+  Changes between Torque 3.1-alpha1 and 3.1-alpha2. <br/>
+</p>
+
+<subsection name="Changes that could (will) break older environments">
+<p>
+  <ul>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Other changes">
+<p>
+  <ul>
+  </ul>
+</p>
+</subsection>
+
+<subsection name="Fixed bugs">
+<p>
+  <ul>
+    <li>
+      TRQS153: BasePeer.doSelect(Criteria, Connection) calls executeQuery 
+      without offset and limit.
+    </li>
+  </ul>
+</p>
+</subsection>
+</section>
+
 
 <section name="Torque 3.1-alpha1">
 <p>

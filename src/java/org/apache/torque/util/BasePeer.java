@@ -1328,14 +1328,7 @@ public abstract class BasePeer implements java.io.Serializable
             con = Transaction.beginOptional(
                     criteria.getDbName(),
                     criteria.isUseTransaction());
-
-            results = executeQuery(
-                    createQueryString(criteria),
-                    criteria.getOffset(),
-                    criteria.getLimit(),
-                    criteria.isSingleRecord(),
-                    con);
-
+            results = doSelect(criteria, con);
             Transaction.commit(con);
         }
         catch (Exception e)
@@ -1343,7 +1336,6 @@ public abstract class BasePeer implements java.io.Serializable
             Transaction.rollback(con);
             throw new TorqueException(e);
         }
-
         return results;
     }
 
@@ -1361,6 +1353,8 @@ public abstract class BasePeer implements java.io.Serializable
     {
         return executeQuery(
             createQueryString(criteria),
+            criteria.getOffset(),
+            criteria.getLimit(),
             criteria.isSingleRecord(),
             con);
     }
