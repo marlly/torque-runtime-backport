@@ -728,4 +728,12 @@ public class Torque
         }
         return configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME);
     }
+
+    /**
+     * @deprecated Use getDefaultDB() instead.
+     */
+    public static String getDefaultMap()
+    {
+        return getDefaultDB();
+    }
 }
