@@ -1,7 +1,0 @@
-# ------------------------------------------------------------------------
-# D A T A B A S E  P R O P E R T I E S
-# ------------------------------------------------------------------------
-
-database.driver = com.sybase.jdbc.SybDriver
-database.url = jdbc:sybase:Tds:localhost:5000/${database.name}
-database.create.url =
