@@ -90,16 +90,12 @@ public class DBFactory
 
     private static ExtendedProperties configuration;
 
-    private static Category category;
+    private static Category category =
+        Category.getInstance(DBFactory.class.getName());
 
     public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
-    }
-
-    public static void setCategory(Category c)
-    {
-        category = c;
     }
 
     /**

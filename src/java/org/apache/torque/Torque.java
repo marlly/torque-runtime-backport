@@ -222,8 +222,8 @@ public class Torque
     public static void setCategory(Category c)
     {
         category = c;
-        DBFactory.setCategory(c);
-        BasePeer.setCategory(c);
+        //DBFactory.setCategory(c);
+        //BasePeer.setCategory(c);
     }
 
     /**

@@ -133,12 +133,8 @@ public abstract class BasePeer implements java.io.Serializable
     /** Hashtable that contains the cached mapBuilders. */
     private static Hashtable mapBuilders = new Hashtable(5);
 
-    protected static Category category;
-
-    public static void setCategory(Category c)
-    {
-        category = c;
-    }
+    protected static Category category = 
+        Category.getInstance(BasePeer.class.getName());
 
     /**
      * Converts a hashtable to a byte array for storage/serialization.
@@ -374,6 +370,8 @@ public abstract class BasePeer implements java.io.Serializable
     public static void rollBackTransaction(DBConnection dbCon)
         throws Exception
     {
+        System.out.println(">>> " + dbCon);
+    
         try
         {
             if ( dbCon.getConnection().getMetaData().supportsTransactions() )
