@@ -5,9 +5,9 @@
 
   <body>
     <links>
-      <item name="runtime"               href="http://db.apache.org/torque/"/>
-      <item name="generator"             href="http://db.apache.org/torque/generator/"/>
-      <item name="maven-plugin"          href="http://db.apache.org/torque/maven-plugin/"/>
+      <item name="runtime"               href="/torque/"/>
+      <item name="generator"             href="/torque/generator/"/>
+      <item name="maven-plugin"          href="/torque/maven-plugin/"/>
     </links>
 
     <menu name="Torque">
@@ -37,7 +37,7 @@
     </menu>
     <menu name="Database Howto Guides">
       <item name="MS SQL Server Howto"   href="/mssql-howto.html"/>
-      <item name="Oracle Howto"       href="/oracle-howto.html"/>
+      <item name="Oracle Howto"          href="/oracle-howto.html"/>
       <item name="Postgres Howto"        href="/postgres-howto.html"/>
       <item name="Sybase Howto"          href="/sybase-howto.html"/>
     </menu>
