@@ -56,9 +56,8 @@
   </p>
 
 <source><![CDATA[
-!!! TO DO - The binary plugn is yet to be deployed, in the mean time you must build the plugin from source. !!!
-!!! TO DO - Confirm these values !!!
-maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.1.1
+# Torque 3.2 is yet to be released and deployed, in the mean time you must build the plugin from source.
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2
 ]]></source>
 
 </section>
