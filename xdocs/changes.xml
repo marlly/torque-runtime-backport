@@ -13,19 +13,33 @@
       <p>
         <ul>
           <li>
-            6 Nov 2001
-            <br/>
-            Fixed the IDBroker so that it would work correctly with
-            PostgreSQL. <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/oid/IDBroker.java.diff?r1=1.8&amp;r2=1.9&amp;diff_format=h">Reference</a>.
+            <strong>7 Nov 2001</strong>
+            <ul>
+              <li>
+                Fixed the TorqueDataDTDTask.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/data/Control.vm.diff?r1=1.1&amp;r2=1.3&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+                Fixed the TorqueDataDumpTask.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/templates/data/dump/Control.vm.diff?r1=1.1&amp;r2=1.2&amp;diff_format=h">Reference</a>.
+              </li>
+            </ul>
           </li>
           <li>
-            6 Nov 2001
-            <br/>
-            Simplified the DBFactory and the Torque.properties file by
-            eliminating the requirement of the adapter properties. The
-            adapters are stored by JDBC driver name and that is already
-            defined in the torque.database.{db}.driver property.
-            <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.14&amp;r2=1.15&amp;diff_format=h">Reference</a>.
+            <strong>6 Nov 2001</strong>
+            <ul>
+              <li>
+                Fixed the IDBroker so that it would work correctly with
+                PostgreSQL. <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/oid/IDBroker.java.diff?r1=1.8&amp;r2=1.9&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+                Simplified the DBFactory and the Torque.properties file by
+                eliminating the requirement of the adapter properties. The
+                adapters are stored by JDBC driver name and that is already
+                defined in the torque.database.{db}.driver property.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.14&amp;r2=1.15&amp;diff_format=h">Reference</a>.
+              </li>
+            </ul>
           </li>
         </ul>
       </p>
