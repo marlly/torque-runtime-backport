@@ -9,23 +9,24 @@
   <body>
 
   <section name="$dataModel.name">
-  <table border="1">
+  <table>
     <tr>
       <th>Table Name</th>
       <th>OM Class</th>
       <th>Description</th>
-    <tr>
+    </tr>
   #foreach ($tbl in $database.tables)
     <tr>
-      <td>$tbl.Name</td>
+      <td><a href="#$tbl.Name">$tbl.Name</a></td>
       <td>$tbl.JavaName</td>
       <td>$!tbl.Description</td>
     </tr>
   #end
   </table>
+  <p/>
 
   #foreach ($tbl in $database.tables)
-    $generator.parse("doc/html/table.vm",$outFile,"table",$tbl)
+    $generator.parse("doc/anakia/table.vm",$outFile,"table",$tbl)
   #end
 
   </section>
