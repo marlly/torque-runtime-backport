@@ -53,6 +53,7 @@ torque.complexObjectModel=true
 torque.addTimeStamp=true
 torque.addIntakeRetrievable=false
 torque.useManagers=true
+torque.useClasspath=true
 
 # -------------------------------------------------------------------
 #
@@ -67,12 +68,12 @@ torque.useManagers=true
 
 torque.database.createUrl = jdbc:mysql://localhost:3306/mysql
 torque.database.buildUrl = jdbc:mysql://localhost:3306/bookstore
-torque.database.url = jdbc:mysql://localhost:3306/bookstore
-torque.database.driver = org.gjt.mm.mysql.Driver
-torque.database.user = root
-torque.database.password =
-torque.database.host = 127.0.0.1
+databaseUrl = jdbc:mysql://localhost:3306/bookstore
+databaseDriver = org.gjt.mm.mysql.Driver
+databaseUser = root
+databasePassword =
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
 torque.sameJavaName=false
+

@@ -242,7 +242,7 @@
     <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
     <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
-    <filter token="DATABASE_ADAPTER" value="${database}"/>
+    <filter token="DATABASE_ADAPTER" value="${torque.database}"/>
   </target>
 
   <!-- ============================================================== -->
