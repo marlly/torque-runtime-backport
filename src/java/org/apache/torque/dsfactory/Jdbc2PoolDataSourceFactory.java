@@ -71,6 +71,7 @@ import org.apache.torque.TorqueException;
  * configuration.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class Jdbc2PoolDataSourceFactory
@@ -123,22 +124,10 @@ public class Jdbc2PoolDataSourceFactory
     {
         category.debug("Starting initCPDS");
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
-        Configuration c = configuration.subset("connection");
-        try
-        {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
-            {
-                String key = (String) i.next();
-                category.debug("Setting datasource property: " + key);
-                setProperty(key, c, cpds);
-            }
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }
+        Configuration c = null;
+
+        c = configuration.subset("connection");
+        applyConfiguration(c, cpds);
         return cpds;
     }
 
@@ -154,23 +143,10 @@ public class Jdbc2PoolDataSourceFactory
     {
         category.debug("Starting initTorqueClassic");
         Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
-        Configuration c = configuration.subset("pool");
-        try
-        {
-            Iterator i = c.getKeys();
-            while (i.hasNext())
-            {
-                String key = (String) i.next();
-                category.debug("Setting datasource property: "
-                               + key);
-                setProperty(key, c, ds);
-            }
-        }
-        catch (Exception e)
-        {
-            category.error("", e);
-            throw new TorqueException(e);
-        }
+        Configuration c = null;
+
+        c = configuration.subset("pool");
+        applyConfiguration(c, ds);
         return ds;
     }
 }

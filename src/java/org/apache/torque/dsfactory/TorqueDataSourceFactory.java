@@ -66,11 +66,10 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.pool.TorqueClassicDataSource;
 
 /**
- * A factory that looks up the DataSource from JNDI.  It is also able
- * to deploy the DataSource based on properties found in the
- * configuration.
+ * A factory that uses the "old" Torque Pools for fetching a DataSource.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class TorqueDataSourceFactory
@@ -149,38 +148,5 @@ public class TorqueDataSourceFactory
         c = configuration.subset("pool");
         applyConfiguration(c, ds);
         return ds;
-    }
-
-
-    /**
-     * Iterate over a Configuration subset and apply all
-     * properties to a passed object which must contain Bean
-     * setter and getter
-     *
-     * @param c The configuration subset
-     * @param o The object to apply the properties to
-     * @throws TorqueException if a property set fails
-     */
-    private void applyConfiguration(Configuration c, Object o)
-        throws TorqueException
-    {
-        category.debug("applyConfiguration(" + c + ", " + o + ")");
-        
-        if(c != null)
-        {
-            try
-            {
-                for (Iterator i = c.getKeys(); i.hasNext();)
-                {
-                    String key = (String) i.next();
-                    setProperty(key, c, o);
-                }
-            }
-            catch (Exception e)
-            {
-                category.error(e);
-                throw new TorqueException(e);
-            }
-        }
     }
 }

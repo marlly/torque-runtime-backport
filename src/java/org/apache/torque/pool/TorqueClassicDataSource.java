@@ -80,6 +80,7 @@ import org.apache.commons.lang.SerializationUtils;
  * Torque's default connection pool DataSource
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public class TorqueClassicDataSource

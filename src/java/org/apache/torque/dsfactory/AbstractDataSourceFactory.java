@@ -60,12 +60,14 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
+import org.apache.torque.TorqueException;
 
 /**
  * A class that contains common functionality of the factories in this
  * package.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
 public abstract class AbstractDataSourceFactory
@@ -150,6 +152,38 @@ public abstract class AbstractDataSourceFactory
                 + " is not supported by DataSource: "
                 + ds.getClass().getName());
             throw e;
+        }
+    }
+
+    /**
+     * Iterate over a Configuration subset and apply all
+     * properties to a passed object which must contain Bean
+     * setter and getter
+     *
+     * @param c The configuration subset
+     * @param o The object to apply the properties to
+     * @throws TorqueException if a property set fails
+     */
+    protected void applyConfiguration(Configuration c, Object o)
+        throws TorqueException
+    {
+        category.debug("applyConfiguration(" + c + ", " + o + ")");
+        
+        if(c != null)
+        {
+            try
+            {
+                for (Iterator i = c.getKeys(); i.hasNext();)
+                {
+                    String key = (String) i.next();
+                    setProperty(key, c, o);
+                }
+            }
+            catch (Exception e)
+            {
+                category.error(e);
+                throw new TorqueException(e);
+            }
         }
     }
 }
