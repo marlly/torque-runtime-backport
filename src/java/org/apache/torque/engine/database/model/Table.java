@@ -59,9 +59,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.torque.adapter.IDMethod;
+import org.apache.commons.util.StringUtils;
 
-import org.apache.velocity.util.StringUtils;
+import org.apache.torque.TorqueException;
+import org.apache.torque.adapter.IDMethod;
 
 import org.xml.sax.Attributes;
 
@@ -201,21 +202,88 @@ public class Table implements IDMethod
         List pk = getPrimaryKey();
         int size = pk.size();
 
-        // We start at an offset of 1 because the entire column list
-        // is generally implicitly indexed by the fact that it's a
-        // primary key.
-        for (int i = 1; i < size; i++)
+        try
         {
-            addIndex(new Index(pk.subList(i, size)));
+            // We start at an offset of 1 because the entire column
+            // list is generally implicitly indexed by the fact that
+            // it's a primary key.
+            for (int i = 1; i < size; i++)
+            {
+                addIndex(new Index(pk.subList(i, size)));
+            }
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
         }
     }
 
     /**
-     * Names composing objects which haven't yet been named.
+     * Names composing objects which haven't yet been named.  This
+     * currently consists of foreign-key and index entities.
      */
     private void doNaming()
     {
-        // TODO: Name nested foreign-key, index, and unique entities.
+        Iterator iter;
+        String name;
+
+        // Assure names are unique across all databases.
+        try
+        {
+            for (iter = foreignKeys.iterator(); iter.hasNext(); )
+            {
+                ForeignKey fk = (ForeignKey) iter.next();
+                name = fk.getName();
+                if (StringUtils.isEmpty(name))
+                {
+                    name = acquireUnusedGlobalName(name, fk.getLocalColumns(),
+                                                   "FK");
+                    fk.setName(name);
+                }
+                else
+                {
+                    getDatabase().getAppData().markNameAsUsed(name);
+                }
+            }
+
+            for (iter = indices.iterator(); iter.hasNext(); )
+            {
+                Index index = (Index) iter.next();
+                name = index.getName();
+                if (StringUtils.isEmpty(name))
+                {
+                    name = acquireUnusedGlobalName(name,
+                                                   index.getColumnNames(),
+                                                   "I");
+                    index.setName(name);
+                }
+                else
+                {
+                    getDatabase().getAppData().markNameAsUsed(name);
+                }
+            }
+
+            // NOTE: Most RDBMSes can apparently name unique column
+            // constraints/indices themselves (using MySQL and Oracle
+            // as test cases), so we'll assume that we needn't add an
+            // entry to the system name list for these.
+        }
+        catch (TorqueException nameAlreadyInUse)
+        {
+            nameAlreadyInUse.printStackTrace();
+        }
+    }
+
+    /**
+     * Macro to acquire an unused system name.
+     */
+    private final String acquireUnusedGlobalName(String name, List inputs,
+                                                 String additionalPart)
+        throws TorqueException
+    {
+        inputs.add(0, getDatabase().getAppData());
+        inputs.add(additionalPart);
+        return NameFactory.generateName(NameFactory.GLOBAL_GENERATOR, inputs);
     }
 
     /**
