@@ -30,7 +30,16 @@
   <release version="3.2-dev" date="in CVS">
     <action type="add" dev="tfischer">
       TRQS289: Added Thomas Vandahl's Patch to synchronize Object.vm
-      to ObjectWithManager.vm.
+      with ObjectWithManager.vm.
+      This contains the following:
+      <ul>
+        <li>The interface attribute is now supported for objects without managers</li>
+        <li>The correctSetters now also work for objects with managers</li>
+        <li>The behavior for objectIsCaching=false for objects with managers
+          now matches the behaviour of objects without managers</li>
+        <li>tabs and spaces formatting</li>
+      </ul>
+      
     </action>
     <action type="add" dev="tfischer">
       TRQS263: Add support for oracle datatype timestamp; 
