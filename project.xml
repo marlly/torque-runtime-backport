@@ -107,6 +107,16 @@
     </developer>
 
     <developer>
+      <name>Quinton McCombs</name>
+      <id>quintonm</id>
+      <email>quintonm@bellsouth.net</email>
+      <organization>NEqualsOne</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+
+    <developer>
       <name>John McNally</name>
       <id>jmcnally</id>
       <email>jmcnally@collab.net</email>
@@ -186,16 +196,6 @@
       </roles>
     </developer>
 
-    <developer>
-      <name>Quinton McCombs</name>
-      <id>quintonm</id>
-      <email>quintonm@bellsouth.net</email>
-      <organization>NEqualsOne</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-
   </developers>
 
   <contributors>
@@ -219,6 +219,7 @@
     <dependency>
       <id>commons-beanutils</id>
       <version>1.5</version>
+      <url>http://jakarta.apache.org/commons/beanutils.html</url>
     </dependency>
     <dependency>
       <id>commons-collections</id>
