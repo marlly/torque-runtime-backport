@@ -90,6 +90,7 @@ import org.apache.log4j.Category;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:eric@dobbse.net">Eric Dobbs</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
  * @version $Id$
  */
 public class Criteria extends Hashtable
