@@ -3,7 +3,7 @@ package org.apache.torque.task;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,6 @@ import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 
 import org.apache.velocity.context.Context;
