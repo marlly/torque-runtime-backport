@@ -11,16 +11,16 @@
 <body>
   <section name="Torque Schema Reference">
     <p>
-      The Torque Database Schema Reference attempts to explain what the 
-      different elements and attributes are when defining your own database schema. 
-      In addition I will attempt to explain what attributes mean what in the 
-      different databases currently supported.
+      The Torque Database Schema Reference attempts to explain what the
+      different elements and attributes are when defining your own database
+      schema. In addition I will attempt to explain what attributes mean what in
+      the different databases currently supported.
     </p>
    </section>
 
    <section name="Elements and their attributes">
      <p>
-       Some of the following examples are taken from the project-schema.xml 
+       Some of the following examples are taken from the project-schema.xml
        document in the src/conf/torque/schema.
      </p>
      <subsection name="Element: database">
@@ -28,20 +28,20 @@
          The database element and its relevant attributes.
        </p>
        <source><![CDATA[
-         <database 
-           name="MY_DATABASE" 
-           defaultIdMethod="idBroker" 
-           package="com.myapp.om" 
-           baseClass="com.myapp.om.BaseClass" 
+         <database
+           name="MY_DATABASE"
+           defaultIdMethod="idBroker"
+           package="com.myapp.om"
+           baseClass="com.myapp.om.BaseClass"
            basePeer="com.myapp.om.BasePeer">
-         
+
            <table name="SIMPLE">
              <!-- table info goes here -->
            </table>
          </database>]]>
        </source>
        <p>
-         The database element has 5 attributes associated with it, they are:
+         The database element has 6 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -52,6 +52,11 @@
            <tr>
              <td>defaultIdMethod</td>
              <td>How will the primary keys be created, defaults to "none"</td>
+           </tr>
+           <tr>
+             <td>defaultJavaNamingMethod</td>
+             <td>indicates how a schema table or column name is mapped to a java
+                 class or method name respectively</td>
            </tr>
            <tr>
              <td>package</td>
@@ -67,7 +72,7 @@
            </tr>
          </table>
        </p>
-       
+
        <p>
          The last four will be explained in detail below.
        </p>
@@ -78,12 +83,12 @@
          </ul>
        </p>
      </subsection>
-     
+
      <subsection name="Attribute: defaultIdMethod">
        <p>
-         By defining this attribute at the database level it applies the 
-         defaultIdMethod to those tables which do not have an idMethod 
-         attribute defined. The attribute defaultIdMethod has 5 possible 
+         By defining this attribute at the database level it applies the
+         defaultIdMethod to those tables which do not have an idMethod
+         attribute defined. The attribute defaultIdMethod has 5 possible
          values, they are:
        </p>
        <p>
@@ -111,23 +116,51 @@
          </table>
        </p>
      </subsection>
+     <subsection name="Attribute: defaultJavaNamingMethod">
+       <p>
+         This attribute determines how table or column names, from the name
+         attribute of the table or column element, are converted to a Java class
+         or method name respectively when creating the OM java objects.
+         defaultJavaNamingMethod can contain 3 different values:
+       </p>
+       <p>
+         <table>
+           <tr>
+             <td>nochange</td>
+             <td>Indicates no change is performed.</td>
+           </tr>
+           <tr>
+             <td>underscore</td>
+             <td>Underscores are removed, First letter is capitalized, first
+               letter after an underscore is capitalized, the rest of the
+               letters are converted to lowercase.
+             </td>
+           </tr>
+           <tr>
+             <td>javaname</td>
+             <td>Same as underscore, but no letters are converted to lowercase.
+             </td>
+           </tr>
+         </table>
+       </p>
+     </subsection>
      <subsection name="Attribute: package">
        <p>
-         The base package in which this database will generate the Object Models 
-         associated with it. This overrides the targetPackage property in 
+         The base package in which this database will generate the Object Models
+         associated with it. This overrides the targetPackage property in
          the torque build.properties file.
        </p>
      </subsection>
      <subsection name="Attribute: baseClass">
        <p>
-         The base class to use when generating the Object Model. 
+         The base class to use when generating the Object Model.
          This class does not have to extend org.apache.turbine.om.BaseObject.
        </p>
      </subsection>
      <subsection name="Attribute: basePeer">
        <p>
          The base peer to use when generating the Object Model Peers.
-         Unlike baseClass, basePeer should extend BasePeer at some point in the 
+         Unlike baseClass, basePeer should extend BasePeer at some point in the
          chain, i.e it needs to be the superclass.
        </p>
      </subsection>
@@ -136,20 +169,21 @@
          The table element and its relevant attributes
        </p>
        <source><![CDATA[
-         <table 
-           name="MY_TABLE" 
+         <table
+           name="MY_TABLE"
            javaName="table"
            idMethod="idbroker"
            skipSql="false"
            baseClass="com.myapp.om.table.BaseClass"
-           basePeer="com.myapp.om.table.BasePeer">
-           
+           basePeer="com.myapp.om.table.BasePeer"
+           javaNamingMethod="underscore">
+
            <!-- column information here -->
-    
+
          </table>]]>
        </source>
        <p>
-         The table element has 8 attributes associated with it, they are:
+         The table element has 9 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -185,9 +219,15 @@
              <td>basePeer</td>
              <td>used for OM Peer generation</td>
            </tr>
+           <tr>
+             <td>javaNamingMethod</td>
+             <td>Specifies how the name attribute is converted to the Java class
+               name of the coresponding OM object.  this attribute overides the
+               defaultJavaNamingMethod attribute of the database element</td>
+           </tr>
          </table>
        </p>
-       
+
        <p>
          The table element can contain the following elements:
        </p>
@@ -218,13 +258,13 @@
      </subsection>
      <subsection name="Attribute: javaName">
        <p>
-         This is the java class name to use when generating the Table or 
-         column. If this is missing the java name is generated in the 
+         This is the java class name to use when generating the Table or
+         column. If this is missing the java name is generated in the
          following manner:
        </p>
        <p>
-         Underscores are removed, first letter and first letter after each 
-         underscore is uppercased, all other letters are lowercased. 
+         Underscores are removed, first letter and first letter after each
+         underscore is uppercased, all other letters are lowercased.
          So YOUR_TABLE_NAME would become YourTableName.
        </p>
      </subsection>
@@ -233,19 +273,20 @@
          The column element and its relevant attributes
        </p>
        <source><![CDATA[
-         <column 
+         <column
            name="MY_COLUMN"
            javaName="Column"
            primaryKey="true"
            required="true"
            size="4"
-           type="VARCHAR">
-         
+           type="VARCHAR"
+           javaNamingMethod="underscore">
+
            <!-- inheritance info if necessary -->
          </column>]]>
        </source>
        <p>
-         The column element has 8 attributes associated with it, they are:
+         The column element has 10 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -284,6 +325,12 @@
            <tr>
              <td>inheritance</td>
              <td>?</td>
+           <tr>
+             <td>javaNamingMethod</td>
+             <td>Specifies how the name attribute is converted to the Java class
+               name of the coresponding OM object.  this attribute overides the
+               defaultJavaNamingMethod attribute of the database element</td>
+           </tr>
            </tr>
          </table>
        </p>
@@ -324,7 +371,7 @@
         </table>
       </p>
     </subsection>
-    
+
     <subsection name="Element: foreign-key">
       <p>
         The foreign-key element and its relevant attributes
@@ -357,7 +404,7 @@
         </table>
       </p>
     </subsection>
-    
+
     <subsection name="Element: reference">
       <p>
         The reference element and its relevant attributes

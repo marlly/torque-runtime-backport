@@ -16,7 +16,7 @@
             6 Nov 2001
             <br/>
             Fixed the IDBroker so that it would work correctly with
-            PostgreSQL. <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src /java/org/apache/torque/oid/IDBroker.java.diff?r1=1.8&r2=1.9&diff_format=h">Reference</a>.
+            PostgreSQL. <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/oid/IDBroker.java.diff?r1=1.8&amp;r2=1.9&amp;diff_format=h">Reference</a>.
           </li>
         </ul>
       </p>

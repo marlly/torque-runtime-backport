@@ -2,20 +2,131 @@
 
 <document>
 
- <properties>
-  <title>Torque</title>
-  <author email="jvanzyl@apache.com">Jason van Zyl</author>
- </properties>
+  <properties>
+    <title>Torque</title>
+    <author email="jvanzyl@apache.com">Jason van Zyl</author>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  </properties>
 
- <body>
+  <body>
 
- <section name="What is Torque?">
+    <section name="What is Torque?">
+      <p>
+        Torque is a persistence layer. Torque generates all the database
+        resources required by your application and includes a runtime
+        environment to run the generated classes.
+      </p>
 
- <p>
-    Torque is a persistence layer.
- </p>
+      <subsection name="Torque's generation tasks">
+        <p>
+          Torque uses a single XML database schema to generate the SQL for
+          your target database and Torque's Peer-based object relation model
+          representing your XML database schema. Additionally, an HTML document
+          describing the database can be generated if you wish to make a
+          browseable version of the database schema.
+        </p>
 
-</section>
+        <p>
+          Torque offers the following <a href="http://jakarta.apache.org/ant">
+          Ant</a> tasks:
+          <ul>
+            <li>
+              <strong>TorqueCreateDatabase</strong><br/>
+              generates simple scripts for creating databases on various
+              platforms.
+            </li>
+            <li>
+              <strong>TorqueDataDTDTask</strong><br/>
+              generates data DTD from an XML schema describing a database
+              structure
+            </li>
+            <li>
+              <strong>TorqueDataDumpTask</strong><br/>
+              dumping data from db into XML
+            </li>
+            <li>
+              <strong>TorqueDataSQLTask</strong><br/>
+              generates SQL source from an XML data file
+            </li>
+            <li>
+              <strong>TorqueJDBCTransformTask</strong><br/>
+              generates an XML schema of an existing database from JDBC metadata
+            </li>
+            <li>
+              <strong>TorqueObjectModelTask</strong><br/>
+              generates output by using Velocity
+            </li>
+            <li>
+              <strong>TorqueSQLExecTask</strong><br/>
+              inserts a SQL file into its designated database
+            </li>
+            <li>
+              <strong>TorqueSQLTask</strong><br/>
+              generates SQL source from an XML schema describing a database
+              structure
+            </li>
+            <li>
+              <strong>TorqueSQLTransformTask</strong><br/>
+              generates an xml schema from an sql schema
+            </li>
+          </ul>
+        </p>
+      </subsection>
+
+      <subsection name="Torque's runtime environment">
+        <p>
+          Torque's runtime environment includes everything you need to use the
+          generated OM/Peer classes. It includes a jdbc connection pool.
+        </p>
+      </subsection>
+
+    </section>
+
+    <section name="Supported RDBMS">
+      <p>
+        Well tested RDBMS are marked <strong>bold</strong>
+
+        <ul>
+          <li>
+            DB2
+          </li>
+          <li>
+            Hypersonic
+          </li>
+          <li>
+            Informix
+          </li>
+          <li>
+            InstantDB
+          </li>
+          <li>
+            Interbase
+          </li>
+          <li>
+            <strong>Mysql</strong>
+          </li>
+          <li>
+            MS SQL <a href="mssql-howto.html">HowTo</a>
+          </li>
+          <li>
+            <strong>Oracle</strong> <a href="oracle-howto.html">HowTo</a>
+          </li>
+          <li>
+            <strong>Postgres</strong> <a href="postgres-howto.html">HowTo</a>
+          </li>
+          <li>
+            SapDB
+          </li>
+          <li>
+            Sybase <a href="sybase-howto.html">HowTo</a>
+          </li>
+          <li>
+            Weblogic
+          </li>
+        </ul>
+
+     </p>
+   </section>
 
  </body>
  </document>
