@@ -54,24 +54,26 @@ package org.apache.torque.task;
  * <http://www.apache.org/>.
  */
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import org.apache.tools.ant.Project;
+
 import org.apache.velocity.context.Context;
 
-import com.workingdogs.village.QueryDataSet;
-import com.workingdogs.village.Record;
 
 /**
  * An extended Texen task used for dumping data from db into XML
  *
  * @author <a href="mailto:fedor.karpelevitch@home.com">Fedor Karpelevitch</a>
- * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
- * @author <a href="dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class TorqueDataDumpTask extends TorqueDataModelTask
@@ -267,22 +269,14 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
      *  <li>the abovenamed iterator which iterates over the table</li>
      *  <li>getter for the table fields</li>
      *  </ul>
-     *
-     * @author  fedor
      */
     public class TableTool implements Iterator
     {
         /** querydataset */
-        private QueryDataSet qds;
-        /** is empty */
-        private boolean isEmpty;
-        /** current index */
-        private int curIndex = -1;
-        /** current record */
-        private Record curRec = null;
+        private ResultSet rs;
 
         /**
-         *  Constructor for the TableTool object
+         * Constructor for the TableTool object
          */
         public TableTool()
         {
@@ -294,11 +288,9 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
          * @param qds Description of Parameter
          * @throws Exception Problem using database record set cursor.
          */
-        protected TableTool(QueryDataSet qds) throws Exception
+        protected TableTool(ResultSet rs) throws Exception
         {
-            this.qds = qds;
-            this.qds.fetchRecords();
-            this.isEmpty = !(qds.size() > 0);
+            this.rs = rs;
         }
 
         /**
@@ -313,8 +305,8 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
             log("Fetching data for table " + tableName, Project.MSG_INFO);
             // Set Statement object in associated TorqueDataDump
             // instance
-            return new TableTool
-                (new QueryDataSet(conn, "SELECT * FROM " + tableName));
+            return new TableTool(conn.createStatement()
+                    .executeQuery("SELECT * FROM " + tableName));
         }
 
         /**
@@ -326,7 +318,12 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         {
             try
             {
-                return ((this.curIndex < this.qds.size() - 1) && (!isEmpty));
+                // TODO optimize this
+                // i tried to use rs.isLast() but this returns wrong results
+                // for empty tables :-(
+                boolean validRow = rs.next();
+                rs.previous();
+                return validRow;
             }
             catch (Exception se)
             {
@@ -346,8 +343,8 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         {
             try
             {
-                System.err.print(".");
-                this.curRec = this.qds.getRecord(++curIndex);
+                System.out.print(".");
+                rs.next();
             }
             catch (Exception se)
             {
@@ -368,7 +365,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         {
             try
             {
-                return (this.curRec.getValue(columnName).asString());
+                return (rs.getString(columnName));
             }
             catch (Exception se)
             {
