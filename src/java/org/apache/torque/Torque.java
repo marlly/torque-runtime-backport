@@ -976,15 +976,17 @@ public class Torque implements Initializable, Configurable
      * This method returns a pool with the specified name.  The pool must
      * either have been registered with the
      * {@link #registerPool(String,String,String,String,String)} method, or be
-     * specified in the TurbineResources properties. This method is used
-     * internally by the service.
+     * specified in the TurbineResources properties.  This method is used
+     * internally by the service.  Under normal usage it would not be used
+     * in application code, but is public in the event the pool must be 
+     * accessed directly, such as to shutdown an individual pool.
      *
      * @param name The name of the pool to get.
      * @return     The requested pool.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    private static ConnectionPool getPool(String name)
+    public static ConnectionPool getPool(String name)
         throws TorqueException
     {
         if (name == null)
