@@ -54,7 +54,6 @@ package org.apache.torque.pool;
  * <http://www.apache.org/>.
  */
 
-import java.util.Hashtable;
 import java.util.Properties;
 import java.io.FileInputStream;
 
@@ -97,8 +96,6 @@ public class PoolTest implements Runnable
     private static ThreadGroup threadGroup = new ThreadGroup("run");
 
     private static int currentThreadCount = 0;
-
-    private Hashtable localHash = new Hashtable();
 
     private static Category category;
 
