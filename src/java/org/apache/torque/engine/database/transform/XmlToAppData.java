@@ -117,7 +117,8 @@ public class XmlToAppData extends DefaultHandler
 
     private static SAXParserFactory saxFactory;
 
-    static {
+    static 
+    {
         saxFactory = SAXParserFactory.newInstance();
         saxFactory.setValidating(true);
     }
@@ -156,7 +157,8 @@ public class XmlToAppData extends DefaultHandler
     {
         try
         {
-            SAXParser parser = createParser();
+            SAXParser parser = saxFactory.newSAXParser();
+
             FileReader fr = null;
             try
             {
@@ -192,19 +194,7 @@ public class XmlToAppData extends DefaultHandler
     }
 
     /**
-     * Sets up the XML parser used by this SAX callback.
-     *
-     * @return A validating XML parser.
-     */
-    protected SAXParser createParser()
-        throws SAXException, ParserConfigurationException
-    {
-        SAXParser parser = saxFactory.newSAXParser();
-        return parser;
-    }
-
-    /**
-     * called by the XML parser
+     * EntityResolver implementation. Called by the XML parser
      *
      * @return an InputSource for the database.dtd file
      */
