@@ -103,6 +103,7 @@ public abstract class AbstractBaseManager
 
     private boolean lockCache;
     private int inGet;
+    private boolean isNew = true;
 
     protected Map validFields;
     protected Map listenersMap = new HashMap();
@@ -440,8 +441,28 @@ public abstract class AbstractBaseManager
 
     public MethodResultCache getMethodResultCache()
     {
+        if (isNew) 
+        {
+            synchronized (this)
+            {
+                if (isNew) 
+                {
+                    registerAsListener();
+                    isNew = false;   
+                }        
+            }
+        }
         return mrCache;
     }
+
+    /**
+     * NoOp version.  Managers should override this method to notify other
+     * managers that they are interested in CacheEvents.
+     */
+    protected void registerAsListener()
+    {
+    }
+
 
     public void addCacheListenerImpl(CacheListener listener)
     {
