@@ -80,18 +80,23 @@ torque.dsfactory.@DATABASE_DEFAULT@.connection.password = @DATABASE_PASSWORD@
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.defaultMaxConnections=10
 
 ## ConnectionPoolDataSource
-#torque.dsfactory.DB@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.JndiDataSourceFactory
-#torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.path=jdbc/DB@DATABASE_DEFAULT@
-#torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
-#torque.dsfactory.DB@DATABASE_DEFAULT@.jndi.java.naming.factory.url.pkgs = org.apache.naming
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.classname=org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.driver = @DATABASE_DRIVER@
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.url = @DATABASE_URL@
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.user = @DATABASE_USER@
-#torque.dsfactory.DB@DATABASE_DEFAULT@.datasource.password = @DATABASE_PASSWORD@
+#torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.JndiDataSourceFactory
+#torque.dsfactory.@DATABASE_DEFAULT@.jndi.path=jdbc/DB@DATABASE_DEFAULT@
+#torque.dsfactory.@DATABASE_DEFAULT@.jndi.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
+#torque.dsfactory.@DATABASE_DEFAULT@.jndi.java.naming.factory.url.pkgs = org.apache.naming
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.classname=org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.driver = @DATABASE_DRIVER@
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.url = @DATABASE_URL@
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.user = @DATABASE_USER@
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.password = @DATABASE_PASSWORD@
 
 # Determines if the quantity column of the IDBroker's id_table should
 # be increased automatically if requests for ids reaches a high
 # volume.
 
 torque.idbroker.cleverquantity=true
+
+# Determines whether the managers cache instances of the business objects.
+# And also whether the MethodResultCache will really cache results.
+
+torque.manager.useCache = true

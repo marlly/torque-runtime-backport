@@ -42,8 +42,7 @@
     <filter token="DATABASE_ADAPTOR" value="${database.adaptor}"/>
     <filter token="DATABASE_USER" value="${database.user}"/>
     <filter token="DATABASE_PASSWORD" value="${database.password}"/>
-    <filter token="DATABASE_NAME" value="${database.name}"/>
-    <filter token="DATABASE_DEFAULT" value="default"/>
+    <filter token="DATABASE_DEFAULT" value="${database.name}"/>
     <filter token="PROJECT" value="${project}"/>
     <filter token="APPLICATION_ROOT" value="${application.root}"/>
 
