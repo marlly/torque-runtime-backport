@@ -87,7 +87,6 @@ public class MethodResultCache
     public MethodResultCache(GroupCacheAccess cache)
         throws TorqueException
     {
-        // keys = new WeakHashMap();
         this.jcsCache = cache;
         groups = new HashMap();
         pool = new StackObjectPool(new MethodCacheKey.Factory(), 10000);
@@ -134,7 +133,6 @@ public class MethodResultCache
         {
             log.debug("MethodResultCache saved expensive operation: " + key);
         }
-
         return result;
     }
 
@@ -146,21 +144,7 @@ public class MethodResultCache
         String group = key.getGroupKey();
         if (!groups.containsKey(group))
         {
-            synchronized (jcsCache)
-            {
-                if (!groups.containsKey(group))
-                {
-                    try
-                    {
-                        jcsCache.defineGroup(group);
-                    }
-                    catch (CacheException ce)
-                    {
-                        throw new TorqueException(ce);
-                    }
-                    groups.put(group, null);
-                }
-            }
+            groups.put(group, null);
         }
 
         Object old = null;
