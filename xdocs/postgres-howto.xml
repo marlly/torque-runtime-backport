@@ -13,7 +13,7 @@
 <p>
 Turbine comes with a default User implementation which utilizes some libraries,
 and code that are not 100% compatible with <a href="http://www.postgresql.org">
-PostgreSQL</a>. This document will explain  what you need to get the defaut
+PostgreSQL</a>. This document will explain  what you need to get the default
 Turbine User Implementation running with PostgreSQL. The user management code is
 only a small part of Turbine, and the default implementation is easily
 replacable. Rather than following the steps in this document, you can always
