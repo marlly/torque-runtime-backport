@@ -51,6 +51,15 @@ that app.</strong>  If you've never heard of an OID before, or you only use OID'
 to reference large objects, you don't need to worry about it.
 </p>
 
+<p>
+Another problem is solved in the more recent JDBC drivers.  The test case
+JDBCToXMLSchema fails with the driver packaged with at least PostgreSQL
+7.1.3 and maybe others.  This problem is fixed in the 7.2dev1.2 version
+(build date 2001-11-25).
+That and other PostgreSQL JDBC resources can be found here:
+<a href="http://jdbc.postgresql.org/download.html">http://jdbc.postgresql.org/download.html</a>
+</p>
+
 </section>
 
 <section name="Patch">
