@@ -158,7 +158,7 @@ public class Torque
         monitor.setDaemon(true);
         monitor.start();
 
-        DBFactory.init();
+        DBFactory.init(configuration);
     }
 
     /**
@@ -244,7 +244,12 @@ public class Torque
         //  DBFactory and IDBroker need some configuration
         // information.
         
-        DBFactory.setConfiguration(c);
+        // DBFactory is now supposed to have its ExtendedProperties by
+        // its init(ExtendedProperties) method ... I'm unsure of what
+        // happens if this setConfiguration(ExtendedProperties) method
+        // is called after that occurs. (DLR)
+
+        //DBFactory.setConfiguration(c);
     }
 
     /**
