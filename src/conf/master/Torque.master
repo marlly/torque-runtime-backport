@@ -38,31 +38,34 @@ log4j.appender.org.apache.torque.append = false
 #
 # These values kick in, if you don't explicitly override them in your
 # various database settings. At the moment they're only used if you
-# configure the TorqueDataSourceFactory of the Jdbc2PoolDataSourceFactory
+# configure the SharedPoolDataSourceFactory of the PerUserDataSourceFactory
 # as your data source provider. It does not work with JNDI.
 #
-# The example is shown for TorqueDataSource.
+# The example is shown for SharedPoolDataSource.
 #
 # -------------------------------------------------------------------
 
-# If > 0, then a monitoring thread is started for every pool to
-# display the number of created, available and checked out connections
-# The interval is in seconds.
-torque.defaults.pool.logInterval = 0
+# Time to wait for a connection to the database in milliseconds.
+torque.defaults.pool.maxWait = 10000
 
-# Time to wait for a connection to the databas in Seconds.
-torque.defaults.pool.connectionWaitTimeout = 10
-
-# Maximum number of connections cached in a database definition. Note
-# that, if you have multiple database definitions which access the
+# Maximum number of idle and active connections cached in a database 
+# definition. 
+# Note that, if you have multiple database definitions which access the
 # same database URL, they don't share the connections but you have
 # multiple pools and each has this maximum number. So if you have a
 # connection licensed database engine, you must multiply this number by
 # the number of times you use a specific database URL.
-torque.defaults.pool.defaultMaxConnections = 80
+torque.defaults.pool.maxIdle = 8
+torque.defaults.pool.maxActive = 10
 
-# Lifetime of a connection in the pool. Defaults to one hour
-torque.defaults.pool.maxExpiryTime = 3600
+# How often the pool is checked for connection which stayed in the pool 
+# for too long. Defaults to 5 minutes (5 * 60 * 1000)
+# remove property if the idle object evictor should not be run
+torque.defaults.pool.timeBetweenEvictionRunsMillis= 300000
+
+# Lifetime of an idle connection in the pool in milliseconds.
+# Defaults to one hour (1000 * 60 * 60)
+torque.defaults.pool.minEvictableIdleTimeMillis = 3600000
 
 # Sets the driver for the data sources.
 torque.defaults.connection.driver = @DATABASE_DRIVER@
@@ -92,6 +95,7 @@ torque.database.@DATABASE_DEFAULT@.adapter=@DATABASE@
 ## Using commons-dbcp 
 torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.SharedPoolDataSourceFactory
 #torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.PerUserPoolDataSourceFactory
+torque.dsfactory.@DATABASE_DEFAULT@.pool.maxIdle=8
 torque.dsfactory.@DATABASE_DEFAULT@.pool.maxActive=10
 torque.dsfactory.@DATABASE_DEFAULT@.pool.testOnBorrow=true
 torque.dsfactory.@DATABASE_DEFAULT@.pool.validationQuery=@VALIDATION_QUERY@
@@ -110,7 +114,8 @@ torque.dsfactory.@DATABASE_DEFAULT@.connection.password = @DATABASE_PASSWORD@
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.dataSourceName=jdbc/DB@DATABASE_DEFAULT@
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.jndiEnvironment.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
 #torque.dsfactory.@DATABASE_DEFAULT@.datasource.jndiEnvironment.java.naming.factory.url.pkgs = org.apache.naming
-#torque.dsfactory.@DATABASE_DEFAULT@.datasource.defaultMaxConnections=10
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.maxIdle=8
+#torque.dsfactory.@DATABASE_DEFAULT@.datasource.maxActive=10
 
 ## ConnectionPoolDataSource
 #torque.dsfactory.@DATABASE_DEFAULT@.factory=org.apache.torque.dsfactory.JndiDataSourceFactory
