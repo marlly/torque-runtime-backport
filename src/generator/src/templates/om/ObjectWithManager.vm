@@ -1110,7 +1110,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
                     ${table.JavaName}Peer.doUpdate(($table.JavaName) this, con);
                 }
 
-  #if ($table.PrimaryKey.size() > 0)
+  #set ($tableHasPrimaryKey = $table.PrimaryKey.size() > 0)
+  #if ($tableHasPrimaryKey)
     #set ($interfaceName = $table.JavaName)
     #if ($table.Interface)
       #set ($interfaceName = $table.Interface)
@@ -1400,7 +1401,20 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     public void setQueryKey(String key)
         throws TorqueException
     {
+  ## Work around the fact that BaseObject.setPrimaryKey() declares
+  ## that it throws Exception instead of TorqueException.
+  #if (!$tableHasPrimaryKey)
+        try
+        {
+  #end
         setPrimaryKey(key);
+  #if (!$tableHasPrimaryKey)
+        }
+        catch (Exception e)
+        {
+            throw new TorqueException("Unable to set query key", e);
+        }
+  #end
     }
 #end
 
