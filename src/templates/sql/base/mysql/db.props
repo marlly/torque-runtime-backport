@@ -38,3 +38,4 @@ NOTNULL = NOT NULL
  
 removeNotNullWithAutoIncrement = false
 suppressDefaults = false
+maxColumnNameLength = 64
