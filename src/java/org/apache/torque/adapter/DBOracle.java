@@ -55,6 +55,7 @@ package org.apache.torque.adapter;
  */
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
 
 import java.sql.Connection;
@@ -69,11 +70,15 @@ import javax.sql.ConnectionPoolDataSource;
  *
  * @author <a href="mailto:jon@clearink.com">Jon S. Stevens</a>
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
+ * @author <a href="mailto:bschneider@vecna.com">Bill Schneider</a>
+ * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
 public class DBOracle
     extends DB
 {
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     /**
      * Empty constructor.
      */
@@ -166,6 +171,28 @@ public class DBOracle
         con.commit();
     }
 
+    /**
+     * This method is used to check whether the database natively
+     * supports limiting the size of the resultset.
+     *
+     * @return True.
+     */
+    public boolean supportsNativeLimit()
+    {
+        return true;
+    }
+
+    /**
+     * This method is used to check whether the database supports
+     * limiting the size of the resultset.
+     *
+     * @return LIMIT_STYLE_ORACLE.
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_ORACLE;
+    }
+
     public ConnectionPoolDataSource getConnectionPoolDataSource()
         throws java.sql.SQLException
     {
@@ -184,36 +211,34 @@ public class DBOracle
         }
         catch (Exception e)
         {
-            throw new
-                SQLException("Could not create OracleConnectioPoolDataSource object: " + e);
+            throw new SQLException
+                ("Could not create OracleConnectioPoolDataSource object: " + e);
         }
     }
 
-   /**
-    * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
-    * any string in a SqlExpression with a BACKSLASH will either be changed to
-    * "\\" or left as "\".  SapDB does not need the escape character.
-    *
-    * @return false.
-    */
-
+    /**
+     * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
+     * any string in a SqlExpression with a BACKSLASH will either be changed to
+     * "\\" or left as "\".  SapDB does not need the escape character.
+     *
+     * @return false.
+     */
     public boolean escapeText()
     {
         return false;
     }
 
-
     /**
-     * This method is used to format any date string.
-     * Database can use different default date formats.
+     * This method is used to format any date string using Oracle's
+     * <code>TO_DATE</code> built-in function.
      *
-     * @return The proper date formated String.
+     * @see org.apache.torque.adapter.DB#getDateString(String)
      * @deprecated use getDateString(java.util.Date)
      */
-  public String getDateString(String dateString)
-  {
-    return "TO_DATE('" + dateString + "', 'yyyy-mm-dd hh24:mi:ss..' )";
-  }
+    public String getDateString(String dateString)
+    {
+        return formatDate(dateString);
+    }
 
     /**
      * This method is used to format any date string.
@@ -221,8 +246,19 @@ public class DBOracle
      *
      * @return The proper date formated String.
      */
-  public String getDateString(Date date)
-  {
-      return "TO_DATE('" + date.toString() + "', 'yyyy-mm-dd hh24:mi:ss..' )";
-  }
+    public String getDateString(Date date)
+    {
+        return formatDate(new SimpleDateFormat(DATE_FORMAT).format(date));
+    }
+
+    /**
+     * This method is used to format any date string using Oracle's
+     * <code>TO_DATE</code> built-in function.
+     */
+    private final String formatDate(String date)
+    {
+        char delim = getStringDelimiter();
+        return ("TO_DATE(" + delim + date + delim + ", " + delim +
+                "yyyy-mm-dd hh24:mi:ss" + delim + ')');
+    }
 }

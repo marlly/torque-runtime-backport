@@ -106,6 +106,9 @@ public abstract class DB implements Serializable, IDMethod
     /** <code>SET ROWCOUNT &lt;offset&gt; SELECT ... SET ROWCOUNT 0</code> */
     public static final int LIMIT_STYLE_SYBASE = 3;
 
+    /** <code><pre>SELECT ... WHERE ... AND ROWNUM < <limit></pre></code> */
+    public static final int LIMIT_STYLE_ORACLE = 4;
+
     /** The database user name. */
     protected String DB_USER;
 
