@@ -146,10 +146,10 @@ public class TorqueDataSQLTask extends TorqueDataModelTask
     /**
      * Set up the initialial context for generating the SQL from the XML schema.
      *
-     * @return  Description of the Returned Value
+     * @return the context
+     * @throws Exception
      */
-    public Context initControlContext()
-        throws Exception
+    public Context initControlContext() throws Exception
     {
         super.initControlContext();
 

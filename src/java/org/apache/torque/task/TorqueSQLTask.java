@@ -25,13 +25,13 @@ package org.apache.torque.task;
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Apache" and "Apache Software Foundation" and 
- *    "Apache Turbine" must not be used to endorse or promote products 
- *    derived from this software without prior written permission. For 
+ * 4. The names "Apache" and "Apache Software Foundation" and
+ *    "Apache Turbine" must not be used to endorse or promote products
+ *    derived from this software without prior written permission. For
  *    written permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache",
- *    "Apache Turbine", nor may "Apache" appear in their name, without 
+ *    "Apache Turbine", nor may "Apache" appear in their name, without
  *    prior written permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -60,7 +60,6 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 import java.util.Iterator;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 import org.apache.torque.engine.database.model.AppData;
 
@@ -73,8 +72,7 @@ import org.apache.torque.engine.database.model.AppData;
  * @author <a href="mailto:jmcnally@collab.net>John McNally</a>
  * @version $Id$
  */
-public class TorqueSQLTask 
-    extends TorqueDataModelTask
+public class TorqueSQLTask extends TorqueDataModelTask
 {
     // if the database is set than all generated sql files
     // will be placed in the specified database, the database
@@ -82,33 +80,34 @@ public class TorqueSQLTask
 
     private String database;
     private String suffix = "";
-    
+
     private String idTableXMLFile = null;
-    
+
     public void setDatabase(String database)
     {
         this.database = database;
     }
-    
+
     public String getDatabase()
     {
         return database;
-    }        
+    }
 
     public void setSuffix(String suffix)
     {
         this.suffix = suffix;
     }
-    
+
     public String getSuffix()
     {
         return suffix;
-    }        
+    }
 
     /**
      * Set the path to the xml schema file that defines the id-table, used
      * by the idbroker method.
-     * @param xml path to file.
+     *
+     * @param idXmlFile xml schema file
      */
     public void setIdTableXMLFile(String idXmlFile)
     {
@@ -117,56 +116,62 @@ public class TorqueSQLTask
 
     /**
      * Gets the id-table xml schema file path.
+     *
      * @return Path to file.
      */
     public String getIdTableXMLFile()
     {
         return idTableXMLFile;
     }
-    
-    private void createSqlDbMap()
-        throws Exception
+
+    /**
+     * create the sql -> database map.
+     *
+     * @throws Exception
+     */
+    private void createSqlDbMap() throws Exception
     {
         if (getSqlDbMap() == null)
         {
             return;
-        }        
-        
+        }
+
         // Produce the sql -> database map
         Properties sqldbmap = new Properties();
-        
+
         // Check to see if the sqldbmap has already been created.
         File file = new File(getSqlDbMap());
-        
+
         if (file.exists())
         {
             FileInputStream fis = new FileInputStream(file);
             sqldbmap.load(fis);
             fis.close();
         }
-        
+
         Iterator i = getDataModelDbMap().keySet().iterator();
-        
+
         while (i.hasNext())
         {
             String dataModelName = (String) i.next();
             String sqlFile = dataModelName + suffix + ".sql";
-            
+
             String databaseName;
-            
+
             if (getDatabase() == null)
             {
                 databaseName = (String) getDataModelDbMap().get(dataModelName);
             }
             else
-            {   
+            {
                 databaseName = getDatabase();
             }
-            
-            sqldbmap.setProperty(sqlFile,databaseName);
+
+            sqldbmap.setProperty(sqlFile, databaseName);
         }
-        
-        sqldbmap.store(new FileOutputStream(getSqlDbMap()),"Sqlfile -> Database map");
+
+        sqldbmap.store(new FileOutputStream(getSqlDbMap()),
+                "Sqlfile -> Database map");
     }
 
     /**
@@ -179,7 +184,7 @@ public class TorqueSQLTask
     {
         // Transform the XML database schema into
         // data model object.
-        XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(), 
+        XmlToAppData xmlParser = new XmlToAppData(getTargetDatabase(),
                                                   getBasePathToDbProps());
         AppData ad = xmlParser.parseFile(getIdTableXMLFile());
         xmlParser.parseFile(getIdTableXMLFile());
@@ -189,14 +194,14 @@ public class TorqueSQLTask
 
     /**
      * Place our target database and target platform
-     * values into the context for use in the
-     * templates.
+     * values into the context for use in the templates.
+     *
+     * @return the context
+     * @throws Exception
      */
-    public Context initControlContext()
-        throws Exception
-    {   
+    public Context initControlContext() throws Exception
+    {
         super.initControlContext();
-        context.put("targetDatabase", getTargetDatabase());
         createSqlDbMap();
 
         // If the load path for the id broker table xml schema is
@@ -206,7 +211,7 @@ public class TorqueSQLTask
         {
             loadIdBrokerModel();
         }
-        
+
         return context;
     }
 }

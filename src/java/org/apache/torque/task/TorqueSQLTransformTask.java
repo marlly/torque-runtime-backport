@@ -56,8 +56,6 @@ package org.apache.torque.task;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.PrintStream;
-import java.io.Writer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.torque.engine.database.model.AppData;
@@ -70,8 +68,7 @@ import org.apache.torque.engine.database.transform.SQLToAppData;
  * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
  * @version $Id$
  */
-public class TorqueSQLTransformTask
-    extends Task
+public class TorqueSQLTransformTask extends Task
 {
     /**
      * SQL input file.

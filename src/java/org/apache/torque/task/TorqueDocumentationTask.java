@@ -89,6 +89,9 @@ public class TorqueDocumentationTask extends TorqueDataModelTask
 
     /**
      * Place our target package value into the context for use in the templates.
+     *
+     * @return the context
+     * @throws Exception
      */
     public Context initControlContext() throws Exception
     {

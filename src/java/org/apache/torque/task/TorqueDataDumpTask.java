@@ -82,22 +82,22 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     private String databaseName;
 
     /**
-     *  Database URL used for JDBC connection.
+     * Database URL used for JDBC connection.
      */
     private String databaseUrl;
 
     /**
-     *  Database driver used for JDBC connection.
+     * Database driver used for JDBC connection.
      */
     private String databaseDriver;
 
     /**
-     *  Database user used for JDBC connection.
+     * Database user used for JDBC connection.
      */
     private String databaseUser;
 
     /**
-     *  Database password used for JDBC connection.
+     * Database password used for JDBC connection.
      */
     private String databasePassword;
 
@@ -112,7 +112,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     private Statement stmt;
 
     /**
-     *  Get the database name to dump
+     * Get the database name to dump
      *
      * @return  The DatabaseName value
      */
@@ -122,7 +122,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Set the database name
+     * Set the database name
      *
      * @param  v The new DatabaseName value
      */
@@ -132,7 +132,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Get the database url
+     * Get the database url
      *
      * @return  The DatabaseUrl value
      */
@@ -142,7 +142,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Set the database url
+     * Set the database url
      *
      * @param  v The new DatabaseUrl value
      */
@@ -152,7 +152,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Get the database driver name
+     * Get the database driver name
      *
      * @return  String database driver name
      */
@@ -162,7 +162,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Set the database driver name
+     * Set the database driver name
      *
      * @param  v The new DatabaseDriver value
      */
@@ -172,7 +172,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Get the database user
+     * Get the database user
      *
      * @return  String database user
      */
@@ -182,7 +182,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Set the database user
+     * Set the database user
      *
      * @param  v The new DatabaseUser value
      */
@@ -192,7 +192,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Get the database password
+     * Get the database password
      *
      * @return  String database password
      */
@@ -202,7 +202,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Set the database password
+     * Set the database password
      *
      * @param  v The new DatabasePassword value
      */
@@ -212,15 +212,15 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     *  Initializes initial context
+     * Initializes initial context
      *
-     * @return  Description of the Returned Value
+     * @return the context
+     * @throws Exception
      */
-    public Context initControlContext()
-        throws Exception
+    public Context initControlContext() throws Exception
     {
         super.initControlContext();
-        
+
         context.put("dataset", "all");
 
         StringBuffer buf = new StringBuffer("Database settings:\n")
@@ -256,10 +256,10 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
     }
 
     /**
-     * Closes <code>rs</code> and <code>conn</code>, overriding the
-     * <code>cleanup()</code> hook method in <code>TexenTask</code>.
+     * Closes the db-connection, overriding the <code>cleanup()</code> hook
+     * method in <code>TexenTask</code>.
      *
-     * @exception Exception Database problem while closing resource.
+     * @throws Exception Database problem while closing resource.
      */
     protected void cleanup() throws Exception
     {
@@ -299,11 +299,10 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         }
 
         /**
-         *  Constructor for the TableTool object
+         * Constructor for the TableTool object
          *
-         * @param  rs Description of Parameter
-         * @exception SQLException Problem using database record set
-         * cursor.
+         * @param qds Description of Parameter
+         * @throws Exception Problem using database record set cursor.
          */
         protected TableTool(QueryDataSet qds) throws Exception
         {
@@ -313,13 +312,11 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         }
 
         /**
-         *  Fetches an <code>Iterator</code> for the data in the named
-         *  table.
+         * Fetches an <code>Iterator</code> for the data in the named table.
          *
          * @param  tableName Description of Parameter
          * @return <code>Iterator</code> for the fetched data.
-         * @exception SQLException Problem creating connection or
-         * executing query.
+         * @throws Exception Problem creating connection or executing query.
          */
         public TableTool fetch(String tableName) throws Exception
         {
@@ -331,9 +328,9 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         }
 
         /**
-         *  Description of the Method
+         * check if there are more records in the QueryDataSet
          *
-         * @return  Description of the Returned Value
+         * @return true if there are more records
          */
         public boolean hasNext()
         {
@@ -353,7 +350,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
          * load the next record from the QueryDataSet
          *
          * @return Description of the Returned Value
-         * @exception NoSuchElementException Description of Exception
+         * @throws NoSuchElementException Description of Exception
          */
         public Object next() throws NoSuchElementException
         {
@@ -372,7 +369,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         }
 
         /**
-         * Retruns the value for the column
+         * Returns the value for the column
          *
          * @param  columnName name of the column
          * @return  value of the column or null if it doesn't exist
@@ -381,7 +378,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         {
             try
             {
-                return(this.curRec.getValue(columnName).asString());
+                return (this.curRec.getValue(columnName).asString());
             }
             catch (Exception se)
             {
@@ -394,7 +391,7 @@ public class TorqueDataDumpTask extends TorqueDataModelTask
         /**
          * unsupported! always throws Exception
          *
-         * @exception UnsupportedOperationException
+         * @throws UnsupportedOperationException
          */
         public void remove() throws UnsupportedOperationException
         {

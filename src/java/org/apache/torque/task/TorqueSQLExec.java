@@ -1,6 +1,6 @@
 package org.apache.torque.task;
 
-/*
+/* ====================================================================
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999-2002 The Apache Software Foundation.  All rights
@@ -109,7 +109,7 @@ public class TorqueSQLExec extends Task
     private AntClassLoader loader;
 
     /**
-     * 
+     *
      */
     static public class DelimiterType extends EnumeratedAttribute
     {
@@ -226,6 +226,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the sqldbmap properties file.
+     *
+     * @param sqldbmap filename for the sqldbmap
      */
     public void setSqlDbMap(String sqldbmap)
     {
@@ -234,6 +236,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Get the sqldbmap properties file.
+     *
+     * @return filename for the sqldbmap
      */
     public File getSqlDbMap()
     {
@@ -241,8 +245,9 @@ public class TorqueSQLExec extends Task
     }
 
     /**
-     * Set the src directory for the sql files
-     * listed in the sqldbmap file.
+     * Set the src directory for the sql files listed in the sqldbmap file.
+     *
+     * @param srcDir sql source directory
      */
     public void setSrcDir(String srcDir)
     {
@@ -250,8 +255,9 @@ public class TorqueSQLExec extends Task
     }
 
     /**
-     * Get the src directory for the sql files
-     * listed in the sqldbmap file.
+     * Get the src directory for the sql files listed in the sqldbmap file.
+     *
+     * @return sql source directory
      */
     public String getSrcDir()
     {
@@ -260,6 +266,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the classpath for loading the driver.
+     *
+     * @param classpath
      */
     public void setClasspath(Path classpath)
     {
@@ -275,6 +283,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Create the classpath for loading the driver.
+     *
+     * @return the classpath
      */
     public Path createClasspath()
     {
@@ -287,6 +297,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the classpath for loading the driver using the classpath reference.
+     *
+     * @param r reference to the classpath
      */
     public void setClasspathRef(Reference r)
     {
@@ -295,6 +307,8 @@ public class TorqueSQLExec extends Task
 
     /**
      * Set the sql command to execute
+     *
+     * @param sql sql command to execute
      */
     public void addText(String sql)
     {
@@ -467,7 +481,7 @@ public class TorqueSQLExec extends Task
         Hashtable h = new Hashtable();
         TreeSet keys = new TreeSet(p.keySet());
 
-        for (Iterator e = keys.iterator(); e.hasNext();)
+        for (Iterator e = keys.iterator(); e.hasNext(); )
         {
             String sqlfile = (String) e.next();
             String database = p.getProperty(sqlfile);
@@ -504,7 +518,7 @@ public class TorqueSQLExec extends Task
             {
                 String s = (String) j.next();
                 Transaction t = new Transaction();
-                t.setSrc(new File(srcDir,s));
+                t.setSrc(new File(srcDir, s));
                 ts.addElement(t);
             }
 
@@ -527,7 +541,7 @@ public class TorqueSQLExec extends Task
             Class dc;
             if (classpath != null)
             {
-                log( "Loading " + driver + " using AntClassLoader with classpath " + classpath,
+                log("Loading " + driver + " using AntClassLoader with classpath " + classpath,
                      Project.MSG_VERBOSE );
 
                 loader = new AntClassLoader(project, classpath);
@@ -570,7 +584,7 @@ public class TorqueSQLExec extends Task
                 throw new SQLException("No suitable Driver for " + url);
             }
 
-            if (!isValidRdbms(conn)) 
+            if (!isValidRdbms(conn))
             {
                 return;
             }
@@ -582,14 +596,14 @@ public class TorqueSQLExec extends Task
             {
                 if (output != null)
                 {
-                    log("Opening PrintStream to output file " + output, 
+                    log("Opening PrintStream to output file " + output,
                             Project.MSG_VERBOSE);
                     out = new PrintStream(new BufferedOutputStream(
                             new FileOutputStream(output)));
                 }
 
                 // Process all transactions
-                for (Enumeration e = transactions.elements(); 
+                for (Enumeration e = transactions.elements();
                         e.hasMoreElements();)
                 {
                     ((Transaction) e.nextElement()).runTransaction(out);
@@ -659,7 +673,7 @@ public class TorqueSQLExec extends Task
     }
 
     /**
-     * 
+     *
      * @param reader
      * @param out
      * @throws SQLException
@@ -683,7 +697,7 @@ public class TorqueSQLExec extends Task
                 if (line.startsWith("//")) continue;
                 if (line.startsWith("--")) continue;
                 if (line.length() > 2 &&
-                    line.substring(0,3).equalsIgnoreCase("REM")) continue;
+                    line.substring(0, 3).equalsIgnoreCase("REM")) continue;
 
                 sql += " " + line;
                 sql = sql.trim();
@@ -691,12 +705,15 @@ public class TorqueSQLExec extends Task
                 // SQL defines "--" as a comment to EOL
                 // and in Oracle it may contain a hint
                 // so we cannot just remove it, instead we must end it
-                if (line.indexOf("--") >= 0) sql += "\n";
+                if (line.indexOf("--") >= 0)
+                {
+                    sql += "\n";
+                }
 
-                if (delimiterType.equals(DelimiterType.NORMAL) 
-                        && sql.endsWith(delimiter) 
-                        || delimiterType.equals(DelimiterType.ROW) 
-                        && line.equals(delimiter)) 
+                if (delimiterType.equals(DelimiterType.NORMAL)
+                        && sql.endsWith(delimiter)
+                        || delimiterType.equals(DelimiterType.ROW)
+                        && line.equals(delimiter))
                 {
                     log("SQL: " + sql, Project.MSG_VERBOSE);
                     execSQL(sql.substring(0, sql.length() - delimiter.length()),
@@ -738,7 +755,7 @@ public class TorqueSQLExec extends Task
                 log("RDBMS = " + theVendor, Project.MSG_VERBOSE);
                 if (theVendor == null || theVendor.indexOf(rdbms) < 0)
                 {
-                    log("Not the required RDBMS: " 
+                    log("Not the required RDBMS: "
                             + rdbms, Project.MSG_VERBOSE);
                     return false;
                 }
@@ -750,10 +767,10 @@ public class TorqueSQLExec extends Task
                         .toLowerCase();
 
                 log("Version = " + theVersion, Project.MSG_VERBOSE);
-                if (theVersion == null || !(theVersion.startsWith(version) 
+                if (theVersion == null || !(theVersion.startsWith(version)
                         || theVersion.indexOf(" " + version) >= 0))
                 {
-                    log("Not the required version: \"" + version + "\"", 
+                    log("Not the required version: \"" + version + "\"",
                             Project.MSG_VERBOSE);
                     return false;
                 }
@@ -916,7 +933,7 @@ public class TorqueSQLExec extends Task
                 log("Executing file: " + tSrcFile.getAbsolutePath(),
                     Project.MSG_INFO);
                 Reader reader = (encoding == null) ? new FileReader(tSrcFile)
-                        : new InputStreamReader(new FileInputStream(tSrcFile), 
+                        : new InputStreamReader(new FileInputStream(tSrcFile),
                         encoding);
                 runStatements(reader, out);
                 reader.close();
