@@ -171,7 +171,7 @@ public class Table implements IDMethod
      * manual</a> for a better description of why heavy indexing is
      * useful for quickly searchable database tables.</p>
      */
-    private void doHeavyIndexing()
+    public void doHeavyIndexing()
     {
         if (DEBUG)
         {
@@ -276,12 +276,6 @@ public class Table implements IDMethod
         columnsByJavaName.put(col.getJavaName(), col);
         col.setPosition(columnList.size());
         needsTransactionInPostgres |= col.requiresTransactionInPostgres();
-        if (col.isPrimaryKey())
-        {
-            // TODO: Make this conditional -- some databases may not
-            // appreciate it as much as MySQL and Oracle.
-            doHeavyIndexing();
-        }
     }
 
     /**
