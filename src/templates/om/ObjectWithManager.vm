@@ -153,6 +153,21 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 #end
 
         #if ($complexObjectModel)
+          #if ($col.isForeignKey())
+            #set ( $tblFK = $table.Database.getTable($col.RelatedTableName) )
+            #set ( $colFK = $tblFK.getColumn($col.RelatedColumnName) )
+            #if ($col.isMultipleFK() || $col.RelatedTableName.equals($table.Name))
+              #set ( $varName = "a${tblFK.JavaName}RelatedBy$col.JavaName" )
+            #else
+              #set ( $varName = "a$tblFK.JavaName" )
+            #end
+
+        if ($varName != null &&  !Objects.equals(${varName}.get${colFK.JavaName}(), v) )
+        {
+            $varName = null;
+        }
+          #end
+
           #foreach ($fk in $col.Referrers)
             #set ( $fkColName = $fk.ForeignLocalMapping.get($col.Name) )
             #set ( $tblFK = $fk.Table )
@@ -215,6 +230,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $relCol = "RelatedBy$relCol" )
    #end
    #set ( $pVarName = "$className$relCol" )
+   #set ( $varName = "a$pVarName" )
+    private $className $varName;
 
     /**
      * Declares an association between this object and a $className object
@@ -229,13 +246,23 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $colFK = $tblFK.getColumn($colFKName) )
         set${column.JavaName}(v.get${colFK.JavaName}());
    #end
+        $varName = v;
     }
 
+   #set ( $and = "" )
    #set ( $comma = "" )
+   #set ( $conditional = "" )
    #set ( $arglist = "" )
    #set ( $argsize = 0 )
    #foreach ($columnName in $fk.LocalColumns)
     #set ( $column = $table.getColumn($columnName) )
+    #set ( $cjtype = $column.JavaNative )
+    #set ( $clo=$column.Name.toLowerCase() )
+    #if ($cjtype == "short" || $cjtype == "int" || $cjtype == "long")
+        #set ( $conditional = "$conditional${and}get${column.JavaName}()>0" )
+    #else
+        #set ( $conditional = "$conditional${and}!Objects.equals(get${column.JavaName}(), null)" )
+    #end
     #set ( $arglist = "$arglist${comma}get${column.JavaName}()" )
     #set ( $and = " && " )
     #set ( $comma = ", " )
@@ -244,6 +271,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     
     public $className get${pVarName}() throws TorqueException
     {
+        if ( $conditional )
+        {
   #if ($tblFK.isAlias())
         ## Leaving this as is for now, though it should probably be
         ## changed to use the Manager like the else clause does.
@@ -256,6 +285,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         return ${className}Manager.getInstance($arglist);
    #end
   #end
+        }
+        return $varName;
     }
 
     /**
