@@ -76,6 +76,7 @@ import org.apache.torque.util.StringStackBuffer;
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
+ * @author <a href="mailto:fedor@apache.org">Fedor Karpelevitch</a>
  * @version $Id$
  */
 public class SqlExpression
@@ -284,14 +285,15 @@ public class SqlExpression
            {
                criteria = quoteAndEscapeText(criteria.toString(), db);
            }
-           else if( criteria instanceof java.util.Date )
+           else if( criteria instanceof Date )
            {
-               criteria = db.getDateString((Date)criteria);
+               Date dt = (Date) criteria;
+               criteria = db.getDateString(dt);
            }
            else if ( criteria instanceof DateKey ) 
            {
-               criteria = db
-                   .getDateString((Date)((DateKey)criteria).getValue()); 
+               Date dt = (Date) ((DateKey) criteria).getValue();
+               criteria = db.getDateString(dt);
            }
            else if( criteria instanceof Boolean )
            {

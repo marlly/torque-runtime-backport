@@ -59,6 +59,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import javax.sql.ConnectionPoolDataSource;
 
 /**
@@ -402,7 +403,6 @@ public abstract class DB implements Serializable, IDMethod
        return '\'' + dateString + '\'';
     }
 
-
     /**
      * This method is used to format any date string.
      * Database can use different default date formats.
@@ -411,6 +411,7 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getDateString(Date date)
     {
-       return '\'' + date.toString() + '\'';
+        //return '\'' + date.toString() + '\'';
+        return "{ts '" + new Timestamp(date.getTime()) + "'}";
     }
 }
