@@ -19,11 +19,36 @@
             <strong></strong>
             <ul>
               <li>
+                <a href="">Reference</a>.
               </li>
             </ul>
           </li>
           -->
-
+          
+          <li>
+            <strong>12 Nov 2001</strong>
+            <ul>
+              <li>
+                Made the driver -> adapter map complete. Thanks to
+                Hugh Brien for spotting the problem.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.15&amp;r2=1.16&amp;diff_format=h">Reference</a>.
+              </li>
+              <li>
+                Added support for Cloudscape. Thanks to David Sean Taylor from
+                the Jetspeed group.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>11 Nov 2001</strong>
+            <ul>
+              <li>
+                Cleaned up the initialization sequence too allow a common
+                pattern for stand-alone and embedded usage.
+                <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/Torque.java.diff?r1=1.37&amp;r2=1.38&amp;diff_format=h">Reference</a>.
+              </li>
+            </ul>
+          </li>
           <li>
             <strong>8 Nov 2001</strong>
             <ul>
