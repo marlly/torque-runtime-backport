@@ -102,7 +102,8 @@ public class NameFactory
      * Factory method which retrieves an instance of the named generator.
      *
      * @param name The fully qualified class name of the name
-     * generation algorithm to retrieve.
+     *        generation algorithm to retrieve.
+     * @return A name generator
      */
     protected NameGenerator getAlgorithm(String name)
     {
@@ -140,6 +141,7 @@ public class NameFactory
      * implementation to use to generate names.
      * @param inputs Inputs used to generate a name.
      * @return The generated name.
+     * @throws EngineException
      */
     public static String generateName(String algorithmName, List inputs)
         throws EngineException

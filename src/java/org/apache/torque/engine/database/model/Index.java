@@ -124,7 +124,7 @@ public class Index
     /**
      * Creates a name for the index using the NameFactory.
      *
-     * @throws EngineException
+     * @throws EngineException if the name could not be created
      */
     private void createName() throws EngineException
     {

@@ -81,16 +81,11 @@ public class ForeignKey
     private final String SETNULL = "SETNULL";
 
     /**
-     * Default Constructor
-     */
-    public ForeignKey()
-    {
-    }
-
-    /**
      * Imports foreign key from an XML specification
+     *
+     * @param attrib the xml attributes
      */
-    public void loadFromXML (Attributes attrib)
+    public void loadFromXML(Attributes attrib)
     {
         foreignTableName = attrib.getValue("foreignTable");
         name = attrib.getValue("name");
@@ -102,6 +97,9 @@ public class ForeignKey
 
     /**
      * Normalizes the input of onDelete, onUpdate attributes
+     *
+     * @param attrib the attribute to normalize
+     * @return nomalized form
      */
     private String normalizeFKey(String attrib)
     {
@@ -113,13 +111,15 @@ public class ForeignKey
         attrib = attrib.toUpperCase();
         if (attrib.equals(SETNULL))
         {
-            attrib =  "SET NULL";
+            attrib = "SET NULL";
         }
         return attrib;
     }
 
     /**
      * Returns whether or not the onUpdate attribute is set
+     *
+     * @return true if the onUpdate attribute is set
      */
     public boolean hasOnUpdate()
     {
@@ -128,6 +128,8 @@ public class ForeignKey
 
     /**
      * Returns whether or not the onDelete attribute is set
+     *
+     * @return true if the onDelete attribute is set
      */
     public boolean hasOnDelete()
     {
@@ -136,6 +138,8 @@ public class ForeignKey
 
     /**
      * Returns the onUpdate attribute
+     *
+     * @return the onUpdate attribute
      */
     public String getOnUpdate()
     {
@@ -144,6 +148,8 @@ public class ForeignKey
 
     /**
      * Returns the onDelete attribute
+     *
+     * @return the onDelete attribute
      */
     public String getOnDelete()
     {
@@ -152,6 +158,8 @@ public class ForeignKey
 
     /**
      * Sets the onDelete attribute
+     *
+     * @param value the onDelete attribute
      */
     public void setOnDelete(String value)
     {
@@ -160,6 +168,8 @@ public class ForeignKey
 
     /**
      * Sets the onUpdate attribute
+     *
+     * @param value the onUpdate attribute
      */
     public void setOnUpdate(String value)
     {
@@ -168,6 +178,8 @@ public class ForeignKey
 
     /**
      * Returns the name attribute.
+     *
+     * @return the name
      */
     public String getName()
     {
@@ -176,6 +188,8 @@ public class ForeignKey
 
     /**
      * Sets the name attribute.
+     *
+     * @param name the name
      */
     public void setName(String name)
     {
@@ -184,6 +198,8 @@ public class ForeignKey
 
     /**
      * Get the foreignTableName of the FK
+     *
+     * @return the name of the foreign table
      */
     public String getForeignTableName()
     {
@@ -192,6 +208,8 @@ public class ForeignKey
 
     /**
      * Set the foreignTableName of the FK
+     *
+     * @param tableName the name of the foreign table
      */
     public void setForeignTableName(String tableName)
     {
@@ -200,6 +218,8 @@ public class ForeignKey
 
     /**
      * Set the parent Table of the foreign key
+     *
+     * @param parent the table
      */
     public void setTable(Table parent)
     {
@@ -208,6 +228,8 @@ public class ForeignKey
 
     /**
      * Get the parent Table of the foreign key
+     *
+     * @return the parent table
      */
     public Table getTable()
     {
@@ -216,6 +238,8 @@ public class ForeignKey
 
     /**
      * Returns the name of the table the foreign key is in
+     *
+     * @return the name of the table
      */
     public String getTableName()
     {
@@ -224,6 +248,8 @@ public class ForeignKey
 
     /**
      * Adds a new reference entry to the foreign key
+     *
+     * @param attrib the xml attributes
      */
     public void addReference(Attributes attrib)
     {
@@ -232,6 +258,9 @@ public class ForeignKey
 
     /**
      * Adds a new reference entry to the foreign key
+     *
+     * @param local name of the local column
+     * @param foreign name of the foreign column
      */
     public void addReference(String local, String foreign)
     {
@@ -241,6 +270,8 @@ public class ForeignKey
 
     /**
      * Returns a comma delimited string of local column names
+     *
+     * @return the local column names
      */
     public String getLocalColumnNames()
     {
@@ -249,6 +280,8 @@ public class ForeignKey
 
     /**
      * Returns a comma delimited string of foreign column names
+     *
+     * @return the foreign column names
      */
     public String getForeignColumnNames()
     {
@@ -257,6 +290,8 @@ public class ForeignKey
 
     /**
      * Returns the list of local column names. You should not edit this List.
+     *
+     * @return the local columns
      */
     public List getLocalColumns()
     {
@@ -266,6 +301,8 @@ public class ForeignKey
     /**
      * Utility method to get local column names to foreign column names
      * mapping for this foreign key.
+     *
+     * @return table mapping foreign names to local names
      */
     public Hashtable getLocalForeignMapping()
     {
@@ -280,7 +317,9 @@ public class ForeignKey
     }
 
     /**
-     * Returns the list of local column names. You should not edit this List.
+     * Returns the list of foreign column names. You should not edit this List.
+     *
+     * @return the foreign columns
      */
     public List getForeignColumns()
     {
@@ -290,6 +329,8 @@ public class ForeignKey
     /**
      * Utility method to get foreign column names to local column names
      * mapping for this foreign key.
+     *
+     * @return table mapping local names to foreign names
      */
     public Hashtable getForeignLocalMapping()
     {
@@ -305,6 +346,8 @@ public class ForeignKey
 
     /**
      * String representation of the foreign key. This is an xml representation.
+     *
+     * @return string representation in xml
      */
     public String toString()
     {

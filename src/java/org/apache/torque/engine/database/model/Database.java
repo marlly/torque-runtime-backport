@@ -94,14 +94,9 @@ public class Database
     private boolean heavyIndexing;
 
     /**
-     * Creates a new instance with unset attributes.
-     */
-    public Database()
-    {
-    }
-
-    /**
      * Load the database object from an xml tag.
+     *
+     * @param attrib the xml attributes
      */
     public void loadFromXML(Attributes attrib)
     {
@@ -121,6 +116,8 @@ public class Database
 
     /**
      * Get the name of the Database
+     *
+     * @return name of the Database
      */
     public String getName()
     {
@@ -129,6 +126,8 @@ public class Database
 
     /**
      * Set the name of the Database
+     *
+     * @param name name of the Database
      */
     public void setName(String name)
     {
@@ -217,6 +216,8 @@ public class Database
 
     /**
      * Get type to use in Java sources (primitive || object)
+     *
+     * @return the type to use
      */
     public String getDefaultJavaType()
     {
@@ -226,6 +227,7 @@ public class Database
     /**
      * Get the value of defaultJavaNamingMethod which specifies the
      * method for converting schema names for table and column to Java names.
+     *
      * @return The default naming conversion used by this database.
      */
     public String getDefaultJavaNamingMethod()
@@ -262,6 +264,8 @@ public class Database
 
     /**
      * Return an array of all tables
+     *
+     * @return array of all tables
      */
     public Table[] getTables()
     {
@@ -276,6 +280,8 @@ public class Database
 
     /**
      * Return the table with the specified name.
+     *
+     * @param name table name
      * @return A Table object.  If it does not exist it returns null
      */
     public Table getTable(String name)
@@ -285,6 +291,8 @@ public class Database
 
     /**
      * Return the table with the specified javaName.
+     *
+     * @param javaName name of the java object representing the table
      * @return A Table object.  If it does not exist it returns null
      */
     public Table getTableByJavaName(String javaName)
@@ -294,6 +302,9 @@ public class Database
 
     /**
      * An utility method to add a new table from an xml attribute.
+     *
+     * @param attrib the xml attributes
+     * @return the created Table
      */
     public Table addTable(Attributes attrib)
     {
@@ -306,6 +317,8 @@ public class Database
 
     /**
      * Add a table to the list and sets the Database property to this Database
+     *
+     * @param tbl the table to add
      */
     public void addTable(Table tbl)
     {
@@ -318,6 +331,8 @@ public class Database
 
     /**
      * Set the parent of the database
+     *
+     * @param parent the parent
      */
     public void setAppData(AppData parent)
     {
@@ -326,6 +341,8 @@ public class Database
 
     /**
      * Get the parent of the table
+     *
+     * @return the parent
      */
     public AppData getAppData()
     {
@@ -477,6 +494,8 @@ public class Database
     /**
      * Creats a string representation of this Database.
      * The representation is given in xml format.
+     *
+     * @return string representation in xml
      */
     public String toString()
     {

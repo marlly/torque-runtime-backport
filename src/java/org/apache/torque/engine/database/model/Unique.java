@@ -70,14 +70,9 @@ import java.util.List;
 public class Unique extends Index
 {
     /**
-     * Creates a new instance.
-     */
-    public Unique()
-    {
-    }
-
-    /**
      * Returns <code>true</code>.
+     *
+     * @return true
      */
     public final boolean isUnique()
     {
@@ -86,6 +81,8 @@ public class Unique extends Index
 
     /**
      * String representation of the index. This is an xml representation.
+     *
+     * @return string representation in xml
      */
     public String toString()
     {

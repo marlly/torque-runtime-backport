@@ -70,14 +70,9 @@ public class Inheritance
     private Column parent;
 
     /**
-     * Default Constructor
-     */
-    public Inheritance()
-    {
-    }
-
-    /**
      * Imports foreign key from an XML specification
+     *
+     * @param attrib the xml attributes
      */
     public void loadFromXML (Attributes attrib)
     {
@@ -161,6 +156,8 @@ public class Inheritance
 
     /**
      * String representation of the foreign key. This is an xml representation.
+     *
+     * @return string representation in xml
      */
     public String toString()
     {

@@ -410,6 +410,9 @@ public class Table implements IDMethod
     /**
      * A utility function to create a new foreign key
      * from attrib and add it to this table.
+     *
+     * @param attrib the xml attributes
+     * @return the created ForeignKey
      */
     public ForeignKey addForeignKey(Attributes attrib)
     {
@@ -449,6 +452,8 @@ public class Table implements IDMethod
 
     /**
      * Adds the foreign key from another table that refers to this table.
+     *
+     * @param fk A foreign key refering to this table
      */
     public void addReferrer(ForeignKey fk)
     {
@@ -461,6 +466,8 @@ public class Table implements IDMethod
 
     /**
      * Get list of references to this table.
+     *
+     * @return A list of references to this table
      */
     public List getReferrers()
     {
@@ -469,6 +476,8 @@ public class Table implements IDMethod
 
     /**
      * Set whether this table contains a foreign PK
+     *
+     * @param b
      */
     public void setContainsForeignPK(boolean b)
     {
@@ -485,6 +494,8 @@ public class Table implements IDMethod
 
     /**
      * A list of tables referenced by foreign keys in this table
+     *
+     * @return A list of tables
      */
     public List getForeignTableNames()
     {
@@ -498,6 +509,8 @@ public class Table implements IDMethod
     /**
      * Adds a new FK to the FK list and set the
      * parent table of the column to the current table
+     *
+     * @param fk A foreign key
      */
     public void addForeignKey(ForeignKey fk)
     {
@@ -586,6 +599,8 @@ public class Table implements IDMethod
     /**
      * A utility function to create a new Unique
      * from attrib and add it to this table.
+     *
+     * @param attrib the xml attributes
      */
     public Unique addUnique(Attributes attrib)
     {
@@ -851,6 +866,8 @@ public class Table implements IDMethod
 
     /**
      * A name to use for creating a sequence if one is not specified.
+     *
+     * @return name of the sequence
      */
     public String getSequenceName()
     {
@@ -871,7 +888,9 @@ public class Table implements IDMethod
     }
 
     /**
-     * Returns an Array containing all the FKs in the table
+     * Returns an Array containing all the indices in the table
+     *
+     * @return An array containing all the indices
      */
     public Index[] getIndices()
     {
@@ -886,6 +905,8 @@ public class Table implements IDMethod
 
     /**
      * Returns an Array containing all the UKs in the table
+     *
+     * @return An array containing all the UKs
      */
     public Unique[] getUnices()
     {
@@ -900,6 +921,8 @@ public class Table implements IDMethod
 
     /**
      * Returns a specified column.
+     *
+     * @param name name of the column
      * @return Return a Column object or null if it does not exist.
      */
     public Column getColumn(String name)
@@ -909,6 +932,8 @@ public class Table implements IDMethod
 
     /**
      * Returns a specified column.
+     *
+     * @param javaName java name of the column
      * @return Return a Column object or null if it does not exist.
      */
     public Column getColumnByJavaName(String javaName)
@@ -920,9 +945,11 @@ public class Table implements IDMethod
      * Return the first foreign key that includes col in it's list
      * of local columns.  Eg. Foreign key (a,b,c) refrences tbl(x,y,z)
      * will be returned of col is either a,b or c.
+     *
+     * @param col column name included in the key
      * @return Return a Column object or null if it does not exist.
      */
-    public ForeignKey getForeignKey (String col)
+    public ForeignKey getForeignKey(String col)
     {
         ForeignKey firstFK = null;
         for (Iterator iter = foreignKeys.iterator(); iter.hasNext();)
@@ -948,6 +975,9 @@ public class Table implements IDMethod
 
     /**
      * Returns true if the table contains a specified column
+     *
+     * @param col the column
+     * @return true if the table contains the column
      */
     public boolean containsColumn(Column col)
     {
@@ -956,6 +986,9 @@ public class Table implements IDMethod
 
     /**
      * Returns true if the table contains a specified column
+     *
+     * @param name name of the column
+     * @return true if the table contains the column
      */
     public boolean containsColumn(String name)
     {
@@ -1134,6 +1167,7 @@ public class Table implements IDMethod
     /**
      * Returns the elements of the list, separated by commas.
      *
+     * @param list a list of Columns
      * @return A CSV list.
      */
     private String printList(List list)

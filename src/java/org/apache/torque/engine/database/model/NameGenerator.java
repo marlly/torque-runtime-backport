@@ -103,7 +103,7 @@ public interface NameGenerator
      *
      * @param inputs Inputs used to generate a name.
      * @return The generated name.
-     * @throws EngineException
+     * @throws EngineException if the name could not be generated
      */
     String generateName(List inputs) throws EngineException;
 }
