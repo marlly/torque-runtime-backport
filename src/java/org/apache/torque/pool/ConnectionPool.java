@@ -68,8 +68,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * This class implements a simple connection pooling scheme.  Multiple
- * pools are available through use of the <code>PoolBrokerService</code>.
+ * This class implements a simple connection pooling scheme.
  *
  * @author <a href="mailto:csterg@aias.gr">Costas Stergiou</a>
  * @author <a href="mailto:frank.kim@clearink.com">Frank Y. Kim</a>
