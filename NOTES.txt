@@ -119,3 +119,6 @@ people can use the standard build.xml file in a known way. Things
 are a little loosy-goosy and fragile right now. What I do could still
 potentially break scarab's build because I'm not sure how things
 are being used ... but I'm getting there :-)
+
+Scott Eade has found that Monitor threads appear to be living on past
+servlet restarts. Need to add a test for that.
