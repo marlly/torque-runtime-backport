@@ -88,6 +88,7 @@ public class Table implements IDMethod
     private List unices;
     private List idMethodParameters;
     private String name;
+    private String description;
     private String javaName;
     private String idMethod;
     private String javaNamingMethod;
@@ -106,6 +107,7 @@ public class Table implements IDMethod
     private Hashtable columnsByJavaName;
     private boolean needsTransactionInPostgres;
     private boolean skipHeavyIndexing;
+
 
     /**
      * Default Constructor
@@ -167,6 +169,7 @@ public class Table implements IDMethod
         alias = attrib.getValue("alias");
         skipHeavyIndexing = "true"
             .equals(attrib.getValue("skipHeavyIndexing"));
+        description = attrib.getValue("description");
     }
 
     /**
@@ -181,11 +184,11 @@ public class Table implements IDMethod
     {
         // Heavy indexing must wait until after all columns composing
         // a table's primary key have been parsed.
-        if (!skipHeavyIndexing && !getDatabase().isSkipHeavyIndexing()) 
+        if (!skipHeavyIndexing && !getDatabase().isSkipHeavyIndexing())
         {
-            doHeavyIndexing();    
+            doHeavyIndexing();
         }
-        
+
         // Name any indices which are missing a name using the
         // appropriate algorithm.
         doNaming();
@@ -584,6 +587,24 @@ public class Table implements IDMethod
     public void setName(String newName)
     {
         name = newName;
+    }
+
+    /**
+     * Get the description for the Table
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * Set the description for the Table
+     *
+     * @param newDescription description for the Table
+     */
+    public void setDescription(String newDescription)
+    {
+        description = newDescription;
     }
 
     /**
@@ -1001,7 +1022,7 @@ public class Table implements IDMethod
     public boolean hasPrimaryKey()
     {
         return (getPrimaryKey().size() > 0);
-    }        
+    }
 
     /**
      * Returns all parts of the primary key, separated by commas.

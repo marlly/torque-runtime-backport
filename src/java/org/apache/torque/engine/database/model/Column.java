@@ -76,6 +76,7 @@ import org.apache.torque.TorqueException;
 public class Column
 {
     private String name;
+    private String description;
     private String javaName = null;
     private String javaNamingMethod;
     private boolean isNotNull = false;
@@ -196,6 +197,7 @@ public class Column
             ( inheritanceType != null && !inheritanceType.equals("false") );
 
         this.inputValidator = attrib.getValue("inputValidator");
+        description = attrib.getValue("description");
     }
 
     /**
@@ -222,6 +224,23 @@ public class Column
         name = newName;
     }
 
+    /**
+     * Get the description for the Table
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * Set the description for the Table
+     *
+     * @param newDescription description for the Table
+     */
+    public void setDescription(String newDescription)
+    {
+        description = newDescription;
+    }
 
     /**
      * Get name to use in Java sources
