@@ -150,6 +150,7 @@ public class DBFactory
         driverToAdapterMap.put("com.ibm.as400.access.AS400JDBCDriver", "DBDB2400");
         driverToAdapterMap.put("COM.ibm.db2.jdbc.app.DB2Driver", "DBDB2App");
         driverToAdapterMap.put("COM.ibm.db2.jdbc.net.DB2Driver", "DBDB2Net");
+        driverToAdapterMap.put("COM.cloudscape.core.JDBCDriver", "DBCloudscape");
         driverToAdapterMap.put("org.hsql.jdbcDriver", "DBHypersonicSQL");
         driverToAdapterMap.put("interbase.interclient.Driver", "DBInterbase");
         driverToAdapterMap.put("org.enhydra.instantdb.jdbc.idbDriver", "DBInstantDB");
