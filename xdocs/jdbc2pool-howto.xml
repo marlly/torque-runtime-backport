@@ -36,7 +36,7 @@ bound to jndi and torque only needs to use it.
 If a pool is known to already be available via jndi, the configuration for
 torque to use it can be very simple.  In all examples that follow we will
 use the handle, bookstore.  This is the name attribute that is used in the
-<database> tag in the schema.xml.  If the name attribute is not used, then the
+&lt;database&gt; tag in the schema.xml.  If the name attribute is not used, then the
 handle would be 'default'.
 </p>
 
@@ -76,7 +76,7 @@ needed.  The default <code>InitialContext</code> is chosen according to the
 rules given in the class's javadoc.  If the default has not been configured,
 you can specify any other environment properties that are needed to instantiate
 the <code>InitialContext</code> as extra properties of the form,
-torque.jndi.<handle>.<env-var>.  A couple examples are shown below:
+torque.jndi.&lt;handle&gt;.&lt;env-var&gt;.  A couple examples are shown below:
 
 <source><![CDATA[
 torque.jndi.bookstore.java.naming.factory.initial = org.apache.naming.java.javaURLContextFactory
@@ -141,6 +141,7 @@ torque.jndi.DBbookstore.path=jdbc/DBbookstore
 where the second handle, DBbookstore, has no relevance to torque, other than 
 to uniquely identify this group of properties as belonging together.  Any 
 unique handle may be used.
+</p>
 
 </section>
 
@@ -155,7 +156,7 @@ deployed pools.  Here is an example using catalina of deploying the pool that
 used to come with torque, but is now part of commons-sandbox/jdbc2pool.
 </p>
 
-<p>In server.xml, the following would be added to the <Context> for your
+<p>In server.xml, the following would be added to the &lt;Context$gt; for your
 webapp:
 
 <source><![CDATA[
@@ -214,6 +215,7 @@ the servlet specification:
 ]]></source>
 </p>
 
+<p>
 Catalina deploys all objects configured similarly to above within the
 <strong>java:comp/env</strong> namespace so the jndi path given in
 Torque.properties would be
@@ -226,13 +228,16 @@ Remember that commons-sandbox/jdbc2pool pools expect a
 <code>ConnectionPoolDataSource</code>
 available via jndi under the name given in the dataSourceName, so you will
 need entries in server.xml and web.xml for this object as well.
+</p>
 
+<p>
 Catalina provides a default <code>DataSource</code> that can be used as well
 and it is configured similarly, but detailed information on that
 implementation is <a href="http://jakarta.apache.org/tomcat/tomcat-4.1-doc/jndi-resources-howto.html">here</a>.  Note that the 
 "type attribute/ref-type element" value of "javax.sql.DataSource" appears to 
 be reserved for catalina's default implementation, which is why the
 implementation classname is used in our configuration example.
+</p>
 
 </section>
 
