@@ -32,7 +32,6 @@
     do a general inclusion of the torque.lib.dir to catch any drivers.
   -->
   <path id="torque-classpath">
-    <pathelement location="torque.jar.fullpath"/>
     <fileset dir="${torque.lib.dir}">
       <include name="**/commons-beanutils-1.4.1.jar"/>
       <include name="**/commons-collections-2.0.jar"/>
