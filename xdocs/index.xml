@@ -95,6 +95,11 @@
           <th>tester</th>
         </tr>
         <tr>
+          <td>Cloudscape</td>
+          <td>untested</td>
+          <td></td>
+        </tr>
+        <tr>
           <td>DB2</td>
           <td>untested</td>
           <td></td>
