@@ -237,10 +237,10 @@
 
   <target name="filterTokens">
     <filter token="DATABASE_DEFAULT" value="${torque.defaultDatabase}"/>
-    <filter token="DATABASE_URL" value="${databaseUrl}"/>
-    <filter token="DATABASE_USER" value="${databaseUser}"/>
-    <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
-    <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
+    <filter token="DATABASE_URL" value="${torque.database.url}"/>
+    <filter token="DATABASE_USER" value="${torque.database.user}"/>
+    <filter token="DATABASE_DRIVER" value="${torque.database.driver}"/>
+    <filter token="DATABASE_PASSWORD" value="${torque.database.password}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
     <filter token="DATABASE_ADAPTER" value="${torque.database}"/>
   </target>
@@ -304,11 +304,23 @@
       filtering="yes"
     />
 
-    <java
-      classname="org.apache.torque.test.TorqueRunner">
-      <arg value="${build.test}/rttest/Torque.properties"/>
-      <classpath refid="classpath"/>
-    </java>
+    <!-- Runs the actual rttest tests -->
+    <junit printsummary="no" haltonfailure="yes">
+      <classpath>
+        <pathelement location="${torque.destDir}"/>
+        <path refid="classpath"/>
+      </classpath>
+
+      <formatter type="plain" usefile="false"/>
+
+      <batchtest>
+        <fileset dir="${torque.destDir}">
+          <include name="**/*Test*.class"/>
+          <exclude name="**/BaseTestCase.class"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
   </target>
 
   <target
@@ -364,11 +376,11 @@
 
     <filter token="DATABASE_DEFAULT" value="${torque.sqlTest.defaultDatabase}"/>
     <filter token="DATABASE_URL" value="${torque.sqlTest.databaseUrl}"/>
-    <filter token="DATABASE_USER" value="${databaseUser}"/>
-    <filter token="DATABASE_DRIVER" value="${databaseDriver}"/>
-    <filter token="DATABASE_PASSWORD" value="${databasePassword}"/>
+    <filter token="DATABASE_USER" value="${torque.database.user}"/>
+    <filter token="DATABASE_DRIVER" value="${torque.database.driver}"/>
+    <filter token="DATABASE_PASSWORD" value="${torque.database.password}"/>
     <filter token="DATABASE_ID_METHOD" value="${torque.idMethod}"/>
-    <filter token="DATABASE_ADAPTER" value="${torque.databaseAdapter}"/>
+    <filter token="DATABASE_ADAPTER" value="${torque.database.adapter}"/>
 
     <mkdir dir="${build.test}/sqltest"/>
 
