@@ -63,6 +63,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.io.Serializable;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import org.apache.commons.collections.FastArrayList;
 import org.apache.jcs.JCS;
@@ -103,8 +104,6 @@ public abstract class AbstractBaseManager
 
     private String region;
 
-    private boolean lockCache;
-    private int inGet;
     private boolean isNew = true;
 
     protected Map validFields;
@@ -219,18 +218,9 @@ public abstract class AbstractBaseManager
         Persistent om = null;
         if (cache != null)
         {
-            if (lockCache)
+            synchronized (this)
             {
-                synchronized (this)
-                {
-                    om = (Persistent) cache.get(key);
-                }
-            }
-            else
-            {
-                inGet++;
                 om = (Persistent) cache.get(key);
-                inGet--;
             }
         }
         return om;
@@ -271,29 +261,19 @@ public abstract class AbstractBaseManager
         Persistent oldOm = null;
         if (cache != null)
         {
-            synchronized (this)
+            try
             {
-                lockCache = true;
-                try
+                synchronized (this)
                 {
                     oldOm = (Persistent) cache.get(key);
-                    while (inGet > 0)
-                    {
-                        Thread.yield();
-                    }
                     cache.remove(key);
                 }
-                catch (CacheException ce)
-                {
-                    lockCache = false;
-                    throw new TorqueException(
-                    "Could not remove from cache due to internal JCS error.",
-                        ce);
-                }
-                finally
-                {
-                    lockCache = false;
-                }
+            }
+            catch (CacheException ce)
+            {
+                throw new TorqueException
+                    ("Could not remove from cache due to internal JCS error",
+                     ce);
             }
         }
         return oldOm;
@@ -334,28 +314,18 @@ public abstract class AbstractBaseManager
         Persistent oldOm = null;
         if (cache != null)
         {
-            synchronized (this)
+            try
             {
-                lockCache = true;
-                try
+                synchronized (this)
                 {
                     oldOm = (Persistent) cache.get(key);
-                    while (inGet > 0)
-                    {
-                        Thread.yield();
-                    }
                     cache.put(key, om);
                 }
-                catch (CacheException ce)
-                {
-                    lockCache = false;
-                    throw new TorqueException(
-                        "Could not cache due to internal JCS error.", ce);
-                }
-                finally
-                {
-                    lockCache = false;
-                }
+            }
+            catch (CacheException ce)
+            {
+                throw new TorqueException
+                    ("Could not cache due to internal JCS error", ce);
             }
         }
         return oldOm;
@@ -517,6 +487,9 @@ public abstract class AbstractBaseManager
         }
     }
 
+    /**
+     * @return The cache instance.
+     */
     public MethodResultCache getMethodResultCache()
     {
         if (isNew)
@@ -543,7 +516,7 @@ public abstract class AbstractBaseManager
 
     /**
      * 
-     * @param listener
+     * @param listener A new listener for cache events.
      */
     public void addCacheListenerImpl(CacheListener listener)
     {
@@ -591,7 +564,7 @@ public abstract class AbstractBaseManager
     /**
      * 
      * @param key
-     * @return
+     * @return A subset of the list identified by <code>key</code>.
      */
     private synchronized List createSubsetList(String key)
     {
@@ -664,13 +637,13 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * helper methods for the Serializable interface
+     * Helper methods for the <code>Serializable</code> interface.
      * 
-     * @param in
+     * @param in The stream to read a <code>Serializable</code> from.
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream in)
+    private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
@@ -685,7 +658,7 @@ public abstract class AbstractBaseManager
         catch (Exception e)
         {
             log.error("Cache could not be initialized for region: "
-                    + region + "after deserialization");
+                    + region + " after deserialization");
         }
     }
 }

@@ -70,7 +70,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.torque.TorqueException;
 
 /**
- * This class provides a cache for convenient storage of method results
+ * This class provides a cache for convenient storage of method
+ * results.
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @version $Id$
@@ -79,7 +80,6 @@ public class MethodResultCache
 {
     private ObjectPool pool;
     private GroupCacheAccess jcsCache;
-    private boolean lockCache;
     private int inGet;
     private Map groups;
 
@@ -125,18 +125,9 @@ public class MethodResultCache
         Object result = null;
         if (jcsCache != null)
         {
-            if (lockCache)
+            synchronized (this)
             {
-                synchronized (this)
-                {
-                    result = jcsCache.getFromGroup(key, key.getGroupKey());
-                }
-            }
-            else
-            {
-                inGet++;
                 result = jcsCache.getFromGroup(key, key.getGroupKey());
-                inGet--;
             }
         }
 
@@ -161,28 +152,18 @@ public class MethodResultCache
         Object old = null;
         if (jcsCache != null)
         {
-            synchronized (this)
+            try
             {
-                lockCache = true;
-                try
+                synchronized (this)
                 {
                     old = jcsCache.getFromGroup(key, group);
-                    while (inGet > 0)
-                    {
-                        Thread.yield();
-                    }
                     jcsCache.putInGroup(key, group, value);
                 }
-                catch (CacheException ce)
-                {
-                    lockCache = false;
-                    throw new TorqueException(
-                        "Could not cache due to internal JCS error.", ce);
-                }
-                finally
-                {
-                    lockCache = false;
-                }
+            }
+            catch (CacheException ce)
+            {
+                throw new TorqueException
+                    ("Could not cache due to internal JCS error", ce);
             }
         }
         return old;
@@ -196,27 +177,8 @@ public class MethodResultCache
         {
             synchronized (this)
             {
-                lockCache = true;
-                try
-                {
-                    old = jcsCache.getFromGroup(key, key.getGroupKey());
-                    while (inGet > 0)
-                    {
-                        Thread.yield();
-                    }
-                    jcsCache.remove(key, key.getGroupKey());
-                }
-                // jcs does not throw an exception here, might remove this
-                catch (Exception ce)
-                {
-                    lockCache = false;
-                    throw new TorqueException(
-                        "Could not cache due to internal JCS error.", ce);
-                }
-                finally
-                {
-                    lockCache = false;
-                }
+                old = jcsCache.getFromGroup(key, key.getGroupKey());
+                jcsCache.remove(key, key.getGroupKey());
             }
         }
         return old;
@@ -521,7 +483,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error removing element", e);
             }
         }
         return result;
@@ -545,12 +507,12 @@ public class MethodResultCache
                 catch (Exception e)
                 {
                     log.warn(
-                        "Nonfatal error.  Could not return key to pool", e);
+                        "Nonfatal error: Could not return key to pool", e);
                 }
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error removing element from cache", e);
             }
         }
         return result;
@@ -580,7 +542,7 @@ public class MethodResultCache
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error removing element from cache", e);
             }
         }
         return result;
@@ -603,12 +565,12 @@ public class MethodResultCache
                 catch (Exception e)
                 {
                     log.warn(
-                        "Nonfatal error.  Could not return key to pool", e);
+                        "Nonfatal error: Could not return key to pool", e);
                 }
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error removing element from cache", e);
             }
         }
         return result;
