@@ -217,9 +217,9 @@ public class DocsTest extends BaseTestCase
         try 
         {
             result = BasePeer.executeQuery(
-                    "SELECT BOOK.* FROM BOOK "
-                    + "INNER JOIN AUTHOR "
-                    + "ON BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID");
+                    "SELECT book.* FROM book "
+                    + "INNER JOIN author "
+                    + "ON book.AUTHOR_ID=author.AUTHOR_ID");
         }
         catch (Exception e) 
         { 
@@ -238,8 +238,8 @@ public class DocsTest extends BaseTestCase
         try 
         {
             result = BasePeer.executeQuery(
-                    "SELECT BOOK.* FROM BOOK,AUTHOR "
-                    + "WHERE BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID");
+                    "SELECT book.* FROM book,author "
+                    + "WHERE book.AUTHOR_ID=author.AUTHOR_ID");
         }
         catch (Exception e) 
         { 
