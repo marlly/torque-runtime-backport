@@ -1,7 +1,7 @@
 #set ( $database = $dataModel.database )
 #set ( $unknownTorqueTypes = [  'NULL', 'OTHER',  'JAVA_OBJECT', 'DISTINCT', 'STRUCT', 'ARRAY', 'REF', 'BOOLEANINT', 'BOOLEANCHAR' ] )
 #set ( $mappedJdbcTypes = ['INTEGER', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'BLOB', 'INTEGER', 'CHAR' ] )
-#set ( $fieldsWithNoSize = ['INTEGER', 'BLOB', 'CLOB', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'BIGINT', 'SMALLINT', 'TINYINT' ] ) 
+#set ( $fieldsWithNoSize = ['INTEGER', 'BLOB', 'CLOB', 'DATE', 'TIME', 'TIMESTAMP', 'BINARY', 'BIGINT', 'SMALLINT', 'TINYINT' ] )
 #set ( $space = "     " )
 #if ($database.Package)
     #set ($package = $database.Package)
@@ -14,15 +14,15 @@
 
 
 <!--
-============================================================== 
-            TABLE $table.Name               
-============================================================== 
+==============================================================
+            TABLE $table.Name
+==============================================================
 $!table.getDescription()
 -->
-  <class-descriptor 
+  <class-descriptor
     #if ($ojbUseProxy)
-    	proxy="dynamic"
-    #end	
+        proxy="dynamic"
+    #end
     class="${package}.${table.JavaName}"
     table="$table.Name"
   >
@@ -43,7 +43,7 @@ $!table.getDescription()
 $!col.getDescription()
 -->
     #set ( $mappingPos = $unknownTorqueTypes.indexOf($col.TorqueType) )
-    #set ( $size = ${col.size} )
+    #set ( $size = "" )
     #set ( $precision = "" )
     #set ( $colType = $col.getType() )
     #set ( $colTypeClass =  $colType.getClass() )
@@ -51,19 +51,19 @@ $!col.getDescription()
   ## === determin the type of the field. OJB recognizes less types than Torque, thus unkown types must be mapped
     #if ($mappingPos != -1)
       #set ( $jdbcFieldType = $mappedJdbcTypes.get($mappingPos) )
-      #if ( $mappedJdbcTypes.get($mappingPos) == "CHAR" ) 
+      #if ( $mappedJdbcTypes.get($mappingPos) == "CHAR" )
         #set ( $size = "1" )
       #else
         #set ( $size = "" )
-      #end 
-    #else  ## == no mapping is required 
+      #end
+    #else  ## == no mapping is required
       #set ( $jdbcFieldType = $col.TorqueType )
-     ## === split the size field into length and precision 
+     ## === split the size field into length and precision
       #if ($col.size != "")
         #set ( $sizeList = $size.split(",") )
         #set ( $foundPart = 0 )
         ## == unfortunatedly $sizeList.get(0) dows not work so I did this hack
-        #foreach ( $part in $sizeList) 
+        #foreach ( $part in $sizeList)
           #if ($foundPart == 0)
             #set ( $size = $part )
             #set ( $foundPart = 1 )
@@ -79,21 +79,27 @@ $!col.getDescription()
       name="$col.JavaName"
       column="$col.Name"
       jdbc-type="$jdbcFieldType"
-#if ($col.isNotNull()) ${space}nullable="false" 
+#if ($col.isNotNull()) ${space}nullable="false"
 #end
-#if ($indices.indexOf($col.Name) != -1) ${space}indexed="true" 
+#if ($indices.indexOf($col.Name) != -1) ${space}indexed="true"
 #end
-#if ($col.isPrimaryKey()) ${space}primarykey="true" 
+#if ($col.isPrimaryKey()) ${space}primarykey="true"
 #end
-#if ($col.isAutoIncrement()) ${space}autoincrement="true" 
+#if ($col.isAutoIncrement()) ${space}autoincrement="true"
 #end
-#if ($size != "" || $size != "0") 
+#if ($size != "" && $size != "0")
   ${space}length="${size}"
-  #set ($size = "0")
 #end
-#if ($precision != "") ${space}precision="${precision}" 
+#if ($precision != "") ${space}precision="${precision}"
 #end
-    >
+#if ($col.TorqueType == "BOOLEANINT")
+  ${space}conversion="org.apache.ojb.broker.accesslayer.conversions.Boolean2IntFieldConversion"
+#end
+#if ($col.TorqueType == "BOOLEANCHAR")
+  ${space}conversion="insert-conversion-class-here"
+#end
+
+    />
 
 
   #end
