@@ -24,7 +24,7 @@
             Simplified the DBFactory and the Torque.properties file by
             eliminating the requirement of the adapter properties. The
             adapters are stored by JDBC driver name and that is already
-            defined in the torque.database.<db>.driver property.
+            defined in the torque.database.{db}.driver property.
             <a href="http://cvs.apache.org/viewcvs/jakarta-turbine-torque/src/java/org/apache/torque/adapter/DBFactory.java.diff?r1=1.14&amp;r2=1.15&amp;diff_format=h">Reference</a>.
           </li>
         </ul>
