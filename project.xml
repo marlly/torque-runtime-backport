@@ -264,11 +264,7 @@
       </excludes>
     </unitTest>
 
-    <resources>
-      <includes>
-        <include>src/templates/**/*</include>
-      </includes>
-    </resources>
+    <resources></resources>
     <jars></jars>
   </build>
 </project>
