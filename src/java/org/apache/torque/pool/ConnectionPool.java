@@ -259,24 +259,27 @@ public class ConnectionPool
 
 
     /**
-     * Returns a connection that maintains a link to the pool it came from.
+     * Returns a connection that maintains a link to the pool it came
+     * from.  Internally synchronized.
      *
      * @return A database connection.
      *
      * @exception Exception Error retrieving connection.
      */
-    public synchronized final DBConnection getConnection()
+    public final DBConnection getConnection()
         throws Exception
     {
         DBConnection dbconn = null;
-
-        if ( pool.empty() && totalConnections < maxConnections )
+        synchronized (this)
         {
-            dbconn = getNewConnection();
-        }
-        else
-        {
-            dbconn = getInternalPooledConnection();
+            if ( pool.empty() && totalConnections < maxConnections )
+            {
+                dbconn = getNewConnection();
+            }
+            else
+            {
+                dbconn = getInternalPooledConnection();
+            }
         }
         dbconn.link(this);
         return dbconn;
