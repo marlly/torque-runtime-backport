@@ -126,7 +126,11 @@ public abstract class BasePeer implements java.io.Serializable
     /** Classes that implement this class should override this value. */
     public static final String TABLE_NAME = "TABLE_NAME";
 
-    /** The Torque default MapBuilder. */
+    /** 
+     * The Torque default MapBuilder.
+     * 
+     * @deprecated there is no default map builder! 
+     */
     public static final String DEFAULT_MAP_BUILDER =
         "org.apache.torque.util.db.map.TurbineMapBuilder";
 
@@ -2046,6 +2050,7 @@ public abstract class BasePeer implements java.io.Serializable
      * @return A MapBuilder.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated you have to specify the name of the map builder!
      */
     public static MapBuilder getMapBuilder() throws TorqueException
     {
