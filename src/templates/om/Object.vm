@@ -771,7 +771,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
      */
-    public void save() throws Exception
+    public void save() throws TorqueException
     {
  #if ($complexObjectModel)
             save(${table.JavaName}Peer.getMapBuilder()
