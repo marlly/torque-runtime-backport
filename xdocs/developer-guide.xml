@@ -40,7 +40,7 @@
         Maven-enabled.  Before you begin, you'll need to check out the
         <code>db-torque</code> CVS repository (if you are not familiar with the
         Apache CVS repositories, please refer to the
-        <a href="http://www.apache.org/foundation/cvs.html">documentation</a>).
+        <a href="http://www.apache.org/dev/version-control.html">documentation</a>).
       </p>
       <p>
         <code>maven java:jar</code> builds the jar. <br/>
