@@ -650,13 +650,18 @@ public class Column
             result.append(" required=\"false\"");
         }
 
-        result.append(" type=\"").append (torqueType).append('"');
+        result.append(" type=\"").append(torqueType).append('"');
 
         if (size != null)
         {
             result.append(" size=\"").append(size).append('"');
         }
 
+        if (scale != null)
+        {
+            result.append(" scale=\"").append(scale).append('"');
+        }
+        
         if (defaultValue != null)
         {
             result.append(" default=\"").append(defaultValue).append('"');
