@@ -10,20 +10,6 @@
   <property file="default.properties" />
 
   <!-- ================================================================== -->
-  <!-- C O M P I L E   P O S T   G O A L                                  -->
-  <!-- ================================================================== -->
-  <!-- copies the templates, dtd, .. to the ${maven.build.dest} to        -->
-  <!-- include them in the jar file                                       -->
-  <!-- ================================================================== -->
-  <postGoal name="java:compile">
-    <!-- copy default.properties to the right place -->
-    <copy
-      file="${maven.src.dir}/conf/default.properties"
-      todir="${maven.build.dest}/org/apache/torque"
-    />
-  </postGoal>
-
-  <!-- ================================================================== -->
   <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->
   <!-- ================================================================== -->
   <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
@@ -166,7 +152,7 @@
     />
     <copy
       tofile="${build.test}/rttest/default.properties"
-      file="${src.dir}/conf/default.properties"
+      file="${src.dir}/generator/src/conf/default.properties"
       overwrite="yes"
     />
 
