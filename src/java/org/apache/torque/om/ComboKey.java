@@ -112,6 +112,8 @@ public class ComboKey extends ObjectKey
 
     /**
      * Sets the internal representation to a String array.
+     *
+     * @see toString()
      */
     public ComboKey(String keys)
     {
@@ -291,6 +293,11 @@ public class ComboKey extends ObjectKey
         return isEqual;
     }
 
+    /**
+     *
+     * @param sb
+     * @see toString()
+     */
     public void appendTo(StringBuffer sb)
     {
         if (key != null)
@@ -350,7 +357,11 @@ public class ComboKey extends ObjectKey
 
     /**
      * A String that may consist of one section or multiple sections
-     * separated by a colon.
+     * separated by a colon. <br/>
+     * Each Key is represented by <code>[type N|S|D][value][:]</code>. <p/>
+     * Example: <br/>
+     * the ComboKey(StringKey("key1"), NumberKey(2)) is represented as
+     * <code><b>Skey1:N2:</b></code>
      */
     public String toString()
     {
