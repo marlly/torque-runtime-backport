@@ -36,7 +36,7 @@
 
   <table name="course_number" description="Number for a course">
     <column name="course_id" required="true" type="INTEGER"/>
-    <column name="number" required="true" type="INTEGER"/>
+    <column name="course_num" required="true" type="INTEGER"/>
 
     <foreign-key foreignTable="course"
      onDelete="cascade" onUpdate="cascade">
@@ -45,7 +45,7 @@
   </table>
 
   <table name="course_number1" description="Number for a course">
-    <column name="number" required="true" type="INTEGER"/>
+    <column name="course_num" required="true" type="INTEGER"/>
     <column name="course_id" required="true" type="INTEGER"/>
 
     <foreign-key foreignTable="course"
