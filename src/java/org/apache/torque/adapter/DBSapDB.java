@@ -54,10 +54,7 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.lang.reflect.Method;
-
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -69,8 +66,7 @@ import java.sql.Statement;
  * @author <a href="mailto:dave.polito@planetcad.com">Dave Polito</a>
  * @version $Id$
  */
-public class DBSapDB
-    extends DB
+public class DBSapDB extends DB
 {
     /**
      * Empty constructor.

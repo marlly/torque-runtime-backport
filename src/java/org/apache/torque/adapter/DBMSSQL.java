@@ -54,10 +54,6 @@ package org.apache.torque.adapter;
  * <http://www.apache.org/>.
  */
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 /**
  * This is used to connect to a MSSQL database.  For now, this class
  * simply extends the adaptor for Sybase.  You can use one of several
@@ -69,8 +65,7 @@ import java.sql.Statement;
  * @author <a href="mailto:gonzalo.diethelm@sonda.com">Gonzalo Diethelm</a>
  * @version $Id$
  */
-public class DBMSSQL
-    extends DBSybase
+public class DBMSSQL extends DBSybase
 {
     /**
      * Empty constructor.

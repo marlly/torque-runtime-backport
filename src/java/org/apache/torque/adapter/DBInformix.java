@@ -55,7 +55,6 @@ package org.apache.torque.adapter;
  */
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -66,8 +65,7 @@ import java.sql.Statement;
  * @author <a href="mailto:bpm@ec-group.com">Brian P Millett</a>
  * @version $Id$
  */
-public class DBInformix
-    extends DB
+public class DBInformix extends DB
 {
     /**
      * Empty constructor.

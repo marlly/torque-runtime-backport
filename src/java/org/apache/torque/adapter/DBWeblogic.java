@@ -56,9 +56,7 @@ package org.apache.torque.adapter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * This code should be used for a Weblogic database pool.
@@ -67,8 +65,7 @@ import java.sql.Statement;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public class DBWeblogic
-    extends DB
+public class DBWeblogic extends DB
 {
     private String DATABASE_POOL;   // = "jdbc:weblogic:pool:mla";
 

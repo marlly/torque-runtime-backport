@@ -65,8 +65,7 @@ import java.sql.SQLException;
  * @author <a href="mailto:hakan42@gmx.de">Hakan Tandogan</a>
  * @version $Id$
  */
-public class DBPostgres
-    extends DB
+public class DBPostgres extends DB
 {
     /**
      * Empty constructor.
@@ -83,9 +82,7 @@ public class DBPostgres
      */
     public String toUpperCase(String in)
     {
-        String s =
-            new StringBuffer("UPPER(").append(in).append(")").toString();
-
+        String s = new StringBuffer("UPPER(").append(in).append(")").toString();
         return s;
     }
 
@@ -97,9 +94,7 @@ public class DBPostgres
      */
     public String ignoreCase(String in)
     {
-        String s =
-            new StringBuffer("UPPER(").append(in).append(")").toString();
-
+        String s = new StringBuffer("UPPER(").append(in).append(")").toString();
         return s;
     }
 
@@ -112,8 +107,8 @@ public class DBPostgres
     }
 
     /**
-     * @param name The name of the field (should be of type
-     * <code>String</code>).
+     * @param name The name of the field (should be of type 
+     *      <code>String</code>).
      * @return SQL to retreive the next database key.
      * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object)
      */
@@ -131,7 +126,7 @@ public class DBPostgres
      */
     public String getSequenceSql(Object obj)
     {
-        return "SELECT nextval('" + (String)obj + "')";
+        return "SELECT nextval('" + (String) obj + "')";
     }
 
     /**
@@ -141,9 +136,8 @@ public class DBPostgres
      * @param table The name of the table to lock.
      * @exception SQLException
      */
-    public void lockTable(Connection con,
-                          String table)
-        throws SQLException
+    public void lockTable(Connection con, String table)
+            throws SQLException
     {
     }
 
@@ -154,9 +148,8 @@ public class DBPostgres
      * @param table The name of the table to unlock.
      * @exception SQLException
      */
-    public void unlockTable(Connection con,
-                            String table)
-        throws SQLException
+    public void unlockTable(Connection con, String table)
+            throws SQLException
     {
     }
 
