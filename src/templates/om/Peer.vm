@@ -761,6 +761,7 @@ public abstract class $basePrefix${table.JavaName}Peer
     public static void doUpdate($table.JavaName obj) throws TorqueException
     {
         doUpdate(buildCriteria(obj));
+        obj.setModified(false);
     }
 
     /**
@@ -801,7 +802,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         throws TorqueException
     {
         doUpdate(buildCriteria(obj), con);
+        obj.setModified(false);
     }
+
     /**
      * Method to delete.  This method is to be used during a transaction,
      * otherwise use the doDelete($table.JavaName) method.  It will take
