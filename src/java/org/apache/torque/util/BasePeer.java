@@ -370,8 +370,6 @@ public abstract class BasePeer implements java.io.Serializable
     public static void rollBackTransaction(DBConnection dbCon)
         throws Exception
     {
-        System.out.println(">>> " + dbCon);
-    
         try
         {
             if ( dbCon.getConnection().getMetaData().supportsTransactions() )
