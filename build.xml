@@ -176,6 +176,39 @@
       todir="${build.dir}/classes/org/apache/torque/engine/database/transform"/>
   </target>
 
+  <target name="compile-test" depends="prepare,compile" 
+          description="--> compiles the test source code">  
+    <javac srcdir="${test.dir}"
+      destdir="${test.dir}"
+      excludes="**/package.html"
+      debug="${debug}"
+      deprecation="${deprecation}"
+      optimize="${optimize}">
+      <classpath refid="classpath"/>
+      <classpath>
+          <pathelement path="${build.dir}/classes"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- T E S T                                                            -->
+  <!-- ================================================================== -->
+  <!-- Not currently working due to the way that Ant mucks with 
+       a subprocess's threads
+  <target name="run-test" depends="prepare,compile-test" 
+          description="--> runs the test source code">
+    <java classname="org.apache.torque.pool.PoolTest">
+      <classpath refid="classpath"/>
+      <classpath>
+          <pathelement path="${build.dir}/classes"/>
+          <pathelement path="${test.dir}"/>
+          <pathelement location="../scarab/lib/mm.mysql-2.0.4.jar"/>
+      </classpath>
+    </java>
+  </target>
+  -->
+
   <!-- ================================================================== -->
   <!-- J A R                                                              -->
   <!-- ================================================================== -->
