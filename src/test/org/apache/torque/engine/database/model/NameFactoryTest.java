@@ -67,6 +67,10 @@ import org.apache.torque.BaseTestCase;
  * <p>Unit tests for class <code>NameFactory</code> and known
  * <code>NameGenerator</code> implementations.</p>
  *
+ * <p>To add more tests, add entries to the <code>ALGORITHMS</code>,
+ * <code>INPUTS</code>, and <code>OUTPUTS</code> arrays, and code to
+ * the <code>makeInputs()</code> method.</p>
+ *
  * <p>This test assumes that it's being run using the MySQL database
  * adapter, <code>DBMM</code>.  MySQL has a column length limit of 64
  * characters.</p>
@@ -85,7 +89,7 @@ public class NameFactoryTest extends BaseTestCase
      */
     private static final String[] ALGORITHMS =
     {
-        NameFactory.CONSTRAINT_GENERATOR
+        NameFactory.CONSTRAINT_GENERATOR, NameFactory.JAVA_GENERATOR
     };
 
     /**
@@ -97,7 +101,8 @@ public class NameFactoryTest extends BaseTestCase
           { makeString(61), "I", new Integer(2) },
           { makeString(65), "I", new Integer(3) },
           { makeString(4), "FK", new Integer(1) },
-          { makeString(5), "FK", new Integer(2) } }
+          { makeString(5), "FK", new Integer(2) } },
+        { { "MY_USER" } }
     };
 
     /**
@@ -109,7 +114,8 @@ public class NameFactoryTest extends BaseTestCase
           makeString(60) + "_I_2",
           makeString(60) + "_I_3",
           makeString(4)  + "_FK_1",
-          makeString(5)  + "_FK_2" }
+          makeString(5)  + "_FK_2" },
+        { "MyUser" }
     };
 
     /**
@@ -199,6 +205,10 @@ public class NameFactoryTest extends BaseTestCase
             list = new ArrayList(inputs.length + 1);
             list.add(0, database);
             list.addAll(Arrays.asList(inputs));
+        }
+        else if (NameFactory.JAVA_GENERATOR.equals(algo))
+        {
+            list = Arrays.asList(inputs);
         }
         return list;
     }
