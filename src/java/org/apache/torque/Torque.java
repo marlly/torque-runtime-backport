@@ -54,9 +54,16 @@ package org.apache.torque;
  * <http://www.apache.org/>.
  */
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.collections.ExtendedProperties;
+
+import org.apache.log4j.Category;
+import org.apache.log4j.PropertyConfigurator;
 
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
@@ -67,9 +74,6 @@ import org.apache.torque.oid.IDBroker;
 import org.apache.torque.pool.ConnectionPool;
 import org.apache.torque.pool.DBConnection;
 import org.apache.torque.util.BasePeer;
-
-import org.apache.commons.collections.ExtendedProperties;
-import org.apache.log4j.Category;
 
 /**
  * The implementation of Torque.
@@ -130,14 +134,14 @@ public class Torque
     private static Monitor monitor;
 
     /**
-     * Initializes the service.
+     * Initializes Torque.
      */
     public static void init()
         throws Exception
     {
-        dbMaps = (Map)new HashMap();
+        dbMaps = new HashMap();
 
-        pools = (Map) new HashMap();
+        pools = new HashMap();
 
         // Create monitor thread
         monitor = new Monitor();
@@ -148,19 +152,37 @@ public class Torque
         monitor.setDaemon(true);
         monitor.start();
 
-        DBFactory.setConfiguration(configuration);
-        DBFactory.setCategory(category);
         DBFactory.init();
-
-        BasePeer.setCategory(category);
     }
 
     /**
-     * Sets the logging category.
+     * Brute-force initialization of Torque via a configuration file.
+     *
+     * @param configFile The path to the configuration file.
+     */
+    public static void init(String configFile)
+        throws Exception
+    {
+        ExtendedProperties c = new ExtendedProperties(configFile);
+        c = c.subset("services.DatabaseService");
+
+        Properties p = new Properties();
+        p.load(new FileInputStream(configFile));
+        PropertyConfigurator.configure(p);
+
+        Torque.setConfiguration(c);
+        Torque.setCategory(Category.getInstance("ALL"));
+        Torque.init();
+    }
+
+    /**
+     * Sets the logging category for Torque and all dependencies.
      */
     public static void setCategory(Category c)
     {
         category = c;
+        DBFactory.setCategory(c);
+        BasePeer.setCategory(c);
     }
 
     /**
@@ -172,11 +194,12 @@ public class Torque
     }
 
     /**
-     * Sets the configuration.
+     * Sets the configuration for Torque and all dependencies.
      */
     public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
+        DBFactory.setConfiguration(c);
     }
 
     /**
