@@ -212,7 +212,7 @@
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
-      <version>20030825.184428</version>
+      <version>1.1-RC1</version>
       <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
@@ -227,7 +227,7 @@
     </dependency>
     <dependency>
       <id>commons-pool</id>
-      <version>20030825.183949</version>
+      <version>1.1-RC1</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
     </dependency>
     <dependency>

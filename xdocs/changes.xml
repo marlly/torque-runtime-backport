@@ -9,6 +9,12 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='update'>
+        Upgrade to commons-pool-1.1-RC1 and commons-dbcp-1.1RC1
+      </action>
+      <action dev='mpoeschl' type='update'>
+        Refactored generator model (removed AppData class)
+      </action>
       <action dev='mpoeschl' type='fix'>
         TRQS180: NumberKey long constructor introduces rounding errors.
       </action>
