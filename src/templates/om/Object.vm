@@ -1108,6 +1108,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     }
 #end
 
+#if (!$table.isAlias())
     /**
      * returns a peer instance associated with this om.  Since Peer classes
      * are not to have any instance attributes, this method returns the
@@ -1118,5 +1119,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         return peer;
     }
+#end
 }
 
