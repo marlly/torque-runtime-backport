@@ -69,11 +69,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Properties;
 import java.util.TreeSet;
-import java.util.Iterator;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Driver;
@@ -105,7 +103,14 @@ import org.apache.tools.ant.types.Reference;
  */
 public class TorqueSQLExec extends Task
 {
+    private int goodSql = 0;
+    private int totalSql = 0;
+    private Path classpath;
+    private AntClassLoader loader;
 
+    /**
+     * 
+     */
     static public class DelimiterType extends EnumeratedAttribute
     {
         static public final String NORMAL = "normal";
@@ -116,10 +121,6 @@ public class TorqueSQLExec extends Task
             return new String[] {NORMAL, ROW};
         }
     }
-
-    private int goodSql = 0, totalSql = 0;
-    private Path classpath;
-    private AntClassLoader loader;
 
     /**
      * Database connection
@@ -423,8 +424,7 @@ public class TorqueSQLExec extends Task
     /**
      * Load the sql file and then execute it
      */
-    public void execute()
-        throws BuildException
+    public void execute() throws BuildException
     {
         sqlCommand = sqlCommand.trim();
 
@@ -540,17 +540,17 @@ public class TorqueSQLExec extends Task
             }
             driverInstance = (Driver) dc.newInstance();
         }
-        catch(ClassNotFoundException e)
+        catch (ClassNotFoundException e)
         {
             throw new BuildException("Class Not Found: JDBC driver " + driver +
                 " could not be loaded", location);
         }
-        catch(IllegalAccessException e)
+        catch (IllegalAccessException e)
         {
             throw new BuildException("Illegal Access: JDBC driver " + driver +
                 " could not be loaded", location);
         }
-        catch(InstantiationException e)
+        catch (InstantiationException e)
         {
             throw new BuildException("Instantiation Exception: JDBC driver " +
                 driver + " could not be loaded", location);
@@ -567,10 +567,13 @@ public class TorqueSQLExec extends Task
             if (conn == null)
             {
                 // Driver doesn't understand the URL
-                throw new SQLException("No suitable Driver for "+url);
+                throw new SQLException("No suitable Driver for " + url);
             }
 
-            if (!isValidRdbms(conn)) return;
+            if (!isValidRdbms(conn)) 
+            {
+                return;
+            }
 
             conn.setAutoCommit(autocommit);
             statement = conn.createStatement();
@@ -579,12 +582,15 @@ public class TorqueSQLExec extends Task
             {
                 if (output != null)
                 {
-                    log("Opening PrintStream to output file " + output, Project.MSG_VERBOSE);
-                    out = new PrintStream(new BufferedOutputStream(new FileOutputStream(output)));
+                    log("Opening PrintStream to output file " + output, 
+                            Project.MSG_VERBOSE);
+                    out = new PrintStream(new BufferedOutputStream(
+                            new FileOutputStream(output)));
                 }
 
                 // Process all transactions
-                for (Enumeration e = transactions.elements(); e.hasMoreElements();)
+                for (Enumeration e = transactions.elements(); 
+                        e.hasMoreElements();)
                 {
                     ((Transaction) e.nextElement()).runTransaction(out);
                     if (!autocommit)
@@ -602,7 +608,7 @@ public class TorqueSQLExec extends Task
                 }
             }
         }
-        catch(IOException e)
+        catch (IOException e)
         {
             if (!autocommit && conn != null && onError.equals("abort"))
             {
@@ -617,7 +623,7 @@ public class TorqueSQLExec extends Task
             }
             throw new BuildException(e, location);
         }
-        catch(SQLException e)
+        catch (SQLException e)
         {
             if (!autocommit && conn != null && onError.equals("abort"))
             {
@@ -652,8 +658,15 @@ public class TorqueSQLExec extends Task
             " SQL statements executed successfully");
     }
 
+    /**
+     * 
+     * @param reader
+     * @param out
+     * @throws SQLException
+     * @throws IOException
+     */
     protected void runStatements(Reader reader, PrintStream out)
-        throws SQLException, IOException
+            throws SQLException, IOException
     {
         String sql = "";
         String line = "";
@@ -662,7 +675,7 @@ public class TorqueSQLExec extends Task
 
         try
         {
-            while ((line=in.readLine()) != null)
+            while ((line = in.readLine()) != null)
             {
                 line = line.trim();
                 line = ProjectHelper.replaceProperties(project, line,
@@ -680,21 +693,25 @@ public class TorqueSQLExec extends Task
                 // so we cannot just remove it, instead we must end it
                 if (line.indexOf("--") >= 0) sql += "\n";
 
-                if (delimiterType.equals(DelimiterType.NORMAL) && sql.endsWith(delimiter) ||
-                    delimiterType.equals(DelimiterType.ROW) && line.equals(delimiter)) {
+                if (delimiterType.equals(DelimiterType.NORMAL) 
+                        && sql.endsWith(delimiter) 
+                        || delimiterType.equals(DelimiterType.ROW) 
+                        && line.equals(delimiter)) 
+                {
                     log("SQL: " + sql, Project.MSG_VERBOSE);
-                    execSQL(sql.substring(0, sql.length() - delimiter.length()), out);
+                    execSQL(sql.substring(0, sql.length() - delimiter.length()),
+                            out);
                     sql = "";
                 }
             }
 
             // Catch any statements not followed by ;
-            if(!sql.equals(""))
+            if (!sql.equals(""))
             {
                 execSQL(sql, out);
             }
         }
-        catch(SQLException e)
+        catch (SQLException e)
         {
             throw e;
         }
@@ -702,7 +719,7 @@ public class TorqueSQLExec extends Task
 
     /**
      * Verify if connected to the correct RDBMS
-     **/
+     */
     protected boolean isValidRdbms(Connection conn)
     {
         if (rdbms == null && version == null)
@@ -721,21 +738,23 @@ public class TorqueSQLExec extends Task
                 log("RDBMS = " + theVendor, Project.MSG_VERBOSE);
                 if (theVendor == null || theVendor.indexOf(rdbms) < 0)
                 {
-                    log("Not the required RDBMS: "+rdbms, Project.MSG_VERBOSE);
+                    log("Not the required RDBMS: " 
+                            + rdbms, Project.MSG_VERBOSE);
                     return false;
                 }
             }
 
             if (version != null)
             {
-                String theVersion = dmd.getDatabaseProductVersion().toLowerCase();
+                String theVersion = dmd.getDatabaseProductVersion()
+                        .toLowerCase();
 
                 log("Version = " + theVersion, Project.MSG_VERBOSE);
-                if (theVersion == null ||
-                    !(theVersion.startsWith(version) ||
-                      theVersion.indexOf(" " + version) >= 0))
+                if (theVersion == null || !(theVersion.startsWith(version) 
+                        || theVersion.indexOf(" " + version) >= 0))
                 {
-                    log("Not the required version: \""+ version +"\"", Project.MSG_VERBOSE);
+                    log("Not the required version: \"" + version + "\"", 
+                            Project.MSG_VERBOSE);
                     return false;
                 }
             }
@@ -764,7 +783,7 @@ public class TorqueSQLExec extends Task
             if (!statement.execute(sql))
             {
                 log(statement.getUpdateCount() + " rows affected",
-                    Project.MSG_VERBOSE);
+                        Project.MSG_VERBOSE);
             }
             else
             {
@@ -778,7 +797,7 @@ public class TorqueSQLExec extends Task
             while (warning != null)
             {
                 log(warning + " sql warning", Project.MSG_VERBOSE);
-                warning=warning.getNextWarning();
+                warning = warning.getNextWarning();
             }
             conn.clearWarnings();
             goodSql++;
@@ -897,7 +916,8 @@ public class TorqueSQLExec extends Task
                 log("Executing file: " + tSrcFile.getAbsolutePath(),
                     Project.MSG_INFO);
                 Reader reader = (encoding == null) ? new FileReader(tSrcFile)
-                                                   : new InputStreamReader(new FileInputStream(tSrcFile), encoding);
+                        : new InputStreamReader(new FileInputStream(tSrcFile), 
+                        encoding);
                 runStatements(reader, out);
                 reader.close();
             }

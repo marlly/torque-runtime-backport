@@ -55,7 +55,6 @@ package org.apache.torque.task;
  */
 
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
 
 /**
  * An extended Texen task used for generating simple scripts
@@ -64,8 +63,7 @@ import org.apache.velocity.VelocityContext;
  * @author <a href="mailto:jvanzyl@zenplex.com">Jason van Zyl</a>
  * @version $Id$
  */
-public class TorqueCreateDatabase 
-    extends TorqueDataModelTask
+public class TorqueCreateDatabase extends TorqueDataModelTask
 {
     /**
      * The target database vendor: MySQL, Oracle.
@@ -77,7 +75,7 @@ public class TorqueCreateDatabase
      *
      * @return String target database.
      */
-    public String getTargetDatabase ()
+    public String getTargetDatabase()
     {
         return targetDatabase;
     }
@@ -87,7 +85,7 @@ public class TorqueCreateDatabase
      *
      * @param String target database(s)
      */
-    public void setTargetDatabase (String v)
+    public void setTargetDatabase(String v)
     {
         targetDatabase = v;
     }
@@ -97,8 +95,7 @@ public class TorqueCreateDatabase
      * values into the context for use in the
      * templates.
      */
-    public Context initControlContext()
-        throws Exception
+    public Context initControlContext() throws Exception
     {   
         super.initControlContext();
         context.put("targetDatabase", targetDatabase);

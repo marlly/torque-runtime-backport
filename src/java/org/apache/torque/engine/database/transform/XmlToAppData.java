@@ -56,8 +56,6 @@ package org.apache.torque.engine.database.transform;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.PrintStream;
-import java.io.Reader;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.List;
@@ -67,31 +65,21 @@ import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Column;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.model.ForeignKey;
-import org.apache.torque.engine.database.model.IdMethodParameter;
 import org.apache.torque.engine.database.model.Index;
-import org.apache.torque.engine.database.model.Inheritance;
 import org.apache.torque.engine.database.model.Table;
 import org.apache.torque.engine.database.model.Unique;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * A Class that is used to parse an input
- * xml schema file and creates and AppData java structure.
- * It uses apache Xerces to do the xml parsing.
+ * A Class that is used to parse an input xml schema file and creates an AppData
+ * java structure.
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
@@ -101,6 +89,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XmlToAppData extends DefaultHandler
 {
+    /** enables debug output */
     private static final boolean DEBUG = false;
 
     private AppData app;
@@ -153,17 +142,17 @@ public class XmlToAppData extends DefaultHandler
             FileReader fr = null;
             try
             {
-                fr = new FileReader (xmlFile);
+                fr = new FileReader(xmlFile);
             }
             catch (FileNotFoundException fnfe)
             {
                 throw new FileNotFoundException
                     (new File(xmlFile).getAbsolutePath());
             }
-            BufferedReader br = new BufferedReader (fr);
+            BufferedReader br = new BufferedReader(fr);
             try
             {
-                InputSource is = new InputSource (br);
+                InputSource is = new InputSource(br);
                 parser.parse(is, this);
             }
             finally
@@ -241,10 +230,9 @@ public class XmlToAppData extends DefaultHandler
                 }
                 else if (rawName.equals("foreign-key"))
                 {
-                    String foreignTableName =
-                        attributes.getValue("foreignTable");
-                    foreignTable = currDB
-                        .getTable(foreignTableName);
+                    String foreignTableName = 
+                            attributes.getValue("foreignTable");
+                    foreignTable = currDB.getTable(foreignTableName);
                     if ( foreignTable == null )
                     {
                         System.out.println("ERROR!! Attempt to set foreign"
@@ -378,8 +366,7 @@ public class XmlToAppData extends DefaultHandler
     /**
      * Warning callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void warning(SAXParseException spe)
     {
@@ -389,8 +376,7 @@ public class XmlToAppData extends DefaultHandler
     /**
      * Error callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void error(SAXParseException spe)
     {
@@ -400,8 +386,7 @@ public class XmlToAppData extends DefaultHandler
     /**
      * Fatal error callback.
      *
-     * @exception spe The parse exception that caused the callback to be
-     *                invoked.
+     * @param spe The parse exception that caused the callback to be invoked.
      */
     public void fatalError(SAXParseException spe)
     {

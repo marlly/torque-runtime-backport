@@ -146,7 +146,7 @@ public class TorqueDataModelTask
     /**
      * Set the sqldbmap.
      *
-     * @param String sqldbmap
+     * @param sqldbmap th db map 
      */
     public void setSqlDbMap(String sqldbmap)
     {
@@ -186,8 +186,7 @@ public class TorqueDataModelTask
     }        
 
     /**
-     *  Get the xml schema describing the application
-     *  model.
+     * Get the xml schema describing the application model.
      *
      * @return  String xml schema file.
      */
@@ -197,8 +196,7 @@ public class TorqueDataModelTask
     }
 
     /**
-     *  Set the xml schema describing the application
-     *  model.
+     * Set the xml schema describing the application model.
      *
      * @param xmlFile The new XmlFile value
      */
@@ -220,7 +218,7 @@ public class TorqueDataModelTask
      *
      * @return String target database(s)
      */
-    public String getTargetDatabase ()
+    public String getTargetDatabase()
     {
         return targetDatabase;
     }
@@ -229,9 +227,9 @@ public class TorqueDataModelTask
      * Set the current target package.  This is where
      * generated java classes will live.
      *
-     * @param String target database(s)
+     * @param v target database(s)
      */
-    public void setTargetDatabase (String v)
+    public void setTargetDatabase(String v)
     {
         targetDatabase = v;
     }
@@ -257,13 +255,11 @@ public class TorqueDataModelTask
     }
     
     /**
-     *  Set up the initialial context for generating the
-     *  SQL from the XML schema.
+     * Set up the initialial context for generating the SQL from the XML schema.
      *
      * @return  Description of the Returned Value
      */
-    public Context initControlContext()
-        throws Exception
+    public Context initControlContext() throws Exception
     {
         XmlToAppData xmlParser;
     

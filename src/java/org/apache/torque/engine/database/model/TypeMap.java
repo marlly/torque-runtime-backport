@@ -55,10 +55,7 @@ package org.apache.torque.engine.database.model;
  */
 
 import java.util.Hashtable;
-import java.util.Date;
 import java.sql.Types;
-
-import java.math.BigDecimal;
 
 // I don't know if the peer system deals
 // with the recommended mappings.
@@ -501,8 +498,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         return (String)jdbcToJavaObjectMap.get(jdbcType);
     }
 
@@ -514,8 +512,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         return (String) jdbcToJavaNativeMap.get(jdbcType);
     }
 
@@ -527,8 +526,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-        
+        }
         String s = (String)jdbcToJavaNativeObjectMap.get(jdbcType);
         if ( s == null ) 
         {
@@ -545,8 +545,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         return (String) jdbcToVillageMethodMap.get(jdbcType);
     }
 
@@ -558,8 +559,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         String s = (String)jdbcToVillageObjectMethodMap.get(jdbcType);
         if ( s == null ) 
         {
@@ -576,8 +578,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         return (String) jdbcToPPMethodMap.get(jdbcType);
     }
 
@@ -588,8 +591,9 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
+        }
         return (String) torqueTypeToJdbcTypeMap.get(type);
     }
 
@@ -601,9 +605,10 @@ public class TypeMap
     {
         // Make sure the we are initialized.
         if (isInitialized == false)
+        {
             initialize();
-
-        return (String)jdbcToTorqueTypeMap.get(sqlType);
+        }
+        return (String) jdbcToTorqueTypeMap.get(sqlType);
     }
 
     /**

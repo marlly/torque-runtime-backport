@@ -55,7 +55,6 @@ package org.apache.torque.task;
  */
 
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
 
 /**
  * An ant task for generating output by using Velocity
@@ -119,11 +118,9 @@ public class TorqueDocumentationTask extends TorqueDataModelTask
     }
 
     /**
-     * Place our target package value
-     * into the context for use in the templates.
+     * Place our target package value into the context for use in the templates.
      */
-    public Context initControlContext()
-        throws Exception
+    public Context initControlContext() throws Exception
     {
         super.initControlContext();
         context.put("targetDatabase", targetDatabase);

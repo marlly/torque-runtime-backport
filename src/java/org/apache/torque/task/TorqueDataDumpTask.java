@@ -54,36 +54,27 @@ package org.apache.torque.task;
  * <http://www.apache.org/>.
  */
 
-import java.util.Date;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.NoSuchElementException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.tools.ant.Project;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.texen.ant.TexenTask;
-import org.apache.torque.engine.database.model.AppData;
-import org.apache.torque.engine.database.model.Database;
-import org.apache.torque.engine.database.transform.XmlToAppData;
 
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 
 /**
- *  An extended Texen task used for dumping data from db into XML
+ * An extended Texen task used for dumping data from db into XML
  *
- * @author <a href="mailto:fedor.karpelevitch@home.com">  Fedor Karpelevitch  </a>
+ * @author <a href="mailto:fedor.karpelevitch@home.com">Fedor Karpelevitch</a>
  * @author <a href="jvanzyl@zenplex.com">Jason van Zyl</a>
  * @author <a href="dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class TorqueDataDumpTask
-    extends TorqueDataModelTask
+public class TorqueDataDumpTask extends TorqueDataModelTask
 {
     /**
      * Database name.
@@ -270,8 +261,7 @@ public class TorqueDataDumpTask
      *
      * @exception Exception Database problem while closing resource.
      */
-    protected void cleanup()
-        throws Exception
+    protected void cleanup() throws Exception
     {
         if (stmt != null)
         {
@@ -308,7 +298,6 @@ public class TorqueDataDumpTask
         {
         }
 
-
         /**
          *  Constructor for the TableTool object
          *
@@ -322,7 +311,6 @@ public class TorqueDataDumpTask
             this.qds.fetchRecords();
             this.isEmpty = !(qds.size() > 0);
         }
-
 
         /**
          *  Fetches an <code>Iterator</code> for the data in the named
@@ -342,7 +330,6 @@ public class TorqueDataDumpTask
                 (new QueryDataSet(conn, "SELECT * FROM " + tableName));
         }
 
-
         /**
          *  Description of the Method
          *
@@ -352,7 +339,7 @@ public class TorqueDataDumpTask
         {
             try
             {
-                return ((this.curIndex < this.qds.size()-1) && (!isEmpty));
+                return ((this.curIndex < this.qds.size() - 1) && (!isEmpty));
             }
             catch (Exception se)
             {
@@ -362,12 +349,11 @@ public class TorqueDataDumpTask
             return false;
         }
 
-
         /**
-         *  Description of the Method
+         * load the next record from the QueryDataSet
          *
-         * @return  Description of the Returned Value
-         * @exception  NoSuchElementException Description of Exception
+         * @return Description of the Returned Value
+         * @exception NoSuchElementException Description of Exception
          */
         public Object next() throws NoSuchElementException
         {
@@ -385,12 +371,11 @@ public class TorqueDataDumpTask
             return this;
         }
 
-
         /**
-         *  Description of the Method
+         * Retruns the value for the column
          *
-         * @param  columnName Description of Parameter
-         * @return  Description of the Returned Value
+         * @param  columnName name of the column
+         * @return  value of the column or null if it doesn't exist
          */
         public String get(String columnName)
         {
@@ -406,11 +391,10 @@ public class TorqueDataDumpTask
             return null;
         }
 
-
         /**
-         *  Description of the Method
+         * unsupported! always throws Exception
          *
-         * @exception  UnsupportedOperationException Description of Exception
+         * @exception UnsupportedOperationException
          */
         public void remove() throws UnsupportedOperationException
         {

@@ -59,7 +59,6 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Properties;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.VelocityContext;
 import org.apache.torque.engine.database.model.AppData;
 import org.apache.torque.engine.database.model.Database;
 import org.apache.torque.engine.database.transform.XmlToData;
@@ -72,8 +71,7 @@ import org.apache.torque.engine.database.transform.XmlToData;
  * @author <a href="mailto:fedor.karpelevitch@home.com"> Fedor Karpelevitch </a>
  * @version $Id$
  */
-public class TorqueDataSQLTask
-    extends TorqueDataModelTask
+public class TorqueDataSQLTask extends TorqueDataModelTask
 {
     private String dataXmlFile;
     private String dataDTD;

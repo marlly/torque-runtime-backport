@@ -135,7 +135,7 @@ public class Table implements IDMethod
     /**
      * Load the table object from an xml tag.
      */
-    public void loadFromXML (Attributes attrib, String defaultIdMethod)
+    public void loadFromXML(Attributes attrib, String defaultIdMethod)
     {
         name = attrib.getValue("name");
         javaName = attrib.getValue("javaName");
@@ -366,8 +366,8 @@ public class Table implements IDMethod
     public Column addColumn(Attributes attrib)
     {
         Column col = new Column();
-        col.setTable (this);
-        col.loadFromXML (attrib);
+        col.setTable(this);
+        col.loadFromXML(attrib);
         addColumn(col);
         return col;
     }
@@ -417,13 +417,13 @@ public class Table implements IDMethod
     public List getChildrenNames()
     {
         if ( inheritanceColumn == null
-             || !inheritanceColumn.isEnumeratedClasses() )
+                || !inheritanceColumn.isEnumeratedClasses() )
         {
             return null;
         }
         List children = inheritanceColumn.getChildren();
         List names = new ArrayList(children.size());
-        for ( int i=0; i<children.size(); i++ )
+        for ( int i = 0; i < children.size(); i++ )
         {
             names.add( ((Inheritance)children.get(i)).getClassName() );
         }

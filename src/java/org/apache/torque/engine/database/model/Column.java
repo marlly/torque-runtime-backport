@@ -81,6 +81,7 @@ public class Column
     private String javaNamingMethod;
     private boolean isNotNull = false;
     private String size;
+    /** type as defined in schema.xml */
     private String torqueType;
     private String javaType;
     private Object columnType;
@@ -150,7 +151,7 @@ public class Column
     /**
      * Imports a column from an XML specification
      */
-    public void loadFromXML (Attributes attrib)
+    public void loadFromXML(Attributes attrib)
     {
         //Name
         name = attrib.getValue("name");
@@ -743,17 +744,17 @@ public class Column
         else if (tn.indexOf ("DATE") != -1 )
         {
             torqueType = "DATE";
-            columnType = new java.util.Date();
+            columnType = new Date();
         }
         else if (tn.indexOf ("TIME") != -1)
         {
             torqueType = "TIMESTAMP";
-            columnType = new java.util.Date();
+            columnType = new Date();
         }
         else if (tn.indexOf ("BINARY") != -1)
         {
             torqueType = "LONGVARBINARY";
-            columnType = new java.util.Hashtable();
+            columnType = new Hashtable();
         }
         else
         {

@@ -64,9 +64,6 @@ import org.xml.sax.Attributes;
 
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
-
-import org.apache.torque.engine.database.model.NameGenerator;
-
 import org.apache.torque.adapter.IDMethod;
 
 
@@ -120,8 +117,7 @@ public class Database
         {
             defaultJavaNamingMethod = NameGenerator.CONV_METHOD_UNDERSCORE;
         }
-        heavyIndexing = "true"
-            .equals(attrib.getValue("heavyIndexing"));
+        heavyIndexing = "true".equals(attrib.getValue("heavyIndexing"));
     }
 
     /**
@@ -274,7 +270,7 @@ public class Database
         Table[] tbls = new Table[size];
         for (int i = 0; i < size; i++)
         {
-            tbls[i] = (Table)tableList.get(i);
+            tbls[i] = (Table) tableList.get(i);
         }
         return tbls;
     }
@@ -283,18 +279,18 @@ public class Database
      * Return the table with the specified name.
      * @return A Table object.  If it does not exist it returns null
      */
-    public Table getTable (String name)
+    public Table getTable(String name)
     {
-        return (Table)tablesByName.get(name);
+        return (Table) tablesByName.get(name);
     }
 
     /**
      * Return the table with the specified javaName.
      * @return A Table object.  If it does not exist it returns null
      */
-    public Table getTableByJavaName (String javaName)
+    public Table getTableByJavaName(String javaName)
     {
-        return (Table)tablesByJavaName.get(javaName);
+        return (Table) tablesByJavaName.get(javaName);
     }
 
     /**
@@ -303,9 +299,9 @@ public class Database
     public Table addTable(Attributes attrib)
     {
         Table tbl = new Table();
-        tbl.setDatabase (this);
-        tbl.loadFromXML (attrib, this.getDefaultIdMethod());
-        addTable (tbl);
+        tbl.setDatabase(this);
+        tbl.loadFromXML(attrib, this.getDefaultIdMethod());
+        addTable(tbl);
         return tbl;
     }
 
@@ -314,7 +310,7 @@ public class Database
      */
     public void addTable(Table tbl)
     {
-        tbl.setDatabase (this);
+        tbl.setDatabase(this);
         tableList.add(tbl);
         tablesByName.put(tbl.getName(), tbl);
         tablesByJavaName.put(tbl.getJavaName(), tbl);
@@ -372,7 +368,7 @@ public class Database
     public boolean requiresIdTable()
     {
         Table table[] = getTables();
-        for (int i=0; i<table.length; i++)
+        for (int i = 0; i < table.length; i++)
         {
             if (table[i].getIdMethod().equals(IDMethod.ID_BROKER))
             {

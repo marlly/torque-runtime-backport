@@ -180,7 +180,7 @@ public class AppData
     /**
      * Set the name of the database.
      *
-     * @param String name
+     * @param name of the database.
      */
     public void setName(String name)
     {
@@ -209,6 +209,8 @@ public class AppData
 
     /**
      * Return an array of all databases
+     * 
+     * @return Array of Database objects
      */
     public Database[] getDatabases()
     {
@@ -216,7 +218,7 @@ public class AppData
         Database[] dbs = new Database[size];
         for (int i = 0; i < size; i++)
         {
-            dbs[i] = (Database)dbList.get(i);
+            dbs[i] = (Database) dbList.get(i);
         }
         return dbs;
     }
@@ -231,6 +233,7 @@ public class AppData
 
     /**
      * Return the database with the specified name.
+     * 
      * @return A Database object.  If it does not exist it returns null
      */
     public Database getDatabase (String name)
