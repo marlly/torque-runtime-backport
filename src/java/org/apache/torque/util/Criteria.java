@@ -167,6 +167,9 @@ public class Criteria extends Hashtable
     /** The name of the database. */
     private String dbName;
 
+    /** The name of the database as given in the contructor. */
+    private String originalDbName;
+
     /**
      * To limit the number of rows to return.  <code>-1</code> means return all
      * rows.
@@ -227,7 +230,35 @@ public class Criteria extends Hashtable
     {
         super(initialCapacity);
         this.dbName = dbName;
+        this.originalDbName = dbName;
     }
+
+    /**
+     * Brings this criteria back to its initial state, so that it
+     * can be reused as if it was new. Except if the criteria has grown in
+     * capacity, it is left at the current capacity.
+     */
+    public void clear() 
+    {
+       super.clear();
+       ignoreCase = false;
+       singleRecord = false;
+       cascade = false;
+       selectModifiers.clear();
+       selectColumns.clear();
+       orderByColumns.clear();
+       groupByColumns.clear();
+       having = null;
+       asColumns.clear();
+       joinL = null;
+       joinR = null;       
+       dbName = originalDbName;
+       offset = 0;
+       limit = -1;
+       blobFlag = null;
+       aliases = null;
+       useTransaction = false;
+     }
 
     /**
      * Add an AS clause to the select columns. Usage:
