@@ -58,9 +58,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.ArrayList;
 import org.apache.torque.Torque;
-import org.apache.torque.util.BasePeer;
 import org.apache.torque.pool.DBConnection;
-import org.apache.torque.util.BasePeer;
 import com.workingdogs.village.QueryDataSet;
 
 /**
@@ -80,8 +78,7 @@ import com.workingdogs.village.QueryDataSet;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @version $Id$
  */
-public class LargeSelect
-    implements Runnable
+public class LargeSelect implements Runnable
 {
     private int miniblock;
     private int memoryLimit;
@@ -115,11 +112,10 @@ public class LargeSelect
      * one time.
      * @exception Exception, a generic exception.
      */
-    public LargeSelect(Criteria criteria,
-                       int memoryLimit)
+    public LargeSelect(Criteria criteria, int memoryLimit)
         throws Exception
     {
-        miniblock = Math.min(100, memoryLimit/100+1);
+        miniblock = Math.min(100, memoryLimit / 100 + 1);
         name = DEFAULT_NAME;
         init(name, criteria, memoryLimit);
     }
@@ -140,7 +136,7 @@ public class LargeSelect
                        int memoryLimit)
         throws Exception
     {
-        miniblock = Math.min(100, memoryLimit/100);
+        miniblock = Math.min(100, memoryLimit / 100);
         init(name, criteria, memoryLimit);
     }
 
@@ -230,7 +226,7 @@ public class LargeSelect
     public List getPreviousResults()
         throws Exception
     {
-        return getResults(position-2*miniblock, miniblock);
+        return getResults(position - 2 * miniblock, miniblock);
     }
 
     /**
@@ -267,9 +263,9 @@ public class LargeSelect
         // Request was for a block of rows which should be in progess.
         // If the rows have not yet been returned, wait for them to be
         // retrieved.
-        if ( start >= blockBegin  &&  (start+size-1) < blockEnd )
+        if ( start >= blockBegin  &&  (start + size - 1) < blockEnd )
         {
-            while ( (start+size-1) > currentlyFilledTo )
+            while ( (start + size - 1) > currentlyFilledTo )
             {
                 Thread.currentThread().sleep(500);
             }
@@ -280,7 +276,7 @@ public class LargeSelect
         else if ( start < blockBegin  &&  start >= 0 )
         {
             stopQuery();
-            if (memoryLimit >= 2*size)
+            if (memoryLimit >= 2 * size)
             {
                 blockBegin = start - size;
                 blockEnd = blockBegin + memoryLimit - 1;
@@ -296,7 +292,7 @@ public class LargeSelect
 
         // Assume we are moving on, do not retrieve any records prior
         // to start.
-        else if ( (start+size-1) >= blockEnd )
+        else if ( (start + size - 1) >= blockEnd )
         {
             stopQuery();
             blockBegin = start;
@@ -310,14 +306,13 @@ public class LargeSelect
         }
 
         List returnResults = new ArrayList(size);
-        for (int i=(start-blockBegin); i<(start-blockBegin+size); i++)
+        for (int i = (start - blockBegin); i < (start - blockBegin + size); i++)
         {
             returnResults.add( results.get(i) );
         }
-        position = start+size;
+        position = start + size;
         return returnResults;
     }
-
 
     /**
      * A background thread that retrieves the rows.
@@ -348,7 +343,7 @@ public class LargeSelect
                 List tempResults = BasePeer.getSelectResults( qds,
                                                               size,
                                                               false);
-                for (int i=0; i<tempResults.size(); i++)
+                for (int i = 0; i < tempResults.size(); i++)
                 {
                     results.add( tempResults.get(i) );
                 }
