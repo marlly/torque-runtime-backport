@@ -386,6 +386,7 @@ public class TorqueJDBCTransformTask extends Task
                 tables.addElement(name);
             }
         }
+	   tableNames.close();
         return tables;
     }
 
@@ -426,6 +427,7 @@ public class TorqueJDBCTransformTask extends Task
             v.addElement (defValue);
             columns.addElement (v);
         }
+	   columnSet.close();
         return columns;
     }
 
@@ -446,6 +448,8 @@ public class TorqueJDBCTransformTask extends Task
         {
             pk.add(parts.getString(4));
         }
+	   
+        parts.close();
         return pk;
     }
 
@@ -488,6 +492,7 @@ public class TorqueJDBCTransformTask extends Task
             ref[1] = foreignKeys.getString(4); //foreign column
             refs.add(ref);
         }
+	   foreignKeys.close();
         return fks.values();
     }
 }
