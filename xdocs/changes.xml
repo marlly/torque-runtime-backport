@@ -27,6 +27,8 @@
 <p>
   <ul>
     <li>
+      Added a Maven plugin for executing Torque commands and updated the
+      <a href="maven-howto.html">Maven Howto</a> to reflect the addition.
     </li>
   </ul>
 </p>
