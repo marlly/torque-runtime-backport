@@ -167,7 +167,7 @@
 
   <target 
     name="project-jdbc" 
-    description="==> jbbc to xml">
+    description="==> jdbc to xml">
 
     <echo message="JDBC transform"/>
 
@@ -342,7 +342,7 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
-  <target 
+  <target
     name="project-sql-classpath">
 
     <echo message="+------------------------------------------+"/>
@@ -352,7 +352,7 @@
     <echo message="|                                          |"/>
     <echo message="+------------------------------------------+"/>
 
-    <taskdef 
+    <taskdef
       name="torque-sql"
       classname="org.apache.torque.task.TorqueSQLTask">
       <classpath refid="classpath"/>
@@ -371,13 +371,46 @@
   </target>
 
   <!-- ================================================================ -->
+  <!-- G E N E R A T E   I D   B R O K E R   I N I T   S Q L            -->
+  <!-- ================================================================ -->
+
+  <target
+    name="id-table-init-sql">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating initialization SQL            |"/>
+    <echo message="| for ID Broker system!                    |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <torque-sql
+      contextProperties="${templatePath}/sql/id-table/project.props"
+      controlTemplate="${idTableControlTemplate}"
+      templatePath="${templatePath}"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      outputFile="${database}-id-table-init.sql"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
+    />
+
+  </target>
+
+
+  <!-- ================================================================ -->
   <!-- G E N E R A T E  P R O J E C T  P E E R  B A S E D  O M          -->
   <!-- ================================================================ -->
   <!-- Generate the Peer-based object model for your project.           -->
   <!-- These are in addition to the base Turbine OM!                    -->
   <!-- ================================================================ -->
 
-  <target 
+  <target
     name="project-om-classpath">
 
     <echo message="+------------------------------------------+"/>

@@ -167,7 +167,7 @@
 
   <target 
     name="project-jdbc" 
-    description="==> jbbc to xml">
+    description="==> jdbc to xml">
 
     <echo message="JDBC transform"/>
 
@@ -226,10 +226,42 @@
   </target>
 
   <!-- ================================================================ -->
+  <!-- G E N E R A T E   I D   B R O K E R   I N I T   S Q L            -->
+  <!-- ================================================================ -->
+
+  <target
+    name="id-table-init-sql">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating initialization SQL            |"/>
+    <echo message="| for ID Broker system!                    |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="torque-sql"
+      classname="org.apache.torque.task.TorqueSQLTask">
+      <classpath refid="classpath"/>
+    </taskdef>
+
+    <torque-sql
+      contextProperties="${templatePath}/sql/id-table/project.props"
+      controlTemplate="${idTableControlTemplate}"
+      templatePath="${templatePath}"
+      outputDirectory="${torque.home}/${outputDirectory}/sql"
+      outputFile="${database}-id-table-init.sql"
+      xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
+    />
+
+  </target>
+
+  <!-- ================================================================ -->
   <!-- Dump data from database into xml file                            -->
   <!-- ================================================================ -->
 
-  <target 
+  <target
     name="project-datadump" 
     description="==> dump data from database into xml file">
 
