@@ -102,6 +102,16 @@ public class Query
     {
         return selectModifiers;
     }
+    
+    /**
+     * Set the modifiers. E.g. DISTINCT and ALL.
+     * 
+     * @param modifiers the modifiers
+     */
+    public void setSelectModifiers(StringStack modifiers)
+    {
+		selectModifiers = modifiers;
+    }
 
     /**
      * Retrieve the columns buffer in order to specify which columns
@@ -115,18 +125,36 @@ public class Query
         return selectColumns;
     }
 
+	/**
+	 * Set the columns.
+	 * 
+	 * @param columns columns list
+	 */
+	public void setSelectClause(StringStack columns)
+	{
+		selectColumns = columns;
+	}
+
     /**
      * Retrieve the from buffer in order to specify which tables are
      * involved in this query.
      *
-     *
-     * @return A StringStack used to add tables involved in the
-     * query.
+     * @return A StringStack used to add tables involved in the query.
      */
     public StringStack getFromClause()
     {
         return fromTables;
     }
+
+	/**
+	 * Set the from clause.
+	 * 
+	 * @param tables the tables
+	 */
+	public void setFromClause(StringStack tables)
+	{
+		fromTables = tables;
+	}
 
     /**
      * Retrieve the where buffer in order to specify the selection
@@ -139,6 +167,16 @@ public class Query
     {
         return whereCriteria;
     }
+
+	/**
+	 * Set the where clause.
+	 *  
+	 * @param where where clause
+	 */
+	public void setWhereClause(StringStack where)
+	{
+		whereCriteria = where;
+	}
 
     /**
      * Retrieve the order by columns buffer in order to specify which
