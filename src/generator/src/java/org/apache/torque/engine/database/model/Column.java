@@ -259,7 +259,9 @@ public class Column
     }
 
     /**
-     * Get name to use in Java sources
+     * Get name to use in Java sources to build method names.
+     * 
+     * @return the capitalised javaName
      */
     public String getJavaName()
     {
@@ -278,7 +280,7 @@ public class Column
                 log.error(e, e);
             }
         }
-        return javaName;
+        return StringUtils.capitalise(javaName);
     }
     
     /**
