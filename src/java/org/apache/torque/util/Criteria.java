@@ -1865,12 +1865,17 @@ public class Criteria extends Hashtable
                 .append(super.get(key).toString()).append(":  ");
         }
 
+        /* createQueryString modifies the Criteria object, so we should not
+           call it during toString().  Commenting this out instead of removing
+           it because a better fix would fix createQueryString to not modify
+           the Criteria
         try
         {
             sb.append("\nCurrent Query SQL (may not be complete or applicable): ")
               .append(BasePeer.createQueryString(this));
         }
         catch (Exception exc) {}
+        */
 
         return sb.toString();
     }
