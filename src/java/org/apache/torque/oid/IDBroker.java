@@ -120,17 +120,24 @@ public class IDBroker
     implements Runnable, IdGenerator
 {
     /**
+     * Name of the ID_TABLE = ID_TABLE
+     */
+    public static final String ID_TABLE = "ID_TABLE";
+
+    /**
      * Fully qualified Table_Name column name
      */
-    public static final String TABLE_NAME = "ID_TABLE.TABLE_NAME";
+    public static final String TABLE_NAME = ID_TABLE + ".TABLE_NAME";
+
     /**
      * Fully qualified Next_ID column name
      */
-    public static final String NEXT_ID = "ID_TABLE.NEXT_ID";
+    public static final String NEXT_ID = ID_TABLE + ".NEXT_ID";
+
     /**
      * Fully qualified Quantity column name
      */
-    public static final String QUANTITY = "ID_TABLE.QUANTITY";
+    public static final String QUANTITY = ID_TABLE + ".QUANTITY";
 
     /** The TableMap referencing the ID_TABLE for this IDBroker. */
     private TableMap tableMap;
@@ -723,9 +730,9 @@ public class IDBroker
         throws Exception
     {
         StringBuffer stmt = new StringBuffer();
-        stmt.append( "SELECT NEXT_ID, QUANTITY" )
-            .append( " FROM ID_TABLE" )
-            .append( " WHERE TABLE_NAME = '" )
+        stmt.append( "SELECT " + NEXT_ID + ", " + QUANTITY)
+            .append( " FROM " + ID_TABLE )
+            .append( " WHERE " + TABLE_NAME + " = '" )
             .append( tableName )
             .append( '\'' );
 
@@ -748,7 +755,7 @@ public class IDBroker
             else
             {
                 throw new TorqueException("The table "+tableName+
-                    " does not have a proper entry in the ID_TABLE");
+                    " does not have a proper entry in the " + ID_TABLE);
             }
         }
         finally
@@ -775,10 +782,10 @@ public class IDBroker
     {
         StringBuffer stmt =
             new StringBuffer(id.length() + tableName.length() + 50);
-        stmt.append( "UPDATE ID_TABLE" )
-            .append( " SET next_id = " )
+        stmt.append( "UPDATE " + ID_TABLE )
+            .append( " SET " + NEXT_ID + " = " )
             .append( id )
-            .append( " WHERE TABLE_NAME = '" )
+            .append( " WHERE " + TABLE_NAME + " = '" )
             .append( tableName )
             .append( '\'' );
 
