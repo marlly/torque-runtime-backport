@@ -14,7 +14,7 @@ o Separate the connection pool and make it pluggable
   that already use PoolMan, or the commons connection pool, or
   the struts connection pool or whatever
 
-o XML an configuration
+o XML as configuration
 
 o Use the digester to turn the datamodel into an object and
   get rid of the dependency on xerces. It would be nice to 
@@ -43,16 +43,26 @@ o using cursors to allow controlled access to a large set
   of data. typically there is no need to see a massive
   set of records all at once.
   
+  [JSS] Not really database agnostic though. Must be implemented
+  conditionally.
+  
 o using proxies for large objects. if you had a user object
   that had 50 attributes it would more efficient to create
   a proxy object of that user that might have a few attributes,
   enough to identify the object. you might use the proxy
   objects in a list and when it is selected the real user
   object is transparently retrieved.
+
+  [JSS] I consider this custom code and can be implemented in
+  the base objects quite easily.
   
 o would it be possible to support native connection methods
   for high efficiency. an easy to access C APIs, would it
   even be useful?
+
+  [JSS] in this case, the JDBC driver can be made native and
+  is probably not a worry/optimization of ours because this 
+  is handled in the JDBC layer.
 
 o application programmers should be able to save, update, and
   delete objects without any knowledge of the database schema.
@@ -62,3 +72,5 @@ o application programmers should be able to save, update, and
   to change but you don't want this to affect application
   programmers who may know little about databases. reasonably
   so, the persistence layer should take care of everything.
+
+  [JSS] YES!
