@@ -529,7 +529,7 @@ public class IDBroker
             long thenLong = lastTime.getTime();
             long nowLong = now.getTime();
             int timeLapse = (int)(nowLong-thenLong);
-            if ( timeLapse < sleepPeriod )
+            if ( timeLapse < sleepPeriod && timeLapse > 0 )
             {
                 Torque.getCategory().info("Unscheduled retrieval of more ids for table: " +
                          tableName);
