@@ -66,6 +66,8 @@ import java.util.ArrayList;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -272,6 +274,15 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         public String getValue()
         {
             return val;
+        }
+
+        public String getEscapedValue()
+        {
+            StringBuffer sb = new StringBuffer();
+            sb.append("'");
+            sb.append(StringUtils.replace(val, "'", "\\'"));
+            sb.append("'");
+            return sb.toString();
         }
     }
 }
