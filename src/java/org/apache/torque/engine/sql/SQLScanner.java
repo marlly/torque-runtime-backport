@@ -65,6 +65,7 @@ import java.util.ArrayList;
  *
  * @author <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a>
  * @author <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
+ * @author <a href="mailto:andyhot@di.uoa.gr">Andreas Andreou</a>
  * @version $Id$
  */
 public class SQLScanner
@@ -92,21 +93,21 @@ public class SQLScanner
      */
     public SQLScanner()
     {
-        this (null);
+        this(null);
     }
 
     /**
      * Creates a new scanner with an Input Reader
      */
-    public SQLScanner (Reader input)
+    public SQLScanner(Reader input)
     {
-        setInput (input);
+        setInput(input);
     }
 
     /**
      * Set the Input
      */
-    public void setInput (Reader input)
+    public void setInput(Reader input)
     {
         in = input;
     }
@@ -118,12 +119,20 @@ public class SQLScanner
      */
     private void readChar() throws IOException
     {
+        boolean wasLine = (char) chr == '\r';
         chr = in.read();
         if ((char) chr == '\n' || (char) chr == '\r' || (char) chr == '\f')
         {
             col = 0;
-            line++;
-        } else col++;
+            if (!wasLine || (char) chr != '\n')
+            {
+                line++;
+            }
+        }
+        else
+        {
+            col++;
+        }
     }
 
     /**
@@ -139,7 +148,25 @@ public class SQLScanner
             readChar();
             c = (char) chr;
         }
-        tokens.add(new Token(token,line,col));
+        int start = col - token.length();
+        tokens.add(new Token(token, line, start));
+    }
+
+    /**
+     * Scans an identifier which had started with the negative sign.
+     */
+    private void scanNegativeIdentifier () throws IOException
+    {
+        token = "-";
+        char c = (char) chr;
+        while (chr != -1 && white.indexOf(c) == -1 && special.indexOf(c) == -1)
+        {
+            token = token + (char) chr;
+            readChar();
+            c = (char) chr;
+        }
+        int start = col - token.length();
+        tokens.add(new Token(token, line, start));
     }
 
     /**
@@ -154,11 +181,14 @@ public class SQLScanner
         boolean inCommentSlashStar = false;
         boolean inCommentDash = false;
 
+        boolean inNegative;
+
         tokens = new ArrayList();
         readChar();
         while (chr != -1)
         {
             char c = (char) chr;
+            inNegative=false;
 
             if ((char) c == commentDash)
             {
@@ -166,6 +196,11 @@ public class SQLScanner
                 if ((char) chr == commentDash)
                 {
                     inCommentDash = true;
+                }
+                else
+                {
+                    inNegative = true;
+                    c = (char) chr;
                 }
             }
 
@@ -208,7 +243,14 @@ public class SQLScanner
             }
             else if (alfanum.indexOf(c) >= 0)
             {
-                scanIdentifier();
+                if (inNegative)
+                {
+                    scanNegativeIdentifier();
+                }
+                else
+                {
+                    scanIdentifier();
+                }
             }
             else if (special.indexOf(c) >= 0)
             {

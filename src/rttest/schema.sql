@@ -4,6 +4,6 @@ CREATE TABLE jiveForum (
   description       TEXT,
   modifiedDate      VARCHAR(15),
   creationDate      VARCHAR(15),
-  moderated         INT default 2 NOT NULL,
+  moderated         INT default -1 NOT NULL,
   PRIMARY KEY       (forumID)
 );
