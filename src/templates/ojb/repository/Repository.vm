@@ -6,8 +6,11 @@
     #set ($package = $targetPackage)
 #end
 
+#set ( $baseId = $modelCount * 1000 )
+
 #foreach ($table in $database.tables)
-  <ClassDescriptor id="$velocityCount">
+  #set ( $id = $baseId + $velocityCount )
+  <ClassDescriptor id="$id">
     <class.name>${package}.${table.JavaName}</class.name>
     <class.proxy>dynamic</class.proxy>
     <class.extent>test.ojb.broker.BookArticle</class.extent>
