@@ -88,32 +88,24 @@ import org.apache.velocity.texen.ant.TexenTask;
 public class TorqueDataModelTask extends TexenTask
 {
     /**
-     *  XML that describes the database model, this is transformed
-     *  into the application model object.
+     * XML that describes the database model, this is transformed
+     * into the application model object.
      */
     protected String xmlFile;
 
-    /**
-     * Fileset of XML schemas which represent our data models.
-     */
+    /** Fileset of XML schemas which represent our data models. */
     protected List filesets = new ArrayList();
 
-    /**
-     * Data models that we collect. One from each XML schema file.
-     */
+    /** Data models that we collect. One from each XML schema file. */
     protected List dataModels = new ArrayList();
 
-    /**
-     * Velocity context which exposes our objects
-     * in the templates.
-     */
+    /** Velocity context which exposes our objects in the templates. */
     protected Context context;
 
     /**
      * Map of data model name to database name.
-     * Should probably stick to the convention
-     * of them being the same but I know right now
-     * in a lot of cases they won't be.
+     * Should probably stick to the convention of them being the same but 
+     * I know right now in a lot of cases they won't be.
      */
     protected Hashtable dataModelDbMap;
 
@@ -136,22 +128,15 @@ public class TorqueDataModelTask extends TexenTask
 
     /**
      * The path to properties file containing db idiosyncrasies is
-     * constructed by appending the "getTargetDatabase()/db.props
-     * to this path.
+     * constructed by appending the "getTargetDatabase()/db.props to this path.
+     * @deprecated replaced by the platform package
      */
     private String basePathToDbProps;
 
-    /**
-     * The target database(s) we are generating SQL
-     * for. Right now we can only deal with a single
-     * target, but we will support multiple targets
-     * soon.
-     */
+    /** The target database(s) we are generating SQL for. */
     private String targetDatabase;
 
-    /**
-     * Target Java package to place the generated files in.
-     */
+    /** Target Java package to place the generated files in. */
     private String targetPackage;
 
 
@@ -177,8 +162,7 @@ public class TorqueDataModelTask extends TexenTask
     }
 
     /**
-     * Return the data models that have been
-     * processed.
+     * Return the data models that have been processed.
      *
      * @return List data models
      */

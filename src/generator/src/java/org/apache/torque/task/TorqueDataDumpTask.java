@@ -3,7 +3,7 @@ package org.apache.torque.task;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,39 +76,25 @@ import com.workingdogs.village.Record;
  */
 public class TorqueDataDumpTask extends TorqueDataModelTask
 {
-    /**
-     * Database name.
-     */
+    /** Database name. */
     private String databaseName;
 
-    /**
-     * Database URL used for JDBC connection.
-     */
+    /** Database URL used for JDBC connection. */
     private String databaseUrl;
 
-    /**
-     * Database driver used for JDBC connection.
-     */
+    /** Database driver used for JDBC connection. */
     private String databaseDriver;
 
-    /**
-     * Database user used for JDBC connection.
-     */
+    /** Database user used for JDBC connection. */
     private String databaseUser;
 
-    /**
-     * Database password used for JDBC connection.
-     */
+    /** Database password used for JDBC connection. */
     private String databasePassword;
 
-    /**
-     * The database connection used to retrieve the data to dump.
-     */
+    /** The database connection used to retrieve the data to dump. */
     private Connection conn;
 
-    /**
-     * The statement used to acquire the data to dump.
-     */
+    /** The statement used to acquire the data to dump. */
     private Statement stmt;
 
     /**
