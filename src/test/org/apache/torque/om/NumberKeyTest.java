@@ -151,4 +151,12 @@ public class NumberKeyTest extends TestCase
         Assert.assertEquals(n2a, array[2]);
     }
     
+    /**
+     * Test long constructor
+     */
+    public void testLongConstructor()
+    {
+        NumberKey key = new NumberKey(9900000000000001L);
+        assertEquals("9900000000000001", key.toString());
+    }    
 }

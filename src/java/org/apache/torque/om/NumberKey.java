@@ -120,7 +120,7 @@ public class NumberKey extends SimpleKey
      */
     public NumberKey(long key)
     {
-        this.key = new BigDecimal(key);
+        this.key = BigDecimal.valueOf(key);
     }
 
     /**

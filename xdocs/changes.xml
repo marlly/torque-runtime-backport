@@ -9,6 +9,9 @@
 
     <release version="3.2-alpha" date="in CVS">
 
+      <action dev='mpoeschl' type='fix'>
+        TRQS180: NumberKey long constructor introduces rounding errors.
+      </action>
       <action dev='mpoeschl' type='remove'>
         Removed the deprecated connection pool (commons-dbcp is used as
         default since 3.1)
