@@ -221,6 +221,9 @@
   </dependencies>
 
   <build>
+
+    <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
+
     <sourceDirectories>
       <sourceDirectory>src/java</sourceDirectory>
     </sourceDirectories>
