@@ -9,6 +9,10 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action type="update" dev="seade">
+        TRQS235 Generated code contains Javadoc error "sentence is 
+        different...".
+      </action>
       <action dev='seade' type='fix'>
         TRQS154: TIME should be enclosed in single quotes for SQL Loader.
         Thanks to Matt Finn for the patch.

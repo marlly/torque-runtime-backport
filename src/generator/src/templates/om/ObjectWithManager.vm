@@ -339,7 +339,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     /**
      * Provides convenient way to set a relationship based on a
-     * ObjectKey.  e.g.
+     * ObjectKey, for example
      * <code>bar.setFooKey(foo.getPrimaryKey())</code>
      *
     #if ($fk.LocalColumns.size() > 1)
