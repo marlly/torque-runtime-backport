@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>Torque</title>
+    <author email="jvanzyl@apache.com">Jason van Zyl</author>
+  </properties>
+
+  <body>
+
+    <section name="References">
+      <p>
+        <ul>
+          <li>
+            <a href="http://www.ambysoft.com/persistenceLayer.pdf">
+            The Design of a Robust Persistence Layer For Relational
+            Databases
+            </a>
+          </li>
+          <li>
+            <a href="http://www.ambysoft.com/mappingObjects.pdf">
+            Mapping Objects to Relational Databases
+            </a>
+          </li>
+        </ul>
+      </p>
+    </section>
+  </body>
+</document>

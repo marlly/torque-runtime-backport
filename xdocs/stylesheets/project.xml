@@ -24,6 +24,7 @@
     <menu name="Development">
       <item name="DB Adapters"           href="/db-adapters.html"/>
       <item name="Changes"               href="/changes.html"/>
+      <item name="References"            href="/references.html"/>
     </menu>
   </body>
 </project>
