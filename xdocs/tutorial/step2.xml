@@ -677,6 +677,14 @@ log4j.appender.default.layout = org.apache.log4j.SimpleLayout
     runtime POM</a>.
   </p>
 
+  <p>
+    <b>
+      Note: There is no need to include the torque-gen jar file in your project
+      classath, including it may adversly affect the logging configuration of 
+      your application.
+    </b>
+  </p>
+
 </section>
 
 <section name="Where to next">
