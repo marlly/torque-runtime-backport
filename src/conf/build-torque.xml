@@ -713,6 +713,36 @@
   </target>
 
   <target
+    name="project-ojb-repository-classpath">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating OJB repository                |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="ojb-repository"
+      classname="org.apache.torque.task.TorqueDataModelTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <ojb-repository
+      contextProperties="${build.properties}"
+      controlTemplate="ojb/repository/Control.vm"
+      targetPackage="${targetPackage}.om"
+      targetDatabase="${database}"
+      outputDirectory="${torque.home}/${outputDirectory}/ojb"
+      useClasspath="true"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputFile="report.${project}.ojb.generation">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </ojb-repository>
+  </target>
+
+  <target
     name="project-ojb-model">
 
     <echo message="+------------------------------------------+"/>
@@ -742,5 +772,34 @@
     </ojb-model>
   </target>
 
+  <target
+    name="project-ojb-model-classpath">
+
+    <echo message="+------------------------------------------+"/>
+    <echo message="|                                          |"/>
+    <echo message="| Generating OJB model                     |"/>
+    <echo message="|                                          |"/>
+    <echo message="+------------------------------------------+"/>
+
+    <taskdef
+      name="ojb-model"
+      classname="org.apache.torque.task.TorqueDataModelTask">
+      <classpath refid="torque-classpath"/>
+    </taskdef>
+
+    <ojb-model
+      contextProperties="${build.properties}"
+      controlTemplate="ojb/model/Control.vm"
+      targetPackage="${targetPackage}.om"
+      targetDatabase="${database}"
+      outputDirectory="${torque.home}/${outputDirectory}/ojb"
+      useClasspath="true"
+      sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
+      outputFile="report.${project}.ojb.generation">
+      <fileset dir="${torque.home}/${schemaDirectory}">
+        <include name="*-schema.xml"/>
+      </fileset>
+    </ojb-model>
+  </target>
 </project>
 
