@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <extend>../../project.xml</extend>
+  <extend>../../project-base.xml</extend>
   <pomVersion>3</pomVersion>
   <id>maven-torque-plugin</id>
   <name>Maven Torque Plug-in</name>
@@ -10,43 +10,6 @@
   <shortDescription>Maven Plugin for Torque</shortDescription>
   <url>http://db.apache.org/torque/maven-plugin/</url>
   <siteDirectory>/www/db.apache.org/torque/maven-plugin</siteDirectory>
-
-  <developers>
-    <developer>
-      <name>Martin Poeschl</name>
-      <id>mpoeschl</id>
-      <email>mpoeschl@marmot.at</email>
-      <organization>Tucana.at</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Stephen Haberman</name>
-      <id>stephenh</id>
-      <email>stephenh@chase3000.com</email>
-      <organization/>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Quinton McCombs</name>
-      <id>quintonm</id>
-      <email>quintonm@bellsouth.net</email>
-      <organization>NequalsOne</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-    </developer>
-  </developers>
-
-  <contributors>
-    <contributor>
-      <name>Markus M. May</name>
-      <email>mmay@javafreedom.org</email>
-    </contributor>
-  </contributors>
 
   <dependencies>
     <dependency>
@@ -65,14 +28,14 @@
     </dependency>
     <dependency>
       <id>commons-dbcp</id>
-      <version>20030825.184428</version>
+      <version>1.1</version>
       <properties>
         <classloader>root</classloader>
       </properties>
     </dependency>
     <dependency>
       <id>commons-lang</id>
-      <version>1.0.1</version>
+      <version>2.0</version>
       <properties>
         <classloader>root</classloader>
       </properties>
@@ -87,13 +50,6 @@
     <dependency>
       <id>log4j</id>
       <version>1.2.8</version>
-      <properties>
-        <classloader>root</classloader>
-      </properties>
-    </dependency>
-    <dependency>
-      <id>stratum</id>
-      <version>1.0-b3</version>
       <properties>
         <classloader>root</classloader>
       </properties>

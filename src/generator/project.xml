@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <extend>../../project.xml</extend>
+  <extend>../../project-base.xml</extend>
   <pomVersion>3</pomVersion>
   <id>torque-gen</id>
   <name>Torque generator</name>
@@ -19,6 +19,21 @@
       <id>ant</id>
       <version>1.5.1</version>
       <url>http://ant.apache.org/</url>
+    </dependency>
+    <dependency>
+      <id>commons-collections</id>
+      <version>2.1</version>
+      <url>http://jakarta.apache.org/commons/collections.html</url>
+    </dependency>
+    <dependency>
+      <id>commons-lang</id>
+      <version>2.0</version>
+      <url>http://jakarta.apache.org/commons/</url>
+    </dependency>
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.3</version>
+      <url>http://jakarta.apache.org/commons/</url>
     </dependency>
     <dependency>
       <id>velocity</id>
