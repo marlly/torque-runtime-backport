@@ -411,7 +411,16 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getDateString(Date date)
     {
-        //return '\'' + date.toString() + '\'';
-        return "{ts '" + new Timestamp(date.getTime()) + "'}";
+        Timestamp ts = null;
+        if ( date instanceof Timestamp ) 
+        {
+            ts = (Timestamp)date;
+        }
+        else 
+        {
+            new Timestamp(date.getTime());
+        }
+        
+        return "{ts '" + ts + "'}";
     }
 }
