@@ -190,6 +190,12 @@
       <version>2.0.2</version>
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
+  
+    <dependency>
+      <id>junit</id>
+      <version>3.7</version>
+    </dependency>
+  
   </dependencies>
 
   <build>
@@ -202,8 +208,10 @@
     <unitTest>
       <includes>
         <include>**/*Test*.java</include>
-        <include>**/BaseTestCase.java</include>
       </includes>
+      <excludes>
+        <exclude>**/BaseTestCase.java</exclude>
+      </excludes>
     </unitTest>
 
     <resources>
