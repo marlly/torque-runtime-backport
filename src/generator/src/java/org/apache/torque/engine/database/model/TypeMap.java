@@ -268,7 +268,7 @@ public class TypeMap
      */
     public synchronized static void initialize()
     {
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             /*
              * Create JDBC -> Java object mappings.
@@ -503,7 +503,7 @@ public class TypeMap
     public static String getJavaObject(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -520,7 +520,7 @@ public class TypeMap
     public static String getJavaNative(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -537,7 +537,7 @@ public class TypeMap
     public static String getJavaNativeObject(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -559,7 +559,7 @@ public class TypeMap
     public static String getVillageMethod(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -576,7 +576,7 @@ public class TypeMap
     public static String getVillageObjectMethod(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -598,7 +598,7 @@ public class TypeMap
     public static String getPPMethod(String jdbcType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -614,7 +614,7 @@ public class TypeMap
     public static String getJdbcType(String type)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
@@ -631,7 +631,7 @@ public class TypeMap
     public static String getTorqueType(Integer sqlType)
     {
         // Make sure the we are initialized.
-        if (isInitialized == false)
+        if (!isInitialized)
         {
             initialize();
         }
