@@ -10,7 +10,7 @@
 
 #foreach ($dataModel in $dataModels)
     #if ($project)
-        #set ( $outFile = "repository__${dataModel.shortName}.xml" )
+        #set ( $outFile = "repository_${dataModel.shortName}.xml" )
   	#set ( $modelCount = $velocityCount )
 
   	File to be created: $outFile	
