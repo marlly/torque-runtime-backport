@@ -63,7 +63,7 @@ import org.apache.torque.TorqueException;
 import org.xml.sax.Attributes;
 
 /**
- * A Class for information about indices of a table
+ * Information about indices of a table.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@finemaltcoding.com>Daniel Rall</a>
@@ -100,17 +100,11 @@ public class Index
         this();
         if (indexColumns.size() > 0)
         {
-            List inputs = new ArrayList(indexColumns.size() + 1);
-            Iterator i = indexColumns.iterator();
-            while (i.hasNext())
-            {
-                Column c = (Column) i.next();
-                inputs.add(c.getName());
-            }
+            this.indexColumns = indexColumns;
+
+            List inputs = getColumnNames();
             inputs.add("I");
             indexName = NameFactory.generateName(inputs);
-
-            this.indexColumns = indexColumns;
 
             if (DEBUG)
             {
@@ -247,12 +241,30 @@ public class Index
     }
 
     /**
-     * Return the vector of local columns.  You should not edit
+     * Return the list of local columns.  You should not edit
      * this vector.
      */
     public List getColumns()
     {
         return indexColumns;
+    }
+
+    /**
+     * Returns the list of names of the columns referenced by this
+     * index.  Slightly over-allocates the list's buffer (just in case
+     * more elements are going to be added, such as when a name is
+     * being generated).  Feel free to modify this list.
+     */
+    public List getColumnNames()
+    {
+        List names = new ArrayList(indexColumns.size() + 2);
+        Iterator i = getColumns().iterator();
+        while (i.hasNext())
+        {
+            Column c = (Column) i.next();
+            names.add(c.getName());
+        }
+        return names;
     }
 
     /**
