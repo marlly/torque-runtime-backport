@@ -244,7 +244,7 @@ public class XmlToData extends DefaultHandler implements EntityResolver
         {
             StringBuffer sb = new StringBuffer();
             sb.append("'");
-            sb.append(StringUtils.replace(val, "'", "\\'"));
+            sb.append(StringUtils.replace(val, "'", "''"));
             sb.append("'");
             return sb.toString();
         }

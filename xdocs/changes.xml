@@ -28,6 +28,9 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="fix" dev="tfischer">
+      TRQS267: Fix escpaing of single quotes in datasql task 
+    </action>
     <action type="add" dev="tfischer">
       Added support for schema support at generate time. 
       See <a href="schema-howto.html">Schema Support Howto</a>.
