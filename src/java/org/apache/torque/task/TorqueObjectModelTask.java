@@ -74,6 +74,14 @@ public class TorqueObjectModelTask
     private String targetPackage;
 
     /**
+     * The target database(s) we are generating SQL
+     * for. Right now we can only deal with a single
+     * target, but we will support multiple targets
+     * soon.
+     */
+    private String targetDatabase;
+
+    /**
      * Get the current target package.
      *
      * @return return target java package.
@@ -95,6 +103,28 @@ public class TorqueObjectModelTask
     }
 
     /**
+     * Get the current target package.
+     *
+     * @return String target database(s)
+     */
+    public String getTargetDatabase ()
+    {
+        return targetDatabase;
+    }
+
+    /**
+     * Set the current target package.  This is where
+     * generated java classes will live.
+     *
+     * @param String target database(s)
+     */
+    public void setTargetDatabase (String v)
+    {
+        targetDatabase = v;
+    }
+
+
+    /**
      * Place our target package value
      * into the context for use in the templates.
      */
@@ -103,6 +133,7 @@ public class TorqueObjectModelTask
     {
         super.initControlContext();
         context.put("targetPackage", targetPackage);
+        context.put("targetDatabase", targetDatabase);
         return context;
     }
 }

@@ -254,6 +254,7 @@
       outputFile="report.${project}.om.generation"
       targetPackage="${targetPackage}.om"
       xmlFile="${torque.home}/${schemaDirectory}/${project}-schema.xml"
+      targetDatabase="${database}"
     />
 
   </target>

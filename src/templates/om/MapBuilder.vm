@@ -95,7 +95,7 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
         #if ($table.IdMethod == "idbroker")
         tMap.setPrimaryKeyMethodInfo(tMap.getName());
-        #elseif ($table.IdMethod == "sequence")
+        #elseif ($table.IdMethod == "sequence" ||  ($table.IdMethod == "native" && $dbprops.get("idMethod") == "sequence"))
         tMap.setPrimaryKeyMethodInfo("$table.SequenceName");
         #elseif ($table.IdMethodParameters)
         // this might need upgrading based on what all the databases

@@ -45,3 +45,5 @@ removeNotNullWithAutoIncrement = false
 suppressDefaults = false
 
 maxColumnNameLength = 30
+
+idMethod=sequence
