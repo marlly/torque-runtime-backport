@@ -54,13 +54,13 @@
       <name>Torque User List</name>
       <subscribe>torque-user-subscribe@db.apache.org</subscribe>
       <unsubscribe>torque-user-unsubscribe@db.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=torque-user@db.apache.org</archive>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=torque-user@db.apache.org</archive>
     </mailingList>
     <mailingList>
       <name>Torque Developer List</name>
       <subscribe>torque-dev-subscribe@db.apache.org</subscribe>
       <unsubscribe>torque-dev-unsubscribe@db.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
+      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
     </mailingList>
   </mailingLists>
 
