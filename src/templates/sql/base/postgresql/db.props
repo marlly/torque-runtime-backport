@@ -8,13 +8,13 @@ INTEGER = integer
 BIGINT = int8
 FLOAT = float
 REAL = float
-BOOLEANCHAR = boolean
+BOOLEANCHAR = char
 BOOLEANINT = int2
 
 DOUBLE =
 NUMERIC =
 DECIMAL =
-CHAR = varchar
+CHAR = char
 VARCHAR = varchar
 LONGVARCHAR = bytea
 DATE = date
