@@ -64,9 +64,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
-
 import org.apache.commons.collections.ExtendedProperties;
-
+import org.apache.log4j.Category;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -204,7 +203,13 @@ public class IDBroker
 
     private static final String DB_IDBROKER_PREFETCH =
         "idbroker.prefetch";
-
+    
+    /**
+     * Category used for logging.
+     */
+    Category category = 
+        Category.getInstance(IDBroker.class.getName());
+    
     /**
      * Creates an IDBroker for the ID table.
      *
@@ -255,7 +260,7 @@ public class IDBroker
         }
         if (!transactionsSupported)
         {
-            Torque.getCategory().warn
+            category.warn
                 ("IDBroker is being used with db '" + dbName +
                  "', which does not support transactions.  IDBroker " +
                  "attempts to use transactions to limit the possibility of " +
@@ -402,11 +407,11 @@ public class IDBroker
         {
             if (availableIds == null)
             {
-                Torque.getCategory().info ("Forced id retrieval - no available vector");
+                category.info ("Forced id retrieval - no available vector");
             }
             else
             {
-                Torque.getCategory().info ("Forced id retrieval - " + availableIds.size());
+                category.info ("Forced id retrieval - " + availableIds.size());
             }
             storeIDs(tableName, true);
             availableIds = (List)ids.get(tableName);
@@ -474,7 +479,7 @@ public class IDBroker
             }
             catch (Exception e)
             {
-                Torque.getCategory().error("Release of connection failed.", e);
+                category.error("Release of connection failed.", e);
             }
         }
         
@@ -488,7 +493,7 @@ public class IDBroker
      */
     public void run()
     {
-        Torque.getCategory().info("IDBroker thread was started.");
+        category.info("IDBroker thread was started.");
 
         Thread thisThread = Thread.currentThread();
         while (houseKeeperThread == thisThread)
@@ -502,12 +507,12 @@ public class IDBroker
                 // ignored
             }
 
-            // Torque.getCategory().info("IDBroker thread checking for more keys.");
+            // category.info("IDBroker thread checking for more keys.");
             Enumeration e = ids.keys();
             while (e.hasMoreElements())
             {
                 String tableName = (String)e.nextElement();
-                Torque.getCategory().info("IDBroker thread checking for more keys on table: " +
+                category.info("IDBroker thread checking for more keys on table: " +
                          tableName);
                 List availableIds = (List)ids.get(tableName);
                 int quantity = getQuantity(tableName).intValue();
@@ -519,18 +524,18 @@ public class IDBroker
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false);
-                        Torque.getCategory().info("Retrieved more ids for table: " +
+                        category.info("Retrieved more ids for table: " +
                                  tableName);
                     }
                     catch (Exception exc)
                     {
-                        Torque.getCategory().error("There was a problem getting new IDs for table: " +
+                        category.error("There was a problem getting new IDs for table: " +
                                   tableName, exc);
                     }
                 }
             }
         }
-        Torque.getCategory().info("IDBroker thread finished.");
+        category.info("IDBroker thread finished.");
     }
 
     /**
@@ -583,7 +588,7 @@ public class IDBroker
             int timeLapse = (int)(nowLong-thenLong);
             if ( timeLapse < sleepPeriod && timeLapse > 0 )
             {
-                Torque.getCategory().info("Unscheduled retrieval of more ids for table: " +
+                category.info("Unscheduled retrieval of more ids for table: " +
                          tableName);
                 // Increase quantity, so that hopefully this does not
                 // happen again.
@@ -761,7 +766,7 @@ public class IDBroker
                 }
                 catch (Exception e)
                 {
-                    Torque.getCategory().error("Release of connection failed.", e);
+                    category.error("Release of connection failed.", e);
                 }
             }
         }
@@ -832,9 +837,11 @@ public class IDBroker
                            String id)
         throws Exception
     {
+        
+    
         StringBuffer stmt =
             new StringBuffer(id.length() + tableName.length() + 50);
-        stmt.append( "UPDATE " + ID_TABLE )
+            stmt.append( "UPDATE " + ID_TABLE )
             .append( " SET " + NEXT_ID + " = " )
             .append( id )
             .append( " WHERE " + TABLE_NAME + " = '" )
@@ -842,7 +849,9 @@ public class IDBroker
             .append( '\'' );
 
         Statement statement = null;
-
+        
+        category.debug("updateRow: " + stmt.toString());
+        
         try
         {
             statement = con.createStatement();
