@@ -139,7 +139,6 @@ public class Torque implements Initializable, Configurable
      */
     protected static Map managers = new HashMap();
 
-
     /**
      * The logging category.
      */
@@ -241,6 +240,7 @@ public class Torque implements Initializable, Configurable
     /**
      * configure torque
      *
+     * @param config Configuration
      * @see org.apache.stratum.lifecycle.Configurable
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -357,6 +357,10 @@ public class Torque implements Initializable, Configurable
      * <br>
      *
      * Generic ServiceBroker provides no Services.
+     *
+     * @param configuration the Configuration representing the properties file
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
      */
     protected static void initManagerMappings(Configuration configuration)
         throws TorqueException
@@ -383,9 +387,16 @@ public class Torque implements Initializable, Configurable
         }
     }
 
+    /**
+     * Initialize a manager
+     *
+     * @param name
+     * @param className
+     * @throws TorqueException
+     */
     private static void initManager(String name, String className)
         throws TorqueException
-    { 
+    {
         AbstractBaseManager manager = (AbstractBaseManager) managers.get(name);
 
         if (manager == null)
@@ -401,13 +412,18 @@ public class Torque implements Initializable, Configurable
                 catch (Exception e)
                 {
                     throw new TorqueException(
-                        "Could not instantiate manager associated with key: " 
+                        "Could not instantiate manager associated with key: "
                         + name, e);
                 }
             }
         }
     }
 
+    /**
+     * Determine whether Torque has already been initialized.
+     *
+     * @return true if Torque is already initialized
+     */
     public static boolean isInit()
     {
         return isInit;
@@ -415,6 +431,8 @@ public class Torque implements Initializable, Configurable
 
     /**
      * Sets the configuration for Torque and all dependencies.
+     *
+     * @param c the Configuration
      */
     public static void setConfiguration(Configuration c)
     {
@@ -423,6 +441,8 @@ public class Torque implements Initializable, Configurable
 
     /**
      * Get the configuration for this component.
+     *
+     * @return the Configuration
      */
     public static Configuration getConfiguration()
     {
@@ -534,6 +554,12 @@ public class Torque implements Initializable, Configurable
         return false;
     }
 
+    /**
+     * This method returns a Manager for the given name.
+     *
+     * @param name
+     * @return a Manager
+     */
     public static AbstractBaseManager getManager(String name)
     {
         return (AbstractBaseManager)managers.get(name);
@@ -600,7 +626,7 @@ public class Torque implements Initializable, Configurable
      * of the connection pool to associate with the map.
      *
      * @param name The name of the database corresponding to the
-     * <code>DatabaseMap</code> to retrieve.
+     *        <code>DatabaseMap</code> to retrieve.
      * @return The named <code>DatabaseMap</code>.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -672,6 +698,11 @@ public class Torque implements Initializable, Configurable
         return map;
     }
 
+    /**
+     *
+     *
+     * @param className
+     */
     public static void registerMapBuilder(String className)
     {
         mapBuilders.add(className);
@@ -807,6 +838,7 @@ public class Torque implements Initializable, Configurable
      * Release a connection back to the database pool.  <code>null</code>
      * references are ignored.
      *
+     * @param dbconn the connection to release
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -877,6 +909,10 @@ public class Torque implements Initializable, Configurable
      * @param url The URL of the database to use.
      * @param username The name of the database user.
      * @param password The password of the database user.
+     * @param maxCons
+     * @param expiryTime
+     * @param maxConnectionAttempts
+     * @param connectionWaitTimeout
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */

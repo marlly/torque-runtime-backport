@@ -61,23 +61,50 @@ import org.apache.commons.lang.exception.NestableException;
  *
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @author <a href="mailto:jvz@apache.org">Jason van Zyl</a>
+ * @version $Id$
  */
 public class TorqueException extends NestableException
 {
+
+    /**
+     * Constructs a new <code>TorqueException</code> without specified detail
+     * message.
+     */
     public TorqueException()
     {
     }
 
+    /**
+     * Constructs a new <code>TorqueException</code> with specified detail
+     * message.
+     *
+     * @param msg the error message.
+     */
     public TorqueException(String msg)
     {
         super(msg);
     }
 
+    /**
+     * Constructs a new <code>TorqueException</code> with specified nested
+     * <code>Throwable</code>.
+     *
+     * @param nested the exception or error that caused this exception
+     *               to be thrown.
+     */
     public TorqueException(Throwable nested)
     {
         super(nested);
     }
 
+    /**
+     * Constructs a new <code>TorqueException</code> with specified detail
+     * message and nested <code>Throwable</code>.
+     *
+     * @param msg the error message.
+     * @param nested the exception or error that caused this exception
+     *               to be thrown.
+     */
     public TorqueException(String msg, Throwable nested)
     {
         super(msg, nested);

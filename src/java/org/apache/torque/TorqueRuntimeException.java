@@ -63,16 +63,21 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 /**
- * This is a base class of runtime exeptions thrown by Turbine.
+ * This is a base class of runtime exeptions thrown by Torque.
  *
  * This class represents a non-checked type exception (see
- * {@see java.lang.RuntimeException}). It has the nested stack trace
- * functionality found in the {@see TurbineException} class.
- *
- * It's sad that this class is a straight copy/paste of Turbine exception.
- * I wish that Java supported NonCheckedException marker interface...
+ * {@see java.lang.RuntimeException}).
+ * It is intended to ease the debugging by carrying on the information about the
+ * exception which was caught and provoked throwing the current exception.
+ * Catching and rethrowing may occur multiple times, and provided that all
+ * exceptions except the first one are descendands of
+ * <code>TorqueRuntimeException</code>, when the exception is finally printed
+ * out using any of the <code>printStackTrace()</code> methods, the stacktrace
+ * will contain the information about all exceptions thrown and caught on the
+ * way.
  *
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
+ * @version $Id$
  */
 public class TorqueRuntimeException
     extends RuntimeException
@@ -131,8 +136,7 @@ public class TorqueRuntimeException
     }
 
     /**
-     * Prints the stack trace of this exception the the standar error
-     * stream.
+     * Prints the stack trace of this exception the the standar error stream.
      */
     public void printStackTrace()
     {
