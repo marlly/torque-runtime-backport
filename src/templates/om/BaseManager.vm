@@ -41,7 +41,7 @@ public abstract class $basePrefix${interfaceName}Manager
     extends AbstractBaseManager
 {
     /** The name of the manager */
-    protected static String MANAGER_NAME = "${interfaceName}Manager";
+    protected static String MANAGED_CLASS = "${package}.${interfaceName}";
     
     /** The name of our class to pass to Torque as the default manager. */
     protected static String DEFAULT_MANAGER_CLASS
@@ -56,7 +56,7 @@ public abstract class $basePrefix${interfaceName}Manager
     public static ${interfaceName}Manager getManager()
     {
         return (${interfaceName}Manager)
-            Torque.getManager(${interfaceName}Manager.MANAGER_NAME, 
+            Torque.getManager(${interfaceName}Manager.MANAGED_CLASS,
                 ${interfaceName}Manager.DEFAULT_MANAGER_CLASS);
     }
 

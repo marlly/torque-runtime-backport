@@ -92,6 +92,7 @@ import org.apache.stratum.lifecycle.Disposable;
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
 public class Torque 
@@ -114,13 +115,13 @@ public class Torque
      * A prefix for <code>Manager</code> properties in
      * TurbineResource.properties.
      */
-    public static final String MANAGER_PREFIX = "managers.";
+    public static final String MANAGER_PREFIX = "managed_class.";
 
     /**
      * A <code>Service</code> property determining its implementing
      * class name .
      */
-    public static final String CLASSNAME_SUFFIX = ".classname";
+    public static final String MANAGER_SUFFIX = ".manager";
 
 
     /**
@@ -395,15 +396,17 @@ public class Torque
 
 
     /**
-     * Creates a mapping between Manager names and class names.
+     * Creates a mapping between classes and their manager classes.
      *
      * The mapping is built according to settings present in
      * TurbineResources.properties.  The entries should have the
      * following form:
      *
      * <pre>
-     * torque.manager.MyManager.classname=com.mycompany.MyManagerImpl
-     * services.manager.MyOtherManager.classname=com.mycompany.MyOtherManagerImpl
+     * torque.managed_class.com.mycompany.Myclass.manager= \
+     *          com.mycompany.MyManagerImpl
+     * services.managed_class.com.mycompany.Myotherclass.manager= \
+     *          com.mycompany.MyOtherManagerImpl
      * </pre>
      *
      * <br>
@@ -418,7 +421,7 @@ public class Torque
         throws TorqueException
     {
         int pref = MANAGER_PREFIX.length();
-        int suff = CLASSNAME_SUFFIX.length();
+        int suff = MANAGER_SUFFIX.length();
 
         Iterator keys = configuration.getKeys();
 
@@ -427,17 +430,17 @@ public class Torque
             String key = (String) keys.next();
 
             if (key.startsWith(MANAGER_PREFIX)
-                    && key.endsWith(CLASSNAME_SUFFIX))
+                    && key.endsWith(MANAGER_SUFFIX))
             {
-                String managerKey = key.substring(pref, key.length() - suff);
-                if (!managers.containsKey(managerKey))
+                String managedClassKey = key.substring(pref, key.length() - suff);
+                if (!managers.containsKey(managedClassKey))
                 {
                     String managerClass = configuration.getString(key);
-                    category.info("Added Mapping for Manager: " + managerKey
+                    category.info("Added Manager for Class: " + managedClassKey
                                   + " -> " + managerClass);
                     try
                     {
-                        initManager(managerKey, managerClass);
+                        initManager(managedClassKey, managerClass);
                     }
                     catch (TorqueException e)
                     {
@@ -478,7 +481,7 @@ public class Torque
                 catch (Exception e)
                 {
                     throw new TorqueException(
-                        "Could not instantiate manager associated with key: "
+                        "Could not instantiate manager associated with class: "
                         + name, e);
                 }
             }
@@ -648,7 +651,7 @@ public class Torque
         AbstractBaseManager m = (AbstractBaseManager) managers.get(name);
         if (m == null)
         {
-            category.debug("Added late Mapping for Manager: "
+            category.debug("Added late Manager mapping for Class: "
                            + name + " -> " + defaultClassName);
 
             try

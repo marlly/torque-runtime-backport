@@ -9,6 +9,13 @@
       todir="${maven.build.dest}/org/apache/torque/engine/database/transform"
     />
 
+    <!-- copy default.properties to the right place -->
+
+    <copy
+      file="${maven.src.dir}/conf/default.properties"
+      todir="${maven.build.dest}/org/apache/torque"
+    />
+
     <!-- copy templates to the right place -->
 
     <copy todir="${maven.build.dest}">
