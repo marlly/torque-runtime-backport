@@ -70,3 +70,43 @@ o application programmers should be able to save, update, and
   so, the persistence layer should take care of everything.
 
   [JSS] YES!
+
+Questions
+---------
+
+These are really just questions I'm jotting down as I go through
+the source. Not really important that they be answered here, I'll
+post the whole slew to the list eventually.
+
+o Why is there a save(DBConnection) in the BaseObject?
+  The objects should know nothing about databases, and if knowledge
+  of a specific database is required it should probably be in
+  some mapping mechanism. The BaseObject should be retrievable
+  from any store so the BaseObject shouldn't contain information
+  about any specific store type. XML persistence would be nice
+  to add with one of myriad tools that exist.
+  
+o Same question for the the Persistent interface. Would be nice
+  to get rid of the DB specifics.
+
+o Why do we have so many key types. I thought the surrogate key
+  idea was better? That the keys for objects should have no business
+  meaning under any circumstance. This practice is strongly warned
+  against in Ambler's papers. The object key should be a number or
+  a string.
+
+o Why does the TableMap make reference to the IDGenerator? I realize
+  the id method can be specifed on a table basis. Maybe the datamodel
+  object could be used at run time as the source of information about
+  the database setup. Than a lot of the objects that are coupled could
+  be decoupled because all the meta info would be present in the
+  datamodel object.
+  
+o Same goes for the DatabaseMap. We definitely have information duplicated
+  across objects. Most of this info is already present in the datamodel
+  used to produce the OM. Could use the datamodel to decouple which is
+  what would be need to have pluggable connection pools.
+  
+o Could the information in the adaptors be coupled with information
+  in the db.props file and combined into some XML descriptor for
+  database specifics?
