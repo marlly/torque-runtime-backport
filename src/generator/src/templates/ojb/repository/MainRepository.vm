@@ -21,15 +21,17 @@
      the Connection specified here will be used. -->
 
   <jdbc-connection-descriptor id="default"
+    jcd-alias="default"
+    default-connection="true"
     platform="$ojbPlatform"
     jdbc-level="${jdbcLevel}"
   #if ($ojbUseJNDI)
     jndi-datasource-name="$ojbJNDISource"
   #else
     driver="$databaseDriver"
-    protocol="jdbc"
-    subprotocol="$database"
-    dbalias="$databaseName"
+    protocol="$urlProtocol"
+    subprotocol="$urlSubprotocol"
+    dbalias="$urlDbalias"
   #end
     username="$databaseUser"
     password="$!databasePassword"
