@@ -6,6 +6,11 @@ torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 torque.databaseAdapter = DBPostgres
 
+torque.sqlTest.defaultDatabase = sqltest
+torque.sqlTest.databaseUrl = jdbc:postgresql://127.0.0.1:5432/sqltest
+
+lib.dir = ../lib
+
 # -------------------------------------------------------------------
 # 
 # T O R Q U E  C O N F I G U R A T I O N  F I L E
@@ -81,7 +86,7 @@ sameJavaName=false
 #
 # -------------------------------------------------------------------
 
-templatePath = templates
+templatePath = ../templates
 
 # -------------------------------------------------------------------
 # 
