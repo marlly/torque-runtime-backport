@@ -132,7 +132,10 @@ public class MethodResultCache
 
         if (result != null)
         {
-            log.debug("MethodResultCache saved expensive operation: " + key);
+            if (log.isDebugEnabled())
+            {
+                log.debug("MethodResultCache saved expensive operation: " + key);
+            }
         }
         return result;
     }

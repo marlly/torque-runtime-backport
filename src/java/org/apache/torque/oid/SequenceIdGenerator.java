@@ -190,7 +190,10 @@ public class SequenceIdGenerator implements IdGenerator
         throws Exception
     {
         String idSql = dbAdapter.getIDMethodSQL(keyInfo);
-        log.debug(idSql);
+        if (log.isDebugEnabled())
+        {
+            log.debug(idSql);
+        }
 
         // Execute the query.
         QueryDataSet qds = new QueryDataSet(connection, idSql);

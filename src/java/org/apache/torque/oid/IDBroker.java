@@ -541,8 +541,11 @@ public class IDBroker implements Runnable, IdGenerator
             while (it.hasNext())
             {
                 String tableName = (String) it.next();
-                log.debug("IDBroker thread checking for more keys "
-                             + "on table: " + tableName);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("IDBroker thread checking for more keys "
+                            + "on table: " + tableName);
+                }
                 List availableIds = (List) ids.get(tableName);
                 int quantity = getQuantity(tableName, null).intValue();
                 if (quantity > availableIds.size())
@@ -553,7 +556,10 @@ public class IDBroker implements Runnable, IdGenerator
                         // want the quantity to be adjusted for thread
                         // calls.
                         storeIDs(tableName, false, null);
-                        log.debug("Retrieved more ids for table: " + tableName);
+                        if (log.isDebugEnabled())
+                        {
+                            log.debug("Retrieved more ids for table: " + tableName);
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -608,8 +614,11 @@ public class IDBroker implements Runnable, IdGenerator
             int timeLapse = (int) (nowLong - thenLong);
             if (timeLapse < SLEEP_PERIOD && timeLapse > 0)
             {
-                log.debug("Unscheduled retrieval of more ids for table: "
-                             + tableName);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("Unscheduled retrieval of more ids for table: "
+                            + tableName);
+                }
                 // Increase quantity, so that hopefully this does not
                 // happen again.
                 float rate = getQuantity(tableName, null).floatValue()
@@ -853,7 +862,10 @@ public class IDBroker implements Runnable, IdGenerator
 
         Statement statement = null;
 
-        log.debug("updateNextId: " + stmt.toString());
+        if (log.isDebugEnabled())
+        {
+            log.debug("updateNextId: " + stmt.toString());
+        }
 
         try
         {
@@ -893,7 +905,10 @@ public class IDBroker implements Runnable, IdGenerator
 
         Statement statement = null;
 
-        log.debug("updateQuantity: " + stmt.toString());
+        if (log.isDebugEnabled())
+        {
+            log.debug("updateQuantity: " + stmt.toString());
+        }
 
         try
         {

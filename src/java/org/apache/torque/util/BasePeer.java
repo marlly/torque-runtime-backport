@@ -564,7 +564,10 @@ public abstract class BasePeer implements java.io.Serializable
                 tds = new TableDataSet(con, tab, kd);
                 String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
 
-                log.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("BasePeer.doDelete: whereClause=" + sqlSnippet);
+                }
 
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
@@ -1011,7 +1014,10 @@ public abstract class BasePeer implements java.io.Serializable
             }
             sql = query.toString();
         }
-        log.debug(sql);
+        if (log.isDebugEnabled())
+        {
+            log.debug(sql);
+        }
         return sql;
     }
 
@@ -1531,8 +1537,11 @@ public abstract class BasePeer implements java.io.Serializable
             // execute the query
             long startTime = System.currentTimeMillis();
             qds = new QueryDataSet(con, queryString);
-            log.debug("Elapsed time=" 
-                    + (System.currentTimeMillis() - startTime) + " ms");
+            if (log.isDebugEnabled())
+            {
+                log.debug("Elapsed time=" 
+                        + (System.currentTimeMillis() - startTime) + " ms");
+            }
             results = getSelectResults(
                     qds, start, numberOfResults, singleRecord);
         }
@@ -1914,7 +1923,10 @@ public abstract class BasePeer implements java.io.Serializable
                 // Get affected records.
                 tds = new TableDataSet(con, tab, kd);
                 String sqlSnippet = StringUtils.join(whereClause.iterator(), " AND ");
-                log.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
+                if (log.isDebugEnabled())
+                {
+                    log.debug("BasePeer.doUpdate: whereClause=" + sqlSnippet);
+                }
                 tds.where(sqlSnippet);
                 tds.fetchRecords();
 
@@ -2550,7 +2562,10 @@ public abstract class BasePeer implements java.io.Serializable
             sql = query.toString();
         }
 
-        log.debug(sql);
+        if (log.isDebugEnabled())
+        {
+            log.debug(sql);
+        }
         queryString.append(sql);
     }
 

@@ -564,8 +564,11 @@ public class LargeSelect implements Runnable, Serializable
     private synchronized List getResults(int start, int size)
             throws IllegalArgumentException, TorqueException
     {
-        log.debug("getResults(start: " + start
-                + ", size: " + size + ") invoked.");
+        if (log.isDebugEnabled())
+        {
+            log.debug("getResults(start: " + start
+                    + ", size: " + size + ") invoked.");
+        }
 
         if (size > memoryLimit)
         {
@@ -578,10 +581,13 @@ public class LargeSelect implements Runnable, Serializable
         // retrieved.
         if (start >= blockBegin && (start + size - 1) <= blockEnd)
         {
-            log.debug("getResults(): Sleeping until "
-                    + "start+size-1 (" + (start + size - 1)
-                    + ") > currentlyFilledTo (" + currentlyFilledTo
-                    + ") && !queryCompleted (!" + queryCompleted + ")");
+            if (log.isDebugEnabled())
+            {
+                log.debug("getResults(): Sleeping until "
+                        + "start+size-1 (" + (start + size - 1)
+                        + ") > currentlyFilledTo (" + currentlyFilledTo
+                        + ") && !queryCompleted (!" + queryCompleted + ")");
+            }
             while (((start + size - 1) > currentlyFilledTo) && !queryCompleted)
             {
                 try
@@ -599,8 +605,11 @@ public class LargeSelect implements Runnable, Serializable
         // might want at least 2 sets of data.
         else if (start < blockBegin && start >= 0)
         {
-            log.debug("getResults(): Paging backwards as start (" + start
-                    + ") < blockBegin (" + blockBegin + ") && start >= 0");
+            if (log.isDebugEnabled())
+            {
+                log.debug("getResults(): Paging backwards as start (" + start
+                        + ") < blockBegin (" + blockBegin + ") && start >= 0");
+            }
             stopQuery();
             if (memoryLimit >= 2 * size)
             {
@@ -623,9 +632,12 @@ public class LargeSelect implements Runnable, Serializable
         // Assume we are moving on, do not retrieve any records prior to start.
         else if ((start + size - 1) > blockEnd)
         {
-            log.debug("getResults(): Paging past end of loaded data as "
-                    + "start+size-1 (" + (start + size - 1)
-                    + ") > blockEnd (" + blockEnd + ")");
+            if (log.isDebugEnabled())
+            {
+                log.debug("getResults(): Paging past end of loaded data as "
+                        + "start+size-1 (" + (start + size - 1)
+                        + ") > blockEnd (" + blockEnd + ")");
+            }
             stopQuery();
             blockBegin = start;
             blockEnd = blockBegin + memoryLimit - 1;
@@ -642,10 +654,14 @@ public class LargeSelect implements Runnable, Serializable
 
         int fromIndex = start - blockBegin;
         int toIndex = fromIndex + Math.min(size, results.size() - fromIndex);
-        log.debug("getResults(): Retrieving records from results elements "
-                + "start-blockBegin (" + fromIndex + ") through "
-                + "fromIndex + Math.min(size, results.size() - fromIndex) ("
-                + toIndex + ")");
+
+        if (log.isDebugEnabled())
+        {
+            log.debug("getResults(): Retrieving records from results elements "
+                    + "start-blockBegin (" + fromIndex + ") through "
+                    + "fromIndex + Math.min(size, results.size() - fromIndex) ("
+                    + toIndex + ")");
+        }
         List returnResults = results.subList(fromIndex, toIndex);
 
         if (null != returnBuilderClass)
@@ -694,10 +710,13 @@ public class LargeSelect implements Runnable, Serializable
             conn = Torque.getConnection(dbName);
 
             // Execute the query.
-            log.debug("run(): query = " + query);
-            log.debug("run(): memoryLimit = " + memoryLimit);
-            log.debug("run(): blockBegin = " + blockBegin);
-            log.debug("run(): blockEnd = " + blockEnd);
+            if (log.isDebugEnabled())
+            {
+                log.debug("run(): query = " + query);
+                log.debug("run(): memoryLimit = " + memoryLimit);
+                log.debug("run(): blockBegin = " + blockBegin);
+                log.debug("run(): blockEnd = " + blockEnd);
+            }
             qds = new QueryDataSet(conn, query);
 
             // Continue getting rows one page at a time until the memory limit
@@ -715,8 +734,11 @@ public class LargeSelect implements Runnable, Serializable
                     size = blockEnd - currentlyFilledTo + 1;
                 }
 
-                log.debug("run(): Invoking BasePeer.getSelectResults(qds, "
-                        + size + ", false)");
+                if (log.isDebugEnabled())
+                {
+                    log.debug("run(): Invoking BasePeer.getSelectResults(qds, "
+                            + size + ", false)");
+                }
 
                 List tempResults
                         = BasePeer.getSelectResults(qds, size, false);
@@ -759,16 +781,19 @@ public class LargeSelect implements Runnable, Serializable
                 qds.clearRecords();
             }
 
-            log.debug("run(): While loop terminated because either:");
-            log.debug("run(): 1. qds.allRecordsRetrieved(): "
-                    + qds.allRecordsRetrieved());
-            log.debug("run(): 2. killThread: " + killThread);
-            log.debug("run(): 3. !(currentlyFilledTo + size <= blockEnd): !"
-                    + (currentlyFilledTo + pageSize <= blockEnd));
-            log.debug("run(): - currentlyFilledTo: " + currentlyFilledTo);
-            log.debug("run(): - size: " + pageSize);
-            log.debug("run(): - blockEnd: " + blockEnd);
-            log.debug("run(): - results.size(): " + results.size());
+            if (log.isDebugEnabled())
+            {
+                log.debug("run(): While loop terminated because either:");
+                log.debug("run(): 1. qds.allRecordsRetrieved(): "
+                        + qds.allRecordsRetrieved());
+                log.debug("run(): 2. killThread: " + killThread);
+                log.debug("run(): 3. !(currentlyFilledTo + size <= blockEnd): !"
+                        + (currentlyFilledTo + pageSize <= blockEnd));
+                log.debug("run(): - currentlyFilledTo: " + currentlyFilledTo);
+                log.debug("run(): - size: " + pageSize);
+                log.debug("run(): - blockEnd: " + blockEnd);
+                log.debug("run(): - results.size(): " + results.size());
+            }
         }
         catch (TorqueException e)
         {
