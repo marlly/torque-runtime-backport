@@ -217,9 +217,15 @@ public class TorqueDataModelTask
             xmlParser = new XmlToAppData();
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
+            
+            // This can't be set from the file name as it is an
+            // unreliable method of naming the descriptor. Not everyone
+            // uses the same method as I do in the TDK. jvz.
+            
             String name = xmlFile.substring(
                 xmlFile.lastIndexOf(System.getProperty("file.separator"))+1,
                     xmlFile.indexOf("."));
+            
             ad.setName(name);
             dataModels.addElement(ad);
         } 
@@ -242,8 +248,16 @@ public class TorqueDataModelTask
                         new File(srcDir, dataModelFiles[j]).toString());
                     xmlParser.parseFile(
                         new File(srcDir, dataModelFiles[j]).toString());
+
+                    // This can't be set from the file name as it is an
+                    // unreliable method of naming the descriptor. Not everyone
+                    // uses the same method as I do in the TDK. jvz.
                     
-                    ad.setName(dataModelFiles[j].substring(0,dataModelFiles[j].indexOf(".")));
+                    String name = xmlFile.substring(
+                        xmlFile.lastIndexOf(System.getProperty("file.separator"))+1,
+                            xmlFile.indexOf("."));
+
+                    ad.setName(name);
                     dataModels.addElement(ad);
                 }
             }
