@@ -40,6 +40,10 @@
       LargeSelect is now thread safe when calling invalidateResult 
       (thanks to Soteri Panagou &lt;panagos@midetech.com&gt;). 
     </li>
+    <li>  
+      Updated ojb tasks to work for OJB 1.0(rc3). The generated modell is very 
+      simple. Support for advanced features will be added in the future.
+    </li>
   </ul>
 </p>
 </subsection>
