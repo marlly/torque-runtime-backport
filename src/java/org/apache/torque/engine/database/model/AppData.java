@@ -100,6 +100,12 @@ public class AppData
     private String basePropsFilePath;
 
     /**
+     * Name of the database. Only one database definition
+     * is allowed in one XML descriptor.
+     */
+    private String name;
+
+    /**
      * Creates a new instance.
      */
     public AppData()
@@ -164,6 +170,37 @@ public class AppData
             }
         }
         return idiosyncrasies;
+    }
+
+    /**
+     * Set the name of the database.
+     *
+     * @param String name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    /**
+     * Get the name of the database.
+     *
+     * @return String name
+     */
+    public String getName()
+    {
+        return name;
+    }        
+
+    /**
+     * Get database object.
+     *
+     * @return Database database
+     */
+    public Database getDatabase()
+    {
+        Database[] dbs = getDatabases();
+        return dbs[0];
     }
 
     /**
