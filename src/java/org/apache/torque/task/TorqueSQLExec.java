@@ -466,12 +466,12 @@ public class TorqueSQLExec extends Task
             throw new BuildException("Url attribute must be set!", location);
         }
 
-        Properties p = new Properties();
+        Properties map = new Properties();
 
         try
         {
             FileInputStream fis = new FileInputStream(getSqlDbMap());
-            p.load(fis);
+            map.load(fis);
             fis.close();
         }
         catch (IOException ioe)
@@ -479,51 +479,59 @@ public class TorqueSQLExec extends Task
             throw new BuildException("Cannot open and process the sqldbmap!");
         }
 
-        Hashtable h = new Hashtable();
-        TreeSet keys = new TreeSet(p.keySet());
+        Hashtable databases = new Hashtable();
 
-        for (Iterator e = keys.iterator(); e.hasNext(); )
+        for (Iterator eachProperty = map.keySet().iterator(); eachProperty.hasNext(); )
         {
-            String sqlfile = (String) e.next();
-            String database = p.getProperty(sqlfile);
+            String sqlfile = (String) eachProperty.next();
+            String database = map.getProperty(sqlfile);
 
-            ArrayList x = (ArrayList) h.get(database);
+            ArrayList files = (ArrayList) databases.get(database);
 
-            if (x == null)
+            if (files == null)
             {
-                x = new ArrayList();
-                h.put(database, x);
+                files = new ArrayList();
+                databases.put(database, files);
             }
 
             // We want to make sure that the base schemas
             // are inserted first.
             if (sqlfile.indexOf("schema.sql") != -1)
             {
-                x.add(0, sqlfile);
+                files.add(0, sqlfile);
             }
             else
             {
-                x.add(sqlfile);
+                files.add(sqlfile);
             }
         }
 
-        Iterator k = h.keySet().iterator();
-
-        while (k.hasNext())
+        Iterator eachDatabase = databases.keySet().iterator();
+        while (eachDatabase.hasNext())
         {
-            String db = (String) k.next();
-            ArrayList l = (ArrayList) h.get(db);
-            Iterator j = l.iterator();
-            List ts = new ArrayList();
-            while (j.hasNext())
+            String db = (String) eachDatabase.next();
+            ArrayList files = (ArrayList) databases.get(db);
+            
+            Iterator eachFile = files.iterator();
+            List transactions = new ArrayList();
+            while (eachFile.hasNext())
             {
-                String s = (String) j.next();
-                Transaction t = new Transaction();
-                t.setSrc(new File(srcDir, s));
-                ts.add(t);
+                String fileName = (String) eachFile.next();
+                File file = new File(srcDir, fileName);
+                
+                if (file.exists())
+                {                
+                    Transaction transaction = new Transaction();
+                    transaction.setSrc(file);
+                    transactions.add(transaction);
+                }
+                else
+                {
+                    super.log("File '" + fileName + "' in sqldbmap does not exist, so skipping it.");
+                }
             }
 
-            insertDatabaseSqlFiles(url, db, ts);
+            insertDatabaseSqlFiles(url, db, transactions);
         }
     }
 
