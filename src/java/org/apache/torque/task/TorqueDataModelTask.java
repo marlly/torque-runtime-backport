@@ -224,7 +224,6 @@ public class TorqueDataModelTask
             xmlParser = new XmlToAppData();
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
-
             ad.setName(grokName(xmlFile));
             dataModels.addElement(ad);
         } 
@@ -242,13 +241,11 @@ public class TorqueDataModelTask
                 // Make a transaction for each file
                 for (int j = 0; j < dataModelFiles.length; j++)
                 {
+                    File f = new File(srcDir, dataModelFiles[j]);
                     xmlParser = new XmlToAppData();
-                    AppData ad = xmlParser.parseFile(
-                        new File(srcDir, dataModelFiles[j]).toString());
-                    xmlParser.parseFile(
-                        new File(srcDir, dataModelFiles[j]).toString());
-
-                    ad.setName(grokName(xmlFile));
+                    AppData ad = xmlParser.parseFile(f.toString());
+                    xmlParser.parseFile(f.toString());
+                    ad.setName(grokName(f.toString()));
                     dataModels.addElement(ad);
                 }
             }
