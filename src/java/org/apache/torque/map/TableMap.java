@@ -68,6 +68,12 @@ import org.apache.torque.oid.IdGenerator;
  */
 public class TableMap
 {
+    /**
+     * Key generation through database-native id method
+     * (i.e. auto-increment for MySQL, sequence for Oracle, etc.).
+     */
+    public static final String NATIVE = "native";
+
     /** Key generation through auto-increment. */
     public static final String AUTOINCREMENT = "autoincrement";
 
