@@ -207,6 +207,7 @@ public class DBMM
      */
     public String getDateString(Date date)
     {
-        return getDateString(new SimpleDateFormat(DATE_FORMAT).format(date));
+        char delim = getStringDelimiter();
+        return (delim + new SimpleDateFormat(DATE_FORMAT).format(date) + delim);
     }
 }
