@@ -141,7 +141,7 @@
 
   <build>
 
-    <nagEmailAddress>turbine-maven-dev@jakarta.apache.org</nagEmailAddress>
+    <nagEmailAddress>turbine-torque-dev@jakarta.apache.org</nagEmailAddress>
 
     <sourceDirectory>src/java</sourceDirectory>
 
