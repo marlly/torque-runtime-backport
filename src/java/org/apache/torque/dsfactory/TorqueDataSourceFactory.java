@@ -62,6 +62,7 @@ import javax.sql.DataSource;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 import org.apache.log4j.Category;
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.pool.TorqueClassicDataSource;
 
@@ -124,7 +125,10 @@ public class TorqueDataSourceFactory
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = null;
 
-        c = configuration.subset("connection");
+        c = Torque.getConfiguration().subset(DEFAULT_CONNECTION_KEY);
+        applyConfiguration(c, cpds);
+
+        c = configuration.subset(CONNECTION_KEY);
         applyConfiguration(c, cpds);
         return cpds;
     }
@@ -145,7 +149,10 @@ public class TorqueDataSourceFactory
 
         Configuration c = null;
 
-        c = configuration.subset("pool");
+        c = Torque.getConfiguration().subset(DEFAULT_POOL_KEY);
+        applyConfiguration(c, ds);
+
+        c = configuration.subset(POOL_KEY);
         applyConfiguration(c, ds);
         return ds;
     }

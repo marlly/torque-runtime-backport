@@ -72,6 +72,18 @@ import org.apache.torque.TorqueException;
  */
 public abstract class AbstractDataSourceFactory
 {
+    /** "pool" Key for the configuration */
+    public static final String POOL_KEY = "pool";
+
+    /** "connection" Key for the configuration */
+    public static final String CONNECTION_KEY = "connection";
+
+    /** "default.pool" Key for the configuration */
+    public static final String DEFAULT_POOL_KEY = "defaults.pool";
+
+    /** "default.connection" Key for the configuration */
+    public static final String DEFAULT_CONNECTION_KEY = "defaults.connection";
+
     /**
      * The logging category.
      */

@@ -63,12 +63,11 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
 import org.apache.commons.dbcp.jdbc2pool.Jdbc2PoolDataSource;
 import org.apache.log4j.Category;
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
 /**
- * A factory that looks up the DataSource from JNDI.  It is also able
- * to deploy the DataSource based on properties found in the
- * configuration.
+ * A factory that looks up the DataSource using the JDBC2 pool methods.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
@@ -126,7 +125,10 @@ public class Jdbc2PoolDataSourceFactory
         ConnectionPoolDataSource cpds = new DriverAdapterCPDS();
         Configuration c = null;
 
-        c = configuration.subset("connection");
+        c = Torque.getConfiguration().subset(DEFAULT_CONNECTION_KEY);
+        applyConfiguration(c, cpds);
+
+        c = configuration.subset(CONNECTION_KEY);
         applyConfiguration(c, cpds);
         return cpds;
     }
@@ -145,7 +147,10 @@ public class Jdbc2PoolDataSourceFactory
         Jdbc2PoolDataSource ds = new Jdbc2PoolDataSource();
         Configuration c = null;
 
-        c = configuration.subset("pool");
+        c = Torque.getConfiguration().subset(DEFAULT_POOL_KEY);
+        applyConfiguration(c, ds);
+
+        c = configuration.subset(POOL_KEY);
         applyConfiguration(c, ds);
         return ds;
     }
