@@ -184,16 +184,12 @@
     </dependency>
     <dependency>
       <id>xerces</id>
-      <type>required</type>
       <version>2.0.2</version>
       <jar>xercesImpl-2.0.2.jar</jar>
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
-    <!-- Packaged EntityResolver conflicts with the one in Xerces 1.4.4 -->
-
     <dependency>
       <id>xml-apis</id>
-      <type>required</type>
       <version>2.0.2</version>
       <jar>xmlParserAPIs-2.0.2.jar</jar>
       <url>http://xml.apache.org/xerces2-j/</url>
