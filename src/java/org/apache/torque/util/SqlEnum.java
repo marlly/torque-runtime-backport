@@ -56,7 +56,7 @@ package org.apache.torque.util;
 
 
 /**
- * A typesafe enum of sql string fragments.  Used by Criteria and SqlExpression
+ * A typesafe enum of SQL string fragments.  Used by Criteria and SqlExpression
  * to build queries.  Criteria also makes most of the constants available
  * in order to specify a criterion.
  *
@@ -114,8 +114,4 @@ class SqlEnum
         new SqlEnum(" IS NULL ");
     public static final SqlEnum ISNOTNULL =
         new SqlEnum(" IS NOT NULL ");
-    /*
-      public static final SqlEnum  =
-            new SqlEnum("");
-    */
-    }
+}
