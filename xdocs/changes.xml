@@ -55,6 +55,13 @@
       TRQS68: remove invalid pathelement in build-torque.xml
     </li>
     <li>
+      TRQS75: Object.vm generates files which will not compile.
+    </li>
+    <li>
+      When generating an XML schema from a SQL Schema, the output xml
+      contains a javaname attribute (notice the lowercase "n" in javaname)
+    </li>
+    <li>
       Doc generation (anakia format): escape characters not allowed in XML
     </li>
   </ul>
