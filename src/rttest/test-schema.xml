@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
+<!-- this schema is used to test problems users reported -->
+
+<database name="test" defaultIdMethod="idbroker">
+  <!-- TRQS15 -->
+  <table name="varchar_pk">
+    <column name="test_key" required="true" primaryKey="true" type="VARCHAR" size="30" />
+  </table>
+
+  <!-- TRQS17 -->
+  <table name="timestamp_pk">
+    <column name="test_key" required="true" primaryKey="true" type="TIMESTAMP" />
+    <column name="col_a" type="TIMESTAMP" />
+  </table>
+
+</database>
+
