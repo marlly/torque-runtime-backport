@@ -283,7 +283,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         setDbName(criteria);
 
-		if (con == null)
+        if (con == null)
         {
             return BasePeer.doInsert(criteria);
         }
@@ -470,7 +470,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         setDbName(criteria);
 
-		// BasePeer returns a List of Value (Village) arrays.  The array
+        // BasePeer returns a List of Value (Village) arrays.  The array
         // order follows the order columns were placed in the Select clause.
         if (con == null)
         {
@@ -652,7 +652,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
         setDbName(criteria);
 
-		if (con == null)
+        if (con == null)
         {
             BasePeer.doUpdate(selectCriteria, criteria);
         }
@@ -1516,7 +1516,7 @@ public abstract class $basePrefix${table.JavaName}Peer
 
     private static void setDbName(Criteria crit)
     {
-		// Set the correct dbName if it has not been overridden
+        // Set the correct dbName if it has not been overridden
         // crit.getDbName will return the same object if not set to
         // another value so == check is okay and faster
         if (crit.getDbName() == Torque.getDefaultDB())
