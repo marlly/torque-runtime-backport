@@ -54,15 +54,19 @@ package org.apache.torque.engine.database.model;
  * <http://www.apache.org/>.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.torque.TorqueException;
+import java.util.Map;
+import java.util.Properties;
 
 import org.xml.sax.Attributes;
+
+import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 
 /**
  * A class for holding application data structures.
@@ -80,17 +84,86 @@ public class AppData
     private List dbList = new ArrayList(5);
 
     /**
-     * The list of unique names in use by a system.  Any time a
-     * foreign-key or index entity is added to the RDBMS installation,
-     * it must be added to this list as well.
+     * The table of idiosyncrasies for various database types.
      */
-    private Set globalNames = new HashSet(32, 0.5f);
+    private Map idiosyncrasyTable = new HashMap(8);
+
+    /**
+     * The type for our databases.
+     */
+    private String databaseType;
+
+    /**
+     * The base of the path to the properties file, including trailing
+     * slash.
+     */
+    private String basePropsFilePath;
 
     /**
      * Creates a new instance.
      */
     public AppData()
     {
+        this(null, null);
+    }
+
+    /**
+     * Creates a new instance for the specified database type.
+     *
+     * @param databaseType The default type for any databases added to
+     * this application model.
+     * @param basePropsFilePath The base of the path to the properties
+     * file, including trailing slash.
+     */
+    public AppData(String databaseType, String basePropsFilePath)
+    {
+        this.basePropsFilePath = basePropsFilePath;
+        this.databaseType = databaseType;
+    }
+
+    /**
+     * Each database has its own list of idiosyncrasies which can be
+     * configured by editting its <code>db.props</code> file.
+     *
+     * @param databaseType The type of database to retrieve the
+     * properties of.
+     * @return The idiosyncrasies of <code>databaseType</code>.
+     * @exception TorqueException Couldn't locate properties file.
+     */
+    protected Properties getIdiosyncrasies(String databaseType)
+        throws TorqueException
+    {
+        Properties idiosyncrasies =
+            (Properties) idiosyncrasyTable.get(databaseType);
+
+        // If we haven't yet loaded the properties and we have the
+        // information to do so, proceed with loading.
+        if (idiosyncrasies == null &&
+            basePropsFilePath != null && databaseType != null)
+        {
+            idiosyncrasies = new Properties();
+            File propsFile = new File(basePropsFilePath + databaseType,
+                                      "db.props");
+            if (propsFile.exists())
+            {
+                try
+                {
+                    idiosyncrasies.load(new FileInputStream(propsFile));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                idiosyncrasyTable.put(databaseType, idiosyncrasies);
+            }
+            else
+            {
+                throw new TorqueException("Database-specific properties " +
+                                          "file does not exist: " +
+                                          propsFile.getAbsolutePath());
+            }
+        }
+        return idiosyncrasies;
     }
 
     /**
@@ -151,35 +224,15 @@ public class AppData
     public void addDatabase(Database db)
     {
         db.setAppData (this);
-        dbList.add(db);
-    }
-
-    /**
-     * Tests for existance of name in list of global names.
-     *
-     * @param name The name to check.
-     * @return Whether the name has already been used.
-     */
-    public boolean isUsedName(String name)
-    {
-        return globalNames.contains(name);
-    }
-
-    /**
-     * Adds a name to the list of globaly-scoped names used by the
-     * data storage system.
-     *
-     * @param name The system-scoped name.
-     * @exception TorqueException Globaly-scoped name already in use.
-     */
-    public void markNameAsUsed(String name)
-        throws TorqueException
-    {
-        if (!globalNames.add(name))
+        if (db.getName() == null)
         {
-            throw new TorqueException("Globaly-scoped name already in use: " +
-                                      name);
+            db.setName(Torque.getDefaultDB());
         }
+        if (db.getDatabaseType() == null)
+        {
+            db.setDatabaseType(databaseType);
+        }
+        dbList.add(db);
     }
 
     /**
