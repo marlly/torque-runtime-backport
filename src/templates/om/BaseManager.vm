@@ -81,6 +81,19 @@ public abstract class $basePrefix${interfaceName}Manager
     }
 
     /**
+     * Static accessor for the @see #getInstanceImpl(String).
+     *
+     * @param id an <code>String</code> value of the key
+     * @return a <code>${interfaceName}</code> value
+     * @exception TorqueException if an error occurs
+     */
+    public static ${interfaceName} getInstance(String id)
+        throws TorqueException
+    {
+        return getManager().getInstanceImpl(id);
+    }
+
+    /**
      * Static accessor for the @see #getInstanceImpl(ObjectKey, boolean).
      *
      * @param id an <code>ObjectKey</code> value
@@ -158,7 +171,6 @@ public abstract class $basePrefix${interfaceName}Manager
         setClassName("${package}.${interfaceName}");
     }
 
-
     /**
      * Get a fresh instance of a ${interfaceName}Manager
      */
@@ -179,7 +191,7 @@ public abstract class $basePrefix${interfaceName}Manager
 
 
     /**
-     * Get a user with the given id.
+     * Get a ${interfaceName} with the given id.
      *
      * @param id <code>ObjectKey</code> value
      */
@@ -187,6 +199,17 @@ public abstract class $basePrefix${interfaceName}Manager
         throws TorqueException
     {
         return (${interfaceName}) getOMInstance(id);
+    }
+
+    /**
+     * Get a ${interfaceName} with the given id.
+     *
+     * @param id <code>String</code> value
+     */
+    protected ${interfaceName} getInstanceImpl(String id)
+        throws TorqueException
+    {
+        return getInstanceImpl(new ObjectKey(id));
     }
 
     /**
@@ -218,7 +241,7 @@ public abstract class $basePrefix${interfaceName}Manager
     /**
      * Gets a list of ${interfaceName}s based on id's.
      *
-     * @param userIds a List of <code>ObjectKeys</code> value
+     * @param ids a List of <code>ObjectKeys</code> value
      * @param fromCache if true, look for cached ${interfaceName}s before loading
      * from storage.
      * @return a <code>List</code> of ${interfaceName}s
