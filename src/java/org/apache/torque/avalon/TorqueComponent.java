@@ -56,8 +56,9 @@ package org.apache.torque.avalon;
 
 import java.sql.Connection;
 
-import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.activity.Startable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -65,6 +66,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.thread.ThreadSafe;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -83,7 +85,12 @@ import org.apache.torque.map.DatabaseMap;
  */
 public class TorqueComponent
         extends AbstractLogEnabled
-        implements Configurable, Initializable, Disposable, Contextualizable
+        implements Component,
+                   Configurable,
+                   Initializable,
+                   Contextualizable,
+                   Startable,
+                   ThreadSafe
 {
     /** The Avalon Context */
     private Context context = null;
@@ -178,13 +185,26 @@ public class TorqueComponent
     }
 
     /**
-     * @see org.apache.avalon.framework.activity.Disposable#dispose()
+     * This does nothing but must be present so the container does
+     * not defer initialization until the component is requested for
+     * the first time.
+     *
+     * @see org.apache.avalon.framework.activity.Startable#start()
      */
-    public void dispose()
+    public void start()
     {
-        getLogger().debug("dispose()");
+        getLogger().debug("start()");
+    }
+
+    /**
+     * @see org.apache.avalon.framework.activity.Startable#stop()
+     */
+    public void stop()
+    {
+        getLogger().debug("stop()");
         getTorque().shutdown();
     }
+
 
     /*
      * ========================================================================
