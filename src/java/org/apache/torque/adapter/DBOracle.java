@@ -3,7 +3,7 @@ package org.apache.torque.adapter;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,8 @@ package org.apache.torque.adapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This code should be used for an Oracle database pool.
@@ -69,6 +71,9 @@ import java.sql.Statement;
  */
 public class DBOracle extends DB
 {
+    /** date format used in getDateString() */
+    private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    
     /**
      * Empty constructor.
      */
@@ -98,6 +103,17 @@ public class DBOracle extends DB
         return new StringBuffer("UPPER(").append(in).append(")").toString();
     }
 
+    /**
+     * This method is used to format any date string.
+     *
+     * @param date the Date to format
+     * @return The date formatted String for Oracle.
+     */
+    public String getDateString(Date date) {
+        return "TO_DATE('" + new SimpleDateFormat(DATE_FORMAT).format(date) 
+                + "', 'DD-MM-YYYY HH24:MI:SS')";
+    }
+    
     /**
      * @see org.apache.torque.adapter.DB#getIDMethodType()
      */
