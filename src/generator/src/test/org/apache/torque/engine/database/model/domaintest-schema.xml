@@ -9,4 +9,11 @@
     <column name="name" size="40" />
     <column name="price" domain="amount" />
   </table>
+  
+  <table name="article">
+    <column name="article_id" required="true" primaryKey="true" type="INTEGER" />
+    <column name="name" size="40" />
+    <column name="price" domain="amount" size="12" default="1000" />
+  </table>
+  
 </database>

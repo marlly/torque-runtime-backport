@@ -119,4 +119,19 @@ public class DomainTest extends TestCase
         assertEquals("(10,2)", price.printSize());
     }
     
+    /**
+     * test if the tables get the package name from the properties file
+     */
+    public void testExtendedDomainColumn() throws Exception
+    {
+        Table table = db.getTable("article");
+        Column price = table.getColumn("price");
+        assertEquals("NUMERIC", price.getTorqueType());
+        assertEquals("NUMERIC", price.getType());
+        assertEquals("12", price.getSize());
+        assertEquals("2", price.getScale());
+        assertEquals("1000", price.getDefaultValue());
+        assertEquals("(12,2)", price.printSize());
+    }
+    
 }
