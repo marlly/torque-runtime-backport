@@ -194,14 +194,16 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      }
 
 ##if ($complexObjectModel)
-  #if ($col.isPrimaryKey() || $col.isForeignKey())
-   /**
-    * Set the value of $cfc as a string.
-    */
-    public void set${cfc}(String v ) $throwsClause
-    {
-         set${cfc}(new ${cjtype}(v));
-    }
+  #if ($overloadKeySetters)
+    #if ($col.isPrimaryKey() || $col.isForeignKey())
+     /**
+      * Set the value of $cfc as a string.
+      */
+      public void set${cfc}(String v ) $throwsClause
+      {
+           set${cfc}(new ${cjtype}(v));
+      }
+    #end
   #end
 ##end
 
