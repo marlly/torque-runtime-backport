@@ -40,3 +40,5 @@ indexInsideTableDirective = false
 removeNotNullWithAutoIncrement = false
 
 suppressDefaults = false
+
+idMethod=sequence
