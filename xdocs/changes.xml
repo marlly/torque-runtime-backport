@@ -9,6 +9,13 @@
   <body>
 
     <release version="3.2-alpha" date="in CVS">
+      <action dev='seade' type='update'>
+        Addressed a number of issues highlighted by 
+        <a href="http://findbugs.sourceforge.net/">FindBugs</a> in generated 
+        source code.
+      </action>
+      <action dev='seade' type='update'>
+        Upgrade to and xerces-2.4.0.
       <action dev='seade' type='add'>
         HSQL adapter enhancements: added support for case-insensitive queries
         and cascading deletes.  Thanks to Partick Carl for the patch.
