@@ -54,11 +54,34 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * MS Access Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformMsaccessImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformMsaccessImpl()
+    {
+        super();
+        initialize();
+    }
 
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "MEMO"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BINARY"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "BINARY"));
+    }
 }

@@ -69,7 +69,8 @@ public class Domain
     private String size;
     private String scale;
     /** type as defined in schema.xml */
-    private String torqueType;
+    private SchemaType torqueType;
+    private String sqlType;
     private String defaultValue;
 
     
@@ -78,11 +79,11 @@ public class Domain
      */
     public Domain()
     {
-        this(null);
+        this.name = null;
     }
 
     /**
-     * Creates a new column and set the name
+     * Creates a new Domain and set the name
      *
      * @param name column name
      */
@@ -90,7 +91,50 @@ public class Domain
     {
         this.name = name;
     }
+    
+    /**
+     * Creates a new Domain and set the name
+     */
+    public Domain(SchemaType type)
+    {
+        this.name = null;
+        this.torqueType = type;
+        this.sqlType = type.getName();
+    }
 
+    /**
+     * Creates a new Domain and set the name
+     */
+    public Domain(SchemaType type, String sqlType)
+    {
+        this.name = null;
+        this.torqueType = type;
+        this.sqlType = sqlType;
+    }
+    
+    /**
+     * Creates a new Domain and set the name
+     */
+    public Domain(SchemaType type, String sqlType, String size, String scale)
+    {
+        this.name = null;
+        this.torqueType = type;
+        this.sqlType = sqlType;
+        this.size = size;
+        this.scale = scale;
+    }
+
+    /**
+     * Creates a new Domain and set the name
+     */
+    public Domain(SchemaType type, String sqlType, String size)
+    {
+        this.name = null;
+        this.torqueType = type;
+        this.sqlType = sqlType;
+        this.size = size;
+    }
+    
     /**
      * Imports a column from an XML specification
      */
@@ -175,7 +219,7 @@ public class Domain
     /**
      * @return Returns the torqueType.
      */
-    public String getType()
+    public SchemaType getType()
     {
         return torqueType;
     }
@@ -183,11 +227,19 @@ public class Domain
     /**
      * @param torqueType The torqueType to set.
      */
-    public void setType(String torqueType)
+    public void setType(SchemaType torqueType)
     {
         this.torqueType = torqueType;
     }
 
+    /**
+     * @param torqueType The torqueType to set.
+     */
+    public void setType(String torqueType)
+    {
+        this.torqueType = SchemaType.getEnum(torqueType);
+    }
+    
     /**
      * @return Returns the defaultValue.
      */
@@ -202,6 +254,22 @@ public class Domain
     public void setDefaultValue(String defaultValue)
     {
         this.defaultValue = defaultValue;
+    }
+
+    /**
+     * @return Returns the sqlType.
+     */
+    public String getSqlType() 
+    {
+        return sqlType;
+    }
+
+    /**
+     * @param sqlType The sqlType to set.
+     */
+    public void setSqlType(String sqlType) 
+    {
+        this.sqlType = sqlType;
     }
 
 }

@@ -54,12 +54,48 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * Postgresql Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformPostgresqlImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformPostgresqlImpl()
+    {
+        super();
+        initialize();
+    }
+
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.BIT, "boolean"));
+        setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "int2"));
+        setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "int2"));
+        setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "int8"));
+        setSchemaDomainMapping(new Domain(SchemaType.REAL, "float"));
+        // TODO check this .. just copied from db.props
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANCHAR, "char"));
+        // TODO check this .. just copied from db.props
+        setSchemaDomainMapping(new Domain(SchemaType.BOOLEANINT, "int2"));
+        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "double precision"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "text"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "bytea"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "bytea"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "bytea"));
+        setSchemaDomainMapping(new Domain(SchemaType.CLOB, "text"));
+    }
+    
     /**
      * @see Platform#getNativeIdMethod()
      */

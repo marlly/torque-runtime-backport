@@ -54,12 +54,48 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * Oracle Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformOracleImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformOracleImpl()
+    {
+        super();
+        initialize();
+    }
+
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.BIT, "NUMBER", "1", "0"));
+        setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "NUMBER", "3", "0"));
+        setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "NUMBER", "5", "0"));
+        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "NUMBER"));
+        setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "NUMBER", "20", "0"));
+        setSchemaDomainMapping(new Domain(SchemaType.REAL, "NUMBER"));
+        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "FLOAT"));
+        setSchemaDomainMapping(new Domain(SchemaType.DECIMAL, "NUMBER"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARCHAR, "VARCHAR2"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR2", "2000"));
+        setSchemaDomainMapping(new Domain(SchemaType.TIME, "DATE"));
+        setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "DATE"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "LONG RAW"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BLOB"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG RAW"));
+    }
+    
     /**
      * @see Platform#getMaxColumnNameLength()
      */

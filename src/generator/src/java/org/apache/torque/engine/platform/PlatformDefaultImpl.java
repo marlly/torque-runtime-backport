@@ -54,6 +54,15 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
+
+
 /**
  * Default implementation for the Platform interface.
  *
@@ -62,7 +71,32 @@ package org.apache.torque.engine.platform;
  */
 public class PlatformDefaultImpl implements Platform
 {
+    private Map schemaDomainMap;
+    
+    /**
+     * Default constructor.
+     */
+    public PlatformDefaultImpl() 
+    {
+        initialize();
+    }
+    
+    private void initialize()
+    {
+        schemaDomainMap = new Hashtable(30);
+        Iterator iter = SchemaType.iterator();
+        while (iter.hasNext()) 
+        {
+            SchemaType type = (SchemaType) iter.next();
+            schemaDomainMap.put(type, new Domain(type));
+        }
+    }
 
+    protected void setSchemaDomainMapping(Domain domain) 
+    {
+        schemaDomainMap.put(domain.getType(), domain);
+    }
+    
     /**
      * @see Platform#getMaxColumnNameLength()
      */
@@ -77,6 +111,14 @@ public class PlatformDefaultImpl implements Platform
     public String getNativeIdMethod()
     {
         return "identity";
+    }
+
+    /**
+     * @see Platform#getDomainForJdbcType(SchemaType)
+     */
+    public Domain getDomainForSchemaType(SchemaType jdbcType) 
+    {
+        return (Domain) schemaDomainMap.get(jdbcType);
     }
 
 }

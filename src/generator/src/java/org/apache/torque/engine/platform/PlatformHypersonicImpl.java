@@ -54,11 +54,33 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * Hypersonic Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformHypersonicImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformHypersonicImpl()
+    {
+        super();
+        initialize();
+    }
 
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BINARY"));
+    }
 }

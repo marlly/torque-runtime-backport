@@ -54,6 +54,9 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
  * Interface for RDBMS platform specific behaviour.
  *
@@ -75,4 +78,12 @@ public interface Platform
      * @return the max column length
      */
     int getMaxColumnNameLength();
+
+    /**
+     * Returns the db specific domain for a jdbcType.
+     *
+     * @param jdbcType the jdbcType name
+     * @return the db specific domain
+     */
+    Domain getDomainForSchemaType(SchemaType jdbcType);
 }

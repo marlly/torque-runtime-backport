@@ -54,12 +54,41 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * DB2-AS400 Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformDb2400Impl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformDb2400Impl()
+    {
+        super();
+        initialize();
+    }
+
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "SMALLINT"));
+        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "INT"));
+        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "DOUBLE PRECISION"));
+        setSchemaDomainMapping(new Domain(SchemaType.DECIMAL, "DEC"));
+        setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "VARCHAR (32000) FOR BIT DATA"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG VARCHAR FOR BIT DATA"));
+    }
+    
     /**
      * @see Platform#getMaxColumnNameLength()
      */

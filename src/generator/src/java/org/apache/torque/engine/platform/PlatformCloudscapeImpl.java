@@ -54,11 +54,38 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * Cloudscape Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformCloudscapeImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformCloudscapeImpl()
+    {
+        super();
+        initialize();
+    }
 
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "INT"));
+        setSchemaDomainMapping(new Domain(SchemaType.BIGINT, "LONGINT"));
+        setSchemaDomainMapping(new Domain(SchemaType.DOUBLE, "DOUBLE PRECISION"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "LONG BINARY"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "LONG BINARY"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG VARBINARY"));
+        setSchemaDomainMapping(new Domain(SchemaType.JAVA_OBJECT, "SERIALIZE"));    
+    }
 }

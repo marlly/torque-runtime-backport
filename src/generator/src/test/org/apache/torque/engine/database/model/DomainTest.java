@@ -94,7 +94,7 @@ public class DomainTest extends TestCase
     public void testAllAttributes() throws Exception
     {
         Domain amount = db.getDomain("amount");
-        assertEquals("NUMERIC", amount.getType());
+        assertEquals(SchemaType.NUMERIC, amount.getType());
         assertEquals("10", amount.getSize());
         assertEquals("2", amount.getScale());
         assertEquals("0", amount.getDefaultValue());
@@ -111,6 +111,7 @@ public class DomainTest extends TestCase
         assertEquals("VARCHAR", name.getType());
         assertEquals("40", name.getSize());
         Column price = table.getColumn("price");
+        assertEquals("NUMERIC", price.getTorqueType());
         assertEquals("NUMERIC", price.getType());
         assertEquals("10", price.getSize());
         assertEquals("2", price.getScale());

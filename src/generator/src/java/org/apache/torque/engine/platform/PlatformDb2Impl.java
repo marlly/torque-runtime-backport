@@ -54,12 +54,37 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * DB2 Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformDb2Impl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformDb2Impl()
+    {
+        super();
+        initialize();
+    }
+
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.CHAR, "VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "LONG VARCHAR"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "CHAR(n) FOR BIT DATA"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "VARCHAR(n) FOR BIT DATA"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONG VARCHAR FOR BIT DATA"));
+    }
 
     /**
      * @see Platform#getMaxColumnNameLength()

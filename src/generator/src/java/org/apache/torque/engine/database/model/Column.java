@@ -165,11 +165,12 @@ public class Column
     public void loadFromXML(Attributes attrib)
     {
         String dom = attrib.getValue("domain");
-        if (StringUtils.isNotEmpty(dom)) {
+        if (StringUtils.isNotEmpty(dom)) 
+        {
             Domain domain = getTable().getDatabase().getDomain(dom);
             size = domain.getSize();
             scale = domain.getScale();
-            setType(domain.getType());
+            setType(domain.getType().getName());
             defaultValue = domain.getDefaultValue();
         } 
         else

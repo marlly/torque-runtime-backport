@@ -54,11 +54,39 @@ package org.apache.torque.engine.platform;
  * <http://www.apache.org/>.
  */
 
+import org.apache.torque.engine.database.model.Domain;
+import org.apache.torque.engine.database.model.SchemaType;
+
 /**
+ * MySql Platform implementation.
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class PlatformMysqlImpl extends PlatformDefaultImpl
 {
+    /**
+     * Default constructor.
+     */
+    public PlatformMysqlImpl()
+    {
+        super();
+        initialize();
+    }
 
+    /**
+     * Initializes db specific domain mapping.
+     */
+    private void initialize()
+    {
+        setSchemaDomainMapping(new Domain(SchemaType.NUMERIC, "DECIMAL"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARCHAR, "MEDIUMTEXT"));
+        setSchemaDomainMapping(new Domain(SchemaType.DATE, "DATETIME"));
+        setSchemaDomainMapping(new Domain(SchemaType.BINARY, "BLOB"));
+        setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "MEDIUMBLOB"));
+        setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "LONGBLOB"));
+        setSchemaDomainMapping(new Domain(SchemaType.BLOB, "LONGBLOB"));
+        setSchemaDomainMapping(new Domain(SchemaType.CLOB, "LONGTEXT"));
+    }
+    
 }
