@@ -42,6 +42,9 @@
     <li>
       TRQS139: wrong invocation of populateObject in peer class
     </li>  
+    <li>
+      TRQS141: Table with no primary key results an empty ADD PRIMARY KEY ()
+    </li>  
   </ul>
 </p>
 </subsection>
