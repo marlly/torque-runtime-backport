@@ -49,6 +49,7 @@ package org.apache.torque.manager;
 import java.io.Serializable;
 import org.apache.commons.lang.Objects;
 import org.apache.commons.pool.BasePoolableObjectFactory;
+import org.apache.torque.TorqueException;
 
 public class MethodCacheKey
     implements Serializable
@@ -210,7 +211,7 @@ public class MethodCacheKey
         if ( obj instanceof MethodCacheKey ) 
         {
             MethodCacheKey sck = (MethodCacheKey)obj;
-            equal = sck.n == n;
+            equal = (sck.n == n);
             equal &= Objects.equals(sck.method, method);
             equal &= Objects.equals(sck.instanceOrClass, instanceOrClass);
             if (equal && n > 0) 
@@ -268,7 +269,7 @@ public class MethodCacheKey
     public String toString()
     {
         StringBuffer sb = new StringBuffer(50);
-        sb.append(instanceOrClass.toString());
+        sb.append(instanceOrClass);
         sb.append("::");
         sb.append(method).append('(');
         if (n > 0) 
@@ -317,6 +318,11 @@ public class MethodCacheKey
             throws Exception
         {
             MethodCacheKey key = (MethodCacheKey)obj;
+            if (key.instanceOrClass == null && key.method == null) 
+            {
+                throw new TorqueException(
+                    "Attempted to return key to pool twice.");   
+            }            
             key.instanceOrClass = null;
             key.method = null;
             key.arg1 = null;
