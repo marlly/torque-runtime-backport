@@ -168,7 +168,7 @@
     </dependency>
     <dependency>
       <id>velocity</id>
-      <version>1.3-dev</version>
+      <version>1.3</version>
       <url>http://jakarta.apache.org/velocity/</url>
     </dependency>
     <dependency>
