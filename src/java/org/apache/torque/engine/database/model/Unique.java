@@ -57,7 +57,10 @@ package org.apache.torque.engine.database.model;
 import java.util.List;
 
 /**
- * Information about unique indices of a table.
+ * Information about unique columns of a table.  This class assumes
+ * that in the underlying RDBMS, unique constraints and unique indices
+ * are roughly equivalent.  For example, adding a unique constraint to
+ * a column also creates an index on that column.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
@@ -66,18 +69,10 @@ import java.util.List;
 public class Unique extends Index
 {
     /**
-     * Creates a new, unique <code>Index</code> instance.
+     * Creates a new instance.
      */
     public Unique()
     {
-    }
-
-    /**
-     * @see org.apache.torque.engine.database.model.Index#Index(List indexColumns)
-     */
-    public Unique(List indexColumns)
-    {
-        super(indexColumns);
     }
 
     /**
