@@ -59,10 +59,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+
 import org.apache.torque.engine.EngineException;
+
 import org.xml.sax.Attributes;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -77,8 +77,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Database
 {
-    /** Logging class from commons.logging */
-    private static Log log = LogFactory.getLog(Database.class);
     private String databaseType = null;
     private List tableList = new ArrayList(100);
     private String name;

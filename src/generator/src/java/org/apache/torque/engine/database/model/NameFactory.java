@@ -57,9 +57,6 @@ package org.apache.torque.engine.database.model;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.engine.EngineException;
 
 /**
@@ -70,9 +67,6 @@ import org.apache.torque.engine.EngineException;
  */
 public class NameFactory
 {
-    /** Logging class from commons.logging */
-    private static Log log = LogFactory.getLog(NameFactory.class);
-
     /**
      * The fully qualified class name of the Java name generator.
      */
