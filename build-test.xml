@@ -58,7 +58,6 @@
     <antcall target="test-pre-runtime"/>
     <antcall target="test-runtime"/>
     <antcall target="test-post-runtime"/>
-
   </target>
 
   <!-- ============================================================== -->
@@ -85,6 +84,7 @@
   <target
     name="test-pre-runtime">
 
+    <antcall target="test-project-doc"/>
     <antcall target="test-create-db"/>
     <antcall target="test-project-sql"/>
     <antcall target="test-id-table-init-sql"/>
@@ -127,6 +127,15 @@
       dir="${torque.buildFileDir}"
       antfile="${torque.buildFile}"
       target="id-table-init-sql">
+    </ant>
+  </target>
+
+  <target
+    name="test-project-doc">
+    <ant
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="project-doc">
     </ant>
   </target>
 
