@@ -65,6 +65,8 @@
 
 <section name="Installing Torque">
 
+<subsection name="Generator with the Maven plugin">
+
 <p>
   If you have not already done so, download and install 
   <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the 
@@ -78,6 +80,61 @@
 maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2
 ]]></source>
 
+
+</subsection>
+
+<subsection name="Generator with the Ant build file">
+
+<p>
+  If you prefer to use <a href="http://ant.apache.org/">Ant</a> you need access 
+  to the Torque generator distribution and associated libraries - these are 
+  available from the 
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
+  Downloads page</a> (the file to download is torque-gen-3.1.1.tar.gz or 
+  torque-gen-3.1.1.zip, depending on your development platform).  Unpack the
+  archive to reveal the following directory structure:
+</p>
+
+<source><![CDATA[
+torque-gen-3.1.1/
+    docs/              <--- Contains a copy of the Torque documentation, 
+                            including the API JavaDocs.
+    lib/               <--- Contains the jar files required by the Torque 
+                            generator.
+    schema/            <--- Contains the schema for the table used by Torque's
+                            IDBroker.
+    templates/         <--- A copy of the Torque generator object model
+                            Velocity templates.  To use these rather than the 
+                            copy that is included in the torque-gen jar file
+                            you need to set <code>torque.useClasspath</code> to 
+                            <code>false</code> in <code>build.properties</code>
+                            (this is actually the default).
+    build.properties   <--- The various properties that you use to configure
+                            the Torque generator.
+    build-torque.xml   <--- The Ant build file containing the various torque 
+                            goals.
+    commons-logging.properties
+                       <--- Commons logging configuration file.
+    default.properties <--- The default property values that are used to
+                            configure the Torque generator.
+    LICENSE.txt        <--- The License for the Torque generator.
+    log4j.properties   <--- Log4j configuration file.
+    simplelog.properties
+                       <--- Commons logging simplelog configuration file.
+]]></source>
+
+<p>
+  The instructions below are targeted towards using the Torque maven-plugin.  
+  If you are using Ant the instructions are basically the same, but instead of 
+  using <code>project.properties</code> you use <code>build.properties</code>
+  and instead of using <code>maven torque:${goal-name}</code> you use 
+  <code>ant -f build-torque.xml ${target-name}</code>.
+</p>
+
+</subsection>
+
+<subsection name="Runtime">
+
 <p>
   At runtime the generated object model classes need access to the Torque 
   runtime distribution and associated libraries - these are available from the
@@ -87,13 +144,15 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   what to do with this file in a later step.
 </p>
 
+</subsection>
+
 </section>
 
 <section name="Quick Start Guide">
 
 <p>
   For those who just want to see Torque here we will race our way through all
-  that needs to be done to define, generate and use a Torque object model.\
+  that needs to be done to define, generate and use a Torque object model.
 </p>
 
 <subsection name="Configure Torque Generator (project.properties)">

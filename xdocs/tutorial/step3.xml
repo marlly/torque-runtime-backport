@@ -23,7 +23,9 @@ sections.
 <p>
 Note: If you are yet to jump aboard the Maven ship you can 
 download the torque-gen archive and make use of the Ant build 
-file <code>build-torque.xml</code> contained therein.
+file <code>build-torque.xml</code> contained therein - see the 
+<a href="../user-guide.html#Generator_with_the_Ant_build_file">User Guide</a>. 
+for details.
 </p>
 
 </section>
