@@ -861,12 +861,9 @@ public class Torque
      * @return The requested connection.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @throws java.sql.SQLException never thrown
-     * @throws javax.naming.NamingException never thrown
      */
     public static Connection getConnection()
-        throws TorqueException, java.sql.SQLException,
-               javax.naming.NamingException
+        throws TorqueException
     {
         return getConnection(getDefaultDB());
     }
