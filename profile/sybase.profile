@@ -76,6 +76,17 @@ databaseHost = localhost
 sameJavaName=false
 
 # -------------------------------------------------------------------
+#
+#  D O C U M E N T A T I O   S E T T I N G S
+#
+# -------------------------------------------------------------------
+# These settings will allow you to customize the way your schema
+# documentation is created.
+# Valid formats are: html, anakia (for use with jakarta-site2)
+# -------------------------------------------------------------------
+documentationFormat=html
+
+# -------------------------------------------------------------------
 # You should NOT have to edit anything below here.
 # -------------------------------------------------------------------
 

@@ -102,7 +102,7 @@
       contextProperties="${build.properties}"
       controlTemplate="${DocControlTemplate}"
       outputDirectory="${torque.home}/${outputDirectory}/doc"
-      outputFormat="html"
+      outputFormat="${documentationFormat}"
       templatePath="${templatePath}"
       sqldbmap="${torque.home}/${outputDirectory}/sql/sqldb.map"
       outputFile="report.${project}.doc.generation">
