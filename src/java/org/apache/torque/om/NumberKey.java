@@ -133,13 +133,13 @@ public class NumberKey extends SimpleKey
 
     /**
      * Creates a NumberKey equivalent to <code>key</code>.
-     * Convenience only. Not very efficient at all.
+     * Convenience only.
      *
      * @param key the key value
      */
     public NumberKey(int key)
     {
-        this.key = new BigDecimal(String.valueOf(key));
+        this((long) key);
     }
 
     /**
