@@ -1103,14 +1103,6 @@ public class Table implements IDMethod
     }
 
     /**
-     * @deprecated Use getPrimaryKey() instead.
-     */
-    public final ArrayList getPrimaryKeys()
-    {
-        return (ArrayList) getPrimaryKey();
-    }
-
-    /**
      * Determine whether this table has a primary key.
      *
      * @return Whether this table has any primary key parts.
@@ -1128,14 +1120,6 @@ public class Table implements IDMethod
     public String printPrimaryKey()
     {
         return printList(columnList);
-    }
-
-    /**
-     * @deprecated Use printPrimaryKey() instead.
-     */
-    public final String printPrimaryKeys()
-    {
-        return printPrimaryKey();
     }
 
     /**

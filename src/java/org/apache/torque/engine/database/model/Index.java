@@ -57,9 +57,7 @@ package org.apache.torque.engine.database.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.torque.engine.EngineException;
-
 import org.xml.sax.Attributes;
 
 /**
@@ -73,9 +71,11 @@ public class Index
 {
     /** enables debug output */
     private static final boolean DEBUG = false;
-
+    /** name of the index */
     private String indexName;
+    /** table */
     private Table parentTable;
+    /** columns */
     private List indexColumns;
 
     /**
@@ -121,6 +121,11 @@ public class Index
         }
     }
 
+    /**
+     * Creates a name for the index using the NameFactory.
+     *
+     * @throws EngineException
+     */
     private void createName() throws EngineException
     {
         Table table = getTable();
@@ -143,6 +148,8 @@ public class Index
 
     /**
      * Imports index from an XML specification
+     *
+     * @param attrib the xml attributes
      */
     public void loadFromXML(Attributes attrib)
     {
@@ -150,16 +157,9 @@ public class Index
     }
 
     /**
-     * @see #isUnique()
-     * @deprecated Use isUnique() instead.
-     */
-    public boolean getIsUnique()
-    {
-        return isUnique();
-    }
-
-    /**
      * Returns the uniqueness of this index.
+     *
+     * @return the uniqueness of this index
      */
     public boolean isUnique()
     {
@@ -167,16 +167,9 @@ public class Index
     }
 
     /**
-     * @see #getName()
-     * @deprecated Use getName() instead.
-     */
-    public String getIndexName()
-    {
-        return getName();
-    }
-
-    /**
      * Gets the name of this index.
+     *
+     * @return the name of this index
      */
     public String getName()
     {
@@ -196,16 +189,9 @@ public class Index
     }
 
     /**
-     * @see #setName(String name)
-     * @deprecated Use setName(String name) instead.
-     */
-    public void setIndexName(String name)
-    {
-        setName(name);
-    }
-
-    /**
      * Set the name of this index.
+     *
+     * @param name the name of this index
      */
     public void setName(String name)
     {
@@ -214,6 +200,8 @@ public class Index
 
     /**
      * Set the parent Table of the index
+     *
+     * @param parent the table
      */
     public void setTable(Table parent)
     {
@@ -222,6 +210,8 @@ public class Index
 
     /**
      * Get the parent Table of the index
+     *
+     * @return the table
      */
     public Table getTable()
     {
@@ -230,6 +220,8 @@ public class Index
 
     /**
      * Returns the Name of the table the index is in
+     *
+     * @return the name of the table
      */
     public String getTableName()
     {
@@ -238,6 +230,8 @@ public class Index
 
     /**
      * Adds a new column to an index.
+     *
+     * @param attrib xml attributes for the column
      */
     public void addColumn(Attributes attrib)
     {
@@ -245,16 +239,9 @@ public class Index
     }
 
     /**
-     * @see #getColumnList()
-     * @deprecated Use getColumnList() instead.
-     */
-    public String getIndexColumnList()
-    {
-        return getColumnList();
-    }
-
-    /**
      * Return a comma delimited string of the columns which compose this index.
+     *
+     * @return a list of column names
      */
     public String getColumnList()
     {
@@ -262,16 +249,9 @@ public class Index
     }
 
     /**
-     * @see #getColumns()
-     * @deprecated Use getColumns() instead.
-     */
-    public List getIndexColumns()
-    {
-        return getColumns();
-    }
-
-    /**
      * Return the list of local columns. You should not edit this list.
+     *
+     * @return a list of columns
      */
     public List getColumns()
     {
@@ -283,6 +263,8 @@ public class Index
      * index.  Slightly over-allocates the list's buffer (just in case
      * more elements are going to be added, such as when a name is
      * being generated).  Feel free to modify this list.
+     *
+     * @return a list of column names
      */
     protected List getColumnNames()
     {
@@ -298,6 +280,8 @@ public class Index
 
     /**
      * String representation of the index. This is an xml representation.
+     *
+     * @return a xml representation
      */
     public String toString()
     {
