@@ -178,8 +178,6 @@ public class Torque implements Initializable, Configurable
      */
     public void initialize() throws TorqueException
     {
-        // FIX ME!!
-        // duplicated code init(Configuration)
         if (configuration == null)
         {
             throw new TorqueException("Torque cannot be initialized without " +
@@ -281,64 +279,9 @@ public class Torque implements Initializable, Configurable
     public static void init(Configuration c)
         throws TorqueException
     {
-        Torque.setConfiguration(c);
-        if (configuration == null)
-        {
-            throw new TorqueException("Torque cannot be initialized without " +
-                "a valid configuration. Please check the log files " +
-                    "for further details.");
-        }
-
-        // Setup log4j, I suppose we might want to deal with
-        // systems other than log4j ...
-        configureLogging();
-
-        // Now that we have dealt with processing the log4j properties
-        // that may be contained in the configuration we will make the
-        // configuration consist only of the remain torque specific
-        // properties that are contained in the configuration. First
-        // look for properties that are in the "torque" namespace.
-        Configuration originalConf = configuration;
-        configuration = configuration.subset("torque");
-
-        if (configuration == null || configuration.isEmpty())
-        {
-            // If there are no properties in the "torque" namespace
-            // than try the "services.DatabaseService" namespace. This
-            // will soon be deprecated.
-            configuration = originalConf.subset("services.DatabaseService");
-
-            // the configuration may already have any prefixes stripped
-            if (configuration == null || configuration.isEmpty())
-            {
-                configuration = originalConf;
-            }
-        }
-
-        dbMaps = new HashMap();
-        pools = new HashMap();
-        DBFactory.init(configuration);
-
-        isInit = true;
-        for (Iterator i = mapBuilders.iterator(); i.hasNext(); )
-        {
-            //this will add any maps in this builder to the proper database map
-            BasePeer.getMapBuilder((String)i.next());
-        }
-        // any further mapBuilders will be called/built on demand
-        mapBuilders = null;
-
-        // setup manager mappings
-        initManagerMappings(configuration);
-
-        // Create monitor thread
-        monitor = new Monitor();
-        // Indicate that this is a system thread. JVM will quit only when there
-        // are no more active user threads. Settings threads spawned internally
-        // by Turbine as daemons allows commandline applications using Turbine
-        // to terminate in an orderly manner.
-        monitor.setDaemon(true);
-        monitor.start();
+        Torque torque = new Torque();
+        torque.configure(c);
+        torque.initialize();
     }
 
 
