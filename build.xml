@@ -23,6 +23,7 @@
     <pathelement location="${commons-configuration.jar}"/>
     <pathelement location="${commons-lang.jar}"/>
     <pathelement location="${commons-pool.jar}"/>
+    <pathelement location="${commons-jdbc2pool.jar}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${stratum.jar}"/>
     <pathelement location="tdk.jar"/>

@@ -21,19 +21,21 @@ versions see the runtime configuration section of
 <p>
 Starting with Torque-3.0b3, torque no longer includes a built-in pool.  
 Torque's old pool has been updated to be a <code>javax.sql.DataSource</code>
-implementation and has been moved into the commons-sandbox/jdbc2pool package.
+implementation and has been moved into the commons-jdbc2pool package within
+the commons sandbox.
 Torque now expects a factory that can return a <code>DataSource</code> and can
 be configured using torque's configuration file.
 </p>
 
 <p>
-Currently Torque provides a 
-factory that uses jndi to retrieve the <code>DataSource</code>.  This factory 
+Torque provides two special purpose factories as well as a general
+factory that uses jndi to retrieve the <code>DataSource</code>.  The first
+factory discussed below uses the updated version of torque's old pool and the
+second uses the more full featured pool available in the same package.
+The jndi factory looks up a <code>DataSource</code> bound to jndi; it
 also provides a simple property file based way to configure and deploy most
 <code>DataSource</code>'s, though in many cases a pool may already be 
-bound to jndi and torque only needs to use it. It is expected that very soon
-a couple more factories will be available to allow a simpler arrangement than
-using jndi.
+bound to jndi and torque only needs to use it.
 </p>
 
 <p>
@@ -94,6 +96,95 @@ The valid values are:
 </td>
 </tr>
 </table>
+
+</section>
+
+
+<section name="TorqueDataSourceFactory">
+
+<p>
+This factory gives a DataSource version of the old built-in pool.  The old
+pool was extracted and updated and is now part of the commons-jdbc2pool
+package.  TorqueDataSourceFactory provides an easy way to configure this
+pool and it assumes you will have a jdbc Driver class providing the physical
+database connections.  First you must let torque know you are using this
+factory.
+</p>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.factory=org.apache.torque.dsfactory.TorqueDataSourceFactory
+]]></source>
+
+<p>
+Then there are two sets of properties related to the pool configuration and 
+settings for making the connection to the database.
+</p>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.pool.defaultMaxConnections=10
+torque.dsfactory.bookstore.pool.maxExpiryTime=3600
+torque.dsfactory.bookstore.pool.connectionWaitTimeout=10
+]]></source>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.connection.driver = org.gjt.mm.mysql.Driver
+torque.dsfactory.bookstore.connection.url = jdbc:mysql://localhost:3306/bookstore
+torque.dsfactory.bookstore.connection.user = root
+torque.dsfactory.bookstore.connection.password = 1234
+]]></source>
+
+<p>
+The TorqueClassicDataSource used with this factory has a few other 
+configuration options which could be set above in the "pool" section, but
+the three shown are enough for most cases.  Please see the javadoc for the
+class for more information.
+</p>
+
+</section>
+
+<section name="Jdbc2PoolDataSourceFactory">
+
+<p>
+This factory uses the more full featured DataSource available in the 
+commons-jdbc2pool package.  Jdbc2PoolDataSourceFactory provides an easy way 
+to configure this pool and it assumes you will have a jdbc Driver class 
+providing the physical database connections.  Again, you must let torque know 
+you are using this factory.
+</p>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.factory= \
+  org.apache.torque.dsfactory.Jdbc2PoolDataSourceFactory
+]]></source>
+
+<p>
+Then there are two sets of properties related to the pool configuration and 
+settings for making the connection to the database.
+</p>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.pool.defaultMaxActive=30
+torque.dsfactory.bookstore.pool.testOnBorrow=true
+torque.dsfactory.bookstore.pool.validationQuery=SELECT 1
+]]></source>
+
+<source><![CDATA[
+torque.dsfactory.bookstore.connection.driver = org.gjt.mm.mysql.Driver
+torque.dsfactory.bookstore.connection.url = jdbc:mysql://localhost:3306/bookstore
+torque.dsfactory.bookstore.connection.user = root
+torque.dsfactory.bookstore.connection.password = 1234
+]]></source>
+
+<p>
+Comparing this with the torque's old pool, you can see that this pool does not
+rely on expirying connections periodically to maintain their validity.  The
+pool can be setup to test each connection before returning it to the 
+application, so the likelihood of the application receiving a bad connection
+is much smaller than using <code>TorqueClassicDataSource</code>.  
+<code>Jdbc2PoolDataSource</code> contains several other options, for example,
+the ability have several usernames sharing the same pool settings.  Please
+see the commons-jdbc2pool javadoc for more info.
+</p>
 
 </section>
 
@@ -180,7 +271,7 @@ In the above example two objects are being configured.  One is a
 <code>DataSource</code> that is used by the application (torque).  The other is
 a <code>ConnectionPoolDataSource</code> that is provided as part of a jdbc2
 driver.  If the jdbc driver implementation you are using does not fully
-implement the jdbc2 specification.  commons-sandbox/jdbc2pool provides an
+implement the jdbc2 specification.  commons-jdbc2pool provides an
 adapter for older <code>Driver</code> based drivers.  Another alternative is
 provided in commons/dbcp where <code>BasicDataSource</code> provides a
 <code>DataSource</code> frontend, and has properties to directly configure
@@ -215,7 +306,7 @@ connection pool and torque cannot be guaranteed to be initialized in time for
 these other uses, or if you just want to follow your j2ee environment's
 standard jndi deployment pattern, torque can just make use of these externally
 deployed pools.  Here is an example using catalina of deploying the pool that 
-used to come with torque, but is now part of commons-sandbox/jdbc2pool.
+used to come with torque, but is now part of commons-jdbc2pool.
 </p>
 
 <p>In server.xml, the following would be added to the &lt;Context&gt; for your
@@ -283,7 +374,7 @@ torque.dsfactory.bookstore.jndi.path=java:comp/env/jdbc/bookstore
 ]]></source>
 
 <p>
-Remember that commons-sandbox/jdbc2pool pools expect a 
+Remember that commons-jdbc2pool pools expect a 
 <code>ConnectionPoolDataSource</code>
 available via jndi under the name given in the dataSourceName, so you will
 need entries in server.xml and web.xml for this object as well.
