@@ -92,9 +92,6 @@ public class TableMap implements IDMethod, java.io.Serializable
     /** The primary key generation method. */
     private String primaryKeyMethod = NO_ID_METHOD;
 
-    /** IdGenerator for this tableMap */
-    private IdGenerator idGenerator;
-
     /**
      * Object to store information that is needed if the
      * for generating primary keys.
