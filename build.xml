@@ -590,9 +590,12 @@
     <copy file="${village.jar}" todir="${torque.dir}/lib"/>
     <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-configuration.jar}" todir="${torque.dir}/lib"/>
     <copy file="${commons-lang.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${commons-pool.jar}" todir="${torque.dir}/lib"/>
     <copy file="${stratum.jar}" todir="${torque.dir}/lib"/>
     <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
+    <copy file="${jcs.jar}" todir="${torque.dir}/lib"/>
 
     <filter token="TORQUE_HOME" value="."/>
 
