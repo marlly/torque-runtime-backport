@@ -35,10 +35,10 @@
     <fileset dir="${torque.lib.dir}">
       <include name="**/commons-collections-2.1.jar"/>
       <include name="**/commons-lang-1.0.1.jar"/>
-      <include name="**/log4j-1.2.7.jar"/>
+      <include name="**/log4j-1.2.8.jar"/>
       <include name="**/${torque.jar}"/>
-      <include name="**/velocity-1.3.jar"/>
-      <include name="**/village-2.0-dev-20021111.jar"/>
+      <include name="**/velocity-1.3.1.jar"/>
+      <include name="**/village-2.0-dev-20030625.jar"/>
       <include name="**/xercesImpl-2.0.2.jar"/>
       <include name="**/xmlParserAPIs-2.0.2.jar"/>
       <include name="**/*.jar"/>
