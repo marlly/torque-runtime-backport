@@ -964,7 +964,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
      */
     protected boolean isCacheOnSave()
     {
-        return false;
+        return true;
     }
 #end
 
