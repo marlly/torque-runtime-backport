@@ -66,6 +66,7 @@ databaseDriver = oracle.jdbc.driver.OracleDriver
 databaseUser = torque
 databasePassword = torque
 databaseHost = 192.168.0.1
+databaseSchema = TORQUE
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.

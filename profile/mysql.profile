@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.4.jar
+torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.7-bin.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 torque.databaseAdapter = DBMM

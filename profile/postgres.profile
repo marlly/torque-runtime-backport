@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/postgresql.jar
+torque.testDatabaseJar = ${lib.repo}/postgres7.2dev.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 torque.databaseAdapter = DBPostgres
