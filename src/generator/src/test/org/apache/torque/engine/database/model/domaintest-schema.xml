@@ -14,6 +14,9 @@
     <column name="article_id" required="true" primaryKey="true" type="INTEGER" />
     <column name="name" size="40" />
     <column name="price" domain="amount" size="12" default="1000" />
+    <column name="note" type="VARCHAR" size="50" default="default note" />
+    <column name="decimal_col" type="DECIMAL" size="10" scale="3" />
+    <column name="date_col" type="DATE"/>
   </table>
   
 </database>

@@ -95,6 +95,7 @@ public class DomainTest extends TestCase
     {
         Domain amount = db.getDomain("amount");
         assertEquals(SchemaType.NUMERIC, amount.getType());
+        assertEquals("DECIMAL", amount.getSqlType());
         assertEquals("10", amount.getSize());
         assertEquals("2", amount.getScale());
         assertEquals("0", amount.getDefaultValue());
@@ -109,10 +110,12 @@ public class DomainTest extends TestCase
         Table table = db.getTable("product");
         Column name = table.getColumn("name");
         assertEquals("VARCHAR", name.getType());
+        assertEquals("VARCHAR", name.getDomain().getSqlType());
         assertEquals("40", name.getSize());
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getTorqueType());
         assertEquals("NUMERIC", price.getType());
+        assertEquals("DECIMAL", price.getDomain().getSqlType());
         assertEquals("10", price.getSize());
         assertEquals("2", price.getScale());
         assertEquals("0", price.getDefaultValue());
@@ -128,10 +131,32 @@ public class DomainTest extends TestCase
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getTorqueType());
         assertEquals("NUMERIC", price.getType());
+        assertEquals("DECIMAL", price.getDomain().getSqlType());
         assertEquals("12", price.getSize());
         assertEquals("2", price.getScale());
         assertEquals("1000", price.getDefaultValue());
         assertEquals("(12,2)", price.printSize());
     }
     
+    public void testDecimalColumn() throws Exception
+    {
+        Table table = db.getTable("article");
+        Column col = table.getColumn("decimal_col");
+        assertEquals("DECIMAL", col.getTorqueType());
+        assertEquals("DECIMAL", col.getType());
+        assertEquals("DECIMAL", col.getDomain().getSqlType());
+        assertEquals("10", col.getSize());
+        assertEquals("3", col.getScale());
+        assertEquals("(10,3)", col.printSize());
+    }
+
+    public void testDateColumn() throws Exception
+    {
+        Table table = db.getTable("article");
+        Column col = table.getColumn("date_col");
+        assertEquals("DATE", col.getTorqueType());
+        assertEquals("DATE", col.getType());
+        assertEquals("DATETIME", col.getDomain().getSqlType());
+        assertEquals("", col.printSize());
+    }    
 }

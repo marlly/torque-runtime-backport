@@ -59,12 +59,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.engine.EngineException;
-
+import org.apache.torque.engine.platform.Platform;
+import org.apache.torque.engine.platform.PlatformDefaultImpl;
 import org.xml.sax.Attributes;
 
 /**
@@ -80,7 +79,7 @@ import org.xml.sax.Attributes;
  */
 public class Column
 {
-    private static final String DEFAULT_TYPE = "VARCHAR";
+    private static final SchemaType DEFAULT_TYPE = SchemaType.VARCHAR;
     /** Logging class from commons.logging */
     private static Log log = LogFactory.getLog(Column.class);
     private String name;
@@ -166,8 +165,8 @@ public class Column
         } 
         else
         {
-            domain = new Domain();
-            domain.setType(DEFAULT_TYPE);
+            domain = new Domain(getPlatform().getDomainForSchemaType(DEFAULT_TYPE));
+            setType(attrib.getValue("type"));
         }
         //Name
         name = attrib.getValue("name");
@@ -213,8 +212,6 @@ public class Column
 
         domain.replaceSize(attrib.getValue("size"));
         domain.replaceScale(attrib.getValue("scale"));
-
-        domain.replaceType(attrib.getValue("type"));
 
         inheritanceType = attrib.getValue("inheritance");
         isInheritance = (inheritanceType != null
@@ -571,17 +568,32 @@ public class Column
     }
 
     /**
-     * Returns the colunm type
+     * Sets the colunm type
      */
     public void setType(String torqueType)
     {
-        domain.setType(torqueType);
-        if (torqueType.equals("VARBINARY") || torqueType.equals("BLOB"))
+        SchemaType type = SchemaType.getEnum(torqueType);
+        if (type == null)
+        {
+            log.warn("SchemaType " + torqueType + " does not exist");
+            type = this.DEFAULT_TYPE;
+        }
+        setType(type);
+    }
+
+    /**
+     * Sets the colunm type
+     */
+    public void setType(SchemaType torqueType)
+    {
+        domain = new Domain(getPlatform().getDomainForSchemaType(torqueType));
+        if (torqueType.equals(SchemaType.VARBINARY)
+                || torqueType.equals(SchemaType.BLOB))
         {
             needsTransactionInPostgres = true;
         }
     }
-
+    
     /**
      * Returns the column jdbc type as an object
      */
@@ -728,26 +740,10 @@ public class Column
 
     /**
      * Return a string that will give this column a default value.
-     * <p>
-     * TODO: Properly SQL-escape text values.
      */
      public String getDefaultSetting()
      {
-         StringBuffer dflt = new StringBuffer(0);
-         if (domain.getDefaultValue() != null)
-         {
-             dflt.append("default ");
-             if (TypeMap.isTextType(domain.getType()))
-             {
-                 // TODO: Properly SQL-escape the text.
-                 dflt.append('\'').append(domain.getDefaultValue()).append('\'');
-             }
-             else
-             {
-                 dflt.append(domain.getDefaultValue());
-             }
-         }
-         return dflt.toString();
+         return domain.getDefaultSetting();
      }
 
     /**
@@ -942,5 +938,34 @@ public class Column
         return (s != null && s.equals("primitive"))
             || (s == null && !"object".equals(
                getTable().getDatabase().getDefaultJavaType()));
+    }
+    
+    /**
+     * @return Returns the domain.
+     */
+    public Domain getDomain()
+    {
+        return domain;
+    }
+
+    /**
+     * @param domain The domain to set.
+     */
+    public void setDomain(Domain domain)
+    {
+        this.domain = domain;
+    }
+
+    private Platform getPlatform()
+    {
+        try
+        {
+            return getTable().getDatabase().getPlatform();
+        }
+        catch (Exception ex)
+        {
+            log.warn("could not load platform implementation");
+        }
+        return new PlatformDefaultImpl();
     }
 }
