@@ -295,7 +295,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         {
             set${column.JavaName}(v.get${colFK.JavaName}());
         }
-   #end        
+   #end
         $varName = v;
     }
 
@@ -318,9 +318,15 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
    #end
    #set ( $pCollName = "${table.JavaName}s$relCol" )
 
+    /**
+     * Get the associated $className object
+     *
+     * @return the associated $className object
+     * @throws TorqueException
+     */
     public $className get${pVarName}() throws TorqueException
     {
-        if ($varName==null && ($conditional))
+        if ($varName == null && ($conditional))
         {
   #if ($tblFK.isAlias())
         $varName = ${className}Peer.retrieve${className}ByPK($arglist);
@@ -357,7 +363,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     public void set${pVarName}Key(ObjectKey key) throws TorqueException
     {
     #if ($fk.LocalColumns.size() > 1)
-        SimpleKey[] keys = (SimpleKey[])key.getValue();
+        SimpleKey[] keys = (SimpleKey[]) key.getValue();
         #set ($i = 0)
         #foreach ($colName in $fk.LocalColumns)
             #set ($col = $table.getColumn($colName) )
@@ -465,7 +471,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     {
         if ($collName == null)
         {
-            if ( isNew() )
+            if (isNew())
             {
                $collName = new ArrayList();
             }
@@ -492,7 +498,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $column = $table.getColumn($columnName) )
        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
        #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
                 if (!last${relCol}Criteria.equals(criteria))
                 {
@@ -534,11 +540,12 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * referenced objects can also be obtained using a Connection
      * that is taken as input
      */
-    public List get${relCol}(Criteria criteria,Connection con) throws TorqueException
+    public List get${relCol}(Criteria criteria, Connection con)
+            throws TorqueException
     {
         if ($collName == null)
         {
-            if ( isNew() )
+            if (isNew())
             {
                $collName = new ArrayList();
             }
@@ -548,9 +555,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
         #set ( $colFK = $tblFK.getColumn($colFKName) )
-                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
     #end
-                 $collName = ${className}Peer.doSelect(criteria,con);
+                 $collName = ${className}Peer.doSelect(criteria, con);
              }
          }
          else
@@ -565,11 +572,11 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         #set ( $column = $table.getColumn($columnName) )
         #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
         #set ( $colFK = $tblFK.getColumn($colFKName) )
-                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                 criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
     #end
                  if (!last${relCol}Criteria.equals(criteria))
                  {
-                     $collName = ${className}Peer.doSelect(criteria,con);
+                     $collName = ${className}Peer.doSelect(criteria, con);
                  }
              }
          }
@@ -577,8 +584,6 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
          return $collName;
      }
-
-
 
  #set ( $countFK = 0 )
  #foreach ($dummyFK in $tblFK.ForeignKeys)
@@ -665,7 +670,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $column = $table.getColumn($columnName) )
        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
        #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
                 $collName = ${className}Peer.doSelectJoin${relCol2}(criteria);
             }
@@ -680,7 +685,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $column = $table.getColumn($columnName) )
        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
        #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
             if (!last${relCol}Criteria.equals(criteria))
             {
@@ -723,7 +728,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $column = $table.getColumn($columnName) )
        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
        #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
                 $collName = ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
             }
@@ -738,7 +743,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
        #set ( $column = $table.getColumn($columnName) )
        #set ( $colFKName = $fk.ForeignLocalMapping.get($columnName) )
        #set ( $colFK = $tblFK.getColumn($colFKName) )
-                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}() );
+                criteria.add(${className}Peer.${colFK.Name.toUpperCase()}, get${column.JavaName}());
    #end
             if (!last${relCol}Criteria.equals(criteria))
             {
@@ -768,6 +773,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     /**
      * Generate a list of field names.
+     *
+     * @return a list of field names
      */
     public static synchronized List getFieldNames()
     {
@@ -783,8 +790,10 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     }
 
     /**
-     * Retrieves a field from the object by name passed in
-     * as a String.
+     * Retrieves a field from the object by name passed in as a String.
+     *
+     * @param name field name
+     * @return value
      */
     public Object getByName(String name)
     {
@@ -820,6 +829,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * Retrieves a field from the object by name passed in
      * as a String.  The String must be one of the static
      * Strings defined in this Class' Peer.
+     *
+     * @param name peer name
+     * @return value
      */
     public Object getByPeerName(String name)
     {
@@ -827,7 +839,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
       #set ( $cfc = $col.JavaName )
       #set ( $cup=$col.Name.toUpperCase() )
       #set ( $cjtype = $col.JavaNative )
-        if (name.equals(${table.JavaName}Peer.$cup ))
+        if (name.equals(${table.JavaName}Peer.$cup))
         {
       #if ($cjtype == "int")
         return new Integer(get${cfc}());
@@ -856,6 +868,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     /**
      * Retrieves a field from the object by Position as specified
      * in the xml schema.  Zero-based.
+     *
+     * @param pos position in xml schema
+     * @return value
      */
     public Object getByPosition(int pos)
     {
@@ -898,6 +913,8 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     /**
      * Stores the object in the database.  If the object is new,
      * it inserts it; otherwise an update is performed.
+     *
+     * @throws $saveException
      */
     public void save() throws $saveException
     {
@@ -928,6 +945,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * auto-generated conditionally and therefore needs to be
      * in this file instead of in the super class, BaseObject.
 #end
+     *
+     * @param dbName
+     * @throws TorqueException
      */
     public void save(String dbName) throws TorqueException
     {
@@ -983,6 +1003,9 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      * is meant to be used as part of a transaction, otherwise use
      * the save() method and the connection details will be handled
      * internally
+     *
+     * @param con
+     * @throws TorqueException
      */
     public void save(Connection con) throws TorqueException
     {
@@ -1107,6 +1130,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 
     /**
      * Set the PrimaryKey using a String.
+     *
+     * @param key
      */
     public void setPrimaryKey(String key) $throwsClause
     {
@@ -1119,6 +1144,8 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     private final ComboKey comboPK = new ComboKey(pks);
     /**
      * Set the PrimaryKey with an ObjectKey
+     *
+     * @param key
      */
     public void setPrimaryKey(ObjectKey key) throws TorqueException
     {

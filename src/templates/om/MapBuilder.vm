@@ -60,6 +60,8 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
     /**
      * Tells us if this DatabaseMapBuilder is built so that we
      * don't have to re-build it every time.
+     *
+     * @return true if this DatabaseMapBuilder is built
      */
     public boolean isBuilt()
     {
@@ -72,6 +74,8 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
     /**
      * Gets the databasemap this map builder built.
+     *
+     * @return the databasemap
      */
     public DatabaseMap getDatabaseMap()
     {
@@ -80,6 +84,8 @@ public class ${table.JavaName}MapBuilder implements MapBuilder
 
     /**
      * The doBuild() method builds the DatabaseMap
+     *
+     * @throws TorqueException
      */
     public void doBuild() throws TorqueException
     {
