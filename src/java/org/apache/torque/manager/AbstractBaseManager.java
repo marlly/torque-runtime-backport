@@ -449,7 +449,7 @@ public abstract class AbstractBaseManager
         }
         if (cache == null)
         {
-            category.info("Cache was not be initialized for region: " + v);
+            category.info("Cache could not be initialized for region: " + v);
         }
     }
 
@@ -594,7 +594,7 @@ public abstract class AbstractBaseManager
         }
         catch (Exception e)
         {
-            category.error("Cache was not be initialized for region: "
+            category.error("Cache could not be initialized for region: "
                            + region + "after deserialization");
         }
     }
