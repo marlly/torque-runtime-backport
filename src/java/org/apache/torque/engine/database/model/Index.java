@@ -100,15 +100,18 @@ public class Index
         this();
         if (indexColumns.size() > 0)
         {
-            StringBuffer buf = new StringBuffer();
+            List inputs = new ArrayList(indexColumns.size() + 1);
             Iterator i = indexColumns.iterator();
             while (i.hasNext())
             {
                 Column c = (Column) i.next();
-                buf.append(c.getName()).append('_');
+                inputs.add(c.getName());
             }
-            indexName = buf.append('I').toString();
+            inputs.add("I");
+            indexName = NameFactory.generateName(inputs);
+
             this.indexColumns = indexColumns;
+
             if (DEBUG)
             {
                 System.out.println("Created Index named " + getName() +
