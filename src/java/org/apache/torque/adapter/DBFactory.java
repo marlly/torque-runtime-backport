@@ -57,9 +57,6 @@ package org.apache.torque.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Category;
-
-
 /**
  * This class creates different {@link org.apache.torque.adapter.DB}
  * objects based on specified JDBC driver name.
@@ -73,17 +70,6 @@ import org.apache.log4j.Category;
  */
 public class DBFactory
 {
-    /**
-     * The package name in which known adapters are stored.
-     */
-    private static String adapterPackage = "org.apache.torque.adapter";
-
-    /**
-     * Log4j logging category used for logging.
-     */
-    private static Category category =
-        Category.getInstance(DBFactory.class.getName());
-
     /**
      * JDBC driver to Torque Adapter map.
      */
@@ -132,7 +118,7 @@ public class DBFactory
         adapters.put("weblogic", DBWeblogic.class);
         adapters.put("axion", DBAxion.class);
         adapters.put("informix", DBInformix.class);
-        
+
         adapters.put("", DBNone.class);
     }
 
@@ -162,8 +148,8 @@ public class DBFactory
             catch (IllegalAccessException e)
             {
                 throw new InstantiationException(
-                    "Could not instantiate adapter for JDBC driver: " 
-                    + driver 
+                    "Could not instantiate adapter for JDBC driver: "
+                    + driver
                     + ": Assure that adapter bytecodes are in your classpath");
             }
         }
@@ -171,7 +157,7 @@ public class DBFactory
         {
             throw new InstantiationException(
                 "Unknown JDBC driver: "
-                + driver 
+                + driver
                 + ": Check your configuration file");
         }
     }
