@@ -160,7 +160,6 @@ public class Torque
         monitor.setDaemon(true);
         monitor.start();
 
-        DBFactory.setConfiguration(configuration);
         DBFactory.init();
     }
 
