@@ -8,7 +8,7 @@
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>
-    <logo>/images/db-logo-blue.png</logo>
+    <logo>/images/db-logo-white.png</logo>
   </organization>
   <inceptionYear>2000</inceptionYear>
   <package>org.apache.torque</package>
@@ -20,7 +20,7 @@
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
   <url>http://db.apache.org/torque/</url>
-  <issueTrackingUrl>http://nagoya.apache.org/scarab/issues</issueTrackingUrl>
+  <issueTrackingUrl>http://issues.apache.org/scarab/issues</issueTrackingUrl>
   <siteAddress>db.apache.org</siteAddress>
   <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
   <distributionDirectory>/www/db.apache.org/builds/db-torque/</distributionDirectory>
