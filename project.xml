@@ -20,7 +20,7 @@
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
   <url>http://jakarta.apache.org/turbine/torque/</url>
-  <issueTrackingUrl>http://issues.apache.org/scarab/servlet/scarab/</issueTrackingUrl>
+  <issueTrackingUrl>http://scarab.werken.com</issueTrackingUrl>
   <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/torque/</siteDirectory>
   <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine-torque/</distributionDirectory>
