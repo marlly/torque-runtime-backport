@@ -179,7 +179,7 @@ public class SqlExpression
      */
     public static String build( String columnName,
                                 Object criteria,
-                                String comparison )
+                                SqlEnum comparison )
         throws Exception
     {
         // 'db' can be null because 'ignoreCase' is null
@@ -204,7 +204,7 @@ public class SqlExpression
      */
     public static String build( String columnName,
                                 Object criteria,
-                                String comparison,
+                                SqlEnum comparison,
                                 boolean ignoreCase,
                                 DB db )
         throws Exception
@@ -235,7 +235,7 @@ public class SqlExpression
      */
     public static void build( String columnName,
                               Object criteria,
-                              String comparison,
+                              SqlEnum comparison,
                               boolean ignoreCase,
                               DB db,
                               StringBuffer whereClause)
@@ -474,7 +474,7 @@ public class SqlExpression
      */
     static String buildIn(String columnName,
                           Object criteria,
-                          String comparison,
+                          SqlEnum comparison,
                           boolean ignoreCase,
                           DB db)
     {
@@ -502,7 +502,7 @@ public class SqlExpression
      */
     static void buildIn(String columnName,
                         Object criteria,
-                        String comparison,
+                        SqlEnum comparison,
                         boolean ignoreCase,
                         DB db,
                         StringBuffer whereClause)
