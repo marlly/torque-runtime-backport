@@ -131,7 +131,10 @@ class ConnectionPool implements ConnectionEventListener
     private static Category category
         = Category.getInstance(ConnectionPool.class.getName());
 
+    /** Interval (in seconds) that the monitor thread reports the pool state */
     private int logInterval;
+
+    /** Monitor thread reporting the pool state */
     private Monitor monitor;
 
     /**
