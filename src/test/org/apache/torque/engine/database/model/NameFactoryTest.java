@@ -76,6 +76,8 @@ import org.apache.torque.BaseTestCase;
  */
 public class NameFactoryTest extends BaseTestCase
 {
+    private static final String DATABASE_TYPE = "mysql";
+
     /**
      * The list of known name generation algorithms, specified as the
      * fully qualified class names to <code>NameGenerator</code>
@@ -83,17 +85,19 @@ public class NameFactoryTest extends BaseTestCase
      */
     private static final String[] ALGORITHMS =
     {
-        NameFactory.DEFAULT_GENERATOR, NameFactory.GLOBAL_GENERATOR
+        NameFactory.CONSTRAINT_GENERATOR
     };
 
     /**
      * Two dimensional arrays of inputs for each algorithm.
      */
-    private static final String[][][] INPUTS =
+    private static final Object[][][] INPUTS =
     {
-        { { "FOO", "BAR" }, { "FOO", "BAR", "BAZ" } },
-        { { makeString(62), "I" }, { makeString(62), "I" },
-          { makeString(62), "I" } }
+        { { makeString(61), "I", new Integer(1) },
+          { makeString(61), "I", new Integer(2) },
+          { makeString(65), "I", new Integer(3) },
+          { makeString(4), "FK", new Integer(1) },
+          { makeString(5), "FK", new Integer(2) } }
     };
 
     /**
@@ -101,15 +105,17 @@ public class NameFactoryTest extends BaseTestCase
      */
     private static final String[][] OUTPUTS =
     {
-        { "FOO" + NameGenerator.STD_SEPARATOR_CHAR + "BAR",
-          "FOO" + NameGenerator.STD_SEPARATOR_CHAR + "BAR" +
-          NameGenerator.STD_SEPARATOR_CHAR + "BAZ" },
-        { makeString(62) + NameGenerator.STD_SEPARATOR_CHAR + "I",
-          makeString(61) + NameGenerator.STD_SEPARATOR_CHAR + "I0",
-          makeString(61) + NameGenerator.STD_SEPARATOR_CHAR + "I1" }
+        { makeString(60) + "_I_1",
+          makeString(60) + "_I_2",
+          makeString(60) + "_I_3",
+          makeString(4)  + "_FK_1",
+          makeString(5)  + "_FK_2" }
     };
 
-    private AppData appData;
+    /**
+     * Used as an input.
+     */
+    private Database database;
 
     /**
      * Creates a new instance.
@@ -121,7 +127,8 @@ public class NameFactoryTest extends BaseTestCase
 
     /**
      * Creates a string of the specified length consisting entirely of
-     * the character <code>A</code>.
+     * the character <code>A</code>.  Useful for simulating table
+     * names, etc.
      */
     private static final String makeString(int len)
     {
@@ -147,7 +154,11 @@ public class NameFactoryTest extends BaseTestCase
 
     protected void setUp()
     {
-        appData = new AppData();
+        AppData appData =
+            new AppData(DATABASE_TYPE, "src/templates/sql/base/");
+        database = new Database();
+        database.setDatabaseType(DATABASE_TYPE);
+        appData.addDatabase(database);
     }
 
     /**
@@ -159,7 +170,7 @@ public class NameFactoryTest extends BaseTestCase
         for (int algoIndex = 0; algoIndex < ALGORITHMS.length; algoIndex++)
         {
             String algo = ALGORITHMS[algoIndex];
-            String[][] algoInputs = INPUTS[algoIndex];
+            Object[][] algoInputs = INPUTS[algoIndex];
             for (int i = 0; i < algoInputs.length; i++)
             {
                 List inputs = makeInputs(algo, algoInputs[i]);
@@ -180,17 +191,13 @@ public class NameFactoryTest extends BaseTestCase
      * @param inputs The (possibly partial) list inputs from which to
      * generate the final list.
      */
-    private final List makeInputs(String algo, String[] inputs)
+    private final List makeInputs(String algo, Object[] inputs)
     {
         List list = null;
-        if (NameFactory.DEFAULT_GENERATOR.equals(algo))
-        {
-            list = Arrays.asList(inputs);
-        }
-        else if (NameFactory.GLOBAL_GENERATOR.equals(algo))
+        if (NameFactory.CONSTRAINT_GENERATOR.equals(algo))
         {
             list = new ArrayList(inputs.length + 1);
-            list.add(0, appData);
+            list.add(0, database);
             list.addAll(Arrays.asList(inputs));
         }
         return list;
