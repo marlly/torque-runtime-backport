@@ -216,7 +216,7 @@ public class SQLScanner
             char c = (char) chr;
             inNegative = false;
 
-            if ((char) c == COMMENT_DASH)
+            if (c == COMMENT_DASH)
             {
                 readChar();
                 if ((char) chr == COMMENT_DASH)
@@ -232,18 +232,18 @@ public class SQLScanner
 
             if (inCommentDash)
             {
-                if ((char) c == '\n' || (char) c == '\r')
+                if (c == '\n' || c == '\r')
                 {
                     inCommentDash = false;
                 }
                 readChar();
             }
-            else if ((char) c == COMMENT_POUND)
+            else if (c == COMMENT_POUND)
             {
                 inComment = true;
                 readChar();
             }
-            else if ((char) c == COMMENT_SLASH)
+            else if (c == COMMENT_SLASH)
             {
                 readChar();
                 if ((char) chr == COMMENT_STAR)
@@ -253,7 +253,7 @@ public class SQLScanner
             }
             else if (inComment || inCommentSlashStar)
             {
-                if ((char) c == '*')
+                if (c == '*')
                 {
                     readChar();
                     if ((char) chr == COMMENT_SLASH)
@@ -261,7 +261,7 @@ public class SQLScanner
                         inCommentSlashStar = false;
                     }
                 }
-                else if ((char) c == '\n' || (char) c == '\r')
+                else if (c == '\n' || c == '\r')
                 {
                     inComment = false;
                 }
