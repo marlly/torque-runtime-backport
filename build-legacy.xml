@@ -11,6 +11,7 @@
 
   <!-- Construct compile classpath -->
   <path id="classpath">
+    <pathelement location="${jndi.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${xmlParserAPIs.jar}"/>
     <pathelement location="${velocity.jar}"/>
