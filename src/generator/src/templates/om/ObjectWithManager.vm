@@ -350,7 +350,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         set${col.JavaName}(((NumberKey) keys[$i]).longValue());
         #elseif($fktype == "BigDecimal")
         set${col.JavaName}(((NumberKey) keys[$i]).getBigDecimal());
-        #elseif($fktype == "byte") )
+        #elseif($fktype == "byte")
         set${col.JavaName}(((NumberKey) keys[$i]).byteValue());
         #elseif($fktype == "float")
         set${col.JavaName}(((NumberKey) keys[$i]).floatValue());
@@ -362,7 +362,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         set${col.JavaName}(new Integer(((NumberKey) keys[$i]).intValue()));
         #elseif($fktype == "Long")
         set${col.JavaName}(new Long(((NumberKey) keys[$i]).longValue()));
-        #elseif($fktype == "Byte") )
+        #elseif($fktype == "Byte")
         set${col.JavaName}(new Byte(((NumberKey) keys[$i]).byteValue()));
         #elseif($fktype == "Float")
         set${col.JavaName}(new Float(((NumberKey) keys[$i]).floatValue()));
@@ -389,7 +389,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         set${col.JavaName}(((NumberKey) key).longValue());
       #elseif($fktype == "BigDecimal")
         set${col.JavaName}(((NumberKey) key).getBigDecimal());
-      #elseif($fktype == "byte") )
+      #elseif($fktype == "byte")
         set${col.JavaName}(((NumberKey) key).byteValue());
       #elseif($fktype == "float")
         set${col.JavaName}(((NumberKey) key).floatValue());
@@ -401,7 +401,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
         set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
       #elseif($fktype == "Long")
         set${col.JavaName}(new Long(((NumberKey) key).longValue()));
-      #elseif($fktype == "Byte") )
+      #elseif($fktype == "Byte")
         set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
       #elseif($fktype == "Float")
         set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
@@ -1179,43 +1179,43 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     /**
      * Set the PrimaryKey using ObjectKey.
      *
-     * @param $clo ObjectKey
+     * @param key ObjectKey $clo
      */
-    public void setPrimaryKey(ObjectKey $clo)
+    public void setPrimaryKey(ObjectKey key)
         $throwsClause
     {
     #if ($cjtype == "short")
-        set${col.JavaName}(((NumberKey)$clo).shortValue());
+        set${col.JavaName}(((NumberKey) key).shortValue());
     #elseif($cjtype == "int")
-        set${col.JavaName}(((NumberKey)$clo).intValue());
+        set${col.JavaName}(((NumberKey) key).intValue());
     #elseif($cjtype == "long")
-        set${col.JavaName}(((NumberKey)$clo).longValue());
+        set${col.JavaName}(((NumberKey) key).longValue());
     #elseif($cjtype == "BigDecimal")
-        set${col.JavaName}(((NumberKey)$clo).getBigDecimal());
-    #elseif($cjtype == "byte") )
-        set${col.JavaName}(((NumberKey)$clo).byteValue());
+        set${col.JavaName}(((NumberKey) key).getBigDecimal());
+    #elseif($cjtype == "byte")
+        set${col.JavaName}(((NumberKey) key).byteValue());
     #elseif($cjtype == "float")
-        set${col.JavaName}(((NumberKey)$clo).floatValue());
+        set${col.JavaName}(((NumberKey) key).floatValue());
     #elseif($cjtype == "double")
-        set${col.JavaName}(((NumberKey)$clo).doubleValue());
+        set${col.JavaName}(((NumberKey) key).doubleValue());
     #elseif($cjtype == "Short")
-        set${col.JavaName}(new Short(((NumberKey)$clo).shortValue()));
+        set${col.JavaName}(new Short(((NumberKey) key).shortValue()));
     #elseif($cjtype == "Integer")
-        set${col.JavaName}(new Integer(((NumberKey)$clo).intValue()));
+        set${col.JavaName}(new Integer(((NumberKey) key).intValue()));
     #elseif($cjtype == "Long")
-        set${col.JavaName}(new Long(((NumberKey)$clo).longValue()));
-    #elseif($cjtype == "Byte") )
-        set${col.JavaName}(new Byte(((NumberKey)$clo).byteValue()));
+        set${col.JavaName}(new Long(((NumberKey) key).longValue()));
+    #elseif($cjtype == "Byte")
+        set${col.JavaName}(new Byte(((NumberKey) key).byteValue()));
     #elseif($cjtype == "Float")
-        set${col.JavaName}(new Float(((NumberKey)$clo).floatValue()));
+        set${col.JavaName}(new Float(((NumberKey) key).floatValue()));
     #elseif($cjtype == "Double")
-        set${col.JavaName}(new Double(((NumberKey)$clo).doubleValue()));
+        set${col.JavaName}(new Double(((NumberKey) key).doubleValue()));
     #elseif($cjtype == "String")
-        set${col.JavaName}(${clo}.toString());
+        set${col.JavaName}(key.toString());
     #elseif($cjtype == "Date")
-        set${col.JavaName}(((DateKey)$clo).getDate());
+        set${col.JavaName}(((DateKey) key).getDate());
     #else
-        set${col.JavaName}(($cjtype)$clo);
+        set${col.JavaName}(($cjtype) key);
     #end
     }
 
@@ -1234,7 +1234,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         set${col.JavaName}(Long.parseLong(key));
     #elseif($cjtype == "BigDecimal")
         set${col.JavaName}(new BigDecimal(key));
-    #elseif($cjtype == "byte") )
+    #elseif($cjtype == "byte")
         set${col.JavaName}(Byte.parseByte(key));
     #elseif($cjtype == "float")
         set${col.JavaName}(Float.parseFloat(key));
@@ -1246,7 +1246,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         set${col.JavaName}(new Integer(key));
     #elseif($cjtype == "Long")
         set${col.JavaName}(new Long(key));
-    #elseif($cjtype == "Byte") )
+    #elseif($cjtype == "Byte")
         set${col.JavaName}(new Byte(key));
     #elseif($cjtype == "Float")
         set${col.JavaName}(new Float(key));
@@ -1286,7 +1286,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         set${pk.JavaName}(((NumberKey)keys[$i]).longValue());
       #elseif($pktype == "BigDecimal")
         set${pk.JavaName}(((NumberKey)keys[$i]).getBigDecimal());
-      #elseif($pktype == "byte") )
+      #elseif($pktype == "byte")
         set${pk.JavaName}(((NumberKey)keys[$i]).byteValue());
       #elseif($pktype == "float")
         set${pk.JavaName}(((NumberKey)keys[$i]).floatValue());
@@ -1298,7 +1298,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
         set${pk.JavaName}(new Integer(((NumberKey)keys[$i]).intValue()));
       #elseif($pktype == "Long")
         set${pk.JavaName}(new Long(((NumberKey)keys[$i]).longValue()));
-      #elseif($pktype == "Byte") )
+      #elseif($pktype == "Byte")
         set${pk.JavaName}(new Byte(((NumberKey)keys[$i]).byteValue()));
       #elseif($pktype == "Float")
         set${pk.JavaName}(new Float(((NumberKey)keys[$i]).floatValue()));
