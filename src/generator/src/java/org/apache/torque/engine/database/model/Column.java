@@ -89,6 +89,7 @@ public class Column
     private String javaNamingMethod;
     private boolean isNotNull = false;
     private String size;
+    private String scale;
     /** type as defined in schema.xml */
     private String torqueType;
     private String javaType;
@@ -167,6 +168,7 @@ public class Column
         if (StringUtils.isNotEmpty(dom)) {
             Domain domain = getTable().getDatabase().getDomain(dom);
             size = domain.getSize();
+            scale = domain.getScale();
             setType(domain.getType());
             defaultValue = domain.getDefaultValue();
         } 
@@ -218,6 +220,7 @@ public class Column
                 attrib.getValue("default"), defaultValue);
 
         size = StringUtils.defaultString(attrib.getValue("size"), size);
+        scale = StringUtils.defaultString(attrib.getValue("scale"), scale);
 
         setType(StringUtils.defaultString(attrib.getValue("type"), torqueType));
 
@@ -227,7 +230,6 @@ public class Column
 
         this.inputValidator = attrib.getValue("inputValidator");
         description = attrib.getValue("description");
-        
     }
 
     /**
@@ -688,12 +690,39 @@ public class Column
     }
 
     /**
-     * Return the size in brackets for use in an sql
+     * Returns the size of the column
+     */
+    public String getScale()
+    {
+        return scale;
+    }
+
+    /**
+     * Set the size of the column
+     */
+    public void setScale(String newScale)
+    {
+        scale = newScale;
+    }
+    
+    /**
+     * Return the size and scale in brackets for use in an sql
      * schema if the type is String.  Otherwise return an empty string
      */
     public String printSize()
     {
-        return (size == null ? "" : '(' + size + ')');
+        if (size != null && scale != null) 
+        {
+            return '(' + size + ',' + scale + ')';
+        }
+        else if (size != null) 
+        {
+            return '(' + size + ')';
+        }
+        else
+        {
+            return "";
+        }
     }
 
     /**

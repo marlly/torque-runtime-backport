@@ -113,8 +113,9 @@ public class DomainTest extends TestCase
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getType());
         assertEquals("10", price.getSize());
-//        assertEquals("2", price.getScale());
+        assertEquals("2", price.getScale());
         assertEquals("0", price.getDefaultValue());
+        assertEquals("(10,2)", price.printSize());
     }
     
 }

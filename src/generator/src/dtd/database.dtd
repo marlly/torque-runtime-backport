@@ -111,6 +111,7 @@ Java class or method name.
     ) #IMPLIED 
   javaType (object|primitive) #IMPLIED
   size CDATA #IMPLIED
+  scale CDATA #IMPLIED
   default CDATA #IMPLIED
   autoIncrement (true|false) "false"
   inheritance (single|false) "false"
