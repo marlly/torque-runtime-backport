@@ -26,6 +26,16 @@
           -->
 
           <li>
+            <strong>01 Mar 2002</strong>
+            <ul>
+              <li>
+                Modified most places that torque was throwing the general
+                exception in favor of TorqueException
+              </li>
+            </ul>
+          </li>
+
+          <li>
             <strong>21 Feb 2002</strong>
             <ul>
               <li>
