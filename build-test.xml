@@ -96,6 +96,15 @@
       target="project-om"
       inheritAll="false">
     </ant>
+    
+    <!-- Compile the classes -->
+    
+    <ant 
+      dir="${torque.buildFileDir}"
+      antfile="${torque.buildFile}"
+      target="compile"
+      inheritAll="false">
+    </ant>
   </target>
   
   <target
