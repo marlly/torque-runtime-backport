@@ -18,5 +18,11 @@
     <column name="decimal_col" type="DECIMAL" size="10" scale="3" />
     <column name="date_col" type="DATE"/>
   </table>
+
+  <table name="native" idMethod="native">
+    <column name="native_id" required="true" autoIncrement="true"
+            primaryKey="true" type="INTEGER" />
+    <column name="name" size="40" />
+  </table>
   
 </database>

@@ -59,7 +59,7 @@ import junit.framework.TestCase;
 import org.apache.torque.engine.database.transform.XmlToAppData;
 
 /**
- * Tests for domain handling.
+ * Tests for domain handling (for MySql).
  *
  * @author <a href="mailto:mpoeschl@marmot.at>Martin Poeschl</a>
  * @version $Id$
@@ -158,5 +158,24 @@ public class DomainTest extends TestCase
         assertEquals("DATE", col.getType());
         assertEquals("DATETIME", col.getDomain().getSqlType());
         assertEquals("", col.printSize());
+    }
+
+    public void testNativeAutoincrement() throws Exception
+    {
+        Table table = db.getTable("native");
+        Column col = table.getColumn("native_id");
+        assertEquals("AUTO_INCREMENT", col.getAutoIncrementString());
+        col = table.getColumn("name");
+        assertEquals("", col.getAutoIncrementString());
     }    
+
+    public void testIdBrokerAutoincrement() throws Exception
+    {
+        Table table = db.getTable("article");
+        Column col = table.getColumn("article_id");
+        assertEquals("", col.getAutoIncrementString());
+        col = table.getColumn("name");
+        assertEquals("", col.getAutoIncrementString());
+    }    
+    
 }
