@@ -57,7 +57,8 @@ package org.apache.torque;
 import org.apache.log4j.Category;
 
 /**
- * Runtime tests for Torque.
+ * This class is an example of how to start Torque with a
+ * configuration that exists in the file system.
  *
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>

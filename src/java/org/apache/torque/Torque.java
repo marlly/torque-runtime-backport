@@ -115,7 +115,8 @@ public class Torque
     /**
      * The logging category.
      */
-    private static Category category;
+    private static Category category = 
+        Category.getInstance(Torque.class.getName());
 
     /**
      * Torque-specific configuration.
@@ -139,7 +140,26 @@ public class Torque
                 "a valid configuration. Please check the log files " +
                     "for further details.");
         }            
-    
+        
+        // Setup log4j, I suppose we might want to deal with
+        // systems other than log4j ...
+        configureLogging();
+        
+        // Now that we have dealt with processing the log4j properties
+        // that may be contained in the configuration we will make the
+        // configuration consist only of the remain torque specific
+        // properties that are contained in the configuration. First 
+        // look for properties that are in the "torque" namespace.
+        configuration = configuration.subset("torque");
+        
+        if (configuration.isEmpty())
+        {
+            // If there are no properties in the "torque" namespace
+            // than try the "services.DatabaseService" namespace. This
+            // will soon be deprecated.
+            configuration = configuration.subset("services.DatabaseService");
+        }
+
         dbMaps = new HashMap();
         pools = new HashMap();
         DBFactory.init(configuration);
@@ -163,43 +183,6 @@ public class Torque
         throws Exception
     {
         ExtendedProperties c = new ExtendedProperties(configFile);
-        
-        // First look for properties that are in the "torque"
-        //  namespace.
-        c = c.subset("torque");
-        
-        if (c.isEmpty())
-        {
-            // If there are no properties in the "torque" namespace
-            // than try the "services.DatabaseService" namespace. This
-            // will soon be deprecated.
-            c = c.subset("services.DatabaseService");
-        }
-
-        if (isLoggingConfigured() == false)
-        {
-            // Get the applicationRoot for use in the log4j
-            // properties.
-            String applicationRoot = c.getString("applicationRoot", ".");
-
-            File logsDir = new File(applicationRoot, "logs");
-
-            if (logsDir.exists() == false)
-            {
-                if (logsDir.mkdirs() == false)
-                {
-                    System.err.println("Cannot create logs directory!");
-                }
-            }
-
-            Properties p = new Properties();
-            p.load(new FileInputStream(configFile));
-            // Set the applicationRoot in the log4j properties so that
-            // ${applicationRoot} can be used in the properties file.
-            p.setProperty("applicationRoot", applicationRoot);
-            PropertyConfigurator.configure(p);
-        }
-
         Torque.setConfiguration(c);
         Torque.init();
     }
@@ -210,6 +193,80 @@ public class Torque
     public static void setConfiguration(ExtendedProperties c)
     {
         configuration = c;
+    }
+
+    /**
+     * Get the configuration for this component.
+     */
+    public static ExtendedProperties getConfiguration()
+    {
+        return configuration;
+    }        
+    
+    /**
+     * Configure the logging for this subsystem.
+     */
+    protected static void configureLogging()
+    {
+        if (isLoggingConfigured() == false)
+        {
+            // Get the applicationRoot for use in the log4j
+            // properties.
+            String applicationRoot = 
+                getConfiguration().getString("torque.applicationRoot", ".");
+            
+            //!! Need a configurable log directory.
+            File logsDir = new File(applicationRoot, "logs");
+
+            if (logsDir.exists() == false)
+            {
+                if (logsDir.mkdirs() == false)
+                {
+                    System.err.println("Cannot create logs directory!");
+                }
+            }
+
+            // Extract the log4j values out of the configuration and
+            // place them in a Properties object so that we can 
+            // use the log4j PropertyConfigurator.
+            Properties p = new Properties();
+            p.put("torque.applicationRoot", applicationRoot);
+            
+            Iterator i = getConfiguration().getKeys();
+            while (i.hasNext())
+            {
+                String key = (String) i.next();
+                
+                // We only want log4j properties.
+                if (key.startsWith("log4j") == false)
+                {
+                    continue;
+                }
+                
+                // We have to deal with ExtendedProperties way
+                // of dealing with "," in properties which is to
+                // make them separate values. Log4j category
+                // properties contain commas so we must stick them
+                // back together for log4j.
+                String[] values = getConfiguration().getStringArray(key);
+                
+                String value;
+                if (values.length == 1)
+                {
+                    value = values[0];
+                }
+                else
+                {
+                    value = values[0] + "," + values[1];
+                }                    
+                
+                p.put(key, value);
+            } 
+            
+            PropertyConfigurator.configure(p);
+            category.info("Logging has been configured by Torque.");
+        }
+        
     }
 
     /**
