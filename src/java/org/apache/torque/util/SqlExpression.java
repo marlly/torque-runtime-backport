@@ -3,7 +3,7 @@ package org.apache.torque.util;
 /* ====================================================================
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,14 +56,17 @@ package org.apache.torque.util;
 
 import java.lang.reflect.Array;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
-import org.apache.torque.TorqueException;
-import org.apache.commons.collections.StringStack;
+
 
 /**
  * This class represents a part of an SQL query found in the <code>WHERE</code>
@@ -78,6 +81,7 @@ import org.apache.commons.collections.StringStack;
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:fedor@apache.org">Fedor Karpelevitch</a>
+ * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
 public class SqlExpression
@@ -506,7 +510,7 @@ public class SqlExpression
         }
 
         whereClause.append(comparison);
-        StringStack inClause = new StringStack();
+        HashSet inClause = new HashSet();
         if (criteria instanceof List)
         {
             Iterator iter = ((List) criteria).iterator();
@@ -532,7 +536,7 @@ public class SqlExpression
             }
         }
         whereClause.append('(')
-                   .append(inClause.toString(","))
+                   .append(StringUtils.join(inClause.iterator(), ","))
                    .append(')');
     }
 
