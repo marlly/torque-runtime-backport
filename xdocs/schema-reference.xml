@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
 <document>
 
@@ -6,6 +6,7 @@
   <title>Torque Schema Reference</title>
   <author email="warner@warneronstine.com">Warner Onstine</author>
   <author email="jvanzyl@apache.org">Jason van Zyl</author>
+  <author email="ville.skytta@iki.fi">Ville Skyttä</author>
  </properties>
 
 <body>
@@ -13,8 +14,8 @@
     <p>
       The Torque Database Schema Reference attempts to explain what the
       different elements and attributes are when defining your own database
-      schema. In addition I will attempt to explain what attributes mean what in
-      the different databases currently supported.
+      schema. In addition I will attempt to explain what attributes mean what
+      in the different databases currently supported.
     </p>
    </section>
 
@@ -41,7 +42,7 @@
          </database>]]>
        </source>
        <p>
-         The database element has 6 attributes associated with it, they are:
+         The database element has 8 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -54,33 +55,44 @@
              <td>How will the primary keys be created, defaults to "none"</td>
            </tr>
            <tr>
-             <td>defaultJavaNamingMethod</td>
-             <td>indicates how a schema table or column name is mapped to a java
-                 class or method name respectively</td>
+             <td>defaultJavaType</td>
+             <td>Default type of columns in the database
+                 (object or primitive, defaults to primitive)</td>
            </tr>
            <tr>
              <td>package</td>
-             <td>used for OM Peer generation</td>
+             <td>Used for OM Peer generation</td>
            </tr>
            <tr>
              <td>baseClass</td>
-             <td>used for OM generation</td>
+             <td>Used for OM generation</td>
            </tr>
            <tr>
              <td>basePeer</td>
-             <td>used for OM Peer generation</td>
+             <td>Used for OM Peer generation</td>
+           </tr>
+           <tr>
+             <td>defaultJavaNamingMethod</td>
+             <td>Indicates how a schema table or column name is mapped to a
+                 Java class or method name respectively</td>
+           </tr>
+           <tr>
+             <td>heavyIndexing</td>
+             <td>? (true or false, defaults to false)</td>
            </tr>
          </table>
        </p>
 
        <p>
-         The last four will be explained in detail below.
+         The database element can contain the following elements:
        </p>
        <p>
-         The database element can contain the following elements:
-         <ul>
-           <li>table - one or more</li>
-         </ul>
+        <table>
+          <tr>
+            <td>table</td>
+            <td>1 or more</td>
+          </tr>
+        </table>
        </p>
      </subsection>
 
@@ -95,11 +107,13 @@
          <table>
            <tr>
              <td>idbroker</td>
-             <td>This allows turbine to generate the IDs through its IDBroker Service</td>
+             <td>This allows turbine to generate the IDs through its IDBroker
+                 Service</td>
            </tr>
            <tr>
              <td>native</td>
-             <td>Turbine will determine how the database will auto-generate IDs</td>
+             <td>Turbine will determine how the database will auto-generate
+                 IDs</td>
            </tr>
            <tr>
              <td>autoincrement</td>
@@ -119,8 +133,8 @@
      <subsection name="Attribute: defaultJavaNamingMethod">
        <p>
          This attribute determines how table or column names, from the name
-         attribute of the table or column element, are converted to a Java class
-         or method name respectively when creating the OM java objects.
+         attribute of the table or column element, are converted to a Java
+         class or method name respectively when creating the OM Java objects.
          defaultJavaNamingMethod can contain 3 different values:
        </p>
        <p>
@@ -146,9 +160,9 @@
      </subsection>
      <subsection name="Attribute: package">
        <p>
-         The base package in which this database will generate the Object Models
-         associated with it. This overrides the targetPackage property in
-         the torque build.properties file.
+         The base package in which this database will generate the Object
+         Models associated with it. This overrides the targetPackage property
+         in the Torque build.properties file.
        </p>
      </subsection>
      <subsection name="Attribute: baseClass">
@@ -177,28 +191,28 @@
            baseClass="com.myapp.om.table.BaseClass"
            basePeer="com.myapp.om.table.BasePeer"
            javaNamingMethod="underscore"
-           description="table for torque tests">
+           description="Table for Torque tests">
 
            <!-- column information here -->
 
          </table>]]>
        </source>
        <p>
-         The table element has 10 attributes associated with it, they are:
+         The table element has 13 attributes associated with it, they are:
        </p>
        <p>
          <table>
            <tr>
              <td>name</td>
-             <td>The name of the database being referenced</td>
+             <td>The name of the table being referenced</td>
            </tr>
            <tr>
              <td>javaName</td>
-             <td>How this table will be referenced in java</td>
+             <td>How this table will be referenced in Java</td>
            </tr>
            <tr>
              <td>idMethod</td>
-             <td>How will the primary keys be created, defaults to "none"</td>
+             <td>How will the primary keys be created, defaults to "null"</td>
            </tr>
            <tr>
              <td>skipSql</td>
@@ -209,26 +223,35 @@
              <td>Whether or not to generate the class as Abstract or not</td>
            </tr>
            <tr>
+             <td>baseClass</td>
+             <td>Used for OM Peer generation</td>
+           </tr>
+           <tr>
+             <td>basePeer</td>
+             <td>Used for OM Peer generation</td>
+           </tr>
+           <tr>
              <td>alias</td>
              <td>The table alias</td>
            </tr>
            <tr>
-             <td>baseClass</td>
-             <td>used for OM Peer generation</td>
-           </tr>
-           <tr>
-             <td>basePeer</td>
-             <td>used for OM Peer generation</td>
+             <td>interface</td>
+             <td>?</td>
            </tr>
            <tr>
              <td>javaNamingMethod</td>
-             <td>Specifies how the name attribute is converted to the Java class
-               name of the coresponding OM object.  this attribute overides the
-               defaultJavaNamingMethod attribute of the database element</td>
+             <td>Specifies how the name attribute is converted to the Java
+                 class name of the corresponding OM object.  This attribute
+                 overrides the defaultJavaNamingMethod attribute of the
+                 database element</td>
+           </tr>
+           <tr>
+             <td>heavyIndexing</td>
+             <td>? (true or false)</td>
            </tr>
            <tr>
              <td>description</td>
-             <td>used for doc generation</td>
+             <td>Used for doc generation</td>
            </tr>
          </table>
        </p>
@@ -240,7 +263,7 @@
          <table>
            <tr>
              <td>column</td>
-             <td>one or more</td>
+             <td>1 or more</td>
            </tr>
            <tr>
              <td>foreign-key</td>
@@ -263,8 +286,8 @@
      </subsection>
      <subsection name="Attribute: javaName">
        <p>
-         This is the java class name to use when generating the Table or
-         column. If this is missing the java name is generated in the
+         This is the Java class name to use when generating the Table or
+         column. If this is missing the Java name is generated in the
          following manner:
        </p>
        <p>
@@ -291,7 +314,7 @@
          </column>]]>
        </source>
        <p>
-         The column element has 11 attributes associated with it, they are:
+         The column element has 13 attributes associated with it, they are:
        </p>
        <p>
          <table>
@@ -305,15 +328,22 @@
            </tr>
            <tr>
              <td>primaryKey</td>
-             <td>Is this a primary key or not (true or false)</td>
+             <td>Is this a primary key or not (true or false, defaults to
+                 false)</td>
            </tr>
            <tr>
              <td>required</td>
-             <td>Whether a value is required in this field (true or false)</td>
+             <td>Whether a value is required in this field (true or false,
+                 defaults to false)</td>
            </tr>
            <tr>
              <td>type</td>
-             <td>What type of column is it? (Covered below), defaults to VARCHAR</td>
+             <td>What type of column is it? Covered below, defaults to
+                 VARCHAR</td>
+           </tr>
+           <tr>
+             <td>javaType</td>
+             <td>The type of the column in Java (object or primitive)</td>
            </tr>
            <tr>
              <td>size</td>
@@ -325,29 +355,40 @@
            </tr>
            <tr>
              <td>autoIncrement</td>
-             <td>Whether or not to auto-increment this field, defaults to "false"</td>
+             <td>Whether or not to auto-increment this field (true or false,
+                 defaults to false)</td>
            </tr>
            <tr>
              <td>inheritance</td>
+             <td>? (single or false, defaults to false)</td>
+           </tr>
+           <tr>
+             <td>inputValidator</td>
              <td>?</td>
+           </tr>
            <tr>
              <td>javaNamingMethod</td>
-             <td>Specifies how the name attribute is converted to the Java class
-               name of the coresponding OM object.  this attribute overides the
-               defaultJavaNamingMethod attribute of the database element</td>
+             <td>Specifies how the name attribute is converted to the Java
+                 class name of the corresponding OM object.  This attribute
+                 overrides the defaultJavaNamingMethod attribute of the
+                 database element</td>
            </tr>
            <tr>
              <td>description</td>
-             <td>used for doc generation</td>
-           </tr>
+             <td>Used for doc generation</td>
            </tr>
          </table>
        </p>
        <p>
          The column element can contain the following elements:
-         <ul>
-           <li>inheritance - 0 or more</li>
-         </ul>
+       </p>
+       <p>
+        <table>
+          <tr>
+            <td>inheritance</td>
+            <td>0 or more</td>
+          </tr>
+        </table>
        </p>
       </subsection>
 
@@ -379,6 +420,9 @@
           </tr>
         </table>
       </p>
+      <p>
+        The inheritance element can not contain other elements.
+      </p>
     </subsection>
 
     <subsection name="Element: foreign-key">
@@ -386,18 +430,35 @@
         The foreign-key element and its relevant attributes
       </p>
       <source><![CDATA[
-        <foreign-key foreignTable="MY_TABLE">
+        <foreign-key foreignTable="MY_TABLE"
+          name="MY_TABLE_FK"
+          onUpdate="none"
+          onDelete="none">
           <!-- reference info -->
         </foreign-key>]]>
       </source>
       <p>
-        The foreign-key element has 1 attribute associated with it, it is:
+        The foreign-key element has 4 attributes associated with it, they are:
       </p>
       <p>
         <table>
           <tr>
             <td>foreignTable</td>
             <td>The name of the table being referenced</td>
+          </tr>
+          <tr>
+            <td>name</td>
+            <td>The name of the foreign key</td>
+          </tr>
+          <tr>
+            <td>onUpdate</td>
+            <td>The action to take when the referenced value in foreignTable
+                is updated</td>
+          </tr>
+          <tr>
+            <td>onDelete</td>
+            <td>The action to take when the referenced value in foreignTable
+                is deleted</td>
           </tr>
         </table>
       </p>
@@ -428,15 +489,135 @@
         <table>
           <tr>
             <td>local</td>
-            <td>the local reference</td>
+            <td>The local reference</td>
           </tr>
           <tr>
             <td>foreign</td>
-            <td>the foreign key reference</td>
+            <td>The foreign key reference</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The reference element can not contain other elements.
+      </p>
+    </subsection>
+
+    <subsection name="Element: index">
+      <p>
+        The index element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <index name="MY_INDEX">
+          <!-- index-column info -->
+        </index>]]>
+      </source>
+      <p>
+        The index element has 1 attribute associated with it, it is:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>name</td>
+            <td>The name of the index</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The index element can contain the following elements:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>index-column</td>
+            <td>1 or more</td>
           </tr>
         </table>
       </p>
     </subsection>
+
+    <subsection name="Element: index-column">
+      <p>
+        The index-column element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <index-column name="INDEX_COLUMN"/>]]>
+      </source>
+      <p>
+        The index-column element has 2 attributes associated with it, they are:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>name</td>
+            <td>The name of the indexed column</td>
+          </tr>
+          <tr>
+            <td>size</td>
+            <td>?</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The index-column element can not contain other elements.
+      </p>
+    </subsection>
+
+    <subsection name="Element: unique">
+      <p>
+        The unique element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <unique name="MY_UNIQUE">
+          <!-- unique-column info -->
+        </unique>]]>
+      </source>
+      <p>
+        The unique element has 1 attribute associated with it, it is:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>name</td>
+            <td>The name of the unique constraint</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The unique element can contain the following elements:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>unique-column</td>
+            <td>1 or more</td>
+          </tr>
+        </table>
+      </p>
+    </subsection>
+
+    <subsection name="Element: unique-column">
+      <p>
+        The unique-column element and its relevant attributes
+      </p>
+      <source><![CDATA[
+        <index-column name="UNIQUE_COLUMN"/>]]>
+      </source>
+      <p>
+        The unique-column element has 1 attribute associated with it, it is:
+      </p>
+      <p>
+        <table>
+          <tr>
+            <td>name</td>
+            <td>The name of the unique column</td>
+          </tr>
+        </table>
+      </p>
+      <p>
+        The unique-column element can not contain other elements.
+      </p>
+    </subsection>
+
   </section>
 </body>
 </document>
