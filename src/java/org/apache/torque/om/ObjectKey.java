@@ -63,6 +63,7 @@ import org.apache.torque.TorqueException;
  * and DateKey, and ComboKey which is a Key made up of a combination
  * ofthe first three.
  *
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
 public abstract class ObjectKey implements Serializable, Comparable

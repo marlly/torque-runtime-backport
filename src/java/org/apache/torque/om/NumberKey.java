@@ -61,7 +61,7 @@ import java.math.BigDecimal;
  * object within an application where the id  consists
  * of a single entity such a GUID or the value of a db row's primary key.
  *
- * @author Original author unknown
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @author <a href="mailto:rg@onepercentsoftware.com">Runako Godfrey</a>
  * @version $Id$

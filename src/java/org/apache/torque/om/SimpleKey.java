@@ -58,6 +58,9 @@ package org.apache.torque.om;
  * This empty class  marks an ObjectKey as being capable of being
  * represented as a single column in a database.  It does not
  * implement any methods.
+ *
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @version $Id$
  */
 public abstract class SimpleKey extends ObjectKey
 {

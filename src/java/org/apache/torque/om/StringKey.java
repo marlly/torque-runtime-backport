@@ -60,6 +60,7 @@ package org.apache.torque.om;
  * object within an application where the id  consists
  * of a single entity such a GUID or the value of a db row's primary key.
  *
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
 public class StringKey extends SimpleKey

@@ -60,6 +60,7 @@ import java.util.Date;
  * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id is a Date.
  *
+ * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @version $Id$
  */
 public class DateKey extends SimpleKey
