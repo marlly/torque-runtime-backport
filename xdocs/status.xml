@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<document>
+
+  <properties>
+    <title>News and Status</title>
+    <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  </properties>
+
+  <body>
+
+    <section name="News and Status">
+      <p>
+        This document contains the latest news and status regarding the
+        Torque project.  It is here you'll find announcements related to
+        Torque.
+      </p>
+      <p>
+        A list of changes can be found <a href="changes.html">here</a>.
+      </p>
+
+      <subsection name="Current Status">
+        <p>
+           We are currently working on Torque 3.0 Beta 5.
+        </p>
+      </subsection>
+
+      <subsection name="22 August 2002 - Torque 3.0 Beta 4 is released!">
+        <p>
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b4/">
+          here</a>.
+        </p>
+      </subsection>
+
+      <subsection name="17 July 2002 - Torque 3.0 Beta 3 is released!">
+        <p>
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b3/">
+          here</a>.
+        </p>
+      </subsection>
+
+      <subsection name="26 Juni 2002 - Torque 3.0 Beta 2 is released!">
+        <p>
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b2/">
+          here</a>.
+        </p>
+      </subsection>
+
+      <subsection name="19 March 2002 - Torque 3.0 Beta 1 is released!">
+        <p>
+          Downloads are available <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.0-b1/">
+          here</a>.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>
