@@ -272,8 +272,7 @@
     />
 
     <java
-      classname="org.apache.torque.test.TorqueRunner"
-      fork="true">
+      classname="org.apache.torque.test.TorqueRunner">
       <arg value="${build.test}/rttest/Torque.properties"/>
       <classpath refid="classpath"/>
     </java>
