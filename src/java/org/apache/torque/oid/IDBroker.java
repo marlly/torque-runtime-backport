@@ -218,10 +218,10 @@ public class IDBroker
     public IDBroker(TableMap tMap)
     {
         this.tableMap = tMap;
-
+        configuration = Torque.getConfiguration();
+        
         // Start the housekeeper thread only if prefetch has not been disabled
-        //if (configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
-        if (true)
+        if (configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
             houseKeeperThread = new Thread(this);
             // Indicate that this is a system thread. JVM will quit only when
@@ -561,20 +561,13 @@ public class IDBroker
      */
     private void checkTiming(String tableName)
     {
-        /*
-         * Haven't finished setting up the code to pass
-         * in the configuration object. This evaluates
-         * to false given the current default so I'm
-         * going to comment it out for now. jvz.
-         */
-
         // Check if quantity changing is switched on.
         // If prefetch is turned off, changing quantity does not make sense
-        //if (!configuration.getBoolean(DB_IDBROKER_CLEVERQUANTITY, true)
-        //    || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
-        //{
-        //    return;
-        //}
+        if (!configuration.getBoolean(DB_IDBROKER_CLEVERQUANTITY, true)
+            || !configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
+        {
+            return;
+        }
 
         // Get the last id request for this table.
         java.util.Date lastTime =
@@ -724,14 +717,13 @@ public class IDBroker
     {
         BigDecimal quantity = null;
 
-        /*
         // If prefetch is turned off we simply return 1
         if (!configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
             quantity = new BigDecimal(1);
         }
         // Initialize quantity, if necessary.
-        else */  if (quantityStore.containsKey(tableName))
+        else if (quantityStore.containsKey(tableName))
         {
             quantity = (BigDecimal)quantityStore.get(tableName);
         }
