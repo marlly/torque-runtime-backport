@@ -1,10 +1,10 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/postgresql.jar
+torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.4.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
-torque.databaseAdapter = DBPostgresql
+torque.databaseAdapter = DBMM
 
 # -------------------------------------------------------------------
 # 
@@ -20,7 +20,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = postgresql
+database = mysql
 
 # -------------------------------------------------------------------
 # 
@@ -60,9 +60,9 @@ addIntakeRetrievable=false
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:postgresql://127.0.0.1:5432/template1
-databaseUrl = jdbc:postgresql://127.0.0.1:5432/bookstore
-databaseDriver = org.postgresql.Driver
+createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
+databaseUrl = jdbc:mysql://localhost:3306/bookstore
+databaseDriver = org.gjt.mm.mysql.Driver
 databaseUser = jvanzyl
 databasePassword = 
 databaseHost = 127.0.0.1
