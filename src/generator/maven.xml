@@ -1,5 +1,6 @@
 <project
   default="java:jar"
+  xmlns:pom="pom"
   xmlns:deploy="deploy">
 
   <!-- Allow any user specific values to override the defaults -->
@@ -39,6 +40,18 @@
       <fileset dir="${maven.src.dir}/templates" />
     </copy>
   </postGoal>
+  
+  
+  <!-- ================================================================== -->
+  <!-- X D O C : I N I T   P O S T   G O A L                              -->
+  <!-- ================================================================== -->
+  <postGoal name="xdoc:init">
+    <!-- copy database.dtd to docs dir -->
+    <copy
+      file="${maven.src.dir}/dtd/database.dtd"
+      tofile="target/docs/database.dtd.txt"
+    />
+  </postGoal>  
 
   <!-- ================================================================== -->
   <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->

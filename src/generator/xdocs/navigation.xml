@@ -12,6 +12,7 @@
     <menu name="Overview">
       <item name="Schema Reference"      href="/schema-reference.html"/>
       <item name="Properties Reference"  href="/properties-reference.html"/>
+      <item name="database.dtd"          href="/database.dtd.txt"/>
     </menu>
 
   </body>
