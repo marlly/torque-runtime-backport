@@ -84,6 +84,14 @@ public class DBMM
     }
 
     /**
+     * @return org.apache.torque.adapter.DB#getMaxColumnNameLength()
+     */
+    public int getMaxColumnNameLength()
+    {
+        return 64;
+    }
+
+    /**
      * This method is used to ignore case.
      *
      * @param in The string to transform to upper case.

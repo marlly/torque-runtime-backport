@@ -117,7 +117,7 @@ public class DBSybase
      */
     public String getIDMethodType()
     {
-        return SEQUENCE;
+        return AUTO_INCREMENT;
     }
 
     /**

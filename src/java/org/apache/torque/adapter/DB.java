@@ -137,6 +137,18 @@ public abstract class DB implements Serializable, IDMethod
     }
 
     /**
+     * Returns the maximum length for a column name in this RDBMS.
+     * Returns <code>-1</code> when length is unknown (this is the
+     * default).
+     *
+     * @return Maximum column length.
+     */
+    public int getMaxColumnNameLength()
+    {
+        return -1;
+    }
+
+    /**
      * Returns a JDBC <code>Connection</code> from the
      * <code>DriverManager</code>.
      *
