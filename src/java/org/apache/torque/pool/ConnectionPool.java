@@ -87,11 +87,6 @@ class ConnectionPool implements ConnectionEventListener
     private Stack pool;
 
     /**
-     * The driver type for this pool.
-     */
-    private String driver;
-
-    /**
      * The url for this pool.
      */
     private String url;
@@ -121,14 +116,14 @@ class ConnectionPool implements ConnectionEventListener
      */
     private int expiryTime; // 1 hour
 
-     /**
+    /**
      * Counter that keeps track of the number of threads that are in
      * the wait state, waiting to aquire a connection.
      */
     private int waitCount = 0;
 
-    int logInterval;
-    Monitor monitor;
+    private int logInterval;
+    private Monitor monitor;
 
     /**
      * Amount of time a thread asking the pool for a cached connection will
@@ -151,10 +146,14 @@ class ConnectionPool implements ConnectionEventListener
      * Creates a <code>ConnectionPool</code> with the default
      * attributes.
      *
-     * @param driver   The driver type for this pool.
-     * @param url      The url for this pool.
-     * @param username  The user name for this pool.
+     * @param cpds The datasource
+     * @param username The user name for this pool.
      * @param password The password for this pool.
+     * @param maxConnections max number of connections
+     * @param expiryTime connection expiry time
+     * @param connectionWaitTimeout timeout
+     * @param logInterval log interval
+     * @param logWriter the log
      */
     ConnectionPool(ConnectionPoolDataSource cpds, String username,
                    String password, int maxConnections, int expiryTime,
@@ -208,18 +207,14 @@ class ConnectionPool implements ConnectionEventListener
     /**
      * Returns a connection that maintains a link to the pool it came from.
      *
-     * @param driver   The fully-qualified name of the JDBC driver to use.
-     * @param url      The URL of the database from which the connection is
-     *                 desired.
      * @param username The name of the database user.
      * @param password The password of the database user.
      * @return         A database connection.
-     *
      * @exception SQLException
      */
-    synchronized final PooledConnection
-        getConnection(String username, String password)
-        throws SQLException
+    final synchronized PooledConnection getConnection(String username,
+            String password)
+            throws SQLException
     {
         if (username != this.username || password != this.password)
         {
@@ -359,10 +354,9 @@ class ConnectionPool implements ConnectionEventListener
         // The connection pool was empty to start with--don't call this
         // routine if there's no connection to pop!
         // TODO: Propose general Turbine assertion failure exception? -PGO
-        throw new Exception("Assertaion failure: Attempted to pop " +
-                            "connection from empty pool!");
+        throw new Exception("Assertaion failure: Attempted to pop "
+                + "connection from empty pool!");
     }
-
 
     /**
      * Helper method which determines whether a connection has expired.
@@ -375,8 +369,8 @@ class ConnectionPool implements ConnectionEventListener
         // Test the age of the connection (defined as current time
         // minus connection birthday) against the connection pool
         // expiration time.
-        return (expiryTime < (System.currentTimeMillis() -
-                 ((Long) timeStamps.get(connection)).longValue()));
+        return (expiryTime < (System.currentTimeMillis()
+                - ((Long) timeStamps.get(connection)).longValue()));
     }
 
     /**
@@ -452,8 +446,9 @@ class ConnectionPool implements ConnectionEventListener
     }
 
     /**
-     * Re
-     turns the Total connections in the pool
+     * Returns the Total connections in the pool
+     *
+     * @return total connections in the pool
      */
     int getTotalCount()
     {
@@ -462,6 +457,8 @@ class ConnectionPool implements ConnectionEventListener
 
     /**
      * Returns the available connections in the pool
+     *
+     * @return number of available connections in the pool
      */
     int getNbrAvailable()
     {
@@ -470,6 +467,8 @@ class ConnectionPool implements ConnectionEventListener
 
     /**
      * Returns the checked out connections in the pool
+     *
+     * @return number of checked out connections in the pool
      */
     int getNbrCheckedOut()
     {
@@ -500,6 +499,8 @@ class ConnectionPool implements ConnectionEventListener
      * method came from a PooledConnection, and the user calls the close()
      * method of this connection object. What we need to do here is to
      * release this PooledConnection from our pool...
+     *
+     * @param event the connection event
      */
     public void connectionClosed(ConnectionEvent event)
     {
@@ -509,17 +510,18 @@ class ConnectionPool implements ConnectionEventListener
     /**
      * If a fatal error occurs, close the underlying physical connection so as
      * not to be returned in the future
+     *
+     * @param event the connection event
      */
     public void connectionErrorOccurred(ConnectionEvent event)
     {
         try
         {
-            System.err
-                .println("CLOSING DOWN CONNECTION DUE TO INTERNAL ERROR");
+            System.err.println("CLOSING DOWN CONNECTION DUE TO INTERNAL ERROR");
             //remove this from the listener list because we are no more
             //interested in errors since we are about to close this connection
             ((PooledConnection) event.getSource())
-                .removeConnectionEventListener(this);
+                    .removeConnectionEventListener(this);
         }
         catch (Exception ignore)
         {
@@ -528,7 +530,7 @@ class ConnectionPool implements ConnectionEventListener
 
         try
         {
-            closePooledConnection((PooledConnection)event.getSource());
+            closePooledConnection((PooledConnection) event.getSource());
         }
         catch (Exception ignore)
         {
@@ -540,7 +542,7 @@ class ConnectionPool implements ConnectionEventListener
      * This method returns a connection to the pool, and <b>must</b>
      * be called by the requestor when finished with the connection.
      *
-     * @param connection The database connection to release.
+     * @param pcon The database connection to release.
      */
     private synchronized void releaseConnection(PooledConnection pcon)
     {
@@ -557,7 +559,7 @@ class ConnectionPool implements ConnectionEventListener
 
     /**
      *
-     * @param pcon
+     * @param pcon The database connection to close.
      */
     private void closePooledConnection(PooledConnection pcon)
     {
@@ -568,8 +570,8 @@ class ConnectionPool implements ConnectionEventListener
         }
         catch (Exception e)
         {
-            log("[ERROR] Error occurred trying to close a PooledConnection." +
-                e.getMessage());
+            log("[ERROR] Error occurred trying to close a PooledConnection."
+                    + e.getMessage());
         }
         finally
         {
@@ -614,19 +616,19 @@ class ConnectionPool implements ConnectionEventListener
             {
                 buf.setLength(0);
                 buf.append(getPoolName()).append(" (in + out = total): ")
-                   .append(getNbrAvailable()).append(" + ")
-                   .append(getNbrCheckedOut()).append(" = ")
-                   .append(getTotalCount());
+                       .append(getNbrAvailable()).append(" + ")
+                       .append(getNbrCheckedOut()).append(" = ")
+                       .append(getTotalCount());
                 log(buf.toString());
-            }
 
-            // Wait for a bit.
-            try
-            {
-                Thread.sleep(logInterval);
-            }
-            catch (InterruptedException ignored)
-            {
+                // Wait for a bit.
+                try
+                {
+                    Thread.sleep(logInterval);
+                }
+                catch (InterruptedException ignored)
+                {
+                }
             }
         }
 
@@ -636,4 +638,3 @@ class ConnectionPool implements ConnectionEventListener
         }
     }
 }
-
