@@ -770,7 +770,9 @@ public abstract class BasePeer implements java.io.Serializable
         // setting both columns with your own values
         boolean info = false;
 
-        if (!criteria.containsKey(pk.getFullyQualifiedName()))
+        // pk will be null if there is no primary key defined for the table
+        // we're inserting into.
+        if (pk != null && !criteria.containsKey(pk.getFullyQualifiedName()))
         {
             if (keyGen == null)
             {
@@ -796,17 +798,20 @@ public abstract class BasePeer implements java.io.Serializable
             }
         }
 
-        // Set up Village for the insert.
+        // Use Village to perform the insert.
         TableDataSet tds = null;
         try
         {
-            tds = new TableDataSet(dbCon.getConnection(), tableName );
+            tds = new TableDataSet(dbCon.getConnection(), tableName);
             Record rec = tds.addRecord();
             BasePeer.insertOrUpdateRecord(rec, tableName, criteria);
         }
         finally
         {
-            if (tds != null) tds.close();
+            if (tds != null)
+            {
+                tds.close();
+            }
         }
 
         // If the primary key column is auto-incremented, get the id
