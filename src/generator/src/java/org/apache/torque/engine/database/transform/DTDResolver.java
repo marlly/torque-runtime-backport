@@ -66,7 +66,7 @@ public class DTDResolver implements EntityResolver
             }
             else
             {
-                log.warn("Could not locate the database.dtd");
+                log.warn("Could not locate database.dtd");
             }
         }
         catch (Exception ex)
