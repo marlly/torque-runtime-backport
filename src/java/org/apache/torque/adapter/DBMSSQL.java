@@ -73,4 +73,15 @@ public class DBMSSQL extends DBSybase
     protected DBMSSQL()
     {
     }
+
+    /**
+     * This method is used to chek whether the database natively
+     * supports limiting the size of the resultset.
+     *
+     * @return True.
+     */
+    public boolean supportsNativeLimit()
+    {
+        return false;
+    }
 }

@@ -64,6 +64,7 @@ import org.apache.commons.collections.StringStack;
  * is used primarily by BasePeer.
  *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
+ * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
  * @version $Id$
  */
 public class Query
@@ -74,6 +75,8 @@ public class Query
     private static final String AND = " AND ";
     private static final String OR = " OR ";
     private static final String ORDER_BY = " ORDER BY ";
+    private static final String GROUP_BY = " GROUP BY ";
+    private static final String HAVING = " HAVING ";
     private static final String IN = " IN ";
     private static final String BETWEEN = " BETWEEN ";
     private static final String LIMIT = " LIMIT ";
@@ -84,6 +87,8 @@ public class Query
     private StringStack fromTables = new StringStack();
     private StringStack whereCriteria = new StringStack();
     private StringStack orderByColumns = new StringStack();
+    private StringStack groupByColumns = new StringStack();
+    private String having;
     private String limit;
     private String rowcount;
 
@@ -147,6 +152,28 @@ public class Query
     }
 
     /**
+     * Retrieve the group by columns buffer in order to specify which
+     * columns are used to group the results of the query.
+     *
+     * @return A StringStack used to add columns to group on.
+     */
+    public StringStack getGroupByClause()
+    {
+        return groupByColumns;
+    }
+
+    /**
+     * Set the having clause.  This is used to restrict which rows
+     * are returned.
+     *
+     * @param having A String.
+     */
+    public void setHaving(String having)
+    {
+        this.having = having;
+    }
+
+    /**
      * Set the limit number.  This is used to limit the number of rows
      * returned by a query, and the row where the resultset starts.
      *
@@ -166,6 +193,17 @@ public class Query
     public void setRowcount(String rowcount)
     {
         this.rowcount = rowcount;
+    }
+
+    /**
+     * Get the having clause.  This is used to restrict which
+     * rows are returned based on some condition.
+     *
+     * @return A String that is the having clause.
+     */
+    public String getHaving()
+    {
+        return having;
     }
 
     /**
@@ -213,6 +251,12 @@ public class Query
         if ( !orderByColumns.empty() )
             stmt.append(ORDER_BY)
                 .append(orderByColumns.toString(", "));
+        if ( !groupByColumns.empty() )
+            stmt.append(GROUP_BY)
+                .append(groupByColumns.toString(", "));
+        if ( having != null )
+            stmt.append(HAVING)
+                .append(having);
         if ( limit != null )
             stmt.append(LIMIT)
                 .append(limit);

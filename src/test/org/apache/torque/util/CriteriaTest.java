@@ -66,6 +66,7 @@ import org.apache.torque.util.Criteria;
  * Test class for Criteria.
  *
  * @author <a href="mailto:celkins@scardini.com">Christopher Elkins</a>
+ * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
  * @version $Id$
  */
 public class CriteriaTest extends BaseTestCase
@@ -110,6 +111,79 @@ public class CriteriaTest extends BaseTestCase
         assertTrue(c.getString(table, column).equals(value));
     }
 
+    /**
+     * test various properties of Criterion and nested criterion
+     */
+    public void testNestedCriterion()
+    {
+        final String table2 = "myTable2";
+        final String column2 = "myColumn2";
+        final String value2 = "myValue2";
+        
+        final String table3 = "myTable3";
+        final String column3 = "myColumn3";
+        final String value3 = "myValue3";
+        
+        final String table4 = "myTable4";
+        final String column4 = "myColumn4";
+        final String value4 = "myValue4";
+        
+        final String table5 = "myTable5";
+        final String column5 = "myColumn5";
+        final String value5 = "myValue5";
+
+        Criteria.Criterion crit2 =
+            c.getNewCriterion(table2,column2,(Object)value2,Criteria.EQUAL);
+        Criteria.Criterion crit3 =
+            c.getNewCriterion(table3,column3,(Object)value3,Criteria.EQUAL);
+        Criteria.Criterion crit4 =
+            c.getNewCriterion(table4,column4,(Object)value4,Criteria.EQUAL);
+        Criteria.Criterion crit5 =
+            c.getNewCriterion(table5,column5,(Object)value5,Criteria.EQUAL);
+        
+        
+        crit2.and(crit3).or(crit4.and(crit5));
+        String expect = "((myTable2.myColumn2='myValue2' AND myTable3.myColumn3='myValue3') OR (myTable4.myColumn4='myValue4' AND myTable5.myColumn5='myValue5'))";
+        String result = crit2.toString();
+        assertEquals(expect,result);
+        
+        Criteria.Criterion crit6 =
+            c.getNewCriterion(table2,column2,(Object)value2,Criteria.EQUAL);
+        Criteria.Criterion crit7 =
+            c.getNewCriterion(table3,column3,(Object)value3,Criteria.EQUAL);
+        Criteria.Criterion crit8 =
+            c.getNewCriterion(table4,column4,(Object)value4,Criteria.EQUAL);
+        Criteria.Criterion crit9 =
+            c.getNewCriterion(table5,column5,(Object)value5,Criteria.EQUAL);
+
+        
+        crit6.and(crit7).or(crit8).and(crit9);
+        expect = "(((myTable2.myColumn2='myValue2' AND myTable3.myColumn3='myValue3') OR myTable4.myColumn4='myValue4') AND myTable5.myColumn5='myValue5')";
+        result = crit6.toString();
+        assertEquals(expect,result);
+        
+
+        // should make sure we have tests for all possibilities
+        
+        Criteria.Criterion[] crita = crit2.getAttachedCriterion();
+        
+        assertEquals(crit2,crita[0]);
+        assertEquals(crit3,crita[1]);
+        assertEquals(crit4,crita[2]);
+        assertEquals(crit5,crita[3]);
+        
+        String[] tables = crit2.getAllTables();
+               
+        assertEquals(crit2.getTable(),tables[0]);
+        assertEquals(crit3.getTable(),tables[1]);
+        assertEquals(crit4.getTable(),tables[2]);
+        assertEquals(crit5.getTable(),tables[3]);
+        
+        // simple confirmations that equality operations work
+        assertTrue(crit2.hashCode() == crit2.hashCode());
+        assertEquals(crit2.toString(),crit2.toString());
+    }
+
     public void testBetweenCriterion()
     {
         Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",
@@ -133,6 +207,9 @@ public class CriteriaTest extends BaseTestCase
         assertEquals(expect,result);
     }
 
+    /**
+     * Verify that AND and OR criterion are nested correctly.
+     */
     public void testPrecedence()
     {
         Criteria.Criterion cn1 = c.getNewCriterion("INVOICE.COST",

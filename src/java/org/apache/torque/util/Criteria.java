@@ -158,6 +158,8 @@ public class Criteria extends Hashtable
     private StringStack selectModifiers = new StringStack();
     private StringStack selectColumns = new StringStack();
     private StringStack orderByColumns = new StringStack();
+    private StringStack groupByColumns = new StringStack();
+    private Criterion having = null;
     private Hashtable asColumns = new Hashtable(8);
     private ArrayList joinL = null;
     private ArrayList joinR = null;
@@ -1728,6 +1730,18 @@ public class Criteria extends Hashtable
     }
 
     /**
+     * Add group by column name.
+     *
+     * @param name The name of the column to group by.
+     * @return A modified Criteria object.
+     */
+    public Criteria addGroupByColumn( String groupBy )
+    {
+        groupByColumns.add( groupBy );
+        return this;
+    }
+
+    /**
      * Add order by column name, explicitly specifying ascending.
      *
      * @param name The name of the column to order by.
@@ -1759,6 +1773,26 @@ public class Criteria extends Hashtable
     public StringStack getOrderByColumns()
     {
         return orderByColumns;
+    }
+
+    /**
+     * Get group by columns.
+     *
+     * @return A StringStack with the name of the groupBy clause.
+     */
+    public StringStack getGroupByColumns()
+    {
+        return groupByColumns;
+    }
+
+    /**
+     * Get Having Criterion.
+     *
+     * @return A Criterion that is the having clause.
+     */
+    public Criterion getHaving()
+    {
+        return having;
     }
 
     /**
@@ -1864,6 +1898,28 @@ public class Criteria extends Hashtable
      *
      *------------------------------------------------------------------------
      */
+
+    /**
+     * This method adds a prepared Criterion object to the Criteria as a having clause.
+     * You can get a new, empty Criterion object with the
+     * getNewCriterion() method.
+     *
+     * <p>
+     * <code>
+     * Criteria crit = new Criteria();
+     * Criteria.Criterion c = crit.getNewCriterion(BasePeer.ID, new Integer(5), Criteria.LESS_THAN);
+     * crit.addHaving(c);
+     * </code>
+     *
+     * @param having A Criterion object
+     *
+     * @return A modified Criteria object.
+     */
+    public Criteria addHaving( Criterion having )
+    {
+        this.having = having;
+        return this;
+    }
 
     /**
      * This method adds a prepared Criterion object to the Criteria.

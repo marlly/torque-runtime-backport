@@ -1055,8 +1055,10 @@ public abstract class BasePeer implements java.io.Serializable
         StringStack fromClause = query.getFromClause();
         StringStack whereClause = query.getWhereClause();
         StringStack orderByClause = query.getOrderByClause();
+        StringStack groupByClause = query.getGroupByClause();
 
         StringStack orderBy = criteria.getOrderByColumns();
+        StringStack groupBy = criteria.getGroupByColumns();
         boolean ignoreCase = criteria.isIgnoreCase();
         StringStack select = criteria.getSelectColumns();
         Hashtable aliases = criteria.getAsColumns();
@@ -1213,7 +1215,29 @@ public abstract class BasePeer implements java.io.Serializable
                                                  ignorCase, db) );
             }
         }
-
+        
+        // need to allow for multiple group bys
+        if ( groupBy != null && groupBy.size() > 0)
+        {
+            for (int i=0; i<groupBy.size(); i++)
+            {
+                String groupByColumn = groupBy.get(i);
+                if (groupByColumn.indexOf('.') == -1)
+                {
+                    throwMalformedColumnNameException("group by",groupByColumn);
+                }          
+                
+                groupByClause.add(groupByColumn);
+            }
+        }
+        
+        Criteria.Criterion having = criteria.getHaving();
+        if ( having != null )
+        {
+          //String groupByString = null; 
+          query.setHaving(having.toString());
+        }
+        
         if ( orderBy != null && orderBy.size() > 0)
         {
             // Check for each String/Character column and apply
@@ -1326,6 +1350,8 @@ public abstract class BasePeer implements java.io.Serializable
             try
             {
                 results = executeQuery( createQueryString(criteria),
+                                        criteria.getOffset(),
+                                        criteria.getLimit(),
                                         criteria.isSingleRecord(), dbCon );
                 commitTransaction(dbCon);
             }
@@ -1339,6 +1365,8 @@ public abstract class BasePeer implements java.io.Serializable
         else
         {
             results = executeQuery( createQueryString(criteria),
+                                    criteria.getOffset(),
+                                    criteria.getLimit(),
                                     criteria.getDbName(),
                                     criteria.isSingleRecord() );
         }
