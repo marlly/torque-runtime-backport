@@ -157,8 +157,9 @@ public abstract class $basePrefix${table.JavaName}Peer
         {
             category.error("A FATAL ERROR has occurred which should not" +
                 "have happened under any circumstance.  Please notify " +
-                "Turbine and give as many details as possible including the " +
-                "error stacktrace.", e);
+                "the Turbine developers <turbine-dev@jakarta.apache.org> " +
+                "and give as many details as possible (including the error " +
+                "stack trace).", e);
         }
         return c;
     }
