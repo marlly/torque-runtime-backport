@@ -71,7 +71,7 @@
 
     <!-- move torque.jar to /lib -->
     <move
-      file="${maven.build.dir}/${maven.final.name}.jar"
+      file="${maven.dist.bin.assembly.dir}/${maven.final.name}.jar"
       todir="${maven.dist.bin.assembly.dir}/lib"
     />
 
