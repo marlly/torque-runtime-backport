@@ -115,25 +115,32 @@ import org.apache.torque.util.Transaction;
  */
 public class IDBroker implements Runnable, IdGenerator
 {
-    /**
-     * Name of the ID_TABLE = ID_TABLE
-     */
+    /** Name of the ID_TABLE = ID_TABLE */
     public static final String ID_TABLE = "ID_TABLE";
 
-    /**
-     * Fully qualified Table_Name column name
-     */
-    public static final String TABLE_NAME = ID_TABLE + ".TABLE_NAME";
+    /** Table_Name column name */
+    public static final String COL_TABLE_NAME = "TABLE_NAME";
 
-    /**
-     * Fully qualified Next_ID column name
-     */
-    public static final String NEXT_ID = ID_TABLE + ".NEXT_ID";
+    /** Fully qualified Table_Name column name */
+    public static final String TABLE_NAME = ID_TABLE + "." + COL_TABLE_NAME;
 
-    /**
-     * Fully qualified Quantity column name
-     */
-    public static final String QUANTITY = ID_TABLE + ".QUANTITY";
+    /** ID column name */
+    public static final String COL_TABLE_ID = "ID_TABLE_ID";
+
+    /** Fully qualified ID column name */
+    public static final String TABLE_ID = ID_TABLE + "." + COL_TABLE_ID;
+
+    /** Next_ID column name */
+    public static final String COL_NEXT_ID = "NEXT_ID";
+
+    /** Fully qualified Next_ID column name */
+    public static final String NEXT_ID = ID_TABLE + "." + COL_NEXT_ID;
+
+    /** Quantity column name */
+    public static final String COL_QUANTITY = "QUANTITY";
+
+    /** Fully qualified Quantity column name */
+    public static final String QUANTITY = ID_TABLE + "." + COL_QUANTITY;
 
     /** The TableMap referencing the ID_TABLE for this IDBroker. */
     private TableMap tableMap;
@@ -798,9 +805,15 @@ public class IDBroker implements Runnable, IdGenerator
         throws Exception
     {
         StringBuffer stmt = new StringBuffer();
-        stmt.append("SELECT " + NEXT_ID + ", " + QUANTITY)
-            .append(" FROM " + ID_TABLE)
-            .append(" WHERE TABLE_NAME = '")
+        stmt.append("SELECT ")
+            .append(COL_NEXT_ID)
+            .append(", ")
+            .append(COL_QUANTITY)
+            .append(" FROM ")
+            .append(ID_TABLE)
+            .append(" WHERE ")
+            .append(COL_TABLE_NAME)
+            .append(" = '")
             .append(tableName)
             .append('\'');
 
@@ -854,9 +867,13 @@ public class IDBroker implements Runnable, IdGenerator
         StringBuffer stmt = new StringBuffer(id.length()
                                              + tableName.length() + 50);
         stmt.append("UPDATE " + ID_TABLE)
-            .append(" SET NEXT_ID = ")
+            .append(" SET ")
+            .append(COL_NEXT_ID)
+            .append(" = ")
             .append(id)
-            .append(" WHERE TABLE_NAME = '")
+            .append(" WHERE ")
+            .append(COL_TABLE_NAME)
+            .append(" = '")
             .append(tableName)
             .append('\'');
 
@@ -896,10 +913,15 @@ public class IDBroker implements Runnable, IdGenerator
     {
         StringBuffer stmt = new StringBuffer(quantity.toString().length()
                                              + tableName.length() + 50);
-        stmt.append("UPDATE " + ID_TABLE)
-            .append(" SET QUANTITY = ")
+        stmt.append("UPDATE ")
+            .append(ID_TABLE)
+            .append(" SET ")
+            .append(COL_QUANTITY)
+            .append(" = ")
             .append(quantity)
-            .append(" WHERE TABLE_NAME = '")
+            .append(" WHERE ")
+            .append(COL_TABLE_NAME)
+            .append(" = '")
             .append(tableName)
             .append('\'');
 
