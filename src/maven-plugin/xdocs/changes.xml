@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+    <title>Changes</title>
+    <author email="dion@multitask.com.au">dIon Gillard</author>
+  </properties>
+
+  <body>
+    <release version="3.3" date="in CVS">
+      <action dev="mpoeschl" type="update">
+        update to torque-3.1
+      </action>
+    </release>
+  
+    <release version="3.2" date="2003-09-29">
+      <action dev="dion" type="fix">Apply MAVEN-690</action>
+      <action dev="evenisse" type="fix">
+        Fix prereqs of torque:om-zip goal.
+      </action>
+      <action dev="dion" type="update">
+        Move to log4j 1.2.8
+      </action>
+      <action dev="dion" type="update">
+        Move to latest xerces
+      </action>
+    </release>
+  </body>
+</document>
+

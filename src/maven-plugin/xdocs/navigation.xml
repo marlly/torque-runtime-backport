@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven Torque Plugin">
+
+  <title>Maven Torque Plugin</title>
+
+  <body>
+    <links>
+      <item name="Maven"  href="http://maven.apache.org/"/>
+      <item name="Torque"  href="http://db.apache.org/torque/"/>
+    </links>
+    <menu name="Overview">
+      <item name="Goals"        href="/goals.html"/>
+      <item name="Properties"   href="/properties.html"/>
+    </menu>
+  </body>
+</project>
