@@ -538,6 +538,16 @@ public class Torque
     private static ConnectionPool getPool(String name)
         throws Exception
     {
+        if (name == null)
+        {
+            throw new TorqueException ("Torque.getPool(): name is null");
+        }
+        if (pools == null)
+        {
+            throw new TorqueException (
+                "Torque.getPool(): pools is null, did you call Torque.init() first?");
+        }
+
         ConnectionPool pool = (ConnectionPool) pools.get(name);
 
         // If the pool is not in the Hashtable, we must register it.
