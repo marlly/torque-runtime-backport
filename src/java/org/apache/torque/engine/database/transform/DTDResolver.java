@@ -62,9 +62,6 @@ import org.xml.sax.InputSource;
 
 /**
  * A resolver to get the database.dtd file for the XML parser from the jar.
- * This does not work with jdk1.3 on linux, see
- * <a href="http://developer.java.sun.com/developer/bugParade/bugs/4337703.html">
- * Bug 4337703</a>
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
@@ -72,10 +69,9 @@ import org.xml.sax.InputSource;
  */
 public class DTDResolver implements EntityResolver
 {
-
     /** Where the DTD is located on the web. */
-    private static final String WEB_SITE_DTD =
-        "http://jakarta.apache.org/turbine/dtd/database.dtd";
+    private static final String WEB_SITE_DTD
+            = "http://jakarta.apache.org/turbine/dtd/database.dtd";
 
     /** InputSource for <code>database.dtd</code>. */
     private InputSource databaseDTD = null;
@@ -87,8 +83,8 @@ public class DTDResolver implements EntityResolver
     {
         try
         {
-            InputStream dtdStream =
-                getClass().getResourceAsStream("database.dtd");
+            InputStream dtdStream
+                    = getClass().getResourceAsStream("database.dtd");
 
             // getResource was buggy on many systems including Linux,
             // OSX, and some versions of windows in jdk1.3.
@@ -115,12 +111,10 @@ public class DTDResolver implements EntityResolver
     {
         if (databaseDTD != null && WEB_SITE_DTD.equals(systemId))
         {
-            String pkg =
-                getClass().getName().substring(
-                    0,
+            String pkg = getClass().getName().substring(0,
                     getClass().getName().lastIndexOf("."));
-            System.out.println(
-                "Resolver: used database.dtd from " + pkg + " package ");
+            System.out.println("Resolver: used database.dtd from "
+                    + pkg + " package ");
             return databaseDTD;
         }
         else if (systemId == null)
@@ -150,8 +144,7 @@ public class DTDResolver implements EntityResolver
         }
         catch (IOException ex)
         {
-            System.err.println(
-                "Couldn't read DTD specified in XML schema: "
+            System.err.println("Couldn't read DTD specified in XML schema: "
                     + ex.getMessage());
             //ex.printStackTrace();
             return new InputSource();
