@@ -94,6 +94,16 @@
       <timezone>+10</timezone>
     </developer>
     <developer>
+      <name>Thomas Fischer</name>
+      <id>tfischer</id>
+      <email>fischer@seitenbau.de</email>
+      <organization>Seitenbau GmbH</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
       <name>Stephen Haberman</name>
       <id>stephenh</id>
       <email>stephenh@chase3000.com</email>
