@@ -101,7 +101,7 @@ public class Column
     private String inputValidator = null;
     
     /**
-     * Default Constructor
+     * Creates a new instance with a <code>null</code> name.
      */
     public Column()
     {
