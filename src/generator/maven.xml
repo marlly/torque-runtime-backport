@@ -16,6 +16,12 @@
   <!-- include them in the jar file                                       -->
   <!-- ================================================================== -->
   <postGoal name="java:compile">
+    <!-- copy default.properties to the right place -->
+    <copy
+      file="${maven.src.dir}/conf/default.properties"
+      todir="${maven.build.dest}/org/apache/torque"
+    />
+
     <!-- copy database.dtd to the right place -->
     <copy
       file="${maven.src.dir}/dtd/database.dtd"
