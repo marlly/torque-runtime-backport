@@ -84,7 +84,6 @@
               inserts a SQL file into its designated database
             </li>
             <p/>
-            <p/>
             <li>
               <strong>sql2xml</strong><br/>
               generates an xml schema from an sql schema
@@ -93,6 +92,16 @@
             <li>
               <strong>id-table-init-sql</strong><br/>
               generates the initialization sql for the id table
+            </li>
+            <p/>
+            <li>
+              <strong>ojb-model</strong><br/>
+              generates an object model for ojb (experimental)
+            </li>
+            <p/>
+            <li>
+              <strong>ojb-repository</strong><br/>
+              generates the repository for ojb (experimental)
             </li>
           </ul>
         </p>
@@ -124,13 +133,13 @@
         <tr>
           <td>Cloudscape</td>
           <td>COM.cloudscape.core.JDBCDriver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
           <td>DB2</td>
           <td>COM.ibm.db2.jdbc.{app|net}.DB2Driver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
@@ -142,31 +151,37 @@
         <tr>
           <td>Hypersonic</td>
           <td>org.hsql.jdbcDriver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
           <td>Informix</td>
-          <td>???</td>
-          <td>untested</td>
+          <td>com.informix.jdbc.IfxDriver</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
           <td>InstantDB</td>
           <td>org.enhydra.instantdb.jdbc.idbDriver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
           <td>Interbase</td>
           <td>interbase.interclient.Driver</td>
-          <td>untested</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>MS Access</td>
+          <td>sun.jdbc.odbc.JdbcOdbcDriver</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
           <td><a href="mssql-howto.html">MS SQL</a></td>
           <td>com.microsoft.jdbc.sqlserver.SQLServerDriver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
@@ -190,7 +205,7 @@
         <tr>
           <td>SapDB</td>
           <td>com.sap.dbtech.jdbc.DriverSapDB</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
         <tr>
@@ -205,7 +220,7 @@
         <tr>
           <td>Weblogic</td>
           <td>weblogic.jdbc.pool.Driver</td>
-          <td>untested</td>
+          <td></td>
           <td></td>
         </tr>
       </table>
@@ -217,7 +232,7 @@
       <p>
         If there is no tester for your RDBMS and you want to help, please read
         the <a href="developer-guide.html">developer-guide</a>, run the tests
-        and send your results (and bugfixes ;) to the turbine-dev list.
+        and send your results (and bugfixes ;) to the turbine-torque-dev list.
       </p>
     </section>
 
