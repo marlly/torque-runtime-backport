@@ -38,9 +38,6 @@
       TRQS13: torque.overloadKeySetters obsoleted
     </li>
     <li>
-      TRQS15: Torque gererated code does not compile
-    </li>
-    <li>
       added support for the new com.mysql.jdbc.Driver
     </li>
     <li>
@@ -72,6 +69,9 @@
       TRQ26: string to date conversion in MSSQL/Sybase
     </li>
     <li>
+      TRQ28: booleanint/booleanchar fails with javaType="object"
+    </li>
+    <li>
       TRQ31: ComboKey(String) ctor out-of-memory error
     </li>
     <li>
@@ -87,6 +87,9 @@
     </li>
     <li>
       TRQS1: several small patches to correct db2 sql generation
+    </li>
+    <li>
+      TRQS15: Torque gererated code does not compile
     </li>
     <li>
       bugzilla #12626: Peer.vm was missing the DateKey import.

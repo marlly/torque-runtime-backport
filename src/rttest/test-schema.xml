@@ -12,6 +12,9 @@
   <table name="timestamp_pk">
     <column name="test_key" required="true" primaryKey="true" type="TIMESTAMP" />
     <column name="col_a" type="TIMESTAMP" />
+    <!-- TRQS28 -->
+    <column name="col_b" type="BOOLEANINT" javaType="object" />
+    <column name="col_c" type="BOOLEANCHAR" javaType="object" />
   </table>
 
 </database>

@@ -228,8 +228,8 @@ public class TypeMap
     public static final String REAL_VILLAGE_OBJECT_METHOD = "asFloatObj()";
     public static final String FLOAT_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
     public static final String DOUBLE_VILLAGE_OBJECT_METHOD = "asDoubleObj()";
-    public static final String BOOLEANINT_VILLAGE_OBJECT_METHOD = 
-        "asIntegerObj()";
+    public static final String BOOLEANCHAR_VILLAGE_OBJECT_METHOD = "asString()";
+    public static final String BOOLEANINT_VILLAGE_OBJECT_METHOD = "asInt()";
 
     public static final String CHAR_PP_METHOD = "getString(ppKey)";
     public static final String VARCHAR_PP_METHOD = "getString(ppKey)";
@@ -340,9 +340,9 @@ public class TypeMap
             jdbcToJavaNativeObjectMap.put(REAL, REAL_NATIVE_OBJECT_TYPE);
             jdbcToJavaNativeObjectMap.put(FLOAT, FLOAT_NATIVE_OBJECT_TYPE);
             jdbcToJavaNativeObjectMap.put(DOUBLE, DOUBLE_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(BOOLEANCHAR, 
+            jdbcToJavaNativeObjectMap.put(BOOLEANCHAR,
                                           BOOLEANCHAR_NATIVE_OBJECT_TYPE);
-            jdbcToJavaNativeObjectMap.put(BOOLEANINT, 
+            jdbcToJavaNativeObjectMap.put(BOOLEANINT,
                                           BOOLEANINT_NATIVE_OBJECT_TYPE);
 
             /*
@@ -378,19 +378,21 @@ public class TypeMap
 
             jdbcToVillageObjectMethodMap = new Hashtable();
             jdbcToVillageObjectMethodMap.put(BIT, BIT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(TINYINT, 
+            jdbcToVillageObjectMethodMap.put(TINYINT,
                                              TINYINT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(SMALLINT, 
+            jdbcToVillageObjectMethodMap.put(SMALLINT,
                                              SMALLINT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(INTEGER, 
+            jdbcToVillageObjectMethodMap.put(INTEGER,
                                              INTEGER_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(BIGINT, 
+            jdbcToVillageObjectMethodMap.put(BIGINT,
                                              BIGINT_VILLAGE_OBJECT_METHOD);
             jdbcToVillageObjectMethodMap.put(REAL, REAL_VILLAGE_OBJECT_METHOD);
             jdbcToVillageObjectMethodMap.put(FLOAT, FLOAT_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(DOUBLE, 
+            jdbcToVillageObjectMethodMap.put(DOUBLE,
                                              DOUBLE_VILLAGE_OBJECT_METHOD);
-            jdbcToVillageObjectMethodMap.put(BOOLEANINT, 
+            jdbcToVillageObjectMethodMap.put(BOOLEANCHAR,
+                    BOOLEANCHAR_VILLAGE_OBJECT_METHOD);
+            jdbcToVillageObjectMethodMap.put(BOOLEANINT,
                                              BOOLEANINT_VILLAGE_OBJECT_METHOD);
 
             /*
@@ -530,9 +532,9 @@ public class TypeMap
             initialize();
         }
         String s = (String)jdbcToJavaNativeObjectMap.get(jdbcType);
-        if ( s == null ) 
+        if ( s == null )
         {
-            s = (String)jdbcToJavaNativeMap.get(jdbcType); 
+            s = (String)jdbcToJavaNativeMap.get(jdbcType);
         }
         return s;
     }
@@ -563,9 +565,9 @@ public class TypeMap
             initialize();
         }
         String s = (String)jdbcToVillageObjectMethodMap.get(jdbcType);
-        if ( s == null ) 
+        if ( s == null )
         {
-            s = (String)jdbcToVillageMethodMap.get(jdbcType); 
+            s = (String)jdbcToVillageMethodMap.get(jdbcType);
         }
         return s;
     }
