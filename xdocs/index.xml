@@ -40,39 +40,52 @@
               generates simple scripts for creating databases on various
               platforms.
             </li>
+            <p/>
             <li>
               <strong>TorqueDataDTDTask</strong><br/>
               generates data DTD from an XML schema describing a database
               structure
             </li>
+            <p/>
             <li>
               <strong>TorqueDataDumpTask</strong><br/>
               dumping data from db into XML
             </li>
+            <p/>
             <li>
               <strong>TorqueDataSQLTask</strong><br/>
               generates SQL source from an XML data file
             </li>
+            <p/>
             <li>
               <strong>TorqueJDBCTransformTask</strong><br/>
               generates an XML schema of an existing database from JDBC metadata
             </li>
+            <p/>
             <li>
               <strong>TorqueObjectModelTask</strong><br/>
               generates output by using Velocity
             </li>
+            <p/>
             <li>
               <strong>TorqueSQLExecTask</strong><br/>
               inserts a SQL file into its designated database
             </li>
+            <p/>
             <li>
               <strong>TorqueSQLTask</strong><br/>
               generates SQL source from an XML schema describing a database
               structure
             </li>
+            <p/>
             <li>
               <strong>TorqueSQLTransformTask</strong><br/>
               generates an xml schema from an sql schema
+            </li>
+            <p/>
+            <li>
+              <strong>TorqueDocumentationTask</strong><br/>
+              generates html or xml documentation for xml schemas
             </li>
           </ul>
         </p>
