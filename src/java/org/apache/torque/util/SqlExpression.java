@@ -93,11 +93,11 @@ public class SqlExpression
      * @return A join expression, e.g. UPPER(table_a.column_a) =
      *         UPPER(table_b.column_b).
      */
-    public static String buildInnerJoin( String column,
-                                         String relatedColumn )
+    public static String buildInnerJoin(String column,
+                                         String relatedColumn)
     {
         // 'db' can be null because 'ignoreCase' is false.
-        return buildInnerJoin( column, relatedColumn, false, null );
+        return buildInnerJoin(column, relatedColumn, false, null);
     }
 
     /**
@@ -112,14 +112,14 @@ public class SqlExpression
      * @return A join expression, e.g. UPPER(table_a.column_a) =
      *         UPPER(table_b.column_b).
      */
-    public static String buildInnerJoin( String column,
+    public static String buildInnerJoin(String column,
                                          String relatedColumn,
                                          boolean ignoreCase,
-                                         DB db )
+                                         DB db)
     {
         int addlength = (ignoreCase) ? 25 : 1;
         StringBuffer sb = new StringBuffer(column.length() +
-            relatedColumn.length() + addlength );
+            relatedColumn.length() + addlength);
         buildInnerJoin(column, relatedColumn, ignoreCase, db, sb);
         return sb.toString();
     }
@@ -136,7 +136,7 @@ public class SqlExpression
      * @param whereClause A StringBuffer to which the sql expression will be
      *        appended.
      */
-    public static void buildInnerJoin( String column,
+    public static void buildInnerJoin(String column,
                                        String relatedColumn,
                                        boolean ignoreCase,
                                        DB db,
@@ -154,7 +154,7 @@ public class SqlExpression
             whereClause
                 .append(column)
                 .append('=')
-                .append( relatedColumn );
+                .append(relatedColumn);
         }
     }
 
@@ -171,13 +171,13 @@ public class SqlExpression
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static String build( String columnName,
+    public static String build(String columnName,
                                 Object criteria,
-                                SqlEnum comparison )
+                                SqlEnum comparison)
         throws TorqueException
     {
         // 'db' can be null because 'ignoreCase' is null
-        return build( columnName, criteria, comparison, false, null );
+        return build(columnName, criteria, comparison, false, null);
     }
 
     /**
@@ -196,15 +196,15 @@ public class SqlExpression
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static String build( String columnName,
+    public static String build(String columnName,
                                 Object criteria,
                                 SqlEnum comparison,
                                 boolean ignoreCase,
-                                DB db )
+                                DB db)
         throws TorqueException
     {
         int addlength = (ignoreCase ? 40 : 20);
-        StringBuffer sb = new StringBuffer(columnName.length() + addlength );
+        StringBuffer sb = new StringBuffer(columnName.length() + addlength);
         build(columnName, criteria, comparison, ignoreCase, db, sb);
         return sb.toString();
     }
@@ -224,7 +224,7 @@ public class SqlExpression
      *        appended.
      * @exception Exception, a generic exception.
      */
-    public static void build( String columnName,
+    public static void build(String columnName,
                               Object criteria,
                               SqlEnum comparison,
                               boolean ignoreCase,
@@ -271,61 +271,61 @@ public class SqlExpression
         }
         else
         {
-           if (criteria instanceof String ||
-               criteria instanceof StringKey)
-           {
-               criteria = quoteAndEscapeText(criteria.toString(), db);
-           }
-           else if( criteria instanceof Date )
-           {
-               Date dt = (Date) criteria;
-               criteria = db.getDateString(dt);
-           }
-           else if ( criteria instanceof DateKey )
-           {
-               Date dt = (Date) ((DateKey) criteria).getValue();
-               criteria = db.getDateString(dt);
-           }
-           else if( criteria instanceof Boolean )
-           {
-               criteria = db.getBooleanString((Boolean)criteria);
-           }
+            if (criteria instanceof String ||
+                criteria instanceof StringKey)
+            {
+                criteria = quoteAndEscapeText(criteria.toString(), db);
+            }
+            else if (criteria instanceof Date)
+            {
+                Date dt = (Date) criteria;
+                criteria = db.getDateString(dt);
+            }
+            else if (criteria instanceof DateKey)
+            {
+                Date dt = (Date) ((DateKey) criteria).getValue();
+                criteria = db.getDateString(dt);
+            }
+            else if (criteria instanceof Boolean)
+            {
+                criteria = db.getBooleanString((Boolean)criteria);
+            }
         }
 
-        if ( comparison.equals(Criteria.LIKE) ||
-             comparison.equals(Criteria.NOT_LIKE) )
+        if (comparison.equals(Criteria.LIKE) ||
+             comparison.equals(Criteria.NOT_LIKE))
         {
-            buildLike( columnName, (String)criteria, comparison,
+            buildLike(columnName, (String)criteria, comparison,
                        ignoreCase, db, whereClause);
         }
-        else if ( comparison.equals(Criteria.IN) ||
-                  comparison.equals(Criteria.NOT_IN) )
+        else if (comparison.equals(Criteria.IN) ||
+                  comparison.equals(Criteria.NOT_IN))
         {
-            buildIn( columnName, criteria, comparison,
+            buildIn(columnName, criteria, comparison,
                      ignoreCase, db, whereClause);
         }
         else
         {
-          // Do not put the upper/lower keyword around IS NULL
-          //  or IS NOT NULL
-          if ( comparison.equals(Criteria.ISNULL) ||
-               comparison.equals(Criteria.ISNOTNULL))
-          {
-            whereClause.append(columnName)
-            .append(comparison);
-          }
-          else
-          {
-            String columnValue = criteria.toString();
-            if (ignoreCase && db != null)
+            // Do not put the upper/lower keyword around IS NULL
+            //  or IS NOT NULL
+            if (comparison.equals(Criteria.ISNULL) ||
+                comparison.equals(Criteria.ISNOTNULL))
             {
-                columnName = db.ignoreCase(columnName);
-                columnValue = db.ignoreCase(columnValue);
+                whereClause.append(columnName)
+                  .append(comparison);
             }
-            whereClause.append(columnName)
-                .append(comparison)
-                .append(columnValue);
-           }
+            else
+            {
+                String columnValue = criteria.toString();
+                if (ignoreCase && db != null)
+                {
+                    columnName = db.ignoreCase(columnName);
+                    columnValue = db.ignoreCase(columnValue);
+                }
+                whereClause.append(columnName)
+                    .append(comparison)
+                    .append(columnValue);
+            }
         }
     }
 
@@ -349,15 +349,15 @@ public class SqlExpression
      * @param db Represents the database in use, for vendor specific functions.
      * @return An SQL expression.
      */
-    static String buildLike( String columnName,
+    static String buildLike(String columnName,
                              String criteria,
                              SqlEnum comparison,
                              boolean ignoreCase,
-                             DB db )
+                             DB db)
     {
         StringBuffer whereClause = new StringBuffer();
-        buildLike( columnName, criteria, comparison, ignoreCase, db,
-                   whereClause );
+        buildLike(columnName, criteria, comparison, ignoreCase, db,
+                   whereClause);
         return whereClause.toString();
     }
 
@@ -382,12 +382,12 @@ public class SqlExpression
      * @param whereClause A StringBuffer to which the sql expression
      * will be appended.
      */
-    static void buildLike( String columnName,
+    static void buildLike(String columnName,
                            String criteria,
                            SqlEnum comparison,
                            boolean ignoreCase,
                            DB db,
-                           StringBuffer whereClause )
+                           StringBuffer whereClause)
     {
         // If selection is case insensitive use SQL UPPER() function
         // on column name.
@@ -404,7 +404,7 @@ public class SqlExpression
         String parsedCriteria = null;
         int position = 0;
         StringBuffer sb = new StringBuffer();
-        while ( position < criteria.length() )
+        while (position < criteria.length())
         {
             char checkWildcard = criteria.charAt(position);
 
@@ -437,7 +437,7 @@ public class SqlExpression
                 break;
             }
 
-            sb.append( checkWildcard );
+            sb.append(checkWildcard);
             position++;
         }
         whereClause.append(equalsOrLike);
@@ -582,7 +582,7 @@ public class SqlExpression
      */
     public static String quoteAndEscapeText(String rawText, DB db)
     {
-        StringBuffer buf = new StringBuffer( (int)(rawText.length() * 1.1) );
+        StringBuffer buf = new StringBuffer((int)(rawText.length() * 1.1));
 
         // Some databases do not need escaping.
         String escapeString = new String();
