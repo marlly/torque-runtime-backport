@@ -1,48 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
+  <extend>../../project.xml</extend>
   <pomVersion>3</pomVersion>
   <id>maven-torque-plugin</id>
   <name>Maven Torque Plug-in</name>
-  <currentVersion>3.1-dev</currentVersion>
-  <organization>
-    <name>Apache Software Foundation</name>
-    <url>http://jakarta.apache.org/</url>
-    <logo>http://jakarta.apache.org/turbine/torque/images/jakarta-logo-blue.gif</logo>
-  </organization>
   <inceptionYear>2002</inceptionYear>
   <package>org.apache.torque</package>
-  <logo>http://jakarta.apache.org/turbine/torque/images/blue-logo.gif</logo>
 
   <!-- Gump integration -->
   <gumpRepositoryId>jakarta</gumpRepositoryId>
 
   <description>Maven Plugin for Torque</description>
   <shortDescription>Maven Plugin for Torque</shortDescription>
-  <url>http://jakarta.apache.org/turbine/torque/</url>
   <issueTrackingUrl>http://nagoya.apache.org/scarab/issues</issueTrackingUrl>
-  <siteAddress>jakarta.apache.org</siteAddress>
   <siteDirectory>/www/jakarta.apache.org/turbine/torque/maven-plugin/</siteDirectory>
-  <distributionDirectory>/www/jakarta.apache.org/builds/jakarta-turbine-torque/</distributionDirectory>
-
-  <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:jakarta-turbine-torque</connection>
-    <url>http://cvs.apache.org/viewcvs/jakarta-turbine-torque/</url>
-  </repository>
-
-  <mailingLists>
-    <mailingList>
-      <name>Torque User List</name>
-      <subscribe>turbine-torque-user-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-torque-user-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-torque-user@jakarta.apache.org</archive>
-    </mailingList>
-    <mailingList>
-      <name>Torque Developer List</name>
-      <subscribe>turbine-torque-dev-subscribe@jakarta.apache.org</subscribe>
-      <unsubscribe>turbine-torque-dev-unsubscribe@jakarta.apache.org</unsubscribe>
-      <archive>http://archives.apache.org/eyebrowse/SummarizeList?listName=turbine-torque-dev@jakarta.apache.org</archive>
-    </mailingList>
-  </mailingLists>
 
   <developers>
     <developer>
