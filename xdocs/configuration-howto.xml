@@ -6,6 +6,7 @@
   <title>Pool Configuration</title>
   <author email="jmcnally@apache.org">John McNally</author>
   <author email="mpoeschl@marmot.at">Martin Poeschl</author>
+  <author email="seade@backstagetech.com.au">Scott Eade</author>
  </properties>
 
 <body>
@@ -28,10 +29,29 @@ bound to jndi and torque only needs to use it.
 </p>
 
 <p>
-Before going over how to configure the factories which will take up most the
-content of this document, there is one other configuration that needs covered: 
+Before going over how to configure the factories, which will take up most the
+content of this document, you must first consider your database handles and 
 adapters.
 </p>
+
+</section>
+
+<section name="Database handles">
+
+<p>
+A database handle is the name attribute that was used in the 
+<code>&lt;database&gt;</code> tag of the schema.xml file.  If the name 
+attribute is not used, then the handle would be 'default'.
+</p>
+
+<p>
+In all examples that follow we will use the handle 'bookstore'.  As Torque has 
+the ability to use multiple databases you can tell it which one to use by 
+default thus:</p>
+
+<source><![CDATA[
+torque.database.default=bookstore
+]]></source>
 
 </section>
 
@@ -41,10 +61,7 @@ adapters.
 Previously, Torque provided an internal map between many Drivers and a set
 of adapter classes which are used to account for differences among databases.
 This arrangement is no longer possible using <code>DataSource</code>, so
-the adapter must be given in the configuration.  In all examples that follow we
-will use the handle, bookstore.  This is the name attribute that is used in the
-&lt;database&gt; tag in the schema.xml.  If the name attribute is not used, then
- the handle would be 'default'.
+the adapter must be given in the configuration.
 The adapter property is given as:
 </p>
 
