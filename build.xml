@@ -1,663 +1,93 @@
 <?xml version="1.0"?>
 
-<project name="Torque" default="jar" basedir=".">
+<project name="maven" default="maven:jar" basedir=".">
+
+  <!-- Give user a chance to override without editing this file
+       (and without typing -D each time they invoke a target) -->
 
   <!-- Allow any user specific values to override the defaults -->
   <property file="${user.home}/build.properties" />
   <!-- Allow user defaults for this project -->
   <property file="build.properties" />
   <!-- Set default values for the build -->
-  <property file="default.properties" />
+  <property file="project.properties" />
 
-  <!-- Construct compile classpath -->
-  <path id="classpath">
-    <pathelement location="${xerces.jar}"/>
-    <pathelement location="${xmlParserAPIs.jar}"/>
-    <pathelement location="${velocity.jar}"/>
-    <pathelement location="${village.jar}"/>
-    <pathelement location="${jdbc.jar}"/>
-    <pathelement location="${jcs.jar}"/>
-    <pathelement location="${log4j.jar}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-configuration.jar}"/>
-    <pathelement location="${commons-lang.jar}"/>
-    <pathelement location="${commons-pool.jar}"/>
-    <pathelement location="${commons-jdbc2pool.jar}"/>
-    <pathelement location="${junit.jar}"/>
-    <pathelement location="${stratum.jar}"/>
-    <pathelement location="tdk.jar"/>
-  </path>
-
-  <target
-    name="update-jars">
-
-    <taskdef
-      name="httpget"
-      className="org.apache.tdk.task.Get">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <!-- If you need proxy support you'll have to manually add:
-
-         proxyHost="x"
-         proxyPort="y"
-
-         We'll clean this up but it worked for a user behind a proxy.
-    -->
-
-    <httpget
-      baseUrl="http://jakarta.apache.org/turbine/jars/"
-      dest="${lib.repo}"
-      dependencyFile="deps.list"
-    />
-
+  <!-- maven:start -->
+  
+  <!-- ================================================================== -->
+  <!-- D E L E G A T O R S                                                -->
+  <!-- ================================================================== -->
+        
+  <target 
+    name="maven:site">
+    <ant antfile="${maven.home}/build-docs.xml" target="site"/>
   </target>
-
-  <!-- ================================================================== -->
-  <!-- E N V I R O N M E N T                                             -->
-  <!-- ================================================================== -->
-
-  <target name="env">
-    <echo message="java.home = ${java.home}"/>
-    <echo message="user.home = ${user.home}"/>
-    <echo message="lib.repo = ${lib.repo}"/>
-    <echo message="village.jar = ${village.jar}"/>
-    <echo message="velocity.jar = ${velocity.jar}"/>
-    <echo message="xerces.jar = ${xerces.jar}"/>
-    <echo message="xmlParserAPIs.jar = ${xmlParserAPIs.jar}"/>
-    <echo message="log4j.jar = ${log4j.jar}"/>
-    <echo message="jcs.jar = ${jcs.jar}"/>
-    <echo message="jdbc.jar = ${jdbc.jar}"/>
-    <echo message="junit.jar = ${junit.jar}"/>
-    <echo message="commons-collections.jar = ${commons-collections.jar}"/>
-    <echo message="commons-lang.jar = ${commons-lang.jar}"/>
-    <echo message="commons-pool.jar = ${commons-pool.jar}"/>
-    <echo message="stratum.jar = ${stratum.jar}"/>
+        
+  <target 
+    name="maven:jar">
+    <ant antfile="${maven.home}/build-maven.xml" target="jar"/>
   </target>
-
-  <!-- ================================================================== -->
-  <!-- U S A G E                                                          -->
-  <!-- ================================================================== -->
-
-  <target
-    name="usage">
-
-    <echo message="use -projecthelp to see the available targets"/>
+        
+  <target 
+    name="maven:install-jar">
+    <ant antfile="${maven.home}/build-maven.xml" target="install-jar"/>
   </target>
-
-  <!-- ================================================================== -->
-  <!-- T E S T                                                            -->
-  <!-- ================================================================== -->
-
-  <target
-    name="test"
-    depends="jar"
-    description="==> runtime tests (set torque.testProfile in your build.properties)">
-
-    <ant antfile="build-test.xml"/>
+        
+  <target 
+    name="maven:env">
+    <ant antfile="${maven.home}/build-maven.xml" target="env"/>
   </target>
-
-  <target
-    name="test-classpath"
-    depends="jar"
-    description="==> runtime tests using the -classpath tasks (set torque.testProfile in your build.properties)">
-
-    <ant antfile="build-test.xml"
-         target="test-classpath"/>
+        
+  <target 
+    name="maven:docs">
+    <ant antfile="${maven.home}/build-docs.xml" target="docs"/>
   </target>
-
-  <!-- ================================================================== -->
-  <!-- I N I T                                                            -->
-  <!-- ================================================================== -->
-
-  <target
-    name="init">
-
-    <available
-      classname="org.apache.velocity.anakia.AnakiaTask"
-      property="AnakiaTask.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.velocity.runtime.Runtime"
-      property="velocity.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.xerces.parsers.SAXParser"
-      property="xerces.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.w3c.dom.ranges.DocumentRange"
-      property="xmlParserAPIs.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="com.workingdogs.village.Column"
-      property="village.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.log4j.Category"
-      property="log4j.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.commons.collections.ExtendedProperties"
-      property="commons-collections.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.commons.lang.Strings"
-      property="commons-lang.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.commons.pool.ObjectPool"
-      property="commons-pool.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="org.apache.stratum.component.Component"
-      property="stratum.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="javax.sql.ConnectionPoolDataSource"
-      property="jdbc.present"
-      classpathref="classpath"
-    />
-
-    <available
-      classname="junit.framework.TestCase"
-      property="junit.present"
-      classpathref="classpath"
-    />
+        
+  <target 
+    name="maven:test">
+    <ant antfile="${maven.home}/build-test.xml" target="test"/>
   </target>
-
-  <!-- ================================================================== -->
-  <!-- P R O P E R T Y  C H E C K S  A N D  W A R N I N G S               -->
-  <!-- ================================================================== -->
-
-  <target
-    name="check.velocity"
-    unless="velocity.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="velocity.jar"/>
-      <param name="value" value="${velocity.jar}"/>
-    </antcall>
+        
+  <target 
+    name="maven:clean">
+    <ant antfile="${maven.home}/build-maven.xml" target="clean"/>
   </target>
-
-  <target
-    name="check.xerces">
-
-    <antcall target="check.xercesImpl"/>
-    <antcall target="check.xmlParserAPIs"/>
+        
+  <target  
+    name="maven:metrics">
+    <ant antfile="${maven.home}/build-metrics.xml" target="metrics"/>
   </target>
-
-  <target
-    name="check.xercesImpl"
-    unless="xerces.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="xerces.jar"/>
-      <param name="value" value="${xerces.jar}"/>
-    </antcall>
+        
+  <target 
+    name="maven:dist">
+    <ant antfile="${maven.home}/build-maven.xml" target="dist"/>
   </target>
-
-  <target
-    name="check.xmlParserAPIs"
-    unless="xmlParserAPIs.present">
-    <antcall target="property-warning">
-      <param name="name" value="xmlParserAPIs.jar"/>
-      <param name="value" value="${xmlParserAPIs.jar}"/>
-    </antcall>
+        
+  <target 
+    name="maven:deploy-site">
+    <ant antfile="${maven.home}/build-docs.xml" target="deploy-site"/>
   </target>
-
-  <target name="check.village" unless="village.present">
-    <antcall target="property-warning">
-      <param name="name" value="village.jar"/>
-      <param name="value" value="${village.jar}"/>
-    </antcall>
+        
+  <target 
+    name="maven:gump-descriptor">
+    <ant antfile="${maven.home}/build-maven.xml" target="gump-descriptor"/>
   </target>
-
-  <target
-    name="check.log4j"
-    unless="log4j.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="log4j.jar"/>
-      <param name="value" value="${log4j.jar}"/>
-    </antcall>
+        
+  <target 
+    name="maven:javadocs">
+    <ant antfile="${maven.home}/build-docs.xml" target="javadocs"/>
   </target>
-
-  <target
-    name="check.commons-collections"
-    unless="commons-collections.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="commons-collections.jar"/>
-      <param name="value" value="${commons-collections.jar}"/>
-    </antcall>
-  </target>
-
-  <target
-    name="check.commons-lang"
-    unless="commons-lang.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="commons-lang.jar"/>
-      <param name="value" value="${commons-lang.jar}"/>
-    </antcall>
-  </target>
-
-  <target name="check.commons-pool" unless="commons-pool.present">
-    <antcall target="property-warning">
-      <param name="name" value="commons-pool.jar"/>
-      <param name="value" value="${commons-pool.jar}"/>
-    </antcall>
-  </target>
-
-  <target
-    name="check.stratum"
-    unless="stratum.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="stratum.jar"/>
-      <param name="value" value="${stratum.jar}"/>
-    </antcall>
-  </target>
-
-  <target
-    name="check.jdbc"
-    unless="jdbc.present">
-
-    <antcall target="property-warning">
-      <param name="name" value="jdbc.jar"/>
-      <param name="value" value="${jdbc.jar}"/>
-    </antcall>
-  </target>
-
-  <target name="property-warning">
-    <echo>
-      +----------------------------------------------------------------+
-      + F A I L E D  R E Q U I R E M E N T                             |
-      +----------------------------------------------------------------+
-      | You must define the following property in order                |
-      | to build Torque:                                               |
-      |                                                                |
-      | ${name} (currently "${value}")
-      |                                                                |
-      | You can set this property in the provided build.properties     |
-      | file, or you may set this property in your                     |
-      | ${user.home}/build.properties file.
-      +----------------------------------------------------------------+
-    </echo>
-    <fail message="Failed Requirement"/>
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- P R E P A R E                                                      -->
-  <!-- ================================================================== -->
-
-  <target
-    name="prepare"
-    depends="init,check.velocity,check.xerces,check.village,
-             check.log4j,check.commons-collections,check.commons-lang,
-             check.stratum,check.commons-pool,check.jdbc,env">
-
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dest}"/>
-
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- C O M P I L E                                                      -->
-  <!-- ================================================================== -->
-
-  <target
-    name="compile"
-    depends="prepare"
-    description="==> compiles the source code">
-
-    <javac srcdir="${src.dir}/java"
-      destdir="${build.dest}"
-      debug="${debug}"
-      deprecation="${deprecation}"
-      optimize="${optimize}">
-      <classpath refid="classpath"/>
-    </javac>
-
-    <!-- copy database.dtd to the right place -->
-    <copy file="${src.dir}/dtd/database.dtd"
-      todir="${build.dest}/org/apache/torque/engine/database/transform"/>
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- C O M P I L E  T E S T S                                           -->
-  <!-- ================================================================== -->
-
-  <target
-    name="compile-test"
-    depends="compile"
-    if="junit.present"
-    description="==> compiles the test source code">
-
-    <javac srcdir="${test.dir}"
-      destdir="${build.dest}"
-      excludes="**/package.html"
-      debug="${debug}"
-      deprecation="${deprecation}"
-      optimize="${optimize}">
-      <classpath refid="classpath"/>
-      <classpath>
-        <pathelement path="${build.dest}"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- T E S T                                                            -->
-  <!-- ================================================================== -->
-  <target
-    name="run-test"
-    depends="prepare,compile-test"
-    if="junit.present"
-    description="==> runs the test source code">
-
-    <taskdef
-      name="junit"
-      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
-      <classpath refid="classpath"/>
-    </taskdef>
-
-    <junit printsummary="no" haltonfailure="yes">
-      <classpath>
-        <pathelement location="${build.dest}"/>
-        <pathelement location="${build.test}"/>
-        <path refid="classpath"/>
-      </classpath>
-
-      <formatter type="plain" usefile="false"/>
-
-      <batchtest>
-        <fileset dir="${test.dir}">
-          <exclude name="**/BaseTestCase.java"/>
-          <exclude name="**/PoolTest.java"/>
-          <include name="**/*Test.java"/>
-        </fileset>
-      </batchtest>
-    </junit>
-
-    <!-- Not currently working due to the way that Ant mucks with
-         a subprocess's threads. (JSS)
-    <java classname="org.apache.torque.pool.PoolTest">
-      <classpath refid="classpath"/>
-      <classpath>
-          <pathelement path="${build.dest}"/>
-          <pathelement path="${test.dir}"/>
-          <pathelement location="../scarab/lib/mm.mysql-2.0.4.jar"/>
-      </classpath>
-    </java>
-    -->
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- J A R                                                              -->
-  <!-- ================================================================== -->
-
-  <target
-    name="jar"
-    depends="compile"
-    description="==> generates the torque.jar">
-
-    <jar jarfile="${build.dir}/${final.name}.jar">
-      <fileset dir="${build.dest}" excludes="**/package.html"/>
-      <fileset dir="${src.dir}/templates"/>
-    </jar>
-
-    <!--
-         basedir="${build.dest}"
-         excludes="**/package.html"/> -->
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- J A V A D O C S                                                    -->
-  <!-- ================================================================== -->
-
-  <target
-    name="javadocs"
-    depends="prepare"
-    description="==> generates the API documentation">
-
-    <mkdir dir="${docs.dest}/api"/>
-
-    <javadoc
-      sourcepath="${src.dir}/java"
-      packagenames="${package}.*"
-      destdir="${javadoc.destdir}"
-      author="true"
-      private="true"
-      version="true"
-      use="true"
-      windowtitle="${name} ${version} API"
-      doctitle="${name} ${version} API"
-      bottom="Copyright &amp;copy; ${year} Apache Software Foundation. All Rights Reserved.">
-      <classpath refid="classpath"/>
-      <classpath path="${ant.home}/lib/ant.jar"/>
-    </javadoc>
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- C L E A N                                                          -->
-  <!-- ================================================================== -->
-
-  <target
-    name="clean"
-    description="==> cleans up the build directory">
-
-    <delete dir="${build.dir}"/>
-    <delete dir="${docs.dest}"/>
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- A N A K I A  D O C U M E N T A T I O N                             -->
-  <!-- ================================================================== -->
-
-  <target
-    name="check.jakarta-site2">
-
-    <available
-      property="jakarta-site2.present"
-      file="${jakarta.site2}"
-    />
-  </target>
-
-  <target depends="check.jakarta-site2" name="docs-prepare-error"
-          unless="jakarta-site2.present">
-    <echo>
-      Generation of the Torque documentation was skipped because the
-      Jakarta-Site2 module is not present! Please check to make sure
-      that you have checked it out from CVS.
-
-      &lt;http://jakarta.apache.org/site/jakarta-site2.html&gt;
-    </echo>
-  </target>
-
-  <target
-    name="docs"
-    depends="docs-prepare-error"
-    description="==> generates the HTML documentation"
-    if="jakarta-site2.present">
-
-    <taskdef name="anakia"
-       classname="org.apache.velocity.anakia.AnakiaTask">
-       <classpath>
-         <fileset dir="${jakarta.site2}/lib">
-           <include name="*.jar"/>
-         </fileset>
-       </classpath>
-     </taskdef>
-
-     <anakia
-       basedir="${docs.src}"
-       destdir="${docs.dest}/"
-       extension=".html" style="./site.vsl"
-       projectFile="stylesheets/project.xml"
-       excludes="**/stylesheets/** empty.xml"
-       includes="**/*.xml"
-       lastModifiedCheck="true"
-       templatePath="${jakarta.site2}/xdocs/stylesheets">
-     </anakia>
-
-     <copy todir="${docs.dest}/images" filtering="no">
-       <fileset dir="${docs.src}/images">
-         <include name="**/*.gif"/>
-         <include name="**/*.jpeg"/>
-         <include name="**/*.jpg"/>
-       </fileset>
-     </copy>
-
-     <!-- In case we have CSS someday
-     <copy todir="${docs.dest}" filtering="no">
-       <fileset dir="${docs.src}">
-         <include name="**/*.css"/>
-       </fileset>
-     </copy>
-     -->
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- D I S T - L I T E                                                  -->
-  <!-- ================================================================== -->
-  <target
-    name="dist-lite"
-    depends="jar,check.village"
-    description="==> Creates torque.zip distribution without jars">
-
-    <property name="torque.dir" value="${build.dir}/torque/torque"/>
-    <mkdir dir="${torque.dir}"/>
-    <mkdir dir="${torque.dir}/lib"/>
-
-    <filter token="TORQUE_HOME" value="."/>
-
-    <copy todir="${torque.dir}/lib" filtering="no">
-      <fileset dir="${build.dir}">
-        <include name="${final.name}.jar"/>
-      </fileset>
-    </copy>
-
-    <copy todir="${torque.dir}/templates" filtering="yes">
-      <fileset dir="./src/templates"/>
-    </copy>
-
-    <copy todir="${torque.dir}" filtering="yes">
-      <fileset dir="./src/conf"/>
-    </copy>
-
-    <copy todir="${torque.dir}/schema" filtering="yes">
-      <fileset dir="./examples"/>
-    </copy>
-
-    <zip zipfile="${build.dir}/${final.name}.zip"
-      basedir="${build.dir}/torque"
-    />
-
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- D I S T                                                            -->
-  <!-- ================================================================== -->
-
-  <target
-    name="dist"
-    depends="jar,check.village,javadocs,docs"
-    description="==> Creates torque.zip distribution">
-
-    <property name="torque.dir" value="${build.dir}/torque/torque"/>
-    <mkdir dir="${torque.dir}"/>
-    <mkdir dir="${torque.dir}/lib"/>
-
-    <copy todir="${torque.dir}/docs">
-      <fileset dir="docs"/>
-    </copy>
-
-    <copy file="${velocity.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${xmlParserAPIs.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${village.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${log4j.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-collections.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-configuration.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-lang.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${commons-pool.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${stratum.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${jdbc.jar}" todir="${torque.dir}/lib"/>
-    <copy file="${jcs.jar}" todir="${torque.dir}/lib"/>
-
-    <filter token="TORQUE_HOME" value="."/>
-
-    <copy todir="${torque.dir}/lib" filtering="no">
-      <fileset dir="${build.dir}">
-        <include name="${final.name}.jar"/>
-      </fileset>
-    </copy>
-
-    <copy todir="${torque.dir}/templates" filtering="yes">
-      <fileset dir="./src/templates"/>
-    </copy>
-
-    <copy todir="${torque.dir}" filtering="yes">
-      <fileset dir="./src/conf"/>
-    </copy>
-
-    <copy todir="${torque.dir}/schema" filtering="yes">
-      <fileset dir="./examples"/>
-    </copy>
-
-    <copy todir="${torque.dir}/schema" filtering="yes">
-      <fileset dir="./src/schema"/>
-    </copy>
-
-    <zip zipfile="${build.dir}/${final.name}.zip"
-      basedir="${build.dir}/torque"
-    />
-  </target>
-
-  <!-- ================================================================== -->
-  <!-- I N S T A L L  J A R                                               -->
-  <!-- ================================================================== -->
-
-  <target
-    name="install-jar"
-    depends="jar"
-    description="==> Installs .jar file in ${lib.repo}">
-
-    <copy todir="${lib.repo}" filtering="no">
-      <fileset dir="${build.dir}">
-        <include name="${final.name}.jar"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target
+        
+  <target 
     name="maven:compile">
-
-    <ant antfile="build-maven.xml" target="maven:compile"/>
-
+    <ant antfile="${maven.home}/build-maven.xml" target="compile"/>
   </target>
+
+  <target 
+    name="maven:update-jars">
+    <ant antfile="${maven.home}/build-maven.xml" target="update-jars"/>
+  </target>
+    
+  <!-- maven:end -->
 
 </project>
