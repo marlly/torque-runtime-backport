@@ -76,6 +76,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import org.apache.torque.Torque;
@@ -1519,7 +1520,7 @@ public abstract class BasePeer implements java.io.Serializable
         throws TorqueException
     {
         QueryDataSet qds = null;
-        List results = new ArrayList();
+        List results = Collections.EMPTY_LIST;
         try
         {
             // execute the query
@@ -1554,9 +1555,7 @@ public abstract class BasePeer implements java.io.Serializable
      * Returns all records in a QueryDataSet as a List of Record
      * objects.  Used for functionality like util.db.LargeSelect.
      *
-     * @param qds A QueryDataSet.
-     * @return List of Record objects.
-     * @exception TorqueException
+     * @see #getSelectResults(QueryDataSet, int, int, boolean)
      */
     public static List getSelectResults(QueryDataSet qds)
             throws TorqueException
@@ -1568,10 +1567,7 @@ public abstract class BasePeer implements java.io.Serializable
      * Returns all records in a QueryDataSet as a List of Record
      * objects.  Used for functionality like util.db.LargeSelect.
      *
-     * @param qds A QueryDataSet.
-     * @param singleRecord Whether or not we want to select only a
-     * single record.
-     * @exception TorqueException
+     * @see #getSelectResults(QueryDataSet, int, int, boolean)
      */
     public static List getSelectResults(QueryDataSet qds, boolean singleRecord)
             throws TorqueException
@@ -1584,11 +1580,7 @@ public abstract class BasePeer implements java.io.Serializable
      * of Record objects.  Starting at record 0.  Used for
      * functionality like util.db.LargeSelect.
      *
-     * @param qds A QueryDataSet.
-     * @param numberOfResults The number of results to return.
-     * @param singleRecord Whether or not we want to select only a
-     * single record.
-     * @exception TorqueException
+     * @see #getSelectResults(QueryDataSet, int, int, boolean)
      */
     public static List getSelectResults(QueryDataSet qds,
                                         int numberOfResults,
@@ -1608,12 +1600,16 @@ public abstract class BasePeer implements java.io.Serializable
      * of Record objects.  Starting at record start.  Used for
      * functionality like util.db.LargeSelect.
      *
-     * @param qds A QueryDataSet.
-     * @param start where to start retrieving Records.
-     * @param numberOfResults The number of results to return.
+     * @param qds The <code>QueryDataSet</code> to extract results
+     * from.
+     * @param start The index from which to start retrieving
+     * <code>Record</code> objects from the data set.
+     * @param numberOfResults The number of results to return (or
+     * <code> -1</code> for all results).
      * @param singleRecord Whether or not we want to select only a
      * single record.
-     * @exception TorqueException
+     * @return A <code>List</code> of <code>Record</code> objects.
+     * @exception TorqueException If any <code>Exception</code> occurs.
      */
     public static List getSelectResults(QueryDataSet qds,
                                         int start,
