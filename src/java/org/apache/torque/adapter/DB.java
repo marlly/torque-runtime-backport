@@ -392,7 +392,7 @@ public abstract class DB implements Serializable, IDMethod
      */
     public String getDateString(String dateString)
     {
-        return getStringDelimiter () + dateString + getStringDelimiter();
+        return getStringDelimiter() + dateString + getStringDelimiter();
     }
 
     /**
