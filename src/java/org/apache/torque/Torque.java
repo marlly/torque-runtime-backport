@@ -378,6 +378,8 @@ public class Torque implements Initializable, Configurable
         try
         {
             Class mapClass = Class.forName("java.util.Map");
+            if (c != null) 
+            {            
             Iterator i = c.getKeys();
             while (i.hasNext())
             {
@@ -421,6 +423,7 @@ public class Torque implements Initializable, Configurable
                         bindDStoJndi(ctx, path, ds);
                     }                    
                 }
+            }   
             }            
         }
         catch (Exception e)
@@ -1031,7 +1034,6 @@ public class Torque implements Initializable, Configurable
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new TorqueException(e);
         }
         return con;
