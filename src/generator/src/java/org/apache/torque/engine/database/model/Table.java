@@ -477,7 +477,7 @@ public class Table implements IDMethod
         {
             foreignTableNames = new ArrayList(5);
         }
-        if (foreignTableNames.contains(fk.getForeignTableName()))
+        if (!foreignTableNames.contains(fk.getForeignTableName()))
         {
             foreignTableNames.add(fk.getForeignTableName());
         }
