@@ -229,7 +229,7 @@
 
     <!-- These are ant pattern sets -->
     <jarResources>
-      <jarResource>include = templates/**</jarResource>
+      <jarResource>include = **/*</jarResource>
     </jarResources>
 
     <jars>
