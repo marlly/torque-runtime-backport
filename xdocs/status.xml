@@ -19,6 +19,15 @@
         A list of changes can be found <a href="changes-report.html">here</a>.
       </p>
 
+      <subsection name="20 June 2003 - Torque 3.0.2 is released!">
+        <p>
+          Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0.2/">
+          here</a>. <br/>
+          This is a bugfix release. The docs including a full list of changes is available 
+          <a href="http://db.apache.org/torque/torque-302/">here</a>
+        </p>
+      </subsection>
+
       <subsection name="05 June 2003 - Torque 3.0.1 is released!">
         <p>
           Downloads are available <a href="http://db.apache.org/builds/torque/release/3.0.1/">
