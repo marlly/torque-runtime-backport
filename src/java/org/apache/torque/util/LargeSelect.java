@@ -624,7 +624,13 @@ public class LargeSelect implements Runnable, Serializable
                     + "fromIndex + Math.min(size, results.size() - fromIndex) ("
                     + toIndex + ")");
         }
-        List returnResults = results.subList(fromIndex, toIndex);
+
+        List returnResults;
+
+        synchronized (results) 
+        {
+            returnResults = new ArrayList(results.subList(fromIndex, toIndex));
+        }
 
         if (null != returnBuilderClass)
         {
@@ -705,9 +711,12 @@ public class LargeSelect implements Runnable, Serializable
                 List tempResults
                         = BasePeer.getSelectResults(qds, size, false);
 
-                for (int i = 0, n = tempResults.size(); i < n; i++)
+                synchronized (results) 
                 {
-                    results.add(tempResults.get(i));
+                    for (int i = 0, n = tempResults.size(); i < n; i++)
+                    {
+                        results.add(tempResults.get(i));
+                    }
                 }
 
                 currentlyFilledTo += tempResults.size();
@@ -717,7 +726,10 @@ public class LargeSelect implements Runnable, Serializable
                 // on the last page but we must now get rid of it.
                 if (results.size() == memoryLimit + 1)
                 {
-                    results.remove(currentlyFilledTo--);
+                    synchronized (results)
+                    {
+                        results.remove(currentlyFilledTo--);
+                    }
                     perhapsLastPage = false;
                 }
 
