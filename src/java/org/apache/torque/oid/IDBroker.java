@@ -204,6 +204,9 @@ public class IDBroker
     private static final String DB_IDBROKER_PREFETCH =
         "idbroker.prefetch";
 
+    private static final String DB_IDBROKER_USENEWCONNECTION =
+        "idbroker.usenewconnection";
+
     /**
      * Category used for logging.
      */
@@ -279,6 +282,8 @@ public class IDBroker
      * Returns an id as a primitive int.  Note this method does not
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
+     * To force the use of the passed in connection set the configuration
+     * property torque.idbroker.usenewconnection = false 
      *
      * @param connection A Connection.
      * @param keyInfo, an Object that contains additional info.
@@ -296,6 +301,8 @@ public class IDBroker
      * Returns an id as a primitive long. Note this method does not
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
+     * To force the use of the passed in connection set the configuration
+     * property torque.idbroker.usenewconnection = false 
      *
      * @param connection A Connection.
      * @param tableName, a String that identifies a table.
@@ -312,6 +319,8 @@ public class IDBroker
      * Returns an id as a BigDecimal. Note this method does not
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
+     * To force the use of the passed in connection set the configuration
+     * property torque.idbroker.usenewconnection = false 
      *
      * @param connection A Connection.
      * @param tableName, a String that identifies a table..
@@ -330,6 +339,8 @@ public class IDBroker
      * Returns an id as a String. Note this method does not
      * require a Connection, it just implements the KeyGenerator
      * interface.  if a Connection is needed one will be requested.
+     * To force the use of the passed in connection set the configuration
+     * property torque.idbroker.usenewconnection = false 
      *
      * @param connection A Connection should be null.
      * @param tableName, a String that identifies a table.
@@ -390,6 +401,10 @@ public class IDBroker
 
     /**
      * This method returns x number of ids for the given table.
+     * Note this method does not require a Connection.
+     * If a Connection is needed one will be requested.
+     * To force the use of the passed in connection set the configuration
+     * property torque.idbroker.usenewconnection = false 
      *
      * @param tableName The name of the table for which we want an id.
      * @param numOfIdsToReturn The desired number of ids.
@@ -640,7 +655,8 @@ public class IDBroker
             DBConnection dbCon = null;
             try
             {
-                if (connection == null) 
+                if (connection == null || configuration
+                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true)) 
                 {
                     String databaseName = dbMap.getName();
                     // Get a connection to the db by starting a
@@ -744,7 +760,8 @@ public class IDBroker
             DBConnection dbCon = null;
             try
             {
-                if (connection == null) 
+                if (connection == null || configuration
+                    .getBoolean(DB_IDBROKER_USENEWCONNECTION, true)) 
                 {
                     String databaseName = tableMap.getDatabaseMap().getName();
                     // Get a connection to the db
