@@ -1,12 +1,13 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${lib.repo}/mm.mysql-2.0.12-bin.jar
-torque.idMethod = idbroker
+torque.testDatabaseJar = ${lib.repo}/oracle-classes-1.2.jar
+#torque.idMethod = idbroker
+torque.idMethod = native
 torque.defaultDatabase = bookstore
 
 torque.sqlTest.defaultDatabase = sqltest
-torque.sqlTest.databaseUrl = jdbc:mysql://localhost:3306/sqltest
+torque.sqlTest.databaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
 
 lib.dir = ../lib
 
@@ -24,7 +25,7 @@ project = bookstore
 #
 # -------------------------------------------------------------------
 
-database = mysql
+database = oracle
 
 # -------------------------------------------------------------------
 #
@@ -65,13 +66,13 @@ useManagers=true
 # Turbine system with the generated SQL.
 # -------------------------------------------------------------------
 
-createDatabaseUrl = jdbc:mysql://localhost:3306/mysql
-buildDatabaseUrl = jdbc:mysql://localhost:3306/bookstore
-databaseUrl = jdbc:mysql://localhost:3306/bookstore
-databaseDriver = org.gjt.mm.mysql.Driver
-databaseUser = root
-databasePassword =
-databaseHost = 127.0.0.1
+createDatabaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+buildDatabaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+databaseUrl = jdbc:oracle:thin:@cpddev2.engin.umich.edu:1521:cpddev2
+databaseDriver = oracle.jdbc.driver.OracleDriver
+databaseUser = protot2
+databasePassword = protot2protot2
+databaseHost = cpddev2.engin.umich.edu
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
