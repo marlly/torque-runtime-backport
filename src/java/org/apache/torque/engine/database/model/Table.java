@@ -569,6 +569,7 @@ public class Table implements IDMethod
     public Unique addUnique(Attributes attrib)
     {
         Unique unique = new Unique();
+        unique.loadFromXML(attrib);
         addUnique (unique);
         return unique;
     }
