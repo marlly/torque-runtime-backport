@@ -24,6 +24,16 @@
       todir="${maven.build.dest}/org/apache/torque/engine/database/transform"
     />
 
+    <!-- copy logging properties to the right place -->
+    <copy
+      file="${maven.src.dir}/conf/commons-logging.properties"
+      todir="${maven.build.dest}"
+    />
+    <copy
+      file="${maven.src.dir}/conf/simplelog.properties"
+      todir="${maven.build.dest}"
+    />
+
     <!-- copy templates to the right place -->
     <copy todir="${maven.build.dest}">
       <fileset dir="${maven.src.dir}/templates" />
