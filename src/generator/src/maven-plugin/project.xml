@@ -116,7 +116,7 @@
       </properties>
     </dependency>
     <dependency>
-      <id>torque</id>
+      <id>torque-gen</id>
       <version>3.1-dev</version>
       <properties>
         <classloader>root</classloader>
