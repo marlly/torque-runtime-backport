@@ -122,19 +122,15 @@ public class PlatformDefaultImpl implements Platform
     }
 
     /**
-     * 
-     * @param notNull
-     * @return
+     * @return Only produces a SQL fragment if null values are
+     * disallowed.
+     * @see Platform#getNullString(boolean)
      */
     public String getNullString(boolean notNull)
     {
-        if (notNull) 
-        {
-            // TODO check if this is true for all dbs 
-            // check old sybase templates!
-            return "NOT NULL";
-        }
-        return "";
+        // TODO: Check whether this is true for all DBs.  Also verify
+        // the old Sybase templates.
+        return (notNull ? "NOT NULL" : "");
     }
-    
+
 }

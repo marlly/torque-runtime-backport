@@ -99,18 +99,13 @@ public class PlatformMssqlImpl extends PlatformDefaultImpl
     }
     
     /**
-     * Explicitly returns NULL if null values allowed 
-     * (as recomended by Microsoft).
-     * 
+     * @return Explicitly returns <code>NULL</code> if null values are
+     * allowed (as recomended by Microsoft).
      * @see Platform#getNullString(boolean)
      */
     public String getNullString(boolean notNull) 
     {
-        if (notNull) 
-        {
-            return "NOT NULL";
-        }
-        return "NULL";
+        return (notNull ? "NOT NULL" : "NULL");
     }
 
 }
