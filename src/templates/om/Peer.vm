@@ -840,6 +840,21 @@ public abstract class $basePrefix${table.JavaName}Peer
     #set ($retrieveMethod = "retrieveByPK")
   #end
 
+#set ($pks = $table.PrimaryKey)
+#if ($pks.size() == 1)
+  #set ($pk = $pks.get(0))
+    /**
+     * Retrieve a single object by pk
+     *
+     * @param pk the primary key
+     */
+    public static $table.JavaName ${retrieveMethod}($pk.JavaNative pk)
+        throws TorqueException
+    {
+        return ${retrieveMethod}(SimpleKey.keyFor(pk));
+    }
+#end
+
     /**
      * Retrieve a single object by pk
      *
