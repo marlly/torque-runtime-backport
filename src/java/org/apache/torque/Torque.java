@@ -215,8 +215,7 @@ public class Torque
     public static DatabaseMap getDatabaseMap()
         throws TorqueException
     {
-        return getDatabaseMap(
-            configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME));
+        return getDatabaseMap(getDefaultMap());
     }
 
     /**
@@ -522,7 +521,7 @@ public class Torque
     public static DB getDB()
         throws Exception
     {
-        return getDB(configuration.getString(DATABASE_DEFAULT, DEFAULT_NAME));
+        return getDB(getDefaultDB());
     }
 
     /**
