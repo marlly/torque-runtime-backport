@@ -217,7 +217,7 @@ public class TorqueDataModelTask
             xmlParser = new XmlToAppData();
             AppData ad = xmlParser.parseFile(xmlFile);
             xmlParser.parseFile(xmlFile);
-            ad.setName(xmlFile.substring(0,xmlFile.indexOf(".")));
+            //FIXME: ad.setName(xmlFile.substring(0,xmlFile.indexOf(".")));
             dataModels.addElement(ad);
         } 
         else 
@@ -240,7 +240,7 @@ public class TorqueDataModelTask
                     xmlParser.parseFile(
                         new File(srcDir, dataModelFiles[j]).toString());
                     
-                    ad.setName(dataModelFiles[j].substring(0,dataModelFiles[j].indexOf(".")));
+                    //FIXME: ad.setName(dataModelFiles[j].substring(0,dataModelFiles[j].indexOf(".")));
                     dataModels.addElement(ad);
                 }
             }
@@ -255,9 +255,10 @@ public class TorqueDataModelTask
         while (i.hasNext())
         {
             AppData ad = (AppData) i.next();
-            Database database = ad.getDatabase();
+            //FIXME: Database database = ad.getDatabase();
+            Database database = null;
             databaseNames.put(database.getName(), database.getName());
-            dataModelDbMap.put(ad.getName(), database.getName());
+            //FIXME: dataModelDbMap.put(ad.getName(), database.getName());
         }
 
         // Create a new Velocity context.
