@@ -124,7 +124,6 @@
     <antcall target="om"/>
   </target>
 
-
   <!-- ================================================================ -->
   <!-- C H E C K  U S E C L A S S P A T H                               -->
   <!-- ================================================================ -->
@@ -139,6 +138,19 @@
   </target>
 
   <!-- ================================================================ -->
+  <!-- C H E C K  R U N  O N L Y  O N  S C H E M A  C H A N G E         -->
+  <!-- ================================================================ -->
+  <!-- Maps the torque.runOnlyOnSchemaChange to                         -->
+  <!-- torque.internal.runOnlyOnSchemaChange                            -->
+  <!-- ================================================================ -->
+
+  <target name="check-run-only-on-schema-change">
+    <condition property="torque.internal.runOnlyOnSchemaChange">
+      <equals arg1="${torque.runOnlyOnSchemaChange}" arg2="true"/>
+    </condition>
+  </target>
+
+  <!-- ================================================================ -->
   <!-- G E N E R A T E  P R O J E C T  S Q L                            -->
   <!-- ================================================================ -->
   <!-- Generate the SQL for your project, These are in addition         -->
@@ -146,9 +158,21 @@
   <!-- project should be specified in project-schema.xml.               -->
   <!-- ================================================================ -->
 
+  <target 
+    name="sql-check"
+    depends="check-run-only-on-schema-change"
+    if="torque.internal.runOnlyOnSchemaChange">
+    <uptodate
+      property="torque.internal.sql.uptodate"
+      targetfile="${torque.sql.dir}/${torque.project}-schema.sql">
+      <srcfiles dir="${torque.schema.dir}" includes="**/*-schema.xml" /> 
+    </uptodate>
+  </target>
+  
   <target
     name="sql"
-    depends="check-use-classpath"
+    depends="check-use-classpath, sql-check"
+    unless="torque.internal.sql.uptodate"
     description="==> generates the SQL for your project">
 
     <echo message="+------------------------------------------+"/>
@@ -455,8 +479,20 @@
   <!-- ================================================================ -->
 
   <target
+    name="om-check"
+    depends="check-run-only-on-schema-change"
+    if="torque.internal.runOnlyOnSchemaChange">
+    <uptodate 
+      property="torque.internal.om.uptodate"
+      targetfile="${torque.java.dir}/report.${torque.project}.om.generation">
+      <srcfiles dir="${torque.schema.dir}" includes="**/*-schema.xml" /> 
+    </uptodate>
+  </target>
+
+  <target
     name="om"
-    depends="check-use-classpath"
+    depends="check-use-classpath, om-check"
+    unless="torque.internal.om.uptodate"
     description="==> generates the Peer-based object model for your project">
 
     <echo message="+------------------------------------------+"/>
