@@ -71,7 +71,7 @@ import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.torque.TorqueException;
-import org.apache.torque.TorqueSingleton;
+import org.apache.torque.TorqueInstance;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
@@ -104,9 +104,9 @@ public class TorqueComponent
      *
      * @return A Torque Singleton reference
      */
-    private TorqueSingleton getTorque()
+    private TorqueInstance getTorque()
     {
-        return TorqueSingleton.getInstance();
+        return TorqueInstance.getInstance();
     }
 
     /*

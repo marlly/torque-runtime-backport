@@ -14,6 +14,24 @@
   Changes between Torque 3.1-alpha1 and 3.1-alpha2. <br/>
 </p>
 
+<section name="Torque 3.1-alpha3 dev">
+<p>
+  Changes between Torque 3.1-alpha2 and the unreleased 3.1-alpha3. <br/>
+</p>
+
+<subsection name="Other changes">
+<p>
+  <ul>
+    <li>
+      Introduced the TorqueInstance class to do away with static
+      initialization woes and allow multiple instances of Torque per
+      ClassLoader.
+    </li>
+  </ul>
+</p>
+</subsection>
+</section>
+
 <subsection name="Changes that could (will) break older environments">
 <p>
   <ul>

@@ -96,10 +96,10 @@ import org.apache.torque.util.BasePeer;
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
-public class TorqueSingleton
+public class TorqueInstance
 {
     /** Logging */
-    private static Log log = LogFactory.getLog(TorqueSingleton.class);
+    private static Log log = LogFactory.getLog(TorqueInstance.class);
 
     /** A constant for <code>default</code>. */
     private static final String DEFAULT_NAME = "default";
@@ -154,12 +154,12 @@ public class TorqueSingleton
      */
 
     /** The only instance in this class */
-    private static TorqueSingleton torqueSingleton = null;
+    private static TorqueInstance torqueSingleton = null;
 
     /**
      * C'tor
      */
-    private TorqueSingleton()
+    private TorqueInstance()
     {
         resetConfiguration();
     }
@@ -167,14 +167,14 @@ public class TorqueSingleton
     /**
      * Fetch the Torque Instance from the Singleton
      *
-     * @return The only TorqueSingleton Instance
+     * @return The only TorqueInstance Instance
      */
 
-    public static synchronized TorqueSingleton getInstance()
+    public static synchronized TorqueInstance getInstance()
     {
         if (torqueSingleton == null)
         {
-            torqueSingleton = new TorqueSingleton();
+            torqueSingleton = new TorqueInstance();
         }
         return torqueSingleton;
     }
@@ -268,12 +268,14 @@ public class TorqueSingleton
                 }
                 if (!foundAdapters)
                 {
-                    log.warn("Databases defined but no adapters configurations found!");
+                    log.warn("Databases defined but no adapter "
+                             + "configurations found!");
                 }
             }
             catch (Exception e)
             {
-                log.error("", e);
+                log.error("Error reading configuration seeking database "
+                          + "adapters", e);
                 throw new TorqueException(e);
             }
         }

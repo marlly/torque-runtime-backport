@@ -68,7 +68,7 @@ import org.apache.torque.map.DatabaseMap;
 
 /**
  * A static facade wrapper around the Torque implementation (which is in
- * {@link org.apache.torque.TorqueSingleton}).
+ * {@link org.apache.torque.TorqueInstance}).
  * <br/>
  * For historical reasons this class also contains a thin object which can
  * be used to configure Torque with the Stratum Lifecycle. This is deprecated
@@ -127,13 +127,13 @@ public class Torque
     }
 
     /**
-     * Get the TorqueSingleton Instance.
+     * Get the TorqueInstance Instance.
      *
      * @return A Torque Singleton instance
      */
-    private static TorqueSingleton getInstance()
+    private static TorqueInstance getInstance()
     {
-        return TorqueSingleton.getInstance();
+        return TorqueInstance.getInstance();
     }
 
     /**
