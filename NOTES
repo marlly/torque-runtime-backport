@@ -38,3 +38,18 @@ o find all other OSS persistence layer projects and see if
   
 o separate the runtime system from the generation tools, place
   them in different packages.
+
+o using cursors to allow controlled access to a large set
+  of data. typically there is no need to see a massive
+  set of records all at once.
+  
+o using proxies for large objects. if you had a user object
+  that had 50 attributes it would more efficient to create
+  a proxy object of that user that might have a few attributes,
+  enough to identify the object. you might use the proxy
+  objects in a list and when it is selected the real user
+  object is transparently retrieved.
+  
+o would it be possible to support native connection methods
+  for high efficiency. an easy to access C APIs, would it
+  even be useful?
