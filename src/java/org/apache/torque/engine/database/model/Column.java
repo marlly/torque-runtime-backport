@@ -376,14 +376,14 @@ public class Column
      */
     public boolean isMultipleFK()
     {
-        ForeignKey fk1 = getForeignKey();
-        if (fk1 != null) 
+        ForeignKey fk = getForeignKey();
+        if (fk != null) 
         {
             ForeignKey[] fks = parentTable.getForeignKeys();
-            for (int i=0; i<fks.length; i++)
+            for (int i = 0; i < fks.length; i++)
             {
                 if ( fks[i].getForeignTableName()
-                     .equals(fk1.getForeignTableName())
+                     .equals(fk.getForeignTableName())
                      && !fks[i].getLocalColumns().contains(this.name) )
                 {
                     return true;
