@@ -26,7 +26,8 @@ import org.apache.torque.TorqueException;
  *
  * [$now]
  *
-#end
+ #end
+ *
  * You should not use this class directly.  It should not even be
  * extended all references should be to ${table.JavaName}Manager 
  */
