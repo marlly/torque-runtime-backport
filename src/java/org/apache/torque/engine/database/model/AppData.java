@@ -199,8 +199,7 @@ public class AppData
      */
     public Database getDatabase()
     {
-        Database[] dbs = getDatabases();
-        return dbs[0];
+        return (Database) dbList.get(0);
     }
 
     /**
