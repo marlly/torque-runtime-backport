@@ -492,12 +492,16 @@
 
   <target
     name="dist"
-    depends="jar,check.village"
+    depends="jar,check.village,javadocs"
     description="==> Creates torque.zip distribution">
 
     <property name="torque.dir" value="${build.dir}/torque/torque"/>
     <mkdir dir="${torque.dir}"/>
     <mkdir dir="${torque.dir}/lib"/>
+
+    <copy todir="${torque.dir}/docs">
+      <fileset dir="docs"/>
+    </copy>
 
     <copy file="${velocity.jar}" todir="${torque.dir}/lib"/>
     <copy file="${xerces.jar}" todir="${torque.dir}/lib"/>
