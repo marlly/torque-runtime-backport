@@ -56,7 +56,6 @@ package org.apache.torque.om;
 
 import java.util.ArrayList;
 
-import org.apache.torque.TorqueException;
 import org.apache.commons.lang.ObjectUtils;
 
 /**
@@ -66,6 +65,7 @@ import org.apache.commons.lang.ObjectUtils;
  *
  * @author <a href="mailto:jmcnally@collab.net">John McNally</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:drfish@cox.net">J. Russell Smyth</a>
  * @version $Id$
  */
 public class ComboKey extends ObjectKey
@@ -82,11 +82,6 @@ public class ComboKey extends ObjectKey
      */
     public static final String SEPARATOR_STRING = ":";
 
-    private static final String ERROR_MSG =
-        "This method cannot be used with an uninitialized ComboKey";
-
-    private ArrayList tmpKeys;
-    private StringBuffer sbuf;
     private SimpleKey[] key;
 
     /**
@@ -95,8 +90,6 @@ public class ComboKey extends ObjectKey
      */
     public ComboKey()
     {
-        tmpKeys = new ArrayList(4);
-        sbuf = new StringBuffer();
     }
 
     /**
@@ -105,80 +98,44 @@ public class ComboKey extends ObjectKey
      */
     public ComboKey(SimpleKey[] keys)
     {
-        this();
         setValue(keys);
     }
 
     /**
      * Creates a compound ComboKey whose internal representation is a
      * String array.
+     * @deprecated ambiguous unnecessary ctor will be removed.
      */
-    public ComboKey(String[] keys) throws TorqueException
+    public ComboKey(String[] keys)
     {
-        this();
         setValue(keys);
     }
 
     /**
      * Sets the internal representation to a String array.
      */
-    public ComboKey(String keys) throws TorqueException
+    public ComboKey(String keys)
     {
-        this();
         setValue(keys);
     }
 
     /**
-     * Sets the internal representation using an array of SimpleKeys.
+     * Sets the internal representation using a SimpleKey array.
      */
     public void setValue(SimpleKey[] keys)
     {
-        if (this.key == null)
-        {
-            this.key = keys;
-        }
-        else
-        {
-            for (int i = 0; i < this.key.length; i++)
-            {
-                if (this.key[i] == null)
-                {
-                    this.key[i] = keys[i];
-                }
-            }
-        }
+        this.key = keys;
     }
 
     /**
      * Sets the internal representation using a String array.
+     * @deprecated ambiguous unnecessary method will be removed.
      */
-    public void setValue(String[] keys) throws TorqueException
+    public void setValue(String[] keys)
     {
-        if (this.key == null)
-        {
-            throw new TorqueException(ERROR_MSG);
-            /*
-            this.key = new SimpleKey[keys.length];
-            for ( int i = 0; i < keys.length; i++ )
-            {
-                this.key[i] = new SimpleKey(keys[i]);
-            }
-            */
-        }
-        else
-        {
-            for (int i = 0; i < this.key.length; i++)
-            {
-                if (this.key[i] == null && keys[i] != null)
-                {
-                    throw new TorqueException(ERROR_MSG);
-                    // this.key[i] = new SimpleKey( keys[i] );
-                }
-                else
-                {
-                    this.key[i].setValue(keys[i]);
-                }
-            }
+        this.key = new SimpleKey[keys.length];
+        for ( int i = 0; i < keys.length; i++ ) {
+            this.key[i] = new StringKey(keys[i]);
         }
     }
 
@@ -186,55 +143,51 @@ public class ComboKey extends ObjectKey
      * Sets the internal representation using a String of the
      * form produced by the toString method.
      */
-    public void setValue(String keys) throws TorqueException
+    public void setValue(String keys)
     {
-        int previousIndex = -1;
+        int startPtr = 0;
         int indexOfSep = keys.indexOf(SEPARATOR);
+        ArrayList tmpKeys = new ArrayList();
         while (indexOfSep != -1)
         {
-            if (indexOfSep == 0)
+            if (indexOfSep == startPtr)
             {
                 tmpKeys.add(null);
             }
-            else if (indexOfSep > 0 && indexOfSep < keys.length() - 1)
+            else
             {
-                tmpKeys.add(keys.substring(previousIndex + 1, indexOfSep));
+                char keyType = keys.charAt(startPtr);
+                String keyString = keys.substring(startPtr + 1, indexOfSep);
+                
+                SimpleKey newKey = null;
+                switch(keyType){
+                    case 'N':
+                        newKey = new NumberKey(keyString);
+                        break;
+                    case 'S':
+                        newKey = new StringKey(keyString);
+                        break;
+                    case 'D':
+                        try{
+                            newKey = new DateKey(keyString);
+                        }catch(NumberFormatException nfe){
+                            newKey = new DateKey();
+                        }
+                        break;
+                    default:
+                        // unextepcted key type
+                }
+                tmpKeys.add(newKey);
             }
-            else if (indexOfSep == keys.length() - 1)
-            {
-                tmpKeys.add(null);
-            }
-            indexOfSep = keys.indexOf(SEPARATOR);
+            startPtr = indexOfSep + 1;
+            indexOfSep = keys.indexOf(SEPARATOR,startPtr);
         }
 
-        if (this.key == null)
+        this.key = new SimpleKey[tmpKeys.size()];
+        for ( int i = 0; i < this.key.length; i++ )
         {
-            throw new TorqueException(ERROR_MSG);
-            /*
-            this.key = new SimpleKey[tmpKeys.size()];
-            for ( int i = 0; i < this.key.length; i++ )
-            {
-                this.key[i] = new SimpleKey( (String)tmpKeys.get(i) );
-            }
-            */
+            this.key[i] = (SimpleKey)tmpKeys.get(i);
         }
-        else
-        {
-            for (int i = 0; i < this.key.length; i++)
-            {
-                if (this.key[i] == null && tmpKeys.get(i) != null)
-                {
-                    throw new TorqueException(ERROR_MSG);
-                    // this.key[i] = new SimpleKey( (String)tmpKeys.get(i) );
-                }
-                else
-                {
-                    this.key[i].setValue((String) tmpKeys.get(i));
-                }
-            }
-        }
-
-        tmpKeys.clear();
     }
 
     public void setValue(ComboKey keys)
@@ -341,14 +294,21 @@ public class ComboKey extends ObjectKey
             SimpleKey[] keys = (SimpleKey[]) key;
             for (int i = 0; i < keys.length; i++)
             {
-                if (i != 0)
-                {
-                    sb.append(SEPARATOR);
-                }
                 if (keys[i] != null)
                 {
+                    if(keys[i] instanceof StringKey){
+                        sb.append("S");
+                    }else if(keys[i] instanceof NumberKey){
+                        sb.append("N");
+                    }else if(keys[i] instanceof DateKey){
+                        sb.append("D");
+                    }else{ // unknown type
+                        sb.append("U");
+                    }
                     keys[i].appendTo(sb);
                 }
+                // MUST BE ADDED AFTER EACH KEY, IN CASE OF NULL KEY!
+                sb.append(SEPARATOR);
             }
         }
     }
@@ -382,10 +342,7 @@ public class ComboKey extends ObjectKey
      */
     public String toString()
     {
-        if (sbuf.length() > 0)
-        {
-            sbuf.delete(0, sbuf.length());
-        }
+        StringBuffer sbuf = new StringBuffer();
         appendTo(sbuf);
         return sbuf.toString();
     }
