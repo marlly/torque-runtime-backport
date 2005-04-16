@@ -47,28 +47,31 @@ public class CopyTest extends BaseRuntimeTestCase
      */
     public void testCopyObject() throws Exception
     {
-                Author author = new Author();
-                author.setName("Author to be copied");
-                author.save();
+        Author author = new Author();
+        author.setName("Author to be copied");
+        author.save();
 
-                for (int j = 1; j <= 10; j++)
-                {
-                        Book book = new Book();
-                        book.setAuthor(author);
-                        book.setTitle("Book " + j + " - " + author.getName());
-                        book.setIsbn("unknown");
-                        book.save();
-                }
-                assertTrue("Number of books before copy should be 10, was "
-                + author.getBooks().size(), author.getBooks().size() == 10);
-                Author authorCopy = author.copy();
-                authorCopy.save();
+        for (int j = 1; j <= 10; j++)
+        {
+            Book book = new Book();
+            book.setAuthor(author);
+            book.setTitle("Book " + j + " - " + author.getName());
+            book.setIsbn("unknown");
+            book.save();
+        }
+        assertTrue("Number of books before copy should be 10, was "
+                + author.getBooks().size(), 
+                author.getBooks().size() == 10);
+        Author authorCopy = author.copy();
+        authorCopy.save();
 
-                author = AuthorPeer.retrieveByPK(author.getPrimaryKey());
-                assertTrue("Number of books in original object should be 10, was "
-                + author.getBooks().size(), author.getBooks().size() == 10);
+        author = AuthorPeer.retrieveByPK(author.getPrimaryKey());
+        assertTrue("Number of books in original object should be 10, was "
+                + author.getBooks().size(), 
+                author.getBooks().size() == 10);
 
-                assertTrue("Number of books after copy should be 10, was "
-                + author.getBooks().size(), authorCopy.getBooks().size() == 10);
+        assertTrue("Number of books after copy should be 10, was "
+                + authorCopy.getBooks().size(), 
+                authorCopy.getBooks().size() == 10);
     }
 }
