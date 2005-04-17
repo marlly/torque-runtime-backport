@@ -29,6 +29,11 @@
 
   <release version="3.2-dev" date="in CVS">
     <action type="fix" dev="tfischer">
+      Use the cascade option for dropping tables in PostgreSQL.
+      This allows to drop tables which have foreign keys.
+      Cascade is supported since PostgreSQL 7.3
+    </action>
+    <action type="fix" dev="tfischer">
       Added missing templates for msaccess. I did not test it,
       so no idea whether msaccess is actually supported.
     </action>

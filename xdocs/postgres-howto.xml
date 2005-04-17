@@ -8,11 +8,36 @@
 
 <body>
 
-<section name="Introductory note">
+  <section name="PostgreSQL versions">
+    <p>
+      The generator templates in Torque 3.2 are optimized for 
+      PostgreSQL 7.3 and later.
+      To use an older version of PostgreSQL, do the following:
+    </p>
+    
+    <p>
+      In the generator, locate the template 
+      templates/sql/base/postgresql/drop.vm 
+      and replace the line
+    </p>
+    
+    <source>
+DROP TABLE $table.Name CASCADE;</source>
+    
+    <p>
+      by
+    </p>
+    
+    <source>
+DROP TABLE $table.Name;</source>
+      
+  </section>
+
+<section name="Note">
 
 <p>
-This HOWTO was written some time ago and was targeted at the
-version of Torque that was coupled with the 
+The following sections of this HOWTO were written some time ago 
+and were targeted at the version of Torque that was coupled with the 
 <a href="http://jakarta.apache.org/turbine/">Turbine</a> application framework.
 Contributions towards updating the information below can be submitted to the 
 <a href="mailto:torque-dev@db.apache.org">Torque Dev mailing list</a>.
