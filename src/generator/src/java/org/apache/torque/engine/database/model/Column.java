@@ -170,8 +170,17 @@ public class Column
 
         //AutoIncrement/Sequences
         String autoIncrement = attrib.getValue("autoIncrement");
-        isAutoIncrement = ("true".equals(autoIncrement));
-
+        // autoincrement is false per default,
+        // except if the column is a primary key
+        // and the idMethod is native
+        // and the platform's default id Method is identity
+        // and autoIncrement is not excplicitly set to false
+        isAutoIncrement = ("true".equals(autoIncrement)
+                || (isPrimaryKey()
+                    && IDMethod.NATIVE.equals(getTable().getIdMethod())
+                    && Platform.IDENTITY.equals(
+                            getPlatform().getNativeIdMethod())
+                    && (!"false".equals(autoIncrement))));
         //Default column value.
         domain.replaceDefaultValue(attrib.getValue("default"));
 

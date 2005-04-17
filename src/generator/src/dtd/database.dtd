@@ -118,7 +118,7 @@ Java class or method name.
   size CDATA #IMPLIED
   scale CDATA #IMPLIED
   default CDATA #IMPLIED
-  autoIncrement (true|false) "false"
+  autoIncrement (true|false) #IMPLIED
   inheritance (single|false) "false"
   inputValidator CDATA #IMPLIED
   javaNamingMethod (nochange|underscore|javaname) #IMPLIED

@@ -28,6 +28,14 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="update" dev="tfischer">
+      Unify the behaviour of primary key columns. Until now, 
+      primary key columns were not filled automatically for
+      idMethod=native and for platforms with
+      default idMethod=identity (i.e. all databases exept oracle,
+      postgresql and sapdb). Now, the default is that primary key 
+      columns are always filled automatically by default.
+    </action>
     <action type="fix" dev="tfischer">
       Use the cascade option for dropping tables in PostgreSQL.
       This allows to drop tables which have foreign keys.
