@@ -194,6 +194,10 @@
       <reference local="b_id" foreign="b_id"/>
     </foreign-key>
 
+    <foreign-key foreignTable="a">
+      <reference local="a_id" foreign="a_id"/>
+    </foreign-key>
+
     <foreign-key foreignTable="b">
       <reference local="b_id" foreign="b_id"/>
     </foreign-key>
