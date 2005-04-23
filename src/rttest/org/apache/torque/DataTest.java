@@ -110,11 +110,13 @@ public class DataTest extends BaseRuntimeTestCase
             bc.setTestKey("t1");
             bc.setBintValue(true);
             bc.setBcharValue(true);
+            bc.setBitValue(true);
             bc.save();
             bc = new BooleanCheck();
             bc.setTestKey("f1");
             bc.setBintValue(false);
             bc.setBcharValue(false);
+            bc.setBitValue(false);
             bc.save();
         }
         catch (Exception ex)
@@ -241,11 +243,15 @@ public class DataTest extends BaseRuntimeTestCase
                     + bc.getBintValue(), bc.getBintValue());
             assertTrue("BOOLEANCHAR should be true but is: " 
                     + bc.getBcharValue(), bc.getBcharValue());
+            assertTrue("BIT should be true but is: " 
+                    + bc.getBitValue(), bc.getBitValue());
             bc = BooleanCheckPeer.retrieveByPK(new StringKey("f1"));
             assertFalse("BOOLEANINT should be false but is: " 
                     + bc.getBintValue(), bc.getBintValue());
             assertFalse("BOOLEANCHAR should be false but is: " 
                     + bc.getBcharValue(), bc.getBcharValue());
+            assertFalse("BIT should be false but is: " 
+                    + bc.getBitValue(), bc.getBitValue());
         }
         catch (Exception ex)
         {
@@ -254,6 +260,41 @@ public class DataTest extends BaseRuntimeTestCase
                     + ex.getClass().getName() 
                     + " : " + ex.getMessage());
         }
+    }
+    
+    /**
+     * check whether we can select from boolean columns 
+     * @throws Exception if the test fails
+     */
+    public void testBooleanSelects() throws Exception
+    {
+        Criteria criteria = new Criteria();
+        criteria.add(BooleanCheckPeer.BCHAR_VALUE, new Boolean(true));
+        criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(true));
+        criteria.add(BooleanCheckPeer.BIT_VALUE, new Boolean(true));
+        List booleanCheckList = BooleanCheckPeer.doSelect(criteria);
+        assertTrue("Should have read 1 dataset with both values true "
+                + "but read " + booleanCheckList.size(), 
+                booleanCheckList.size() == 1);
+        BooleanCheck booleanCheck = (BooleanCheck) booleanCheckList.get(0);
+        // use trim() for testkey because some databases will return the
+        // testkey filled up with blanks, as it is defined as char(10)
+        assertTrue("Primary key of data set should be t1 but is "
+                + booleanCheck.getTestKey().trim(),
+                "t1".equals(booleanCheck.getTestKey().trim()));
+        
+        criteria.clear();
+        criteria.add(BooleanCheckPeer.BCHAR_VALUE, new Boolean(false));
+        criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(false));
+        criteria.add(BooleanCheckPeer.BIT_VALUE, new Boolean(false));
+        booleanCheckList = BooleanCheckPeer.doSelect(criteria);
+        assertTrue("Should have read 1 dataset with both values false "
+                + "but read " + booleanCheckList.size(), 
+                booleanCheckList.size() == 1);
+        booleanCheck = (BooleanCheck) booleanCheckList.get(0);
+        assertTrue("Primary key of data set should be f1 but is "
+                + booleanCheck.getTestKey().trim(),
+                "f1".equals(booleanCheck.getTestKey().trim()));
     }
 
     /**

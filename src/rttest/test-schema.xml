@@ -152,6 +152,7 @@
     <column name="test_key" required="true" primaryKey="true" type="CHAR" size="10" />
     <column name="bint_value" required="true" type="BOOLEANINT" />
     <column name="bchar_value" required="true" type="BOOLEANCHAR" />
+    <column name="bit_value" required="true" type="BIT" />
   </table>
 
   <!-- TRQS97 -->
