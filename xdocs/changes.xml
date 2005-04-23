@@ -28,6 +28,9 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="add" dev="tfischer" issue="TRQS251">
+      Added support for using SQL functions in "order by" 
+    </action>
     <action type="update" dev="tfischer">
       Unify the behaviour of primary key columns. Until now, 
       primary key columns were not filled automatically for

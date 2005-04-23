@@ -470,7 +470,10 @@ public abstract class SQLBuilder
             for (int i = 0; i < orderBy.size(); i++)
             {
                 String orderByColumn = (String) orderBy.get(i);
-                int dotPos = orderByColumn.lastIndexOf('.');
+
+                String strippedColumnName 
+                        = removeSQLFunction(orderByColumn);
+                int dotPos = strippedColumnName.lastIndexOf('.');
                 if (dotPos == -1)
                 {
                     throwMalformedColumnNameException(
@@ -478,8 +481,7 @@ public abstract class SQLBuilder
                             orderByColumn);
                 }
 
-                String tableName =
-                        orderByColumn.substring(0, dotPos);
+                String tableName = strippedColumnName.substring(0, dotPos);
                 String table = crit.getTableForAlias(tableName);
                 if (table == null)
                 {
@@ -488,20 +490,28 @@ public abstract class SQLBuilder
 
                 // See if there's a space (between the column list and sort
                 // order in ORDER BY table.column DESC).
-                int spacePos = orderByColumn.indexOf(' ');
+                int spacePos = strippedColumnName.indexOf(' ');
                 String columnName;
                 if (spacePos == -1)
                 {
                     columnName =
-                            orderByColumn.substring(dotPos + 1);
+                            strippedColumnName.substring(dotPos + 1);
                 }
                 else
                 {
-                    columnName = orderByColumn.substring(dotPos + 1, spacePos);
+                    columnName = strippedColumnName.substring(
+                            dotPos + 1,
+                            spacePos);
                 }
                 ColumnMap column = dbMap.getTable(table).getColumn(columnName);
-                if (column.getType() instanceof String)
+                
+                // only ignore case in order by for string columns
+                // which do not have a function around them
+                if (column.getType() instanceof String
+                        && orderByColumn.indexOf('(') == -1) 
                 {
+                    // find space pos relative to orderByColumn
+                    spacePos = orderByColumn.indexOf(' ');
                     if (spacePos == -1)
                     {
                         orderByClause.add(
