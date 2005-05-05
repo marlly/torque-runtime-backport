@@ -34,9 +34,12 @@ import org.apache.torque.test.BooleanCheck;
 import org.apache.torque.test.BooleanCheckPeer;
 import org.apache.torque.test.DateTest;
 import org.apache.torque.test.DateTestPeer;
+import org.apache.torque.test.IntegerPk;
+import org.apache.torque.test.IntegerPkPeer;
 import org.apache.torque.test.LargePk;
 import org.apache.torque.test.LargePkPeer;
 import org.apache.torque.test.MultiPk;
+import org.apache.torque.test.MultiPkForeignKey;
 import org.apache.torque.test.MultiPkPeer;
 import org.apache.torque.test.NullValueTable;
 import org.apache.torque.util.BasePeer;
@@ -726,6 +729,12 @@ public class DataTest extends BaseRuntimeTestCase
                          + ", should be \"Book 2\"");
             }
             
+            // test usage of Expressions in order by
+            criteria = new Criteria();
+            criteria.addAscendingOrderByColumn("UPPER(" + BookPeer.TITLE + ")");
+            criteria.setIgnoreCase(true);
+            BookPeer.doSelect(criteria);
+            
         }
         catch( Exception e) 
         {
@@ -1033,6 +1042,23 @@ public class DataTest extends BaseRuntimeTestCase
                      + e.getClass().getName() 
                      + " : " + e.getMessage());
         }
+    }
+    
+    
+    /**
+     * Tests whether we can handle multiple primary keys some of which are 
+     * also foreign keys
+     * @throws Exception if the testfails
+     */
+    public void testMultiplePrimaryForeignKey() throws Exception
+    {
+        IntegerPk integerPk = new IntegerPk();
+        integerPk.save();
+        MultiPkForeignKey multiPkForeignKey = new MultiPkForeignKey();
+        multiPkForeignKey.setId(10);
+        multiPkForeignKey.setIntegerPk(integerPk);
+        multiPkForeignKey.save();
+        integerPk.save();
     }
         
     /**
