@@ -2,7 +2,7 @@
 <!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_2.dtd">
 <!-- this schema is used to test problems users reported -->
 
-<database name="@DATABASE_DEFAULT@" defaultIdMethod="idbroker" package="org.apache.torque.test">
+<database name="@DATABASE_DEFAULT@" defaultIdMethod="@DATABASE_ID_METHOD@" package="org.apache.torque.test">
 
   <external-schema filename="ext-schema.xml" />
 
@@ -169,5 +169,27 @@
     <column name="LEAGUEYEAR" required="false" type="INTEGER" javaType="primitive"/>
     <column name="LEAGUESCORETYPE" required="false" type="SMALLINT" default="0" javaType="primitive"/>
   </table>
+  
+  <!-- test primary keys which are foreign keys as well -->
+  <table name="multi_pk_foreign_key" idMethod="none">
+    <column name="id" primaryKey="true" required="true" type="INTEGER" />
+    <column name="integer_pk_id" primaryKey="true" required="true" type="INTEGER"/>
+    <column name="name" size="100" type="VARCHAR"/>
+
+    <foreign-key foreignTable="integer_pk">
+      <reference local="integer_pk_id" foreign="id"/>
+    </foreign-key>
+  </table>
+
+  <table name="integer_pk">
+    <column name="id" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="name" size="100" type="VARCHAR"/>        
+  </table>
+
+  <table name="lob_test">
+    <column name="id" required="true" primaryKey="true" type="long" />
+    <column name="blob" type="blob" required="false"/>
+    <column name="clob" type="clob" required="false"/>
+  </table>  
 
 </database>
