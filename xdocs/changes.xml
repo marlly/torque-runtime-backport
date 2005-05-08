@@ -29,6 +29,11 @@
 
   <release version="3.2-dev" date="in CVS">
     <action type="fix" dev="tfischer">
+      In Torque 3.1.1, BIT columns were treated as Strings with the value 0 and 1.
+      This caused problems in various DBs (e.g. HSQLDB). Reverted to the old behaviour:
+      The adapter decides for selects, the db driver for inserts/updates.
+    </action> 
+    <action type="fix" dev="tfischer">
       For inserting/updating tables with BIT columns, use booleans instead of 
       integers for the prepared statement used to update/insert BIT columns
     </action> 

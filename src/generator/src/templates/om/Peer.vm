@@ -307,16 +307,6 @@ public abstract class $basePrefix${table.JavaName}Peer
                 criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "Y" : "N");
             }
          }
-    #elseif ($col.isBit())
-        // check for conversion from boolean to bit (1/0)
-        if (criteria.containsKey($cup))
-        {
-            Object possibleBoolean = criteria.get($cup);
-            if (possibleBoolean instanceof Boolean)
-            {
-                criteria.add($cup, ((Boolean) possibleBoolean).booleanValue() ? "1" : "0");
-            }
-         }
     #end
   #end
     }
