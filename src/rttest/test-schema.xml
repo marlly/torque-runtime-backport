@@ -187,9 +187,9 @@
   </table>
 
   <table name="lob_test">
-    <column name="id" required="true" primaryKey="true" type="long" />
-    <column name="blob" type="blob" required="false"/>
-    <column name="clob" type="clob" required="false"/>
+    <column name="id" required="true" primaryKey="true" type="BIGINT" />
+    <column name="blob_value" type="BLOB" required="false"/>
+    <column name="clob_value" type="CLOB" required="false"/>
   </table>  
 
 </database>
