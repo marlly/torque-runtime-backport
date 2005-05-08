@@ -774,24 +774,6 @@ public class DataTest extends BaseRuntimeTestCase
     }
     
     /**
-     * Deletes all authors and books in the bookstore tables
-     * @throws Exception if the bookstore could not be cleaned
-     */
-    protected void cleanBookstore() throws Exception
-    {
-        Criteria criteria = new Criteria();
-        criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
-        BookPeer.doDelete(criteria);
-
-        criteria.clear();
-        criteria.add(
-                AuthorPeer.AUTHOR_ID, 
-                (Long) null, Criteria.NOT_EQUAL);
-        AuthorPeer.doDelete(criteria);
-    }
-
-    
-    /**
      * Tests the CountHelper class
      * @throws Exception if the test fails
      */
@@ -870,6 +852,24 @@ public class DataTest extends BaseRuntimeTestCase
     }
         
         
+    /**
+     * Deletes all authors and books in the bookstore tables
+     * @throws Exception if the bookstore could not be cleaned
+     */
+    protected void cleanBookstore() throws Exception
+    {
+        Criteria criteria = new Criteria();
+        criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
+        BookPeer.doDelete(criteria);
+
+        criteria.clear();
+        criteria.add(
+                AuthorPeer.AUTHOR_ID, 
+                (Long) null, Criteria.NOT_EQUAL);
+        AuthorPeer.doDelete(criteria);
+    }
+
+    
     /**
      * Strips the schema and table name from a fully qualified colum name
      * This is useful for creating Query with aliases, as the constants
