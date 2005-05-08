@@ -28,6 +28,10 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="update" dev="tfischer" issue="TRQS221">
+      Changed Postgres handling of boolean Values to use FALSE,TRUE instead of '0','1'
+      while selecting from columns of Torque type BIT
+    </action> 
     <action type="add" dev="tfischer" issue="TRQS251">
       Added support for using SQL functions in "order by" 
     </action>
