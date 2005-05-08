@@ -195,7 +195,7 @@ public abstract class VillageUtils
         else if (obj instanceof Boolean)
         {
             rec.setValue(colName,
-                    crit.getBoolean(key) ? 1 : 0);
+                    ((Boolean) obj).booleanValue());
         }
         else if (obj instanceof java.util.Date)
         {
