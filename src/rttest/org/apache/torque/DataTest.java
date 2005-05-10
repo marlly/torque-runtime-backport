@@ -18,6 +18,7 @@ package org.apache.torque;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +38,8 @@ import org.apache.torque.test.DateTestPeer;
 import org.apache.torque.test.IntegerPk;
 import org.apache.torque.test.LargePk;
 import org.apache.torque.test.LargePkPeer;
+import org.apache.torque.test.LobTest;
+import org.apache.torque.test.LobTestPeer;
 import org.apache.torque.test.MultiPk;
 import org.apache.torque.test.MultiPkForeignKey;
 import org.apache.torque.test.MultiPkPeer;
@@ -87,6 +90,8 @@ public class DataTest extends BaseRuntimeTestCase
             Author author = new Author();
             author.setName("Author " + i);
             author.save();
+            assertTrue("authorId should not be 0 after insert",
+                    author.getAuthorId() != 0);
 
             for (int j = 1; j <= 10; j++)
             {
@@ -849,6 +854,58 @@ public class DataTest extends BaseRuntimeTestCase
         A a = new A();
         a.setName("has Single ' Quote");
         a.save();
+    }
+    
+    public void testLobs() throws Exception
+    {
+        // clean LobTest table
+        {
+            Criteria criteria = new Criteria();
+            criteria.add(
+                    LobTestPeer.ID, 
+                    (Long) null, 
+                    Criteria.NOT_EQUAL);
+            LobTestPeer.doDelete(criteria);
+        }
+
+        // create a new LobTest Object with large blob and clob values
+        // and save it
+        LobTest lobTest = new LobTest();
+        {
+            int length = 100000;
+            byte[] bytes = new byte[length];
+            StringBuffer chars = new StringBuffer();
+            String charTemplate = "1234567890abcdefghijklmnopqrstuvwxyz";
+            for (int i = 0; i < length; ++i)
+            {
+          	    bytes[i] = new Integer(i % 256).byteValue();
+                chars.append(charTemplate.charAt(i % charTemplate.length()));
+            }
+            lobTest.setBlobValue(bytes);
+            lobTest.setClobValue(chars.toString());
+        }
+        lobTest.save();
+        
+        // read the LobTests from the database
+        // and check the values against the original values
+        List lobTestList = LobTestPeer.doSelect(new Criteria());
+        assertTrue("lobTests should contain 1 object but contains " 
+                + lobTestList.size(),
+                lobTestList.size() == 1);
+        
+        LobTest readLobTest = (LobTest) lobTestList.get(0);
+        boolean bytesDiffer = false;
+        
+        assertTrue("read and written blobs should be equal. "
+                + "Size of read blob is"
+                + readLobTest.getBlobValue().length
+                + " size of written blob is "
+                + lobTest.getBlobValue().length, 
+                Arrays.equals(
+                        lobTest.getBlobValue(),
+                        readLobTest.getBlobValue()));
+        assertTrue("read and written clobs should be equal", 
+                lobTest.getClobValue().equals(readLobTest.getClobValue()));
     }
         
         
