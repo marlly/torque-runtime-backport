@@ -30,8 +30,13 @@
   <release version="3.2-dev" date="in CVS">
     <action type="fix" dev="tfischer">
       In Torque 3.1.1, BIT columns were treated as Strings with the value 0 and 1.
-      This caused problems in various DBs (e.g. HSQLDB). Reverted to the old behaviour:
+      This caused problems in various DBs which natively support BOOLEAN columns
+      but do not support implicit String conversion.(e.g. HSQLDB).
+      Reverted to the old behaviour:
       The adapter decides for selects, the db driver for inserts/updates.
+      However, this behavior breaks BIT support for Databases which do not have
+      a native boolean datatype (like Oracle). For these Databases, use BOOLEANINT
+      (or BOOLEANCHAR) column types for Booleans.
     </action> 
     <action type="fix" dev="tfischer">
       For inserting/updating tables with BIT columns, use booleans instead of 
