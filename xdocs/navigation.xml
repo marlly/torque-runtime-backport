@@ -36,6 +36,7 @@
       <item name="Peers Howto"           href="/peers-howto.html"/>
       <item name="DB Schema Support"     href="/schema-howto.html"/>
       <item name="Beans Howto"           href="/beans-howto.html"/>
+      <item name="Database layout Howto" href="/database-layout-howto.html"/>
     </menu>
     <menu name="Database Howto Guides">
       <item name="MS SQL Server Howto"   href="/mssql-howto.html"/>
