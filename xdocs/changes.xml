@@ -28,6 +28,9 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="fix" dev="tfischer" issue="TRQS287">
+      Changed the name attribute of the database tag from #IMPLIED to #REQUIRED in the dtd.
+    </action> 
     <action type="add" dev="tfischer" issue="TRQS273">
       Added a database-layout-Howto to the docs. 
     </action> 
