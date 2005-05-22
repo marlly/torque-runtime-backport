@@ -16,6 +16,7 @@ package org.apache.torque;
  * limitations under the License.
  */
 
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -73,6 +74,28 @@ public class DataTest extends BaseRuntimeTestCase
         super.setUp();
     }
 
+    /**
+     * test whether we can connect to the database at all
+     * @throws Exception if no connection can be established
+     */
+    public void testConnect() throws Exception
+    {
+        Connection connection = null;
+        try 
+        {
+        	connection = Torque.getConnection();
+            connection.close();
+            connection = null;
+        }
+        finally 
+        {
+        	if (connection != null)
+            {
+        		connection.close();
+            }
+        }
+    }
+    
     /**
      * does some inserts.
      * @throws Exception if the test fails
