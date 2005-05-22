@@ -26,21 +26,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.torque.adapter.DBOracle;
 import org.apache.torque.om.StringKey;
 import org.apache.torque.test.A;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
+import org.apache.torque.test.BitTest;
+import org.apache.torque.test.BitTestPeer;
+import org.apache.torque.test.BlobTest;
+import org.apache.torque.test.BlobTestPeer;
 import org.apache.torque.test.Book;
 import org.apache.torque.test.BookPeer;
 import org.apache.torque.test.BooleanCheck;
 import org.apache.torque.test.BooleanCheckPeer;
+import org.apache.torque.test.ClobTest;
+import org.apache.torque.test.ClobTestPeer;
 import org.apache.torque.test.DateTest;
 import org.apache.torque.test.DateTestPeer;
 import org.apache.torque.test.IntegerPk;
 import org.apache.torque.test.LargePk;
 import org.apache.torque.test.LargePkPeer;
-import org.apache.torque.test.LobTest;
-import org.apache.torque.test.LobTestPeer;
 import org.apache.torque.test.MultiPk;
 import org.apache.torque.test.MultiPkForeignKey;
 import org.apache.torque.test.MultiPkPeer;
@@ -61,6 +68,8 @@ import com.workingdogs.village.Record;
  */
 public class DataTest extends BaseRuntimeTestCase
 {
+    private static Log log = LogFactory.getLog(DataTest.class);;
+    
     /**
      * Creates a new instance.
      */
@@ -102,12 +111,7 @@ public class DataTest extends BaseRuntimeTestCase
      */
     public void testInsertData() throws Exception
     {
-        // clean booleancheck table (because insert uses fixed keys)
-        Criteria criteria = new Criteria();
-        criteria.add(BooleanCheckPeer.TEST_KEY, (Object) null, Criteria.NOT_EQUAL);
-        BooleanCheckPeer.doDelete(criteria);
-        
-        // do tests
+        // insert books and authors
         for (int i = 1; i <= 10; i++)
         {
             Author author = new Author();
@@ -125,17 +129,20 @@ public class DataTest extends BaseRuntimeTestCase
                 book.save();
             }
         }
+        // clean booleancheck table (because insert uses fixed keys)
+        Criteria criteria = new Criteria();
+        criteria.add(BooleanCheckPeer.TEST_KEY, (Object) null, Criteria.NOT_EQUAL);
+        BooleanCheckPeer.doDelete(criteria);
+        
         BooleanCheck bc = new BooleanCheck();
         bc.setTestKey("t1");
         bc.setBintValue(true);
         bc.setBcharValue(true);
-        bc.setBitValue(true);
         bc.save();
         bc = new BooleanCheck();
         bc.setTestKey("f1");
         bc.setBintValue(false);
         bc.setBcharValue(false);
-        bc.setBitValue(false);
         bc.save();
     }
 
@@ -221,15 +228,76 @@ public class DataTest extends BaseRuntimeTestCase
                 + bc.getBintValue(), bc.getBintValue());
         assertTrue("BOOLEANCHAR should be true but is: " 
                 + bc.getBcharValue(), bc.getBcharValue());
-        assertTrue("BIT should be true but is: " 
-                + bc.getBitValue(), bc.getBitValue());
         bc = BooleanCheckPeer.retrieveByPK(new StringKey("f1"));
         assertFalse("BOOLEANINT should be false but is: " 
                 + bc.getBintValue(), bc.getBintValue());
         assertFalse("BOOLEANCHAR should be false but is: " 
                 + bc.getBcharValue(), bc.getBcharValue());
+    }
+    
+    /**
+     * Tests whether column type BIT can be written and read correctly
+     * and works in criteria as expected
+     * @throws Exception if the test fails
+     */
+    public void testBitType() throws Exception
+    {
+        if (Torque.getDB(Torque.getDefaultDB()) instanceof DBOracle)
+        {
+            log.error("testBitType(): BIT is known not to work with Oracle");
+            // failing is "expected", so exit without error
+            return;
+        }
+        
+        // clean table
+        Criteria criteria = new Criteria();
+        criteria.add(BitTestPeer.ID, (Object) null, Criteria.NOT_EQUAL);
+        BitTestPeer.doDelete(criteria);
+        
+        // insert Data
+        BitTest bitTest = new BitTest();
+        bitTest.setId("t1");
+        bitTest.setBitValue(true);
+        bitTest.save();
+        bitTest = new BitTest();
+        bitTest.setId("f1");
+        bitTest.setBitValue(false);
+        bitTest.save();
+
+        // read data
+        bitTest = BitTestPeer.retrieveByPK(new StringKey("t1"));
+        assertTrue("BIT should be true but is: " 
+                + bitTest.getBitValue(), bitTest.getBitValue());
+        
+        bitTest = BitTestPeer.retrieveByPK(new StringKey("f1"));
         assertFalse("BIT should be false but is: " 
-                + bc.getBitValue(), bc.getBitValue());
+                + bitTest.getBitValue(), bitTest.getBitValue());
+        
+        // query data
+        criteria.clear();
+        criteria.add(BitTestPeer.BIT_VALUE, new Boolean(true));
+        List bitTestList = BooleanCheckPeer.doSelect(criteria);
+        assertTrue("Should have read 1 dataset "
+                + "but read " + bitTestList.size(), 
+                bitTestList.size() == 1);
+        bitTest = (BitTest) bitTestList.get(0);
+        // use trim() for testkey because some databases will return the
+        // testkey filled up with blanks, as it is defined as char(10)
+        assertTrue("Primary key of data set should be t1 but is "
+                + bitTest.getId().trim(),
+                "t1".equals(bitTest.getId().trim()));
+
+        criteria.clear();
+        criteria.add(BitTestPeer.BIT_VALUE, new Boolean(false));
+        bitTestList = BooleanCheckPeer.doSelect(criteria);
+        assertTrue("Should have read 1 dataset "
+                + "but read " + bitTestList.size(), 
+                bitTestList.size() == 1);
+        bitTest = (BitTest) bitTestList.get(0);
+        assertTrue("Primary key of data set should be f1 but is "
+                + bitTest.getId().trim(),
+                "f1".equals(bitTest.getId().trim()));
+
     }
     
     /**
@@ -241,7 +309,6 @@ public class DataTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.add(BooleanCheckPeer.BCHAR_VALUE, new Boolean(true));
         criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(true));
-        criteria.add(BooleanCheckPeer.BIT_VALUE, new Boolean(true));
         List booleanCheckList = BooleanCheckPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset with both values true "
                 + "but read " + booleanCheckList.size(), 
@@ -256,7 +323,6 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.clear();
         criteria.add(BooleanCheckPeer.BCHAR_VALUE, new Boolean(false));
         criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(false));
-        criteria.add(BooleanCheckPeer.BIT_VALUE, new Boolean(false));
         booleanCheckList = BooleanCheckPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset with both values false "
                 + "but read " + booleanCheckList.size(), 
@@ -879,21 +945,26 @@ public class DataTest extends BaseRuntimeTestCase
         a.save();
     }
     
+    
+    /**
+     * check that blob cloumns can be read and written correctly
+     * @throws Exception if the test fails
+     */
     public void testLobs() throws Exception
     {
         // clean LobTest table
         {
             Criteria criteria = new Criteria();
             criteria.add(
-                    LobTestPeer.ID, 
+                    BlobTestPeer.ID, 
                     (Long) null, 
                     Criteria.NOT_EQUAL);
-            LobTestPeer.doDelete(criteria);
+            BlobTestPeer.doDelete(criteria);
         }
 
-        // create a new LobTest Object with large blob and clob values
+        // create a new BlobTest Object with large blob and clob values
         // and save it
-        LobTest lobTest = new LobTest();
+        BlobTest blobTest = new BlobTest();
         {
             int length = 100000;
             byte[] bytes = new byte[length];
@@ -904,31 +975,70 @@ public class DataTest extends BaseRuntimeTestCase
           	    bytes[i] = new Integer(i % 256).byteValue();
                 chars.append(charTemplate.charAt(i % charTemplate.length()));
             }
-            lobTest.setBlobValue(bytes);
-            lobTest.setClobValue(chars.toString());
+            blobTest.setBlobValue(bytes);
         }
-        lobTest.save();
+        blobTest.save();
         
-        // read the LobTests from the database
+        // read the BlobTests from the database
         // and check the values against the original values
-        List lobTestList = LobTestPeer.doSelect(new Criteria());
-        assertTrue("lobTests should contain 1 object but contains " 
+        List lobTestList = BlobTestPeer.doSelect(new Criteria());
+        assertTrue("blobTestList should contain 1 object but contains " 
                 + lobTestList.size(),
                 lobTestList.size() == 1);
         
-        LobTest readLobTest = (LobTest) lobTestList.get(0);
-        boolean bytesDiffer = false;
-        
+        BlobTest readBlobTest = (BlobTest) lobTestList.get(0);        
         assertTrue("read and written blobs should be equal. "
                 + "Size of read blob is"
-                + readLobTest.getBlobValue().length
+                + readBlobTest.getBlobValue().length
                 + " size of written blob is "
-                + lobTest.getBlobValue().length, 
+                + blobTest.getBlobValue().length, 
                 Arrays.equals(
-                        lobTest.getBlobValue(),
-                        readLobTest.getBlobValue()));
+                        blobTest.getBlobValue(),
+                        readBlobTest.getBlobValue()));
+    }
+        
+        
+    /**
+     * check that clob cloumns can be read and written correctly
+     * @throws Exception if the test fails
+     */
+    public void testClobs() throws Exception
+    {
+        // clean ClobTest table
+        {
+            Criteria criteria = new Criteria();
+            criteria.add(
+                    ClobTestPeer.ID, 
+                    (Long) null, 
+                    Criteria.NOT_EQUAL);
+            ClobTestPeer.doDelete(criteria);
+        }
+
+        // create a new ClobTest Object with a large clob value
+        // and save it
+        ClobTest clobTest = new ClobTest();
+        {
+            int length = 10000;
+            StringBuffer chars = new StringBuffer();
+            String charTemplate = "1234567890abcdefghijklmnopqrstuvwxyz";
+            for (int i = 0; i < length; ++i)
+            {
+                 chars.append(charTemplate.charAt(i % charTemplate.length()));
+            }
+            clobTest.setClobValue(chars.toString());
+        }
+        clobTest.save();
+        
+        // read the ClobTests from the database
+        // and check the values against the original values
+        List clobTestList = ClobTestPeer.doSelect(new Criteria());
+        assertTrue("clobTestList should contain 1 object but contains " 
+                + clobTestList.size(),
+                clobTestList.size() == 1);
+        
+        ClobTest readClobTest = (ClobTest) clobTestList.get(0);
         assertTrue("read and written clobs should be equal", 
-                lobTest.getClobValue().equals(readLobTest.getClobValue()));
+                clobTest.getClobValue().equals(readClobTest.getClobValue()));
     }
         
         

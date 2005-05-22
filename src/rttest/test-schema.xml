@@ -152,9 +152,8 @@
     <column name="test_key" required="true" primaryKey="true" type="CHAR" size="10" />
     <column name="bint_value" required="true" type="BOOLEANINT" />
     <column name="bchar_value" required="true" type="BOOLEANCHAR" />
-    <column name="bit_value" required="true" type="BIT" />
   </table>
-
+  
   <!-- TRQS97 -->
   <table name="LEAGUES_OBJECT" description="Contains all leagues">
     <column name="LEAGUEID" primaryKey="true" required="true" type="TINYINT" javaType="object"/>
@@ -186,12 +185,20 @@
     <column name="name" size="100" type="VARCHAR"/>        
   </table>
 
-  <table name="lob_test">
+  <table name="bit_test" idMethod="none">
+    <column name="id" required="true" primaryKey="true" type="CHAR" size="10" />
+    <column name="bit_value" required="true" type="BIT" />
+  </table>
+
+  <table name="blob_test">
     <column name="id" required="true" primaryKey="true" type="BIGINT" />
     <column name="blob_value" type="BLOB" required="false"/>
-    <column name="clob_value" type="CLOB" required="false"/>
   </table>  
 
+  <table name="clob_test">
+    <column name="id" required="true" primaryKey="true" type="SMALLINT" />
+    <column name="clob_value" type="CLOB" required="false"/>
+  </table>  
 
   <!-- TRQS263 -->
   <table name="DATE_TEST" description="Table to test Date formats">
