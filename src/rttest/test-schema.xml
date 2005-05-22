@@ -192,4 +192,94 @@
     <column name="clob_value" type="CLOB" required="false"/>
   </table>  
 
+
+  <!-- TRQS263 -->
+  <table name="DATE_TEST" description="Table to test Date formats">
+    <column
+      name="DATE_TEST_ID"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column
+      name="DATE_VALUE"
+      required="true"
+      type="DATE"
+    />
+    <column
+      name="TIME_VALUE"
+      required="true"
+      type="TIME"
+    />
+    <column
+      name="TIMESTAMP_VALUE"
+      required="true"
+      type="TIMESTAMP"
+    />
+  </table>
+
+
+  <table name="INHERITANCE_TEST" description="Table to test inheritance">
+    <column
+      name="INHERITANCE_TEST"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+    />
+    <column 
+      name="CLASS_NAME" 
+      inheritance="single" 
+      type="CHAR" 
+      size="1">
+      <inheritance 
+        key="B" 
+        class="InheritanceChildB" 
+        extends="org.apache.torque.test.InheritanceTest"
+      />
+      <inheritance 
+        key="C" 
+        class="InheritanceChildC" 
+        extends="org.apache.torque.test.InheritanceTest"
+      />
+      <inheritance 
+        key="D" 
+        class="InheritanceChildD" 
+        extends="org.apache.torque.test.InheritanceChildC"
+      />
+    </column>
+    <column
+      name="PAYLOAD_PARENT"
+      required="true"
+      type="VARCHAR"
+    />
+    <column
+      name="PAYLOAD_B"
+      type="VARCHAR"
+    />
+    <column
+      name="PAYLOAD_C"
+      type="VARCHAR"
+    />
+    <column
+      name="PAYLOAD_D"
+      type="VARCHAR"
+    />
+  </table>
+  
+
+  <table name="LARGE_PK" idMethod="none" description="Table to test large Primary keys">
+    <column
+      name="LARGE_PK_ID"
+      required="true"
+      primaryKey="true"
+      type="BIGINT"
+    />
+    <column
+      name="NAME"
+      type="VARCHAR"
+      size="100"
+      required="false"
+    />
+  </table>
+
 </database>
