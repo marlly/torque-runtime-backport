@@ -611,7 +611,7 @@ public class IDBroker implements Runnable, IdGenerator
      * @param connection a Connection
      * @exception Exception a generic exception.
      */
-    private void storeIDs(String tableName,
+    private synchronized void storeIDs(String tableName,
                           boolean adjustQuantity,
                           Connection connection)
         throws Exception
