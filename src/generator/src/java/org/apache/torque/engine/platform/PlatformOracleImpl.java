@@ -41,7 +41,6 @@ public class PlatformOracleImpl extends PlatformDefaultImpl
      */
     private void initialize()
     {
-        setSchemaDomainMapping(new Domain(SchemaType.BIT, "NUMBER", "1", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.TINYINT, "NUMBER", "3", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.SMALLINT, "NUMBER", "5", "0"));
         setSchemaDomainMapping(new Domain(SchemaType.INTEGER, "NUMBER", "10", "0"));
