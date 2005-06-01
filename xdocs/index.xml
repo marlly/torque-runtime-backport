@@ -63,6 +63,12 @@
           <td><a href="mailto:Sweaver@rippe.com">Scott Weaver</a></td>
         </tr>
         <tr>
+          <td>Firebird</td>
+          <td>org.firebirdsql.jdbc.FBDriver</td>
+          <td>idMethod=&quot;native&quot; does not work</td>
+          <td><a href="mailto:fischer@seitenbau.de">Thomas Fischer</a></td>
+        </tr>
+        <tr>
           <td>Hypersonic</td>
           <td>org.hsql.jdbcDriver</td>
           <td></td>

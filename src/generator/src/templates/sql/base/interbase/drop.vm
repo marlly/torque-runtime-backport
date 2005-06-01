@@ -1,1 +1,1 @@
-drop table if exists $table.Name;
+drop table $table.Name;
