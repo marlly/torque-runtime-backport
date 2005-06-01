@@ -157,10 +157,10 @@ public abstract class VillageUtils
     /**
      * Factored out setting of a Village Record column from a Criteria Key
      *
-     * @param Crit The Criteria
+     * @param crit The Criteria
      * @param key The Criterion Key
      * @param rec The Village Record
-     * @parm colName The name of the Column in the Record
+     * @param colName The name of the Column in the Record
      */
     public static final void setVillageValue(final Criteria crit, 
             final String key,

@@ -1399,7 +1399,7 @@ public abstract class BasePeer
      *
      * @param criteria
      * @param con
-     * @return
+     * @return a List of Record objects.
      * @throws TorqueException Error performing database query.
      */
     public static List doPSSelect(Criteria criteria, Connection con)
@@ -1471,7 +1471,7 @@ public abstract class BasePeer
      * Do a Prepared Statement select according to the given criteria
      *
      * @param criteria
-     * @return
+     * @return a List of Record objects.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */

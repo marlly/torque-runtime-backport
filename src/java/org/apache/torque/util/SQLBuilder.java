@@ -629,7 +629,7 @@ public abstract class SQLBuilder
      * For example, if an alias "a" for the table AUTHOR is defined
      * in the Criteria criteria, getTableNameForFromClause("a", criteria)
      * returns "AUTHOR a".
-     * @param tableOrAliasName the name of a table
+     * @param tableName the name of a table
      *        or the alias for a table
      * @param criteria a criteria object to resolve a possible alias
      * @return either the tablename itself if tableOrAliasName is not an alias,

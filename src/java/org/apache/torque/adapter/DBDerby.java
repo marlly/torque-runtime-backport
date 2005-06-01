@@ -40,7 +40,7 @@ public class DBDerby
     /**
      * This method is used to ignore case.
      *
-     * @param in The string to transform to upper case.
+     * @param str The string to transform to upper case.
      * @return The upper case string.
      */
     public String toUpperCase(String str)
@@ -54,7 +54,7 @@ public class DBDerby
     /**
      * This method is used to ignore case.
      *
-     * @param in The string whose case to ignore.
+     * @param str The string whose case to ignore.
      * @return The string in a case that can be ignored.
      */
     public String ignoreCase(String str)

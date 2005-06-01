@@ -180,7 +180,7 @@ public class Transaction
      * errors are logged at warn level.
      * 
      * @param con The Connection for the transaction.
-     * @see safeRollback
+     * @see rollback
      */
     public static void safeRollback(Connection con) 
     {
