@@ -276,7 +276,7 @@ public class DataTest extends BaseRuntimeTestCase
         // query data
         criteria.clear();
         criteria.add(BitTestPeer.BIT_VALUE, new Boolean(true));
-        List bitTestList = BooleanCheckPeer.doSelect(criteria);
+        List bitTestList = BitTestPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset "
                 + "but read " + bitTestList.size(), 
                 bitTestList.size() == 1);
@@ -289,7 +289,7 @@ public class DataTest extends BaseRuntimeTestCase
 
         criteria.clear();
         criteria.add(BitTestPeer.BIT_VALUE, new Boolean(false));
-        bitTestList = BooleanCheckPeer.doSelect(criteria);
+        bitTestList = BitTestPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset "
                 + "but read " + bitTestList.size(), 
                 bitTestList.size() == 1);
