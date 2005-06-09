@@ -28,9 +28,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.torque.adapter.DBHypersonicSQL;
 import org.apache.torque.adapter.DBOracle;
 import org.apache.torque.om.StringKey;
 import org.apache.torque.test.A;
+import org.apache.torque.test.APeer;
 import org.apache.torque.test.Author;
 import org.apache.torque.test.AuthorPeer;
 import org.apache.torque.test.BitTest;
@@ -403,6 +405,13 @@ public class DataTest extends BaseRuntimeTestCase
      */
     public void testJoins() throws Exception
     {
+        if (Torque.getDB(Torque.getDefaultDB()) instanceof DBHypersonicSQL)
+        {
+            log.error("testJoins(): Right joins are not supported by HSQLDB");
+            // failing is "expected", so exit without error
+            return;
+        }
+
         cleanBookstore();
 
         // insert test data
@@ -940,6 +949,11 @@ public class DataTest extends BaseRuntimeTestCase
      */
     public void testSingleQuotes() throws Exception
     {
+        // clean A table
+        Criteria criteria = new Criteria();
+        criteria.add(APeer.A_ID, (Long) null, Criteria.NOT_EQUAL);
+        APeer.doDelete(criteria);
+        
         A a = new A();
         a.setName("has Single ' Quote");
         a.save();
