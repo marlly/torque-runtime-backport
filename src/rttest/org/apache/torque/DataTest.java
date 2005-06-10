@@ -400,6 +400,25 @@ public class DataTest extends BaseRuntimeTestCase
     }
     
     /**
+     * test the behaviour if a connection is supplied to access the database,
+     * but it is null. All methods on the user level should be able to 
+     * handle this.
+     */
+    public void testNullConnection() throws Exception
+    {
+        Criteria criteria = new Criteria();
+        List result = BookPeer.doSelectVillageRecords(criteria, null);
+        
+        criteria = new Criteria();
+        criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
+        BookPeer.doDelete(criteria, null);
+        
+        Author author = new Author();
+        author.setName("name");
+        author.save((Connection) null);
+    }
+    
+    /**
      * test joins
      * @throws Exception if the test fails
      */
