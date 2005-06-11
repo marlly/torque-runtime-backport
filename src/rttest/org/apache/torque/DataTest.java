@@ -204,6 +204,34 @@ public class DataTest extends BaseRuntimeTestCase
     }
     
     /**
+     * Checks whether the setSingleRecord() method in criteria works
+     */
+    public void testSingleRecord() throws Exception
+    {
+        Criteria criteria = new Criteria();
+        criteria.setSingleRecord(true);
+        criteria.setLimit(1);
+        criteria.setOffset(5);
+        List books = BookPeer.doSelect(criteria);
+        assertTrue("List should have 1 books, not " + books.size(), 
+                books.size() == 1);
+        
+        criteria.clear();
+        criteria.setSingleRecord(true);
+        criteria.setLimit(2);
+        try
+        {
+            books = BookPeer.doSelect(criteria);
+            fail("doSelect should have failed "
+                    + "because two records were selected "
+                    + " and one was expected");
+        }
+        catch (TorqueException e)
+        {   
+        }
+    }
+    
+    /**
      * tests whether null values can be processed successfully by datadump
      * For this, a row containing null values is inserted here,
      * the actual test is done later 
@@ -424,13 +452,6 @@ public class DataTest extends BaseRuntimeTestCase
      */
     public void testJoins() throws Exception
     {
-        if (Torque.getDB(Torque.getDefaultDB()) instanceof DBHypersonicSQL)
-        {
-            log.error("testJoins(): Right joins are not supported by HSQLDB");
-            // failing is "expected", so exit without error
-            return;
-        }
-
         cleanBookstore();
 
         // insert test data
@@ -491,7 +512,14 @@ public class DataTest extends BaseRuntimeTestCase
                      + authorList.size()
                      + ", should be 4");
         }
-        
+
+        if (Torque.getDB(Torque.getDefaultDB()) instanceof DBHypersonicSQL)
+        {
+            log.error("testJoins(): Right joins are not supported by HSQLDB");
+            // failing is "expected", so exit without error
+            return;
+        }
+
         // test right join
         criteria = new Criteria();
         criteria.addJoin(
