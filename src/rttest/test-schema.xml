@@ -133,7 +133,7 @@
     <column name="AUTOINCREMENT_NONE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
     <column name="NAME" type="VARCHAR" size="250"/>
   </table>
-  <table name="AUTOINCREMENT_IDBROKER" idMethod="idBroker">
+  <table name="AUTOINCREMENT_IDBROKER" idMethod="idbroker">
     <column name="AUTOINCREMENT_IDBROKER_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
     <column name="NAME" type="VARCHAR" size="250"/>
   </table>
