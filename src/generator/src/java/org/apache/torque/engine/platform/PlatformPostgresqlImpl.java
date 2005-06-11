@@ -55,6 +55,7 @@ public class PlatformPostgresqlImpl extends PlatformDefaultImpl
         setSchemaDomainMapping(new Domain(SchemaType.BINARY, "BYTEA"));
         setSchemaDomainMapping(new Domain(SchemaType.VARBINARY, "BYTEA"));
         setSchemaDomainMapping(new Domain(SchemaType.LONGVARBINARY, "BYTEA"));
+        setSchemaDomainMapping(new Domain(SchemaType.BLOB, "BYTEA"));
         setSchemaDomainMapping(new Domain(SchemaType.CLOB, "TEXT"));
     }
     
