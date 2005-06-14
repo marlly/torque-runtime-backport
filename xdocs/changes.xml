@@ -34,7 +34,7 @@
       cannot create an index on a varchar column which has the length 255.
     </action>
     <action type="fix" dev="tfischer">
-      Fixed a few things in the interbase implementation for compliance with Firebird 1.5
+      Fixed a few things in the interbase implementation for compliance with Firebird 1.5:
       <ul>
         <li>Tables are dropped before they are created in the create-db task</li>
         <li>The style of comments in the db scripts is changed from /* */ to --</li>
@@ -54,22 +54,18 @@
       In Torque 3.1.1, BIT columns were treated as Strings with the value 0 and 1.
       This caused problems in various DBs which natively support BOOLEAN columns
       but do not support implicit String conversion.(e.g. HSQLDB).
-      Reverted to the old behaviour:
-      The adapter decides for selects, the db driver for inserts/updates.
+      Reverted to the old behaviour, i.e. the adapter chooses the query for selects.
+      The db driver uses booleans instead of integers for inserts/updates of BIT columns.
       However, this behavior breaks BIT support for Databases which do not have
       a native boolean datatype (like Oracle). For these Databases, use BOOLEANINT
       (or BOOLEANCHAR) column types for Booleans.
     </action> 
-    <action type="fix" dev="tfischer">
-      For inserting/updating tables with BIT columns, use booleans instead of 
-      integers for the prepared statement used to update/insert BIT columns
-    </action> 
     <action type="update" dev="tfischer" issue="TRQS221">
       Changed Postgres handling of boolean Values to use FALSE,TRUE instead of '0','1'
-      while selecting from columns of Torque type BIT
+      while selecting from columns of Torque type BIT.
     </action> 
     <action type="add" dev="tfischer" issue="TRQS251">
-      Added support for using SQL functions in "order by" 
+      Added support for using SQL functions in "order by".
     </action>
     <action type="update" dev="tfischer">
       Unify the behaviour of primary key columns. Until now, 
@@ -82,7 +78,7 @@
     <action type="fix" dev="tfischer">
       Use the cascade option for dropping tables in PostgreSQL.
       This allows to drop tables which have foreign keys.
-      Cascade is supported since PostgreSQL 7.3
+      Cascade is supported since PostgreSQL 7.3.
     </action>
     <action type="fix" dev="tfischer">
       Added missing templates for msaccess. I did not test it,
@@ -92,8 +88,8 @@
       It is now possible to generate simple Beans for Torque data objects.
       Methods are supplied to create Beans from Data object and vice versa.
     </action>
-    <action type="add" dev="tfischer">
-      TRQS289: Added Thomas Vandahl's Patch to synchronize Object.vm
+    <action type="add" dev="tfischer" issue="TRQS289">
+      Added Thomas Vandahl's Patch to synchronize Object.vm
       with ObjectWithManager.vm.
       This contains the following:
       <ul>
@@ -103,14 +99,13 @@
           now matches the behaviour of objects without managers</li>
         <li>tabs and spaces formatting</li>
       </ul>
-      
     </action>
-    <action type="add" dev="tfischer">
-      TRQS263: Add support for oracle datatype timestamp; 
-      limit number of digits for saving integers in oracle to 10
+    <action type="add" dev="tfischer" issue="TRQS263">
+      Add support for oracle datatype timestamp; 
+      limit number of digits for saving integers in oracle to 10.
     </action>
-    <action type="fix" dev="tfischer">
-      TRQS267: Fix escpaing of single quotes in datasql task 
+    <action type="fix" dev="tfischer" issue="TRQS267">
+      Fix escaping of single quotes in datasql task.
     </action>
     <action type="add" dev="tfischer">
       Added support for schema support at generate time. 
@@ -119,39 +114,39 @@
     <action type="remove" dev="tfischer" issue="TRQS222">
       Removed Oracle Update patch again. 
       Creates invalid scripts and causes ant to fail. 
-      See Scarab for further details
+      See Scarab for further details.
     </action>
-    <action dev='mpoeschl' type='remove'>
+    <action dev="mpoeschl" type="remove">
       Remove support for old properties (properties without 'torque.' prefix)
     </action>
-    <action dev='mpoeschl' type='remove'>
+    <action dev="mpoeschl" type="remove">
       Remove support for idMethod=sequence and autoincrement.
     </action>
-    <action dev='mpoeschl' type='add'>
-      TRQS146: Support for scale.
+    <action dev="mpoeschl" type="add" issue="TRQS146">
+      Added support for scale.
     </action>
-    <action dev='mpoeschl' type='remove'>
+    <action dev="mpoeschl" type="remove">
       Remove support for stratum lifecycle interfaces.
     </action>
-    <action dev='mpoeschl' type='add'>
-      TRQS163: Add domain element to schema.xml. Domains are used to define 
+    <action dev="mpoeschl" type="add" issue="TRQS163">
+      Add domain element to schema.xml. Domains are used to define 
       attributes for columns.
     </action>
-    <action dev='mpoeschl' type='update'>
+    <action dev="mpoeschl" type="update">
       Refactored generator model (removed AppData class)
     </action>
-    <action dev='mpoeschl' type='fix'>
-      TRQS180: NumberKey long constructor introduces rounding errors.
+    <action dev="mpoeschl" type="fix" issue="TRQS180">
+      NumberKey long constructor introduces rounding errors.
     </action>
-    <action dev='mpoeschl' type='remove'>
+    <action dev="mpoeschl" type="remove">
       Removed the deprecated connection pool (commons-dbcp is used as
       default since 3.1)
     </action>
-    <action dev='mpoeschl' type='add'>
+    <action dev="mpoeschl" type="add">
       Changed ojb-model task to generate Object + BaseObject (like for the 
       torque om).
     </action>
-    <action dev='mpoeschl' type='fix'>
+    <action dev="mpoeschl" type="fix">
       Fix package name for TorqueComponent in roleConfiguration.xml
     </action>
     <action type="add" dev="henning">
