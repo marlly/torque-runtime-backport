@@ -18,3 +18,5 @@ CREATE TABLE $table.Name
 );
 
 #if($index.length() > 0)$strings.chop($index,1)#end
+
+$generator.parse("$basepath/comment.vm", "", "table", $tbl)

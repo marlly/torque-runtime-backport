@@ -17,3 +17,5 @@ CREATE TABLE $table.Name
 
 #set ( $index = $generator.parse("$basepath/index.vm", "", "table", $tbl) )
 #if($index.length() > 0)$index#end
+
+$generator.parse("$basepath/comment.vm", "", "table", $tbl)

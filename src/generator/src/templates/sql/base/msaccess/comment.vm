@@ -1,0 +1,9 @@
+#if ($table.description.length() > 0)
+addtbllabl T=$table.Name L="$table.description";
+#end
+
+#foreach ($col in $table.Columns)
+#if ($col.description.length() > 0)
+addcollabl T=${col.tableName} C=${col.name} L="$col.description";
+#end
+#end

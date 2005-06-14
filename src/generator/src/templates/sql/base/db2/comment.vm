@@ -1,0 +1,9 @@
+#if ($table.description.length() > 0)
+COMMENT ON TABLE $table.Name IS '$table.description';
+#end
+
+#foreach ($col in $table.Columns)
+#if ($col.description.length() > 0)
+COMMENT ON COLUMN ${col.tableName}.${col.name} IS '$col.description';
+#end
+#end

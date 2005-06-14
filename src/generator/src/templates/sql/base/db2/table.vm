@@ -23,3 +23,5 @@ CREATE TABLE $table.Name
 
 ##set $sequence = $generator.parse("$basepath/sequence.vm", "", "table", $tbl)
 ##if ($sequence.length()>0)$sequence#end
+
+$generator.parse("$basepath/comment.vm", "", "table", $tbl)
