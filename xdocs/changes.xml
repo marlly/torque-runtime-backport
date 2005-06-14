@@ -28,6 +28,10 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="add" dev="tfischer" issue="TRQS266">
+      For db2, msaccess, oracle, postgresql and sybase, the description attributes
+      from the schema.xml are inserted as comments into the database.
+    </action>
     <action type="fix" dev="tfischer">
       Changed the length of the tablename column from 255 to 250 in the idbroker
       schema for the runtimetest. This is necessary because the firebird database 
