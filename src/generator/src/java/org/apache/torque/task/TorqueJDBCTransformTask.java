@@ -80,7 +80,7 @@ public class TorqueJDBCTransformTask extends Task
     protected DocumentImpl doc;
 
     /** The document root element. */
-    protected Node databaseNode;
+    protected Element databaseNode;
 
     /** Hashtable of columns that have primary keys. */
     protected Hashtable primaryKeys;
@@ -197,6 +197,7 @@ public class TorqueJDBCTransformTask extends Task
         List tableList = getTableNames(dbMetaData);
 
         databaseNode = doc.createElement("database");
+        databaseNode.setAttribute("name", dbUser);
 
         // Build a database-wide column -> table map.
         columnTableMap = new Hashtable();
