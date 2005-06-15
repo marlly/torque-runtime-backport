@@ -258,18 +258,22 @@
       name="PAYLOAD_PARENT"
       required="true"
       type="VARCHAR"
+      size="100"    
     />
     <column
       name="PAYLOAD_B"
       type="VARCHAR"
+      size="100"    
     />
     <column
       name="PAYLOAD_C"
       type="VARCHAR"
+      size="100"    
     />
     <column
       name="PAYLOAD_D"
       type="VARCHAR"
+      size="100"    
     />
   </table>
   
