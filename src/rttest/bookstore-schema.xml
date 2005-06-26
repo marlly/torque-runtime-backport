@@ -165,7 +165,7 @@
   <!-- C  T A B L E                                       -->
   <!-- =================================================== -->
 
-  <table name="c" description="c table contains fk to r_ab and to b">
+  <table name="c" description="c table contains fk to ar_ab, a and b">
     <column
       name="c_id"
       required="true"
