@@ -580,6 +580,26 @@ public class DataTest extends BaseRuntimeTestCase
                      + ", should be 11");
         }
     }
+    
+    
+    /**
+     * Test joins using the XPeer.DoSelectJoinYYY methods
+     * @throws Exception if the Test fails
+     */
+    public void testDoSelectJoinY() throws Exception
+    {
+        // using the test data from testJoins()
+        Criteria criteria = new Criteria();
+        criteria.addAscendingOrderByColumn(BookPeer.TITLE);
+        List books = MyBookPeer.doSelectJoinAuthor(criteria);
+        assertTrue("books should contain 4 books but contains " 
+                + books.size(), books.size() == 4);
+        Book bookTwo = (Book) books.get(1);
+        Book bookThree = (Book) books.get(2);
+        assertTrue ("the authors of BookTwo and BookThree"
+                + " should point to the same instance",
+                bookTwo.getAuthor() == bookThree.getAuthor());
+    }
 
     /**
      * test the order by, especially in joins and with aliases
@@ -1101,8 +1121,16 @@ public class DataTest extends BaseRuntimeTestCase
         assertTrue("read and written clobs should be equal", 
                 clobTest.getClobValue().equals(readClobTest.getClobValue()));
     }
-        
-        
+    
+    /**
+     * Tests whether shutdown complains about anything
+     * @throws TorqueException if shutdown does not exit cleanly
+     */
+    public void testShutdown() throws TorqueException
+    {
+        Torque.shutdown();
+    }
+
     /**
      * Deletes all authors and books in the bookstore tables
      * @throws Exception if the bookstore could not be cleaned
@@ -1139,5 +1167,18 @@ public class DataTest extends BaseRuntimeTestCase
                 dotPosition + 1, 
                 fullyQualifiedColumnName.length());
         return result;
+    }
+    
+    
+    /**
+     * Subclass of BookPeer to make the doSelectJoinAuthors() visible
+     */
+    static class MyBookPeer extends BookPeer 
+    {
+        public static List doSelectJoinAuthor(Criteria criteria)
+                throws TorqueException
+        {
+            return BookPeer.doSelectJoinAuthor(criteria);
+        }
     }
 }
