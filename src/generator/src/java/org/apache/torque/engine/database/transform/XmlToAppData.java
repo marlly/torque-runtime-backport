@@ -39,6 +39,7 @@ import org.apache.torque.engine.database.model.Unique;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -49,6 +50,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
+ * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
 public class XmlToAppData extends DefaultHandler
@@ -325,6 +327,25 @@ public class XmlToAppData extends DefaultHandler
             log.debug("endElement(" + uri + ", " + localName + ", "
                     + rawName + ") called");
         }
+    }
+    
+    /**
+     * Handles exception which occur when the xml file is parsed
+     * @param e the exception which occured while parsing
+     * @throws SAXException always
+     */
+    public void error(SAXParseException e) throws SAXException
+    {
+        log.error("Sax parser threw an Exception", e);
+        throw new SAXException(
+                "Error while parsing " 
+                + currentXmlFile 
+                + " at line "
+                + e.getLineNumber()
+                + " column "
+                + e.getColumnNumber()
+                + " : "
+                + e.getMessage());
     }
 
     /**
