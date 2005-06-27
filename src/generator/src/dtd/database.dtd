@@ -104,6 +104,7 @@ Java class or method name.
   javaName CDATA #IMPLIED
   primaryKey (true|false) "false"
   required (true|false) "false"
+  protected (true|false) "false"
   domain CDATA #IMPLIED
   type
     (

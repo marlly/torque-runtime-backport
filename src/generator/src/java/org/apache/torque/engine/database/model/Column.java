@@ -50,6 +50,7 @@ public class Column
     private String javaName = null;
     private String javaNamingMethod;
     private boolean isNotNull = false;
+    private boolean isProtected = false;
     private String javaType;
     private Table parentTable;
     private int position;
@@ -193,6 +194,8 @@ public class Column
 
         this.inputValidator = attrib.getValue("inputValidator");
         description = attrib.getValue("description");
+        
+        isProtected = ("true".equals(attrib.getValue("protected")));
     }
 
     /**
@@ -439,6 +442,22 @@ public class Column
                 .getNullString(this.isNotNull());
     }
 
+    /**
+     * Return the isProtected property of the column
+     */
+    public boolean isProtected()
+    {
+        return isProtected;
+    }
+    
+    /**
+     * Set the isProtected property of the Column
+     */
+    public void setProtected(boolean prot)
+    {
+        isProtected = prot;
+    }
+    
     /**
      * Set if the column is a primary key or not
      */

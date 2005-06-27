@@ -119,13 +119,18 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #set ( $cfc=$col.JavaName )
     #set ( $clo=$col.UncapitalisedJavaName )
     #set ( $cjtype = $col.JavaNative )
-
+    #if ( $col.isProtected() )
+      #set ( $accessLevel = "protected" )
+    #else
+      #set ( $accessLevel = "public" )
+    #end
+    
     /**
      * Get the $cfc
      *
      * @return $cjtype
      */
-    public $cjtype ${col.GetterName} ()
+    $accessLevel $cjtype ${col.GetterName} ()
     {
         return $clo;
     }
@@ -147,7 +152,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
      *
      * @param v new value
      */
-    public void ${col.SetterName}($cjtype v) $throwsClause
+    $accessLevel void ${col.SetterName}($cjtype v) $throwsClause
     {
     #if (($cjtype == "NumberKey") || ($cjtype == "StringKey") || ($cjtype == "DateKey"))
         if (v != null && v.getValue() == null)
