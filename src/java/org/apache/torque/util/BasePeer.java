@@ -1338,10 +1338,11 @@ public abstract class BasePeer
      * MapBuilder instances are cached in this class for speed.
      *
      * @param name name of the MapBuilder
-     * @return A MapBuilder, or null (and logs the error) if the
-     * MapBuilder was not found.
+     * @return A MapBuilder, not null
+     * @throws TorqueException if the Map Builder cannot be instantiated
      */
     public static MapBuilder getMapBuilder(String name)
+        throws TorqueException
     {
         synchronized (mapBuilders)
         {
@@ -1383,13 +1384,10 @@ public abstract class BasePeer
             }
             catch (Exception e)
             {
-                // Have to catch possible exceptions because method is
-                // used in initialization of Peers.  Log the exception and
-                // return null.
                 log.error("BasePeer.MapBuilder failed trying to instantiate: " 
                         + name, e);
+                throw new TorqueException(e);
             }
-            return null;
         }
     }
 

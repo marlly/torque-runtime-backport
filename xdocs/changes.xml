@@ -28,6 +28,10 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="fix" dev="tfischer" issue="TRQS304">
+      If a Peer class cannot instantiate its Map Builder, a Runtime Exception is now
+      thrown (instead of just logging the error).
+    </action>
     <action type="add" dev="tfischer">
       The database schema.xml is now validated against the DTD. The generator stops
       and displays an error message if the schema.xml does not satisfy the DTD.  

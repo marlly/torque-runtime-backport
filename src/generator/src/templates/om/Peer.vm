@@ -94,6 +94,7 @@ public abstract class $basePrefix${table.JavaName}Peer
             catch (Exception e)
             {
                 log.error("Could not initialize Peer", e);
+                throw new RuntimeException(e);
             }
         }
         else
