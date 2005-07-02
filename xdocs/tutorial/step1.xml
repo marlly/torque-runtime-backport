@@ -31,7 +31,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 <p>
   At runtime the generated object model classes need access to the Torque 
   runtime distribution and associated libraries - these are available from the
-  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
+  <a href="http://db.apache.org/torque/download.html">
   Downloads page</a> (the file to download is torque-3.1.1.tar.gz or 
   torque-3.1.1.zip, depending on your development platform).  We will cover
   what to do with this file in a later step.
