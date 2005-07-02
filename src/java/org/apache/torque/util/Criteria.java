@@ -28,11 +28,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.OrderedMap;
+import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.Torque;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
@@ -147,7 +147,7 @@ public class Criteria extends Hashtable
     private UniqueList orderByColumns = new UniqueList();
     private UniqueList groupByColumns = new UniqueList();
     private Criterion having = null;
-    private Hashtable asColumns = new Hashtable(8);
+    private OrderedMap asColumns = ListOrderedMap.decorate(new HashMap());
     private List joins = null;
 
     /** The name of the database. */
@@ -266,10 +266,10 @@ public class Criteria extends Hashtable
     /**
      * Get the column aliases.
      *
-     * @return A Hashtable which map the column alias names
+     * @return A Map which map the column alias names
      * to the alias clauses.
      */
-    public Hashtable getAsColumns()
+    public Map getAsColumns()
     {
         return asColumns;
     }

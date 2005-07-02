@@ -28,6 +28,12 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="update" dev="tfischer" issue="TRQS252">
+      The asColumns in a Criteria are now added to the SQL select clause 
+      in the same order as they were added to a Criteria.
+      To achieve this, the return type of the method Criteria.getAsColumns()
+      had to be changed from Hashtable to Map.
+    </action>
     <action type="fix" dev="tfischer" issue="TRQS294">
       Torque.shutdown() now closes the datasourcee initialized by Torque,
       except the Datasource obtained via a JndiDataSourceFactory.

@@ -18,9 +18,9 @@ package org.apache.torque.util;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -355,7 +355,7 @@ public abstract class SQLBuilder
             final Query query) 
     {
         UniqueList querySelectClause = query.getSelectClause();
-        Hashtable criteriaAsColumns = criteria.getAsColumns();
+        Map criteriaAsColumns = criteria.getAsColumns();
       
         for (Iterator it = criteriaAsColumns.keySet().iterator(); it.hasNext(); )
         {
