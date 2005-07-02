@@ -46,7 +46,7 @@ public class PerUserPoolDataSourceFactory
             = LogFactory.getLog(PerUserPoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
-    private DataSource ds;
+    private PerUserPoolDataSource ds;
 
     /**
      * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
@@ -98,4 +98,23 @@ public class PerUserPoolDataSourceFactory
         applyConfiguration(conf, ds);
         return ds;
     }
+    
+    /**
+     * Closes the pool associated with this factory and releases it.
+     * @throws TorqueException if the pool cannot be closed properly
+     */
+    public void close() throws TorqueException
+    {
+        try 
+        {
+            ds.close();
+        }
+        catch (Exception e)
+        {
+            log.error("Exception caught during close()", e);
+            throw new TorqueException(e);
+        }
+        ds = null;
+    }
+
 }

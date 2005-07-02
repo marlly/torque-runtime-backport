@@ -226,6 +226,15 @@ public class JndiDataSourceFactory
     }
 
     /**
+     * Does nothing. We do not want to close a dataSource retrieved from Jndi,
+     * because other applications might use it as well.
+     */
+    public void close()
+    {
+        // do nothing
+    }
+    
+    /**
      *
      * @param ctx the context
      * @throws NamingException

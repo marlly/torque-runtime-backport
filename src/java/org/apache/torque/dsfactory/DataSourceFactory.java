@@ -61,4 +61,19 @@ public interface DataSourceFactory
      */
     String getSchema();
 
+    /**
+     * A hook which is called when the resources of the associated DataSource 
+     * can be released.
+     * After close() is called, the other methods may not work any more 
+     * (e.g. getDataSource() might return null).
+     * It is not guaranteed that this method does anything. For example, 
+     * we do not want to close connections retrieved via JNDI, so the
+     * JndiDataSouurceFactory does not close these connections  
+     * 
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    void close()
+        throws TorqueException;
+    
 }

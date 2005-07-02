@@ -46,7 +46,7 @@ public class SharedPoolDataSourceFactory
             = LogFactory.getLog(SharedPoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
-    private DataSource ds;
+    private SharedPoolDataSource ds;
 
     /**
      * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource
@@ -97,5 +97,24 @@ public class SharedPoolDataSourceFactory
         Configuration conf = configuration.subset(POOL_KEY);
         applyConfiguration(conf, ds);
         return ds;
+    }
+    
+    
+    /**
+     * Closes the pool associated with this factory and releases it.
+     * @throws TorqueException if the pool cannot be closed properly
+     */
+    public void close() throws TorqueException
+    {
+        try 
+        {
+        	ds.close();
+        }
+        catch (Exception e)
+        {
+            log.error("Exception caught during close()", e);
+            throw new TorqueException(e);
+        }
+        ds = null;
     }
 }

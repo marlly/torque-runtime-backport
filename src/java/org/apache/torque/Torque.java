@@ -30,7 +30,7 @@ import org.apache.torque.map.DatabaseMap;
  * <br/>
  *
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
- * @author <a href="mailto:magnus@handtolvur.is">Magnús Þór Torfason</a>
+ * @author <a href="mailto:magnus@handtolvur.is">Magnï¿½s ï¿½ï¿½r Torfason</a>
  * @author <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
  * @author <a href="mailto:Rafal.Krzewski@e-point.pl">Rafal Krzewski</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
@@ -176,9 +176,14 @@ public abstract class Torque
      * Shuts down the service.
      *
      * This method halts the IDBroker's daemon thread in all of
-     * the DatabaseMap's.
+     * the DatabaseMap's. It also closes all SharedPoolDataSourceFactories
+     * and PerUserPoolDataSourceFactories initialized by Torque.
+     * @exception TorqueException if a DataSourceFactory could not be closed 
+     *            cleanly. Only the first exception is rethrown, any following 
+     *            exceptions are logged but ignored.
      */
     public static void shutdown()
+        throws TorqueException
     {
         getInstance().shutdown();
     }

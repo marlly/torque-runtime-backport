@@ -29,9 +29,7 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.torque.TorqueException;
 import org.apache.torque.TorqueInstance;
 import org.apache.torque.adapter.DB;
@@ -185,7 +183,14 @@ public class TorqueComponent
     public void stop()
     {
         getLogger().debug("stop()");
-        getTorque().shutdown();
+        try 
+        {
+        	getTorque().shutdown();
+        }
+        catch (Exception e)
+        {
+            getLogger().error("Error while stopping Torque", e);
+        }
     }
 
 

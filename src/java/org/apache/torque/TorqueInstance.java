@@ -502,9 +502,14 @@ public class TorqueInstance
      * Shuts down the service.
      *
      * This method halts the IDBroker's daemon thread in all of
-     * the DatabaseMap's.
+     * the DatabaseMap's. It also closes all SharedPoolDataSourceFactories
+     * and PerUserPoolDataSourceFactories initialized by Torque.
+     * @exception TorqueException if a DataSourceFactory could not be closed 
+     *            cleanly. Only the first exception is rethrown, any following 
+     *            exceptions are logged but ignored.
      */
-    public synchronized void shutdown()
+    public synchronized void shutdown() 
+        throws TorqueException
     {
         if (dbMaps != null)
         {
@@ -517,6 +522,37 @@ public class TorqueInstance
                     idBroker.stop();
                 }
             }
+        }
+        TorqueException exception = null;
+        for (Iterator it = dsFactoryMap.keySet().iterator(); it.hasNext();)
+        {
+            Object dsfKey = it.next();
+            DataSourceFactory dsf 
+                    = (DataSourceFactory) dsFactoryMap.get(dsfKey);
+            try 
+            {
+                // Database "default" is just a reference to another database.
+                // We must not close it explicitly.
+                if (!DEFAULT_NAME.equals(dsfKey))
+                {
+                	dsf.close();
+                }
+                it.remove();
+            }
+            catch (TorqueException e)
+            {
+                log.error("Error while closing the DataSourceFactory "
+                        + dsfKey, 
+                        e);
+                if (exception == null)
+                {
+                	exception = e;
+                }
+            }
+        }
+        if (exception != null)
+        {
+            throw exception;
         }
         resetConfiguration();
     }
