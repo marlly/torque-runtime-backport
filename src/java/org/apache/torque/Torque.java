@@ -41,9 +41,27 @@ import org.apache.torque.map.DatabaseMap;
 public abstract class Torque
 {
     /**
-     * Name of property that specifies the default map builder and map.
+     * The prefix for all configuration keys used by Torque
      */
-    public static final String DATABASE_DEFAULT = "database.default";
+    public static final String TORQUE_KEY = "torque";
+
+    /**
+     * the prefix for configuring the database adapters and the default database
+     */
+    public static final String DATABASE_KEY = "database";
+
+    /**
+     * The key used to configure the name of the default database
+     */
+    public static final String DEFAULT_KEY = "default";
+
+    /**
+     * Name of property that specifies the default map builder and map.
+     * @deprecated is not used any more. Use DATABASE_KEY and 
+     *             DEFAULT_KEY instead
+     */
+    public static final String DATABASE_DEFAULT 
+            = DATABASE_KEY + "." + DEFAULT_KEY;
 
     /**
      * A prefix for <code>Manager</code> properties in the configuration.
@@ -288,7 +306,7 @@ public abstract class Torque
     /**
      * Returns the name of the default database.
      *
-     * @return name of the default DB
+     * @return name of the default DB, or null if Torque is not initialized yet
      */
     public static String getDefaultDB()
     {

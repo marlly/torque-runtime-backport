@@ -28,6 +28,25 @@
   <body>
 
   <release version="3.2-dev" date="in CVS">
+    <action type="update" dev="tfischer" issue="TRQS308">
+      Changed runtime configuration checking. It is now required having set 
+      the following properties:
+      <ul>
+        <li>torque.database.default</li>
+        <li>torque.database.&lt;defaultDbName&gt;.adapter</li>
+        <li>torque.dsfactory.&lt;defaultDbName&gt;.factory</li>
+      </ul>
+      This was done in order to detect misconfiguration more easily.
+    </action>
+    <action type="update" dev="tfischer">
+      The runtime does not configure the DataSourveFactory with the name "default" 
+      any more automatically. If you need a DataSourceFactory with that name,
+      you have to configure it manually from now on.
+    </action>
+    <action type="update" dev="tfischer">
+      If Torque is not yet initialized, it does now return null as name of the 
+      default database (not "default" as it was before).
+    </action>
     <action type="update" dev="tfischer" issue="TRQS252">
       The asColumns in a Criteria are now added to the SQL select clause 
       in the same order as they were added to a Criteria.

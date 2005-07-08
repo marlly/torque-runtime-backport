@@ -73,6 +73,11 @@ public abstract class DB implements Serializable, IDMethod
     /** <code><pre>SELECT ... WHERE ... AND ROW_NUMBER() OVER() < <limit></pre></code> */
     public static final int LIMIT_STYLE_DB2 = 5;
 
+	/**
+	 * Key for the configuration which contains database adapters 
+	 */
+	public static final String ADAPTER_KEY = "adapter";
+
     /**
      * Empty constructor.
      */

@@ -24,10 +24,21 @@ import org.apache.torque.TorqueException;
  * A factory that returns a DataSource.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
+ * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
 public interface DataSourceFactory
 {
+    /**
+     * Key for the configuration which contains DataSourceFactories
+     */
+    public static final String DSFACTORY_KEY = "dsfactory";
+
+    /**
+     *  Key for the configuration which contains the fully qualified name
+     *  of the factory implementation class 
+     */
+    public static final String FACTORY_KEY = "factory";
     
     /**
      * @return the <code>DataSource</code> configured by the factory.

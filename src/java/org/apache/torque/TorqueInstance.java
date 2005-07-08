@@ -28,13 +28,12 @@ import java.util.Map;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
+import org.apache.torque.dsfactory.AbstractDataSourceFactory;
 import org.apache.torque.dsfactory.DataSourceFactory;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
@@ -64,11 +63,8 @@ public class TorqueInstance
     /** Logging */
     private static Log log = LogFactory.getLog(TorqueInstance.class);
 
-    /** A constant for <code>default</code>. */
-    private static final String DEFAULT_NAME = "default";
-
     /** The db name that is specified as the default in the property file */
-    private String defaultDBName;
+    private String defaultDBName = null;
 
     /** The global cache of database maps */
     private Map dbMaps;
@@ -136,17 +132,22 @@ public class TorqueInstance
         // properties that are contained in the configuration. First
         // look for properties that are in the "torque" namespace.
 
-        Configuration subConf = conf.subset("torque");
-
-        if (subConf != null && !subConf.isEmpty())
+        Configuration subConf = conf.subset(Torque.TORQUE_KEY);
+        if (subConf == null || subConf.isEmpty())
         {
-            setConfiguration(subConf);
+            String error = ("Invalid configuration. No keys starting with "
+                    + Torque.TORQUE_KEY 
+                    + " found in configuration");
+            log.error(error);
+            throw new TorqueException(error);
         }
+        setConfiguration(subConf);
 
-        dbMaps = new HashMap();
+        initDefaultDbName(conf);
         initAdapters(conf);
         initDataSourceFactories(conf);
 
+        dbMaps = new HashMap();
         for (Iterator i = mapBuilders.iterator(); i.hasNext();)
         {
             //this will add any maps in this builder to the proper database map
@@ -160,10 +161,41 @@ public class TorqueInstance
 
         isInit = true;
     }
+    
+    
+    /**
+     * initializes the name of the default database
+     * @param conf the configuration representing the torque section 
+     *        of the properties file
+     * @throws TorqueException if the appropriate key is not set
+     */
+    private final void initDefaultDbName(Configuration conf)
+            throws TorqueException
+    {
+        // Determine default database name.
+        defaultDBName =
+                conf.getString(
+                        Torque.DATABASE_KEY 
+                        + "."
+                        + Torque.DEFAULT_KEY);
+        if (defaultDBName == null)
+        {
+            String error = "Invalid configuration: Key "
+                    + Torque.TORQUE_KEY
+                    + "."
+                    + Torque.DATABASE_KEY 
+                    + "."
+                    + Torque.DEFAULT_KEY
+                    + " not set";
+            log.error(error);
+            throw new TorqueException(error);
+        }
+    }
 
     /**
      *
-     * @param conf the Configuration representing the properties file
+     * @param conf the Configuration representing the torque section of the
+     *        properties file
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -172,44 +204,57 @@ public class TorqueInstance
     {
         log.debug("initAdapters(" + conf + ")");
         adapterMap = new HashMap();
-        Configuration c = conf.subset("database");
 
+        Configuration c = conf.subset(Torque.DATABASE_KEY);
         if (c == null || c.isEmpty())
         {
-            log.warn("No Database definitions found!");
+            String error = "Invalid configuration : "
+                    + "No keys starting with "
+                    + Torque.TORQUE_KEY
+                    + "."
+                    + Torque.DATABASE_KEY
+                    + " found in configuration";
+            log.error(error);
+            throw new TorqueException(error);
         }
-        else
+        
+        try
         {
-            boolean foundAdapters = false;
-
-            try
+            for (Iterator it = c.getKeys(); it.hasNext(); )
             {
-                for (Iterator it = c.getKeys(); it.hasNext(); )
+                String key = (String) it.next();
+                if (key.endsWith(DB.ADAPTER_KEY))
                 {
-                    String key = (String) it.next();
-                    if (key.endsWith("adapter"))
-                    {
-                        String adapter = c.getString(key);
-                        String handle = key.substring(0, key.indexOf('.'));
-                        DB db = DBFactory.create(adapter);
-                        // register the adapter for this name
-                        adapterMap.put(handle, db);
-                        log.debug("Adding " + adapter + " -> " + handle + " as Adapter");
-                        foundAdapters = true;
-                    }
-                }
-                if (!foundAdapters)
-                {
-                    log.warn("Databases defined but no adapter "
-                             + "configurations found!");
+                    String adapter = c.getString(key);
+                    String handle = key.substring(0, key.indexOf('.'));
+                    DB db = DBFactory.create(adapter);
+                    // register the adapter for this name
+                    adapterMap.put(handle, db);
+                    log.debug("Adding " + adapter + " -> " + handle + " as Adapter");
                 }
             }
-            catch (Exception e)
-            {
-                log.error("Error reading configuration seeking database "
-                          + "adapters", e);
-                throw new TorqueException(e);
-            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error reading configuration seeking database "
+                      + "adapters", e);
+            throw new TorqueException(e);
+        }
+        
+        if (adapterMap.get(Torque.getDefaultDB()) == null)
+        {
+            String error = "Invalid configuration : "
+                    + "No adapter definition found for default DB "
+                    + "An adapter must be defined under "
+                    + Torque.TORQUE_KEY
+                    + "."
+                    + Torque.DATABASE_KEY
+                    + "."
+                    + Torque.getDefaultDB()
+                    + "."
+                    + DB.ADAPTER_KEY;
+            log.error(error);
+            throw new TorqueException(error);
         }
     }
 
@@ -224,63 +269,59 @@ public class TorqueInstance
     {
         log.debug("initDataSourceFactories(" + conf + ")");
         dsFactoryMap = new HashMap();
-        Configuration c = conf.subset("dsfactory");
-        if (c != null)
+        
+        Configuration c = conf.subset(DataSourceFactory.DSFACTORY_KEY);
+        if (c == null || c.isEmpty())
         {
-            boolean foundFactories = false;
-
-            try
-            {
-                for (Iterator it = c.getKeys(); it.hasNext();)
-                {
-                    String key = (String) it.next();
-                    if (key.endsWith("factory"))
-                    {
-                        String classname = c.getString(key);
-                        String handle = key.substring(0, key.indexOf('.'));
-                        log.debug("handle: " + handle
-                                + " DataSourceFactory: " + classname);
-                        Class dsfClass = Class.forName(classname);
-                        DataSourceFactory dsf =
-                                (DataSourceFactory) dsfClass.newInstance();
-                        dsf.initialize(c.subset(handle));
-                        dsFactoryMap.put(handle, dsf);
-                        foundFactories = true;
-                    }
-                }
-                if (!foundFactories)
-                {
-                    log.warn("Data Sources configured but no factories found!");
-                }
-            }
-            catch (Exception e)
-            {
-                log.error("Error reading adapter configuration", e);
-                throw new TorqueException(e);
-            }
+            String error = "Invalid configuration: "
+                    + "No keys starting with "
+                    + Torque.TORQUE_KEY
+                    + "."
+                    + DataSourceFactory.DSFACTORY_KEY
+                    + " found in configuration";
+            log.error(error);
+            throw new TorqueException(error);
         }
 
-        // As there might be a default database configured
-        // to map "default" onto an existing datasource, we
-        // must check, whether there _is_ really an entry for
-        // the "default" in the dsFactoryMap or not. If it is
-        // not, then add a dummy entry for the "default"
-        //
-        // Without this, you can't actually access the "default"
-        // data-source, even if you have an entry like
-        //
-        // database.default = bookstore
-        //
-        // in your Torque.properties
-        //
-        String defaultDB = getDefaultDB();
-
-        if (dsFactoryMap.get(DEFAULT_NAME) == null
-                && !defaultDB.equals(DEFAULT_NAME))
+        try
         {
-            log.debug("Adding a dummy entry for "
-                    + DEFAULT_NAME + ", mapped onto " + defaultDB);
-            dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
+            for (Iterator it = c.getKeys(); it.hasNext();)
+            {
+                String key = (String) it.next();
+                if (key.endsWith(DataSourceFactory.FACTORY_KEY))
+                {
+                    String classname = c.getString(key);
+                    String handle = key.substring(0, key.indexOf('.'));
+                    log.debug("handle: " + handle
+                            + " DataSourceFactory: " + classname);
+                    Class dsfClass = Class.forName(classname);
+                    DataSourceFactory dsf =
+                            (DataSourceFactory) dsfClass.newInstance();
+                    dsf.initialize(c.subset(handle));
+                    dsFactoryMap.put(handle, dsf);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Error reading adapter configuration", e);
+            throw new TorqueException(e);
+        }
+
+        if (dsFactoryMap.get(Torque.getDefaultDB()) == null)
+        {
+            String error = "Invalid configuration : "
+                    + "No DataSourceFactory definition for default DB found. "
+                    + "A DataSourceFactory must be defined under the key"
+                    + Torque.TORQUE_KEY
+                    + "."
+                    + DataSourceFactory.DSFACTORY_KEY
+                    + "."
+                    + Torque.getDefaultDB()
+                    + "."
+                    + DataSourceFactory.FACTORY_KEY;
+            log.error(error);
+            throw new TorqueException(error);
         }
     }
 
@@ -531,12 +572,7 @@ public class TorqueInstance
                     = (DataSourceFactory) dsFactoryMap.get(dsfKey);
             try 
             {
-                // Database "default" is just a reference to another database.
-                // We must not close it explicitly.
-                if (!DEFAULT_NAME.equals(dsfKey))
-                {
-                	dsf.close();
-                }
+                dsf.close();
                 it.remove();
             }
             catch (TorqueException e)
@@ -824,22 +860,10 @@ public class TorqueInstance
     /**
      * Returns the name of the default database.
      *
-     * @return name of the default DB
+     * @return name of the default DB, or null if Torque is not initialized yet
      */
     public String getDefaultDB()
     {
-        if (conf == null)
-        {
-            return DEFAULT_NAME;
-        }
-        else if (defaultDBName == null)
-        {
-            // Determine default database name.
-            defaultDBName =
-                    conf.getString(Torque.DATABASE_DEFAULT, 
-                            DEFAULT_NAME).trim();
-        }
-
         return defaultDBName;
     }
 

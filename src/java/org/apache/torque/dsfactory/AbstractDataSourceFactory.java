@@ -56,14 +56,20 @@ public abstract class AbstractDataSourceFactory
     /** "schema" Key for the configuration */
     public static final String SCHEMA_KEY = "schema";
 
-    /** "default.pool" Key for the configuration */
-    public static final String DEFAULT_POOL_KEY = "defaults.pool";
+    /** "defaults" Key for the configuration */
+    public static final String DEFAULTS_KEY = "defaults";
 
-    /** "default.connection" Key for the configuration */
-    public static final String DEFAULT_CONNECTION_KEY = "defaults.connection";
+    /** "defaults.pool" Key for the configuration */
+    public static final String DEFAULT_POOL_KEY 
+            = DEFAULTS_KEY + "." + POOL_KEY;
 
-    /** "default schema name" for the configuration */
-    public static final String DEFAULT_SCHEMA_KEY = "defaults.schema";
+    /** "defaults.connection" Key for the configuration */
+    public static final String DEFAULT_CONNECTION_KEY 
+            = DEFAULTS_KEY + "." + CONNECTION_KEY;
+
+    /** default schema name for the configuration */
+    public static final String DEFAULT_SCHEMA_KEY 
+            = DEFAULTS_KEY + "." + SCHEMA_KEY;
 
 
     /** The log */
