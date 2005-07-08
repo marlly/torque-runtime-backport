@@ -20,7 +20,6 @@
 
       <source><![CDATA[
     db-torque/
-      examples/        <--- example schema and config files
       profile/         <--- testing profiles
       src/             <--- sources
         conf/          <--- runtime configuration
@@ -95,5 +94,117 @@
 
     </section>
 
+    <section name="Initialisation of the Torque Runtime">
+      <p>
+        This section is meant to to provide some insight into the initialisation procedure
+        of Torque.
+        On initialisation, Torque needs to provide the following resources to work properly
+        <ul> 
+          <li>
+            The name of the default database, configured by the key
+            torque.database.default
+          </li> 
+          <li>
+            The adapters, configured by the keys 
+            torque.database.&lt;databaseName&gt;.adapter
+          </li> 
+          <li>
+            The DataSourceFactories, configured by the keys
+            torque.dsfactory.&lt;databaseName&gt;.&lt;property&gt;. 
+            For some DataSourceFactories, default values can be defined under
+            torque.defaults.&lt;property&gt;.
+          </li>
+          <li>
+            The Database maps. Each peer class registers its Map builder with the Torque
+            runtime when the Base Peer Class is loaded (Usually, a peer class is loaded 
+            if one of the constants for a column name is accessed, or a method
+            is called). If Torque is already initialized when the Peer class is loaded
+            (this is usually the case) the Map Builder builds the database map instantly 
+            and makes it avaliable to Torque. If Torque is not yet initialized,
+            the Peer class stores the Map Builder with Torque, which builds the database
+            Map when Torque is initialized.
+          </li>
+          <li>
+            The managers. These are not used in most setups.
+          </li>
+        </ul>
+      </p>
+      
+    </section>
+    
+    <section name="Internal resources used by the Torque Runtime">
+    
+      <subsection name="Default database name">
+        <p>
+          Torque can be used with several databases at once. The resources for each
+          database are usually kept in Maps where the key is the name of the database.
+          To make things easier for people who use only one database, Torque supports
+          the notion of a default database. This allows it to provide convenience 
+          methods like Torque.getConnection() where no database name must be specified. 
+          These methods refer to the default database, in contrast to e.g.
+          Torque.getConnection(String) where the name of the database must be supplied
+          explicitly.
+        </p>
+      </subsection>
+    
+      <subsection name="Adapters">
+        <p>
+          Although all databases supported by Torque understand SQL, there are 
+          differences in the behaviour of the databases which the Torque runtime
+          needs to know about. For example, the standard (String) format of a date
+          object in an oracle9i database is different from a postgresql database.
+          The adapter for a database provides the necessary methods to hide such
+          differences from the user. 
+          For example, the adapter provides a method to create a String in the 
+          database's preferred format from a Date object.
+        </p>
+        
+        <p>
+          Adapters are subclasses of the org.apache.torque.adapter.DB class.
+          The adapters are stored in the private map TorqueInstance.apdapterMap; 
+          the key of the map is the name of the database (e.g. "bookstore"), and the
+          value of the map is the adapter. The adapter for a given key
+          can be retrieved via the method Torque.getDB(key).
+        </p>
+      </subsection>
+
+      <subsection name="DataSourceFactories">
+        <p>
+          To access a database, a connection must be made to the database.
+          A DataSource is an object which can provide Connections to the database.
+          A DataSourceFactory is used to configure and provide one DataSource.
+        </p>
+        
+        <p>
+          DataSourceFactories must implement the interface
+          org.apache.torque.dsfactory.DataSourceFactory.
+          The DataSourceFactories are stored in the private map 
+          TorqueInstance.dsFactoryMap; the key of the map is the 
+          name of the database (e.g. "bookstore"), and the
+          value of the map is the DataSourceFactory. 
+          The DataSourceFactory for a given key
+          can not be retrieved by a public method; however, a connection 
+          from the DataSource for the DataSourceFactory for a given key
+          can be obtained by Torque.getConnection(key);
+        </p>
+      </subsection>
+      
+      <subsection name="Database maps">
+        <p>
+          Torque sometimes needs to know internals about the structure of the
+          database, e.g. which table contains which columns etc.
+          This knowledge is kept in the database maps. 
+        </p>
+        
+        <p>
+          Database Maps are instances of the class org.apache.torque.map.DatabaseMap.
+          They are kept in the instance variable TorqueInstance.dbMaps. The Map
+          for the database with the name key can be retrieved by the method 
+          Torque.getDatabaseMap(key).
+        </p>
+      </subsection>
+      
+    </section>
+    
   </body>
 </document>
