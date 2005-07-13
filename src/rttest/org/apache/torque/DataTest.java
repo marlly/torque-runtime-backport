@@ -918,7 +918,7 @@ public class DataTest extends BaseRuntimeTestCase
      */
     public void testLargePk() throws Exception
     {
-        // clean Date table
+        // clean LargePk table
         Criteria criteria = new Criteria();
         criteria.add(
         		LargePkPeer.LARGE_PK_ID, 
@@ -1120,6 +1120,39 @@ public class DataTest extends BaseRuntimeTestCase
         ClobTest readClobTest = (ClobTest) clobTestList.get(0);
         assertTrue("read and written clobs should be equal", 
                 clobTest.getClobValue().equals(readClobTest.getClobValue()));
+    }
+    
+    /**
+     * Test whether we can execute queries as prepared statements
+     * @throws Exception
+     */
+    public void testPreparedStatements() throws Exception
+    {
+        // clean LargePk table
+        Criteria criteria = new Criteria();
+        criteria.add(
+                LargePkPeer.LARGE_PK_ID, 
+                (Long) null, 
+                Criteria.NOT_EQUAL);
+        LargePkPeer.doDelete(criteria);
+
+        LargePk largePk = new LargePk();
+        largePk.setLargePkId(1);
+        largePk.setName("testLargePk");
+        largePk.save();
+        
+        largePk = new LargePk();
+        largePk.setLargePkId(2);
+        largePk.setName("testLargePk");
+        largePk.save();
+        
+        criteria = new Criteria();
+        criteria.add(LargePkPeer.LARGE_PK_ID, 2, Criteria.LESS_THAN);
+        LargePkPeer.addSelectColumns(criteria);
+        List result = BasePeer.doPSSelect(criteria);
+        assertTrue("Size of largePk list should be 1 but is " 
+                + result.size(),
+                result.size() == 1);
     }
     
     /**
