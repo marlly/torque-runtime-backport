@@ -1031,9 +1031,9 @@ public class DataTest extends BaseRuntimeTestCase
      * check that blob cloumns can be read and written correctly
      * @throws Exception if the test fails
      */
-    public void testLobs() throws Exception
+    public void testBlobs() throws Exception
     {
-        // clean LobTest table
+        // clean BlobTest table
         {
             Criteria criteria = new Criteria();
             criteria.add(
@@ -1062,12 +1062,12 @@ public class DataTest extends BaseRuntimeTestCase
         
         // read the BlobTests from the database
         // and check the values against the original values
-        List lobTestList = BlobTestPeer.doSelect(new Criteria());
+        List blobTestList = BlobTestPeer.doSelect(new Criteria());
         assertTrue("blobTestList should contain 1 object but contains " 
-                + lobTestList.size(),
-                lobTestList.size() == 1);
+                + blobTestList.size(),
+                blobTestList.size() == 1);
         
-        BlobTest readBlobTest = (BlobTest) lobTestList.get(0);        
+        BlobTest readBlobTest = (BlobTest) blobTestList.get(0);        
         assertTrue("read and written blobs should be equal. "
                 + "Size of read blob is"
                 + readBlobTest.getBlobValue().length
