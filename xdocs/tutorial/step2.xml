@@ -466,7 +466,7 @@ torque/
                            runtime.
     master/build.xml  <--- The Ant build file for regenerating 
                            Torque.properties.
-    master/default.prperties
+    master/default.properties
                       <--- The properties that will be used when regenerating 
                            Torque.properties.
     master/Torque.master
