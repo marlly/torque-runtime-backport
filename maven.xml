@@ -38,12 +38,18 @@
   <!-- ================================================================== -->
   <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->
   <!-- ================================================================== -->
-  <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
-  <!-- to include them in the binary dists                                -->
+  <!-- copies jars, sample configuration ... to the                       -->
+  <!-- ${maven.dist.bin.assembly.dir} to include them in the binary dists -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-bin">
     <!-- include listed dependencies -->
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib" excludes="jndi:jndi,jdbc" />
+
+    <!-- copy the contents of the conf directory -->
+    <!-- to the right place -->
+    <copy todir="${maven.dist.bin.assembly.dir}">
+      <fileset dir="${maven.src.dir}/conf" />
+    </copy>
   </preGoal>
 
   <!-- ================================================================== -->
@@ -52,6 +58,7 @@
   <!-- includes project-base.xml in the source distribution               -->
   <!-- This is necessary as long as maven does not resolves the extends   -->
   <!-- property of the pom upon generation of the source distribution     -->                                           
+  <!-- Also, do not include src/generator in the source distribution      -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-src">
     <!-- include project-base.xml                              -->
@@ -59,6 +66,10 @@
     <!-- called from the generator where the project-base.xml  -->
     <!-- does not exist in the base directory                  -->
     <copy todir="${maven.dist.src.assembly.dir}" file="project-base.xml" failonerror="false"/>
+    <!-- do not include src/generator in the source distribution -->
+    <!-- The directory is deleted after copying, maybe one can find -->
+    <!-- a better solution -->                                           
+    <delete dir="${maven.dist.src.assembly.dir}/src/generator" />
   </preGoal>
 
   <!-- ================================================================== -->
