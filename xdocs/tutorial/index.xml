@@ -13,12 +13,6 @@
 <p>
   This tutorial is intended to give first-time users an
   introduction to using Torque, an object-relational tool.
-  Torque was developed as part of the 
-  <a href="http://jakarta.apache.org/turbine/">Turbine</a> web
-  application framework.  Until recently, it was tightly
-  coupled in that framework, and could not be used
-  independently.  This tutorial is an introduction to the
-  decoupled version of Torque.
 </p>
 
 <p>
@@ -33,9 +27,8 @@
 
 <p>
   The example used throughout this tutorial is based on an
-  email sent to the <a href="../mail-lists.html">
-  turbine-user</a> mailing list by Steven F. Davis
-  called
+  email sent to the turbine-user mailing list by 
+  Steven F. Davis called
   <a href="http://mail-archives.apache.org/eyebrowse/ReadMsg?listName=turbine-user@jakarta.apache.org&amp;msgNo=5287">
   torque outside turbine - detailed example (long)</a>.
   It has subsequently been updated for Turbine 3.1 which

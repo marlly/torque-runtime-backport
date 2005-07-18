@@ -11,21 +11,21 @@
 <section name="Step 3: Invoking Torque">
 
 <p>
-With the configuration of Torque completed, you can now
-generate the object model to support your database, and
-optionally create your database and all of its
-associated tables.  As mentioned earlier in this
-tutorial, Torque utilizes Maven to perform these tasks.
-Each of these tasks is covered in the following
-sections.
+  With the configuration of Torque completed, you can now
+  generate the object model to support your database, and
+  optionally create your database and all of its
+  associated tables.  As mentioned earlier in this
+  tutorial, Torque utilizes Maven to perform these tasks.
+  Each of these tasks is covered in the following
+  sections.
 </p>
 
 <p>
-Note: If you are yet to jump aboard the Maven ship you can 
-download the torque-gen archive and make use of the Ant build 
-file <code>build-torque.xml</code> contained therein - see the 
-<a href="../user-guide.html#Generator_with_the_Ant_build_file">User Guide</a>. 
-for details.
+  Note: If you are yet to jump aboard the Maven ship you can 
+  download the torque-gen archive and make use of the Ant build 
+  file <code>build-torque.xml</code> contained therein. Some hints
+  about this can be found in the 
+  <a href="../user-guide.html#Generator_with_the_Ant_build_file">User Guide</a>. 
 </p>
 
 </section>
@@ -102,9 +102,7 @@ maven torque
   schema file.  Check the format of the file and make
   sure it conforms to the
   <a href="../generator/schema-reference.html">
-  Torque Schema Reference</a>.  Validating the file 
-  against the provided DTD will help ensure that it 
-  will be processed correctly.
+  Torque Schema Reference</a>.
 </p>
 
 </section>
@@ -141,6 +139,15 @@ maven torque
 <source><![CDATA[
 maven torque:create-db
 ]]></source>
+
+<p>
+  Note that creating the database might not work 
+  for some databases or the database user configured
+  in the generator properties might not have the 
+  necessary permissions to do so. If you encounter 
+  problems in this step, skip it and create the 
+  database manually.
+</p>
 
 <p>
   To create your tables, type the following commands in

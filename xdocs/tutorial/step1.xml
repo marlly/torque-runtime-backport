@@ -5,14 +5,34 @@
     <title>Torque Tutorial</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
     <author email="seade@backstagetech.com.au">Scott Eade</author>
-  </properties>
+    <author email="fischer@seitenbau.de">Thomas Fischer</author>
+ </properties>
   <body>
 
 <section name="Step 1: Obtaining the Torque Distribution">
 
 <p>
-  For this tutorial we will be using the maven plugin for Torque 3.1.1 to
-  generate our object model classes and the Torque 3.1.1 runtime for our
+  First of all, note that Torque is divided into three parts.
+  <ul>
+    <li>
+      The generator generates your persistence classes from an xml
+      description of the database. It also generates and executes
+      sql scripts to create all the necessary tables, constraints etc. 
+      in your database.
+    </li>
+    <li>
+      The maven plugin integrates the generator into 
+      <a href="http://maven.apache.org/">Maven</a>, a software 
+      project management tool.
+    </li>
+    <li>
+      The runtime has to be included in your projects for the generated classes
+      to work properly.
+    </li>
+  </ul>
+  For this tutorial, we will be using the maven plugin for Torque 3.2.x 
+  (which will silently invoke the generator) to
+  generate our object model classes and the Torque 3.2.x runtime for our
   application that makes use of the generated classes.
 </p>
 
@@ -25,16 +45,21 @@
 </p>
 
 <source><![CDATA[
-maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.1.1
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc1
 ]]></source>
 
 <p>
   At runtime the generated object model classes need access to the Torque 
   runtime distribution and associated libraries - these are available from the
   <a href="http://db.apache.org/torque/download.html">
-  Downloads page</a> (the file to download is torque-3.1.1.tar.gz or 
-  torque-3.1.1.zip, depending on your development platform).  We will cover
+  Downloads page</a> (the file to download is torque-3.2-rc1.tar.gz or 
+  torque-3.2-rc1.zip, depending on your development platform).  We will cover
   what to do with this file in a later step.
+</p>
+
+<p>
+  If you are using the maven plugin, you do not need to download the generator 
+  separately. The maven plugin will download the needed resources.
 </p>
 
 </section>
