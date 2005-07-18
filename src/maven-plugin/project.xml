@@ -75,8 +75,15 @@
     <dependency>
       <groupId>torque</groupId>
       <artifactId>torque-gen</artifactId>
-      <version>SNAPSHOT</version>
-      <url>http://db.apache.org/torque-31/generator/</url>
+      <version>3.2-dev</version>
+      <url>http://db.apache.org/torque/generator/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>torque</groupId>
+      <artifactId>torque-gen-templates</artifactId>
+      <version>3.2-dev</version>
+      <url>http://db.apache.org/torque/generator/templates/</url>
     </dependency>
 
     <dependency>
