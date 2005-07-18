@@ -18,7 +18,7 @@
  -->
 
 <project>
-  <extend>../../project-base.xml</extend>
+  <extend>${torque.project.base.path}</extend>
   <pomVersion>3</pomVersion>
   <id>torque-gen</id>
   <groupId>torque</groupId>
@@ -59,6 +59,20 @@
       <groupId>commons-logging</groupId>
       <version>1.0.4</version>
       <url>http://jakarta.apache.org/commons/logging/</url>
+    </dependency>
+
+    <dependency>
+      <artifactId>logkit</artifactId>
+      <groupId>logkit</groupId>
+      <version>1.0.1</version>
+      <url>http://avalon.apache.org/products/runtime/system/logging/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>torque</groupId>
+      <artifactId>torque-gen-templates</artifactId>
+      <version>3.2-dev</version>
+      <url>http://db.apache.org/torque/generator/templates/</url>
     </dependency>
 
     <dependency>
@@ -105,7 +119,34 @@
         <exclude>**/BaseTestCase.java</exclude>
       </excludes>
     </unitTest>
-
-    <resources></resources>
+    <defaultGoal>jar:jar</defaultGoal>
+    <resources>
+      <resource>
+        <targetPath>org/apache/torque</targetPath>
+        <filtering>false</filtering>
+        <directory>src/conf</directory>
+        <includes>
+          <include>default.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <targetPath>org/apache/torque/engine/database/transform</targetPath>
+        <filtering>false</filtering>
+        <directory>src/dtd</directory>
+        <includes>
+          <include>database.dtd</include>
+        </includes>
+      </resource>
+      <resource>
+        <targetPath></targetPath>
+        <filtering>false</filtering>
+        <directory>src/conf</directory>
+        <includes>
+          <include>commons-logging.properties</include>
+          <include>log4j.properties</include>
+          <include>simplelog.properties</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
 </project>
