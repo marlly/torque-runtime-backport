@@ -170,7 +170,7 @@
         <exclude>**/BaseTestCase.java</exclude>
       </excludes>
     </unitTest>
-
+    <defaultGoal>jar:jar</defaultGoal>
     <resources></resources>
   </build>
   

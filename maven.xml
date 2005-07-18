@@ -26,7 +26,6 @@
 <!-- ======================================================================== -->
 
 <project
-  default="jar:jar"
   xmlns:deploy="deploy">
 
   <!-- Allow any user specific values to override the defaults -->
@@ -45,6 +44,21 @@
   <preGoal name="dist:build-bin">
     <!-- include listed dependencies -->
     <deploy:copy-deps todir="${maven.dist.bin.assembly.dir}/lib" excludes="jndi:jndi,jdbc" />
+  </preGoal>
+
+  <!-- ================================================================== -->
+  <!-- D I S T : B U I L D _ S R C   P R E   G O A L                      -->
+  <!-- ================================================================== -->
+  <!-- includes project-base.xml in the source distribution               -->
+  <!-- This is necessary as long as maven does not resolves the extends   -->
+  <!-- property of the pom upon generation of the source distribution     -->                                           
+  <!-- ================================================================== -->
+  <preGoal name="dist:build-src">
+    <!-- include project-base.xml                              -->
+    <!-- the failonerror is there because this preGoal also is -->
+    <!-- called from the generator where the project-base.xml  -->
+    <!-- does not exist in the base directory                  -->
+    <copy todir="${maven.dist.src.assembly.dir}" file="project-base.xml" failonerror="false"/>
   </preGoal>
 
   <!-- ================================================================== -->
