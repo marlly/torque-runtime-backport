@@ -47,7 +47,7 @@
 
     <!-- copy the contents of the conf directory -->
     <!-- to the right place -->
-    <copy todir="${maven.dist.bin.assembly.dir}">
+    <copy todir="${maven.dist.bin.assembly.dir}" failonerror="false">
       <fileset dir="${maven.src.dir}/conf">
         <include name="componentConfiguration.xml" />
         <include name="roleConfiguration.xml" />
