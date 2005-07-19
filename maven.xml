@@ -275,7 +275,7 @@
 
     <!-- copy test schemas -->
     <copy
-      todir="${test.ojb.distDir}/schema"
+      todir="${test.ojb.distDir}/src/schema"
       filtering="yes"
       overwrite="yes">
       <fileset dir="${test.ojb.srcDir}">
