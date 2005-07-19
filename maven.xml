@@ -48,7 +48,12 @@
     <!-- copy the contents of the conf directory -->
     <!-- to the right place -->
     <copy todir="${maven.dist.bin.assembly.dir}">
-      <fileset dir="${maven.src.dir}/conf" />
+      <fileset dir="${maven.src.dir}/conf">
+        <include name="componentConfiguration.xml" />
+        <include name="roleConfiguration.xml" />
+        <include name="Torque.properties" />
+        <include name="master/*" />
+      </fileset>
     </copy>
   </preGoal>
 
@@ -165,7 +170,7 @@
 
     <!-- copy test schemas -->
     <copy
-      todir="${torque.distDir}/schema"
+      todir="${torque.distDir}/src/schema"
       filtering="yes"
       overwrite="yes">
       <fileset dir="${rttest.dir}">
