@@ -46,7 +46,7 @@
   <!-- ================================================================== -->
   <!-- D I S T : B U I L D _ B I N   P R E   G O A L                      -->
   <!-- ================================================================== -->
-  <!-- copies jars, templates, ... to the ${maven.dist.bin.assembly.dir}  -->
+  <!-- copies jars, ... to the ${maven.dist.bin.assembly.dir}             -->
   <!-- to include them in the binary dists                                -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-bin">
@@ -62,6 +62,15 @@
       file="${maven.src.dir}/conf/build.properties"
       todir="${maven.dist.bin.assembly.dir}"
     />
+    <copy 
+      file="${maven.src.dir}/conf/default.properties"
+      todir="${maven.dist.bin.assembly.dir}"
+    />
+    <copy todir="${maven.dist.bin.assembly.dir}/src/schema">
+      <fileset dir="${maven.src.dir}/schema">
+        <include name="id-table-schema.xml" />
+      </fileset>
+    </copy>
   </preGoal>
 
   <!-- ================================================================== -->
