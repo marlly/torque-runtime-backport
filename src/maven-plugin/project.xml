@@ -18,7 +18,7 @@
  -->
 
 <project>
-  <extend>../../project-base.xml</extend>
+  <extend>${torque.project.base.path}</extend>
   <pomVersion>3</pomVersion>
   <id>maven-torque-plugin</id>
   <groupId>torque</groupId>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/*
+ * Copyright 2001-2004 The Apache Software Foundation.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -->
+
+<!-- ======================================================================== -->
+<!--                                                                          -->
+<!--  maven Buildfile                                                         -->
+<!--                                                                          -->
+<!-- $Id$ -->
+<!--                                                                          -->
+<!-- ======================================================================== -->
+
+<project
+  xmlns:deploy="deploy">
+
+  <!-- Allow any user specific values to override the defaults -->
+  <property file="${user.home}/build.properties" />
+  <!-- Allow user defaults for this project -->
+  <property file="build.properties" />
+  <!-- Set default values for the build -->
+  <property file="project.properties" />
+
+  <!-- ================================================================== -->
+  <!-- D I S T : B U I L D _ S R C   P R E   G O A L                      -->
+  <!-- ================================================================== -->
+  <!-- includes plugin.jelly and plugin.properties                        -->
+  <!-- in the source distribution                                         -->
+  <!-- ================================================================== -->
+  <preGoal name="dist:build-src">
+    <copy todir="${maven.dist.src.assembly.dir}">
+      <fileset dir="${basedir}">
+        <include name="plugin.jelly" />
+        <include name="plugin.properties" />
+      </fileset>
+    </copy>
+    <!--copy build-src.properties to the right place -->
+    <!--see comment in build-src.properties -->
+    <copy 
+      file="${maven.src.dir}/conf/build-src.properties"
+      tofile="${maven.dist.src.assembly.dir}/build.properties"
+    />
+    <copy 
+      file="${torque.project.base.path}"
+      todir="${maven.dist.src.assembly.dir}"
+    />
+  </preGoal>
+  
+</project>
