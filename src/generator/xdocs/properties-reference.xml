@@ -85,7 +85,7 @@
     </tr>
     <tr>
       <td><code>torque.schema.dir</code></td>
-      <td><code>${torque.home}/schema</code></td>
+      <td><code>${torque.home}/src/schema</code></td>
       <td>The base directory to reading <code>*-schema.xml</code> files from.</td>
     </tr>
     <tr>
