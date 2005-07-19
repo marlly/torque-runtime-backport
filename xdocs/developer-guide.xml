@@ -41,7 +41,7 @@
       ]]></source>
     </section>
 
-    <section name="Building">
+    <section name="Building from CVS">
       <p>
         The Torque build process uses
         <a href="http://maven.apache.org">Maven</a>.  Before you begin, you'll 
@@ -52,10 +52,15 @@
         <a href="cvs-usage.html">Source Repository</a> page.
       </p>
       <p>
-        To build the Torque generator jar execute <code>maven jar:jar</code> in 
-        the <code>src/generator</code> directory (<code>maven 
-        jar:install</code> to install a copy of the jar in your local Maven 
-        repository).
+        To build the Torque generator jar, first execute 
+        <code>maven jar:install</code> in the 
+        <code>src/generator/src/templates</code> directory to install a copy 
+        of the templates jar in your local Maven repository. Note that
+        <code>maven jar:jar</code> does not suffice here because the 
+        main generator jar depends upon the template jar.
+        Afterwards, execute <code>maven jar:jar</code> in the src/generator
+        directory to build the generator jar (<code>maven jar:install</code> 
+        to install a copy of the jar in your local Maven repository).
       </p>
       <p>
         To build and install the Torque maven-plugin execute <code>maven 
