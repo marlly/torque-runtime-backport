@@ -71,7 +71,7 @@
     <dependency>
       <groupId>torque</groupId>
       <artifactId>torque-gen-templates</artifactId>
-      <version>3.2-dev</version>
+      <version>3.2-rc1</version>
       <url>http://db.apache.org/torque/generator/templates/</url>
     </dependency>
 

@@ -21,7 +21,7 @@
   <pomVersion>3</pomVersion>
   <groupId>torque</groupId>
   <name>Torque</name>
-  <currentVersion>3.2-dev</currentVersion>
+  <currentVersion>3.2-rc1</currentVersion>
   <organization>
     <name>Apache Software Foundation</name>
     <url>http://db.apache.org/</url>

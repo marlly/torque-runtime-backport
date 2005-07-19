@@ -76,8 +76,7 @@
 </p>
 
 <source><![CDATA[
-# Torque 3.2 is yet to be released and deployed, in the mean time you must build the plugin from source.
-maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc1
 ]]></source>
 
 
@@ -89,9 +88,9 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   If you prefer to use <a href="http://ant.apache.org/">Ant</a> you need access 
   to the Torque generator distribution and associated libraries - these are 
   available from the 
-  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
-  Downloads page</a> (the file to download is torque-gen-3.1.1.tar.gz or 
-  torque-gen-3.1.1.zip, depending on your development platform).  Unpack the
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.2-rc1/">
+  Downloads page</a> (the file to download is torque-gen-3.2-rc1.tar.gz or 
+  torque-gen-3.2-rc1.zip, depending on your development platform).  Unpack the
   archive to reveal the following directory structure:
 </p>
 
@@ -100,27 +99,26 @@ torque-gen-3.1.1/
     docs/              <--- Contains a copy of the Torque documentation, 
                             including the API JavaDocs.
     lib/               <--- Contains the jar files required by the Torque 
-                            generator.
-    schema/            <--- Contains the schema for the table used by Torque's
+                            generator, including the torque-gen-templates
+                            jar containing the templates. If you want to 
+                            modify the templates, you can unpack the 
+                            templates jar, set the 
+                            <code>torque.useClasspath</code> to 
+                            <code>false</code> 
+                            and the <codetorque.schema.dir</code>
+                            to the correct directory in the
+                            <code>build.properties</code>
+    src/schema/        <--- Contains the schema for the table used by Torque's
                             IDBroker.
-    templates/         <--- A copy of the Torque generator object model
-                            Velocity templates.  To use these rather than the 
-                            copy that is included in the torque-gen jar file
-                            you need to set <code>torque.useClasspath</code> to 
-                            <code>false</code> in <code>build.properties</code>
-                            (this is actually the default).
     build.properties   <--- The various properties that you use to configure
                             the Torque generator.
     build-torque.xml   <--- The Ant build file containing the various torque 
                             goals.
-    commons-logging.properties
-                       <--- Commons logging configuration file.
     default.properties <--- The default property values that are used to
                             configure the Torque generator.
     LICENSE.txt        <--- The License for the Torque generator.
-    log4j.properties   <--- Log4j configuration file.
-    simplelog.properties
-                       <--- Commons logging simplelog configuration file.
+    torque-gen-3.2-rc1.jar
+                       <--- The generator jar.
 ]]></source>
 
 <p>

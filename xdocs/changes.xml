@@ -27,7 +27,19 @@
 
   <body>
 
-  <release version="3.2-dev" date="in CVS">
+  <release version="3.2-rc1" date="in CVS">
+    <action type="add" dev="tfischer">
+      Added the build-torque.xml again to the generator release. 
+      In order to use the same default directory structure 
+      for maven and ant, the default directory for the schema files
+      was changed from ${torque.home}/schema to ${torque.home}/src/schema
+    </action>
+    <action type="update" dev="tfischer">
+      The generator templates are now packed in a separate jar file,
+      torque-gen-templates.jar, which is included in the generator
+      tar.gz and zip distributions. To build the jar from source,
+      change into src/generator/src/templates and run maven jar:install.
+    </action>
     <action type="update" dev="tfischer" issue="TRQS308">
       Changed runtime configuration checking. It is now required having set 
       the following properties:
