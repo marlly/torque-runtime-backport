@@ -20,6 +20,43 @@
         A list of changes can be found <a href="changes-report.html">here</a>.
       </p>
 
+      <subsection name="19 July 2005 - Torque 3.2-rc1 is released!">
+        <p>
+          The most prominent changes are:
+          <ul>
+            <li>
+              Added database schema support, both in the generator
+              and in the runtime
+            </li>
+            <li>
+              Added support for outer joins
+            </li>
+            <li>
+              Added support for creation of simple java beans 
+              from persistent objects
+            </li>
+            <li>
+              The old connection pool is removed 
+              (only dbcp is supported out of the box)
+            </li>
+            <li>
+              Some smaller changes were made in the database.dtd
+            </li>  
+            <li>
+              The build-torque ant file for the generator 
+              is contained again in the generator release
+            </li>  
+          </ul>
+          You can obtain the Torque 3.2-rc1 generator, runtime and
+          maven-plugin from our <a href="download.html">Download
+          page</a> or from the <a
+          href="http://ibiblio.org/maven/torque/">ibiblio maven
+          repository</a>. Please refer to <a
+          href="changes-report.html">the Changes report</a> for a full
+          list of changes.
+        </p>
+      </subsection>
+
       <subsection name="26 October 2004 - Torque 3.1.1 is released!">
         <p>
           You can obtain the Torque 3.1.1 generator, runtime and
