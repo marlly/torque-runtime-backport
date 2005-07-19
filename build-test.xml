@@ -206,12 +206,12 @@
   <target
     name="test-ojb-prepare">
     <delete>
-      <fileset dir="${torque.distDir}/schema/">
+      <fileset dir="${torque.distDir}/src/schema/">
         <include name="*"/>
       </fileset>
     </delete>
     <copy
-      todir="${torque.distDir}/schema"
+      todir="${torque.distDir}/src/schema"
       overwrite="yes">
       <fileset dir="src/ojbtest">
         <include name="**/*.xml"/>
