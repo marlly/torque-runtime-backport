@@ -18,7 +18,9 @@
       The generator generates your persistence classes from an xml
       description of the database. It also generates and executes
       sql scripts to create all the necessary tables, constraints etc. 
-      in your database.
+      in your database. 
+      The generator comes packaged in two jars: The templates in 
+      torque-gen-templates.jar, and the rest in torque-gen.jar.
     </li>
     <li>
       The maven plugin integrates the generator into 
