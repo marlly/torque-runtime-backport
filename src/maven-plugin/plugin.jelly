@@ -60,6 +60,7 @@
       <pathelement path="${plugin.getDependencyPath('xercesImpl')}"/>
       <pathelement path="${plugin.getDependencyPath('xml-apis')}"/>
       <pathelement path="${plugin.getDependencyPath('torque:torque-gen')}"/>
+      <pathelement path="${plugin.getDependencyPath('torque:torque-gen-templates')}"/>
       <pathelement path="${pom.getDependencyClasspath()}"/>
       <path refid="maven.dependency.classpath"/>
     </path>
