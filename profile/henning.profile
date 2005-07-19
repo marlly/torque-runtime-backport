@@ -1,7 +1,7 @@
 # location of jar that you will be using for testing
 # so that it can be copied into the dist/lib directory.
 
-torque.testDatabaseJar = ${maven.repo.local}/postgresql/jars/postgresql-7.3-jdbc3.jar
+torque.testDatabaseJar = /usr/share/java/postgresql.jar
 torque.idMethod = idbroker
 #torque.idMethod = native
 torque.defaultDatabase = bookstore
@@ -54,6 +54,7 @@ torque.complexObjectModel=true
 torque.addTimeStamp=true
 torque.addIntakeRetrievable=false
 torque.useManagers=true
+torque.generateBeans=true
 
 # -------------------------------------------------------------------
 #
