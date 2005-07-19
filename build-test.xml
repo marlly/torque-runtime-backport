@@ -183,7 +183,7 @@
   <target
     name="test-datasql">
     <copy
-      tofile="${torque.distDir}/schema/bookstore-data.xml"
+      tofile="${torque.distDir}/src/schema/bookstore-data.xml"
       file="${torque.distDir}/src/bookstore-bookstore-all-data.xml"/>
     <ant
       dir="${torque.buildFileDir}"
