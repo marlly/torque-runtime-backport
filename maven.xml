@@ -71,10 +71,12 @@
     <!-- called from the generator where the project-base.xml  -->
     <!-- does not exist in the base directory                  -->
     <copy todir="${maven.dist.src.assembly.dir}" file="project-base.xml" failonerror="false"/>
-    <!-- do not include src/generator in the source distribution -->
+    <!-- do not include src/generator and src/maven-plugin -->
+    <!-- in the source distribution -->
     <!-- The directory is deleted after copying, maybe one can find -->
     <!-- a better solution -->                                           
     <delete dir="${maven.dist.src.assembly.dir}/src/generator" />
+    <delete dir="${maven.dist.src.assembly.dir}/src/maven-plugin" />
   </preGoal>
 
   <!-- ================================================================== -->
