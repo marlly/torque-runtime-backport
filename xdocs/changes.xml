@@ -27,7 +27,7 @@
 
   <body>
 
-  <release version="3.2-rc1" date="in CVS">
+  <release version="3.2-rc1" date="2005-07-19">
     <action type="add" dev="tfischer">
       Added the build-torque.xml again to the generator release. 
       In order to use the same default directory structure 
