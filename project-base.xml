@@ -38,7 +38,7 @@
   <shortDescription>Persistence Layer</shortDescription>
   <url>http://db.apache.org/torque/</url>
   <issueTrackingUrl>http://issues.apache.org/scarab/issues</issueTrackingUrl>
-  <siteAddress>db.apache.org</siteAddress>
+  <siteAddress>cvs.apache.org</siteAddress>
   <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository</distributionDirectory>
