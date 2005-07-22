@@ -66,6 +66,10 @@
 
   <releases>
     <release>
+      <version>3.2-rc1</version>
+      <tag>TORQUE_3_2_RC1</tag>
+    </release>
+    <release>
       <version>3.1.1</version>
       <tag>TORQUE_3_1_1</tag>
     </release>
