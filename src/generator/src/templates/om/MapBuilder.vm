@@ -1,4 +1,4 @@
-package ${package}.map;
+package ${packageMap};
 
 import java.util.Date;
 import java.math.BigDecimal;

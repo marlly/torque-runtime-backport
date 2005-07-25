@@ -2,7 +2,7 @@
  * author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * version $Id$
  *#
-package $pkbean;
+package $packageBean;
 
 /**
 #if ($addTimeStamp)
@@ -16,6 +16,6 @@ package $pkbean;
  * long as it does not already exist in the output directory.
  */
 public class $table.JavaName${beanSuffix}
-    extends ${pkbean}.${basePrefix}${table.JavaName}${beanSuffix}
+    extends ${packageBaseBean}.${basePrefix}${table.JavaName}${beanSuffix}
 {
 }

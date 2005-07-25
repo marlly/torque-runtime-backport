@@ -1,4 +1,4 @@
-package $package;
+package $packageObject;
 
 import java.util.*;
 import org.apache.torque.om.BaseObject;
@@ -29,6 +29,6 @@ public class $child.ClassName extends $parent
 #set ($col = $child.Column)
 #set ( $cfc=$col.JavaName )
 #set ($table = $col.Table)
-        set${cfc}(${table.JavaName}Peer.CLASSKEY_$child.Key.toUpperCase());
+        set${cfc}(${packagePeer}.${table.JavaName}Peer.CLASSKEY_$child.Key.toUpperCase());
     }
 }

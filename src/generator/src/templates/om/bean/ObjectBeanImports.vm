@@ -1,12 +1,12 @@
 import org.apache.commons.collections.map.IdentityMap;
 import java.util.Iterator;
-import ${pkbean}.${table.JavaName}${beanSuffix};
+import ${packageBean}.${table.JavaName}${beanSuffix};
 #if ($complexObjectModel)
   ## foreign keys
   #foreach ($fk in $table.ForeignKeys)
     #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
     #set ( $className = "${tblFK.JavaName}" )
-import ${pkbean}.${className}${beanSuffix};
+import ${packageBean}.${className}${beanSuffix};
   #end
     
   #if ($objectIsCaching)
@@ -14,7 +14,7 @@ import ${pkbean}.${className}${beanSuffix};
       #set ( $tblFK = $fk.Table )
       #if ( !($tblFK.Name.equals($table.Name)) )
         #set ( $className = $tblFK.JavaName )
-import ${pkbean}.${className}${beanSuffix};
+import ${packageBean}.${className}${beanSuffix};
       #end
     #end
   #end

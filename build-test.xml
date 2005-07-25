@@ -277,7 +277,7 @@
       <batchtest todir="target/test-reports/">
         <fileset dir="${torque.destDir}">
           <include name="**/*Test.class"/>
-          <exclude name="**/test/*.class"/>
+          <exclude name="**/test/**/*.class"/>
           <exclude name="**/LargeSelectTest.class"/>
         </fileset>
       </batchtest>

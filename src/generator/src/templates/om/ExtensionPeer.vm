@@ -1,4 +1,4 @@
-package ${package};
+package ${packagePeer};
 
 /**
 #if ($addTimeStamp)
@@ -12,6 +12,6 @@ package ${package};
  *  long as it does not already exist in the output directory.
  */
 public class ${table.JavaName}Peer
-    extends ${package}.$basePrefix${table.JavaName}Peer
+    extends ${packageBasePeer}.$basePrefix${table.JavaName}Peer
 {
 }

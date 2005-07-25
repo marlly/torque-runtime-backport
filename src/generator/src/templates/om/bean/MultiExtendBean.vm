@@ -2,7 +2,7 @@
  * author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * version $Id$
  *#
-package $pkbean;
+package $packageBean;
 
 #if ($child.Ancestor)
   ## need to disassemble the qualified name of the ancestor class,

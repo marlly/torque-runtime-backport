@@ -7,7 +7,7 @@
   #set ($interfaceName = $table.Interface)
 #end
 
-package ${package};
+package ${packageBaseManager};
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,6 +22,18 @@ import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.SimpleKey;
 import org.apache.torque.om.Persistent;
 import org.apache.torque.util.Criteria;
+
+#if ($packageBaseManager != $packageManager)
+import ${packageManager}.*;
+#end
+
+#if ($packageBaseManager != $packagePeer)
+import ${packagePeer}.*;
+#end
+
+#if ($packageBaseManager != $packageObject)
+import ${packageObject}.*;
+#end
 
 /**
  * This class manages $interfaceName objects.

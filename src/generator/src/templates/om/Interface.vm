@@ -3,7 +3,7 @@
  * version $Id$
  *#
 
-package $package;
+package $packageObject;
 
 /**
  * This is an interface that should be filled with the public api of the

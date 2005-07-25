@@ -54,6 +54,74 @@
       </td>
     </tr>
     <tr>
+      <td><code>torque.subpackage.peer</code></td>
+      <td>Not set</td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>)
+        where Torque will put the generated Peer Java classes. 
+        If not set, the Peer classes will be generated in 
+        <code>${torque.targetPackage}</code>
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.object</code></td>
+      <td>Not set</td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated Object Java classes. 
+        If not set, the Object classes will be generated in 
+        <code>${torque.targetPackage}</code>
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.map</code></td>
+      <td><code>map</code></td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated Java classes for the database map.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.manager</code></td>
+      <td>Not set</td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated Java Manager classes, 
+        if they are generated at all.
+        If not set, the Manager classes will be generated in 
+        <code>${torque.targetPackage}</code>
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.bean</code></td>
+      <td><code>bean</code></td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated JavaBean classes, if they are 
+        generated at all.
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.base</code></td>
+      <td>Not set</td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated BaseObject, BasePeer, 
+        (and BaseManager, if they are generated at all) Java classes.
+        If not set, the Base classes will be generated in 
+        <code>${torque.targetPackage}</code>
+      </td>
+    </tr>
+    <tr>
+      <td><code>torque.subpackage.base.bean</code></td>
+      <td><code>bean</code></td>
+      <td>
+        The subpackage (relative to <code>${torque.targetPackage}</code>) 
+        where Torque will put the generated BaseBean Java classes, 
+        if they are generated at all.
+      </td>
+    </tr>
+    <tr>
       <td><code>torque.runOnlyOnSchemaChange</code></td>
       <td><code>true</code></td>
       <td>

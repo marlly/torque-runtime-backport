@@ -1,4 +1,4 @@
-package ${package};
+package ${packageBasePeer};
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -28,15 +28,14 @@ import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
 
 // Local classes
-import ${package}.map.*;
+import ${packageMap}.*;
 
-#foreach ($fk in $table.ForeignKeys)
-  #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
+#if ($packageBasePeer != $packageObject)
+import ${packageObject}.*;
+#end
 
-  #if ($tblFK.Package != $package)
-import ${tblFK.Package}.${tblFK.JavaName};
-import ${tblFK.Package}.${tblFK.JavaName}Peer;
-  #end
+#if ($packageBasePeer != $packagePeer)
+import ${packagePeer}.*;
 #end
 
 /**
@@ -48,7 +47,7 @@ import ${tblFK.Package}.${tblFK.JavaName}Peer;
 #end
  */
 public abstract class $basePrefix${table.JavaName}Peer
-    extends $table.BasePeer
+    extends ${table.BasePeer}
 {
 #if (!$table.isAlias())
 

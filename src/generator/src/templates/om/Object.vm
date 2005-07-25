@@ -1,4 +1,4 @@
-package ${package};
+package ${packageBaseObject};
 
 #if ($table.BaseClass == "")
   #set ($extendsBaseClass = "" )
@@ -34,17 +34,12 @@ import org.apache.torque.om.Persistent;
 import org.apache.torque.util.Criteria;
 import org.apache.torque.util.Transaction;
 
-#foreach ($fk in $table.ForeignKeys)
-  #set ( $tblFK = $table.Database.getTable($fk.ForeignTableName) )
-  #set ( $className = $tblFK.JavaName )
-  #if ($tblFK.Interface)
-    #set ($className = $tblFK.Interface)
-  #end
+#if ($packageBaseObject != $packageObject)
+import ${packageObject}.*;
+#end
 
-  #if ($tblFK.Package != $package)
-import ${tblFK.Package}.${className};
-import ${tblFK.Package}.${tblFK.JavaName}Peer;
-  #end
+#if ($packageBaseObject != $packagePeer)
+import ${packagePeer}.*;
 #end
 
 #if ($generateBeans) 

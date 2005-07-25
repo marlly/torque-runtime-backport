@@ -27,6 +27,23 @@
 
   <body>
 
+  <release version="3.2-rc2-dev" date="in CVS">
+    <action type="add" dev="tfischer" issue="TRQS306">
+      Added the following generator properties to allow detailed control 
+      where the target classes are generated. 
+      <ul>
+        <li>torque.subpackage.peer</li>
+        <li>torque.subpackage.object</li>
+        <li>torque.subpackage.map</li>
+        <li>torque.subpackage.manager</li>
+        <li>torque.subpackage.bean</li>
+        <li>torque.subpackage.base</li>
+        <li>torque.subpackage.base.bean</li>
+      </ul>
+      See the reference for the generator properties for more information.
+    </action>
+  </release>
+
   <release version="3.2-rc1" date="2005-07-19">
     <action type="add" dev="tfischer">
       Added the build-torque.xml again to the generator release. 

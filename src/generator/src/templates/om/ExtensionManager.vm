@@ -7,7 +7,7 @@
   #set ($interfaceName = $table.Interface)
 #end
 
-package $package;
+package $packageManager;
 
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
@@ -25,7 +25,7 @@ import org.apache.torque.om.Persistent;
  * long as it does not already exist in the output directory.
  */
 public class ${interfaceName}Manager
-    extends $basePrefix${interfaceName}Manager
+    extends ${packageBaseManager}.$basePrefix${interfaceName}Manager
 {
     /**
      * Creates a new <code>${interfaceName}Manager</code> instance.

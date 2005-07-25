@@ -21,7 +21,7 @@
      *        to already created beans
      * @return a $beanClassName with the contents of this object 
      */
-    $beanClassName getBean(IdentityMap createdBeans)
+    protected $beanClassName getBean(IdentityMap createdBeans)
     {
         ${beanClassName} result = ($beanClassName) createdBeans.get(this);
         if (result != null ) {
@@ -136,7 +136,7 @@
      * @return an instance of ${table.JavaName} with the contents of bean
      */
 
-    static ${table.JavaName} create${table.JavaName}(${beanClassName} bean, IdentityMap createdObjects)
+    protected static ${table.JavaName} create${table.JavaName}(${beanClassName} bean, IdentityMap createdObjects)
         throws TorqueException
     {
         ${table.JavaName} result = (${table.JavaName}) createdObjects.get(bean);
@@ -257,7 +257,7 @@
      *
      * @param toAdd $className
      */
-    void add${relColMs}FromBean($className toAdd)
+    protected void add${relColMs}FromBean($className toAdd)
     {
         init${relCol}();
         ${collName}.add(toAdd);
