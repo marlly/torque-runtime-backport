@@ -186,156 +186,167 @@ public class TorqueJDBCTransformTask extends Task
         Class.forName(dbDriver);
         log("DB driver sucessfuly instantiated");
 
-        // Attemtp to connect to a database.
-        Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-        log("DB connection established");
-
-        // Get the database Metadata.
-        DatabaseMetaData dbMetaData = con.getMetaData();
-
-        // The database map.
-        List tableList = getTableNames(dbMetaData);
-
-        databaseNode = doc.createElement("database");
-        databaseNode.setAttribute("name", dbUser);
-
-        // Build a database-wide column -> table map.
-        columnTableMap = new Hashtable();
-
-        log("Building column/table map...");
-        for (int i = 0; i < tableList.size(); i++)
+        Connection con = null;
+        try 
         {
-            String curTable = (String) tableList.get(i);
-            List columns = getColumns(dbMetaData, curTable);
+            // Attempt to connect to a database.
+            con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+            log("DB connection established");
+    
+            // Get the database Metadata.
+            DatabaseMetaData dbMetaData = con.getMetaData();
+    
+            // The database map.
+            List tableList = getTableNames(dbMetaData);        
 
-            for (int j = 0; j < columns.size(); j++)
+            databaseNode = doc.createElement("database");
+            databaseNode.setAttribute("name", dbUser);
+    
+            // Build a database-wide column -> table map.
+            columnTableMap = new Hashtable();
+    
+            log("Building column/table map...");
+            for (int i = 0; i < tableList.size(); i++)
             {
-                List col = (List) columns.get(j);
-                String name = (String) col.get(0);
-
-                columnTableMap.put(name, curTable);
+                String curTable = (String) tableList.get(i);
+                List columns = getColumns(dbMetaData, curTable);
+    
+                for (int j = 0; j < columns.size(); j++)
+                {
+                    List col = (List) columns.get(j);
+                    String name = (String) col.get(0);
+    
+                    columnTableMap.put(name, curTable);
+                }
             }
-        }
-
-        for (int i = 0; i < tableList.size(); i++)
-        {
-            // Add Table.
-            String curTable = (String) tableList.get(i);
-            // dbMap.addTable(curTable);
-            log("Processing table: " + curTable);
-
-            Element table = doc.createElement("table");
-            table.setAttribute("name", curTable);
-            if (isSameJavaName())
+    
+            for (int i = 0; i < tableList.size(); i++)
             {
-                table.setAttribute("javaName", curTable);
-            }
-
-            // Add Columns.
-            // TableMap tblMap = dbMap.getTable(curTable);
-
-            List columns = getColumns(dbMetaData, curTable);
-            List primKeys = getPrimaryKeys(dbMetaData, curTable);
-            Collection forgnKeys = getForeignKeys(dbMetaData, curTable);
-
-            // Set the primary keys.
-            primaryKeys = new Hashtable();
-
-            for (int k = 0; k < primKeys.size(); k++)
-            {
-                String curPrimaryKey = (String) primKeys.get(k);
-                primaryKeys.put(curPrimaryKey, curPrimaryKey);
-            }
-
-            for (int j = 0; j < columns.size(); j++)
-            {
-                List col = (List) columns.get(j);
-                String name = (String) col.get(0);
-                Integer type = ((Integer) col.get(1));
-                int size = ((Integer) col.get(2)).intValue();
-
-                // From DatabaseMetaData.java
-                //
-                // Indicates column might not allow NULL values.  Huh?
-                // Might? Boy, that's a definitive answer.
-                /* int columnNoNulls = 0; */
-
-                // Indicates column definitely allows NULL values.
-                /* int columnNullable = 1; */
-
-                // Indicates NULLABILITY of column is unknown.
-                /* int columnNullableUnknown = 2; */
-
-                Integer nullType = (Integer) col.get(3);
-                String defValue = (String) col.get(4);
-
-                Element column = doc.createElement("column");
-                column.setAttribute("name", name);
+                // Add Table.
+                String curTable = (String) tableList.get(i);
+                // dbMap.addTable(curTable);
+                log("Processing table: " + curTable);
+    
+                Element table = doc.createElement("table");
+                table.setAttribute("name", curTable);
                 if (isSameJavaName())
                 {
-                    column.setAttribute("javaName", name);
+                    table.setAttribute("javaName", curTable);
                 }
-                column.setAttribute("type", TypeMap.getTorqueType(type).getName());
-
-                if (size > 0 && (type.intValue() == Types.CHAR
-                        || type.intValue() == Types.VARCHAR
-                        || type.intValue() == Types.LONGVARCHAR
-                        || type.intValue() == Types.DECIMAL
-                        || type.intValue() == Types.NUMERIC))
+    
+                // Add Columns.
+                // TableMap tblMap = dbMap.getTable(curTable);
+    
+                List columns = getColumns(dbMetaData, curTable);
+                List primKeys = getPrimaryKeys(dbMetaData, curTable);
+                Collection forgnKeys = getForeignKeys(dbMetaData, curTable);
+    
+                // Set the primary keys.
+                primaryKeys = new Hashtable();
+    
+                for (int k = 0; k < primKeys.size(); k++)
                 {
-                    column.setAttribute("size", String.valueOf(size));
+                    String curPrimaryKey = (String) primKeys.get(k);
+                    primaryKeys.put(curPrimaryKey, curPrimaryKey);
                 }
-
-                if (nullType.intValue() == 0)
+    
+                for (int j = 0; j < columns.size(); j++)
                 {
-                    column.setAttribute("required", "true");
-                }
-
-                if (primaryKeys.containsKey(name))
-                {
-                    column.setAttribute("primaryKey", "true");
-                }
-
-                if (defValue != null)
-                {
-                    // trim out parens & quotes out of def value.
-                    // makes sense for MSSQL. not sure about others.
-                    if (defValue.startsWith("(") && defValue.endsWith(")"))
+                    List col = (List) columns.get(j);
+                    String name = (String) col.get(0);
+                    Integer type = ((Integer) col.get(1));
+                    int size = ((Integer) col.get(2)).intValue();
+    
+                    // From DatabaseMetaData.java
+                    //
+                    // Indicates column might not allow NULL values.  Huh?
+                    // Might? Boy, that's a definitive answer.
+                    /* int columnNoNulls = 0; */
+    
+                    // Indicates column definitely allows NULL values.
+                    /* int columnNullable = 1; */
+    
+                    // Indicates NULLABILITY of column is unknown.
+                    /* int columnNullableUnknown = 2; */
+    
+                    Integer nullType = (Integer) col.get(3);
+                    String defValue = (String) col.get(4);
+    
+                    Element column = doc.createElement("column");
+                    column.setAttribute("name", name);
+                    if (isSameJavaName())
                     {
-                        defValue = defValue.substring(1, defValue.length() - 1);
+                        column.setAttribute("javaName", name);
                     }
-
-                    if (defValue.startsWith("'") && defValue.endsWith("'"))
+                    column.setAttribute("type", TypeMap.getTorqueType(type).getName());
+    
+                    if (size > 0 && (type.intValue() == Types.CHAR
+                            || type.intValue() == Types.VARCHAR
+                            || type.intValue() == Types.LONGVARCHAR
+                            || type.intValue() == Types.DECIMAL
+                            || type.intValue() == Types.NUMERIC))
                     {
-                        defValue = defValue.substring(1, defValue.length() - 1);
+                        column.setAttribute("size", String.valueOf(size));
                     }
-
-                    column.setAttribute("default", defValue);
+    
+                    if (nullType.intValue() == 0)
+                    {
+                        column.setAttribute("required", "true");
+                    }
+    
+                    if (primaryKeys.containsKey(name))
+                    {
+                        column.setAttribute("primaryKey", "true");
+                    }
+    
+                    if (defValue != null)
+                    {
+                        // trim out parens & quotes out of def value.
+                        // makes sense for MSSQL. not sure about others.
+                        if (defValue.startsWith("(") && defValue.endsWith(")"))
+                        {
+                            defValue = defValue.substring(1, defValue.length() - 1);
+                        }
+    
+                        if (defValue.startsWith("'") && defValue.endsWith("'"))
+                        {
+                            defValue = defValue.substring(1, defValue.length() - 1);
+                        }
+    
+                        column.setAttribute("default", defValue);
+                    }
+                    table.appendChild(column);
                 }
-                table.appendChild(column);
-            }
-
-            // Foreign keys for this table.
-            for (Iterator l = forgnKeys.iterator(); l.hasNext();)
-            {
-                Object[] forKey = (Object[]) l.next();
-                String foreignKeyTable = (String) forKey[0];
-                List refs = (List) forKey[1];
-                Element fk = doc.createElement("foreign-key");
-                fk.setAttribute("foreignTable", foreignKeyTable);
-                for (int m = 0; m < refs.size(); m++)
+    
+                // Foreign keys for this table.
+                for (Iterator l = forgnKeys.iterator(); l.hasNext();)
                 {
-                    Element ref = doc.createElement("reference");
-                    String[] refData = (String[]) refs.get(m);
-                    ref.setAttribute("local", refData[0]);
-                    ref.setAttribute("foreign", refData[1]);
-                    fk.appendChild(ref);
+                    Object[] forKey = (Object[]) l.next();
+                    String foreignKeyTable = (String) forKey[0];
+                    List refs = (List) forKey[1];
+                    Element fk = doc.createElement("foreign-key");
+                    fk.setAttribute("foreignTable", foreignKeyTable);
+                    for (int m = 0; m < refs.size(); m++)
+                    {
+                        Element ref = doc.createElement("reference");
+                        String[] refData = (String[]) refs.get(m);
+                        ref.setAttribute("local", refData[0]);
+                        ref.setAttribute("foreign", refData[1]);
+                        fk.appendChild(ref);
+                    }
+                    table.appendChild(fk);
                 }
-                table.appendChild(fk);
+                databaseNode.appendChild(table);
             }
-            databaseNode.appendChild(table);
+            doc.appendChild(databaseNode);
         }
-        doc.appendChild(databaseNode);
+        finally {
+            if (con != null)
+            {
+                con.close();
+                con = null;
+            }
+        }
     }
 
     /**
