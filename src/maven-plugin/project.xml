@@ -29,6 +29,12 @@
   <url>http://db.apache.org/torque/maven-plugin/</url>
   <siteDirectory>/www/db.apache.org/torque/maven-plugin</siteDirectory>
 
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/db/torque/trunk/src/maven-plugin</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/db/torque/trunk/src/maven-plugin</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/db/torque/trunk/src/maven-plugin/</url>
+  </repository>
+
   <dependencies>
     <dependency>
       <artifactId>commons-collections</artifactId>

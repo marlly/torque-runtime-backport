@@ -29,9 +29,9 @@
   <siteDirectory>/www/db.apache.org/torque/</siteDirectory>
 
   <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.apache.org:/home/cvs:db-torque</developerConnection>
-    <url>http://cvs.apache.org/viewcvs/db-torque/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/db/torque/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/db/torque/trunk</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/db/torque/trunk/</url>
   </repository>
 
   <dependencies>

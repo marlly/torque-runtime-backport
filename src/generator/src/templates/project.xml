@@ -18,19 +18,22 @@
  -->
 
 <project>
-  <extend>../../../../project-base.xml</extend>
+  <extend>${torque.project.base.path}</extend>
   <pomVersion>3</pomVersion>
   <id>torque-gen-templates</id>
   <groupId>torque</groupId>
   <name>Torque generator templates</name>
 
-  <!-- Gump integration -->
-  <gumpRepositoryId>jakarta</gumpRepositoryId>
-
   <description>Templates for the Generator for Torque.</description>
   <shortDescription>Templates for the Generator for Torque</shortDescription>
   <url>http://db.apache.org/torque/generator/templates</url>
   <siteDirectory>/www/db.apache.org/torque/generator/templates</siteDirectory>
+
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/db/torque/trunk/src/generator/src/templates</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/db/torque/trunk/src/generator/src/templates</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/db/torque/trunk/src/generator/src/templates/</url>
+  </repository>
 
   <build>
     <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>

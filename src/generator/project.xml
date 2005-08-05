@@ -24,13 +24,16 @@
   <groupId>torque</groupId>
   <name>Torque generator</name>
 
-  <!-- Gump integration -->
-  <gumpRepositoryId>jakarta</gumpRepositoryId>
-
   <description>Generator for Torque.</description>
   <shortDescription>Generator for Torque</shortDescription>
   <url>http://db.apache.org/torque/generator</url>
   <siteDirectory>/www/db.apache.org/torque/generator</siteDirectory>
+
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/db/torque/trunk/src/generator</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/db/torque/trunk/src/generator</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/db/torque/trunk/src/generator/</url>
+  </repository>
 
   <dependencies>
     <dependency>
@@ -106,6 +109,7 @@
   </dependencies>
 
   <build>
+    <defaultGoal>jar:jar</defaultGoal>
     <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
