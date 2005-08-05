@@ -7,6 +7,7 @@
     <links>
       <item name="runtime"               href="../index.html"/>
       <item name="generator"             href="/index.html"/>
+      <item name="templates"             href="/templates/index.html"/>
       <item name="maven-plugin"          href="../maven-plugin/"/>
     </links>
 
