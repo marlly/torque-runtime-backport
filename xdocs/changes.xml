@@ -28,6 +28,18 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in CVS">
+    <action type="add" dev="henning">
+      Added templates site reference to menus in runtime, generator, maven-plugin.
+    </action>
+    <action type="add" dev="henning">
+      Added Findbugs report to the site.
+    </action>
+    <action type="add" dev="henning">
+      Updated mailing list references to point to mod_mbox.
+    </action>
+    <action type="add" dev="henning">
+      Updated all SCM references to point to Subversion.
+    </action>
     <action type="add" dev="tfischer" issue="TRQS306">
       Added the following generator properties to allow detailed control 
       where the target classes are generated. 
