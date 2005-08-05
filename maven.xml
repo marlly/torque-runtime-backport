@@ -26,6 +26,7 @@
 <!-- ======================================================================== -->
 
 <project
+  xmlns:j="jelly:core"
   xmlns:deploy="deploy">
 
   <!-- Allow any user specific values to override the defaults -->
@@ -145,6 +146,20 @@
     name="runtime:prepare"
     prereqs="jar:jar">
 
+    <j:if test="${context.getVariable('torque.testProfile') == null || context.getVariable('torque.testProfile') == ''}">
+        <fail>
+--------------------------------------------------------------------------
+| Runtime Test Configuration Error                                       |
+--------------------------------------------------------------------------
+
+ For executing the runtime tests, you must set the property 
+ 'torque.testProfile' by defining it on the command line of your
+ maven command or putting it into the build.properties file.
+
+--------------------------------------------------------------------------
+        </fail>
+    </j:if>
+
     <!-- Set values in test profile -->
     <property file="${torque.testProfile}"/>
 
@@ -216,6 +231,15 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
+
+<!-- FIXME: Do we need this for the rttests?
+    <copy todir="${build.test}/rttest/lib">
+      <fileset dir="${torque.template.home}/target/">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+-->
+
     <copy file="${torque.testDatabaseJar}"
           todir="${build.test}/rttest/lib"/>
 
