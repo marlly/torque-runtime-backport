@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Torque" href="http://db.apache.org/torque/">
+
+  <title>Torque Generator Templates</title>
+
+  <body>
+    <links>
+      <item name="runtime"               href="../../index.html"/>
+      <item name="generator"             href="../index.html"/>
+      <item name="templates"             href="/index.html"/>
+      <item name="maven-plugin"          href="../../maven-plugin/"/>
+    </links>
+  </body>
+</project>
