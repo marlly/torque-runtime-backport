@@ -32,7 +32,7 @@
   <logo>/images/torque-logo-blue.png</logo>
 
   <!-- Gump integration -->
-  <gumpRepositoryId>jakarta</gumpRepositoryId>
+  <gumpRepositoryId>db</gumpRepositoryId>
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
@@ -43,24 +43,18 @@
   <distributionSite>www.apache.org</distributionSite>
   <distributionDirectory>/www/www.apache.org/dist/java-repository</distributionDirectory>
 
-  <repository>
-    <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:db-torque</connection>
-    <developerConnection>scm:cvs:ext:${maven.username}@cvs.apache.org:/home/cvs:db-torque</developerConnection>
-    <url>http://cvs.apache.org/viewcvs/db-torque/</url>
-  </repository>
-
   <mailingLists>
     <mailingList>
       <name>Torque User List</name>
       <subscribe>torque-user-subscribe@db.apache.org</subscribe>
       <unsubscribe>torque-user-unsubscribe@db.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=torque-user@db.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/db-torque-user/</archive>
     </mailingList>
     <mailingList>
       <name>Torque Developer List</name>
       <subscribe>torque-dev-subscribe@db.apache.org</subscribe>
       <unsubscribe>torque-dev-unsubscribe@db.apache.org</unsubscribe>
-      <archive>http://mail-archives.apache.org/eyebrowse/SummarizeList?listName=torque-dev@db.apache.org</archive>
+      <archive>http://mail-archives.apache.org/mod_mbox/db-torque-dev/</archive>
     </mailingList>
   </mailingLists>
 
@@ -304,6 +298,93 @@
     </license>
   </licenses>
 
+  <dependencies>
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-ant-plugin</artifactId>
+      <version>1.9</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-artifact-plugin</artifactId>
+      <version>1.5.2</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-changelog-plugin</artifactId>
+      <version>1.8.2</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-developer-activity-plugin</artifactId>
+      <version>1.5.2</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-file-activity-plugin</artifactId>
+      <version>1.5.2</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency> 
+      <groupId>maven-plugins</groupId> 
+      <artifactId>maven-findbugs-plugin</artifactId> 
+      <version>0.9.1</version> 
+      <url>http://maven-plugins.sourceforge.net/maven-findbugs-plugin/</url> 
+      <type>plugin</type>
+    </dependency> 
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>1.7</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-plugin-plugin</artifactId>
+      <version>1.6</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-scm-plugin</artifactId>
+      <version>1.5</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-site-plugin</artifactId>
+      <version>1.6.1</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-tasklist-plugin</artifactId>
+      <version>2.4</version>
+      <type>plugin</type>
+    </dependency>
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-xdoc-plugin</artifactId>
+      <version>1.9.1</version>
+      <type>plugin</type>
+    </dependency>
+  </dependencies>
+
   <build>
     <nagEmailAddress>torque-dev@db.apache.org</nagEmailAddress>
     <sourceDirectory>src/java</sourceDirectory>
@@ -336,6 +417,7 @@
     <report>maven-pmd-plugin</report>
     <report>maven-simian-plugin</report>
     <report>maven-jcoverage-plugin</report>
+    <report>maven-findbugs-plugin</report> 
   </reports>
   
 </project>
