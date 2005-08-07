@@ -48,6 +48,8 @@ correctGetters = $!correctGetters
       #set ($packageBaseManager = "${package}.${subpackageBase}")
     #else
       #set ($packageBasePeer = "${package}")
+      #set ($packageBaseObject = "${package}")
+      #set ($packageBaseManager = "${package}")
     #end
 
     #if ($subpackageBaseBean)
