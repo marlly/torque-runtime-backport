@@ -1018,33 +1018,45 @@ public class Column
     
     public String getSqlString()
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        sb.append(' ');
-        sb.append(getDomain().getSqlType());
+        List resultList = new ArrayList();
+        resultList.add(getName());
+
+        String type = getDomain().getSqlType();
+
         if (getPlatform().hasSize(getDomain().getSqlType()))
         {
-            sb.append(getDomain().printSize());
-            sb.append(' ');
+            type += getDomain().printSize();
         }
-        if (getDomain().getDefaultValue() != null)
+
+        resultList.add(type);
+
+        if (StringUtils.isNotEmpty(getDomain().getDefaultValue()))
         {
-            sb.append("default ");
+            resultList.add("default");
+
             if (TypeMap.isTextType(getDomain().getType()))
             {
                 // TODO: Properly SQL-escape the text.
-                sb.append('\'').append(getDefaultValue()).append('\'');
+                resultList.add(
+                        new StringBuffer()
+                        .append('\'')
+                        .append(getDefaultValue())
+                        .append('\''));
             }
             else
             {
-                sb.append(getDefaultValue());
+                resultList.add(getDefaultValue());
             }
-            sb.append(' ');
         }
-        sb.append(getNotNullString());
-        sb.append(' ');
-        sb.append(getAutoIncrementString());
-        return sb.toString();
+        if (StringUtils.isNotEmpty(getNotNullString()))
+        {
+            resultList.add(getNotNullString());
+        }
+        if (StringUtils.isNotEmpty(getAutoIncrementString()))
+        {
+            resultList.add(getAutoIncrementString());
+        }
+        return StringUtils.join(resultList.iterator(), ' ');
     }
     
     /**

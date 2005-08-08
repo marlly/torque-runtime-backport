@@ -59,7 +59,7 @@ public class PostgresqlDomainTest extends TestCase
         Column name = table.getColumn("name");
         assertEquals("VARCHAR", name.getDomain().getSqlType());
         assertEquals("40", name.getSize());
-        assertEquals("name VARCHAR(40)  ", name.getSqlString());
+        assertEquals("name VARCHAR(40)", name.getSqlString());
         Column price = table.getColumn("price");
         assertEquals("NUMERIC", price.getTorqueType());
         assertEquals("NUMERIC", price.getDomain().getSqlType());
@@ -67,7 +67,7 @@ public class PostgresqlDomainTest extends TestCase
         assertEquals("2", price.getScale());
         assertEquals("0", price.getDefaultValue());
         assertEquals("(10,2)", price.printSize());
-        assertEquals("price NUMERIC(10,2) default 0  ", price.getSqlString());
+        assertEquals("price NUMERIC(10,2) default 0", price.getSqlString());
     }
     
     /**
@@ -83,7 +83,7 @@ public class PostgresqlDomainTest extends TestCase
         assertEquals("2", price.getScale());
         assertEquals("1000", price.getDefaultValue());
         assertEquals("(12,2)", price.printSize());
-        assertEquals("price NUMERIC(12,2) default 1000  ", price.getSqlString());
+        assertEquals("price NUMERIC(12,2) default 1000", price.getSqlString());
     }
     
     public void testDecimalColumn() throws Exception
@@ -95,7 +95,7 @@ public class PostgresqlDomainTest extends TestCase
         assertEquals("10", col.getSize());
         assertEquals("3", col.getScale());
         assertEquals("(10,3)", col.printSize());
-        assertEquals("decimal_col DECIMAL(10,3)  ", col.getSqlString());
+        assertEquals("decimal_col DECIMAL(10,3)", col.getSqlString());
     }
 
     public void testDateColumn() throws Exception
@@ -105,7 +105,7 @@ public class PostgresqlDomainTest extends TestCase
         assertEquals("DATE", col.getTorqueType());
         assertEquals("DATE", col.getDomain().getSqlType());
         assertEquals("", col.printSize());
-        assertEquals("date_col DATE  ", col.getSqlString());
+        assertEquals("date_col DATE", col.getSqlString());
     }
 
     public void testNativeAutoincrement() throws Exception
@@ -113,7 +113,7 @@ public class PostgresqlDomainTest extends TestCase
         Table table = db.getTable("native");
         Column col = table.getColumn("native_id");
         assertEquals("", col.getAutoIncrementString());
-        assertEquals("native_id INTEGER NOT NULL ", col.getSqlString());
+        assertEquals("native_id INTEGER NOT NULL", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
@@ -123,7 +123,7 @@ public class PostgresqlDomainTest extends TestCase
         Table table = db.getTable("article");
         Column col = table.getColumn("article_id");
         assertEquals("", col.getAutoIncrementString());
-        assertEquals("article_id INTEGER NOT NULL ", col.getSqlString());
+        assertEquals("article_id INTEGER NOT NULL", col.getSqlString());
         col = table.getColumn("name");
         assertEquals("", col.getAutoIncrementString());
     }    
@@ -135,7 +135,7 @@ public class PostgresqlDomainTest extends TestCase
         assertEquals("", col.getAutoIncrementString());
         assertEquals("BOOLEANINT", col.getTorqueType());
         assertEquals("INT2", col.getDomain().getSqlType());
-        assertEquals("cbooleanint INT2  ", col.getSqlString());
+        assertEquals("cbooleanint INT2", col.getSqlString());
     }    
     
 }
