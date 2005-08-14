@@ -1,0 +1,805 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>Torque Tutorial - Step 5 - Writing a Sample Application</title>
+    <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
+    <author email="seade@backstagetech.com.au">Scott Eade</author>
+    <author email="fischer@seitenbau.de">Thomas Fischer</author>
+  </properties>
+  <body>
+
+<section name="Step 5: Writing a Sample Application">
+
+<p>
+Congratulations, you have finally reached the fun the
+part of this tutorial.  This is where you'll discover
+the power of Torque.  Be warned, you'll never want to
+write another SQL statement ever again!
+</p>
+
+<p>
+As mentioned earlier, when Torque created your object
+model, it created four Java classes for each table
+defined in your database schema.  For example, the
+<em>book</em> table, defined in the database schema
+presented earlier, will result in the following classes:
+<em>Book</em>, <em>BookPeer</em>, <em>BaseBook</em>, and
+<em>BaseBookPeer</em>.
+</p>
+
+<p>
+<em>Book</em> and <em>BookPeer</em> are subclasses of
+<em>BaseBook</em> and <em>BaseBookPeer</em>
+respectively.  The two Base classes (<em>BaseBook</em>
+and <em>BaseBookPeer</em>) contain Torque-generated
+logic and should <b>not</b> be modified because Torque
+will overwrite your changes if you happen to generate
+your object model again.  Any
+business logic that you might want to add should be
+placed in the <em>Book</em> and <em>BookPeer</em>
+classes.  This is covered later in the tutorial.
+</p>
+
+<p>
+You might be asking yourself, what is the difference
+between the Peer classes (<em>BookPeer</em> and
+<em>BaseBookPeer</em>) and their counterparts
+(<em>Book</em> and <em>BaseBook</em>), also known as
+Data Objects?  The Peer classes &#147;wrap&#148; their
+associated database tables and provide static methods to
+manipulate those tables such as <em>doSelect</em>,
+<em>doInsert</em>, and <em>doUpdate</em>.  Data Objects,
+on the other hand, &#147;wrap&#148; individual rows
+within those tables and provide getters/mutators for each
+column defined in those tables as well as the convenient
+<em>save</em> method.  Both Peer and Data Objects have a
+one-to-one mapping to a table defined in your database
+schema.  For a more in-depth discussion on Peers and
+Data Objects, refer to the
+<a href="../peers-howto.html#Peer%20Classes">Peers HOWTO</a>.
+An example of adding logic to both the Peer and Data
+Objects is presented later in the tutorial.
+</p>
+
+<p>
+Now that we've covered the basics of the object model
+that Torque generated for you, the rest of this section
+describes the Torque-way of doing database inserts,
+selects, updates, and deletes illustrated with small
+segments of code.  These segments of code are part of a
+sample application that is presented in full after a
+brief discussion on extending the object model classes.
+Finally, instructions on how to compile and run the
+application are detailed.
+</p>
+
+</section>
+
+<section name="Inserting Rows">
+
+<p>
+  Inserting rows into your tables is easy with Torque.
+  Simply instantiate a new Data Object of the
+  appropriate class, set its properties using the
+  mutators named after the table's columns,
+  then invoke the Data Object's <em>save</em> method.
+  Note: It is not necessary to set the object's
+  primary key ID because Torque will do this for you
+  automatically unless you've specified otherwise (see
+  the Database Schema Configuration section above).
+</p>
+
+<p>
+  For example, to insert a new row in the
+  <em>author</em> table (as defined in this tutorial's
+  database schema): instantiate a new <em>Author</em>
+  object, invoke the object's <em>setFirstName</em>
+  and <em>setLastName</em> methods with appropriate
+  values, then call the <em>save</em> method.  That's
+  it.  The following is from the sample application:
+</p>
+
+<source><![CDATA[
+Publisher addison = new Publisher();
+addison.setName("Addison Wesley Professional");
+addison.save();
+
+Author bloch = new Author();
+bloch.setFirstName("Joshua");
+bloch.setLastName("Bloch");
+bloch.save();
+]]></source>
+
+<p>
+  It is also possible to insert a row using the Peer
+  class directly instead of invoking the <em>save</em>
+  method of your Data Object.  Recall, the Peer class
+  provides static methods to perform operations on a
+  table.  One of these operations is the ability to
+  insert rows via the <em>doInsert</em> method.  The
+  Data Object's <em>save</em> method actually calls
+  <em>doInsert</em> for you (or <em>doUpdate</em> if
+  the object is not new and must be updated).
+</p>
+
+<p>
+  For example, you can use
+  <em>AuthorPeer.doInsert</em> as an alternative
+  method to insert a new row in the <em>author</em>
+  table.  The following is from the sample
+  application:
+</p>
+
+<source><![CDATA[
+Author stevens = new Author();
+stevens.setFirstName("W.");
+stevens.setLastName("Stevens");
+AuthorPeer.doInsert(stevens);
+]]></source>
+
+<p>
+  It should also be noted for completeness that
+  <em>doInsert</em> can be passed a <em>Criteria</em>
+  object (discussed in the next section) instead of a
+  Data Object (see the Javadoc for details).  However,
+  the most common method for the insertion of rows in
+  a table is via the <em>save</em> method of the Data
+  Object rather than directly using the Peer's
+  <em>doInsert</em> method.
+</p>
+
+<p>
+  Inserting a row in a table that contains a foreign
+  key is also simple.  As a convenience, Torque creates
+  a mutator for the specific Data Object class
+  that represents the foreign-key in the object model.
+  The name of this method is <em>setTable</em> where
+  <em>Table</em> is the name of the foreign-key's
+  table (as defined in the database schema).  Upon
+  calling this method with a reference to the
+  appropriate Data Object, Torque will automatically
+  extract and insert the foreign-key for you.
+</p>
+
+<p>
+  For example, the <em>book</em> table (as defined in
+  the database schema) contains two foreign-keys:
+  <em>author_id</em> and <em>publisher_id</em>.  To
+  insert a row in this table, follow the same
+  procedure as above, but instead of explicitly
+  setting the foreign-keys (via <em>setAuthorId</em>
+  and <em>setPublisherId</em>), use <em>setAuthor</em>
+  and <em>setPublisher</em> and pass references to an
+  <em>Author</em> and <em>Publisher</em> Data Object.
+  Both methods are illustrated in the following code
+  which builds upon the earlier objects that were
+  created:
+</p>
+
+<source><![CDATA[
+/*
+ * Using the convenience methods to handle
+ * the foreign keys.
+ */
+Book effective = new Book();
+effective.setTitle("Effective Java");
+effective.setISBN("0-618-12902-2");
+effective.setPublisher(addison);
+effective.setAuthor(bloch);
+effective.save();
+
+/*
+ * Inserting the foreign-keys manually.
+ */
+Book tcpip = new Book();
+tcpip.setTitle("TCP/IP Illustrated, Volume 1");
+tcpip.setISBN("0-201-63346-9");
+tcpip.setPublisherId(addison.getPublisherId());
+tcpip.setAuthorId(stevens.getAuthorId());
+tcpip.save();
+]]></source>
+
+<p>
+  As you can see, inserting rows into your database is
+  very easy to do with your Torque object model.
+</p>
+
+</section>
+
+<section name="Selecting Rows">
+
+<p>
+  Selecting rows from your database is just as easy as
+  inserting rows.  The Peer class associated with a
+  table defines a static method called
+  <em>doSelect</em> which is used to pull data out of
+  the table.  The argument to <em>doSelect</em> is a
+  <em>Criteria</em> object.  It is this object that
+  specifies the criteria to be used when selecting
+  data from the database.  As a result of the query,
+  <em>doSelect</em> returns a <code>List</code> of Data Objects
+  representing the rows of data selected.  To use
+  these Data Objects in your application, you must
+  cast them to the appropriate type in your object
+  model.
+</p>
+
+<p>
+  For example, to select all of the rows from the
+  <em>book</em> table that were inserted in the
+  previous section, you must first create a
+  <em>Criteria</em> object.  Because we want to select
+  everything from the table, no criteria will be
+  specified (i.e. no WHERE clause in the underlying
+  SELECT statement).  To perform the query, the empty
+  <em>Criteria</em> object is passed to
+  <em>BookPeer.doSelect</em>, as illustrated below:
+</p>
+
+<source><![CDATA[
+Criteria crit = new Criteria();
+List books = BookPeer.doSelect(crit);
+]]></source>
+
+<p>
+  The results are stored in a <code>List</code> which can then be
+  iterated over to access the individual <em>Book</em>
+  objects retrieved from the table.  The following
+  code prints the <em>Book</em> to standard output (a
+  better approach is presented later):
+</p>
+
+<source><![CDATA[
+for (Iterator i = book.iterator(); i.hasNext();)
+{
+    Book book = (Book) i.next();
+    System.out.println("Title: " + book.getTitle() + "\n");
+    System.out.println("ISBN:  " + book.getISBN() + "\n");
+    System.out.println("Publisher: " +
+            book.getPublisher().getName() + "\n");
+    System.out.println("Author: " +
+            book.getAuthor().getLastName() + ", " +
+            book.getAuthor().getFirstName() + "\n");
+}
+]]></source>
+
+<p>
+  In the above example, you may have noticed that by
+  calling <em>getAuthor</em> and
+  <em>getPublisher</em>, the object model
+  automatically retrieved the <em>Author</em> and
+  <em>Publisher</em> Data Objects for you.  This
+  results in an additional behind-the-scenes SQL query
+  for each table.  Although <em>getAuthor</em> is
+  called twice, only a single SQL query occurs because
+  all of the <em>Author</em> columns are selected in
+  behind-the-scenes query.
+</p>
+
+<table>
+  <tr> <th>The Gory Details (not for the faint)</th></tr>
+  <tr>
+    <td>
+      Even still, this is not the most efficient
+      method to query and populate Data Objects
+      for an entire table with foreign-keys (one
+      query for the table, then two additional
+      queries for each row).  A single query using
+      a join would be much more efficient.  As a
+      convenience, Torque generates the following
+      <em>protected</em> methods in the BasePeer
+      classes whose tables contain foreign-keys:
+      <em>doSelectJoinTable</em> where
+      <em>Table</em> is the name of the
+      foreign-key table.  This method efficiently
+      queries the database (using a single join
+      query) and automatically populates all of
+      the Data Objects.  This eliminates the
+      additional query that is issued when
+      retrieving the foreign-key Data Object.  For
+      example, <em>doSelectJoinAuthor</em> and
+      <em>doSelectJoinPublisher</em> were
+      generated in the <em>BaseBookPeer</em> class
+      that <em>BookPeer</em> extends.  As a
+      reminder, to use these convenience methods,
+      you must provide <em>public</em> members to
+      <em>BookPeer</em> for clients because they
+      are <em>protected</em> in
+      <em>BaseBookPeer</em>.  Unfortunately,
+      Torque does not generate a
+      <em>doSelectJoinAll</em> or
+      <em>doSelectJoinAuthorPublisher</em> method.
+      Those are left to the reader as an exercise
+      to implement in the <em>BookPeer</em> class.
+    </td>
+  </tr>
+</table>
+
+<p>
+  To select a specific <em>Book</em> from the table,
+  create a <em>Criteria</em> object (or just reuse the
+  previous one) and use the <em>add</em> method to
+  specify some criteria.  Specifying criteria is
+  simply a matter of choosing a column (defined as
+  static constants in your Peer class) and some value
+  you want to match.  Thus, selecting a book with the
+  following ISBN, &#145;0-618-12902-2&#146;, is as
+  simple as:
+</p>
+
+<source><![CDATA[
+Criteria crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-618-12902-2");
+List books = BookPeer.doSelect(crit);
+]]></source>
+
+<p>
+  This section has only skimmed the surface of
+  <em>Criteria</em> objects.  <em>Criteria</em> can be
+  used to specify very simple to very complex queries.
+  For a much more in-depth discussion of
+  <em>Criteria</em>, please refer to the
+  <a href="../criteria-howto.html">Criteria HOWTO</a>.
+</p>
+
+</section>
+
+<section name="Updating Rows">
+
+<p>
+  Updating a row in a table is only a matter of
+  changing one or more properties of the Data Object
+  that represents the row by invoking one or more
+  mutators and then calling its <em>save</em> method.
+  When a mutator is called, the Data Object sets an
+  internal flag to indicate that its been modified.
+  This flag is checked when <em>save</em> is invoked
+  to determine if the Peer's <em>doInsert</em> or
+  <em>doUpdate</em> is called to perform the database
+  operation.
+</p>
+
+<p>
+  For example, changing the author of the
+  &#145;Effective Java&#146; book created earlier is
+  as simple as:
+</p>
+
+<source><![CDATA[
+effective.setAuthor(stevens);
+effective.save();
+]]></source>
+
+<p>
+  Alternatively, instead of calling the Data Object's
+  <em>save</em> method, the Peer's <em>doUpdate</em>
+  method may be called directly with a Data Object
+  that has been modified as the argument.  This is
+  illustrated in the following fragment of code that
+  changes the author of the &#145;TCP/IP
+  Illustrated&#146; book:
+</p>
+
+<source><![CDATA[
+tcpip.setAuthor(bloch);
+BookPeer.doUpdate(tcpip);
+]]></source>
+
+<p>
+  Again, for completeness, <em>doUpdate</em> could
+  have been passed a <em>Criteria</em> object to
+  update a row (see the Javadoc for details).  However,
+  the most common method to update rows in a table is
+  via the Data Object's <em>save</em> method rather
+  than directly using the Peer's <em>doUpdate</em>
+  method.
+</p>
+
+</section>
+
+<section name="Deleting Rows">
+
+<p>
+  Deleting rows from a table is easy as well.  The
+  Peer class defines a static method <em>doDelete</em>
+  which can be used for this purpose.  Similar to the
+  other Peer methods, <em>doDelete</em> may be passed
+  a <em>Criteria</em> object or a Data Object to
+  specify which row or rows to delete.  It should be
+  noted that there is no corresponding method in the
+  Data Object to delete a row.
+</p>
+
+<p>
+  For example, the following code deletes all of the
+  rows from the three tables that were inserted during
+  the course of this tutorial using both forms of
+  <em>doDelete</em>.  First, the books are deleted by
+  specifying <em>Criteria</em>, then the authors and
+  publishers are deleted by passing the Data Objects
+  directly to <em>doDelete</em>.
+</p>
+
+<source><![CDATA[
+crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-618-12902-2");
+BookPeer.doDelete(crit);
+
+crit = new Criteria();
+crit.add(BookPeer.ISBN, "0-201-63346-9");
+crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+BookPeer.doDelete(crit);
+
+AuthorPeer.doDelete(bloch);
+AuthorPeer.doDelete(stevens);
+PublisherPeer.doDelete(addison);
+]]></source>
+
+<p>
+  Note: Deleting a row from a table that contains
+  foreign-keys does not automatically delete the
+  foreign-keys from their tables.  If you want to
+  delete the foreign-keys, you must do so explicitly
+  as shown in the above example.  I.e.,  deleting the
+  books from the <em>book</em> table does not
+  automatically delete the corresponding rows in the
+  <em>author</em> and <em>publisher</em> tables.
+
+</p>
+
+<table>
+  <tr> <th>The Gory Details (not for the faint)</th></tr>
+  <tr>
+    <td>
+      It should also be noted that
+      <em>doDelete</em> does not construct its
+      WHERE clause in a similar manner as the
+      <em>doSelect</em> method.  <em>doDelete</em>
+      processes <em>Criteria</em> in a more
+      primitive fashion.  Specifically,
+      <em>Criteria</em> assembled using the
+      <em>and</em> and <em>or</em> methods (not
+      covered in this tutorial) are effectively
+      ignored.  In addition, passing an empty
+      <em>Criteria</em> to <em>doDelete</em> will
+      not delete all of the rows from a table.  In
+      summary, you cannot assume that a
+      <em>Criteria</em> object which successfully
+      selects rows from a table via
+      <em>doSelect</em> will delete those rows if
+      passed to <em>doDelete</em>.  In the future,
+      <em>doDelete</em> may be modified to be
+      consistent in the handling of
+      <em>Criteria</em> objects.
+    </td>
+  </tr>
+</table>
+</section>
+
+<section name="Adding Functionality to the Object Model">
+
+<p>
+  This section will provide examples of adding
+  functionality to both the Peer and Data Object
+  classes.  As you may recall, Torque generated four
+  classes for each table defined in the database
+  schema.  Two of these classes (the Base Data Object
+  and Base Peer class) contain Torque-generated logic
+  while the other two are empty subclasses that you
+  can use to include business logic.  By now, you
+  should have a decent understanding of the type of
+  logic that might be added to these classes.  Keep in
+  mind, Torque will overwrite any changes that are
+  inadvertently added to the Base classes if you
+  regenerate your object model; however, it will not
+  overwrite changes in the non-Base classes.
+</p>
+
+<p>
+  The first change that we'll make to our object model
+  is to provide our Data Objects with adequate
+  <em>toString</em> methods.  Theses methods can then
+  be used to print the Data Objects without adding
+  unnecessary code to the core of the application.
+  The following are the modified <em>Book</em>,
+  <em>Author</em>, and <em>Publisher</em> classes,
+  which are located in a directory hierarchy matching
+  that of the <em>targetPackage</em> you specified in
+  your Torque <em>build.properties</em>:
+</p>
+
+<source><![CDATA[
+// Book.java
+import org.apache.torque.TorqueException;
+
+public  class Book
+    extends com.kazmier.om.BaseBook
+    implements Persistent
+{
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer();
+        try
+        {
+            sb.append("Title:     " + getTitle() + "\n");
+            sb.append("ISBN:      " + getISBN() + "\n");
+            sb.append("Publisher: " + getPublisher() + "\n");
+            sb.append("Author:    " + getAuthor() + "\n");
+        }
+        catch (TorqueException ignored)
+        {
+        }
+        return sb.toString();
+    }
+}
+
+// Author.java
+public  class Author
+    extends com.kazmier.om.BaseAuthor
+    implements Persistent
+{
+    public String toString()
+    {
+        return getLastName() + ", " + getFirstName();
+    }
+}
+
+// Publisher.java
+public  class Publisher
+    extends com.kazmier.om.BasePublisher
+    implements Persistent
+{
+    public String toString()
+    {
+      return getName();
+    }
+}
+]]></source>
+
+<p>
+  The next change that we'll make is to the Peer
+  classes.  For convenience (and based on the
+  suggestion in the
+  <a href="../peers-howto.html#Useful%20Methods">Peers
+  Howto</a>) we'll add <em>doSelectAll</em>
+  methods which will return a List of all the Data
+  Objects in a table.  The following are the modified
+  <em>BookPeer</em>, <em>AuthorPeer</em>, and
+  <em>PublisherPeer</em> classes which are located in
+  the same directory as the Data Objects:
+</p>
+
+<source><![CDATA[
+// BookPeer.java
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
+
+public class BookPeer
+    extends com.kazmier.om.BaseBookPeer
+{
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
+}
+
+// AuthorPeer.java
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
+
+public class AuthorPeer
+    extends com.kazmier.om.BaseAuthorPeer
+{
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
+}
+
+// PublisherPeer.java
+import java.util.List;
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
+
+public class PublisherPeer
+  extends com.kazmier.om.BasePublisherPeer
+{
+    public static List doSelectAll() throws TorqueException
+    {
+        Criteria crit = new Criteria();
+        return doSelect(crit);
+    }
+}
+]]></source>
+
+<p>
+  In order to execute the full application presented
+  at the end of this tutorial, you must make the above
+  changes to your object model.  After you have made
+  the changes, proceed to the next section.
+</p>
+
+</section>
+
+<section name="Full Application">
+
+<p>
+  The following is the sample bookstore application in
+  its entirety.  It should look very familiar if
+  you've been following this tutorial.  In fact, its
+  almost identical with the exception that it utilizes
+  the new functionality that was added to the object
+  model in the previous section.  Note in particular the all-important
+  initialization of Torque using the <code>torque.properties</code>
+  file we created earlier.
+</p>
+
+<source><![CDATA[
+package com.kazmier;
+
+import java.util.*;
+import com.kazmier.om.*;
+import org.apache.torque.Torque;
+import org.apache.torque.util.Criteria;
+
+public class Bookstore
+{
+    public static void main(String[] args)
+    {
+        try
+        {
+            /*
+             * Initializing Torque
+             */
+            Torque.init("torque.properties");
+
+            /*
+             * Creating new objects. These will be inserted into your database
+             * automatically when the save method is called.
+             */
+            Publisher addison = new Publisher();
+            addison.setName("Addison Wesley Professional");
+            addison.save();
+
+            Author bloch = new Author();
+            bloch.setFirstName("Joshua");
+            bloch.setLastName("Bloch");
+            bloch.save();
+
+            /*
+             * An alternative method to inserting rows in your database.
+             */
+            Author stevens = new Author();
+            stevens.setFirstName("W.");
+            stevens.setLastName("Stevens");
+            AuthorPeer.doInsert(stevens);
+
+            /*
+             * Using the convenience methods to handle the foreign keys.
+             */
+            Book effective = new Book();
+            effective.setTitle("Effective Java");
+            effective.setISBN("0-618-12902-2");
+            effective.setPublisher(addison);
+            effective.setAuthor(bloch);
+            effective.save();
+
+            /*
+             * Inserting the foreign-keys manually.
+             */
+            Book tcpip = new Book();
+            tcpip.setTitle("TCP/IP Illustrated, Volume 1");
+            tcpip.setISBN("0-201-63346-9");
+            tcpip.setPublisherId(addison.getPublisherId());
+            tcpip.setAuthorId(stevens.getAuthorId());
+            tcpip.save();
+
+            /*
+             * Selecting all books from the database and printing the results to
+             * stdout using our helper method defined in BookPeer (doSelectAll).
+             */
+            System.out.println("Full booklist:\n");
+            List booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
+
+            /*
+             * Selecting specific objects. Just search for objects that match
+             * this criteria (and print to stdout).
+             */
+            System.out.println("Booklist (specific ISBN):\n");
+            Criteria crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            booklist = BookPeer.doSelect(crit);
+            printBooklist(booklist);
+
+            /*
+             * Updating data. These lines will swap the authors of the two
+             * books. The booklist is printed to stdout to verify the results.
+             */
+            effective.setAuthor(stevens);
+            effective.save();
+
+            tcpip.setAuthor(bloch);
+            BookPeer.doUpdate(tcpip);
+
+            System.out.println("Booklist (authors swapped):\n");
+            booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
+
+            /*
+             * Deleting data. These lines will delete the data that matches the
+             * specified criteria.
+             */
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-618-12902-2");
+            BookPeer.doDelete(crit);
+
+            crit = new Criteria();
+            crit.add(BookPeer.ISBN, "0-201-63346-9");
+            crit.add(BookPeer.TITLE, "TCP/IP Illustrated, Volume 1");
+            BookPeer.doDelete(crit);
+
+            /*
+             * Deleting data by passing Data Objects instead of specifying
+             * criteria.
+             */
+            AuthorPeer.doDelete(bloch);
+            AuthorPeer.doDelete(stevens);
+            PublisherPeer.doDelete(addison);
+
+            System.out.println("Booklist (should be empty):\n");
+            booklist = BookPeer.doSelectAll();
+            printBooklist(booklist);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * Helper method to print a booklist to standard out.
+     */
+    private static void printBooklist(List booklist)
+    {
+        for (Iterator i = booklist.iterator(); i.hasNext();)
+        {
+            Book book = (Book) i.next();
+            System.out.println(book);
+        }
+    }
+}
+  ]]></source>
+
+<p>
+  Save this code in the <em>src/java</em>
+  directory hierarchy with a filename of
+  <em>Bookstore.java</em>.  The above example must be
+  placed in <em>src/java/com/kazmier</em>
+  directory because of its package definition.  Your
+  application might go elsewhere depending on the
+  package that you've selected.
+</p>
+
+</section>
+
+<section name="Where to next">
+
+<p>
+  Now you have finished writing your sample application.
+  The next step shows you how to compile and run the sample
+  application.
+</p>
+<p>
+  Next we will look <a href="step6.html">Compiling and Running the Sample Application</a>.
+</p>
+
+</section>
+
+  </body>
+</document>
