@@ -15,7 +15,7 @@
     <section name="Torque Directory Structure">
 
       <p>
-        Here is what the Torque directory structure looks like in CVS:
+        Here is what the Torque directory structure looks like in SVN:
       </p>
 
       <source><![CDATA[
@@ -41,12 +41,12 @@
       ]]></source>
     </section>
 
-    <section name="Building from CVS">
+    <section name="Building from SVN">
       <p>
         The Torque build process uses
         <a href="http://maven.apache.org">Maven</a>.  Before you begin, you'll 
-        need to check out the <code>db-torque</code> CVS repository (if you are 
-        not familiar with the Apache CVS repositories, please refer to the
+        need to check out the <code>db-torque</code> SVN repository (if you are 
+        not familiar with the Apache SVN repositories, please refer to the
         <a href="http://www.apache.org/dev/version-control.html">documentation</a>).
         Specific information for Torque is available on the 
         <a href="cvs-usage.html">Source Repository</a> page.
