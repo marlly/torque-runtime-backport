@@ -5,6 +5,7 @@
     <title>Torque Tutorial</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
     <author email="seade@backstagetech.com.au">Scott Eade</author>
+    <author email="fischer@seitenbau.de">Thomas Fischer</author>
   </properties>
   <body>
 
@@ -26,10 +27,34 @@
 </p>
 
 <p>
+  In this tutorial, it is assumed that you have experience 
+  in programming in Java, and that you have some experience
+  using JDBC (e.g. you should know what a jdbc driver and a
+  connection URL is).
+  Although <a href="http://maven.apache.org/">Maven</a> 
+  is heavily used in this tutorial, it is not assumed that 
+  you have any experience in using it.
+</p>
+
+<p>
+  If you are using Torque for the first time, you should 
+  stick very closely to the example provided in the Tutorial,
+  and get the sample application running as is. 
+  If you play around, there are quite a few places where 
+  things can go wrong, and is not always clear why they go wrong.
+  Errors are much easier to find when you can pinpoint
+  the source of the error by 
+  &quot;Ok, it went wrong when I changed foo&quot;.<br />
+  Once you got a running example, you can (and should) still 
+  play around to see whether Torque can satisfy your particular 
+  needs.
+</p>
+
+<p>
   The example used throughout this tutorial is based on an
   email sent to the turbine-user mailing list by 
   Steven F. Davis called
-  <a href="http://mail-archives.apache.org/eyebrowse/ReadMsg?listName=turbine-user@jakarta.apache.org&amp;msgNo=5287">
+  <a href="http://mail-archives.apache.org/mod_mbox/jakarta-turbine-user/200109.mbox/%3cBCAC8D6E905D234C84A49D1524A19CD1044FF7@bemail.BEDOMAIN.BEAP.COM%3e">
   torque outside turbine - detailed example (long)</a>.
   It has subsequently been updated for Turbine 3.1 which
   separates the <a href="../generator/">generator</a> from
@@ -44,8 +69,7 @@
 <section name="Where to next">
 
 <p>
-  First we will look at <a href="step1.html">Obtainning the Torque 
-  Distribution</a>.
+  First we will look at <a href="step1.html">Installing Maven and the Torque Maven Plugin</a>.
 </p>
 
 </section>

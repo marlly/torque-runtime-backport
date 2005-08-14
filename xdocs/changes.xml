@@ -28,6 +28,9 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in CVS">
+    <action type="update" dev="tfischer">
+      Reworked the tutorial.
+    </action>
     <action type="add" dev="henning">
       Added templates site reference to menus in runtime, generator, maven-plugin.
     </action>

@@ -2,14 +2,14 @@
 
 <document>
   <properties>
-    <title>Torque Tutorial</title>
+    <title>Torque Tutorial - Step 1: Installing Maven and the Torque Maven Plugin</title>
     <author email="pete-apache-dev@kazmier.com">Pete Kazmier</author>
     <author email="seade@backstagetech.com.au">Scott Eade</author>
     <author email="fischer@seitenbau.de">Thomas Fischer</author>
- </properties>
+  </properties>
   <body>
 
-<section name="Step 1: Obtaining the Torque Distribution">
+<section name="Step 1: Installing Maven and the Torque Maven Plugin">
 
 <p>
   First of all, note that Torque is divided into three parts.
@@ -25,7 +25,8 @@
     <li>
       The maven plugin integrates the generator into 
       <a href="http://maven.apache.org/">Maven</a>, a software 
-      project management tool.
+      project management tool. In other words, the maven plugin is 
+      a frontend for the generator.
     </li>
     <li>
       The runtime has to be included in your projects for the generated classes
@@ -34,16 +35,21 @@
   </ul>
   For this tutorial, we will be using the maven plugin for Torque 3.2.x 
   (which will silently invoke the generator) to
-  generate our object model classes and the Torque 3.2.x runtime for our
-  application that makes use of the generated classes.
+  generate our object model classes and sql scripts. For working with the 
+  generated classes, we will use the Torque 3.2.x runtime for our
+  sample application.
 </p>
 
 <p>
   If you have not already done so, download and install 
-  <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the 
-  Torque maven plugin.  The <a href="../maven-howto.html">Maven Howto</a> 
-  includes details of how to build the maven plugin from source, but you can 
-  easily install a binary distribution thus:
+  <a href="http://maven.apache.org/">Maven</a>. It is highly recommended to use 
+  version 1.0.2 of Maven.
+</p>
+
+<p>
+  Maven uses the <a href="http://www.ibiblio.org/maven">ibiblio maven repository</a>
+  to download any libraries and resources it needs. From there, obtain the Torque 
+  maven plugin by typing
 </p>
 
 <source><![CDATA[
@@ -51,17 +57,10 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 ]]></source>
 
 <p>
-  At runtime the generated object model classes need access to the Torque 
-  runtime distribution and associated libraries - these are available from the
-  <a href="http://db.apache.org/torque/download.html">
-  Downloads page</a> (the file to download is torque-3.2-rc1.tar.gz or 
-  torque-3.2-rc1.zip, depending on your development platform).  We will cover
-  what to do with this file in a later step.
-</p>
-
-<p>
-  If you are using the maven plugin, you do not need to download the generator 
-  separately. The maven plugin will download the needed resources.
+  You do not need to download the generator or the 
+  runtime separately. Maven will download them from 
+  the ibiblio distribution site automatically
+  when they are needed.
 </p>
 
 </section>
@@ -69,7 +68,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 <section name="Where to next">
 
 <p>
-  Next we will look at <a href="step2.html">Configuring Torque</a>.
+  Next we will look at <a href="step2.html">Configuring the Torque generator</a>.
 </p>
 
 </section>
