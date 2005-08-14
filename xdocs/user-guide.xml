@@ -105,7 +105,7 @@ torque-gen-3.1.1/
                             templates jar, set the 
                             <code>torque.useClasspath</code> to 
                             <code>false</code> 
-                            and the <codetorque.schema.dir</code>
+                            and the <code>torque.schema.dir</code>
                             to the correct directory in the
                             <code>build.properties</code>
     src/schema/        <--- Contains the schema for the table used by Torque's
