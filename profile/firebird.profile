@@ -60,6 +60,7 @@ torque.addIntakeRetrievable=false
 #torque.useManagers=true
 torque.useManagers=false
 torque.generateBeans=true
+torque.silentDbFetch=true
 
 # -------------------------------------------------------------------
 #

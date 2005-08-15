@@ -28,6 +28,17 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in CVS">
+    <action type="add" dev="tfischer">
+      Added a method getXXX(connection) to retrieve associated objects
+      in the n->1 direction, which uses the provided connection 
+      if a db hit is necessary 
+    </action>
+    <action type="add" dev="tfischer">
+      Added a generator property torque.silentDbFetch, which is true by default.
+      If set to false, the getXXX() methods without arguments will not access 
+      the db silently, but return null if the associated objects has not been 
+      read yet. Also, the method does not throw a Torque exception any more.
+    </action>
     <action type="update" dev="tfischer">
       Reworked the tutorial.
     </action>

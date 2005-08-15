@@ -54,6 +54,7 @@ torque.addTimeStamp=true
 torque.addIntakeRetrievable=false
 torque.useManagers=true
 torque.useClasspath=true
+torque.silentDbFetch=true
 
 # -------------------------------------------------------------------
 #

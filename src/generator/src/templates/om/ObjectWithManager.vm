@@ -330,22 +330,33 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #end
 
     /**
-     * Get the associated $interfaceName object
+     * Returns the associated $interfaceName object. 
+      #if ($silentDbFetch)
+     * If it was not retrieved before, the object is retrieved from 
+     * the database
+      #end  
      *
      * @return the associated $interfaceName object
+      #if ($silentDbFetch)
      * @throws TorqueException
+      #end  
      */
-    public $interfaceName get${pVarName}() throws TorqueException
+    public $interfaceName get${pVarName}() 
+      #if ($silentDbFetch)
+        throws TorqueException
+      #end  
     {
+      #if ($silentDbFetch)
         if ($varName == null && ($conditional))
         {
-    #if ($argsize > 1)
+        #if ($argsize > 1)
             SimpleKey[] keys = { $arglist };
             return ${interfaceName}Manager.getInstance(new ComboKey(keys));
-    #else
+        #else
             return ${interfaceName}Manager.getInstance($arglist);
-    #end
+        #end
         }
+      #end
         return $varName;
     }
 
@@ -515,22 +526,39 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     /**
       #if ($objectIsCaching)
+        #if (!$silentDbFetch)
+     * returns the Collection.   
+        #else
      * If this collection has already been initialized, returns
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria())
+        #end
       #else
      * A wrapper for get${relCol}(new Criteria())
       #end
      *
+     * @return the collection of associated objects
+      #if ($silentDbFetch)
      * @throws TorqueException
+      #end
      */
-    public List get${relCol}() throws TorqueException
+    public List get${relCol}() 
+      #if ($silentDbFetch)
+        throws TorqueException
+      #end
     {
       #if ($objectIsCaching)
+        #if (!$silentDbFetch)
+        if (isNew())
+        {
+            init${relCol}();
+        }
+        #else
         if ($collName == null)
         {
             $collName = get${relCol}(new Criteria(10));
         }
+        #end
         return $collName;
       #else
         return get${relCol}(new Criteria(10));
@@ -1560,10 +1588,19 @@ shows the infinite loop: System.out.println("Entering save for " + this);
           #end
 
         ${list}v = get${pCollName}();
-        for (int i = 0; i < v.size(); i++)
+          ## v can be null if the generator property
+          ## torque.silentDbFetch is set to false
+        if (v != null)
         {
-            $className obj = ($className) v.get(i);
-            copyObj.add$pCollNameNoS(obj.copy());
+            for (int i = 0; i < v.size(); i++)
+            {
+                $className obj = ($className) v.get(i);
+                copyObj.add$pCollNameNoS(obj.copy());
+            }
+        }
+        else 
+        {
+            copyObj.coll${pCollName} = null;
         }
         #end
         #set ( $list = "" )

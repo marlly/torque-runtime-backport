@@ -42,7 +42,7 @@ import ${packageObject}.*;
 import ${packagePeer}.*;
 #end
 
-#if ($generateBeans) 
+#if ($generateBeans)
   $generator.parse("om/bean/ObjectBeanImports.vm",$path,"child",$child)
 #end
 
@@ -119,13 +119,13 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #else
       #set ( $accessLevel = "public" )
     #end
-    
+
     /**
      * Get the $cfc
      *
      * @return $cjtype
      */
-    $accessLevel $cjtype ${col.GetterName} ()
+    $accessLevel $cjtype ${col.GetterName}()
     {
         return $clo;
     }
@@ -326,26 +326,79 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
     #end
 
     /**
-     * Get the associated $interfaceName object
+     * Returns the associated $interfaceName object. 
+      #if ($silentDbFetch)
+     * If it was not retrieved before, the object is retrieved from 
+     * the database
+      #end  
      *
+     * @return the associated $interfaceName object
+      #if ($silentDbFetch)
+     * @throws TorqueException
+      #end  
+     */
+    public $interfaceName get${pVarName}() 
+      #if ($silentDbFetch)
+        throws TorqueException
+      #end  
+    {
+      #if ($silentDbFetch)
+        if ($varName == null && ($conditional))
+        {
+        #if ($tblFK.isAlias())
+          #if ($argsize > 1)
+            $varName = ${className}Peer.retrieve${className}ByPK($arglist);
+          #else
+            $varName = ${className}Peer.retrieve${className}ByPK(SimpleKey.keyFor($arglist));
+          #end
+        #else
+          #if ($argsize > 1)
+            $varName = ${className}Peer.retrieveByPK($arglist);
+          #else
+            $varName = ${className}Peer.retrieveByPK(SimpleKey.keyFor($arglist));
+          #end
+        #end
+
+            /* The following can be used instead of the line above to
+               guarantee the related object contains a reference
+               to this object, but this level of coupling
+               may be undesirable in many circumstances.
+               As it can lead to a db query with many results that may
+               never be used.
+               $className obj = ${className}Peer.retrieveByPK($arglist);
+               obj.add${pCollName}(this);
+            */
+        }
+      #end
+        return $varName;
+    }
+
+    /**
+     * Return the associated $interfaceName object
+     * If it was not retrieved before, the object is retrieved from 
+     * the database using the passed connection 
+     *
+     * @param connection the connection used to retrieve the associated object
+     *        from the database, if it was not retrieved before
      * @return the associated $interfaceName object
      * @throws TorqueException
      */
-    public $interfaceName get${pVarName}() throws TorqueException
+    public $interfaceName get${pVarName}(Connection connection) 
+        throws TorqueException
     {
         if ($varName == null && ($conditional))
         {
       #if ($tblFK.isAlias())
         #if ($argsize > 1)
-            $varName = ${className}Peer.retrieve${className}ByPK($arglist);
+            $varName = ${className}Peer.retrieve${className}ByPK($arglist, connection);
         #else
-            $varName = ${className}Peer.retrieve${className}ByPK(SimpleKey.keyFor($arglist));
+            $varName = ${className}Peer.retrieve${className}ByPK(SimpleKey.keyFor($arglist), connection);
         #end
       #else
         #if ($argsize > 1)
-            $varName = ${className}Peer.retrieveByPK($arglist);
+            $varName = ${className}Peer.retrieveByPK($arglist, connection);
         #else
-            $varName = ${className}Peer.retrieveByPK(SimpleKey.keyFor($arglist));
+            $varName = ${className}Peer.retrieveByPK(SimpleKey.keyFor($arglist), connection);
         #end
       #end
 
@@ -355,7 +408,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
                may be undesirable in many circumstances.
                As it can lead to a db query with many results that may
                never be used.
-               $className obj = ${className}Peer.retrieveByPK($arglist);
+               $className obj = ${className}Peer.retrieveByPK($arglist, connection);
                obj.add${pCollName}(this);
             */
         }
@@ -528,22 +581,39 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
     /**
       #if ($objectIsCaching)
+        #if (!$silentDbFetch)
+     * returns the Collection.   
+        #else
      * If this collection has already been initialized, returns
      * the collection. Otherwise returns the results of
      * get${relCol}(new Criteria())
+        #end
       #else
      * A wrapper for get${relCol}(new Criteria())
       #end
      *
+     * @return the collection of associated objects
+      #if ($silentDbFetch)
      * @throws TorqueException
+      #end
      */
-    public List get${relCol}() throws TorqueException
+    public List get${relCol}() 
+      #if ($silentDbFetch)
+        throws TorqueException
+      #end
     {
       #if ($objectIsCaching)
+        #if (!$silentDbFetch)
+        if (isNew())
+        {
+            init${relCol}();
+        }
+        #else
         if ($collName == null)
         {
             $collName = get${relCol}(new Criteria(10));
         }
+        #end
         return $collName;
       #else
         return get${relCol}(new Criteria(10));
@@ -898,7 +968,7 @@ public abstract class $basePrefix$table.JavaName $extendsBaseClass
 
         return $collName;
    #else 
-            return ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
+        return ${className}Peer.doSelectJoinAllExcept${table.JavaName}${suffix}(criteria);
    #end
     }
 
@@ -1176,7 +1246,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
 *#
   #end
 
-           // If this object has been modified, then save it to the database.
+            // If this object has been modified, then save it to the database.
             if (isModified())
             {
                 if (isNew())
@@ -1550,10 +1620,19 @@ shows the infinite loop: System.out.println("Entering save for " + this);
           #end
 
         ${list}v = get${pCollName}();
-        for (int i = 0; i < v.size(); i++)
+          ## v can be null if the generator property
+          ## torque.silentDbFetch is set to false
+        if (v != null)
         {
-            $className obj = ($className) v.get(i);
-            copyObj.add$pCollNameNoS(obj.copy());
+            for (int i = 0; i < v.size(); i++)
+            {
+                $className obj = ($className) v.get(i);
+                copyObj.add$pCollNameNoS(obj.copy());
+            }
+        }
+        else 
+        {
+            copyObj.coll${pCollName} = null;
         }
         #end
         #set ( $list = "" )
@@ -1577,7 +1656,7 @@ shows the infinite loop: System.out.println("Entering save for " + this);
     }
 #end
 
-#if ($generateBeans) 
+#if ($generateBeans)
   $generator.parse("om/bean/ObjectBeanMethods.vm",$path,"child",$child)
 #end
 
