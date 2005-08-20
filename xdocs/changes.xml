@@ -39,9 +39,6 @@
       the db silently, but return null if the associated objects has not been 
       read yet. Also, the method does not throw a Torque exception any more.
     </action>
-    <action type="update" dev="tfischer">
-      Reworked the tutorial.
-    </action>
     <action type="add" dev="henning">
       Added templates site reference to menus in runtime, generator, maven-plugin.
     </action>
