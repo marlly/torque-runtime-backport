@@ -195,5 +195,10 @@ java -cp classes:lib/avalon-framework-4.1.4.jar:lib/commons-beanutils-1.7.0.jar:
 
 </section>
 
+<section name="User Comments">
+  <a href="http://wiki.apache.org/db-torque/TutorialUserCommentsStep6">User comments</a>
+  for this step
+</section>
+
   </body>
 </document>

@@ -9,7 +9,7 @@
   </properties>
   <body>
 
-<section name="Configuring the Torque Runtime">
+<section name="Step 4: Configuring the Torque Runtime">
 
 <p>
   Before we can start to write a Torque application, we have to 
@@ -291,6 +291,11 @@ torque.dsfactory.bookstore.connection.password = password
     Next we will look <a href="step5.html">Writing a Sample Application</a>.
   </p>
 
+</section>
+
+<section name="User Comments">
+  <a href="http://wiki.apache.org/db-torque/TutorialUserCommentsStep4">User comments</a>
+  for this step
 </section>
 
 </body>

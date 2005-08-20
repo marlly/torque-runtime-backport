@@ -37,6 +37,16 @@
 </p>
 
 <p>
+  For each step in the tutorial, user comments are available 
+  in the
+  <a href="http://wiki.apache.org/db-torque/">Torque Wiki</a>,
+  see the links at the bottom of each page.
+  If you had difficulties with a particular step and found
+  a solution, please write it up and add it to the corresponding
+  wiki page for each step.
+</p>
+
+<p>
   If you are using Torque for the first time, you should 
   stick very closely to the example provided in the Tutorial,
   and get the sample application running as is. 
@@ -72,6 +82,11 @@
   First we will look at <a href="step1.html">Installing Maven and the Torque Maven Plugin</a>.
 </p>
 
+</section>
+
+<section name="User Comments">
+  <a href="http://wiki.apache.org/db-torque/TutorialUserComments">User comments</a>
+  for the tutorial as a whole and this page  
 </section>
 
   </body>
