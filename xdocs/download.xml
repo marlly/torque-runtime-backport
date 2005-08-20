@@ -242,14 +242,12 @@ These are the currently released versions of Torque:<br/>
   </p>
 </section>
 
-<section name="Getting The Development Source From CVS">
+<section name="Getting The Development Source From SVN">
   <p>
-    You can check out the latest source from the DB CVS module.<br/>
-    Torque resides in the db-torque module:
-    </p>
-    <source><![CDATA[cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic login
-password: anoncvs
-cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout db-torque]]></source>
+    You can check out the latest source from the DB SVN module.<br/>
+    Torque resides in the db/torque module:
+  </p>
+  <source><![CDATA[svn checkout https://svn.apache.org/repos/asf/db/torque/trunk]]></source>
 </section>
 
 <section name="Building The Source">

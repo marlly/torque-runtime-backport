@@ -66,7 +66,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 
   <p>
     Building the maven plugin from source is relatively easy - you might want
-    to do this if there are fixes or enhancements in CVS that you want to make
+    to do this if there are fixes or enhancements in SVN that you want to make
     use of.  Another reason you might want to do this is if you wish to 
     make your own copy of the plugin that includes a set of customized 
     generator templates to modify the object model class files that will be
@@ -74,7 +74,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   </p>
 
   <p>
-    The first thing to do is to check out Torque from CVS (make sure you use
+    The first thing to do is to check out Torque from SVN (make sure you use
     branch tag you desire).  If you want to modify any of the generator 
     templates you would do this before running <code>maven 
     plugin:install</code> from the <code>src/maven-plugin</code> directory. 
