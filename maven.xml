@@ -27,7 +27,8 @@
 
 <project
   xmlns:j="jelly:core"
-  xmlns:deploy="deploy">
+  xmlns:deploy="deploy"
+  default="jar:jar">
 
   <!-- Allow any user specific values to override the defaults -->
   <property file="${user.home}/build.properties" />
@@ -61,23 +62,14 @@
   <!-- ================================================================== -->
   <!-- D I S T : B U I L D _ S R C   P R E   G O A L                      -->
   <!-- ================================================================== -->
-  <!-- includes project-base.xml in the source distribution               -->
+  <!-- includes common files                                              -->
   <!-- This is necessary as long as maven does not resolves the extends   -->
   <!-- property of the pom upon generation of the source distribution     -->                                           
-  <!-- Also, do not include src/generator in the source distribution      -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-src">
-    <!-- include project-base.xml                              -->
-    <!-- the failonerror is there because this preGoal also is -->
-    <!-- called from the generator where the project-base.xml  -->
-    <!-- does not exist in the base directory                  -->
-    <copy todir="${maven.dist.src.assembly.dir}" file="project-base.xml" failonerror="false"/>
-    <!-- do not include src/generator and src/maven-plugin -->
-    <!-- in the source distribution -->
-    <!-- The directory is deleted after copying, maybe one can find -->
-    <!-- a better solution -->                                           
-    <delete dir="${maven.dist.src.assembly.dir}/src/generator" />
-    <delete dir="${maven.dist.src.assembly.dir}/src/maven-plugin" />
+      <copy todir="${maven.dist.src.assembly.dir}/common">
+      <fileset dir="common" includes="*"/>
+    </copy>  
   </preGoal>
 
   <!-- ================================================================== -->
