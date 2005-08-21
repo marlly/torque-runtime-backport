@@ -18,7 +18,7 @@
  -->
 
 <project>
-  <extend>project-base.xml</extend>
+  <extend>common/project.xml</extend>
   <pomVersion>3</pomVersion>
   <id>torque</id>
   <name>Torque</name>
