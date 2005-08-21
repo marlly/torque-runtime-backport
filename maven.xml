@@ -68,7 +68,10 @@
   <!-- ================================================================== -->
   <preGoal name="dist:build-src">
       <copy todir="${maven.dist.src.assembly.dir}/common">
-      <fileset dir="common" includes="*"/>
+      <fileset dir="${basedir}/common">
+        <include name="project.xml"/>
+        <include name="project.properties"/>
+      </fileset>
     </copy>  
   </preGoal>
 
