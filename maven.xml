@@ -213,7 +213,7 @@
     />
     <copy
       tofile="${build.test}/rttest/default.properties"
-      file="${src.dir}/generator/src/conf/default.properties"
+      file="${torque.generator.home}/src/conf/default.properties"
       overwrite="yes"
     />
 
@@ -240,7 +240,7 @@
 
     <!-- copy templates -->
     <copy todir="${build.test}/rttest/templates">
-      <fileset dir="${torque.generator.home}/src/templates"/>
+      <fileset dir="${torque.template.home}/src/templates"/>
     </copy>
 
     <!-- copy Torque.properties -->
@@ -316,7 +316,7 @@
     />
     <copy
       tofile="${test.ojb.distDir}/default.properties"
-      file="${src.dir}/generator/src/conf/default.properties"
+      file="${torque.generator.home}/src/conf/default.properties"
       overwrite="yes"
     />
 
