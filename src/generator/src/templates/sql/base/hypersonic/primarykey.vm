@@ -1,3 +1,0 @@
-#if ($table.hasPrimaryKey() && $table.IdMethod != "native")    
-    PRIMARY KEY($table.printPrimaryKey()),
-#end

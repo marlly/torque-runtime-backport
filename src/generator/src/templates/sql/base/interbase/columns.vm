@@ -1,8 +1,0 @@
-#foreach ($col in $table.Columns)
-    #set ( $type = $col.Domain.SqlType )
-    #set ( $size = $col.printSize() )
-    #set ( $default = $col.DefaultSetting )
-    #set ( $colName = $col.Name )
-    #set ( $entry = "$colName $type $size $default $col.NotNullString $col.AutoIncrementString," )
-    $strings.sub($strings.collapseSpaces($entry)," ,",",")
-#end

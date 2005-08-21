@@ -1,4 +1,0 @@
-#foreach ($col in $table.Columns)
-    #set ( $entry = "$col.SqlString," )
-    $strings.sub($strings.collapseSpaces($entry)," ,",",")
-#end
