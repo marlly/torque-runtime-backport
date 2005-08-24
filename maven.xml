@@ -45,9 +45,12 @@
   <!-- ================================================================== -->
   <preGoal name="dist:build-bin">
     <!-- include listed dependencies -->
-    <deploy:copy-deps 
-      todir="${maven.dist.bin.assembly.dir}/lib" 
-      excludes="jndi:jndi,jdbc,maven-ant-plugin,maven-artifact-plugin,maven-changelog-plugin,maven-developer-activity-plugin,maven-file-activity-plugin,maven-findbugs-plugin,maven-jar-plugin,maven-plugin-plugin,maven-scm-plugin,maven-site-plugin,maven-tasklist-plugin,maven-xdoc-plugin" />
+    <j:forEach var="dep" items="${pom.dependencies}">
+      <j:if test="${dep.getProperty('dist.bundle') != null &amp;&amp; dep.getProperty('dist.bundle').equalsIgnoreCase('true')}">
+        <copy todir="${maven.dist.bin.assembly.dir}/lib"
+              file="${maven.repo.local}/${dep.getArtifactDirectory()}/jars/${dep.getArtifact()}"/>
+      </j:if>
+    </j:forEach>
 
     <!-- copy the contents of the conf directory -->
     <!-- to the right place -->

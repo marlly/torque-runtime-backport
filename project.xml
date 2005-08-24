@@ -40,6 +40,9 @@
       <groupId>avalon-framework</groupId>
       <version>4.1.4</version>
       <url>http://avalon.apache.org/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -47,6 +50,9 @@
       <groupId>commons-beanutils</groupId>
       <version>1.7.0</version>
       <url>http://jakarta.apache.org/commons/beanutils/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -54,6 +60,9 @@
       <groupId>commons-collections</groupId>
       <version>3.1</version>
       <url>http://jakarta.apache.org/commons/collections/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -61,6 +70,9 @@
       <groupId>commons-configuration</groupId>
       <version>1.1</version>
       <url>http://jakarta.apache.org/commons/configuration/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -68,6 +80,9 @@
       <groupId>commons-dbcp</groupId>
       <version>1.2.1</version>
       <url>http://jakarta.apache.org/commons/dbcp/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -75,6 +90,9 @@
       <groupId>commons-lang</groupId>
       <version>2.1</version>
       <url>http://jakarta.apache.org/commons/lang/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -82,6 +100,9 @@
       <groupId>commons-logging</groupId>
       <version>1.0.4</version>
       <url>http://jakarta.apache.org/commons/logging/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -89,6 +110,9 @@
       <groupId>commons-pool</groupId>
       <version>1.2</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -96,6 +120,9 @@
       <groupId>jcs</groupId>
       <version>20030822.182132</version>
       <url>http://jakarta.apache.org/turbine/jcs/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -117,6 +144,9 @@
       <groupId>log4j</groupId>
       <version>1.2.8</version>
       <url>http://logging.apache.org/log4j/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency-->
 
     <dependency>
@@ -125,6 +155,9 @@
       <groupId>logkit</groupId>
       <version>1.0.1</version>
       <url>http://avalon.apache.org/products/runtime/system/logging/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -132,6 +165,9 @@
       <groupId>village</groupId>
       <version>2.0-dev-20030825</version>
       <url>http://share.whichever.com/index.php?SCREEN=village</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -139,6 +175,9 @@
       <groupId>xerces</groupId>
       <version>2.6.2</version>
       <url>http://xml.apache.org/xerces2-j/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
@@ -146,6 +185,9 @@
       <groupId>xml-apis</groupId>
       <version>2.0.2</version>
       <url>http://xml.apache.org/commons/</url>
+      <properties>
+        <dist.bundle>true</dist.bundle>
+      </properties>
     </dependency>
 
     <dependency>
