@@ -1,7 +1,7 @@
 package org.apache.torque.dsfactory;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2001-2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -292,11 +292,11 @@ public class JndiDataSourceFactory
                     // for this condition, some implementations
                     // throw the more general one.
                     /*
-                      if (ne.getMessage().indexOf("already bound") == -1 )
-                      {
-                      throw ne;
-                      }
-                    */
+                     *                      if (ne.getMessage().indexOf("already bound") == -1 )
+                     *                      {
+                     *                      throw ne;
+                     *                      }
+                     */
                     // ignore
                 }
                 ctx = (Context) ctx.lookup(subctx);
