@@ -16,7 +16,6 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
-
 /**
  * A typesafe enum of SQL string fragments.  Used by Criteria and SqlExpression
  * to build queries.  Criteria also makes most of the constants available

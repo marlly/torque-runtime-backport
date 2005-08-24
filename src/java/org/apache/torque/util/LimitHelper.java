@@ -1,9 +1,5 @@
 package org.apache.torque.util;
 
-import org.apache.torque.Torque;
-import org.apache.torque.TorqueException;
-import org.apache.torque.adapter.DB;
-
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
  *
@@ -19,6 +15,11 @@ import org.apache.torque.adapter.DB;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
+import org.apache.torque.adapter.DB;
+
 
 /**
  * Factored out all the various &quot;How to generate offset and limit

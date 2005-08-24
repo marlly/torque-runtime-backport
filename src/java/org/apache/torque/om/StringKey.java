@@ -16,7 +16,6 @@ package org.apache.torque.om;
  * limitations under the License.
  */
 
-
 /**
  * This class can be used as an ObjectKey to uniquely identify an
  * object within an application where the id  consists
