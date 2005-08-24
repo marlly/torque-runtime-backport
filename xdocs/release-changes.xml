@@ -295,7 +295,7 @@
               </li>
               <li>
                 Added DOUBLE as a valid type for a column in a datamodel
-                descriptor. 
+                descriptor.
               </li>
               <li>
                 Fixed the TorqueDataDTDTask.

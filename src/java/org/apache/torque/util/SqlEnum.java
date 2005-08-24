@@ -30,22 +30,22 @@ package org.apache.torque.util;
 public class SqlEnum implements java.io.Serializable
 {
     private final String s;
-    
-    private SqlEnum(String s) 
-    { 
+
+    private SqlEnum(String s)
+    {
         this.s = s;
     }
 
-    public final String toString()  
-    { 
+    public final String toString()
+    {
         return s;
     }
-    
-    public static final SqlEnum EQUAL = 
+
+    public static final SqlEnum EQUAL =
         new SqlEnum("=");
-    public static final SqlEnum NOT_EQUAL = 
+    public static final SqlEnum NOT_EQUAL =
             new SqlEnum("<>");
-    public static final SqlEnum ALT_NOT_EQUAL = 
+    public static final SqlEnum ALT_NOT_EQUAL =
         new SqlEnum("!=");
     public static final SqlEnum GREATER_THAN =
         new SqlEnum(">");
@@ -54,7 +54,7 @@ public class SqlEnum implements java.io.Serializable
     public static final SqlEnum GREATER_EQUAL =
         new SqlEnum(">=");
     public static final SqlEnum LESS_EQUAL =
-        new SqlEnum("<=");  
+        new SqlEnum("<=");
     public static final SqlEnum LIKE =
         new SqlEnum(" LIKE ");
     public static final SqlEnum NOT_LIKE =
@@ -97,20 +97,20 @@ public class SqlEnum implements java.io.Serializable
         new SqlEnum(" ON ");
     public static final SqlEnum AS =
         new SqlEnum(" AS ");
-    
+
     /**
      * returns whether o is the same SqlEnum as this object.
      * Two SqlEnums are considered equal if they contain the same String.
      * @param o the object to compare the SqlEnum with.
      */
-    public boolean equals(Object o) 
+    public boolean equals(Object o)
     {
-        if (o == null) 
+        if (o == null)
         {
             return false;
         }
 
-        if (! (o instanceof SqlEnum)) 
+        if (! (o instanceof SqlEnum))
         {
             return false;
         }
@@ -121,17 +121,17 @@ public class SqlEnum implements java.io.Serializable
         // both null: true
         // other null, this not null: false
         // else compare
-        return (otherEnum.s == null) 
+        return (otherEnum.s == null)
                 ? (s == null)
                 : otherEnum.s.equals(s);
     }
-    
+
     /**
      * returns a hashcode for this object which is consistent with equals()
      */
-    public int hashCode() 
+    public int hashCode()
     {
-        return (s == null) 
+        return (s == null)
                 ? 0
                 : s.hashCode();
     }

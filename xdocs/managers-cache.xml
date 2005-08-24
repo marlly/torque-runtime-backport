@@ -43,7 +43,7 @@
   </p>
   <p>
     A manager is responsible for instantiating new objects, retrieving stored
-    objects, and possibly caching these objects.  Managers provide static 
+    objects, and possibly caching these objects.  Managers provide static
     accessors for much of its functionality, so usage examples are:
   </p>
 
@@ -52,7 +52,7 @@
     // id is an ObjectKey that identifies the object in the db
     foo = FooManager.getInstance(id);
     // ids is a List of ObjectKey's that identifies objects in the db
-    List foos = FooManager.getInstances(ids); 
+    List foos = FooManager.getInstances(ids);
   ]]></source>
 
 </section>
@@ -60,12 +60,12 @@
 <section name="Business Object Cache">
 
   <p>
-    If no-arg constructor of FooManager, 
+    If no-arg constructor of FooManager,
     calls setRegion(region) where the String region is the key used to
     determine the cache, the manager will cache instances of Foo retrieved
     via the getInstance(ObjectKey id) and getInstances(List ids) methods.
-    One possibility for the region key is the 
-    fully qualified classname with dots replaced by underscores. 
+    One possibility for the region key is the
+    fully qualified classname with dots replaced by underscores.
   </p>
 
   <source><![CDATA[
@@ -79,9 +79,9 @@
   <p>
     The key given for the region is used in a JCS
     configuration file, cache.ccf, to set up a cache that the manager uses
-    to store objects for which it is responsible. See the JCS 
+    to store objects for which it is responsible. See the JCS
     <a href="http://jakarta.apache.org/turbine/jcs/">
-    documentation</a> for details on configuring JCS.  But here is a 
+    documentation</a> for details on configuring JCS.  But here is a
     simple section that creates an in-memory only LRU cache for FooManager.
   </p>
 
@@ -95,13 +95,13 @@ jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
   ]]></source>
 
   <p>
-    It is a good idea to set a region for each manager, but this behavior 
-    is optional.  There also will be no caching if JCS is 
+    It is a good idea to set a region for each manager, but this behavior
+    is optional.  There also will be no caching if JCS is
     not configured for the region given in the Constructor.
   </p>
 
   <p>
-    The generated object model classes have methods for getting objects 
+    The generated object model classes have methods for getting objects
     that are related by foreign keys.  If the FOO table contains an fk to
     the BAR table then Foo.getBar() will exist.  This method uses
     BarManager.getInstance(bar_id) and therefore will return a cached
@@ -118,7 +118,7 @@ jcs.region.net_bar_om_Foo.cacheattributes.MemoryCacheName=
     would be preferrable that repeated requests to this method returned
     cached results as opposed to hitting the db for each call.  It could be
     possible to add such caching to the generated method, and Criteria
-    implements an equals() method that would make this possible.  But 
+    implements an equals() method that would make this possible.  But
     determining the equality of a Criteria is complex and possibly buggy (this
     is the perception of the author of this doc, there are no known bugs).
     Invalidating the results has also not been reduced to templated Java code.
@@ -149,8 +149,8 @@ public List getFoos(FooType type, boolean deleted)
 
   <p>
     In the above code the database will be hit for every call to the method.
-    BarManager provides some convenience code to add caching to the above 
-    method, so it can be rewritten as:  
+    BarManager provides some convenience code to add caching to the above
+    method, so it can be rewritten as:
   </p>
 
   <source><![CDATA[
@@ -158,9 +158,9 @@ public List getFoos(FooType type, boolean deleted)
 {
     List result = null;
     Boolean b = (deleted ? Boolean.TRUE : Boolean.FALSE);
-    Object obj = BarManager.getMethodResult().get(this, "getFoos", type, b); 
-    if ( obj == null ) 
-    {        
+    Object obj = BarManager.getMethodResult().get(this, "getFoos", type, b);
+    if ( obj == null )
+    {
         Criteria crit = new Criteria();
         crit.add(FooPeer.TYPE_ID, type.getId());
         crit.add(FooPeer.DELETED, deleted);
@@ -168,7 +168,7 @@ public List getFoos(FooType type, boolean deleted)
 
         BarManager.getMethodResult().put(result, this, "getFoos", type, b);
     }
-    else 
+    else
     {
         result = (List)obj;
     }
@@ -202,16 +202,16 @@ public List getFoos(FooType type, boolean deleted)
 
   <p>
     An event model exists for invalidating cached method results.  Continuing
-    the example from above, BarManager should register itself as a listener 
+    the example from above, BarManager should register itself as a listener
     with the FooManager.
     Then FooManager will notify BarManager, if a foo.save() is called
-    that might affect its cached results.  The following code is added to 
+    that might affect its cached results.  The following code is added to
     BarManager.java which implements the CacheListener interface.
   </p>
 
   <source><![CDATA[
     /**
-     * Method should be overridden to notify other managers with 
+     * Method should be overridden to notify other managers with
      * relevant CacheEvents.
      */
     protected void registerAsListener()
@@ -226,11 +226,11 @@ public List getFoos(FooType type, boolean deleted)
 
     public void addedObject(Persistent om)
     {
-        if (om instanceof Foo) 
+        if (om instanceof Foo)
         {
             getMethodResult().removeAll(om, "getFoos");
         }
-        else if (om instanceof X) 
+        else if (om instanceof X)
         {
             getMethodResult().remove(om, GET_URLS);
             getMethodResult().removeAll(om, GET_COMMENTS);
@@ -255,12 +255,12 @@ public List getFoos(FooType type, boolean deleted)
   ]]></source>
 
   <p>
-    When a foo which is of interest to BarManager is saved, the instance is 
+    When a foo which is of interest to BarManager is saved, the instance is
     passed
     to the appropriate listener method.  This object may contain information
     that could result in no action or possibly more precise repair of the
     cached data.  In the above examples the cache is just cleared of all
-    data that is potentially invalid. 
+    data that is potentially invalid.
     Some code is also added to FooManager to support the invalidation.
   </p>
 
@@ -283,7 +283,7 @@ public List getFoos(FooType type, boolean deleted)
         List listeners = (List)listenersMap.get(FooPeer.BAR_ID);
         notifyListeners(listeners, oldOm, om);
         return oldOm;
-    }                
+    }
   ]]></source>
 
   <p>

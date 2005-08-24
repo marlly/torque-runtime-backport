@@ -71,7 +71,7 @@ import com.workingdogs.village.Record;
 public class DataTest extends BaseRuntimeTestCase
 {
     private static Log log = LogFactory.getLog(DataTest.class);;
-    
+
     /**
      * Creates a new instance.
      */
@@ -92,13 +92,13 @@ public class DataTest extends BaseRuntimeTestCase
     public void testConnect() throws Exception
     {
         Connection connection = null;
-        try 
+        try
         {
         	connection = Torque.getConnection();
             connection.close();
             connection = null;
         }
-        finally 
+        finally
         {
         	if (connection != null)
             {
@@ -106,7 +106,7 @@ public class DataTest extends BaseRuntimeTestCase
             }
         }
     }
-    
+
     /**
      * does some inserts.
      * @throws Exception if the test fails
@@ -135,7 +135,7 @@ public class DataTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.add(BooleanCheckPeer.TEST_KEY, (Object) null, Criteria.NOT_EQUAL);
         BooleanCheckPeer.doDelete(criteria);
-        
+
         BooleanCheck bc = new BooleanCheck();
         bc.setTestKey("t1");
         bc.setBintValue(true);
@@ -158,7 +158,7 @@ public class DataTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.add(MultiPkPeer.PK1, (Object) null, Criteria.NOT_EQUAL);
         MultiPkPeer.doDelete(criteria);
-        
+
         // do test
         MultiPk mpk = new MultiPk();
         mpk.setPrimaryKey("Svarchar:N5:Schar:");
@@ -166,7 +166,7 @@ public class DataTest extends BaseRuntimeTestCase
     }
 
     private static final String[] validTitles = {
-        "Book 7 - Author 8", "Book 6 - Author 8", "Book 7 - Author 7", 
+        "Book 7 - Author 8", "Book 6 - Author 8", "Book 7 - Author 7",
         "Book 6 - Author 7", "Book 7 - Author 6", "Book 6 - Author 6",
         "Book 7 - Author 5", "Book 6 - Author 5", "Book 7 - Author 4",
         "Book 6 - Author 4"};
@@ -178,31 +178,31 @@ public class DataTest extends BaseRuntimeTestCase
     public void testLimitOffset() throws Exception
     {
         Map titleMap = new HashMap();
-        for (int j = 0; j < validTitles.length; j++) 
+        for (int j = 0; j < validTitles.length; j++)
         {
             titleMap.put(validTitles[j], null);
         }
 
         Criteria crit = new Criteria();
-        Criteria.Criterion c = crit.getNewCriterion(BookPeer.TITLE, 
+        Criteria.Criterion c = crit.getNewCriterion(BookPeer.TITLE,
                 (Object) "Book 6 - Author 1", Criteria.GREATER_EQUAL);
-        c.and(crit.getNewCriterion(BookPeer.TITLE, 
+        c.and(crit.getNewCriterion(BookPeer.TITLE,
                 (Object) "Book 8 - Author 3", Criteria.LESS_EQUAL));
         crit.add(c);
         crit.addDescendingOrderByColumn(BookPeer.BOOK_ID);
         crit.setLimit(10);
         crit.setOffset(5);
         List books = BookPeer.doSelect(crit);
-        assertTrue("List should have 10 books, not " + books.size(), 
+        assertTrue("List should have 10 books, not " + books.size(),
                 books.size() == 10);
-        for (Iterator i = books.iterator(); i.hasNext();) 
+        for (Iterator i = books.iterator(); i.hasNext();)
         {
             String title = ((Book) i.next()).getTitle();
-            assertTrue("Incorrect title: " + title, 
+            assertTrue("Incorrect title: " + title,
                     titleMap.containsKey(title));
         }
     }
-    
+
     /**
      * Checks whether the setSingleRecord() method in criteria works
      */
@@ -213,9 +213,9 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.setLimit(1);
         criteria.setOffset(5);
         List books = BookPeer.doSelect(criteria);
-        assertTrue("List should have 1 books, not " + books.size(), 
+        assertTrue("List should have 1 books, not " + books.size(),
                 books.size() == 1);
-        
+
         criteria.clear();
         criteria.setSingleRecord(true);
         criteria.setLimit(2);
@@ -227,14 +227,14 @@ public class DataTest extends BaseRuntimeTestCase
                     + " and one was expected");
         }
         catch (TorqueException e)
-        {   
+        {
         }
     }
-    
+
     /**
      * tests whether null values can be processed successfully by datadump
      * For this, a row containing null values is inserted here,
-     * the actual test is done later 
+     * the actual test is done later
      * @throws Exception if inserting the test data fails
      */
     public void testDataDump() throws Exception
@@ -246,7 +246,7 @@ public class DataTest extends BaseRuntimeTestCase
         nvt.setNumberObj1(new Integer(1));
         nvt.save();
     }
-    
+
     /**
      * test boolean values
      * @throws Exception if the test fails
@@ -254,17 +254,17 @@ public class DataTest extends BaseRuntimeTestCase
     public void testBooleanValues() throws Exception
     {
         BooleanCheck bc = BooleanCheckPeer.retrieveByPK(new StringKey("t1"));
-        assertTrue("BOOLEANINT should be true but is: " 
+        assertTrue("BOOLEANINT should be true but is: "
                 + bc.getBintValue(), bc.getBintValue());
-        assertTrue("BOOLEANCHAR should be true but is: " 
+        assertTrue("BOOLEANCHAR should be true but is: "
                 + bc.getBcharValue(), bc.getBcharValue());
         bc = BooleanCheckPeer.retrieveByPK(new StringKey("f1"));
-        assertFalse("BOOLEANINT should be false but is: " 
+        assertFalse("BOOLEANINT should be false but is: "
                 + bc.getBintValue(), bc.getBintValue());
-        assertFalse("BOOLEANCHAR should be false but is: " 
+        assertFalse("BOOLEANCHAR should be false but is: "
                 + bc.getBcharValue(), bc.getBcharValue());
     }
-    
+
     /**
      * Tests whether column type BIT can be written and read correctly
      * and works in criteria as expected
@@ -278,12 +278,12 @@ public class DataTest extends BaseRuntimeTestCase
             // failing is "expected", so exit without error
             return;
         }
-        
+
         // clean table
         Criteria criteria = new Criteria();
         criteria.add(BitTestPeer.ID, (Object) null, Criteria.NOT_EQUAL);
         BitTestPeer.doDelete(criteria);
-        
+
         // insert Data
         BitTest bitTest = new BitTest();
         bitTest.setId("t1");
@@ -296,19 +296,19 @@ public class DataTest extends BaseRuntimeTestCase
 
         // read data
         bitTest = BitTestPeer.retrieveByPK(new StringKey("t1"));
-        assertTrue("BIT should be true but is: " 
+        assertTrue("BIT should be true but is: "
                 + bitTest.getBitValue(), bitTest.getBitValue());
-        
+
         bitTest = BitTestPeer.retrieveByPK(new StringKey("f1"));
-        assertFalse("BIT should be false but is: " 
+        assertFalse("BIT should be false but is: "
                 + bitTest.getBitValue(), bitTest.getBitValue());
-        
+
         // query data
         criteria.clear();
         criteria.add(BitTestPeer.BIT_VALUE, new Boolean(true));
         List bitTestList = BitTestPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset "
-                + "but read " + bitTestList.size(), 
+                + "but read " + bitTestList.size(),
                 bitTestList.size() == 1);
         bitTest = (BitTest) bitTestList.get(0);
         // use trim() for testkey because some databases will return the
@@ -321,7 +321,7 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.add(BitTestPeer.BIT_VALUE, new Boolean(false));
         bitTestList = BitTestPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset "
-                + "but read " + bitTestList.size(), 
+                + "but read " + bitTestList.size(),
                 bitTestList.size() == 1);
         bitTest = (BitTest) bitTestList.get(0);
         assertTrue("Primary key of data set should be f1 but is "
@@ -329,9 +329,9 @@ public class DataTest extends BaseRuntimeTestCase
                 "f1".equals(bitTest.getId().trim()));
 
     }
-    
+
     /**
-     * check whether we can select from boolean columns 
+     * check whether we can select from boolean columns
      * @throws Exception if the test fails
      */
     public void testBooleanSelects() throws Exception
@@ -341,7 +341,7 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(true));
         List booleanCheckList = BooleanCheckPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset with both values true "
-                + "but read " + booleanCheckList.size(), 
+                + "but read " + booleanCheckList.size(),
                 booleanCheckList.size() == 1);
         BooleanCheck booleanCheck = (BooleanCheck) booleanCheckList.get(0);
         // use trim() for testkey because some databases will return the
@@ -349,13 +349,13 @@ public class DataTest extends BaseRuntimeTestCase
         assertTrue("Primary key of data set should be t1 but is "
                 + booleanCheck.getTestKey().trim(),
                 "t1".equals(booleanCheck.getTestKey().trim()));
-        
+
         criteria.clear();
         criteria.add(BooleanCheckPeer.BCHAR_VALUE, new Boolean(false));
         criteria.add(BooleanCheckPeer.BINT_VALUE, new Boolean(false));
         booleanCheckList = BooleanCheckPeer.doSelect(criteria);
         assertTrue("Should have read 1 dataset with both values false "
-                + "but read " + booleanCheckList.size(), 
+                + "but read " + booleanCheckList.size(),
                 booleanCheckList.size() == 1);
         booleanCheck = (BooleanCheck) booleanCheckList.get(0);
         assertTrue("Primary key of data set should be f1 but is "
@@ -370,7 +370,7 @@ public class DataTest extends BaseRuntimeTestCase
     public void testDelete() throws Exception
     {
         cleanBookstore();
-        
+
         Author author = new Author();
         author.setName("Name");
         author.save();
@@ -384,8 +384,8 @@ public class DataTest extends BaseRuntimeTestCase
         // delete without matching data
         Criteria criteria = new Criteria();
         criteria.add(
-                AuthorPeer.AUTHOR_ID, 
-                author.getAuthorId(), 
+                AuthorPeer.AUTHOR_ID,
+                author.getAuthorId(),
                 Criteria.NOT_EQUAL);
         AuthorPeer.doDelete(criteria);
         List authorResult = AuthorPeer.doSelect(new Criteria());
@@ -395,10 +395,10 @@ public class DataTest extends BaseRuntimeTestCase
         List bookResult = BookPeer.doSelect(new Criteria());
         authorResult = AuthorPeer.doSelect(new Criteria());
         // check that the book has disappeared
-        assertTrue("delete by object failed", 
+        assertTrue("delete by object failed",
             bookResult.size() == 0);
         // check that the underlying author has not been deleted
-        assertTrue("delete by object deleted in cascade", 
+        assertTrue("delete by object deleted in cascade",
             authorResult.size() == 1);
 
         // delete with matching data
@@ -406,46 +406,46 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.add(AuthorPeer.AUTHOR_ID, author.getAuthorId());
         AuthorPeer.doDelete(criteria);
         authorResult = AuthorPeer.doSelect(new Criteria());
-        assertTrue("deleted not enough records", 
+        assertTrue("deleted not enough records",
             authorResult.size() == 0);
     }
-    
+
     /**
      * test special cases in the select clause
      * @throws Exception if the test fails
      */
     public void testSelectClause() throws Exception
-    {     
+    {
         // test double functions in select columns
         Criteria criteria = new Criteria();
         criteria.addSelectColumn("count(distinct(" + BookPeer.BOOK_ID + "))");
         List result = BookPeer.doSelectVillageRecords(criteria);
-        
+
         // test qualifiers in function in select columns
         criteria = new Criteria();
         criteria.addSelectColumn("count(distinct " + BookPeer.BOOK_ID + ")");
         result = BookPeer.doSelectVillageRecords(criteria);
     }
-    
+
     /**
      * test the behaviour if a connection is supplied to access the database,
-     * but it is null. All methods on the user level should be able to 
+     * but it is null. All methods on the user level should be able to
      * handle this.
      */
     public void testNullConnection() throws Exception
     {
         Criteria criteria = new Criteria();
         List result = BookPeer.doSelectVillageRecords(criteria, null);
-        
+
         criteria = new Criteria();
         criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
         BookPeer.doDelete(criteria, null);
-        
+
         Author author = new Author();
         author.setName("name");
         author.save((Connection) null);
     }
-    
+
     /**
      * test joins
      * @throws Exception if the test fails
@@ -463,7 +463,7 @@ public class DataTest extends BaseRuntimeTestCase
         book.setTitle("Book 1");
         book.setIsbn("unknown");
         book.save();
-      
+
         author = new Author();
         author.setName("Author without book");
         author.save();
@@ -471,7 +471,7 @@ public class DataTest extends BaseRuntimeTestCase
         author = new Author();
         author.setName("Author with three books");
         author.save();
-        for (int bookNr = 2; bookNr <=4; bookNr++) 
+        for (int bookNr = 2; bookNr <=4; bookNr++)
         {
             book = new Book();
             book.setAuthor(author);
@@ -488,14 +488,14 @@ public class DataTest extends BaseRuntimeTestCase
         // Here we get 5 authors:
         // the author with one book, the author without books,
         // and three times the author with three books
-        if (authorList.size() != 5) 
+        if (authorList.size() != 5)
         {
             fail("author left join book : "
-                     + "incorrect numbers of authors found : " 
+                     + "incorrect numbers of authors found : "
                      + authorList.size()
                      + ", should be 5");
         }
-      
+
         // test inner join
         criteria = new Criteria();
         criteria.addJoin(
@@ -503,12 +503,12 @@ public class DataTest extends BaseRuntimeTestCase
                 Criteria.INNER_JOIN);
         authorList = AuthorPeer.doSelect(criteria);
         // Here we get 4 authors:
-        // the author with one book, 
+        // the author with one book,
         // and three times the author with three books
-        if (authorList.size() != 4) 
+        if (authorList.size() != 4)
         {
             fail("author left join book : "
-                     + "incorrect numbers of authors found : " 
+                     + "incorrect numbers of authors found : "
                      + authorList.size()
                      + ", should be 4");
         }
@@ -529,14 +529,14 @@ public class DataTest extends BaseRuntimeTestCase
         // Here we get 4 authors:
         // the author with one book, the author without books,
         // and three times the author with three books
-        if (authorList.size() != 5) 
+        if (authorList.size() != 5)
         {
             fail("book right join author "
-                     + "incorrect numbers of authors found : " 
+                     + "incorrect numbers of authors found : "
                      + authorList.size()
                      + ", should be 5");
         }
-        
+
         // test double join with aliases
         criteria = new Criteria();
         criteria.addAlias("b", BookPeer.TABLE_NAME);
@@ -544,21 +544,21 @@ public class DataTest extends BaseRuntimeTestCase
                 BookPeer.AUTHOR_ID, AuthorPeer.AUTHOR_ID,
                 Criteria.RIGHT_JOIN);
         criteria.addJoin(
-                AuthorPeer.AUTHOR_ID, 
+                AuthorPeer.AUTHOR_ID,
                 "b." + getRawColumnName(BookPeer.AUTHOR_ID),
                 Criteria.LEFT_JOIN);
         authorList = AuthorPeer.doSelect(criteria);
         // Here we get 11 authors:
         // the author with one book, the author without books,
         // and nine times the author with three books
-        if (authorList.size() != 11) 
+        if (authorList.size() != 11)
         {
             fail("book right join author left join book b: "
-                     + "incorrect numbers of authors found : " 
+                     + "incorrect numbers of authors found : "
                      + authorList.size()
                      + ", should be 11");
         }
-        
+
         // test double join with aliases and "reversed" second join
         criteria = new Criteria();
         criteria.addAlias("b", BookPeer.TABLE_NAME);
@@ -572,16 +572,16 @@ public class DataTest extends BaseRuntimeTestCase
         // Here we get 11 authors:
         // the author with one book, the author without books,
         // and nine times the author with three books
-        if (authorList.size() != 11) 
+        if (authorList.size() != 11)
         {
             fail("book right join author left join book b (reversed): "
-                     + "incorrect numbers of authors found : " 
+                     + "incorrect numbers of authors found : "
                      + authorList.size()
                      + ", should be 11");
         }
     }
-    
-    
+
+
     /**
      * Test joins using the XPeer.DoSelectJoinYYY methods
      * @throws Exception if the Test fails
@@ -592,7 +592,7 @@ public class DataTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.addAscendingOrderByColumn(BookPeer.TITLE);
         List books = MyBookPeer.doSelectJoinAuthor(criteria);
-        assertTrue("books should contain 4 books but contains " 
+        assertTrue("books should contain 4 books but contains "
                 + books.size(), books.size() == 4);
         Book bookTwo = (Book) books.get(1);
         Book bookThree = (Book) books.get(2);
@@ -618,11 +618,11 @@ public class DataTest extends BaseRuntimeTestCase
         book.setTitle("Book 1");
         book.setIsbn("unknown");
         book.save();
-            
+
         Author secondAuthor = new Author();
         secondAuthor.setName("Author 2");
         secondAuthor.save();
-        for (int bookNr = 2; bookNr <=4; bookNr++) 
+        for (int bookNr = 2; bookNr <=4; bookNr++)
         {
             book = new Book();
             book.setAuthor(secondAuthor);
@@ -630,65 +630,65 @@ public class DataTest extends BaseRuntimeTestCase
             book.setIsbn("unknown");
             book.save();
         }
-        
+
         // test simple ascending order by
         Criteria criteria = new Criteria();
         criteria.addAscendingOrderByColumn(BookPeer.TITLE);
         List bookList = BookPeer.doSelect(criteria);
-        if (bookList.size() != 4) 
+        if (bookList.size() != 4)
         {
             fail("Ascending Order By: "
-                     + "incorrect numbers of books found : " 
+                     + "incorrect numbers of books found : "
                      + bookList.size()
                      + ", should be 4");
         }
-        if (! "Book 1".equals(((Book) bookList.get(0)).getTitle())) 
+        if (! "Book 1".equals(((Book) bookList.get(0)).getTitle()))
         {
             fail("Ascending Order By: "
-                     + "Title of first Book is " 
+                     + "Title of first Book is "
                      + ((Book) bookList.get(0)).getTitle()
                      + ", should be \"Book 1\"");
         }
-        if (! "Book 4".equals(((Book) bookList.get(3)).getTitle())) 
+        if (! "Book 4".equals(((Book) bookList.get(3)).getTitle()))
         {
             fail("Ascending Order By: "
-                     + "Title of fourth Book is " 
+                     + "Title of fourth Book is "
                      + ((Book) bookList.get(3)).getTitle()
                      + ", should be \"Book 4\"");
         }
-        
+
         // test simple descending order by
         criteria = new Criteria();
         criteria.addDescendingOrderByColumn(BookPeer.TITLE);
         bookList = BookPeer.doSelect(criteria);
-        if (bookList.size() != 4) 
+        if (bookList.size() != 4)
         {
             fail("Descending Order By: "
-                     + "incorrect numbers of books found : " 
+                     + "incorrect numbers of books found : "
                      + bookList.size()
                      + ", should be 4");
         }
-        if (! "Book 1".equals(((Book) bookList.get(3)).getTitle())) 
+        if (! "Book 1".equals(((Book) bookList.get(3)).getTitle()))
         {
             fail("Descending Order By: "
-                     + "Title of fourth Book is " 
+                     + "Title of fourth Book is "
                      + ((Book) bookList.get(3)).getTitle()
                      + ", should be \"Book 1\"");
         }
-        if (! "Book 4".equals(((Book) bookList.get(0)).getTitle())) 
+        if (! "Book 4".equals(((Book) bookList.get(0)).getTitle()))
         {
             fail("Descending Order By: "
-                     + "Title of first Book is " 
+                     + "Title of first Book is "
                      + ((Book) bookList.get(0)).getTitle()
                      + ", should be \"Book 4\"");
         }
-        
+
         // test ordering by Aliases and in joins
         criteria = new Criteria();
         criteria.addAlias("b", BookPeer.TABLE_NAME);
         criteria.addJoin(BookPeer.AUTHOR_ID, AuthorPeer.AUTHOR_ID);
         criteria.addJoin(
-                AuthorPeer.AUTHOR_ID, 
+                AuthorPeer.AUTHOR_ID,
                 "b." + getRawColumnName(BookPeer.AUTHOR_ID));
         criteria.addAscendingOrderByColumn(
                 "b." + getRawColumnName(BookPeer.TITLE));
@@ -702,33 +702,33 @@ public class DataTest extends BaseRuntimeTestCase
         // author2  book4   book3
         // ...
         bookList = BookPeer.doSelect(criteria);
-        if (bookList.size() != 10) 
+        if (bookList.size() != 10)
         {
             fail("ordering by Aliases: "
-                     + "incorrect numbers of books found : " 
+                     + "incorrect numbers of books found : "
                      + bookList.size()
                      + ", should be 10");
         }
-        if (!"Book 4".equals(((Book)bookList.get(1)).getTitle())) 
+        if (!"Book 4".equals(((Book)bookList.get(1)).getTitle()))
         {
             fail("ordering by Aliases: "
-                     + "Title of second Book is " 
+                     + "Title of second Book is "
                      + ((Book) bookList.get(1)).getTitle()
                      + ", should be \"Book 4\"");
         }
-        if (!"Book 3".equals(((Book)bookList.get(2)).getTitle())) 
+        if (!"Book 3".equals(((Book)bookList.get(2)).getTitle()))
         {
             fail("ordering by Aliases: "
-                     + "Title of third Book is " 
+                     + "Title of third Book is "
                      + ((Book) bookList.get(2)).getTitle()
                      + ", should be \"Book 3\"");
         }
-        
+
         criteria = new Criteria();
         criteria.addAlias("b", BookPeer.TABLE_NAME);
         criteria.addJoin(BookPeer.AUTHOR_ID, AuthorPeer.AUTHOR_ID);
         criteria.addJoin(
-                AuthorPeer.AUTHOR_ID, 
+                AuthorPeer.AUTHOR_ID,
                 "b." + getRawColumnName(BookPeer.AUTHOR_ID));
         criteria.addAscendingOrderByColumn(BookPeer.TITLE);
         criteria.addDescendingOrderByColumn(
@@ -742,36 +742,36 @@ public class DataTest extends BaseRuntimeTestCase
         // author2  book3   book4
         // ...
         bookList = BookPeer.doSelect(criteria);
-        if (bookList.size() != 10) 
+        if (bookList.size() != 10)
         {
             fail("ordering by Aliases (2): "
-                     + "incorrect numbers of books found : " 
+                     + "incorrect numbers of books found : "
                      + bookList.size()
                      + ", should be 10");
         }
-        if (!"Book 2".equals(((Book)bookList.get(1)).getTitle())) 
+        if (!"Book 2".equals(((Book)bookList.get(1)).getTitle()))
         {
             fail("ordering by Aliases (2, PS): "
-                     + "Title of second Book is " 
+                     + "Title of second Book is "
                      + ((Book) bookList.get(1)).getTitle()
                      + ", should be \"Book 2\"");
         }
-        if (!"Book 2".equals(((Book)bookList.get(2)).getTitle())) 
+        if (!"Book 2".equals(((Book)bookList.get(2)).getTitle()))
         {
             fail("ordering by Aliases (2, PS): "
-                     + "Title of third Book is " 
+                     + "Title of third Book is "
                      + ((Book) bookList.get(2)).getTitle()
                      + ", should be \"Book 2\"");
         }
-        
+
         // test usage of Expressions in order by
         criteria = new Criteria();
         criteria.addAscendingOrderByColumn("UPPER(" + BookPeer.TITLE + ")");
         criteria.setIgnoreCase(true);
         BookPeer.doSelect(criteria);
     }
-    
-    
+
+
     /**
      * Tests whether ignoreCase works correctly
      * @throws Exception if the test fails
@@ -783,17 +783,17 @@ public class DataTest extends BaseRuntimeTestCase
         Author author = new Author();
         author.setName("AuTHor");
         author.save();
-        
+
         Criteria criteria = new Criteria();
         criteria.add(AuthorPeer.NAME, author.getName().toLowerCase());
         criteria.setIgnoreCase(true);
         List result = AuthorPeer.doSelect(criteria);
-        if (result.size() != 1) 
+        if (result.size() != 1)
         {
             fail("Size of result is not 1, but " + result.size());
         }
     }
-    
+
     /**
      * tests whether AsColumns produce valid SQL code
      * @throws Exception if the test fails
@@ -807,7 +807,7 @@ public class DataTest extends BaseRuntimeTestCase
         criteria.addSelectColumn(AuthorPeer.AUTHOR_ID);
         BasePeer.doSelect(criteria);
     }
-    
+
     /**
      * Test whether same column name in different tables
      * are handled correctly
@@ -819,17 +819,17 @@ public class DataTest extends BaseRuntimeTestCase
         Author author = new Author();
         author.setName("Name");
         author.save();
-        
+
         author = new Author();
         author.setName("NotCorrespondingName");
         author.save();
-        
+
         Book book = new Book();
         book.setTitle("Name");
         book.setAuthor(author);
         book.setIsbn("unknown");
         book.save();
-        
+
         Criteria criteria = new Criteria();
         criteria.addJoin(BookPeer.TITLE, AuthorPeer.NAME);
         BookPeer.addSelectColumns(criteria);
@@ -847,7 +847,7 @@ public class DataTest extends BaseRuntimeTestCase
             fail("wrong Ids read");
         }
     }
-    
+
     /**
      * Tests the date, time and datetime accuracy.
      * At the moment, no upper limit for the accuracy is checked,
@@ -859,11 +859,11 @@ public class DataTest extends BaseRuntimeTestCase
         // clean Date table
         Criteria criteria = new Criteria();
         criteria.add(
-                DateTestPeer.DATE_TEST_ID, 
-                (Long) null, 
+                DateTestPeer.DATE_TEST_ID,
+                (Long) null,
                 Criteria.NOT_EQUAL);
         DateTestPeer.doDelete(criteria);
-        
+
         // insert new DateTest object to db
         DateTest dateTest = new DateTest();
         Date now = new Date();
@@ -873,47 +873,47 @@ public class DataTest extends BaseRuntimeTestCase
         dateTest.save();
         DateFormat dateFormat = new SimpleDateFormat();
         System.out.println(
-                "testDateTime() : set date to : " 
+                "testDateTime() : set date to : "
                 + dateFormat.format(now));
-        
+
         // reload dateTest from db
-        DateTest loadedDateTest 
+        DateTest loadedDateTest
                 = DateTestPeer.retrieveByPK(dateTest.getPrimaryKey());
-        
+
         System.out.println(
-                "testDateTime() : retrieved date : " 
+                "testDateTime() : retrieved date : "
                 + dateFormat.format(loadedDateTest.getDateValue()));
         System.out.println(
-                "testDateTime() : retrieved time : " 
+                "testDateTime() : retrieved time : "
                 + dateFormat.format(loadedDateTest.getTimeValue()));
         System.out.println(
-                "testDateTime() : retrieved timestamp : " 
+                "testDateTime() : retrieved timestamp : "
                 + dateFormat.format(loadedDateTest.getTimestampValue()));
 
         // compute time differences between reloaded and original object
-        long dateDifference 
+        long dateDifference
                 = dateTest.getDateValue().getTime()
                     - loadedDateTest.getDateValue().getTime();
-        long timeDifference 
+        long timeDifference
                 = dateTest.getTimeValue().getTime()
                     - loadedDateTest.getTimeValue().getTime();
-        long timestampDifference 
+        long timestampDifference
                 = dateTest.getTimestampValue().getTime()
                     - loadedDateTest.getTimestampValue().getTime();
-        
+
         System.out.println(
-                "testDateTime() : Date difference (ms): " 
+                "testDateTime() : Date difference (ms): "
                 + dateDifference);
         System.out.println(
-                "testDateTime() : Time difference (ms): " 
+                "testDateTime() : Time difference (ms): "
                 + timeDifference);
         System.out.println(
-                "testDateTime() : Timestamp difference (ms): " 
+                "testDateTime() : Timestamp difference (ms): "
                 + timestampDifference);
     }
-    
+
     /**
-     * tests whether large primary keys are inserted and read correctly 
+     * tests whether large primary keys are inserted and read correctly
      * @throws Exception if the test fails
      */
     public void testLargePk() throws Exception
@@ -921,8 +921,8 @@ public class DataTest extends BaseRuntimeTestCase
         // clean LargePk table
         Criteria criteria = new Criteria();
         criteria.add(
-        		LargePkPeer.LARGE_PK_ID, 
-                (Long) null, 
+        		LargePkPeer.LARGE_PK_ID,
+                (Long) null,
                 Criteria.NOT_EQUAL);
         LargePkPeer.doDelete(criteria);
 
@@ -931,7 +931,7 @@ public class DataTest extends BaseRuntimeTestCase
         largePk.setLargePkId(longId);
         largePk.setName("testLargePk");
         largePk.save();
-        
+
         List largePkList = LargePkPeer.doSelect(new Criteria());
         LargePk readLargePk = (LargePk) largePkList.get(0);
         assertTrue("the inserted Id, " + largePk.getLargePkId()
@@ -942,7 +942,7 @@ public class DataTest extends BaseRuntimeTestCase
         		+ " , should be equal to " + longId,
         		longId == largePk.getLargePkId());
     }
-    
+
     /**
      * Tests the CountHelper class
      * @throws Exception if the test fails
@@ -953,29 +953,29 @@ public class DataTest extends BaseRuntimeTestCase
         Author author = new Author();
         author.setName("Name");
         author.save();
-        
+
         author = new Author();
         author.setName("Name2");
         author.save();
-        
+
         author = new Author();
         author.setName("Name");
         author.save();
-        
+
         Criteria criteria = new Criteria();
         int count = new CountHelper().count(
-                criteria, 
-                null, 
+                criteria,
+                null,
                 AuthorPeer.AUTHOR_ID);
-        
+
         if (count != 3) {
             fail("counted " + count + " datasets, should be 3 ");
         }
-                    
+
         criteria = new Criteria();
         criteria.setDistinct();
         count = new CountHelper().count(criteria, null, AuthorPeer.NAME);
-        
+
         if (count != 2) {
             fail("counted " + count + " distinct datasets, should be 2 ");
         }
@@ -983,16 +983,16 @@ public class DataTest extends BaseRuntimeTestCase
         criteria = new Criteria();
         criteria.add(AuthorPeer.NAME, "Name2");
         count = new CountHelper().count(criteria);
-        
+
         if (count != 1) {
             fail("counted " + count + " datasets with name Name2,"
                  + " should be 1 ");
         }
     }
-    
-    
+
+
     /**
-     * Tests whether we can handle multiple primary keys some of which are 
+     * Tests whether we can handle multiple primary keys some of which are
      * also foreign keys
      * @throws Exception if the test fails
      */
@@ -1006,10 +1006,10 @@ public class DataTest extends BaseRuntimeTestCase
         multiPkForeignKey.save();
         integerPk.save();
     }
-        
+
     /**
      * Tests inserting single quotes in Strings.
-     * This may not crash now, but in a later task like datasql, 
+     * This may not crash now, but in a later task like datasql,
      * so the data has to be inserted in a table which does not get cleaned
      * during the runtime test.
      * @throws Exception if inserting the test data fails
@@ -1020,13 +1020,13 @@ public class DataTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.add(APeer.A_ID, (Long) null, Criteria.NOT_EQUAL);
         APeer.doDelete(criteria);
-        
+
         A a = new A();
         a.setName("has Single ' Quote");
         a.save();
     }
-    
-    
+
+
     /**
      * check that blob cloumns can be read and written correctly
      * @throws Exception if the test fails
@@ -1037,8 +1037,8 @@ public class DataTest extends BaseRuntimeTestCase
         {
             Criteria criteria = new Criteria();
             criteria.add(
-                    BlobTestPeer.ID, 
-                    (Long) null, 
+                    BlobTestPeer.ID,
+                    (Long) null,
                     Criteria.NOT_EQUAL);
             BlobTestPeer.doDelete(criteria);
         }
@@ -1059,26 +1059,26 @@ public class DataTest extends BaseRuntimeTestCase
             blobTest.setBlobValue(bytes);
         }
         blobTest.save();
-        
+
         // read the BlobTests from the database
         // and check the values against the original values
         List blobTestList = BlobTestPeer.doSelect(new Criteria());
-        assertTrue("blobTestList should contain 1 object but contains " 
+        assertTrue("blobTestList should contain 1 object but contains "
                 + blobTestList.size(),
                 blobTestList.size() == 1);
-        
-        BlobTest readBlobTest = (BlobTest) blobTestList.get(0);        
+
+        BlobTest readBlobTest = (BlobTest) blobTestList.get(0);
         assertTrue("read and written blobs should be equal. "
                 + "Size of read blob is"
                 + readBlobTest.getBlobValue().length
                 + " size of written blob is "
-                + blobTest.getBlobValue().length, 
+                + blobTest.getBlobValue().length,
                 Arrays.equals(
                         blobTest.getBlobValue(),
                         readBlobTest.getBlobValue()));
     }
-        
-        
+
+
     /**
      * check that clob cloumns can be read and written correctly
      * @throws Exception if the test fails
@@ -1089,8 +1089,8 @@ public class DataTest extends BaseRuntimeTestCase
         {
             Criteria criteria = new Criteria();
             criteria.add(
-                    ClobTestPeer.ID, 
-                    (Long) null, 
+                    ClobTestPeer.ID,
+                    (Long) null,
                     Criteria.NOT_EQUAL);
             ClobTestPeer.doDelete(criteria);
         }
@@ -1109,19 +1109,19 @@ public class DataTest extends BaseRuntimeTestCase
             clobTest.setClobValue(chars.toString());
         }
         clobTest.save();
-        
+
         // read the ClobTests from the database
         // and check the values against the original values
         List clobTestList = ClobTestPeer.doSelect(new Criteria());
-        assertTrue("clobTestList should contain 1 object but contains " 
+        assertTrue("clobTestList should contain 1 object but contains "
                 + clobTestList.size(),
                 clobTestList.size() == 1);
-        
+
         ClobTest readClobTest = (ClobTest) clobTestList.get(0);
-        assertTrue("read and written clobs should be equal", 
+        assertTrue("read and written clobs should be equal",
                 clobTest.getClobValue().equals(readClobTest.getClobValue()));
     }
-    
+
     /**
      * Test whether we can execute queries as prepared statements
      * @throws Exception
@@ -1131,8 +1131,8 @@ public class DataTest extends BaseRuntimeTestCase
         // clean LargePk table
         Criteria criteria = new Criteria();
         criteria.add(
-                LargePkPeer.LARGE_PK_ID, 
-                (Long) null, 
+                LargePkPeer.LARGE_PK_ID,
+                (Long) null,
                 Criteria.NOT_EQUAL);
         LargePkPeer.doDelete(criteria);
 
@@ -1140,21 +1140,21 @@ public class DataTest extends BaseRuntimeTestCase
         largePk.setLargePkId(1);
         largePk.setName("testLargePk");
         largePk.save();
-        
+
         largePk = new LargePk();
         largePk.setLargePkId(2);
         largePk.setName("testLargePk");
         largePk.save();
-        
+
         criteria = new Criteria();
         criteria.add(LargePkPeer.LARGE_PK_ID, 2, Criteria.LESS_THAN);
         LargePkPeer.addSelectColumns(criteria);
         List result = BasePeer.doPSSelect(criteria);
-        assertTrue("Size of largePk list should be 1 but is " 
+        assertTrue("Size of largePk list should be 1 but is "
                 + result.size(),
                 result.size() == 1);
     }
-    
+
     /**
      * Tests whether shutdown complains about anything
      * @throws TorqueException if shutdown does not exit cleanly
@@ -1176,12 +1176,12 @@ public class DataTest extends BaseRuntimeTestCase
 
         criteria.clear();
         criteria.add(
-                AuthorPeer.AUTHOR_ID, 
+                AuthorPeer.AUTHOR_ID,
                 (Long) null, Criteria.NOT_EQUAL);
         AuthorPeer.doDelete(criteria);
     }
 
-    
+
     /**
      * Strips the schema and table name from a fully qualified colum name
      * This is useful for creating Query with aliases, as the constants
@@ -1189,24 +1189,24 @@ public class DataTest extends BaseRuntimeTestCase
      * @param fullyQualifiedColumnName the fully qualified column name, not null
      * @return the column name stripped from the table (and schema) prefixes
      */
-    public static String getRawColumnName(String fullyQualifiedColumnName) 
+    public static String getRawColumnName(String fullyQualifiedColumnName)
     {
         int dotPosition = fullyQualifiedColumnName.lastIndexOf(".");
-        if (dotPosition == -1) 
+        if (dotPosition == -1)
         {
             return fullyQualifiedColumnName;
         }
         String result = fullyQualifiedColumnName.substring(
-                dotPosition + 1, 
+                dotPosition + 1,
                 fullyQualifiedColumnName.length());
         return result;
     }
-    
-    
+
+
     /**
      * Subclass of BookPeer to make the doSelectJoinAuthors() visible
      */
-    static class MyBookPeer extends BookPeer 
+    static class MyBookPeer extends BookPeer
     {
         public static List doSelectJoinAuthor(Criteria criteria)
                 throws TorqueException

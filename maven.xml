@@ -67,7 +67,7 @@
   <!-- ================================================================== -->
   <!-- includes common files                                              -->
   <!-- This is necessary as long as maven does not resolves the extends   -->
-  <!-- property of the pom upon generation of the source distribution     -->                                           
+  <!-- property of the pom upon generation of the source distribution     -->
   <!-- ================================================================== -->
   <preGoal name="dist:build-src">
       <copy todir="${maven.dist.src.assembly.dir}/common">
@@ -75,7 +75,7 @@
         <include name="project.xml"/>
         <include name="project.properties"/>
       </fileset>
-    </copy>  
+    </copy>
   </preGoal>
 
   <!-- ================================================================== -->
@@ -150,7 +150,7 @@
 | Runtime Test Configuration Error                                       |
 --------------------------------------------------------------------------
 
- For executing the runtime tests, you must set the property 
+ For executing the runtime tests, you must set the property
  'torque.testProfile' by defining it on the command line of your
  maven command or putting it into the build.properties file.
 
@@ -254,11 +254,11 @@
       overwrite="yes"
     />
   </goal>
-  
+
   <!-- ================================================================== -->
   <!-- O J B   R U N T I M E T E S T                                      -->
   <!-- ================================================================== -->
-  
+
   <goal
     name="runtime:test-ojb"
     prereqs="runtime:prepare-ojb"
@@ -268,7 +268,7 @@
          target="test-ojb"
          inheritAll="false"/>
   </goal>
-  
+
   <goal
     name="runtime:prepare-ojb"
     prereqs="jar:jar">
@@ -333,5 +333,5 @@
     <copy file="${ojb.jar}" todir="${test.ojb.distDir}/lib"/>
     <copy file="${commons-collections}" todir="${test.ojb.distDir}/lib"/>
   </goal>
-  
+
 </project>

@@ -18,7 +18,7 @@ package org.apache.torque.om;
 
 /**
  * This empty class  marks an ObjectKey as being capable of being
- * represented as a single column in a database.  
+ * represented as a single column in a database.
  *
  * @author <a href="mailto:jmcnally@apache.org">John McNally</a>
  * @author <a href="mailto:drfish@cox.net">J. Russell Smyth</a>
@@ -30,7 +30,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(java.math.BigDecimal key)
     {
         return new NumberKey(key);
@@ -40,7 +40,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(int key)
     {
         return new NumberKey(key);
@@ -50,7 +50,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(long key)
     {
         return new NumberKey(key);
@@ -60,7 +60,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(double key)
     {
         return new NumberKey(key);
@@ -70,7 +70,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(Number key)
     {
         return new NumberKey(key);
@@ -80,7 +80,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(NumberKey key)
     {
         return new NumberKey(key);
@@ -90,7 +90,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(String key)
     {
         return new StringKey(key);
@@ -100,7 +100,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(StringKey key)
     {
         return new StringKey(key);
@@ -110,7 +110,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(java.util.Date key)
     {
         return new DateKey(key);
@@ -120,7 +120,7 @@ public abstract class SimpleKey extends ObjectKey
      * Creates a SimpleKey equivalent to key
      * @param key the key value
      * @return a SimpleKey
-     */    
+     */
     public static SimpleKey keyFor(DateKey key)
     {
         return new DateKey(key);

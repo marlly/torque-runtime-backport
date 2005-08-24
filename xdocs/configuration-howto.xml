@@ -39,13 +39,13 @@ Torque provides factories to use the commons-dbcp as well as a general
 factory that uses jndi to retrieve the <code>DataSource</code>.
 The jndi factory looks up a <code>DataSource</code> bound to jndi; it
 also provides a simple property file based way to configure and deploy most
-<code>DataSource</code>'s, though in many cases a pool may already be 
+<code>DataSource</code>'s, though in many cases a pool may already be
 bound to jndi and torque only needs to use it.
 </p>
 
 <p>
 Before going over how to configure the factories, which will take up most the
-content of this document, you must first consider your database handles and 
+content of this document, you must first consider your database handles and
 adapters.
 </p>
 
@@ -54,14 +54,14 @@ adapters.
 <section name="Database handles">
 
 <p>
-A database handle is the name attribute that was used in the 
-<code>&lt;database&gt;</code> tag of the schema.xml file.  If the name 
+A database handle is the name attribute that was used in the
+<code>&lt;database&gt;</code> tag of the schema.xml file.  If the name
 attribute is not used, then the handle would be 'default'.
 </p>
 
 <p>
-In all examples that follow we will use the handle 'bookstore'.  As Torque has 
-the ability to use multiple databases you can tell it which one to use by 
+In all examples that follow we will use the handle 'bookstore'.  As Torque has
+the ability to use multiple databases you can tell it which one to use by
 default thus:</p>
 
 <source><![CDATA[
@@ -126,10 +126,10 @@ The valid values are:
 <section name="SharedPoolDataSourceFactory">
 
 <p>
-This factory uses the more full featured DataSource available in the 
-commons-dbcp package. SharedPoolDataSourceFactory provides an easy way 
-to configure this pool and it assumes you will have a jdbc Driver class 
-providing the physical database connections.  Again, you must let torque know 
+This factory uses the more full featured DataSource available in the
+commons-dbcp package. SharedPoolDataSourceFactory provides an easy way
+to configure this pool and it assumes you will have a jdbc Driver class
+providing the physical database connections.  Again, you must let torque know
 you are using this factory.
 </p>
 
@@ -139,7 +139,7 @@ torque.dsfactory.bookstore.factory= \
 ]]></source>
 
 <p>
-Then there are two sets of properties related to the pool configuration and 
+Then there are two sets of properties related to the pool configuration and
 settings for making the connection to the database.
 </p>
 
@@ -159,9 +159,9 @@ torque.dsfactory.bookstore.connection.password = 1234
 <p>
 Comparing this with the torque's old pool, you can see that this pool does not
 rely on expirying connections periodically to maintain their validity.  The
-pool can be setup to test each connection before returning it to the 
+pool can be setup to test each connection before returning it to the
 application, so the likelihood of the application receiving a bad connection
-is much smaller than using <code>TorqueClassicDataSource</code>. 
+is much smaller than using <code>TorqueClassicDataSource</code>.
 Torque also includes a factory for the <code>PerUserPoolDataSource</code>.
 Please see the commons-dbcp javadoc for more info.
 </p>
@@ -194,9 +194,9 @@ torque.dsfactory.bookstore.jndi.path=jdbc/bookstore
 ]]></source>
 
 <p>
-This line defines the string that will be used to lookup the 
+This line defines the string that will be used to lookup the
 <code>DataSource</code> within the default jndi <code>InitialContext</code>.
-If everything is configured and the default <code>InitialContext</code> 
+If everything is configured and the default <code>InitialContext</code>
 contains the <code>DataSource</code>, this is all that is
 needed.  The default <code>InitialContext</code> is chosen according to the
 rules given in the class's javadoc.  If the default has not been configured,
@@ -219,10 +219,10 @@ running torque's unit/run-time tests
 <p>
 One of the advantages of jndi is that it supports changing
 the <code>DataSource</code> on the fly. On the other hand this means that the
-actual <code>DataSource</code> object must be looked up in the context with 
+actual <code>DataSource</code> object must be looked up in the context with
 every database operation. To avoid this, the factory provides a simple
 caching mechanism, which stores the <code>DataSource</code> object for a
-configurable amount of time (im ms). The <b>t</b>ime between <b>t</b>wo 
+configurable amount of time (im ms). The <b>t</b>ime between <b>t</b>wo
 <b>l</b>ookups is specified as follows:
 </p>
 
@@ -240,7 +240,7 @@ This property is optional. If not specified, it defaults to 0 (no caching).
 
 <p>
 Generally a J2EE environment such as a servlet engine or application server is
-expected to provide a jdbc2 compatible connection pool.  If your application 
+expected to provide a jdbc2 compatible connection pool.  If your application
 is not running within such an environment, or even if it is and torque is your
 only use of a connection pool, torque provides a simple properties file
 method of configuring a <code>DataSource</code> and deploying it via jndi.
@@ -265,7 +265,7 @@ torque.dsfactory.DBbookstore.datasource.password = 1234
 ]]></source>
 
 <p>
-In the above example two objects are being configured.  One is a 
+In the above example two objects are being configured.  One is a
 <code>DataSource</code> that is used by the application (torque).  The other is
 a <code>ConnectionPoolDataSource</code> that is provided as part of a jdbc2
 driver.  If the jdbc driver implementation you are using does not fully
@@ -274,11 +274,11 @@ adapter for older <code>Driver</code> based drivers.  Another alternative is
 provided in commons-dbcp where <code>BasicDataSource</code> provides a
 <code>DataSource</code> frontend, and has properties to directly configure
 a jdbc1 <code>Driver</code>.  But regardless of the implementation torque
-uses commons-beanutils package to call the setters on the object using 
+uses commons-beanutils package to call the setters on the object using
 reflection.
 </p>
 
-<p>Torque uses the jndi path properties to know where to deploy the 
+<p>Torque uses the jndi path properties to know where to deploy the
 configured objects.  So you would have the two following properties in
 addition to the datasource props:
 </p>
@@ -289,8 +289,8 @@ torque.dsfactory.DBbookstore.jndi.path=jdbc/DBbookstore
 ]]></source>
 
 <p>
-The second handle, DBbookstore, has no relevance to torque, other than 
-to uniquely identify this group of properties as belonging together.  Any 
+The second handle, DBbookstore, has no relevance to torque, other than
+to uniquely identify this group of properties as belonging together.  Any
 unique handle may be used.
 </p>
 
@@ -299,11 +299,11 @@ unique handle may be used.
 <subsection name="Tomcat example of external configuration/binding">
 
 <p>
-If you have other parts of your application that need to use the same 
+If you have other parts of your application that need to use the same
 connection pool and torque cannot be guaranteed to be initialized in time for
 these other uses, or if you just want to follow your j2ee environment's
 standard jndi deployment pattern, torque can just make use of these externally
-deployed pools.  Here is an example using catalina of deploying the pool that 
+deployed pools.  Here is an example using catalina of deploying the pool that
 used to come with torque, but is now part of commons-jdbc2pool.
 </p>
 
@@ -338,7 +338,7 @@ webapp:
   </ResourceParams>
 ]]></source>
 
-<p>In web.xml.  Elements must be given in the order of the dtd described in 
+<p>In web.xml.  Elements must be given in the order of the dtd described in
 the servlet specification:
 </p>
 
@@ -372,7 +372,7 @@ torque.dsfactory.bookstore.jndi.path=java:comp/env/jdbc/bookstore
 ]]></source>
 
 <p>
-Remember that jdbc2 pools expect a 
+Remember that jdbc2 pools expect a
 <code>ConnectionPoolDataSource</code>
 available via jndi under the name given in the dataSourceName, so you will
 need entries in server.xml and web.xml for this object as well.
@@ -381,8 +381,8 @@ need entries in server.xml and web.xml for this object as well.
 <p>
 Catalina provides a default <code>DataSource</code> that can be used as well
 and it is configured similarly, but detailed information on that
-implementation is <a href="http://jakarta.apache.org/tomcat/tomcat-4.1-doc/jndi-resources-howto.html">here</a>.  Note that the 
-"type attribute/ref-type element" value of "javax.sql.DataSource" appears to 
+implementation is <a href="http://jakarta.apache.org/tomcat/tomcat-4.1-doc/jndi-resources-howto.html">here</a>.  Note that the
+"type attribute/ref-type element" value of "javax.sql.DataSource" appears to
 be reserved for catalina's default implementation, which is why the
 implementation classname is used in our configuration example.
 </p>
@@ -393,9 +393,9 @@ implementation classname is used in our configuration example.
 <subsection name="An example configuration from scarab">
 
 <p>
-The following example shows a complete torque configuration from 
+The following example shows a complete torque configuration from
 scarab, an issue tracking application, running under catalina, but using torque
-to deploy the <code>DataSource</code>.  It is here to 
+to deploy the <code>DataSource</code>.  It is here to
 put together some of the details shown above.
 </p>
 

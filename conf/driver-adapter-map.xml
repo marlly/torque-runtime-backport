@@ -14,88 +14,88 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<driverAdapterMap>  
-  <entries>  
-    
-    <entry>  
+<driverAdapterMap>
+  <entries>
+
+    <entry>
       <key>com.ibm.as400.access.AS400JDBCDriver</key>
       <value>DBDB2400</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>COM.ibm.db2.jdbc.app.DB2Driver</key>
       <value>DBDB2App</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>COM.ibm.db2.jdbc.net.DB2Driver</key>
       <value>DBDB2Net</value>
-    </entry>  
+    </entry>
 
-    <entry>  
+    <entry>
       <key>COM.cloudscape.core.JDBCDriver</key>
       <value>DBCloudscape</value>
-    </entry>  
-   
-    <entry>  
+    </entry>
+
+    <entry>
       <key>org.hsql.jdbcDriver</key>
       <value>DBHypersonicSQL</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>org.hsqldb.jdbcDriver</key>
       <value>DBHypersonicSQL</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>interbase.interclient.Driver</key>
       <value>DBInterbase</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>org.enhydra.instantdb.jdbc.idbDriver</key>
       <value>DBInstantDB</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>com.microsoft.jdbc.sqlserver.SQLServerDriver</key>
       <value>DBMSSQL</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>org.gjt.mm.mysql.Driver</key>
       <value>DBMM</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>oracle.jdbc.driver.OracleDriver</key>
       <value>DBOracle</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>org.postgresql.Driver</key>
       <value>DBPostgres</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>com.sap.dbtech.jdbc.DriverSapDB</key>
       <value>DBSapDB</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>com.sybase.jdbc.SybDriver</key>
       <value>DBSybase</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>com.sybase.jdbc2.jdbc.SybDriver</key>
       <value>DBSybase</value>
-    </entry>  
-  
-    <entry>  
+    </entry>
+
+    <entry>
       <key>weblogic.jdbc.pool.Driver</key>
       <value>DBWeblogic</value>
-    </entry>  
-  
+    </entry>
+
   </entries>
-</driverAdapterMap>  
+</driverAdapterMap>

@@ -32,15 +32,15 @@
     <li>
       The generator generates your persistence classes from an xml
       description of the database. It also generates and executes
-      sql scripts to create all the necessary tables, constraints etc. 
-      in your database. 
-      The generator comes packaged in two jars: The templates in 
+      sql scripts to create all the necessary tables, constraints etc.
+      in your database.
+      The generator comes packaged in two jars: The templates in
       torque-gen-templates.jar, and the rest in torque-gen.jar.
     </li>
     <li>
-      The maven plugin integrates the generator into 
-      <a href="http://maven.apache.org/">Maven</a>, a software 
-      project management tool. In other words, the maven plugin is 
+      The maven plugin integrates the generator into
+      <a href="http://maven.apache.org/">Maven</a>, a software
+      project management tool. In other words, the maven plugin is
       a frontend for the generator.
     </li>
     <li>
@@ -48,22 +48,22 @@
       to work properly.
     </li>
   </ul>
-  For this tutorial, we will be using the maven plugin for Torque 3.2.x 
+  For this tutorial, we will be using the maven plugin for Torque 3.2.x
   (which will silently invoke the generator) to
-  generate our object model classes and sql scripts. For working with the 
+  generate our object model classes and sql scripts. For working with the
   generated classes, we will use the Torque 3.2.x runtime for our
   sample application.
 </p>
 
 <p>
-  If you have not already done so, download and install 
-  <a href="http://maven.apache.org/">Maven</a>. It is highly recommended to use 
+  If you have not already done so, download and install
+  <a href="http://maven.apache.org/">Maven</a>. It is highly recommended to use
   version 1.0.2 of Maven.
 </p>
 
 <p>
   Maven uses the <a href="http://www.ibiblio.org/maven">ibiblio maven repository</a>
-  to download any libraries and resources it needs. From there, obtain the Torque 
+  to download any libraries and resources it needs. From there, obtain the Torque
   maven plugin by typing
 </p>
 
@@ -72,8 +72,8 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 ]]></source>
 
 <p>
-  You do not need to download the generator or the 
-  runtime separately. Maven will download them from 
+  You do not need to download the generator or the
+  runtime separately. Maven will download them from
   the ibiblio distribution site automatically
   when they are needed.
 </p>

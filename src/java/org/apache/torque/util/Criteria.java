@@ -133,10 +133,10 @@ public class Criteria extends Hashtable
 
     /** &quot;RIGHT JOIN&quot; SQL statement */
     public static final SqlEnum RIGHT_JOIN = SqlEnum.RIGHT_JOIN;
-  
+
     /** &quot;INNER JOIN&quot; SQL statement */
     public static final SqlEnum INNER_JOIN = SqlEnum.INNER_JOIN;
-    
+
     private static final int DEFAULT_CAPACITY = 10;
 
     private boolean ignoreCase = false;
@@ -1336,7 +1336,7 @@ public class Criteria extends Hashtable
             joins = new ArrayList(3);
         }
         joins.add(new Join(left,right, operator));
-  
+
         return this;
     }
 
@@ -3590,77 +3590,77 @@ public class Criteria extends Hashtable
             }
         }
     }
-    
+
     /**
      * Data object to describe a join between two tables, for example
      * <pre>
      * table_a LEFT JOIN table_b ON table_a.id = table_b.a_id
      * </pre>
-     * The class is immutable. Because the class is also used by 
+     * The class is immutable. Because the class is also used by
      * {@link org.apache.torque.util.BasePeer}, it is visible from the package.
      */
     public static class Join
     {
         /** the left column of the join condition */
         private String leftColumn = null;
-      
+
         /** the right column of the join condition */
         private String rightColumn = null;
-      
+
         /** the type of the join (LEFT JOIN, ...), or null */
         private SqlEnum joinType = null;
-      
+
         /**
          * Constructor
-         * @param leftColumn the left column of the join condition; 
+         * @param leftColumn the left column of the join condition;
          *        might contain an alias name
          * @param rightColumn the right column of the join condition
          *        might contain an alias name
-         * @param joinType the type of the join. Valid join types are 
+         * @param joinType the type of the join. Valid join types are
          *        null (adding the join condition to the where clause),
          *        SqlEnum.LEFT_JOIN, SqlEnum.RIGHT_JOIN, and SqlEnum.INNER_JOIN
          */
         public Join(
-                final String leftColumn, 
-                final String rightColumn, 
+                final String leftColumn,
+                final String rightColumn,
                 final SqlEnum joinType)
         {
             this.leftColumn = leftColumn;
             this.rightColumn = rightColumn;
             this.joinType = joinType;
         }
-      
+
         /**
-         * @return the type of the join, i.e. SqlEnum.LEFT_JOIN, ..., 
+         * @return the type of the join, i.e. SqlEnum.LEFT_JOIN, ...,
          *         or null for adding the join condition to the where Clause
          */
-        public final SqlEnum getJoinType() 
+        public final SqlEnum getJoinType()
         {
             return joinType;
         }
-  
+
         /**
          * @return the left column of the join condition
          */
-        public final String getLeftColumn() 
+        public final String getLeftColumn()
         {
             return leftColumn;
         }
-  
+
         /**
          * @return the right column of the join condition
          */
-        public final String getRightColumn() 
+        public final String getRightColumn()
         {
             return rightColumn;
         }
-        
+
         /**
          * returns a String representation of the class,
          * mainly for debuggung purposes
          * @return a String representation of the class
          */
-        public String toString() 
+        public String toString()
         {
             StringBuffer result = new StringBuffer();
             if (joinType != null)

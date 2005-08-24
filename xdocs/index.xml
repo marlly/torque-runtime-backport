@@ -167,8 +167,8 @@
       <p>
         If there is no tester for your RDBMS and you want to help, please read
         the <a href="developer-guide.html">developer-guide</a>, run the tests
-        and send your results (and bugfixes ;) to the 
-        <a href="mailto:torque-dev@db.apache.org">torque-dev@db.apache.org</a> 
+        and send your results (and bugfixes ;) to the
+        <a href="mailto:torque-dev@db.apache.org">torque-dev@db.apache.org</a>
         list.
       </p>
     </section>

@@ -355,7 +355,7 @@ public class SqlExpression
                            DB db,
                            StringBuffer whereClause)
     {
-        // If selection is case insensitive use ILIKE for PostgreSQL or SQL 
+        // If selection is case insensitive use ILIKE for PostgreSQL or SQL
         // UPPER() function on column name for other databases.
         if (ignoreCase)
         {
@@ -363,11 +363,11 @@ public class SqlExpression
             {
                 if (comparison.equals(Criteria.LIKE))
                 {
-                    comparison = Criteria.ILIKE; 
+                    comparison = Criteria.ILIKE;
                 }
                 else if (comparison.equals(Criteria.NOT_LIKE))
                 {
-                    comparison = Criteria.NOT_ILIKE; 
+                    comparison = Criteria.NOT_ILIKE;
                 }
             }
             else

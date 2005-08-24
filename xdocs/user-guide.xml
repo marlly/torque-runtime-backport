@@ -63,14 +63,14 @@
   Torque consists of two main components:
   <ul>
     <li>
-      <a href="/generator/">Generator</a> - The Torque generator uses a single XML 
-      database schema file to generate the SQL for your target database and 
-      Torque's Peer-based object relational model.  The generator can be 
-      executed using the Torque <a href="/maven-plugin/">maven-plugin</a> or 
+      <a href="/generator/">Generator</a> - The Torque generator uses a single XML
+      database schema file to generate the SQL for your target database and
+      Torque's Peer-based object relational model.  The generator can be
+      executed using the Torque <a href="/maven-plugin/">maven-plugin</a> or
       an <a href="http://ant.apache.org/">Ant</a> build file.
     </li>
     <li>
-      <a href="/">Runtime</a> - The Torque runtime is required in order to 
+      <a href="/">Runtime</a> - The Torque runtime is required in order to
       compile and use of the classes produced by the generator.
     </li>
   </ul>
@@ -83,10 +83,10 @@
 <subsection name="Generator with the Maven plugin">
 
 <p>
-  If you have not already done so, download and install 
-  <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the 
-  Torque maven plugin.  The <a href="../maven-howto.html">Maven Howto</a> 
-  includes details of how to build the maven plugin from source, but you can 
+  If you have not already done so, download and install
+  <a href="http://maven.apache.org/">Maven</a>.  You then need to obtain the
+  Torque maven plugin.  The <a href="../maven-howto.html">Maven Howto</a>
+  includes details of how to build the maven plugin from source, but you can
   easily install a binary distribution thus:
 </p>
 
@@ -100,26 +100,26 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 <subsection name="Generator with the Ant build file">
 
 <p>
-  If you prefer to use <a href="http://ant.apache.org/">Ant</a> you need access 
-  to the Torque generator distribution and associated libraries - these are 
-  available from the 
+  If you prefer to use <a href="http://ant.apache.org/">Ant</a> you need access
+  to the Torque generator distribution and associated libraries - these are
+  available from the
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.2-rc1/">
-  Downloads page</a> (the file to download is torque-gen-3.2-rc1.tar.gz or 
+  Downloads page</a> (the file to download is torque-gen-3.2-rc1.tar.gz or
   torque-gen-3.2-rc1.zip, depending on your development platform).  Unpack the
   archive to reveal the following directory structure:
 </p>
 
 <source><![CDATA[
 torque-gen-3.1.1/
-    docs/              <--- Contains a copy of the Torque documentation, 
+    docs/              <--- Contains a copy of the Torque documentation,
                             including the API JavaDocs.
-    lib/               <--- Contains the jar files required by the Torque 
+    lib/               <--- Contains the jar files required by the Torque
                             generator, including the torque-gen-templates
-                            jar containing the templates. If you want to 
-                            modify the templates, you can unpack the 
-                            templates jar, set the 
-                            <code>torque.useClasspath</code> to 
-                            <code>false</code> 
+                            jar containing the templates. If you want to
+                            modify the templates, you can unpack the
+                            templates jar, set the
+                            <code>torque.useClasspath</code> to
+                            <code>false</code>
                             and the <code>torque.schema.dir</code>
                             to the correct directory in the
                             <code>build.properties</code>
@@ -127,7 +127,7 @@ torque-gen-3.1.1/
                             IDBroker.
     build.properties   <--- The various properties that you use to configure
                             the Torque generator.
-    build-torque.xml   <--- The Ant build file containing the various torque 
+    build-torque.xml   <--- The Ant build file containing the various torque
                             goals.
     default.properties <--- The default property values that are used to
                             configure the Torque generator.
@@ -137,10 +137,10 @@ torque-gen-3.1.1/
 ]]></source>
 
 <p>
-  The instructions below are targeted towards using the Torque maven-plugin.  
-  If you are using Ant the instructions are basically the same, but instead of 
+  The instructions below are targeted towards using the Torque maven-plugin.
+  If you are using Ant the instructions are basically the same, but instead of
   using <code>project.properties</code> you use <code>build.properties</code>
-  and instead of using <code>maven torque:${goal-name}</code> you use 
+  and instead of using <code>maven torque:${goal-name}</code> you use
   <code>ant -f build-torque.xml ${target-name}</code>.
 </p>
 
@@ -149,10 +149,10 @@ torque-gen-3.1.1/
 <subsection name="Runtime">
 
 <p>
-  At runtime the generated object model classes need access to the Torque 
+  At runtime the generated object model classes need access to the Torque
   runtime distribution and associated libraries - these are available from the
   <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.1.1/">
-  Downloads page</a> (the file to download is torque-3.1.1.tar.gz or 
+  Downloads page</a> (the file to download is torque-3.1.1.tar.gz or
   torque-3.1.1.zip, depending on your development platform).  We will cover
   what to do with this file in a later step.
 </p>
@@ -270,9 +270,9 @@ torque-gen-3.1.1/
 <subsection name="Torque Runtime Configuration (Torque.properties)">
 
 <p>
-  The runtime distribution archive includes an Ant build file that can be used 
+  The runtime distribution archive includes an Ant build file that can be used
   to generate your Torque runtime configuration - see the Torque
-  <a href="tutorial/step2.html#Torque_Run-Time_Properties">tutSorial</a> for 
+  <a href="tutorial/step2.html#Torque_Run-Time_Properties">tutSorial</a> for
   details.
 </p>
 
@@ -280,7 +280,7 @@ torque-gen-3.1.1/
 torque.database.default = my_project
 torque.database.my_project.adapter = mysql
 
-# Using commons-dbcp 
+# Using commons-dbcp
 torque.dsfactory.my_project.factory = org.apache.torque.dsfactory.SharedPoolDataSourceFactory
 torque.dsfactory.my_project.connection.driver = org.gjt.mm.mysql.Driver
 torque.dsfactory.my_project.connection.url = jdbc:mysql://localhost:3306/my_project
@@ -289,7 +289,7 @@ torque.dsfactory.my_project.connection.password = password
   ]]></source>
 
   <p>
-    The above example uses the commons-dbcp connection pool - see 
+    The above example uses the commons-dbcp connection pool - see
     <a href="configuration-howto.html">Pool-config Howto</a>
     details of the available <code>DataSource</code> factories.
   </p>
@@ -299,12 +299,12 @@ torque.dsfactory.my_project.connection.password = password
 <subsection name="Add Libraries">
 
   <p>
-    In order to be able to compile and use the generated class files it is 
+    In order to be able to compile and use the generated class files it is
     necessary to include the Torque runtime jar file and jar files for all of
-    the necessary dependencies in the classpath of your project.  The necessary 
+    the necessary dependencies in the classpath of your project.  The necessary
     jars are included in the <code>torque/lib</code> directory of the Torque
     runtime.  If you are using Maven to build your project it may be easiest to
-    copy the necessary <a href="../dependencies.html">dependencies</a> from the 
+    copy the necessary <a href="../dependencies.html">dependencies</a> from the
     <a href="http://cvs.apache.org/viewcvs.cgi/db-torque/project.xml?only_with_tag=TORQUE_3_1_BRANCH">Torque
     runtime POM</a>.
   </p>

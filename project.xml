@@ -213,5 +213,5 @@
     <defaultGoal>jar:jar</defaultGoal>
     <resources/>
   </build>
-  
+
 </project>

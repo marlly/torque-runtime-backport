@@ -19,7 +19,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-	
+
 <document>
 
   <properties>
@@ -161,7 +161,7 @@ These are the currently released versions of Torque:<br/>
           <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.tar.gz.asc">Signature</a>&nbsp;
           <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.tar.gz.md5">MD5</a></td>
     </tr>
-    
+
     <tr>
       <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.zip">ZIP</a>&nbsp;
           <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.zip.asc">Signature</a>&nbsp;
@@ -237,7 +237,7 @@ These are the currently released versions of Torque:<br/>
   <p>
     We generate daily snapshots of the DB torque project. These
     are built on a daily base but are only source snapshots. There are no
-    warranties that these build or run. You can get them from 
+    warranties that these build or run. You can get them from
     <a href="http://cvs.apache.org/dist/db/torque/nightly/">nightly snapshot site</a>.
   </p>
 </section>
@@ -252,7 +252,7 @@ These are the currently released versions of Torque:<br/>
 
 <section name="Building The Source">
   <p>
-    Torque uses <a href="http://maven.apache.org">Maven</a> as its 
+    Torque uses <a href="http://maven.apache.org">Maven</a> as its
     build system. Run <code>maven</code> or <code>maven jar:jar</code>
     at the top of the source directory to build the runtime.
   </p>

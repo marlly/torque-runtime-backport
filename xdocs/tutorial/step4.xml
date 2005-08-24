@@ -27,18 +27,18 @@
 <section name="Step 4: Configuring the Torque Runtime">
 
 <p>
-  Before we can start to write a Torque application, we have to 
+  Before we can start to write a Torque application, we have to
   configure the runtime environment:
   <ul>
     <li>
-      We have to make sure that the generated 
-      object model classes have access to the Torque 
+      We have to make sure that the generated
+      object model classes have access to the Torque
       runtime and associated libraries.
     </li>
     <li>
       The Torque runtime needs a configuration file
-      in order to retrieve the data which is necessary 
-      to connect to the database. 
+      in order to retrieve the data which is necessary
+      to connect to the database.
     </li>
   </ul>
   These two steps will be covered in the following sections.
@@ -46,14 +46,14 @@
 
 </section>
 
-<section name="Setting up the classpath">  
-  
+<section name="Setting up the classpath">
+
 <p>
-  The libraries which the generated classes depend on 
+  The libraries which the generated classes depend on
   are specified in the file <em>project.xml</em>
   in the top level directory of the project.
-  You already created this file in step 3 of the 
-  tutorial; now it needs to be extended a bit.  
+  You already created this file in step 3 of the
+  tutorial; now it needs to be extended a bit.
   Assuming that you use JDK 1.4+, you need to add
   the following entries to the &lt;dependencies&gt;
   section of your <em>project.xml</em>
@@ -124,7 +124,7 @@
       <groupId>village</groupId>
       <version>2.0-dev-20030825</version>
     </dependency>
-    
+
     <dependency>
       <artifactId>xercesImpl</artifactId>
       <groupId>xerces</groupId>
@@ -136,19 +136,19 @@
       <groupId>xml-apis</groupId>
       <version>2.0.2</version>
     </dependency>
-    
+
 ]]></source>
 
 <p>
-  You need not download any of these libraries - 
-  Maven will download them automatically when you 
+  You need not download any of these libraries -
+  Maven will download them automatically when you
   build your project.
 </p>
 
 <p>
   <b>
     Note: There is no need to include the torque-gen jar file in your project
-    classpath, including it may adversly affect the logging configuration of 
+    classpath, including it may adversly affect the logging configuration of
     your application.
   </b>
 </p>
@@ -158,7 +158,7 @@
 <section name="Torque Run-Time Properties">
 
 <p>
-  The second step in the configuration of the 
+  The second step in the configuration of the
   Torque Runtime are the
   Torque run-time properties.  As the name suggests,
   these properties are used when your application is
@@ -172,11 +172,11 @@
 </p>
 
 <p>
-  We will save our runtime properties in the 
+  We will save our runtime properties in the
   a file called <em>torque.properties</em>.
   Create a subdirectory src/conf in the
   top-level directory of your project, and create
-  a new file called <em>torque.properties</em> 
+  a new file called <em>torque.properties</em>
   in it. Add the following lines to this file:
 </p>
 
@@ -273,23 +273,23 @@ torque.dsfactory.bookstore.connection.password = password
 <section name="Logging configuration">
 
   <p>
-    Torque uses 
+    Torque uses
     <a href="http://jakarta.apache.org/commons/logging/">
     commons-logging</a> as a logging interface.
-    To enable logging in your application, read the 
+    To enable logging in your application, read the
     <a href="http://jakarta.apache.org/commons/logging/commons-logging-1.0.3/usersguide.html">
     commons-logging user guide</a>.
   </p>
-  
+
   <p>
     If you have no trouble running the tutorial,
     you do not need to configure logging now. If, however,
-    you experience runtime errors later on 
-    and do not find the reason immediately, 
-    it might be a good idea to configure 
-    logging and look at the log messages. Also, for a 
-    &quot;serious&quot; application, logging is 
-    indispensible in order to track down any 
+    you experience runtime errors later on
+    and do not find the reason immediately,
+    it might be a good idea to configure
+    logging and look at the log messages. Also, for a
+    &quot;serious&quot; application, logging is
+    indispensible in order to track down any
     unexpected errors.
   </p>
 

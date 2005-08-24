@@ -35,23 +35,23 @@ import org.apache.torque.util.Criteria;
 public class DocsTest extends BaseRuntimeTestCase
 {
     public static final String AUTHOR_1_NAME = "Joshua Bloch";
-    
+
     public static final String AUTHOR_2_NAME = "W. Stevens";
 
     public static final String AUTHOR_3_NAME = "Author without book";
-    
+
     public static final String BOOK_1_TITLE = "Effective Java";
-    
+
     public static final String BOOK_1_ISBN = "0-618-12902-2";
-    
+
     public static final String BOOK_2_TITLE = "TCP/IP Illustrated";
-    
+
     public static final String BOOK_2_ISBN = "0-201-63346-9";
-  
+
     public static final String BOOK_3_TITLE = "TCP/IP Illustrated";
-    
+
     public static final String BOOK_3_ISBN = "0-201-63354-X";
-        
+
     /**
      * Creates a new instance.
      */
@@ -67,38 +67,38 @@ public class DocsTest extends BaseRuntimeTestCase
         // clean the books database
         Criteria criteria = new Criteria();
         criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
-        try 
+        try
         {
             BookPeer.doDelete(criteria);
         }
-        catch(Exception e) 
+        catch(Exception e)
         {
             e.printStackTrace();
-            fail("cleaning books : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("cleaning books : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
         criteria.clear();
         criteria.add(
-                AuthorPeer.AUTHOR_ID, 
+                AuthorPeer.AUTHOR_ID,
                 (Long) null, Criteria.NOT_EQUAL);
-        try 
+        try
         {
             AuthorPeer.doDelete(criteria);
         }
-        catch(Exception e) 
+        catch(Exception e)
         {
             e.printStackTrace();
-            fail("cleaning authors : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("cleaning authors : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
-        
-        
+
+
         // insert some data into the database
         // taken from tutorial step 4 with some changes
-        try 
-        {  
+        try
+        {
             Author bloch = new Author();
             bloch.setName(AUTHOR_1_NAME);
             bloch.save();
@@ -132,8 +132,8 @@ public class DocsTest extends BaseRuntimeTestCase
         }
         catch (Exception e) {
             e.printStackTrace();
-            fail("Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
     }
@@ -141,25 +141,25 @@ public class DocsTest extends BaseRuntimeTestCase
     /**
      * Criteria howto, section "Order by".
      */
-    public void testCriteriaOrderBy() 
+    public void testCriteriaOrderBy()
     {
         List books = null;
-        try 
+        try
         {
             Criteria criteria = new Criteria();
             criteria.addAscendingOrderByColumn(BookPeer.TITLE);
             criteria.addAscendingOrderByColumn(BookPeer.ISBN);
-    
-            books = BookPeer.doSelect(criteria);            
+
+            books = BookPeer.doSelect(criteria);
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
-        
+
         Book book = (Book) books.get(0);
         assertTrue(
                 "title of first book is not"
@@ -177,99 +177,99 @@ public class DocsTest extends BaseRuntimeTestCase
                 + book.getIsbn(),
                 BOOK_3_ISBN.equals(book.getIsbn()));
     }
-    
+
     /**
      * Criteria howto, section "Order by".
      */
-    public void testCriteriaJoins() 
+    public void testCriteriaJoins()
     {
         // inner joins
         List bookAuthors = null;
-        try 
+        try
         {
             Criteria criteria = new Criteria();
             criteria.addJoin(
-                    AuthorPeer.AUTHOR_ID, 
-                    BookPeer.AUTHOR_ID, 
+                    AuthorPeer.AUTHOR_ID,
+                    BookPeer.AUTHOR_ID,
                     Criteria.INNER_JOIN);
-  
+
             bookAuthors = AuthorPeer.doSelect(criteria);
-            
+
             // from Details section
             Author author = (Author) bookAuthors.get(0);
             List books = author.getBooks();
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("inner join : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("inner join : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
-        
+
         assertTrue(
                 "inner join : size of bookAuthors is not 3, but"
                 + bookAuthors.size(),
                 bookAuthors.size() == 3);
-        
+
         // test explicit sql statements from details section
         List result = null;
-        try 
+        try
         {
             result = BasePeer.executeQuery(
                     "SELECT book.* FROM book "
                     + "INNER JOIN author "
                     + "ON book.AUTHOR_ID=author.AUTHOR_ID");
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("Explicit SQL query 1 : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Explicit SQL query 1 : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
-        
+
         assertTrue(
             "Explicit SQL query 1 : size of result is not 3, but"
             + result.size(),
             result.size() == 3);
 
         result = null;
-        try 
+        try
         {
             result = BasePeer.executeQuery(
                     "SELECT book.* FROM book,author "
                     + "WHERE book.AUTHOR_ID=author.AUTHOR_ID");
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("Explicit SQL query 2 : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Explicit SQL query 2 : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
-        
+
         assertTrue(
             "Explicit SQL query 2 : size of result is not 3, but"
             + result.size(),
             result.size() == 3);
-        
+
         // test left outer join
         bookAuthors = null;
-        try 
+        try
         {
               Criteria criteria = new Criteria();
               criteria.addJoin(
-                      AuthorPeer.AUTHOR_ID, 
-                      BookPeer.AUTHOR_ID, 
+                      AuthorPeer.AUTHOR_ID,
+                      BookPeer.AUTHOR_ID,
                       Criteria.LEFT_JOIN);
               bookAuthors = AuthorPeer.doSelect(criteria);
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("left join : Exception caught : " 
-                     + e.getClass().getName() 
+            fail("left join : Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
 
@@ -279,29 +279,29 @@ public class DocsTest extends BaseRuntimeTestCase
             bookAuthors.size() == 4);
 
     }
-    
+
     /**
      * Criteria Howto, section "Distinct".
      */
-    public void testDistinct() 
+    public void testDistinct()
     {
         List bookAuthors = null;
-        try 
+        try
         {
             Criteria criteria = new Criteria();
             criteria.addJoin(
-                    AuthorPeer.AUTHOR_ID, 
-                    BookPeer.AUTHOR_ID, 
+                    AuthorPeer.AUTHOR_ID,
+                    BookPeer.AUTHOR_ID,
                     Criteria.INNER_JOIN);
             criteria.setDistinct();
-        
+
             bookAuthors = AuthorPeer.doSelect(criteria);
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
         assertTrue(
@@ -309,37 +309,37 @@ public class DocsTest extends BaseRuntimeTestCase
             + bookAuthors.size(),
             bookAuthors.size() == 2);
     }
-    
+
     /**
      * Criteria Howto, section "Join & Order & Distinct".
      */
-    public void testJoinOrderDistinct() 
+    public void testJoinOrderDistinct()
     {
         List bookAuthors = null;
-        try 
+        try
         {
             Criteria criteria = new Criteria();
             criteria.addJoin(
-                    AuthorPeer.AUTHOR_ID, 
-                    BookPeer.AUTHOR_ID, 
+                    AuthorPeer.AUTHOR_ID,
+                    BookPeer.AUTHOR_ID,
                     Criteria.INNER_JOIN);
             criteria.setDistinct();
             criteria.addAscendingOrderByColumn(AuthorPeer.NAME);
-                  
+
             bookAuthors = AuthorPeer.doSelect(criteria);
         }
-        catch (Exception e) 
-        { 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            fail("Exception caught : " 
-                     + e.getClass().getName() 
+            fail("Exception caught : "
+                     + e.getClass().getName()
                      + " : " + e.getMessage());
         }
         assertTrue(
             "size of bookAuthors is not 2, but"
             + bookAuthors.size(),
             bookAuthors.size() == 2);
-        
+
         Author author = (Author) bookAuthors.get(0);
         assertTrue(
             "Author of first book is not"
@@ -347,7 +347,7 @@ public class DocsTest extends BaseRuntimeTestCase
             + " but "
             + author.getName(),
             AUTHOR_1_NAME.equals(author.getName()));
-  
+
         author = (Author) bookAuthors.get(1);
         assertTrue(
             "Author of second book is not"

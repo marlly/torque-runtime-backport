@@ -189,7 +189,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -211,7 +211,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param key
      * @return
      * @throws TorqueException Any exceptions caught during processing will be
@@ -242,7 +242,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param om
      * @return
      * @throws TorqueException Any exceptions caught during processing will be
@@ -256,7 +256,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param key
      * @param om
      * @return
@@ -294,7 +294,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param id
      * @return
      * @throws TorqueException Any exceptions caught during processing will be
@@ -397,7 +397,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param ids
      * @return
      * @throws TorqueException Any exceptions caught during processing will be
@@ -408,7 +408,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Get the value of region.
-     * 
+     *
      * @return value of region.
      */
     public String getRegion()
@@ -477,7 +477,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param listener A new listener for cache events.
      */
     public void addCacheListenerImpl(CacheListener listener)
@@ -524,7 +524,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param key
      * @return A subset of the list identified by <code>key</code>.
      */
@@ -545,7 +545,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     * 
+     *
      * @param listeners
      * @param oldOm
      * @param om
@@ -588,7 +588,7 @@ public abstract class AbstractBaseManager
 
     /**
      * helper methods for the Serializable interface
-     * 
+     *
      * @param out
      * @throws IOException
      */
@@ -600,7 +600,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Helper methods for the <code>Serializable</code> interface.
-     * 
+     *
      * @param in The stream to read a <code>Serializable</code> from.
      * @throws IOException
      * @throws ClassNotFoundException

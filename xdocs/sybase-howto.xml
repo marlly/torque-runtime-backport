@@ -27,9 +27,9 @@
 
 <p>
 This HOWTO was written some time ago and was targeted at the
-version of Torque that was coupled with the 
+version of Torque that was coupled with the
 <a href="http://jakarta.apache.org/turbine/">Turbine</a> application framework.
-Contributions towards updating the information below can be submitted to the 
+Contributions towards updating the information below can be submitted to the
 <a href="mailto:torque-dev@db.apache.org">Torque Dev mailing list</a>.
 </p>
 
@@ -39,7 +39,7 @@ Contributions towards updating the information below can be submitted to the
 
 <p>
 This text is a description of integration of Sybase ASE as the target
-database in a TDK generated application.  
+database in a TDK generated application.
 </p>
 
 </section>
@@ -48,7 +48,7 @@ database in a TDK generated application.
 
 <p>
 Sybase has a pure java jdbc driver, jConnect, that is free to use, but not
-open source.  You may download this driver from 
+open source.  You may download this driver from
 <a href="http://www.sybase.com/products/eaimiddleware/jconnectforjdbc/">Sybase</a>.
 </p>
 </section>
@@ -77,7 +77,7 @@ work, so the database must be created first.
 The .sql files that the TDK build process generates files with the
 sql command terminated by a ; for use in the sql directive provided by
 the Ant build system.  These scripts will not work properly if run by
-hand via the 'isql' command. 
+hand via the 'isql' command.
 </LI>
 <LI>
 The .sql files to create the tables, do not correctly remove any

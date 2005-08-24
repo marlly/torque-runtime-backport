@@ -71,7 +71,7 @@ public class DBOracle extends DB
      * @param date the Date to format
      * @return The date formatted String for Oracle.
      */
-    public String getDateString(Date date) 
+    public String getDateString(Date date)
     {
         return "TO_DATE('" + new SimpleDateFormat(DATE_FORMAT).format(date)
                 + "', 'DD-MM-YYYY HH24:MI:SS')";

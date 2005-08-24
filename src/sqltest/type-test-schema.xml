@@ -17,8 +17,8 @@
 <!DOCTYPE database SYSTEM "http://jakarta.apache.org/turbine/dtd/database.dtd">
 
 
-<database 
-  name="@DATABASE_DEFAULT@" 
+<database
+  name="@DATABASE_DEFAULT@"
   defaultIdMethod="@DATABASE_ID_METHOD@">
 
   <!-- =================================================== -->
@@ -33,9 +33,9 @@
     <column name="DATE_TYPE" type="DATE"/>
     <column name="TIME_TYPE" type="TIME"/>
     <column name="TIMESTAMP_TYPE" type="TIMESTAMP"/>
-    
+
     <!--
-    
+
     <column name="BIT_TYPE" type="BIT"/>
     <column name="TINYINT_TYPE" type="TINYINT"/>
     <column name="SMALLINT_TYPE" type="SMALLINT"/>
@@ -52,9 +52,9 @@
     <column name="NULL_TYPE" type="NULL"/>
     <column name="BLOB_TYPE" type="BLOB"/>
     <column name="CLOB_TYPE" type="CLOB"/>
-  
+
     -->
-  
+
     <!-- These types have been left out intentionally for now
          as I'm not sure how they map and dealing with the types
          above will give the testbed a thorough workout I'm sure :-)
@@ -64,9 +64,9 @@
     <column name="STRUCT_TYPE" type="STRUCT"/>
     <column name="ARRAY_TYPE" type="ARRAY"/>
     <column name="REF_TYPE" type="REF"/>
-    
+
     -->
-  
+
   </table>
 </database>
 

@@ -33,16 +33,16 @@ import org.apache.torque.TorqueException;
 import com.workingdogs.village.DataSetException;
 import com.workingdogs.village.Record;
 
-public class CountHelper 
-{  
+public class CountHelper
+{
     /**
-     * The COUNT function returns the number of rows in a query. 
-     * Does not use a connection, hardcode the column to "*" and 
+     * The COUNT function returns the number of rows in a query.
+     * Does not use a connection, hardcode the column to "*" and
      * set the distinct qualifier to false.
      * Only use this function if you have added additional constraints to
      * the criteria, otherwise Torque does not know which table it should
      * count the datasets in.
-     * 
+     *
      * @param c Criteria to get the count for.
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
@@ -53,40 +53,40 @@ public class CountHelper
     }
 
     /**
-     * The COUNT function returns the number of rows in a query. 
+     * The COUNT function returns the number of rows in a query.
      * Hard code the distinct parameter to false and set the column to "*".
      * Only use this function if you have added additional constraints to
      * the criteria, otherwise Torque does not know which table it should
      * count the datasets in.
-     * 
+     *
      * @param c Criteria to get the count for.
      * @param conn Connection to use
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
-     */    
+     */
     public int count( Criteria c, Connection conn ) throws TorqueException
     {
-        return count( c, conn, "*" );       
+        return count( c, conn, "*" );
     }
 
     /**
      * Returns the number of rows in a query.
-     * 
+     *
      * @param c Criteria to get the count for.
      * @param columnName Name of database Column which is counted. Preferably,
      *        use the primary key here.
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c, String columnName ) 
+    public int count( Criteria c, String columnName )
         throws TorqueException
     {
         return count( c, null, columnName );
     }
 
     /**
-     * Returns the number of rows in a query. 
-     * 
+     * Returns the number of rows in a query.
+     *
      * @param c Criteria to get the count for.
      * @param conn Connection to use
      * @param columnName Name of database Column which is counted. Preferably,
@@ -94,9 +94,9 @@ public class CountHelper
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c, Connection conn, String columnName ) 
+    public int count( Criteria c, Connection conn, String columnName )
         throws TorqueException
-    {        
+    {
         /* Clear the select columns. */
         c.getSelectColumns().clear();
         c.getOrderByColumns().clear();
@@ -106,8 +106,8 @@ public class CountHelper
         criteriaSelectModifiers = c.getSelectModifiers();
 
         boolean distinct = false;
-        if( criteriaSelectModifiers != null && 
-            criteriaSelectModifiers.size() > 0 && 
+        if( criteriaSelectModifiers != null &&
+            criteriaSelectModifiers.size() > 0 &&
             criteriaSelectModifiers.contains( SqlEnum.DISTINCT.toString() ) )
     	{
             criteriaSelectModifiers.remove( SqlEnum.DISTINCT.toString() );
@@ -129,7 +129,7 @@ public class CountHelper
         else
     	{
             result = BasePeer.doSelect( c, conn );
-        } 
+        }
         Record record = (Record) result.get(0);
         try {
             return record.getValue(1).asInt();

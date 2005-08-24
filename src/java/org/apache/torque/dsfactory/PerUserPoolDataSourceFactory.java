@@ -42,7 +42,7 @@ public class PerUserPoolDataSourceFactory
 {
 
     /** The log. */
-    private static Log log 
+    private static Log log
             = LogFactory.getLog(PerUserPoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
@@ -98,14 +98,14 @@ public class PerUserPoolDataSourceFactory
         applyConfiguration(conf, ds);
         return ds;
     }
-    
+
     /**
      * Closes the pool associated with this factory and releases it.
      * @throws TorqueException if the pool cannot be closed properly
      */
     public void close() throws TorqueException
     {
-        try 
+        try
         {
             ds.close();
         }

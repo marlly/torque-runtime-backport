@@ -157,9 +157,9 @@ public class DBPostgres extends DB
 
     /**
      * This method overrides the JDBC escapes used to format dates
-     * using a <code>DateFormat</code>. 
+     * using a <code>DateFormat</code>.
      *
-     * This generates the timedate format defined in 
+     * This generates the timedate format defined in
      * http://www.postgresql.org/docs/7.3/static/datatype-datetime.html
      * which defined PostgreSQL dates as YYYY-MM-DD hh:mm:ss
      * @param date the date to format

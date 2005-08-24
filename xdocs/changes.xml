@@ -28,13 +28,13 @@
   <release version="3.2-rc2-dev" date="in SVN">
     <action type="add" dev="tfischer">
       Added a method getXXX(connection) to retrieve associated objects
-      in the n->1 direction, which uses the provided connection 
-      if a db hit is necessary 
+      in the n->1 direction, which uses the provided connection
+      if a db hit is necessary
     </action>
     <action type="add" dev="tfischer">
       Added a generator property torque.silentDbFetch, which is true by default.
-      If set to false, the getXXX() methods without arguments will not access 
-      the db silently, but return null if the associated objects has not been 
+      If set to false, the getXXX() methods without arguments will not access
+      the db silently, but return null if the associated objects has not been
       read yet. Also, the method does not throw a Torque exception any more.
     </action>
     <action type="add" dev="henning">
@@ -50,8 +50,8 @@
       Updated all SCM references to point to Subversion.
     </action>
     <action type="add" dev="tfischer" issue="TRQS306">
-      Added the following generator properties to allow detailed control 
-      where the target classes are generated. 
+      Added the following generator properties to allow detailed control
+      where the target classes are generated.
       <ul>
         <li>torque.subpackage.peer</li>
         <li>torque.subpackage.object</li>
@@ -67,8 +67,8 @@
 
   <release version="3.2-rc1" date="2005-07-19">
     <action type="add" dev="tfischer">
-      Added the build-torque.xml again to the generator release. 
-      In order to use the same default directory structure 
+      Added the build-torque.xml again to the generator release.
+      In order to use the same default directory structure
       for maven and ant, the default directory for the schema files
       was changed from ${torque.home}/schema to ${torque.home}/src/schema
     </action>
@@ -79,7 +79,7 @@
       change into src/generator/src/templates and run maven jar:install.
     </action>
     <action type="update" dev="tfischer" issue="TRQS308">
-      Changed runtime configuration checking. It is now required having set 
+      Changed runtime configuration checking. It is now required having set
       the following properties:
       <ul>
         <li>torque.database.default</li>
@@ -89,16 +89,16 @@
       This was done in order to detect misconfiguration more easily.
     </action>
     <action type="update" dev="tfischer">
-      The runtime does not configure the DataSourveFactory with the name "default" 
+      The runtime does not configure the DataSourveFactory with the name "default"
       any more automatically. If you need a DataSourceFactory with that name,
       you have to configure it manually from now on.
     </action>
     <action type="update" dev="tfischer">
-      If Torque is not yet initialized, it does now return null as name of the 
+      If Torque is not yet initialized, it does now return null as name of the
       default database (not "default" as it was before).
     </action>
     <action type="update" dev="tfischer" issue="TRQS252">
-      The asColumns in a Criteria are now added to the SQL select clause 
+      The asColumns in a Criteria are now added to the SQL select clause
       in the same order as they were added to a Criteria.
       To achieve this, the return type of the method Criteria.getAsColumns()
       had to be changed from Hashtable to Map.
@@ -117,11 +117,11 @@
     </action>
     <action type="add" dev="tfischer">
       The database schema.xml is now validated against the DTD. The generator stops
-      and displays an error message if the schema.xml does not satisfy the DTD.  
+      and displays an error message if the schema.xml does not satisfy the DTD.
     </action>
     <action type="fix" dev="tfischer" issue="TRQS286">
       The TorqueJDBCTransformTask now creates a name attribute for the database
-      element. The attribute value is the name of the database user used to 
+      element. The attribute value is the name of the database user used to
       connect to the database.
     </action>
     <action type="add" dev="tfischer" issue="TRQS266">
@@ -130,7 +130,7 @@
     </action>
     <action type="fix" dev="tfischer">
       Changed the length of the tablename column from 255 to 250 in the idbroker
-      schema for the runtimetest. This is necessary because the firebird database 
+      schema for the runtimetest. This is necessary because the firebird database
       cannot create an index on a varchar column which has the length 255.
     </action>
     <action type="fix" dev="tfischer">
@@ -141,15 +141,15 @@
         <li>Column names are no longer put into double quotes by the create-db task</li>
         <li>The template createdb.vm was added to be able to run the create-db task</li>
       </ul>
-      Also, a firebird profile was added for the runtimetest, and firebird was added 
+      Also, a firebird profile was added for the runtimetest, and firebird was added
       to the list of supported databases on the homepage.
     </action>
     <action type="fix" dev="tfischer" issue="TRQS287">
       Changed the name attribute of the database tag from #IMPLIED to #REQUIRED in the dtd.
-    </action> 
+    </action>
     <action type="add" dev="tfischer" issue="TRQS273">
-      Added a database-layout-Howto to the docs. 
-    </action> 
+      Added a database-layout-Howto to the docs.
+    </action>
     <action type="fix" dev="tfischer">
       In Torque 3.1.1, BIT columns were treated as Strings with the value 0 and 1.
       This caused problems in various DBs which natively support BOOLEAN columns
@@ -159,20 +159,20 @@
       However, this behavior breaks BIT support for Databases which do not have
       a native boolean datatype (like Oracle). For these Databases, use BOOLEANINT
       (or BOOLEANCHAR) column types for Booleans.
-    </action> 
+    </action>
     <action type="update" dev="tfischer" issue="TRQS221">
       Changed Postgres handling of boolean Values to use FALSE,TRUE instead of '0','1'
       while selecting from columns of Torque type BIT.
-    </action> 
+    </action>
     <action type="add" dev="tfischer" issue="TRQS251">
       Added support for using SQL functions in "order by".
     </action>
     <action type="update" dev="tfischer">
-      Unify the behaviour of primary key columns. Until now, 
+      Unify the behaviour of primary key columns. Until now,
       primary key columns were not filled automatically for
       idMethod=native and for platforms with
       default idMethod=identity (i.e. all databases exept oracle,
-      postgresql and sapdb). Now, the default is that primary key 
+      postgresql and sapdb). Now, the default is that primary key
       columns are always filled automatically by default.
     </action>
     <action type="fix" dev="tfischer">
@@ -201,19 +201,19 @@
       </ul>
     </action>
     <action type="add" dev="tfischer" issue="TRQS263">
-      Add support for oracle datatype timestamp; 
+      Add support for oracle datatype timestamp;
       limit number of digits for saving integers in oracle to 10.
     </action>
     <action type="fix" dev="tfischer" issue="TRQS267">
       Fix escaping of single quotes in datasql task.
     </action>
     <action type="add" dev="tfischer">
-      Added support for schema support at generate time. 
+      Added support for schema support at generate time.
       See <a href="schema-howto.html">Schema Support Howto</a>.
     </action>
     <action type="remove" dev="tfischer" issue="TRQS222">
-      Removed Oracle Update patch again. 
-      Creates invalid scripts and causes ant to fail. 
+      Removed Oracle Update patch again.
+      Creates invalid scripts and causes ant to fail.
       See Scarab for further details.
     </action>
     <action dev="mpoeschl" type="remove">
@@ -229,7 +229,7 @@
       Remove support for stratum lifecycle interfaces.
     </action>
     <action dev="mpoeschl" type="add" issue="TRQS163">
-      Add domain element to schema.xml. Domains are used to define 
+      Add domain element to schema.xml. Domains are used to define
       attributes for columns.
     </action>
     <action dev="mpoeschl" type="update">
@@ -243,7 +243,7 @@
       default since 3.1)
     </action>
     <action dev="mpoeschl" type="add">
-      Changed ojb-model task to generate Object + BaseObject (like for the 
+      Changed ojb-model task to generate Object + BaseObject (like for the
       torque om).
     </action>
     <action dev="mpoeschl" type="fix">
@@ -277,7 +277,7 @@
       sure that his patch goes in ok.
     </action>
     <action type="update" dev="henning">
-      Started reworking the BasePeer class, factored out some code into SQLBuilder and VillageUtils.  
+      Started reworking the BasePeer class, factored out some code into SQLBuilder and VillageUtils.
     </action>
     <action type="add" dev="henning">
       Make the getter names for the table column values configurable. Torque did generate
@@ -327,15 +327,15 @@
       Add Torque Reporting to the Maven plugin. Patch contributed by Thierry Lach.
     </action>
     <action type="update" dev="henning" issue="TRQS207">
-      Make <code>org.apache.torque.util.SqlEnum</code> public visible. The C'tor is 
+      Make <code>org.apache.torque.util.SqlEnum</code> public visible. The C'tor is
       still private, so this should be no problem.
     </action>
     <action type="update" dev="henning" issue="TRQS239">
-      Fix a typo in the reworked Limit / Offset Code for Oracle and DB2. 
+      Fix a typo in the reworked Limit / Offset Code for Oracle and DB2.
       Confused pre and post.
     </action>
     <action type="update" dev="henning" issue="TRQS240">
-      Fix offset and limit swap for DB2 and Oracle. 
+      Fix offset and limit swap for DB2 and Oracle.
     </action>
   </release>
   <release version="3.1.1-RC3" date="2004-10-16">
@@ -357,11 +357,11 @@
       file. Activated the maven-changes-report.
     </action>
     <action type="update">
-        Changed the default property value for <code>torque.output.dir</code> 
+        Changed the default property value for <code>torque.output.dir</code>
         from <code>maven.build.dest</code> to <code>maven.build.dir</code>.
-        This means many of the generated files will now appear in the 
+        This means many of the generated files will now appear in the
         <code>target</code> rather than the <code>target/classes</code>
-        directory. The properties reference was updated accordingly (a few 
+        directory. The properties reference was updated accordingly (a few
         missing properties were also documented).
     </action>
     <action type="update" dev="henning">
@@ -369,11 +369,11 @@
         method to the generated peer classes
     </action>
     <action type="add" dev="henning">
-        Patrick Carl donated an XSL style sheet to convert Torque schema 
+        Patrick Carl donated an XSL style sheet to convert Torque schema
         files into <a href="http://mogwai.sourceforge.net/erdesigner/erdesigner.html">mogwai ERDesigner</a> files.
     </action>
     <action type="update" dev="seade">
-      Restructured maven project files based on HEAD to gain improved control 
+      Restructured maven project files based on HEAD to gain improved control
       over dependencies.
     </action>
     <action type="update" dev="seade">
@@ -398,21 +398,21 @@
     <action type="fix">
       Deleting an Object containing a timestamp didn't work with PostgreSQL (the
       adapter was missing the necessary method to convert the timestamp into a value
-      that is understood by the databases).     
+      that is understood by the databases).
     </action>
   </release>
   <release version="3.1.1-RC2" date="2004-08-27">
     <action type="fix" dev="henning">
-      <code>limit</code> and <code>offset</code> handling for all databases 
-      other than DB2 was broken.  <code>limit</code> and <code>offset</code> 
-      handling for all databases has been revamped and should now work 
+      <code>limit</code> and <code>offset</code> handling for all databases
+      other than DB2 was broken.  <code>limit</code> and <code>offset</code>
+      handling for all databases has been revamped and should now work
       correctly.
     </action>
    </release>
   <release version="3.1.1-RC1" date="2004-08-26">
     <action type="update">
-      Addressed a number of issues highlighted by 
-      <a href="http://findbugs.sourceforge.net/">FindBugs</a> in generated 
+      Addressed a number of issues highlighted by
+      <a href="http://findbugs.sourceforge.net/">FindBugs</a> in generated
       source code.
     </action>
     <action type="update">
@@ -423,18 +423,18 @@
       commons-lang-2.0 and commons-logging-1.0.4.
     </action>
     <action type="fix">
-      HSQL adapter enhancements/fixes: added support for case-insensitive 
+      HSQL adapter enhancements/fixes: added support for case-insensitive
       queries, added support for cascading deletes, correction to the generated
       CREATE TABLE DDL when using IDENTITY columns.  Thanks to Patrick Carl for
       the patch.
     </action>
     <action type="update">
-      The <code>adapter</code> property is now used in preference to 
+      The <code>adapter</code> property is now used in preference to
       <code>driver</code> when building the database map.  This allows Torque
-      to work when the driver setting is not what it expects - e.g. if using 
-      <code>com.mysql</code> driver instead of the 
-      <code>org.gjt.mm.mysql</code> or when using 
-      <a http="http://www.p6spy.org/">P6Spy</a> pass through driver for 
+      to work when the driver setting is not what it expects - e.g. if using
+      <code>com.mysql</code> driver instead of the
+      <code>org.gjt.mm.mysql</code> or when using
+      <a http="http://www.p6spy.org/">P6Spy</a> pass through driver for
       performance monitoring.  Thanks to Ben Hogan for the patch.
     </action>
     <action type="add">
@@ -451,8 +451,8 @@
       solution implemented has been tested under MySLQ and PostgreSQL only.
     </action>
     <action type="fix">
-      Multiple unique constraints and indexes on a single table are now 
-      allocated sequential names (previously duplicate names were being 
+      Multiple unique constraints and indexes on a single table are now
+      allocated sequential names (previously duplicate names were being
       allocated).
     </action>
     <action type="fix">
@@ -460,30 +460,30 @@
       to HEAD some time ago.
     </action>
     <action type="fix">
-      Generate sequences correctly for PostgreSQL (i.e. leave it to 
+      Generate sequences correctly for PostgreSQL (i.e. leave it to
       PostgreSQL).  Note that schemas produced from the database using
       the <code>torque:jdbc</code> goal are not yet handling sequences
       correctly.
     </action>
     <action type="fix" issue="TRQD26">
-      Problems with Torque tutorial.  The Torque tutorial has been 
+      Problems with Torque tutorial.  The Torque tutorial has been
       updated to reflect the separated generator and runtime components and
       to use the Maven plugin.
     </action>
     <action type="fix">
-      The generator logging configuration has been changed from DEBUG to INFO 
-      - this will make the day of all those people that for some reason have 
+      The generator logging configuration has been changed from DEBUG to INFO
+      - this will make the day of all those people that for some reason have
       the torque-gen jar in their classpath at runtime.  <b>Hint: You don't
       need this jar to use the Torque generated object model classes.</b>
     </action>
     <action type="fix">
-      The maven-plugin now provides default values for 
+      The maven-plugin now provides default values for
       <code>torque.initialIDValue</code> and
-      <code>torque.initialIDStep</code> so that the id table initialization 
+      <code>torque.initialIDStep</code> so that the id table initialization
       sql is now generated correctly.
     </action>
     <action type="fix" issue="TRQS223">
-      The get${pVarName} method in the Object.vm template does not 
+      The get${pVarName} method in the Object.vm template does not
       return related objects with a negative PK.  Thanks to Nick Curry for
       the patch.
     </action>
@@ -495,15 +495,15 @@
       short or byte.
     </action>
     <action type="fix" issue="TRQS149">
-      For PostgreSQL the LONGVARCHAR datatype now maps to 
+      For PostgreSQL the LONGVARCHAR datatype now maps to
       <em>text</em> rather than <em>bytea</em>.
     </action>
     <action type="fix" issue="TRQS190">
       Error on "byte" data type generation rules.
     </action>
     <action type="fix">
-      A minor template change has been made to correctly allow 
-      Base[TableName]Peer.doDelete(criteria, connection) to be overridden in 
+      A minor template change has been made to correctly allow
+      Base[TableName]Peer.doDelete(criteria, connection) to be overridden in
       [TableName]Peer.
     </action>
   </release>
@@ -511,7 +511,7 @@
   <release version="3.1" date="2003-09-01">
     <action type="fix">
       SqlExpression: replace UniqueList with HashSet to improve performace for
-      large IN clause.      
+      large IN clause.
     </action>
   </release>
 
@@ -534,16 +534,16 @@
       ClassLoader.
     </action>
     <action type="update">
-      The generated schema-data.dtd has been changed to allow any order of 
+      The generated schema-data.dtd has been changed to allow any order of
       table data entries.
     </action>
     <action type="update">
-      The old Torque connection pool is deprecated. You should use the 
+      The old Torque connection pool is deprecated. You should use the
       commons-dbcp pool.
     </action>
     <action type="update">
-      Upgraded to latest commons-dbcp snapshot. The new 
-      SharedPoolDatasourceFactory is now used by default. Don't forget to 
+      Upgraded to latest commons-dbcp snapshot. The new
+      SharedPoolDatasourceFactory is now used by default. Don't forget to
       upgrade your property file!
     </action>
     <action type="fix" issue="TRQS51">
@@ -553,9 +553,9 @@
       Torque.initialize not reentrant
     </action>
     <action type="fix" issue="TRQS87">
-      name conflict in generated java sources when using java reserved 
+      name conflict in generated java sources when using java reserved
       words (like "class") as column names. <br/>
-      <code>Column.UncapitalisedJavaName</code> is now used as member name 
+      <code>Column.UncapitalisedJavaName</code> is now used as member name
       instead of <code>Column.Name.toLowerCase()</code> <br/>
     </action>
     <action type="fix" issue="TRQS136">
@@ -569,7 +569,7 @@
     </action>
     <action type="fix" issue="TRQS178">
       use sql autoincrement only if idMethod native.<br/>
-      So you have to set idMethod="native" (table) plus autoincrement="true" 
+      So you have to set idMethod="native" (table) plus autoincrement="true"
       (column) to generate the autoincrement code in your sql.
     </action>
   </release>
@@ -580,23 +580,23 @@
       BaseObject.log() and .getLog() now return a Log object.
     </action>
     <action type="update">
-      The DTD resolver will now use the database.dtd from the classpath if the 
+      The DTD resolver will now use the database.dtd from the classpath if the
       DTD is http://db.apache.org/torque/dtd/database_3_1.dtd.
     </action>
     <action type="update">
       LargeSelect now implements Serializable, provides better debugging
       information and further methods for maintaining search parameters.
     </action>
-    <action type="update">  
-      LargeSelect is now thread safe when calling invalidateResult 
-      (thanks to Soteri Panagou &lt;panagos@midetech.com&gt;). 
+    <action type="update">
+      LargeSelect is now thread safe when calling invalidateResult
+      (thanks to Soteri Panagou &lt;panagos@midetech.com&gt;).
     </action>
-    <action type="update">  
-      Updated ojb tasks to work for OJB 1.0(rc3). The generated modell is very 
+    <action type="update">
+      Updated ojb tasks to work for OJB 1.0(rc3). The generated modell is very
       simple. Support for advanced features will be added in the future.
     </action>
     <action type="fix" issue="TRQS20">
-      mysql: "on delete cascade" not generated 
+      mysql: "on delete cascade" not generated
     </action>
     <action type="fix" issue="TRQS101">
       Sql2Xml task should generate a dtd compliant xml
@@ -609,21 +609,21 @@
     </action>
     <action type="fix" issue="TRQS139">
       wrong invocation of populateObject in peer class
-    </action>  
+    </action>
     <action type="fix" issue="TRQS141">
       Table with no primary key results an empty ADD PRIMARY KEY ()
-    </action>  
+    </action>
     <action type="fix" issue="TRQS153">
-      BasePeer.doSelect(Criteria, Connection) calls executeQuery 
+      BasePeer.doSelect(Criteria, Connection) calls executeQuery
       without offset and limit.
     </action>
     <action type="fix" issue="TRQS159">
       Invalid syntaxes for Hypersonic when using indexes.
     </action>
     <action type="fix" issue="TRQS165">
-      columns in an external schema caused Manager imports to be 
+      columns in an external schema caused Manager imports to be
       generated
-    </action>  
+    </action>
     <action type="fix">
       Corrected deadly multi-CPU thread deadlock problem discovered by
       Ed Korthof &lt;ed@apache.org&gt; and John McNally

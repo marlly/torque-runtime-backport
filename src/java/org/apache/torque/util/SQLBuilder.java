@@ -68,12 +68,12 @@ public abstract class SQLBuilder
 
             if (dotIndex == -1) // No schema given
             {
-                String targetDBName = (dbName == null) 
+                String targetDBName = (dbName == null)
                         ? Torque.getDefaultDB()
                         : dbName;
-                
+
                 String targetSchema = Torque.getSchema(targetDBName);
-                
+
                 // If we have a default schema, fully qualify the
                 // table and return.
                 if (StringUtils.isNotEmpty(targetSchema))
@@ -158,7 +158,7 @@ public abstract class SQLBuilder
 
         return null; // Ugh
     }
-    
+
     /**
      * Removes possible qualifiers (like DISTINCT) from a column name
      *
@@ -185,14 +185,14 @@ public abstract class SQLBuilder
             // Qualifiers are first, tablename is piece after last space
             return name.trim().substring(spacePos + 1);
         }
-        
+
         // no spaces, nothing changed
         return name;
     }
-    
+
 
     /**
-     * Returns a table name from an identifier. Each identifier is to be qualified 
+     * Returns a table name from an identifier. Each identifier is to be qualified
      * as [schema.]table.column. This could also contain FUNCTION([schema.]table.column).
      *
      * @param name The (possible fully qualified) identifier name
@@ -230,8 +230,8 @@ public abstract class SQLBuilder
 
         return getFullTableName(testName.substring(0, rightDotIndex), dbName);
     }
-            
-            
+
+
 
     /**
      * Returns a set of all tables and possible aliases referenced
@@ -255,7 +255,7 @@ public abstract class SQLBuilder
             Criteria.Criterion c = crit.getCriterion(key);
             List tableNames = c.getAllTables();
 
-            // Loop over all Tables referenced in this criterion. 
+            // Loop over all Tables referenced in this criterion.
             for (Iterator it2 = tableNames.iterator(); it2.hasNext(); )
             {
                 String name = (String) it2.next();
@@ -264,7 +264,7 @@ public abstract class SQLBuilder
                 // If the tables have an alias, add an "<xxx> AS <yyy> statement"
                 if (StringUtils.isNotEmpty(aliasName))
                 {
-                    String newName = 
+                    String newName =
                             new StringBuffer(name.length() + aliasName.length() + 4)
                             .append(aliasName)
                             .append(" AS ")
@@ -280,7 +280,7 @@ public abstract class SQLBuilder
                 tableCallback.process(tables, key, crit);
             }
         }
-        
+
         return tables;
     }
 
@@ -294,7 +294,7 @@ public abstract class SQLBuilder
      * @exception TorqueException if an error occurs
      */
     public static final Query buildQueryClause(final Criteria crit,
-            final List params, 
+            final List params,
             final QueryCallback qc)
             throws TorqueException
     {
@@ -326,7 +326,7 @@ public abstract class SQLBuilder
      * adds the select columns from the criteria to the query
      * @param criteria the criteria from which the select columns are taken
      * @param query the query to which the select columns should be added
-     * @throws TorqueException if the select columns can not be processed 
+     * @throws TorqueException if the select columns can not be processed
      */
     private static final void processSelectColumns(
             final Criteria criteria,
@@ -336,15 +336,15 @@ public abstract class SQLBuilder
     {
         UniqueList selectClause = query.getSelectClause();
         UniqueList select = criteria.getSelectColumns();
-        
+
         for (int i = 0; i < select.size(); i++)
         {
             String identifier = (String) select.get(i);
             selectClause.add(identifier);
-            addTableToFromClause(getTableName(identifier, dbName), criteria, query); 
+            addTableToFromClause(getTableName(identifier, dbName), criteria, query);
         }
     }
-    
+
     /**
      * adds the As-columns from the criteria to the query.
      * @param criteria the criteria from which the As-columns are taken
@@ -352,11 +352,11 @@ public abstract class SQLBuilder
      */
     private static final void processAsColumns(
             final Criteria criteria,
-            final Query query) 
+            final Query query)
     {
         UniqueList querySelectClause = query.getSelectClause();
         Map criteriaAsColumns = criteria.getAsColumns();
-      
+
         for (Iterator it = criteriaAsColumns.keySet().iterator(); it.hasNext(); )
         {
             String key = (String) it.next();
@@ -368,7 +368,7 @@ public abstract class SQLBuilder
                     .toString());
         }
     }
-    
+
     /**
      * adds the Modifiers from the criteria to the query
      * @param criteria the criteria from which the Modifiers are taken
@@ -376,7 +376,7 @@ public abstract class SQLBuilder
      */
     private static final void processModifiers(
             final Criteria criteria,
-            final Query query) 
+            final Query query)
     {
         UniqueList selectModifiers = query.getSelectModifiers();
         UniqueList modifiers = criteria.getSelectModifiers();
@@ -385,23 +385,23 @@ public abstract class SQLBuilder
             selectModifiers.add(modifiers.get(i));
         }
     }
-    
+
     /**
      * adds the Criterion-objects from the criteria to the query
      * @param criteria the criteria from which the Criterion-objects are taken
      * @param query the query to which the Criterion-objects should be added
      * @param params the parameters if a prepared statement should be built,
      *        or null if a normal statement should be built.
-     * @throws TorqueException if the Criterion-objects can not be processed 
+     * @throws TorqueException if the Criterion-objects can not be processed
      */
     private static final void processCriterions(
             final DB db,
             final DatabaseMap dbMap,
             final String dbName,
-            final Criteria crit, 
+            final Criteria crit,
             final Query query,
             final List params,
-            final QueryCallback qc) 
+            final QueryCallback qc)
         throws TorqueException
     {
         UniqueList fromClause = query.getFromClause();
@@ -418,8 +418,8 @@ public abstract class SQLBuilder
             for (int i = 0; i < someCriteria.length; i++)
             {
                 String tableName = someCriteria[i].getTable();
-    
-                // add the table to the from clause, if it is not already 
+
+                // add the table to the from clause, if it is not already
                 // contained there
                 // it is important that this piece of code is executed AFTER
                 // the joins are processed
@@ -439,30 +439,30 @@ public abstract class SQLBuilder
 
                 someCriteria[i].setIgnoreCase(ignoreCase);
             }
-            
+
             criterion.setDB(db);
             whereClause.add(qc.process(criterion, params));
         }
     }
-    
+
     /**
      * adds the OrderBy-Columns from the criteria to the query
      * @param criteria the criteria from which the OrderBy-Columns are taken
      * @param query the query to which the OrderBy-Columns should be added
-     * @throws TorqueException if the OrderBy-Columns can not be processed 
+     * @throws TorqueException if the OrderBy-Columns can not be processed
      */
     private static final void processOrderBy(
             final DB db,
             final DatabaseMap dbMap,
             final Criteria crit,
-            final Query query) 
+            final Query query)
             throws TorqueException
     {
         UniqueList orderByClause = query.getOrderByClause();
         UniqueList selectClause = query.getSelectClause();
-  
+
         UniqueList orderBy = crit.getOrderByColumns();
-        
+
         if (orderBy != null && orderBy.size() > 0)
         {
             // Check for each String/Character column and apply
@@ -471,7 +471,7 @@ public abstract class SQLBuilder
             {
                 String orderByColumn = (String) orderBy.get(i);
 
-                String strippedColumnName 
+                String strippedColumnName
                         = removeSQLFunction(orderByColumn);
                 int dotPos = strippedColumnName.lastIndexOf('.');
                 if (dotPos == -1)
@@ -504,11 +504,11 @@ public abstract class SQLBuilder
                             spacePos);
                 }
                 ColumnMap column = dbMap.getTable(table).getColumn(columnName);
-                
+
                 // only ignore case in order by for string columns
                 // which do not have a function around them
                 if (column.getType() instanceof String
-                        && orderByColumn.indexOf('(') == -1) 
+                        && orderByColumn.indexOf('(') == -1)
                 {
                     // find space pos relative to orderByColumn
                     spacePos = orderByColumn.indexOf(' ');
@@ -539,11 +539,11 @@ public abstract class SQLBuilder
      * adds the GroupBy-Columns from the criteria to the query
      * @param criteria the criteria from which the GroupBy-Columns are taken
      * @param query the query to which the GroupBy-Columns should be added
-     * @throws TorqueException if the GroupBy-Columns can not be processed 
+     * @throws TorqueException if the GroupBy-Columns can not be processed
      */
     private static final void processGroupBy(
             final Criteria crit,
-            final Query query) 
+            final Query query)
             throws TorqueException
     {
         UniqueList groupByClause = query.getGroupByClause();
@@ -579,11 +579,11 @@ public abstract class SQLBuilder
      * adds the Having-Columns from the criteria to the query
      * @param criteria the criteria from which the Having-Columns are taken
      * @param query the query to which the Having-Columns should be added
-     * @throws TorqueException if the Having-Columns can not be processed 
+     * @throws TorqueException if the Having-Columns can not be processed
      */
     private static final void processHaving(
             final Criteria crit,
-            final Query query) 
+            final Query query)
             throws TorqueException
     {
         Criteria.Criterion having = crit.getHaving();
@@ -625,7 +625,7 @@ public abstract class SQLBuilder
 
     /**
      * Returns the tablename which can be added to a From Clause.
-     * This takes care of any aliases that might be defined. 
+     * This takes care of any aliases that might be defined.
      * For example, if an alias "a" for the table AUTHOR is defined
      * in the Criteria criteria, getTableNameForFromClause("a", criteria)
      * returns "AUTHOR a".
@@ -637,8 +637,8 @@ public abstract class SQLBuilder
      *         if tableOrAliasName is an alias for a table name
      */
     public static final String getTableNameForFromClause(
-            final String tableName, 
-            final Criteria criteria) 
+            final String tableName,
+            final Criteria criteria)
     {
         String shortTableName = getUnqualifiedTableName(tableName);
 
@@ -664,13 +664,13 @@ public abstract class SQLBuilder
 
         return tableName;
     }
-    
+
     /**
      * Checks if the Tablename tableName is already contained in a from clause.
-     * If tableName and the tablenames in fromClause are generated by 
+     * If tableName and the tablenames in fromClause are generated by
      * getTablenameForFromClause(String, Criteria), (which they usually are),
-     * then different aliases for the same table are treated 
-     * as different tables: E.g. 
+     * then different aliases for the same table are treated
+     * as different tables: E.g.
      * fromClauseContainsTableName(fromClause, "table_a a") returns false if
      * fromClause contains only another alias for table_a ,
      * e.g. "table_a aa" and the unaliased tablename "table_a".
@@ -682,21 +682,21 @@ public abstract class SQLBuilder
      *         If tableName is null, true is returned.
      */
     public static final boolean fromClauseContainsTableName(
-            final UniqueList fromClause, 
-            final String tableName) 
+            final UniqueList fromClause,
+            final String tableName)
     {
-        if (tableName == null) 
+        if (tableName == null)
         {
-            // usually this function is called to see if tableName should be 
+            // usually this function is called to see if tableName should be
             // added to the fromClause. As null should not be added,
             // true is returned.
             return true;
         }
         for ( Iterator it = fromClause.iterator(); it.hasNext();)
         {
-            Query.FromElement fromElement 
+            Query.FromElement fromElement
                     = (Query.FromElement) it.next();
-            if (tableName.equals(fromElement.getTableName())) 
+            if (tableName.equals(fromElement.getTableName()))
             {
                 return true;
             }
@@ -718,20 +718,20 @@ public abstract class SQLBuilder
     private static final String addTableToFromClause(
             final String tableName,
             final Criteria criteria,
-            Query query) 
+            Query query)
     {
-        String tableNameForFromClause 
+        String tableNameForFromClause
                 = getTableNameForFromClause(tableName, criteria);
 
         UniqueList queryFromClause = query.getFromClause();
-        
+
         // it is important that this piece of code is executed AFTER
         // the joins are processed
         if (!fromClauseContainsTableName(
-            queryFromClause, 
+            queryFromClause,
             tableNameForFromClause))
         {
-            Query.FromElement fromElement 
+            Query.FromElement fromElement
                     = new Query.FromElement(
                             tableNameForFromClause, null, null);
             queryFromClause.add(fromElement);
@@ -740,7 +740,7 @@ public abstract class SQLBuilder
     }
 
     /**
-     * Inner Interface that defines the Callback method for 
+     * Inner Interface that defines the Callback method for
      * the Table creation loop.
      */
     public interface TableCallback
@@ -756,7 +756,7 @@ public abstract class SQLBuilder
     }
 
     /**
-     * Inner Interface that defines the Callback method for 
+     * Inner Interface that defines the Callback method for
      * the buildQuery Criterion evaluation
      */
     public interface QueryCallback

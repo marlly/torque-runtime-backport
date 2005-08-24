@@ -115,7 +115,7 @@ public class TorqueComponent
 
         try
         {
-            appRoot = (context == null) 
+            appRoot = (context == null)
                     ? null : (String) context.get("componentAppRoot");
         }
         catch (ContextException ce)
@@ -136,12 +136,12 @@ public class TorqueComponent
                 configFile = configFile.substring(1);
                 getLogger().debug("Config File changes to " + configFile);
             }
-            
+
             StringBuffer sb = new StringBuffer();
             sb.append(appRoot);
             sb.append('/');
             sb.append(configFile);
-            
+
             configFile = sb.toString();
         }
 
@@ -183,7 +183,7 @@ public class TorqueComponent
     public void stop()
     {
         getLogger().debug("stop()");
-        try 
+        try
         {
         	getTorque().shutdown();
         }

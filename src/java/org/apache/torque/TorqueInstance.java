@@ -136,7 +136,7 @@ public class TorqueInstance
         if (subConf == null || subConf.isEmpty())
         {
             String error = ("Invalid configuration. No keys starting with "
-                    + Torque.TORQUE_KEY 
+                    + Torque.TORQUE_KEY
                     + " found in configuration");
             log.error(error);
             throw new TorqueException(error);
@@ -161,11 +161,11 @@ public class TorqueInstance
 
         isInit = true;
     }
-    
-    
+
+
     /**
      * initializes the name of the default database
-     * @param conf the configuration representing the torque section 
+     * @param conf the configuration representing the torque section
      *        of the properties file
      * @throws TorqueException if the appropriate key is not set
      */
@@ -175,7 +175,7 @@ public class TorqueInstance
         // Determine default database name.
         defaultDBName =
                 conf.getString(
-                        Torque.DATABASE_KEY 
+                        Torque.DATABASE_KEY
                         + "."
                         + Torque.DEFAULT_KEY);
         if (defaultDBName == null)
@@ -183,7 +183,7 @@ public class TorqueInstance
             String error = "Invalid configuration: Key "
                     + Torque.TORQUE_KEY
                     + "."
-                    + Torque.DATABASE_KEY 
+                    + Torque.DATABASE_KEY
                     + "."
                     + Torque.DEFAULT_KEY
                     + " not set";
@@ -217,7 +217,7 @@ public class TorqueInstance
             log.error(error);
             throw new TorqueException(error);
         }
-        
+
         try
         {
             for (Iterator it = c.getKeys(); it.hasNext(); )
@@ -240,7 +240,7 @@ public class TorqueInstance
                       + "adapters", e);
             throw new TorqueException(e);
         }
-        
+
         if (adapterMap.get(Torque.getDefaultDB()) == null)
         {
             String error = "Invalid configuration : "
@@ -269,7 +269,7 @@ public class TorqueInstance
     {
         log.debug("initDataSourceFactories(" + conf + ")");
         dsFactoryMap = new HashMap();
-        
+
         Configuration c = conf.subset(DataSourceFactory.DSFACTORY_KEY);
         if (c == null || c.isEmpty())
         {
@@ -545,11 +545,11 @@ public class TorqueInstance
      * This method halts the IDBroker's daemon thread in all of
      * the DatabaseMap's. It also closes all SharedPoolDataSourceFactories
      * and PerUserPoolDataSourceFactories initialized by Torque.
-     * @exception TorqueException if a DataSourceFactory could not be closed 
-     *            cleanly. Only the first exception is rethrown, any following 
+     * @exception TorqueException if a DataSourceFactory could not be closed
+     *            cleanly. Only the first exception is rethrown, any following
      *            exceptions are logged but ignored.
      */
-    public synchronized void shutdown() 
+    public synchronized void shutdown()
         throws TorqueException
     {
         if (dbMaps != null)
@@ -568,9 +568,9 @@ public class TorqueInstance
         for (Iterator it = dsFactoryMap.keySet().iterator(); it.hasNext();)
         {
             Object dsfKey = it.next();
-            DataSourceFactory dsf 
+            DataSourceFactory dsf
                     = (DataSourceFactory) dsFactoryMap.get(dsfKey);
-            try 
+            try
             {
                 dsf.close();
                 it.remove();
@@ -578,7 +578,7 @@ public class TorqueInstance
             catch (TorqueException e)
             {
                 log.error("Error while closing the DataSourceFactory "
-                        + dsfKey, 
+                        + dsfKey,
                         e);
                 if (exception == null)
                 {
@@ -782,7 +782,7 @@ public class TorqueInstance
     }
 
     /**
-     * Returns a DataSourceFactory 
+     * Returns a DataSourceFactory
      *
      * @param name Name of the DSF to get
      * @return A DataSourceFactory object
@@ -790,9 +790,9 @@ public class TorqueInstance
     protected DataSourceFactory getDataSourceFactory(String name)
             throws TorqueException
     {
-    	if (!isInit()) 
+    	if (!isInit())
     	{
-            throw new TorqueException("Torque is not initialized.");    		
+            throw new TorqueException("Torque is not initialized.");
     	}
 
     	DataSourceFactory dsf = null;
@@ -805,7 +805,7 @@ public class TorqueInstance
         {
             throw new TorqueException(e);
         }
-            
+
         if (dsf == null)
         {
             throw new NullPointerException(

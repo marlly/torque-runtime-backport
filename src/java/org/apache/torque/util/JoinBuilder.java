@@ -39,10 +39,10 @@ public abstract class JoinBuilder
      * adds the Joins from the criteria to the query
      * @param criteria the criteria from which the Joins are taken
      * @param query the query to which the Joins should be added
-     * @throws TorqueException if the Joins can not be processed 
+     * @throws TorqueException if the Joins can not be processed
      */
     public static final void processJoins(
-            final DB db, 
+            final DB db,
             final DatabaseMap dbMap,
             final Criteria criteria,
             final Query query)
@@ -63,7 +63,7 @@ public abstract class JoinBuilder
             Criteria.Join join = (Criteria.Join) criteriaJoins.get(i);
             String leftColumn = join.getLeftColumn();
             String rightColumn = join.getRightColumn();
-                      
+
             // check if the column names make sense
             if (leftColumn.indexOf('.') == -1)
             {
@@ -73,19 +73,19 @@ public abstract class JoinBuilder
             {
                 SQLBuilder.throwMalformedColumnNameException("join", rightColumn);
             }
-      
-            // get the table names 
+
+            // get the table names
             // (and the alias names for them if necessary))
-            // Also check whether a case insensitive comparison is needed  
+            // Also check whether a case insensitive comparison is needed
             int dot = leftColumn.lastIndexOf('.');
             String leftTableName = leftColumn.substring(0, dot);
 
-            leftTableName = 
+            leftTableName =
                     SQLBuilder.getTableNameForFromClause(leftTableName, criteria);
 
             dot = rightColumn.lastIndexOf('.');
             String rightTableName = rightColumn.substring(0, dot);
-            String dbTableName 
+            String dbTableName
                     = criteria.getTableForAlias(rightTableName);
 
             if (dbTableName == null)
@@ -94,7 +94,7 @@ public abstract class JoinBuilder
             }
 
             String columnName = rightColumn.substring(
-                    dot + 1, 
+                    dot + 1,
                     rightColumn.length());
 
             boolean ignoreCase = (criteria.isIgnoreCase()
@@ -103,32 +103,32 @@ public abstract class JoinBuilder
                             .getColumn(columnName)
                             .getType()
                             instanceof String));
-            
+
             rightTableName = SQLBuilder.getTableNameForFromClause(
                     rightTableName, criteria);
-            
+
             // now check the join type and add the join to the
             // appropriate places in the query
             SqlEnum joinType  = join.getJoinType();
-                              
+
             if (joinType == null)
             {
-                // Do not treat join as explicit join, but add 
+                // Do not treat join as explicit join, but add
                 // the join condition to the where clauses
                 if (!SQLBuilder.fromClauseContainsTableName(
-                            queryFromClause, 
-                            leftTableName)) 
+                            queryFromClause,
+                            leftTableName))
                 {
-                    Query.FromElement fromElement 
+                    Query.FromElement fromElement
                             = new Query.FromElement(
                                     leftTableName, null, null);
                     queryFromClause.add(fromElement);
                 }
                 if (!SQLBuilder.fromClauseContainsTableName(
-                            queryFromClause, 
-                            rightTableName)) 
+                            queryFromClause,
+                            rightTableName))
                 {
-                    Query.FromElement fromElement 
+                    Query.FromElement fromElement
                             = new Query.FromElement(
                                     rightTableName, null, null);
                     queryFromClause.add(fromElement);
@@ -142,42 +142,42 @@ public abstract class JoinBuilder
                 // check whether the order of the join must be "reversed"
                 // This if the case if the fromClause already contains
                 // rightTableName
-                          
+
                 if (!SQLBuilder.fromClauseContainsTableName(
-                            queryFromClause, 
-                            rightTableName)) 
+                            queryFromClause,
+                            rightTableName))
                 {
                     if (!SQLBuilder.fromClauseContainsTableName(
-                                queryFromClause, 
+                                queryFromClause,
                                 leftTableName))
                     {
-                        Query.FromElement fromElement 
+                        Query.FromElement fromElement
                                 = new Query.FromElement(
                                         leftTableName, null, null);
                         queryFromClause.add(fromElement);
                     }
-                            
+
                     Query.FromElement fromElement
                             = new Query.FromElement(
                                     rightTableName, joinType,
                                     SqlExpression.buildInnerJoin(
-                                            leftColumn, rightColumn, 
+                                            leftColumn, rightColumn,
                                             ignoreCase, db));
                     queryFromClause.add(fromElement);
                 }
                 else
                 {
                     if (SQLBuilder.fromClauseContainsTableName(
-                                queryFromClause, 
-                                leftTableName)) 
+                                queryFromClause,
+                                leftTableName))
                     {
-                        // We cannot add an explicit join if both tables 
+                        // We cannot add an explicit join if both tables
                         // are alredy present in the from clause
                         throw new TorqueException(
                                 "Unable to create a " + joinType
-                                + "because both table names " 
-                                + leftTableName + " and " + rightTableName 
-                                + " are already in use. " 
+                                + "because both table names "
+                                + leftTableName + " and " + rightTableName
+                                + " are already in use. "
                                 + "Try to create an(other) alias.");
                     }
                     // now add the join in reverse order
@@ -187,7 +187,7 @@ public abstract class JoinBuilder
                             = new Query.FromElement(
                                     leftTableName, reverseJoinType(joinType),
                                     SqlExpression.buildInnerJoin(
-                                            rightColumn, leftColumn,  
+                                            rightColumn, leftColumn,
                                             ignoreCase, db));
                     queryFromClause.add(fromElement);
                 }
@@ -202,19 +202,19 @@ public abstract class JoinBuilder
      * table_a left join table_b <br />
      * produces the same result as  <br />
      * table_b right join table_a<br />
-     * So "left join" is the reverse of "right join" 
+     * So "left join" is the reverse of "right join"
      * @param joinType the join type to be reversed
      * @return the reversed join type
      */
     private static final SqlEnum reverseJoinType(
-            final SqlEnum joinType) 
+            final SqlEnum joinType)
     {
-        if (SqlEnum.LEFT_JOIN.equals(joinType)) 
+        if (SqlEnum.LEFT_JOIN.equals(joinType))
         {
             return SqlEnum.RIGHT_JOIN;
         }
-        else if (SqlEnum.RIGHT_JOIN.equals(joinType)) 
-        {  
+        else if (SqlEnum.RIGHT_JOIN.equals(joinType))
+        {
             return SqlEnum.LEFT_JOIN;
         }
         else

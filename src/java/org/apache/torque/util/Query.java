@@ -362,7 +362,7 @@ public class Query
         {
             stmt.append(postLimit);
         }
-            
+
         return stmt;
     }
 
@@ -376,16 +376,16 @@ public class Query
      */
     public static class FromElement
     {
-        
+
         /** the tablename, might contain an appended alias name */
         String tableName = null;
-          
+
         /** the type of the join, e.g. SqlEnum.LEFT_JOIN */
         SqlEnum joinType = null;
-          
+
         /** the join condition, e.g. table_a.id = table_b.a_id */
         String joinCondition = null;
-          
+
         /**
          * Constructor
          * @param tableName the tablename, might contain an appended alias name
@@ -396,59 +396,59 @@ public class Query
          *        or null if no excplicit join is wanted
          * @param joinCondition the join condition,
          *        e.g. table_a.id = table_b.a_id,
-         *        or null if no explicit join is wanted 
+         *        or null if no explicit join is wanted
          *        (In this case, the join condition is appended to the
          *         whereClause instead)
          */
-        public FromElement(String tableName, 
-                SqlEnum joinType, 
-                String joinCondition) 
+        public FromElement(String tableName,
+                SqlEnum joinType,
+                String joinCondition)
         {
             this.tableName = tableName;
             this.joinType = joinType;
             this.joinCondition = joinCondition;
         }
-          
-          
+
+
         /**
          * @return the join condition, e.g. table_a.id = table_b.a_id,
          *         or null if the join is not an explicit join
          */
-        public String getJoinCondition() 
+        public String getJoinCondition()
         {
             return joinCondition;
         }
-  
+
         /**
          * @return the type of the join, e.g. SqlEnum.LEFT_JOIN,
          *         or null if the join is not an explicit join
          */
-        public SqlEnum getJoinType() 
+        public SqlEnum getJoinType()
         {
             return joinType;
         }
-  
+
         /**
          * @return the tablename, might contain an appended alias name,
          *         e.g. <br />
          *         table_1<br />
          *         table_1 alias_for_table_1
-         *         
+         *
          */
-        public String getTableName() 
+        public String getTableName()
         {
             return tableName;
         }
-        
+
         /**
          * Returns a SQL representation of the element
          * @return a SQL representation of the element
-         */  
-        public String toString() 
+         */
+        public String toString()
         {
             StringBuffer result = new StringBuffer();
             if (joinType != null) {
-                result.append(joinType); 
+                result.append(joinType);
             }
             result.append(tableName);
             if (joinCondition != null) {

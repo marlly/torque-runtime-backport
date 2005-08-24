@@ -49,7 +49,7 @@
     <property name="templatePath" value="no_templatePath"/>
     <antcall target="test"/>
   </target>
-  
+
   <target
     name="test-ojb"
     description="run the testbed using ojb">
@@ -245,7 +245,7 @@
       target="ojb">
     </ant>
   </target>
-  
+
   <target
     name="test-ojb-compile">
     <mkdir dir="${torque.distDir}/bin/ojb"/>
@@ -258,9 +258,9 @@
       srcdir="${torque.distDir}/src/ojb">
       <classpath refid="classpath"/>
     </javac>
-    
+
   </target>
-  
+
 
   <!-- ============================================================== -->
   <!-- R U N T I M E  T E S T S                                       -->

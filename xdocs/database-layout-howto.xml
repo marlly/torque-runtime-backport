@@ -22,67 +22,67 @@
  </properties>
 
  <body>
- 
+
   <p>
-   This Howto is NOT meant as a complete guide of how to design a database. 
+   This Howto is NOT meant as a complete guide of how to design a database.
    On the contrary, it is meant as a kind of addon, in the sense of
    &quot;If I know in general how to design a databasein general, what do I have to
-   keep in mind if I use Torque to access that database&quot; 
+   keep in mind if I use Torque to access that database&quot;
   </p>
 
   <section name="Things not supported by Torque">
-   
+
    <subsection name="Column names">
-   
+
     <p>
      There are some column names which you can not use in Torque although
-     your database would support them. The reason is that they would 
+     your database would support them. The reason is that they would
      produce constants twice in the generated code. The column names which
      cannot be used are (case is ignored)
      <ul>
       <li>TABLE_NAME</li>
       <li>DATABASE_NAME</li>
-     </ul>     
+     </ul>
     </p>
-   
+
     <p>
-     Furthermore, it is recommended that you do not use words which have 
+     Furthermore, it is recommended that you do not use words which have
      a defined meaning in SQL as column names. Even if you can trick your
      database into using them, it is not sure whether Torque can do the same.
      And besides, even if it works for one database, if you ever decide
-     to use another database, you may run into trouble then. 
+     to use another database, you may run into trouble then.
     </p>
-     
+
    </subsection>
-   
+
   </section>
 
-  
+
   <section name="Design considerations">
-  
+
    <p>
-    These design considerations apply to the most common uses of a database. 
+    These design considerations apply to the most common uses of a database.
     In some cases where you have to meet very special challanges, there will
     be reasons not to follow the advice given here. But in general,
     you will be fine if you follow these guidelines.
    </p>
-   
+
    <subsection name="Primary keys">
-    
+
     <p>
-     For every table, you should create a primary key which has no meaning 
+     For every table, you should create a primary key which has no meaning
      in real life. The reasons for this are:
     </p>
-    
+
     <p>
-     You should use a primary key at all because it creates a well-defined 
-     link between the objects in the database and the objects in memory. 
+     You should use a primary key at all because it creates a well-defined
+     link between the objects in the database and the objects in memory.
      Often, one has to decide whether a java object in memory describes
      &quot;the same&quot; object as a certain row in the database. For example,
-     if you read an object from a database, change a field value and 
-     write it again to the database, you would usually want to update the 
+     if you read an object from a database, change a field value and
+     write it again to the database, you would usually want to update the
      row you read from. This is only possible if Torque can find the row
-     in the database from which the object originated. For this, the 
+     in the database from which the object originated. For this, the
      primary key is used in relational databases. If two java objects have
      the same primary key, they describe &quot;the same thing&quot; and refer
      to the same row in the database. If you do not have
@@ -90,30 +90,30 @@
      objects describe &quot;the same thing&quot;. You might run into not
      being able to update an object.
     </p>
-    
+
     <p>
-     Now that we know why we want to have a primary key at all, why should 
-     it have no meaning in real life ? This can be explained best by an 
-     example. Consider a table which holds manufactured parts. Each part 
+     Now that we know why we want to have a primary key at all, why should
+     it have no meaning in real life ? This can be explained best by an
+     example. Consider a table which holds manufactured parts. Each part
      has an unique serial number. So it is tempting to use the serial number
-     as a primary key. But now imagine that we have registered the wrong 
-     serial number for a certain part in the database. Remember that 
-     the primary key is used to decide &quot;is it the same object?&quot; 
+     as a primary key. But now imagine that we have registered the wrong
+     serial number for a certain part in the database. Remember that
+     the primary key is used to decide &quot;is it the same object?&quot;
      So we cannot change the serial number of a specified object without
-     making it another object. 
-    </p>  
-   
+     making it another object.
+    </p>
+
     <p>
      In Torque, this problem manifests itself in that there is no easy way
      to change the primary key of an object; you must trick Torque into it
      by using Torque's internals. This should be avoided if possible.
      If you use an additional primary key which
      has no meaning in real life, you do not run into that trouble.
-    </p>   
-   
+    </p>
+
    </subsection>
-   
-  </section> 
- 
+
+  </section>
+
  </body>
 </document>

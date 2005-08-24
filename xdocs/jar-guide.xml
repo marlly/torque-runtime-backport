@@ -29,22 +29,22 @@
 <p>
   The standard practice for using Torque has been to download the jar, unjar it
   to get the directory structure given in the <a href="user-guide.html">user
-  guide</a>, and  somehow either integrate your source tree and Torque's 
-  un-jared directory  structure. While doable, this was less than desirable, 
+  guide</a>, and  somehow either integrate your source tree and Torque's
+  un-jared directory  structure. While doable, this was less than desirable,
   especially when working with prespecified directory structures, such as that
   used by Maven.
 </p>
 
 <p>
-  Complex build scripts, such as <a href="http://scarab.tigris.org">Scarab's</a>, 
-  which dynamically unjar Torque during the build process and copy over all the 
-  correct files, can get around this, but having to re-develop or even copy such 
+  Complex build scripts, such as <a href="http://scarab.tigris.org">Scarab's</a>,
+  which dynamically unjar Torque during the build process and copy over all the
+  correct files, can get around this, but having to re-develop or even copy such
   capabilities on a project-by-project basis is undesirable do to the relative
   complexity.
 </p>
 
 <p>
-  Instead, it is possible to run Torque without un-jaring it. All that is needed 
+  Instead, it is possible to run Torque without un-jaring it. All that is needed
   is the venerable <code>build-torque.xml</code> and <code>build.properties</code>.
   Everything else can be read  from the classpath and outputted directly to the
   directories that are desired instead of the previous rigid structure.
@@ -56,8 +56,8 @@
 
 <p>
   Along with the <code>build-torque.xml</code> and <code>build.properties</code>,
-  you must ensure that Torque and all of it's dependencies are in the classpath. 
-  For a list of dependencies, please refer to 
+  you must ensure that Torque and all of it's dependencies are in the classpath.
+  For a list of dependencies, please refer to
   <a href="dependencies.html">dependencies.html</a>.
 </p>
 
@@ -69,9 +69,9 @@
 
 
 <p>
-  <strong>Note</strong>, if you set only the above properties, Torque will default 
+  <strong>Note</strong>, if you set only the above properties, Torque will default
   to using the old directory structure to read and output files from. This
-  maintains backwards compatibility, but is not always what is wanted. The next 
+  maintains backwards compatibility, but is not always what is wanted. The next
   section addresses telling Torque where to read and output files.
 </p>
 
@@ -81,7 +81,7 @@
 
 <p>
   The following directory properties allow you to control with a good deal of
-  granularity where Torque will read and output files. The table contains each 
+  granularity where Torque will read and output files. The table contains each
   of the properties, along with it's default value and description.
 </p>
 

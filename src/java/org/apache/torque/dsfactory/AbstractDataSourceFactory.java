@@ -60,15 +60,15 @@ public abstract class AbstractDataSourceFactory
     public static final String DEFAULTS_KEY = "defaults";
 
     /** "defaults.pool" Key for the configuration */
-    public static final String DEFAULT_POOL_KEY 
+    public static final String DEFAULT_POOL_KEY
             = DEFAULTS_KEY + "." + POOL_KEY;
 
     /** "defaults.connection" Key for the configuration */
-    public static final String DEFAULT_CONNECTION_KEY 
+    public static final String DEFAULT_CONNECTION_KEY
             = DEFAULTS_KEY + "." + CONNECTION_KEY;
 
     /** default schema name for the configuration */
-    public static final String DEFAULT_SCHEMA_KEY 
+    public static final String DEFAULT_SCHEMA_KEY
             = DEFAULTS_KEY + "." + SCHEMA_KEY;
 
 
@@ -131,7 +131,7 @@ public abstract class AbstractDataSourceFactory
             }
             else
             {
-                if ("password".equals(key)) 
+                if ("password".equals(key))
                 {
                     // do not log value of password
                     // for this, ConvertUtils.convert cannot be used
@@ -155,7 +155,7 @@ public abstract class AbstractDataSourceFactory
                     Object value =
                         ConvertUtils.convert(c.getString(property), propertyType);
                     PropertyUtils.setSimpleProperty(ds, property, value);
-    
+
                     if (log.isDebugEnabled())
                     {
                         log.debug("setSimpleProperty("
@@ -210,7 +210,7 @@ public abstract class AbstractDataSourceFactory
             }
         }
     }
-    
+
     /**
      * Initializes the ConnectionPoolDataSource.
      *
@@ -235,10 +235,10 @@ public abstract class AbstractDataSourceFactory
             Configuration conf = c.subset(DEFAULT_CONNECTION_KEY);
             applyConfiguration(conf, cpds);
         }
-            
+
         Configuration conf = configuration.subset(CONNECTION_KEY);
         applyConfiguration(conf, cpds);
-        
+
         return cpds;
     }
 
@@ -278,7 +278,7 @@ public abstract class AbstractDataSourceFactory
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public void initialize(Configuration configuration) 
+    public void initialize(Configuration configuration)
         throws TorqueException
     {
         if (configuration == null)

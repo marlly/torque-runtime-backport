@@ -33,10 +33,10 @@
   Now that you've generated your object model with
   Torque, and created a sample application, you are
   now ready to compile everything.  Again, Maven is used
-  to control the build process.  
+  to control the build process.
 </p>
 <p>
-  First, we need to tell maven where the java source 
+  First, we need to tell maven where the java source
   files are located. To do this, add the following section
   just after the <code>&lt;dependencies&gt;</code> of your
   <em>project.xml</em> which you created sooner on in the
@@ -49,9 +49,9 @@
   </build>
 ]]></source>
 
-<p>  
+<p>
   Afterwards, you can compile your jave source files
-  by typing the following in the top-level directory 
+  by typing the following in the top-level directory
   of your project:
 </p>
 
@@ -64,8 +64,8 @@ maven java:compile
   build without any errors.  All of the resulting Java
   class files are placed in the
   <em>target/classes</em> directory.  If the compiler
-  misses any external libraries, review the 
-  &lt;dependencies&gt; section in your 
+  misses any external libraries, review the
+  &lt;dependencies&gt; section in your
   <em>project.xml</em>.  Should you
   encounter other errors, go back and review your
   application code.
@@ -83,22 +83,22 @@ maven java:compile
   jars denoted in the &lt;dependencies&gt; section
   of your <em>project.xml</em>, and all of your
   application and object model classes located in
-  <em>target/classes</em>.  
+  <em>target/classes</em>.
 </p>
 
 <p>
-  Before compiling your application, 
+  Before compiling your application,
   maven will have downloaded all libraries
   your project depends on to the local maven repository.
   Gathering them from there is a cumbersome process.
-  To ease copying them into one place, we modify 
+  To ease copying them into one place, we modify
   Maven's build process a little.
   For this, you need to create a new file called
-  <em>maven.xml</em> in the top-level directory 
-  of your project. It needs to have the 
+  <em>maven.xml</em> in the top-level directory
+  of your project. It needs to have the
   following content:
 </p>
-  
+
 <source><![CDATA[
 <project xmlns:java="java" xmlns:deploy="deploy">
   <postGoal name="java:compile">
@@ -119,15 +119,15 @@ maven java:compile
 ]]></source>
 
 <p>
-  Now change into the target directory. In addition 
-  to the <em>classes</em> subdirectory which was 
+  Now change into the target directory. In addition
+  to the <em>classes</em> subdirectory which was
   already created in the first compilation run,
   you see that maven has generated an additional
-  <em>lib</em> directory which contains the needed 
+  <em>lib</em> directory which contains the needed
   libraries, and that maven also copied the
   Torque.properties file here.
 </p>
-  
+
 <p>
   Now everything is in one place, and you can start the
   application by typing
@@ -176,7 +176,7 @@ java -cp classes:lib/avalon-framework-4.1.4.jar:lib/commons-beanutils-1.7.0.jar:
 
   Booklist (should be empty):
 ]]></source>
-  
+
 <p>
   If your application throws an exception, it could be
   for one of many reasons, most of which are not very

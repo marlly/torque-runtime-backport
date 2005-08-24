@@ -98,7 +98,7 @@
     <column name="test_key" required="true" primaryKey="true" type="FLOAT" />
   </table>
 
-  <!-- TRQS143 Generated OM will not compile if table name is Base --> 
+  <!-- TRQS143 Generated OM will not compile if table name is Base -->
   <table name="BASE" javaName="BaseTable">
     <column name="BASE_ID_CODE" primaryKey="true" required="true"
             size="22" type="DECIMAL" javaName="Id"/>
@@ -115,7 +115,7 @@
     <column name="START_DATE" type="TIMESTAMP"/>
     <column name="END_DATE" type="TIMESTAMP"/>
   </table>
-  
+
   <!-- test for hypersonic -->
   <table name="NATIVE_TEST">
     <column name="NATIVE_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
@@ -126,13 +126,13 @@
     <column name="NAME" type="VARCHAR" size="250"/>
     <column name="FK_ID" required="true" type="INTEGER"/>
   </table>
-  
+
   <!-- TRQS159 Invalid syntaxes for Hypersonic when using indexes. -->
-  <table name="payment_invoice_map" 
+  <table name="payment_invoice_map"
          description="maps the many-to-many relationship between payments and invoices">
     <column name="payment_id" required="false" type="INTEGER"/>
     <column name="invoice_id" required="false" type="INTEGER"/>
-  	
+
     <index name="ix_uq_payment_invoice_map_pa_in">
       <index-column name="payment_id"/>
       <index-column name="invoice_id"/>
@@ -152,7 +152,7 @@
     <column name="AUTOINCREMENT_IDBROKER_ID" required="true" primaryKey="true" type="INTEGER" autoIncrement="true"/>
     <column name="NAME" type="VARCHAR" size="250"/>
   </table>
-  
+
   <!-- TRQS87  -->
 <!--
   <table name="reserved_words">
@@ -168,7 +168,7 @@
     <column name="bint_value" required="true" type="BOOLEANINT" />
     <column name="bchar_value" required="true" type="BOOLEANCHAR" />
   </table>
-  
+
   <!-- TRQS97 -->
   <table name="LEAGUES_OBJECT" description="Contains all leagues">
     <column name="LEAGUEID" primaryKey="true" required="true" type="TINYINT" javaType="object"/>
@@ -183,7 +183,7 @@
     <column name="LEAGUEYEAR" required="false" type="INTEGER" javaType="primitive"/>
     <column name="LEAGUESCORETYPE" required="false" type="SMALLINT" default="0" javaType="primitive"/>
   </table>
-  
+
   <!-- test primary keys which are foreign keys as well -->
   <table name="multi_pk_foreign_key" idMethod="none">
     <column name="id" primaryKey="true" required="true" type="INTEGER" />
@@ -197,7 +197,7 @@
 
   <table name="integer_pk">
     <column name="id" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="name" size="100" type="VARCHAR"/>        
+    <column name="name" size="100" type="VARCHAR"/>
   </table>
 
   <table name="bit_test" idMethod="none">
@@ -208,12 +208,12 @@
   <table name="blob_test">
     <column name="id" required="true" primaryKey="true" type="BIGINT" />
     <column name="blob_value" type="BLOB" required="false"/>
-  </table>  
+  </table>
 
   <table name="clob_test">
     <column name="id" required="true" primaryKey="true" type="SMALLINT" />
     <column name="clob_value" type="CLOB" required="false"/>
-  </table>  
+  </table>
 
   <!-- TRQS263 -->
   <table name="DATE_TEST" description="Table to test Date formats">
@@ -248,24 +248,24 @@
       primaryKey="true"
       type="INTEGER"
     />
-    <column 
-      name="CLASS_NAME" 
-      inheritance="single" 
-      type="CHAR" 
+    <column
+      name="CLASS_NAME"
+      inheritance="single"
+      type="CHAR"
       size="1">
-      <inheritance 
-        key="B" 
-        class="InheritanceChildB" 
+      <inheritance
+        key="B"
+        class="InheritanceChildB"
         extends="org.apache.torque.test.InheritanceTest"
       />
-      <inheritance 
-        key="C" 
-        class="InheritanceChildC" 
+      <inheritance
+        key="C"
+        class="InheritanceChildC"
         extends="org.apache.torque.test.InheritanceTest"
       />
-      <inheritance 
-        key="D" 
-        class="InheritanceChildD" 
+      <inheritance
+        key="D"
+        class="InheritanceChildD"
         extends="org.apache.torque.test.InheritanceChildC"
       />
     </column>
@@ -285,15 +285,15 @@
     <column
       name="PAYLOAD_C"
       type="VARCHAR"
-      size="100"    
+      size="100"
     />
     <column
       name="PAYLOAD_D"
       type="VARCHAR"
-      size="100"    
+      size="100"
     />
   </table>
-  
+
 
   <table name="LARGE_PK" idMethod="none" description="Table to test large Primary keys">
     <column

@@ -40,7 +40,7 @@ import java.text.SimpleDateFormat;
  */
 public class DBMM extends DB
 {
-    
+
     /** A specialized date format for MySQL. */
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
 

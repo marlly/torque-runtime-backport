@@ -627,7 +627,7 @@ public class LargeSelect implements Runnable, Serializable
 
         List returnResults;
 
-        synchronized (results) 
+        synchronized (results)
         {
             returnResults = new ArrayList(results.subList(fromIndex, toIndex));
         }
@@ -711,7 +711,7 @@ public class LargeSelect implements Runnable, Serializable
                 List tempResults
                         = BasePeer.getSelectResults(qds, size, false);
 
-                synchronized (results) 
+                synchronized (results)
                 {
                     for (int i = 0, n = tempResults.size(); i < n; i++)
                     {
@@ -1128,7 +1128,7 @@ public class LargeSelect implements Runnable, Serializable
         totalPages = -1;
         totalRecords = 0;
         // todo Perhaps store the oldPageNumber and immediately restart the
-        // query. 
+        // query.
         // oldPageNumber = currentPageNumber;
         currentPageNumber = 0;
         queryCompleted = false;
@@ -1173,7 +1173,7 @@ public class LargeSelect implements Runnable, Serializable
     }
 
     /**
-     * Set a search parameter.  If the value is <code>null</code> then the 
+     * Set a search parameter.  If the value is <code>null</code> then the
      * key will be removed from the parameters.
      *
      * @param name the search parameter key to set.
@@ -1213,7 +1213,7 @@ public class LargeSelect implements Runnable, Serializable
 
     /**
      * Provide something useful for debugging purposes.
-     * 
+     *
      * @return some basic information about this instance of LargeSelect.
      */
     public String toString()

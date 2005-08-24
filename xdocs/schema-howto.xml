@@ -37,7 +37,7 @@ part of the SQL standard. YMMV, however.</p>
 Torque has some rudimentary support for Database schemas when
 accessing a database. Schema names can either be specified when
 generating classes via the generator, or they can be specified
-in the runtime. Note that specifying explicit schema names both at 
+in the runtime. Note that specifying explicit schema names both at
 generate time and at runtime is not tested and most likely causes problems.
 </p>
 
@@ -70,7 +70,7 @@ torque.dsfactory.bar.schema = foo
 
 <p>
 If no schema is configured in the torque properties, Torque will not
-qualify its table names. 
+qualify its table names.
 </p>
 
 </section>
@@ -91,7 +91,7 @@ classes used).
 
 Torque.setSchema("bar", "foo");
 
-/* Reset the schema names (no longer qualify 
+/* Reset the schema names (no longer qualify
  * accesses to the tables of the "bar" datasource
  */
 Torque.setSchema("bar", null);
@@ -106,10 +106,10 @@ String barSchema = Torque.getSchema("bar");
   <section name="Using Schema Names at generate time">
 
     <p>
-      To define the schema of a table in the schema.xml, use the 
-      fully qualified table name as name attribute in the &lt;table&gt; 
+      To define the schema of a table in the schema.xml, use the
+      fully qualified table name as name attribute in the &lt;table&gt;
       element of your schema.xml.
-      For example, to use the schema "bookstore" for the table "book", 
+      For example, to use the schema "bookstore" for the table "book",
       use the following table definition:
     </p>
 
@@ -121,9 +121,9 @@ String barSchema = Torque.getSchema("bar");
     </source>
 
     <p>
-      If the standard naming method is used, the resulting 
-      java class will be named BookstoreBook. If you want to omit 
-      the schema name in the java name 
+      If the standard naming method is used, the resulting
+      java class will be named BookstoreBook. If you want to omit
+      the schema name in the java name
       (i.e. the resulting java class should be named "Book"),
       you can either use the javaName attribute of the table definition:
     </p>
@@ -136,7 +136,7 @@ String barSchema = Torque.getSchema("bar");
     </source>
 
     <p>
-      or you can use the attribute 
+      or you can use the attribute
       defaultJavaNamingMethod="underscoreOmitSchema"
       in the database definition:
     </p>
@@ -149,13 +149,13 @@ String barSchema = Torque.getSchema("bar");
       </source>
 
     <p>
-      Note that the defaultJavaNamingMethod attribute of a table 
-      will only affect the column names in the table and cannot 
+      Note that the defaultJavaNamingMethod attribute of a table
+      will only affect the column names in the table and cannot
       be used to change the name of the table itself.
     </p>
 
     <p>
-      If you use a sequence to autogenerate ids, the sequence will be generated in the same schema 
+      If you use a sequence to autogenerate ids, the sequence will be generated in the same schema
       as the table.
     </p>
 

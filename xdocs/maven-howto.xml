@@ -58,7 +58,7 @@
   <p>
     The advent of Maven allows Torque to be used in a much simpler manner. With
     the Maven plugin, absolutely no Torque-related resources (except the Torque
-    jar file iteself) are required to be locally installed in each project. 
+    jar file iteself) are required to be locally installed in each project.
     Instead, the plugin will automatically download any required resources for
     you.
   </p>
@@ -82,25 +82,25 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   <p>
     Building the maven plugin from source is relatively easy - you might want
     to do this if there are fixes or enhancements in SVN that you want to make
-    use of.  Another reason you might want to do this is if you wish to 
-    make your own copy of the plugin that includes a set of customized 
+    use of.  Another reason you might want to do this is if you wish to
+    make your own copy of the plugin that includes a set of customized
     generator templates to modify the object model class files that will be
     produced.
   </p>
 
   <p>
     The first thing to do is to check out Torque from SVN (make sure you use
-    branch tag you desire).  If you want to modify any of the generator 
-    templates you would do this before running <code>maven 
-    plugin:install</code> from the <code>src/maven-plugin</code> directory. 
-    This will jar together the various plugin files copy it into your 
-    <code>${maven.home}/plugins</code> directory.  
+    branch tag you desire).  If you want to modify any of the generator
+    templates you would do this before running <code>maven
+    plugin:install</code> from the <code>src/maven-plugin</code> directory.
+    This will jar together the various plugin files copy it into your
+    <code>${maven.home}/plugins</code> directory.
   </p>
 
   <p>
-    For consistency you should also install the corresponding 
+    For consistency you should also install the corresponding
     generator and runtime jars in your local maven repository by running
-    <code>maven jar:install</code> from the <code>src/generator</code> 
+    <code>maven jar:install</code> from the <code>src/generator</code>
     and <code>src</code> directories respectively.
   </p>
 
@@ -109,8 +109,8 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
 <section name="Configuration">
 
   <p>
-    The Torque Maven plugin is configured via properties defined in your 
-    project.properties file.  See the 
+    The Torque Maven plugin is configured via properties defined in your
+    project.properties file.  See the
     <a href="maven-plugin/properties.html">properties reference</a> for
     details on the various properties that can be configured.
   </p>
@@ -120,7 +120,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   <p>
     Instead of relying on the typical <code>build.properties</code>, the Maven
     plugin uses the project-wide settings in the <code>project.properties</code>
-    file.  
+    file.
   </p>
 
   <p>
@@ -130,7 +130,7 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   </p>
 
   <p>
-    
+
     Here is a sample configuration from <code>project.properties</code>:
 
 <source><![CDATA[
@@ -156,7 +156,7 @@ torque.database.host = localhost
 ]]></source>
 
   </p>
-  
+
 </subsection>
 
 

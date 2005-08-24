@@ -42,17 +42,17 @@
 </p>
 
 <p>
-  In this tutorial, it is assumed that you have experience 
+  In this tutorial, it is assumed that you have experience
   in programming in Java, and that you have some experience
   using JDBC (e.g. you should know what a jdbc driver and a
   connection URL is).
-  Although <a href="http://maven.apache.org/">Maven</a> 
-  is heavily used in this tutorial, it is not assumed that 
+  Although <a href="http://maven.apache.org/">Maven</a>
+  is heavily used in this tutorial, it is not assumed that
   you have any experience in using it.
 </p>
 
 <p>
-  For each step in the tutorial, user comments are available 
+  For each step in the tutorial, user comments are available
   in the
   <a href="http://wiki.apache.org/db-torque/">Torque Wiki</a>,
   see the links at the bottom of each page.
@@ -62,28 +62,28 @@
 </p>
 
 <p>
-  If you are using Torque for the first time, you should 
+  If you are using Torque for the first time, you should
   stick very closely to the example provided in the Tutorial,
-  and get the sample application running as is. 
-  If you play around, there are quite a few places where 
+  and get the sample application running as is.
+  If you play around, there are quite a few places where
   things can go wrong, and is not always clear why they go wrong.
   Errors are much easier to find when you can pinpoint
-  the source of the error by 
+  the source of the error by
   &quot;Ok, it went wrong when I changed foo&quot;.<br />
-  Once you got a running example, you can (and should) still 
-  play around to see whether Torque can satisfy your particular 
+  Once you got a running example, you can (and should) still
+  play around to see whether Torque can satisfy your particular
   needs.
 </p>
 
 <p>
   The example used throughout this tutorial is based on an
-  email sent to the turbine-user mailing list by 
+  email sent to the turbine-user mailing list by
   Steven F. Davis called
   <a href="http://mail-archives.apache.org/mod_mbox/jakarta-turbine-user/200109.mbox/%3cBCAC8D6E905D234C84A49D1524A19CD1044FF7@bemail.BEDOMAIN.BEAP.COM%3e">
   torque outside turbine - detailed example (long)</a>.
   It has subsequently been updated for Turbine 3.1 which
   separates the <a href="../generator/">generator</a> from
-  the <a href="../">runtime</a> and provides a 
+  the <a href="../">runtime</a> and provides a
   <a href="../maven-plugin/">maven-plugin</a> for executing
   the generator using <a href="http://maven.apache.org/">
   Maven</a>.
@@ -101,7 +101,7 @@
 
 <section name="User Comments">
   <a href="http://wiki.apache.org/db-torque/TutorialUserComments">User comments</a>
-  for the tutorial as a whole and this page  
+  for the tutorial as a whole and this page
 </section>
 
   </body>

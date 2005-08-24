@@ -31,8 +31,8 @@ import org.apache.torque.TorqueException;
  *
  * <p>
  * This can be used to handle cases where transaction support is optional.
- * The second parameter of beginOptionalTransaction will determine with a 
- * transaction is used or not. 
+ * The second parameter of beginOptionalTransaction will determine with a
+ * transaction is used or not.
  * If a transaction is not used, the commit and rollback methods
  * do not have any effect. Instead it simply makes the logic easier to follow
  * by cutting down on the if statements based solely on whether a transaction
@@ -178,17 +178,17 @@ public class Transaction
      * Roll back a transaction without throwing errors if they occur.
      * A null Connection argument is logged at the debug level and other
      * errors are logged at warn level.
-     * 
+     *
      * @param con The Connection for the transaction.
      * @see rollback
      */
-    public static void safeRollback(Connection con) 
+    public static void safeRollback(Connection con)
     {
-        if (con == null) 
+        if (con == null)
         {
             log.debug("called safeRollback with null argument");
         }
-        else 
+        else
         {
             try
             {
@@ -198,6 +198,6 @@ public class Transaction
             {
                 log.warn("An error occured during rollback.", e);
             }
-        }   
+        }
     }
 }

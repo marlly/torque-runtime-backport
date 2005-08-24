@@ -26,31 +26,31 @@
   <section name="Oracle Howto" >
 
     <p>
-      Saravana Kannan is maintaining a patched version of Village that 
-      supports Oracle LOBs: 
-      <a href="https://sweb.uky.edu/~skkann2/village/index.html">Village 2.0 
+      Saravana Kannan is maintaining a patched version of Village that
+      supports Oracle LOBs:
+      <a href="https://sweb.uky.edu/~skkann2/village/index.html">Village 2.0
       Patched for Oracle LOBs - For use with Torque 3.1 and later</a>
     </p>
-    
+
     <p>
-      The data type TIME only has day accuracy for Oracle. This is due to the 
-      underlying village library and the fact that oracle does not support 
+      The data type TIME only has day accuracy for Oracle. This is due to the
+      underlying village library and the fact that oracle does not support
       a SQL type TIME.
       If you are using Oracle 9i and later, you can use the type TIMESTAMP
       instead which gives you millisecond accuracy.
     </p>
-    
+
     <subsection name="Oracle versions">
       <p>
-        This version of Torque is optimized for Oracle 9i and later. 
+        This version of Torque is optimized for Oracle 9i and later.
         The following issues exist for older versions of Oracle:
       </p>
-     
+
       <p>
         The data type TIMESTAMP is not supported up to and including
-        Oracle 8.1.7. Either use the types DATE or TIME instead of TIMESTAMP 
-        or change the following line in the class 
-        org.apache.torque.engine.platform.PlatformOracleImpl 
+        Oracle 8.1.7. Either use the types DATE or TIME instead of TIMESTAMP
+        or change the following line in the class
+        org.apache.torque.engine.platform.PlatformOracleImpl
         in the generator source
       </p>
 
@@ -60,7 +60,7 @@ setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "TIMESTAMP"));</source>
       <p>
         to
       </p>
-      
+
       <source>
 setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "DATE"));</source>
 
@@ -69,7 +69,7 @@ setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "DATE"));</source>
         However, both possibilities will give you only day accuracy for the
         data types DATE, TIME and TIMESTAMP
       </p>
-      
+
     </subsection>
 
   </section>
@@ -78,10 +78,10 @@ setSchemaDomainMapping(new Domain(SchemaType.TIMESTAMP, "DATE"));</source>
 <section name="Introductory note for the following sections">
 
 <p>
-The following part of this HOWTO was written some time ago and was 
-targeted at Oracle 8i and the version of Torque that was coupled with the 
+The following part of this HOWTO was written some time ago and was
+targeted at Oracle 8i and the version of Torque that was coupled with the
 <a href="http://jakarta.apache.org/turbine/">Turbine</a> application framework.
-Contributions towards updating the information below can be submitted to the 
+Contributions towards updating the information below can be submitted to the
 <a href="mailto:torque-dev@db.apache.org">Torque Dev mailing list</a>.
 </p>
 
@@ -92,7 +92,7 @@ Contributions towards updating the information below can be submitted to the
 <p>
 This HOWTO aims to be a simple guide to make Turbine run with an existing
 Oracle 8i database. The process of making Turbine run is not covered in
-this guide, proceed to the 
+this guide, proceed to the
 <a href="http://jakarta.apache.org/turbine/">Turbine</a> site for
 help on how to install Turbine.
 </p>

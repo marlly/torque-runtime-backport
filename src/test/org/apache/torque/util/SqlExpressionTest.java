@@ -25,7 +25,7 @@ import org.apache.torque.adapter.DBFactory;
 
 /**
  * Tests for SqlExpression
- * 
+ *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
@@ -33,7 +33,7 @@ import org.apache.torque.adapter.DBFactory;
 public class SqlExpressionTest extends TestCase
 {
     private DB db = null;
-    
+
 
         /**
          * Constructor for SqlExpressionTest.
@@ -73,7 +73,7 @@ public class SqlExpressionTest extends TestCase
          */
         public void testBuildInnerJoinStringStringbooleanDB()
         {
-        String result = SqlExpression.buildInnerJoin("TA.COLA", "TB.COLB", 
+        String result = SqlExpression.buildInnerJoin("TA.COLA", "TB.COLB",
                 true, db);
         assertEquals(result, "TA.COLA=TB.COLB");
         }
@@ -84,7 +84,7 @@ public class SqlExpressionTest extends TestCase
         public void testBuildInStringObjectSqlEnumbooleanDB()
         {
         String[] values = new String[] { "42", "43", "44" };
-        String result = SqlExpression.buildIn("COL", values, SqlEnum.IN, 
+        String result = SqlExpression.buildIn("COL", values, SqlEnum.IN,
                 true, db);
         // It seems the order of the values is different for jdk1.3 vs 1.4
         // In any case, the order is not significant.
@@ -99,7 +99,7 @@ public class SqlExpressionTest extends TestCase
             assertEquals(result, "COL IN ('43','44','42')");
         }
         }
-    
+
     public void testLargeBuildInStringObjectSqlEnumbooleanDB()
     {
         int size = 10000;
@@ -109,10 +109,10 @@ public class SqlExpressionTest extends TestCase
             Array.set(values, i, String.valueOf(i));
         }
         long start = System.currentTimeMillis();
-        String result = SqlExpression.buildIn("COL", values, SqlEnum.IN, 
+        String result = SqlExpression.buildIn("COL", values, SqlEnum.IN,
                 true, db);
         long end =  System.currentTimeMillis();
         System.out.println("large buildIn took " + (end - start) + " milliseconds");
     }
-    
+
 }

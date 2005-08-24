@@ -51,7 +51,7 @@ public abstract class LimitHelper
         {
             // If we hit a database type, that is able to do native
             // limiting, we must set the criteria values to -1 and 0
-            // afterwards. Reason is, that else theexecuteQuery 
+            // afterwards. Reason is, that else theexecuteQuery
             // method tries to do the limiting using Village
             //
             switch (db.getLimitStyle())
@@ -91,7 +91,7 @@ public abstract class LimitHelper
             int offset, int limit)
     {
         StringBuffer limitStringBuffer = new StringBuffer();
-        
+
         if (offset > 0)
         {
             limitStringBuffer.append(offset)
@@ -156,11 +156,11 @@ public abstract class LimitHelper
      *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
      *     <= offset + limit
      * </pre>
-     * 
+     *
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
-     */ 
+     */
     private static final void generateOracleLimits(Query query,
             int offset, int limit)
     {
@@ -206,11 +206,11 @@ public abstract class LimitHelper
      *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
      *     <= offset + limit
      * </pre>
-     * 
+     *
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
-     */ 
+     */
     private static final void generateDB2Limits(Query query,
             int offset, int limit)
     {

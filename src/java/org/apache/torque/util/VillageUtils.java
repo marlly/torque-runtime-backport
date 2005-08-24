@@ -162,7 +162,7 @@ public abstract class VillageUtils
      * @param rec The Village Record
      * @param colName The name of the Column in the Record
      */
-    public static final void setVillageValue(final Criteria crit, 
+    public static final void setVillageValue(final Criteria crit,
             final String key,
             final Record rec,
             final String colName)

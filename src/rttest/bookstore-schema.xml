@@ -17,8 +17,8 @@
 <!DOCTYPE database SYSTEM "http://db.apache.org/torque/dtd/database_3_2.dtd">
 
 
-<database 
-  name="@DATABASE_DEFAULT@" 
+<database
+  name="@DATABASE_DEFAULT@"
   defaultIdMethod="@DATABASE_ID_METHOD@">
 
   <!-- =================================================== -->
@@ -87,7 +87,7 @@
   <!-- =================================================== -->
 
   <!-- TRQS51 Datadump does not recognize null columns properly -->
-  <table name="NULL_VALUE_TABLE" 
+  <table name="NULL_VALUE_TABLE"
          description="table containing null values to test datadump">
     <column name="NULL_VALUE_TABLE_ID" primaryKey="true" required="true" type="INTEGER"/>
     <column name="number1" type="INTEGER"/>
@@ -97,7 +97,7 @@
     <column name="text2" type="VARCHAR" size="20"/>
     <column name="number_obj1" type="INTEGER" javaType="object"/>
     <column name="number_obj2" type="INTEGER" javaType="object"/>
-  	
+
   </table>
 
 
@@ -255,14 +255,14 @@
   <table name="MULTIPK_SELF_REFTABLE" idMethod="none">
     <column name="COL1" primaryKey="true" required="true" type="DECIMAL"/>
     <column name="COL2" primaryKey="true" required="true" type="DECIMAL"/>
-            
+
     <column name="PARENT_COL1" required="true" type="DECIMAL"/>
     <column name="PARENT_COL2" required="true" type="DECIMAL"/>
-            
+
     <foreign-key foreignTable="MULTIPK_SELF_REFTABLE">
       <reference foreign="COL1" local="PARENT_COL1"/>
       <reference foreign="COL2" local="PARENT_COL2"/>
     </foreign-key>
   </table>
-  
+
 </database>

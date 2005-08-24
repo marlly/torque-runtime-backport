@@ -36,10 +36,10 @@ public interface DataSourceFactory
 
     /**
      *  Key for the configuration which contains the fully qualified name
-     *  of the factory implementation class 
+     *  of the factory implementation class
      */
     public static final String FACTORY_KEY = "factory";
-    
+
     /**
      * @return the <code>DataSource</code> configured by the factory.
      * @throws TorqueException if the source can't be returned
@@ -53,7 +53,7 @@ public interface DataSourceFactory
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    void initialize(Configuration configuration) 
+    void initialize(Configuration configuration)
         throws TorqueException;
 
     /**
@@ -73,18 +73,18 @@ public interface DataSourceFactory
     String getSchema();
 
     /**
-     * A hook which is called when the resources of the associated DataSource 
+     * A hook which is called when the resources of the associated DataSource
      * can be released.
-     * After close() is called, the other methods may not work any more 
+     * After close() is called, the other methods may not work any more
      * (e.g. getDataSource() might return null).
-     * It is not guaranteed that this method does anything. For example, 
+     * It is not guaranteed that this method does anything. For example,
      * we do not want to close connections retrieved via JNDI, so the
-     * JndiDataSouurceFactory does not close these connections  
-     * 
+     * JndiDataSouurceFactory does not close these connections
+     *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
     void close()
         throws TorqueException;
-    
+
 }

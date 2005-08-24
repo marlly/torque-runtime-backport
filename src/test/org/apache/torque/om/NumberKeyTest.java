@@ -23,13 +23,13 @@ import junit.framework.TestCase;
 
 /**
  * Currently just tests the equality of NumberKey.
- * 
+ *
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @version $Id$
  */
 public class NumberKeyTest extends TestCase
 {
-    
+
     /** Test value. */
     private NumberKey n1a = new NumberKey(1);
     /** Test value. */
@@ -38,17 +38,17 @@ public class NumberKeyTest extends TestCase
     private NumberKey n1c = new NumberKey(1);
     /** Test value. */
     private NumberKey n2a = new NumberKey(2);
-    
+
     /**
      * Simple constructor.
-     * 
+     *
      * @param name the name of the test to execute
      */
     public NumberKeyTest(String name)
     {
         super(name);
     }
-    
+
     /**
      * Test a.equals(a)
      */
@@ -56,7 +56,7 @@ public class NumberKeyTest extends TestCase
     {
         Assert.assertTrue(n1a.equals(n1a));
     }
-    
+
     /**
      * Test a.equals(b) = b.equals(a)
      */
@@ -64,7 +64,7 @@ public class NumberKeyTest extends TestCase
     {
         Assert.assertTrue(n1a.equals(n1b));
         Assert.assertTrue(n1b.equals(n1a));
-        
+
         Assert.assertTrue(!"1".equals(n1a));
         // As this used to give false, i.e. n1a was considered equal to "1"
         // it can lead to difficult to find bugs if it is immediately
@@ -81,7 +81,7 @@ public class NumberKeyTest extends TestCase
         Assert.assertTrue(!n1a.equals(new Integer(1)));
         Assert.assertTrue(!new Integer(1).equals(n1a));
     }
-    
+
     /**
      * Test a.equals(b) = b.equals(c) = c.equals(a)
      */
@@ -91,7 +91,7 @@ public class NumberKeyTest extends TestCase
         Assert.assertTrue(n1b.equals(n1c));
         Assert.assertTrue(n1c.equals(n1a));
     }
-    
+
     /**
      * Test !a.equals(null)
      */
@@ -99,7 +99,7 @@ public class NumberKeyTest extends TestCase
     {
         Assert.assertTrue(!n1a.equals(null));
     }
-    
+
     /**
      * Test sorting.
      */
@@ -120,5 +120,5 @@ public class NumberKeyTest extends TestCase
     {
         NumberKey key = new NumberKey(9900000000000001L);
         assertEquals("9900000000000001", key.toString());
-    }    
+    }
 }

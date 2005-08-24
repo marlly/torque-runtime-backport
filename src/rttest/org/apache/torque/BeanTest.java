@@ -36,17 +36,17 @@ import org.apache.torque.util.Criteria;
 public class BeanTest extends BaseRuntimeTestCase
 {
     public static final String AUTHOR_1_NAME = "Joshua Bloch";
-    
+
     public static final int AUTHOR_1_ID = 123;
-       
+
     public static final String BOOK_1_TITLE = "Effective Java";
-    
+
     public static final String BOOK_1_ISBN = "0-618-12902-2";
-    
+
     public static final int BOOK_1_ID = 456;
 
     public static final String AUTHOR_2_NAME = "W. Stevens";
-           
+
     /**
      * Creates a new instance.
      */
@@ -68,15 +68,15 @@ public class BeanTest extends BaseRuntimeTestCase
         Author author = new Author();
         author.setName(AUTHOR_1_NAME);
         author.setAuthorId(AUTHOR_1_ID);
-        
+
         AuthorBean authorBean = author.getBean();
-        assertTrue("bean.getName() is " + authorBean.getName() 
+        assertTrue("bean.getName() is " + authorBean.getName()
                 + " should be " + author.getName(),
                 author.getName().equals(authorBean.getName()));
-        assertTrue("bean.getId() is " + authorBean.getAuthorId() 
+        assertTrue("bean.getId() is " + authorBean.getAuthorId()
                 + " should be " + AUTHOR_1_ID,
                 author.getAuthorId() == authorBean.getAuthorId());
-        
+
         Author authorFromBean = Author.createAuthor(authorBean);
         assertTrue("author from bean has name " + authorFromBean.getName()
                 + " should be " + author.getName(),
@@ -85,7 +85,7 @@ public class BeanTest extends BaseRuntimeTestCase
                 + " should be " + author.getAuthorId(),
                 author.getAuthorId() == authorBean.getAuthorId());
     }
-    
+
     /**
      * tests whether object relations are transferred correctly,
      * if two objects refer to each other
@@ -94,30 +94,30 @@ public class BeanTest extends BaseRuntimeTestCase
     {
         Author author = new Author();
         author.setAuthorId(AUTHOR_1_ID);
-      
+
         Book book = new Book();
         book.setBookId(BOOK_1_ID);
-      
+
         author.addBook(book);
         book.setAuthor(author);
-        
+
         // check one roundtrip from author
         assertTrue("author from book should be the same object as author",
                 author == book.getAuthor());
-        
+
         AuthorBean authorBean = author.getBean();
         BookBean bookBean = (BookBean) authorBean.getBookBeans().get(0);
         assertTrue("authorBean from BookBean should be the same "
                 + "object as authorBean",
                 bookBean.getAuthorBean() == authorBean);
-        
+
         author = Author.createAuthor(authorBean);
         book = (Book) author.getBooks().get(0);
-        
+
         assertTrue("author from book should be the same object as author "
                 + "after creating from bean",
                 author == book.getAuthor());
-        
+
         // check one roundtrip from book
         assertTrue("book from author should be the same object as book",
                 book == author.getBooks().get(0));
@@ -135,34 +135,34 @@ public class BeanTest extends BaseRuntimeTestCase
                 + "after creating from bean",
                 author.getBooks().get(0) == book);
     }
- 
+
     /**
      * tests whether object relations are transferred correctly,
      * if there is no mutual reference between objects
      * @throws Exception
      */
-    public void testDifferentObjectRelations() throws Exception 
+    public void testDifferentObjectRelations() throws Exception
     {
         // create a relation chain:
         //
         //      getBooks()  getAuthor()          getBooks()
-        //         |            |                    |   
+        //         |            |                    |
         // author ----> book -----> differentAuthor ---> differentBook
         Author author = new Author();
         author.setAuthorId(AUTHOR_1_ID);
 
         Book book = new Book();
         book.setBookId(BOOK_1_ID);
-        
+
         Author differentAuthor = new Author();
         author.setAuthorId(AUTHOR_1_ID);
 
         author.addBook(book);
         book.setAuthor(differentAuthor);
-        
+
         Book differentBook = new Book();
         book.setBookId(BOOK_1_ID);
-        
+
         differentAuthor.addBook(differentBook);
 
         // check one roundtrip from author
@@ -183,7 +183,7 @@ public class BeanTest extends BaseRuntimeTestCase
                 author != book.getAuthor());
 
         // check one roundtrip from book
-        assertTrue("book from differentAuthor should not be " 
+        assertTrue("book from differentAuthor should not be "
                 + "the same object as book",
                 book != differentAuthor.getBooks().get(0));
 
@@ -207,63 +207,63 @@ public class BeanTest extends BaseRuntimeTestCase
         Criteria criteria = new Criteria();
         criteria.add(BookPeer.BOOK_ID, (Long) null, Criteria.NOT_EQUAL);
         BookPeer.doDelete(criteria);
-        
+
         criteria = new Criteria();
         criteria.add(AuthorPeer.AUTHOR_ID, (Long) null, Criteria.NOT_EQUAL);
         AuthorPeer.doDelete(criteria);
-        
+
         Author author = new Author();
         author.setName(AUTHOR_1_NAME);
         author.save();
-        
+
         assertFalse("isModified() should return false after save",
                 author.isModified());
         assertFalse("isNew() should return false after save",
                 author.isNew());
-        
+
         AuthorBean authorBean = author.getBean();
-        
+
         assertFalse("bean.isModified() should return false after save "
                 + "and bean creation",
                 authorBean.isModified());
         assertFalse("bean.isNew() should return false after save "
                 + "and bean creation",
                 authorBean.isNew());
-        
+
         author = Author.createAuthor(authorBean);
-        
+
         assertFalse("isModified() should return false after save "
                 + "and bean roundtrip",
                 author.isModified());
         assertFalse("isNew() should return false after save "
                 + "and bean rounddtrip",
                 author.isNew());
-        
+
         authorBean.setName(AUTHOR_2_NAME);
         assertTrue("bean.isModified() should return true after it was modified",
                 authorBean.isModified());
-        assertFalse("bean.isNew() should still return false " 
+        assertFalse("bean.isNew() should still return false "
                 + "after bean creation and modification",
                 authorBean.isNew());
-        
+
         author = Author.createAuthor(authorBean);
         assertTrue("isModified() should return true after creation of object "
                 + "from modified bean",
                 author.isModified());
-        
+
         author.save();
-        
+
         List authorList = AuthorPeer.doSelect(new Criteria());
         Author readAuthor = (Author) authorList.get(0);
-        assertEquals("name from read Author is " + readAuthor.getName() 
+        assertEquals("name from read Author is " + readAuthor.getName()
                 +" but should be " + authorBean.getName(),
                 readAuthor.getName(),
                 authorBean.getName());
-        
+
         BookBean bookBean = new BookBean();
         bookBean.setTitle(BOOK_1_TITLE);
         bookBean.setIsbn(BOOK_1_ISBN);
-        
+
         Book book = Book.createBook(bookBean);
         assertTrue("isModified() should return true after creation of object "
                 + " from new bean",
@@ -273,9 +273,9 @@ public class BeanTest extends BaseRuntimeTestCase
                 book.isNew());
         book.setAuthor(author);
         book.save();
-        
+
         List bookList = BookPeer.doSelect(new Criteria());
-        assertTrue("Ther should be one book in DB but there are " 
+        assertTrue("Ther should be one book in DB but there are "
                 + bookList.size(),
                 bookList.size() == 1);
     }

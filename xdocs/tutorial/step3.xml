@@ -37,11 +37,11 @@
 </p>
 
 <p>
-  Note: If you are yet to jump aboard the Maven ship you can 
-  download the torque-gen archive and make use of the Ant build 
+  Note: If you are yet to jump aboard the Maven ship you can
+  download the torque-gen archive and make use of the Ant build
   file <code>build-torque.xml</code> contained therein. Some hints
-  about this can be found in the 
-  <a href="../user-guide.html#Generator_with_the_Ant_build_file">User Guide</a>. 
+  about this can be found in the
+  <a href="../user-guide.html#Generator_with_the_Ant_build_file">User Guide</a>.
 </p>
 
 </section>
@@ -85,9 +85,9 @@ maven torque
 </p>
 
 <p>
-  The generated Java classes are located in the 
-  <em>src/java</em> directory and will be in a 
-  directory hierarchy matching that of the 
+  The generated Java classes are located in the
+  <em>src/java</em> directory and will be in a
+  directory hierarchy matching that of the
   <code>torque.targetPackage</code> you
   specified in <em>project.properties</em>.
   These are the files that will be compiled into your
@@ -95,8 +95,8 @@ maven torque
 </p>
 
 <p>
-  The generated SQL files are located in the 
-  <em>target/sql</em> directory.  
+  The generated SQL files are located in the
+  <em>target/sql</em> directory.
   For each database schema in your
   <em>src/schema</em> directory, there will be a
   corresponding file with a <em>.sql</em> extension
@@ -108,11 +108,11 @@ maven torque
 
 <p>
   To change the directory where the classes are generated,
-  use the properties <code>torque.home</code>, 
+  use the properties <code>torque.home</code>,
   <code>torque.output.dir</code>
   and/or <code>torque.java.dir</code>
   in your <code>project.properties</code> file - see
-  the <a href="../generator/properties-reference.html">properties 
+  the <a href="../generator/properties-reference.html">properties
   reference</a> for more detail).
 </p>
 
@@ -137,7 +137,7 @@ maven torque
   defined in <em>project.properties</em>) is in your
   classpath so that Torque can connect to your
   database and execute the generated SQL commands.
-  The easiest way to accomplish this is to add the 
+  The easiest way to accomplish this is to add the
   database driver jar to your local maven repository,
   and specify it as a dependency in your project.
   This is done as follows:
@@ -146,11 +146,11 @@ maven torque
 <subsection name="Adding the driver to the maven repository">
 
 <p>
-  For licensing reasons, most database drivers cannot 
+  For licensing reasons, most database drivers cannot
   be downloaded automatically by maven. Therefore,
-  you have to add the driver manually to your local maven 
+  you have to add the driver manually to your local maven
   repository. The local maven repository
-  is located by default in the directory 
+  is located by default in the directory
   <em>%HOMEDRIVE%%HOMEPATH%\.maven\repository</em>
   in windows, and <em>$HOME/.maven/repository</em>
   in linux/unix. Change into that direcory and
@@ -158,7 +158,7 @@ maven torque
   where <em>${groupId}</em> is typically set to
   the name of the database (for example, use
   <em>mysql/jars</em> for mysql).
-  Then, download the database driver, and copy the 
+  Then, download the database driver, and copy the
   driver jar to the subdirectory you just created.
 </p>
 
@@ -167,14 +167,14 @@ maven torque
 <subsection name="Specifying the driver dependency">
 
 <p>
-  The dependencies of a project are specified 
-  in a file named <em>project.xml</em> in the 
+  The dependencies of a project are specified
+  in a file named <em>project.xml</em> in the
   top level directory of your project.
   (This is not the only use of this file,
-  see the 
+  see the
   <a href="http://maven.apache.org/start/ten-minute-test.html">
   maven getting started guide</a>
-  and the 
+  and the
   <a href="http://maven.apache.org/reference/project-descriptor.html">
   Maven Project descriptor reference</a> for more
   information.)
@@ -182,9 +182,9 @@ maven torque
 
 <p>
   If you did not create a <em>project.xml</em> file yet,
-  create it in the top level directory of your project 
+  create it in the top level directory of your project
   and fill it using the following template. (If you
-  already have a <em>project.xml</em>, 
+  already have a <em>project.xml</em>,
   just add the dependency.)
 </p>
 
@@ -207,25 +207,25 @@ maven torque
 ]]></source>
 
 <p>
-  Replace the variables ${driverJarName}, 
-  ${databaseName}, and ${driverVersion} by the values 
-  needed to locate the driver jar. These variable 
+  Replace the variables ${driverJarName},
+  ${databaseName}, and ${driverVersion} by the values
+  needed to locate the driver jar. These variable
   must be chosen such that using the path
-  <em>${repo}/${groupId}/${type}s/${artifactId}-${version}.${type}</em> 
+  <em>${repo}/${groupId}/${type}s/${artifactId}-${version}.${type}</em>
   points to the driver jar you copied into the
   local maven repository.
-  Here, <em>${repo}</em> is the path to the 
-  local maven repository, ${type} is set to 
-  <code>jar</code> by default, and the other variables 
+  Here, <em>${repo}</em> is the path to the
+  local maven repository, ${type} is set to
+  <code>jar</code> by default, and the other variables
   are set in the <em>project.xml</em>.
   If the name of the driver jar cannot be expressed as
-  <em>${artifactId}-${version}.${type}</em>, rename 
+  <em>${artifactId}-${version}.${type}</em>, rename
   the driver jar in yor local maven repository.
 </p>
 
 <p>
   For example, if the downloaded driver was put into the local
-  repository as 
+  repository as
   <em>mysql/jars/mysql-connector-java-3.1.6-bin.jar</em>,
   <code>${artifactId}</code> would be set to
   <code>mysql-connector-java</code>,
@@ -258,22 +258,22 @@ maven torque:create-db
 ]]></source>
 
 <p>
-  Note that creating the database might not work 
+  Note that creating the database might not work
   for some databases at all (e.g. oracle).
-  Also, for other databases (e.g. mysql), 
-  the database user must be database administrator 
+  Also, for other databases (e.g. mysql),
+  the database user must be database administrator
   to be able to create the database, and often
   (e.g. mysql, postgresql), one must connect to a
   database which is different from the database
-  which one wants to create (this is why there are 
-  different properties 
+  which one wants to create (this is why there are
+  different properties
   <code>torque.database.createUrl</code>
   and <code>torque.database.buildUrl</code>
-  in the <em>project.properties</em> 
+  in the <em>project.properties</em>
   for creating the database and the tables,
-  respectively).<br /> 
-  If you encounter problems in this step, 
-  you might want to skip it 
+  respectively).<br />
+  If you encounter problems in this step,
+  you might want to skip it
   and create the database manually.
 </p>
 

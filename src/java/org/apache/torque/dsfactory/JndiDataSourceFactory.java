@@ -74,7 +74,7 @@ public class JndiDataSourceFactory
     public DataSource getDataSource() throws TorqueException
     {
         long time = System.currentTimeMillis();
-        
+
         if (ds == null || time - lastLookup > ttl)
         {
             try
@@ -191,7 +191,7 @@ public class JndiDataSourceFactory
                         {
                             log.debug("Datasource class: " + classname);
                         }
-                        
+
                         Class dsClass = Class.forName(classname);
                         ds = dsClass.newInstance();
                     }
@@ -233,7 +233,7 @@ public class JndiDataSourceFactory
     {
         // do nothing
     }
-    
+
     /**
      *
      * @param ctx the context

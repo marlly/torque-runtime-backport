@@ -28,21 +28,21 @@ import org.apache.torque.om.Persistent;
 public interface CacheListener
 {
     /**
-     * 
+     *
      * @param om
      */
     void addedObject(Persistent om);
-    
+
     /**
-     * 
+     *
      * @param om
      */
     void refreshedObject(Persistent om);
-    
+
     //public void removedObject(Persistent om);
-    
+
     /**
-     * 
+     *
      */
     List getInterestedFields();
 }

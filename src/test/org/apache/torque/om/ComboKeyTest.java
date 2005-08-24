@@ -53,7 +53,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          * @param args
          */
     public static void main(java.lang.String[] args)
@@ -62,7 +62,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          * @return Test
          */
     public static Test suite()
@@ -73,7 +73,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testReflexive()
@@ -86,7 +86,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testSymmetric()
@@ -96,7 +96,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testNull()
@@ -105,7 +105,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testNotEqual()
@@ -114,7 +114,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testRoundTripWithStringKeys()
@@ -138,7 +138,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testRoundTripWithComplexKey()
@@ -155,7 +155,7 @@ public class ComboKeyTest extends TestCase
         }
         catch (Exception e)
         {
-            fail("Exception " + e.getClass().getName() 
+            fail("Exception " + e.getClass().getName()
                     + " thrown on new ComboKey("
                     + stringValue + "):" + e.getMessage());
         }
@@ -163,7 +163,7 @@ public class ComboKeyTest extends TestCase
     }
 
         /**
-         * 
+         *
          *
          */
     public void testRoundTripWithNullKey()
@@ -179,7 +179,7 @@ public class ComboKeyTest extends TestCase
         }
         catch (Exception e)
         {
-            fail("Exception " + e.getClass().getName() 
+            fail("Exception " + e.getClass().getName()
                     + " thrown on new ComboKey("
                     + stringValue + "):" + e.getMessage());
         }
@@ -189,8 +189,8 @@ public class ComboKeyTest extends TestCase
     }
 
 
-    /** 
-     * Test of appendTo method, of class org.apache.torque.om.ComboKey. 
+    /**
+     * Test of appendTo method, of class org.apache.torque.om.ComboKey.
      */
     public void testAppendTo()
     {
@@ -199,8 +199,8 @@ public class ComboKeyTest extends TestCase
         Assert.assertEquals("Skey1:Skey2:", sb.toString());
     }
 
-    /** 
-     * Test of toString method, of class org.apache.torque.om.ComboKey. 
+    /**
+     * Test of toString method, of class org.apache.torque.om.ComboKey.
      */
     public void testToString()
     {

@@ -28,11 +28,11 @@
 <section name="Working With Peers">
 
 <p>
-Peers are an Object Relation mapping tool, built on top of 
+Peers are an Object Relation mapping tool, built on top of
 <a href="http://share.whichever.com/village/">Village</a> that gives
 you access to a relational database via Java objects.  Peers act on a somewhat
 lower level than other O-R mapping tools like
-<a href="http://www.castor.org/">Castor</a> or 
+<a href="http://www.castor.org/">Castor</a> or
 <a href="http://osage.sourceforge.net/">Osage</a>. This means that
 you have to do some coding by hand, but it allows for the most flexible
 solution.
@@ -137,7 +137,7 @@ databases.
 </p>
 
 <p>
-DatabaseMaps are constructed by classes called MapBuilders.  Torque 
+DatabaseMaps are constructed by classes called MapBuilders.  Torque
 generates MapBuilder classes for each of the tables in your schema.
 </p>
 </section>
@@ -226,7 +226,7 @@ as desired in your schema.
 </p>
 
 <p>
-The ID Broker is used in the underlying Peer code.  After you have generated 
+The ID Broker is used in the underlying Peer code.  After you have generated
 your object model classes you need not worry about it anymore.
 </p>
 

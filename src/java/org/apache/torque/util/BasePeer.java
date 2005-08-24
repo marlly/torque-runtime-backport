@@ -70,7 +70,7 @@ import com.workingdogs.village.TableDataSet;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class BasePeer 
+public abstract class BasePeer
         implements Serializable
 {
     /** Constant criteria key to reference ORDER BY columns. */
@@ -94,11 +94,11 @@ public abstract class BasePeer
     private static void throwTorqueException(Exception e)
         throws TorqueException
     {
-        if (e instanceof TorqueException) 
+        if (e instanceof TorqueException)
         {
             throw (TorqueException) e;
         }
-        else 
+        else
         {
             throw new TorqueException(e);
         }
@@ -335,7 +335,7 @@ public abstract class BasePeer
         final DB db = Torque.getDB(dbName);
         final DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
-        // This Callback adds all tables to the Table set which 
+        // This Callback adds all tables to the Table set which
         // are referenced from a cascading criteria. As a result, all
         // data that is referenced through foreign keys will also be
         // deleted.
@@ -499,7 +499,7 @@ public abstract class BasePeer
                     throw new TorqueException(
                             "IdGenerator for table '" + table + "' is null");
                 }
-                
+
                 id = getId(pk, keyGen, con, keyInfo);
                 criteria.add(pk.getFullyQualifiedName(), id);
             }
@@ -888,7 +888,7 @@ public abstract class BasePeer
             qds = new QueryDataSet(con, queryString);
             if (log.isDebugEnabled())
             {
-                log.debug("Elapsed time=" 
+                log.debug("Elapsed time="
                         + (System.currentTimeMillis() - startTime) + " ms");
             }
             results = getSelectResults(
@@ -1384,7 +1384,7 @@ public abstract class BasePeer
             }
             catch (Exception e)
             {
-                log.error("BasePeer.MapBuilder failed trying to instantiate: " 
+                log.error("BasePeer.MapBuilder failed trying to instantiate: "
                         + name, e);
                 throw new TorqueException(e);
             }
@@ -1521,7 +1521,7 @@ public abstract class BasePeer
     }
 
     /**
-     * Process the result of a Table list generation. 
+     * Process the result of a Table list generation.
      * This runs the statements onto the list of tables and
      * provides a callback hook to add functionality.
      *
@@ -1624,9 +1624,9 @@ public abstract class BasePeer
             }
         }
     }
-    
+
     /**
-     * Inner Interface that defines the Callback method for 
+     * Inner Interface that defines the Callback method for
      * the Record Processing
      */
     protected interface ProcessCallback

@@ -57,10 +57,10 @@ public abstract class Torque
 
     /**
      * Name of property that specifies the default map builder and map.
-     * @deprecated is not used any more. Use DATABASE_KEY and 
+     * @deprecated is not used any more. Use DATABASE_KEY and
      *             DEFAULT_KEY instead
      */
-    public static final String DATABASE_DEFAULT 
+    public static final String DATABASE_DEFAULT
             = DATABASE_KEY + "." + DEFAULT_KEY;
 
     /**
@@ -196,8 +196,8 @@ public abstract class Torque
      * This method halts the IDBroker's daemon thread in all of
      * the DatabaseMap's. It also closes all SharedPoolDataSourceFactories
      * and PerUserPoolDataSourceFactories initialized by Torque.
-     * @exception TorqueException if a DataSourceFactory could not be closed 
-     *            cleanly. Only the first exception is rethrown, any following 
+     * @exception TorqueException if a DataSourceFactory could not be closed
+     *            cleanly. Only the first exception is rethrown, any following
      *            exceptions are logged but ignored.
      */
     public static void shutdown()
