@@ -5,17 +5,15 @@
 
   <body>
     <links>
-      <item name="runtime"               href="/index.html"/>
-      <item name="generator"             href="/generator/"/>
-      <item name="templates"             href="/generator/templates"/>
-      <item name="maven-plugin"          href="/maven-plugin/"/>
+      <item name="overview"              href="http://db.apache.org/torque/"/>
+      <item name="runtime"               href="http://db.apache.org/torque/runtime"/>
+      <item name="generator"             href="http://db.apache.org/torque/generator/"/>
+      <item name="templates"             href="http://db.apache.org/torque/templates"/>
+      <item name="maven-plugin"          href="http://db.apache.org/torque/maven-plugin/"/>
     </links>
 
-    <menu name="Torque">
+    <menu name="Runtime">
       <item name="Overview"              href="/index.html"/>
-      <item name="News and Status"       href="/status.html"/>
-      <item name="Downloads"             href="/download.html"/>
-      <item name="Torque 3.1.1 docs"     href="http://db.apache.org/torque-311/"/>
       <item name="Torque Wiki"           href="http://wiki.apache.org/db-torque/"/>
     </menu>
     <menu name="Guides">
