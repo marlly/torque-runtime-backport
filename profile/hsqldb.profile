@@ -5,6 +5,9 @@ torque.testDatabaseJar = ${maven.home}/repository/hsqldb/jars/hsqldb-1.7.1.jar
 torque.idMethod = idbroker
 torque.defaultDatabase = bookstore
 
+torque.idMethod = idbroker
+#torque.idMethod = native
+
 torque.sqlTest.defaultDatabase = sqltest
 torque.sqlTest.databaseUrl = jdbc:hsqldb:sqltest
 
@@ -74,7 +77,7 @@ torque.database.driver = org.hsqldb.jdbcDriver
 torque.database.user = sa
 torque.database.password =
 torque.database.host = 127.0.0.1
-torque.database.validationQuery = SELECT 1
+torque.database.validationQuery = CALL NOW
 
 # Tells JDBC task that javaName attribute for the tables and columns
 # should be made same as SQL name.
