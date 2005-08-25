@@ -207,10 +207,10 @@ maven torque
 ]]></source>
 
 <p>
-  Replace the variables ${driverJarName},
-  ${databaseName}, and ${driverVersion} by the values
-  needed to locate the driver jar. These variable
-  must be chosen such that using the path
+  Replace the variables ${artifactId},
+  ${groupId} and ${version} by the values
+  needed to locate the driver jar. These variables
+  must be chosen such that the path
   <em>${repo}/${groupId}/${type}s/${artifactId}-${version}.${type}</em>
   points to the driver jar you copied into the
   local maven repository.
@@ -271,9 +271,19 @@ maven torque:create-db
   and <code>torque.database.buildUrl</code>
   in the <em>project.properties</em>
   for creating the database and the tables,
-  respectively).<br />
+  respectively).
+</p>
+
+<p>
   If you encounter problems in this step,
-  you might want to skip it
+  one possible reason might be a misconfiguration
+  of your <em>project.properties</em>.  Another common
+  problem is that the user specified in the
+  <em>project.properties</em> does not have sufficient
+  privilege to create a database.  In either
+  case, refer to the section above that explains the
+  <em>project.properties</em> file.
+  If the problems persist, skip this step 
   and create the database manually.
 </p>
 
@@ -311,14 +321,10 @@ maven torque:insert-sql
 </p>
 
 <p>
-  If you encounter errors while creating your
-  database, it is more than likely a misconfiguration
-  of your <em>project.properties</em>.  Another common
-  problem is that the user specified in the
-  <em>project.properties</em> does not have sufficient
-  privilege to create tables.  In either
-  case, refer to the section above that explains the
-  <em>project.properties</em> file.
+  If you have difficulties in creating the tables 
+  using maven, you can also execute the SQL scripts 
+  generated in the directory <em>target/sql</em> 
+  manually.
 </p>
 
 </subsection>
