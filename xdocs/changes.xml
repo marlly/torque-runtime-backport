@@ -26,6 +26,10 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in SVN">
+    <action type="fix" dev="tfischer">
+      For HSQLDB, the generator now generates
+      NULL/NOT NULL, DEFAULT and IDENTITY declarations
+    </action>
     <action type="add" dev="tfischer">
       The generated beans are now serializable.
     </action>
