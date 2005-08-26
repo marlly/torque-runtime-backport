@@ -27,6 +27,9 @@
 
   <release version="3.2-rc2-dev" date="in SVN">
     <action type="add" dev="tfischer">
+      The generated beans are now serializable.
+    </action>
+    <action type="add" dev="tfischer">
       Added a method getXXX(connection) to retrieve associated objects
       in the n->1 direction, which uses the provided connection
       if a db hit is necessary

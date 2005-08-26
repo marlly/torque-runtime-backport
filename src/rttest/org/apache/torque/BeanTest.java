@@ -16,6 +16,10 @@ package org.apache.torque;
  * limitations under the License.
  */
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 import org.apache.torque.test.Author;
@@ -84,6 +88,71 @@ public class BeanTest extends BaseRuntimeTestCase
         assertTrue("author from bean has Id " + authorFromBean.getAuthorId()
                 + " should be " + author.getAuthorId(),
                 author.getAuthorId() == authorBean.getAuthorId());
+    }
+    
+    /**
+     * tests whether it is possible to serialize/deserialize beans
+     * @throws Exception
+     */
+    public void testSerializeBeans() throws Exception
+    {
+        Author author = new Author();
+        author.setName(AUTHOR_1_NAME);
+        author.setAuthorId(AUTHOR_1_ID);
+
+        AuthorBean authorBean = author.getBean();
+        
+        // serialize the AuthorBean
+        byte[] serializedAuthorBean;
+        {
+            ObjectOutputStream objectOutputStream = null;
+            ByteArrayOutputStream byteArrayOutputStream;
+            try
+            {
+                byteArrayOutputStream 
+                        = new ByteArrayOutputStream();
+                objectOutputStream 
+                        = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(authorBean);
+                serializedAuthorBean 
+                        = byteArrayOutputStream.toByteArray();
+            }
+            finally
+            {
+                if (objectOutputStream != null)
+                {
+                    objectOutputStream.close();
+                }
+            }
+        }
+        // deserialize the AuthorBean again
+        AuthorBean deserializedAuthorBean;
+        {
+            ObjectInputStream objectInputStream = null;
+            ByteArrayInputStream byteArrayInputStream = null;
+            try
+            {
+                byteArrayInputStream 
+                        = new ByteArrayInputStream(serializedAuthorBean);
+                objectInputStream 
+                        = new ObjectInputStream(byteArrayInputStream);
+                deserializedAuthorBean 
+                        = (AuthorBean) objectInputStream.readObject();
+            }
+            finally
+            {
+                if (byteArrayInputStream != null)
+                {
+                    byteArrayInputStream.close();
+                }
+            }
+        }
+        assertEquals("The Name of the deserialized AuthorBean, "
+                + " should equal the Name of AuthorBean",
+                deserializedAuthorBean.getName(), authorBean.getName());
+        assertEquals("The Id of the deserialized AuthorBean, "
+                + " should equal the Id of AuthorBean",
+                deserializedAuthorBean.getAuthorId(), authorBean.getAuthorId());
     }
 
     /**
