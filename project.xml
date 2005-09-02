@@ -161,8 +161,8 @@
     <dependency>
       <artifactId>village</artifactId>
       <groupId>village</groupId>
-      <version>2.0-dev-20030825</version>
-      <url>http://share.whichever.com/index.php?SCREEN=village</url>
+      <version>2.0</version>
+      <url>http://www.softwareforge.de/projects/village</url>
       <properties>
         <dist.bundle>true</dist.bundle>
       </properties>
