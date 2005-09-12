@@ -483,6 +483,30 @@ public class CriteriaTest extends BaseTestCase
         assertTrue(result.equals(firstExpect) || result.equals(secondExpect));
     }
 
+//    /**
+//     * Very basic test that serialization works.
+//     */
+//    public void testSerialization()
+//    {
+//        // Hashtable works:
+//        Hashtable h = new Hashtable();
+//        h.put("Author.NAME", "author");
+//        Hashtable hClone = (Hashtable) SerializationUtils.clone(h);
+//        assertEquals(h, hClone);
+//
+//        // Criterion works (even though Bloch strongly recommends against inner
+//        // classes implementing Serializable):
+//        Criterion cn = c.new Criterion("Author.NAME", "author");
+//        Criterion cnClone = (Criterion) SerializationUtils.clone(cn);
+//        assertEquals(cn, cnClone);
+//
+//        // Criteria DOES NOT WORK - i.e. it isn't actually Serializable at present.
+//        // http://mail-archives.apache.org/mod_mbox/db-torque-dev/200404.mbox/%3CF4DFE8EDB932F641A9407CFB5CA599C3F17DF1@e2kmtl1.internal.sungard.corp%3E
+//        c.add("Author.NAME", "author");
+//        Criteria cClone = (Criteria) SerializationUtils.clone(c);
+//        assertEquals(c, cClone);
+//    }
+
     /**
      * test for TRQS25
      */
