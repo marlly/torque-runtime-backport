@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
@@ -111,16 +113,15 @@ import com.workingdogs.village.DataSetException;
  * <p>In your template you will then use something along the lines of:
  *
  * <pre>
- *    #set ($largeSelect = $data.User.getTemp("someName"))
- *    #set ($searchop = $data.Parameters.getString("searchop"))
- *    #if ($searchop.equals("prev"))
- *      #set ($recs = $largeSelect.PreviousResults)
+ *    #set($largeSelect = $data.User.getTemp("someName"))
+ *    #set($searchop = $data.Parameters.getString("searchop"))
+ *    #if($searchop.equals("prev"))
+ *      #set($recs = $largeSelect.PreviousResults)
  *    #else
- *      #if ($searchop.equals("goto"))
- *        #set ($recs
- *                = $largeSelect.getPage($data.Parameters.getInt("page", 1)))
+ *      #if($searchop.equals("goto"))
+ *        #set($recs = $largeSelect.getPage($data.Parameters.getInt("page", 1)))
  *      #else
- *        #set ($recs = $largeSelect.NextResults)
+ *        #set($recs = $largeSelect.NextResults)
  *      #end
  *    #end
  * </pre>
@@ -141,9 +142,9 @@ public class LargeSelect implements Runnable, Serializable
     private int memoryLimit;
 
     /** The record number of the first record in memory. */
-    private int blockBegin = 0;
+    private transient int blockBegin = 0;
     /** The record number of the last record in memory. */
-    private int blockEnd;
+    private transient int blockEnd;
     /** How much of the memory block is currently occupied with result data. */
     private volatile int currentlyFilledTo = -1;
 
@@ -151,31 +152,29 @@ public class LargeSelect implements Runnable, Serializable
     private String query;
     /** The database name to get from Torque. */
     private String dbName;
-    /** Used to retrieve query results from Village. */
-    private QueryDataSet qds = null;
 
     /** The memory store of records. */
-    private List results = null;
+    private transient List results = null;
 
     /** The thread that executes the query. */
-    private Thread thread = null;
+    private transient Thread thread = null;
     /**
      * A flag used to kill the thread when the currently executing query is no
      * longer required.
      */
-    private volatile boolean killThread = false;
+    private transient volatile boolean killThread = false;
     /** A flag that indicates whether or not the query thread is running. */
-    private volatile boolean threadRunning = false;
+    private transient volatile boolean threadRunning = false;
     /**
      * An indication of whether or not the current query has completed
      * processing.
      */
-    private volatile boolean queryCompleted = false;
+    private transient volatile boolean queryCompleted = false;
     /**
      * An indication of whether or not the totals (records and pages) are at
      * their final values.
      */
-    private boolean totalsFinalized = false;
+    private transient boolean totalsFinalized = false;
 
     /** The cursor position in the result set. */
     private int position;
@@ -183,13 +182,11 @@ public class LargeSelect implements Runnable, Serializable
     private int totalPages = -1;
     /** The total number of records known to exist. */
     private int totalRecords = 0;
-    /** The number of the page that was last retrieved. */
-    private int currentPageNumber = 0;
 
     /** The criteria used for the query. */
     private Criteria criteria = null;
     /** The last page of results that were returned. */
-    private List lastResults;
+    private transient List lastResults;
 
     /**
      * The class that is possibly used to construct the criteria and used
@@ -200,24 +197,31 @@ public class LargeSelect implements Runnable, Serializable
      * A reference to the method in the return builder class that will
      * convert the Village Records to the desired class.
      */
-    private Method populateObjectsMethod = null;
+    private transient Method populateObjectsMethod = null;
 
     /**
      * The default value ("&gt;") used to indicate that the total number of
-     * records or pages is unknown. You can use <code>setMoreIndicator()</code>
-     * to change this to whatever value you like (e.g. "more than").
+     * records or pages is unknown.
      */
     public static final String DEFAULT_MORE_INDICATOR = "&gt;";
 
+    /**
+     * The value used to indicate that the total number of records or pages is
+     * unknown (default: "&gt;"). You can use <code>setMoreIndicator()</code>
+     * to change this to whatever value you like (e.g. "more than").
+     */
     private static String moreIndicator = DEFAULT_MORE_INDICATOR;
 
     /**
      * The default value for the maximum number of pages of data to be retained
-     * in memory - you can provide your own default value using
-     * <code>setMemoryPageLimit()</code>.
+     * in memory.
      */
     public static final int DEFAULT_MEMORY_LIMIT_PAGES = 5;
 
+    /**
+     * The maximum number of pages of data to be retained in memory.  Use
+     * <code>setMemoryPageLimit()</code> to provide your own value.
+     */
     private static int memoryPageLimit = DEFAULT_MEMORY_LIMIT_PAGES;
 
     /** A place to store search parameters that relate to this query. */
@@ -354,11 +358,6 @@ public class LargeSelect implements Runnable, Serializable
                 selectColumnAdder.invoke(returnBuilderClass.newInstance(),
                         theArgs);
             }
-
-            // Locate the populateObjects() method - this will be used later
-            Class[] argTypes = { List.class };
-            populateObjectsMethod =
-                returnBuilderClass.getMethod("populateObjects", argTypes);
         }
         catch (Exception e)
         {
@@ -368,6 +367,21 @@ public class LargeSelect implements Runnable, Serializable
         }
 
         init(criteria, pageSize, memoryPageLimit);
+    }
+
+    /**
+     * Access the populateObjects method.
+     */
+    private Method getPopulateObjectsMethod()
+            throws SecurityException, NoSuchMethodException
+    {
+        if (null == populateObjectsMethod)
+        {
+            Class[] argTypes = { List.class };
+            populateObjectsMethod
+                    = returnBuilderClass.getMethod("populateObjects", argTypes);
+        }
+        return populateObjectsMethod;
     }
 
     /**
@@ -430,10 +444,9 @@ public class LargeSelect implements Runnable, Serializable
     {
         if (pageNumber < 1)
         {
-            throw new IllegalArgumentException("pageNumber must be greater "
-                    + "than zero.");
+            throw new IllegalArgumentException(
+                    "pageNumber must be greater than zero.");
         }
-        currentPageNumber = pageNumber;
         return getResults((pageNumber - 1) * pageSize);
     }
 
@@ -451,7 +464,6 @@ public class LargeSelect implements Runnable, Serializable
         {
             return getCurrentPageResults();
         }
-        currentPageNumber++;
         return getResults(position);
     }
 
@@ -460,10 +472,13 @@ public class LargeSelect implements Runnable, Serializable
      *
      * @return a <code>List</code> of query results containing a maximum of
      * <code>pageSize</code> reslts.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public List getCurrentPageResults()
+    public List getCurrentPageResults() throws TorqueException
     {
-        return lastResults;
+        return null == lastResults && position > 0
+                ? getResults(position) : lastResults;
     }
 
     /**
@@ -485,12 +500,10 @@ public class LargeSelect implements Runnable, Serializable
         if (position - 2 * pageSize < 0)
         {
             start = 0;
-            currentPageNumber = 1;
         }
         else
         {
             start = position - 2 * pageSize;
-            currentPageNumber--;
         }
         return getResults(start);
     }
@@ -638,10 +651,8 @@ public class LargeSelect implements Runnable, Serializable
             Object[] theArgs = { returnResults };
             try
             {
-                returnResults =
-                    (List) populateObjectsMethod.invoke(
-                        returnBuilderClass.newInstance(),
-                        theArgs);
+                returnResults = (List) getPopulateObjectsMethod().invoke(
+                        returnBuilderClass.newInstance(), theArgs);
             }
             catch (Exception e)
             {
@@ -661,6 +672,8 @@ public class LargeSelect implements Runnable, Serializable
         int size = pageSize;
         /* The connection to the database. */
         Connection conn = null;
+        /** Used to retrieve query results from Village. */
+        QueryDataSet qds = null;
 
         try
         {
@@ -854,7 +867,7 @@ public class LargeSelect implements Runnable, Serializable
      */
     public int getCurrentPageNumber()
     {
-        return currentPageNumber;
+        return position / pageSize;
     }
 
     /**
@@ -905,8 +918,7 @@ public class LargeSelect implements Runnable, Serializable
             return totalPages;
         }
 
-        int tempPageCount =
-            getTotalRecords() / pageSize
+        int tempPageCount =  getTotalRecords() / pageSize
                 + (getTotalRecords() % pageSize > 0 ? 1 : 0);
 
         if (getTotalsFinalized())
@@ -1009,14 +1021,16 @@ public class LargeSelect implements Runnable, Serializable
      *
      * @return the number of records that are included on the current page of
      * results.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public int getCurrentPageSize()
+    public int getCurrentPageSize() throws TorqueException
     {
-        if (null == lastResults)
+        if (null == getCurrentPageResults())
         {
             return 0;
         }
-        return lastResults.size();
+        return getCurrentPageResults().size();
     }
 
     /**
@@ -1030,17 +1044,19 @@ public class LargeSelect implements Runnable, Serializable
         {
             return 0;
         }
-        return getCurrentPageNumber() * getPageSize() - getPageSize() + 1;
+        return (getCurrentPageNumber() - 1) * getPageSize() + 1;
     }
 
     /**
      * Provide the record number of the last row included on the current page.
      *
      * @return the record number of the last row of the current page.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public int getLastRecordNoForPage()
+    public int getLastRecordNoForPage() throws TorqueException
     {
-        if (0 == currentPageNumber)
+        if (0 == getCurrentPageNumber())
         {
             return 0;
         }
@@ -1054,8 +1070,10 @@ public class LargeSelect implements Runnable, Serializable
      *
      * @return progress text in the form of "26 - 50 of &gt; 250" where "&gt;"
      * can be configured using <code>setMoreIndicator()</code>.
+     * @throws TorqueException if invoking the <code>populateObjects()<code>
+     * method runs into problems or a sleep is unexpectedly interrupted.
      */
-    public String getRecordProgressText()
+    public String getRecordProgressText() throws TorqueException
     {
         StringBuffer result = new StringBuffer();
         result.append(getFirstRecordNoForPage());
@@ -1122,15 +1140,13 @@ public class LargeSelect implements Runnable, Serializable
         blockBegin = 0;
         blockEnd = 0;
         currentlyFilledTo = -1;
-        qds = null;
         results = null;
+        // TODO Perhaps store the oldPosition and immediately restart the
+        // query.
+        // oldPosition = position;
         position = 0;
         totalPages = -1;
         totalRecords = 0;
-        // todo Perhaps store the oldPageNumber and immediately restart the
-        // query.
-        // oldPageNumber = currentPageNumber;
-        currentPageNumber = 0;
         queryCompleted = false;
         totalsFinalized = false;
         lastResults = null;
@@ -1209,6 +1225,20 @@ public class LargeSelect implements Runnable, Serializable
         {
             params.remove(name);
         }
+    }
+
+    /**
+     * Deserialize this LargeSelect instance.
+     *
+     * @param inputStream The serialization input stream.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream inputStream)
+            throws IOException, ClassNotFoundException
+    {
+        inputStream.defaultReadObject();
+        startQuery(pageSize);
     }
 
     /**
