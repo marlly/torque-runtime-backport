@@ -26,6 +26,19 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in SVN">
+    <action type="add" dev="tfischer">
+      <ul>
+        <li>
+          Added the methods getCachedInstance() and getCachedInstanceImpl()
+          to the BaseManager.vm template
+        </li>
+        <li>
+          Added the method getXXX(Connection) for associated objects 
+          to the ObjectWithManager.vm template
+        </li>
+      </ul>
+      Thanks to Thomas Vandahl for the patch.
+    </action>
     <action type="fix" dev="tfischer">
       For HSQLDB, the generator now generates
       NULL/NOT NULL, DEFAULT and IDENTITY declarations
