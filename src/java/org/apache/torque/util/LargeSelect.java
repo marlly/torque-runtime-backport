@@ -16,27 +16,26 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Set;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
+import org.apache.torque.adapter.DB;
 
-import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.DataSetException;
+import com.workingdogs.village.QueryDataSet;
 
 /**
  * This class can be used to retrieve a large result set from a database query.
@@ -669,7 +668,34 @@ public class LargeSelect implements Runnable, Serializable
      */
     public void run()
     {
-        int size = pageSize;
+        boolean dbSupportsNativeLimit;
+        try
+        {
+            dbSupportsNativeLimit 
+                    = (Torque.getDB(dbName).getLimitStyle()
+                        != DB.LIMIT_STYLE_NONE);
+        }
+        catch (TorqueException e)
+        {
+            log.error("run() : Exiting :", e);
+            // we cannot execute further because Torque is not initialized
+            // correctly
+            return;
+        }
+        
+        int size;
+        if (dbSupportsNativeLimit)
+        {
+            // retrieve one page at a time
+            size = pageSize;
+        }
+        else 
+        {
+            // retrieve the whole block at once and add the offset,
+            // and add one record to check if we have reached the end of the 
+            // data
+            size = blockBegin + memoryLimit + 1;
+        }
         /* The connection to the database. */
         Connection conn = null;
         /** Used to retrieve query results from Village. */
@@ -680,11 +706,15 @@ public class LargeSelect implements Runnable, Serializable
             // Add 1 to memory limit to check if the query ends on a page break.
             results = new ArrayList(memoryLimit + 1);
 
-            // Use the criteria to limit the rows that are retrieved to the
-            // block of records that fit in the predefined memoryLimit.
-            criteria.setOffset(blockBegin);
-            // Add 1 to memory limit to check if the query ends on a page break.
-            criteria.setLimit(memoryLimit + 1);
+            if (dbSupportsNativeLimit)
+            {
+                // Use the criteria to limit the rows that are retrieved to the
+                // block of records that fit in the predefined memoryLimit.
+                criteria.setOffset(blockBegin);
+                // Add 1 to memory limit to check if the query ends on a 
+                // page break.
+                criteria.setLimit(memoryLimit + 1);
+            }
             query = BasePeer.createQueryString(criteria);
 
             // Get a connection to the db.
@@ -709,7 +739,10 @@ public class LargeSelect implements Runnable, Serializable
             {
                 // This caters for when memoryLimit is not a multiple of
                 //  pageSize which it never is because we always add 1 above.
-                if ((currentlyFilledTo + pageSize) >= blockEnd)
+                // not applicable if the db has no native limit where this
+                // was already considered
+                if ((currentlyFilledTo + pageSize) >= blockEnd
+                        && dbSupportsNativeLimit)
                 {
                     // Add 1 to check if the query ends on a page break.
                     size = blockEnd - currentlyFilledTo + 1;
@@ -728,16 +761,29 @@ public class LargeSelect implements Runnable, Serializable
                 {
                     for (int i = 0, n = tempResults.size(); i < n; i++)
                     {
+                        if (dbSupportsNativeLimit
+                                || (i >= blockBegin))
                         results.add(tempResults.get(i));
                     }
                 }
 
-                currentlyFilledTo += tempResults.size();
+                if (dbSupportsNativeLimit)
+                {
+                    currentlyFilledTo += tempResults.size();
+                }
+                else
+                {
+                    currentlyFilledTo = tempResults.size() - 1 - blockBegin;
+                }
+                
                 boolean perhapsLastPage = true;
 
                 // If the extra record was indeed found then we know we are not
                 // on the last page but we must now get rid of it.
-                if (results.size() == memoryLimit + 1)
+                if ((dbSupportsNativeLimit 
+                        && (results.size() == memoryLimit + 1))
+                    || (!dbSupportsNativeLimit 
+                            && currentlyFilledTo >= memoryLimit))
                 {
                     synchronized (results)
                     {
@@ -753,7 +799,11 @@ public class LargeSelect implements Runnable, Serializable
                     totalRecords = blockBegin + currentlyFilledTo + 1;
                 }
 
-                if (qds.allRecordsRetrieved())
+                // if the db has limited the datasets, we must retrieve all 
+                // datasets. If not, we are always finished because we fetch
+                // the whole block at once.
+                if (qds.allRecordsRetrieved()
+                        || !dbSupportsNativeLimit)
                 {
                     queryCompleted = true;
                     // The following ugly condition ensures that the totals are

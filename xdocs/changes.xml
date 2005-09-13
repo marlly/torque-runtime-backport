@@ -26,6 +26,10 @@
   <body>
 
   <release version="3.2-rc2-dev" date="in SVN">
+    <action type="fix" dev="tfischer" issue="TRQS318">
+      LargeSelect now also works for databases which do not support
+      native limit and offset
+    </action>
     <action type="fix" dev="tfischer" issue="TRQS320">
       Added necessary addJoin() statenments to the generated Methods 
       XXXPeer.doSelectAllExceptYYY(). 
