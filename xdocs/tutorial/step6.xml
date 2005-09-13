@@ -134,7 +134,7 @@ maven java:compile
 </p>
 
 <source><![CDATA[
-java -cp classes:lib/avalon-framework-4.1.4.jar:lib/commons-beanutils-1.7.0.jar:lib/commons-collections-3.1.jar:lib/commons-configuration-1.1.jar:lib/commons-dbcp-1.2.1.jar:lib/commons-lang-2.1.jar:lib/commons-logging-1.0.4.jar:lib/commons-pool-1.2.jar:lib/jcs-20030822.182132.jar:lib/mysql-connector-java-3.1.6-bin.jar:lib/torque-3.2-rc1.jar:lib/village-2.0-dev-20030825.jar com.kazmier.Bookstore
+java -cp classes:lib/avalon-framework-4.1.4.jar:lib/commons-beanutils-1.7.0.jar:lib/commons-collections-3.1.jar:lib/commons-configuration-1.1.jar:lib/commons-dbcp-1.2.1.jar:lib/commons-lang-2.1.jar:lib/commons-logging-1.0.4.jar:lib/commons-pool-1.2.jar:lib/jcs-20030822.182132.jar:lib/mysql-connector-java-3.1.6-bin.jar:lib/torque-3.2-rc2.jar:lib/village-2.0-dev-20030825.jar com.kazmier.Bookstore
 ]]></source>
 
 <p>

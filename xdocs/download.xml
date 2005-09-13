@@ -44,31 +44,31 @@ These are the currently released versions of Torque:<br/>
     </tr>
 
     <tr>
-      <td rowspan="3"><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/">Torque 3.2-rc1</a></td>
+      <td rowspan="3"><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/">Torque 3.2-rc2</a></td>
     </tr>
 
     <tr>
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.tar.gz">TAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.tar.gz.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.tar.gz.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.tar.gz">TAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.tar.gz.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.tar.gz.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.tar.gz">TAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.tar.gz.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.tar.gz.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.tar.gz">TAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.tar.gz.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.tar.gz.md5">MD5</a></td>
       <td rowspan="2">
-          <a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/binaries/maven-torque-plugin-3.2-rc1.jar">JAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/maven-torque-plugin-3.2-rc1.jar.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/maven-torque-plugin-3.2-rc1.jar.md5">MD5</a></td>
+          <a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/binaries/maven-torque-plugin-3.2-rc2.jar">JAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/maven-torque-plugin-3.2-rc2.jar.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/maven-torque-plugin-3.2-rc2.jar.md5">MD5</a></td>
     </tr>
 
     <tr>
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.zip">ZIP</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.zip.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-3.2-rc1.zip.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.zip">ZIP</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.zip.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-3.2-rc2.zip.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.zip">ZIP</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.zip.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/binaries/torque-gen-3.2-rc1.zip.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.zip">ZIP</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.zip.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/binaries/torque-gen-3.2-rc2.zip.md5">MD5</a></td>
     </tr>
 
     <tr>
@@ -147,33 +147,33 @@ These are the currently released versions of Torque:<br/>
     </tr>
 
     <tr>
-      <td rowspan="2"><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/">Torque 3.2-rc1</a></td>
+      <td rowspan="2"><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/">Torque 3.2-rc2</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.tar.gz">TAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.tar.gz.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.tar.gz.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.tar.gz">TAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.tar.gz.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.tar.gz.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.tar.gz">TAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.tar.gz.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.tar.gz.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.tar.gz">TAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.tar.gz.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.tar.gz.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.tar.gz">TAR</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.tar.gz.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.tar.gz.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.tar.gz">TAR</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.tar.gz.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.tar.gz.md5">MD5</a></td>
     </tr>
 
     <tr>
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.zip">ZIP</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.zip.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-3.2-rc1-src.zip.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.zip">ZIP</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.zip.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-3.2-rc2-src.zip.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.zip">ZIP</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.zip.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/torque-gen-3.2-rc1-src.zip.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.zip">ZIP</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.zip.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/torque-gen-3.2-rc2-src.zip.md5">MD5</a></td>
 
-      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.zip">ZIP</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.zip.asc">Signature</a>&nbsp;
-          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc1/source/maven-torque-plugin-3.2-rc1-src.zip.md5">MD5</a></td>
+      <td><a href="http://www.apache.org/dyn/closer.cgi/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.zip">ZIP</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.zip.asc">Signature</a>&nbsp;
+          <a href="http://www.apache.org/dist/db/torque/torque-3.2-rc2/source/maven-torque-plugin-3.2-rc2-src.zip.md5">MD5</a></td>
     </tr>
 
     <tr>

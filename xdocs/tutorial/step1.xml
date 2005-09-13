@@ -68,7 +68,7 @@
 </p>
 
 <source><![CDATA[
-maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc1
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc2
 ]]></source>
 
 <p>
