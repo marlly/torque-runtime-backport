@@ -25,7 +25,7 @@
 
   <body>
 
-  <release version="3.2-rc2-dev" date="in SVN">
+  <release version="3.2-rc2" date="2005-09-13">
     <action type="fix" dev="tfischer" issue="TRQS318">
       LargeSelect now also works for databases which do not support
       native limit and offset

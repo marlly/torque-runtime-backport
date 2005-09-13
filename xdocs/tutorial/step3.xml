@@ -194,7 +194,7 @@ maven torque
   <groupId>torque</groupId>
   <id>torque-tutorial</id>
   <name>Torque</name>
-  <currentVersion>3.2-rc2-dev</currentVersion>
+  <currentVersion>3.2-rc2</currentVersion>
 
   <dependencies>
     <dependency>
