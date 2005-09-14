@@ -172,7 +172,7 @@ torque-gen-3.2-rc2/
 
 <p>
   For a complete list of generator properties, please refer to the
-  <a href="generator/properties-reference.html">properties reference</a>. Below
+  <a href="../generator/properties-reference.html">properties reference</a>. Below
   is a short list of the primary properties you should be interested in.
 </p>
 
@@ -261,7 +261,7 @@ torque-gen-3.2-rc2/
 ]]></source>
 
 <p>
-  Please refer to <a href="generator/schema-reference.html">Torque Schema Reference</a>
+  Please refer to <a href="../generator/schema-reference.html">Torque Schema Reference</a>
   to find out more about the the different elements and attributes.
 </p>
 

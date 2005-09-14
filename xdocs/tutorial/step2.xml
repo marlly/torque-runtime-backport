@@ -117,7 +117,7 @@
 
 <p>
   For a reference as to what each property, and others, controls, please
-  see the <a href="../generator/properties-reference.html">properties
+  see the <a href="../../generator/properties-reference.html">properties
   reference</a> for the Torque generator.
 </p>
 
@@ -378,7 +378,7 @@
 <p>
   For additional information on
   the XML elements and attributes, please refer to the
-  <a href="../generator/schema-reference.html">
+  <a href="../../generator/schema-reference.html">
   Torque Schema Reference</a>.
 </p>
 

@@ -112,7 +112,7 @@ maven torque
   <code>torque.output.dir</code>
   and/or <code>torque.java.dir</code>
   in your <code>project.properties</code> file - see
-  the <a href="../generator/properties-reference.html">properties
+  the <a href="../../generator/properties-reference.html">properties
   reference</a> for more detail).
 </p>
 
@@ -121,7 +121,7 @@ maven torque
   than likely a formatting error of your database
   schema file.  Check the format of the file and make
   sure it conforms to the
-  <a href="../generator/schema-reference.html">
+  <a href="../../generator/schema-reference.html">
   Torque Schema Reference</a>.
 </p>
 
