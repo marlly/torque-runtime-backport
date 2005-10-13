@@ -19,6 +19,7 @@
  <properties>
  <title>Microsoft SQL Server&#x99; Howto</title>
  <author email="djpolito@apache.org"></author>
+ <author email="monroe@dukece.com"></author>
 </properties>
 
 <body>
@@ -26,9 +27,8 @@
 <section name="Introductory note">
 
 <p>
-This HOWTO was written some time ago and was targeted at the
-version of Torque that was coupled with the
-<a href="http://jakarta.apache.org/turbine/">Turbine</a> application framework.
+This is an updated HOWTO based on Torque 3.2 RC2 that has been derived from the original 
+HOWTO written some time ago. 
 Contributions towards updating the information below can be submitted to the
 <a href="mailto:torque-dev@db.apache.org">Torque Dev mailing list</a>.
 </p>
@@ -38,10 +38,8 @@ Contributions towards updating the information below can be submitted to the
 <section name="Microsoft SQL Server&#x99; Howto">
 
 <p>
-This howto contains configuration help on using MS SQL Server with Turbine.
-This Howto supplements the
-<a href="http://jakarta.apache.org/turbine/tdk/tdk-howto.html">TDK Howto</a>
-page.
+This HowTo contains configuration help on using MS SQL Server with Turbine.
+It is a supplement to the Users Guide and other HowTo documentation for Turbine.
 </p>
 
 <p>
@@ -66,30 +64,27 @@ refer to SQL Server documentation for further details.
 </section>
 <section name="JDBC Driver">
 <p>
-Microsoft has a JDBC driver for MS SQL Server available from their <a
-href="http://www.microsoft.com/sql/downloads/">SQL Downloads page</a>.
-Alternately, a third party commercial driver from
-<a href="http://industry.java.sun.com/products/jdbc/drivers">JDBC(TM)
-Technology - Drivers</a>, the JDBC-ODBC bridge driver from Sun, or one of the
-free drivers, <a href="http://www.freetds.org">FreeTDS</a> or
-<a href="http://jtds.sourceforge.net/">jTDS</a> can be used.
+There is an excellent open source driver for MS SQL called 
+<a href="http://jtds.sourceforge.net/">jTDS</a>.  This driver is
+being used in production mode with Torque and many other JDBC applications.
+The information in this HowTo has been verified with this driver, other
+drivers should work the same, but your milage may vary.
+</p>
+<p>
+In addition, Microsoft has a JDBC driver for MS SQL Server available from their <a
+href="http://www.microsoft.com/sql/downloads/">SQL Downloads page</a>. Please not 
+that this driver is limited to MS SQL 2000 and above and will not work with 7.0.
+</p>
+<p>
+Alternatively, there are a wide variety of third party commercial drivers available.
+See <a href="http://industry.java.sun.com/products/jdbc/drivers">JDBC(TM)
+Technology - Drivers</a> for a comprehensive list.
 </p>
 
 <p>
-The driver from FreeTDS, as of version 0.51, is unstable and buggy, and not
-recommended for production environments. Use at your own risk. If you have used
-a more recent version of FreeTDS successfully then please let us know.
-</p>
-
-<p>
-We have only recently been informed of the existence of
-<a href="http://jtds.sourceforge.net/">jTDS</a>, which is based on FreeTDS.
-Try it out and let us know how it goes.
-</p>
-
-<p>
-The JDBC-ODBC bridge driver from Sun is included with the Java 2 SDK
-Standard Edition as package sun.jdbc.odbc. Sun's statement on this driver is,
+Finally, for completeness, there is the JDBC-ODBC bridge driver from Sun 
+that is included with the Java 2 SDK Standard Edition as package 
+sun.jdbc.odbc. Sun's statement on this driver is,
 &quot;Note that the bridge driver included in the SDK is appropriate only for
 experimental use or when no other driver is available.&quot; So use at your own
 risk. Also, if you are using a non-windows box to run Turbine, you will need to
@@ -100,14 +95,14 @@ box that says, "Use ANSI nulls, paddings and warnings.".
 </p>
 
 </section>
-<section name="Edit property files">
+<section name="The Generator build.properties file">
 <p>
-In the ...\WEB-INF\build\build.properties file make sure that;
+In the build.properties file make sure that:
 </p>
 
 <source><![CDATA[
-database=mssql
-database.manual.creation = true
+torque.database = mssql
+torque.database.type = mssql
 ]]></source>
 
 <p>
@@ -115,11 +110,27 @@ And set the JDBC connection information:
 </p>
 
 <source><![CDATA[
-databaseDriver = [JDBC Driver]
-databaseUser = [db username]
-databasePassword = [db password]
-databaseHost = [hostname]
-databaseUrl = [Follow JDBC Driver Docs]
+torque.database.createUrl = [Follow JDBC Driver Docs]
+torque.database.buildUrl = [Follow JDBC Driver Docs]
+torque.database.url = [Follow JDBC Driver Docs]
+torque.database.driver = [JDBC Driver class]
+torque.database.user = [db username created above]
+torque.database.password = [db user password]
+torque.database.host = [hostname]
+torque.database.name = [name of db created above]
+torque.database.schema = [db username created above]
+]]></source>
+
+<p>
+If you are using the jTDS driver, these settings would look like the entries below (
+(replace [hostname] and [db name]!)  Note that if you are using MS SQL 7.0, you 
+should add ;TDS=7.0 after the [db name]:
+</p>
+<source><![CDATA[
+torque.database.createUrl = jdbc:jtds:sqlserver://[hostname]:1433/template1
+torque.database.buildUrl = jdbc:jtds:sqlserver://[hostname]:1433/[db name]
+torque.database.url = jdbc:jtds:sqlserver://[hostname]:1433/[db name]
+torque.database.driver = net.sourceforge.jtds.jdbc.Driver
 ]]></source>
 
 <p>
@@ -137,24 +148,82 @@ jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=mydb;SelectMethod=cursor
 ]]></source>
 
 <p>
-If you are using the JDBC-ODBC bridge driver:
+If you are using the JDBC-ODBC bridge driver, see the Sun documents related
+to this for the values to use.
 </p>
-
-<source><![CDATA[
-databaseUrl = jdbc:odbc:[DSN Name]
-databaseHost = [hostname]
-databaseDriver = sun.jdbc.odbc.JdbcOdbcDriver
-databaseUser = [db username]
-databasePassword = [db password]
-]]></source>
-
+</section>
+<section name="Generated Task Notes">
+<subsection name="Generated SQL Code">
 <p>
-In the ..\WEB-INF\conf\TurbineResources.properties file, set;
+SQL Scripts generated by the Ant sql target do not contain the fully qualified 
+table names, e.g. user.table.  When manually running these scripts, do this 
+as the user you want to own the tables.  I.e., if you run it as 'SA', your
+tables will be created as dbo.table rather than user.table.  This can lead
+to problems in determining which table gets used.  General rule of thumb is 
+that the tables should be owned by the user you connect with.
+</p>
+<p>
+SQL Scripts generated by the datasql Ant targetData may include autoincrement fields
+that MS SQL will not allow to be set via SQL unless surrounded the following statements:
+</p>
+<source><![CDATA[
+SET IDENTITY_INSERT <table>  ON
+
+SET IDENTITY_INSERT <table>  OFF
+]]></source>
+<p>
+In addition, the order does not take foreign keys into consideration.  The 
+order in which tables are populated may need to be manually changed to insure
+the "key" tables get created first.
+</p>
+
+</subsection>
+<subsection name="XML Schema Notes">
+<p>
+Beware the use of MS SQL keywords in table and column names.  This will cause 
+problems in the generated SQL.
+</p>
+<p>
+MS SQL supports defaultIdMethod="native" attribute of the database tag for autogenerated 
+fields.
+</p>
+<p>
+The Ant jdbc target will generate an almost correct schema for all tables owned 
+by the SQL user specified in the torque.database.schema property.  If this 
+property is not set, no tables will be processed.
+</p>
+<p>
+The schema.xml file generated by the jdbc target will be missing various important
+items, like autogenerated field tags, unique field specifications, and index 
+definitions.  In addition, the order of the tables may need to be redone to 
+create the tables with key fields first.  But in general, the jdbc task is
+a good way to use GUI tools to create your table structure and then extract
+the basics to Torque XML.
+</p>
+</subsection>
+</section>
+<section name="The Runtime Torque.properties file">
+<p>
+There are various ways to set up your runtime torque.properties file.  The easiest 
+is to use the build.xml process in the master directory of runtime package.  Just 
+make sure that the generation build.properties are in your user.home directory and
+run ant in the master directory.  A properly configured Torque.properties should 
+be created in the directory above this one.
+</p>
+<p>
+If you are configuring the properties manually, the folling settings are MSSQL 
+specific.  Note that there are several generic settings you will need to 
+look at as well.
 </p>
 
 <source><![CDATA[
-services.DatabaseService.database.adaptor=DBMSSQL
-services.DatabaseService.database.adaptor.DBMSSQL=[JDBC Driver]
+torque.database.default=[data base ref] (e.g. default, or the project name)
+torque.database.wacs.adapter=mssql
+
+torque.dsfactory.[data base ref].connection.driver = [JDBC Driver class]
+torque.dsfactory.[data base ref].connection.url = [Follow JDBC Driver Docs]
+torque.dsfactory.[data base ref].connection.user =  [db username created above]
+torque.dsfactory.[data base ref].connection.password = [db user password]
 ]]></source>
 
 
