@@ -177,6 +177,40 @@
   name="bookstore"
   defaultIdMethod="idbroker">
 
+  <table name="publisher" description="Publisher Table">
+    <column
+      name="publisher_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Publisher Id"/>
+    <column
+      name="name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="Publisher Name"/>
+  </table>
+  <table name="author" description="Author Table">
+    <column
+      name="author_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Author Id"/>
+    <column
+      name="first_name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="First Name"/>
+    <column
+      name="last_name"
+      required="true"
+      type="VARCHAR"
+      size="128"
+      description="Last Name"/>
+  </table>
   <table name="book" description="Book Table">
     <column
       name="book_id"
@@ -217,40 +251,6 @@
         local="author_id"
         foreign="author_id"/>
     </foreign-key>
-  </table>
-  <table name="publisher" description="Publisher Table">
-    <column
-      name="publisher_id"
-      required="true"
-      primaryKey="true"
-      type="INTEGER"
-      description="Publisher Id"/>
-    <column
-      name="name"
-      required="true"
-      type="VARCHAR"
-      size="128"
-      description="Publisher Name"/>
-  </table>
-  <table name="author" description="Author Table">
-    <column
-      name="author_id"
-      required="true"
-      primaryKey="true"
-      type="INTEGER"
-      description="Author Id"/>
-    <column
-      name="first_name"
-      required="true"
-      type="VARCHAR"
-      size="128"
-      description="First Name"/>
-    <column
-      name="last_name"
-      required="true"
-      type="VARCHAR"
-      size="128"
-      description="Last Name"/>
   </table>
 </database>
 ]]></source>
