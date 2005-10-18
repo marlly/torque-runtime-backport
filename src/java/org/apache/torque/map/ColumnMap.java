@@ -29,6 +29,9 @@ public class ColumnMap implements java.io.Serializable
 
     /** Size of the column. */
     private int size = 0;
+    
+    /** Scale of the column */
+    private int scale = 0;
 
     /** Is it a primary key? */
     private boolean pk = false;
@@ -185,7 +188,14 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Get the size of this column.
+     * The "precision" value from the XML 
+     * size="&lt;precision&gt;[,&lt;scale&gt;]"
+     * attribute. Where [,&lt;scale&gt;] is optional. 
+     * 
+     * If the size attribute has not been set in the XML, it will return 0.<p>
+     * 
+     * Note that the size="P,S" format should be replaced with 
+     * size="P" scale="S".
      *
      * @return An int specifying the size.
      */
@@ -252,5 +262,26 @@ public class ColumnMap implements java.io.Serializable
     public String getRelatedColumnName()
     {
         return relatedColumnName;
+    }
+
+    /**
+     * Gets the scale set for this column (if any) as set in the XML database
+     * definition.  E.g., the value of the scale attribute or the scale portion
+     * of a size="P,S" attribute. 
+     * (Note: size="P,S" format is being deprecated!).
+     *
+     * @return Returns the scale.
+     */
+    public int getScale() 
+    {
+        return scale;
+    }
+
+    /**
+     * @param scale The scale to set.
+     */
+    public void setScale(int scale) 
+    {
+        this.scale = scale;
     }
 }

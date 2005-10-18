@@ -25,6 +25,13 @@
 
   <body>
 
+  <release version="3.2-rc3-dev" date="in SVN">
+    <action type="add" dev="tfischer" issue="TRQS323">
+      The size and scale attributes from the schema.xml are now used
+      to fill the fields size and scale in the column objects
+      created by the generated map builder objects.
+    </action>
+  </release>
   <release version="3.2-rc2" date="2005-09-13">
     <action type="fix" dev="tfischer" issue="TRQS318">
       LargeSelect now also works for databases which do not support

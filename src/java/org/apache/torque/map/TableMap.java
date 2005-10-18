@@ -291,6 +291,19 @@ public class TableMap implements IDMethod, java.io.Serializable
     }
 
     /**
+     * Add a column to this table of a certain type, size, and scale.
+     *
+     * @param columnName A String with the column name.
+     * @param type An Object specifying the type.
+     * @param size An int specifying the size.
+     * @param scale An int specifying the scale.
+     */
+    public void addColumn(String columnName, Object type, int size, int scale)
+    {
+        addColumn(columnName, type, false, null, null, size, scale);
+    }
+    
+    /**
      * Add a column to this table of a certain type and size.
      *
      * @param columnName A String with the column name.
@@ -410,6 +423,28 @@ public class TableMap implements IDMethod, java.io.Serializable
                            String fkColumn,
                            int size)
     {
+        addColumn(name, type, pk, fkTable,fkColumn, size, 0 );
+    }
+
+    /**
+     * Add a column to the table.
+     *
+     * @param name A String with the column name.
+     * @param type An Object specifying the type.
+     * @param pk True if column is a primary key.
+     * @param fkTable A String with the foreign key table name.
+     * @param fkColumn A String with the foreign key column name.
+     * @param size An int specifying the size.
+     * @param scale An int specifying the scale.
+     */
+    private void addColumn(String name,
+                           Object type,
+                           boolean pk,
+                           String fkTable,
+                           String fkColumn,
+                           int size,
+                           int scale)
+    {
         // If the tablename is prefixed with the name of the column,
         // remove it ie: SCARAB_PROJECT.PROJECT_ID remove the
         // SCARAB_PROJECT.
@@ -430,6 +465,7 @@ public class TableMap implements IDMethod, java.io.Serializable
         col.setPrimaryKey(pk);
         col.setForeignKey(fkTable, fkColumn);
         col.setSize(size);
+        col.setScale(scale);
         columns.put(name, col);
     }
 
