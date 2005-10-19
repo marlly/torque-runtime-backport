@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="fix" dev="tfischer" issue="TRQS322">
+      The DataSourceFactory with the name "default" is created 
+      automatically again. This was removed when fixing TRQS308,
+      but is required by Turbine.
+    </action>
     <action type="add" dev="tfischer" issue="TRQS323">
       The size and scale attributes from the schema.xml are now used
       to fill the fields size and scale in the column objects

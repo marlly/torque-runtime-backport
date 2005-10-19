@@ -63,6 +63,9 @@ public class TorqueInstance
     /** Logging */
     private static Log log = LogFactory.getLog(TorqueInstance.class);
 
+    /** A constant for <code>default</code>. */
+    private static final String DEFAULT_NAME = "default";
+
     /** The db name that is specified as the default in the property file */
     private String defaultDBName = null;
 
@@ -83,6 +86,14 @@ public class TorqueInstance
 
     /** flag to set to true once this class has been initialized */
     private boolean isInit = false;
+    
+    /** 
+     * a flag which indicates whether the DataSourceFactory with the key
+     * <code>DEFAULT</code> is a reference to another
+     * DataSourceFactory. This is important to know when closing the 
+     * DataSourceFactories on shutdown(); 
+     */ 
+    private boolean defaultDSFIsReference = false;
 
     /**
      * Store mapbuilder classnames for peers that have been referenced prior
@@ -322,6 +333,30 @@ public class TorqueInstance
                     + DataSourceFactory.FACTORY_KEY;
             log.error(error);
             throw new TorqueException(error);
+        }
+        
+        // As there might be a default database configured
+        // to map "default" onto an existing datasource, we
+        // must check, whether there _is_ really an entry for
+        // the "default" in the dsFactoryMap or not. If it is
+        // not, then add a dummy entry for the "default"
+        //
+        // Without this, you can't actually access the "default"
+        // data-source, even if you have an entry like
+        //
+        // database.default = bookstore
+        //
+        // in your Torque.properties
+        //
+        String defaultDB = getDefaultDB();
+
+        if (dsFactoryMap.get(DEFAULT_NAME) == null
+                && !defaultDB.equals(DEFAULT_NAME))
+        {
+            log.debug("Adding a dummy entry for "
+                    + DEFAULT_NAME + ", mapped onto " + defaultDB);
+            dsFactoryMap.put(DEFAULT_NAME, dsFactoryMap.get(defaultDB));
+            this.defaultDSFIsReference = true;
         }
     }
 
@@ -568,6 +603,16 @@ public class TorqueInstance
         for (Iterator it = dsFactoryMap.keySet().iterator(); it.hasNext();)
         {
             Object dsfKey = it.next();
+
+            if (DEFAULT_NAME.equals(dsfKey) && defaultDSFIsReference)
+            {
+                // the entry with the key DEFAULT_NAME
+                // is just a reference to aynother entry. Do not close because
+                // this leads to closing the same DataSourceFactory twice.
+                it.remove();
+                break;
+            }
+
             DataSourceFactory dsf
                     = (DataSourceFactory) dsFactoryMap.get(dsfKey);
             try
