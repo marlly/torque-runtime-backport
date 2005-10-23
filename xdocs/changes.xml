@@ -26,6 +26,14 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="update" dev="tfischer">
+      The default values of the generator options 
+      torque.subpackage.base.bean,
+      torque.subpackage.bean,
+      and torque.subpackage.map
+      are now defined in the property files plugin.properties (for maven) 
+      and default.properties (for ant) instead of in the templates
+    </action>
     <action type="fix" dev="tfischer" issue="TRQS322">
       The DataSourceFactory with the name "default" is created 
       automatically again. This was removed when fixing TRQS308,
