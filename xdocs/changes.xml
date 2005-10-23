@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="fix" dev="tfischer" issue="TRQS325">
+      Fixed importing references for foreign keys if the
+      object for the foreign key is in another package.<br />
+      Thanks to Robert Dietrick for the patch.
+    </action>
     <action type="update" dev="tfischer">
       The default values of the generator options 
       torque.subpackage.base.bean,
