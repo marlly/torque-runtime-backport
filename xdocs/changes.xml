@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="add" dev="tfischer">
+      Added hyperlinks to foreign key in the documentation to point to 
+      the referenced table.
+      Thanks to Hilco Wijbenga for an early version of the patch.
+    </action>
     <action type="fix" dev="seade">
       Corrected serialization of Criteria objects.  While there also fixed
       equals() and added hashCode().
