@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="fix" dev="seade">
+      Corrected serialization of Criteria objects.  While there also fixed
+      equals() and added hashCode().
+      Thanks to Martin Goulet for a very early version of the serialization fix.
+    </action>
     <action type="add" dev="tfischer">
       Added scale (i.e number of digits after the decimal point) support 
       for the sql data types NUMERIC and DECIMAL in the JDBCTransformTask

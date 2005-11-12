@@ -16,6 +16,9 @@ package org.apache.torque.util;
  * limitations under the License.
  */
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -30,6 +33,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.OrderedMap;
 import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,10 +58,13 @@ import org.apache.torque.om.ObjectKey;
  * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class Criteria extends Hashtable
 {
+    /** Serial version. */
+    private static final long serialVersionUID = -9001666575933085601L;
 
     /** Comparison type. */
     public static final SqlEnum EQUAL = SqlEnum.EQUAL;
@@ -148,7 +155,7 @@ public class Criteria extends Hashtable
     private UniqueList groupByColumns = new UniqueList();
     private Criterion having = null;
     private OrderedMap asColumns = ListOrderedMap.decorate(new HashMap());
-    private List joins = null;
+    private transient List joins = null;
 
     /** The name of the database. */
     private String dbName;
@@ -272,6 +279,16 @@ public class Criteria extends Hashtable
     public Map getAsColumns()
     {
         return asColumns;
+    }
+
+    /**
+     * Get the table aliases.
+     *
+     * @return A Map which maps the table alias names to the actual table names.
+     */
+    public Map getAliases()
+    {
+        return aliases;
     }
 
     /**
@@ -1818,6 +1835,9 @@ public class Criteria extends Hashtable
                     && selectModifiers.equals(criteria.getSelectModifiers())
                     && selectColumns.equals(criteria.getSelectColumns())
                     && orderByColumns.equals(criteria.getOrderByColumns())
+                    && ObjectUtils.equals(aliases, criteria.getAliases())
+                    && asColumns.equals(criteria.getAsColumns())
+                    && joins.equals(criteria.getJoins())
                 )
             {
                 isEquiv = true;
@@ -1843,6 +1863,30 @@ public class Criteria extends Hashtable
             }
         }
         return isEquiv;
+    }
+
+    /**
+     * Returns the hash code value for this Join.
+     *
+     * @return a hash code value for this object.
+     */
+    public int hashCode()
+    {
+        int result = 16;
+        result = 37 * result + offset;
+        result = 37 * result + limit;
+        result = 37 * result + (ignoreCase ? 0 : 1);
+        result = 37 * result + (singleRecord ? 0 : 1);
+        result = 37 * result + (cascade ? 0 : 1);
+        result = 37 * result + dbName.hashCode();
+        result = 37 * result + selectModifiers.hashCode();
+        result = 37 * result + selectColumns.hashCode();
+        result = 37 * result + orderByColumns.hashCode();
+        result = 37 * result + (aliases == null ? 0 : aliases.hashCode());
+        result = 37 * result + asColumns.hashCode();
+        result = 37 * result + joins.hashCode();
+        result = 37 * result + super.hashCode();
+        return result;
     }
 
     /*
@@ -3000,11 +3044,90 @@ public class Criteria extends Hashtable
     }
 
     /**
-     * This is an inner class that describes an object in the
-     * criteria.
+     * Serializes this Criteria.
+     *
+     * @param s The output stream.
+     * @throws IOException if an IO error occurs.
+     */
+    private void writeObject(ObjectOutputStream s) throws IOException
+    {
+        s.defaultWriteObject();
+
+        // Joins need to be serialized manually.
+        ArrayList serializableJoins = null;
+        if (joins != null && joins.size() > 0)
+        {
+            serializableJoins = new ArrayList(joins.size());
+
+            for (Iterator jonisIter = joins.iterator(); jonisIter.hasNext();)
+            {
+                Join join = (Join) jonisIter.next();
+
+                ArrayList joinContent = new ArrayList(3);
+                joinContent.add(join.getLeftColumn());
+                joinContent.add(join.getRightColumn());
+                joinContent.add(join.getJoinType());
+
+                serializableJoins.add(joinContent);
+            }
+        }
+
+        s.writeObject(serializableJoins);
+    }
+
+    /**
+     * Deserialize a Criteria.
+     *
+     * @param s The input stream.
+     * @throws IOException if an IO error occurs.
+     * @throws ClassNotFoundException if the class cannot be located.
+     */
+    private void readObject(ObjectInputStream s)
+            throws IOException, ClassNotFoundException
+    {
+        s.defaultReadObject();
+
+        // Criteria.put() differs somewhat from Hashtable.put().
+        // This necessitates some corrective behavior upon deserialization.
+        for (Iterator iter = keySet().iterator(); iter.hasNext();)
+        {
+            Object key = iter.next();
+            Object value = get(key);
+            if (value instanceof Criteria.Criterion)
+            {
+                super.put(key, value);
+            }
+        }
+
+        // Joins need to be deserialized manually.
+        ArrayList joins = (ArrayList) s.readObject();
+        if (joins != null)
+        {
+            for (int i = 0; i < joins.size(); i++)
+            {
+                ArrayList joinContent = (ArrayList) joins.get(i);
+
+                String leftColumn = (String) joinContent.get(0);
+                String rightColumn = (String) joinContent.get(1);
+                SqlEnum joinType = null;
+                Object joinTypeObj = joinContent.get(2);
+                if (joinTypeObj != null)
+                {
+                    joinType = (SqlEnum) joinTypeObj;
+                }
+                addJoin(leftColumn, rightColumn, joinType);
+            }
+        }
+    }
+
+    /**
+     * This is an inner class that describes an object in the criteria.
      */
     public final class Criterion implements Serializable
     {
+        /** Serial version. */
+        private static final long serialVersionUID = 7157097965404611710L;
+
         public static final String AND = " AND ";
         public static final String OR = " OR ";
 
@@ -3449,7 +3572,7 @@ public class Criteria extends Hashtable
         }
 
         /**
-         * This method checks another Criteria to see if they contain
+         * This method checks another Criteria.Criterion to see if they contain
          * the same attributes and hashtable entries.
          */
         public boolean equals(Object obj)
@@ -3589,7 +3712,7 @@ public class Criteria extends Hashtable
                 }
             }
         }
-    }
+    } // end of inner class Criterion
 
     /**
      * Data object to describe a join between two tables, for example
@@ -3675,5 +3798,43 @@ public class Criteria extends Hashtable
 
             return result.toString();
         }
+
+        /**
+         * This method checks another Criteria.Join to see if they contain the
+         * same attributes.
+         */
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if ((obj == null) || !(obj instanceof Join))
+            {
+                return false;
+            }
+
+            Join join = (Join) obj;
+
+            return ObjectUtils.equals(leftColumn, join.getLeftColumn())
+                    && ObjectUtils.equals(rightColumn, join.getRightColumn())
+                    && ObjectUtils.equals(joinType, join.getJoinType());
+        }
+
+        /**
+         * Returns the hash code value for this Join.
+         *
+         * @return a hash code value for this object.
+         */
+        public int hashCode()
+        {
+            int result = 13;
+            result = 37 * result + leftColumn.hashCode();
+            result = 37 * result + rightColumn.hashCode();
+            result = 37 * result + (null == joinType ? 0 : joinType.hashCode());
+            return result;
+        }
+
     } // end of inner class Join
 }

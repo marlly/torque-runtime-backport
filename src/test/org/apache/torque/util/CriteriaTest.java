@@ -19,19 +19,23 @@ package org.apache.torque.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
-
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.torque.BaseTestCase;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DBFactory;
+import org.apache.torque.util.Criteria.Criterion;
+import org.apache.torque.util.Criteria.Join;
 
 /**
  * Test class for Criteria.
  *
  * @author <a href="mailto:celkins@scardini.com">Christopher Elkins</a>
  * @author <a href="mailto:sam@neurogrid.com">Sam Joseph</a>
+ * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
  * @version $Id$
  */
 public class CriteriaTest extends BaseTestCase
@@ -483,29 +487,94 @@ public class CriteriaTest extends BaseTestCase
         assertTrue(result.equals(firstExpect) || result.equals(secondExpect));
     }
 
-//    /**
-//     * Very basic test that serialization works.
-//     */
-//    public void testSerialization()
-//    {
-//        // Hashtable works:
-//        Hashtable h = new Hashtable();
-//        h.put("Author.NAME", "author");
-//        Hashtable hClone = (Hashtable) SerializationUtils.clone(h);
-//        assertEquals(h, hClone);
-//
-//        // Criterion works (even though Bloch strongly recommends against inner
-//        // classes implementing Serializable):
-//        Criterion cn = c.new Criterion("Author.NAME", "author");
-//        Criterion cnClone = (Criterion) SerializationUtils.clone(cn);
-//        assertEquals(cn, cnClone);
-//
-//        // Criteria DOES NOT WORK - i.e. it isn't actually Serializable at present.
-//        // http://mail-archives.apache.org/mod_mbox/db-torque-dev/200404.mbox/%3CF4DFE8EDB932F641A9407CFB5CA599C3F17DF1@e2kmtl1.internal.sungard.corp%3E
-//        c.add("Author.NAME", "author");
-//        Criteria cClone = (Criteria) SerializationUtils.clone(c);
-//        assertEquals(c, cClone);
-//    }
+    /**
+     * Test that serialization works.
+     */
+    public void testSerialization()
+    {
+        c.setOffset(10);
+        c.setLimit(11);
+        c.setIgnoreCase(true);
+        c.setSingleRecord(true);
+        c.setCascade(true);
+        c.setDbName("myDB");
+        c.setAll();
+        c.setDistinct();
+        c.addSelectColumn("Author.NAME");
+        c.addSelectColumn("Author.AUTHOR_ID");
+        c.addDescendingOrderByColumn("Author.NAME");
+        c.addAscendingOrderByColumn("Author.AUTHOR_ID");
+        c.addAlias("Writer", "Author");
+        c.addAsColumn("AUTHOR_NAME", "Author.NAME");
+        c.addJoin("Author.AUTHOR_ID", "Book.AUTHOR_ID", Criteria.INNER_JOIN);
+        c.add("Author.NAME", (Object) "author%", Criteria.LIKE);
+
+        // Some direct Criterion checks
+        Criterion cn = c.getCriterion("Author.NAME");
+        cn.setIgnoreCase(true);
+        assertEquals("author%", cn.getValue());
+        assertEquals(Criteria.LIKE, cn.getComparison());
+        Criterion cnDirectClone = (Criterion) SerializationUtils.clone(cn);
+        assertEquals(cn, cnDirectClone);
+
+        // Clone the object
+        Criteria cClone = (Criteria) SerializationUtils.clone(c);
+
+        // Check the clone
+        assertEquals(c.size(), cClone.size());
+        assertEquals(10, cClone.getOffset());
+        assertEquals(c.getOffset(), cClone.getOffset());
+        assertEquals(11, cClone.getLimit());
+        assertEquals(c.getLimit(), cClone.getLimit());
+        assertEquals(true, cClone.isIgnoreCase());
+        assertEquals(c.isIgnoreCase(), cClone.isIgnoreCase());
+        assertEquals(true, cClone.isSingleRecord());
+        assertEquals(c.isSingleRecord(), cClone.isSingleRecord());
+        assertEquals(true, cClone.isCascade());
+        assertEquals(c.isCascade(), cClone.isCascade());
+        assertEquals("myDB", cClone.getDbName());
+        assertEquals(c.getDbName(), cClone.getDbName());
+        List selectModifiersClone = cClone.getSelectModifiers();
+        assertTrue(selectModifiersClone.contains(Criteria.ALL.toString()));
+        assertTrue(selectModifiersClone.contains(Criteria.DISTINCT.toString()));
+        assertEquals(c.getSelectModifiers(), cClone.getSelectModifiers());
+        List selectColumnsClone = cClone.getSelectColumns();
+        assertTrue(selectColumnsClone.contains("Author.NAME"));
+        assertTrue(selectColumnsClone.contains("Author.AUTHOR_ID"));
+        assertEquals(c.getSelectColumns(), cClone.getSelectColumns());
+        List orderByColumnsClone = cClone.getOrderByColumns();
+        assertTrue(orderByColumnsClone.contains("Author.NAME DESC"));
+        assertTrue(orderByColumnsClone.contains("Author.AUTHOR_ID ASC"));
+        assertEquals(c.getOrderByColumns(), cClone.getOrderByColumns());
+        Map aliasesClone = cClone.getAliases();
+        assertTrue(aliasesClone.containsKey("Writer"));
+        assertEquals("Author", aliasesClone.get("Writer"));
+        assertEquals(c.getAliases(), cClone.getAliases());
+        Map asColumnsClone = cClone.getAsColumns();
+        assertTrue(asColumnsClone.containsKey("AUTHOR_NAME"));
+        assertEquals("Author.NAME", asColumnsClone.get("AUTHOR_NAME"));
+        assertEquals(c.getAsColumns(), cClone.getAsColumns());
+
+        // Check Joins
+        List joinsClone = cClone.getJoins();
+        Join joinClone = (Join) joinsClone.get(0);
+        assertEquals("Author.AUTHOR_ID", joinClone.getLeftColumn());
+        assertEquals("Book.AUTHOR_ID", joinClone.getRightColumn());
+        assertEquals(Criteria.INNER_JOIN, joinClone.getJoinType());
+        assertEquals(c.getJoins(), cClone.getJoins());
+
+        // Some Criterion checks
+        Criterion cnClone = cClone.getCriterion("Author.NAME");
+        assertEquals("author%", cnClone.getValue());
+        assertEquals(Criteria.LIKE, cnClone.getComparison());
+        assertEquals(cn.isIgnoreCase(), cnClone.isIgnoreCase());
+
+        // Confirm that equals() checks all of the above.
+        assertEquals(c, cClone);
+
+        // Check hashCode() too.
+        assertEquals(c.hashCode(), cClone.hashCode());
+    }
 
     /**
      * test for TRQS25
