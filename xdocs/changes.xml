@@ -26,6 +26,9 @@
   <body>
 
   <release version="3.2-rc3-dev" date="in SVN">
+    <action type="fix" dev="tfischer">
+      Fixed support for limit and offset for Derby in the runtime.
+    </action>
     <action type="add" dev="tfischer">
       Added hyperlinks to foreign key in the documentation to point to 
       the referenced table.
