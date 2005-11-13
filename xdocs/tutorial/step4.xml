@@ -62,7 +62,7 @@
     <dependency>
       <artifactId>torque</artifactId>
       <groupId>torque</groupId>
-      <version>3.2-rc2</version>
+      <version>3.2-rc3</version>
     </dependency>
 
     <dependency>

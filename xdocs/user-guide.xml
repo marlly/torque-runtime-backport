@@ -91,7 +91,7 @@
 </p>
 
 <source><![CDATA[
-maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc2
+maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversion=3.2-rc3
 ]]></source>
 
 
@@ -103,14 +103,14 @@ maven plugin:download -DartifactId=maven-torque-plugin -DgroupId=torque -Dversio
   If you prefer to use <a href="http://ant.apache.org/">Ant</a> you need access
   to the Torque generator distribution and associated libraries - these are
   available from the
-  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.2-rc2/">
-  Downloads page</a> (the file to download is torque-gen-3.2-rc2.tar.gz or
-  torque-gen-3.2-rc2.zip, depending on your development platform).  Unpack the
+  <a href="http://jakarta.apache.org/builds/jakarta-turbine/torque/release/3.2-rc3/">
+  Downloads page</a> (the file to download is torque-gen-3.2-rc3.tar.gz or
+  torque-gen-3.2-rc3.zip, depending on your development platform).  Unpack the
   archive to reveal the following directory structure:
 </p>
 
 <source><![CDATA[
-torque-gen-3.2-rc2/
+torque-gen-3.2-rc3/
     docs/              <--- Contains a copy of the Torque documentation,
                             including the API JavaDocs.
     lib/               <--- Contains the jar files required by the Torque
@@ -132,7 +132,7 @@ torque-gen-3.2-rc2/
     default.properties <--- The default property values that are used to
                             configure the Torque generator.
     LICENSE.txt        <--- The License for the Torque generator.
-    torque-gen-3.2-rc2.jar
+    torque-gen-3.2-rc3.jar
                        <--- The generator jar.
 ]]></source>
 
