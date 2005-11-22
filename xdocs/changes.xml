@@ -25,6 +25,20 @@
 
   <body>
 
+  <release version="3.2-rc4-dev" date="in SVN">
+    <action type="fix" dev="tfischer">
+      Fixed foreign key support in mysql to allow the referenced table to
+      be declared before the referencing table.
+      This is done by defining the foreign keys in an extra 
+      &quot;CREATE TABLE&quot; statement instead of defining them in the 
+      &quot;CREATE TABLE&quot; statement. 
+      Note that foreign keys are ignored by mysql except in InnoDB tables. 
+      <br />
+      Thanks to Thoralf Rickert for suggesting the patch.
+      Fixes also TRQS278.
+    </action>
+  </release>
+
   <release version="3.2-rc3" date="2005-11-13">
     <action type="fix" dev="tfischer">
       Fixed support for limit and offset for Derby in the runtime.
