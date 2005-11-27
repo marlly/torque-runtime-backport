@@ -37,7 +37,7 @@
           LONGVARCHAR, BINARY and VARBINARY
         </li>
         <li>
-          Implemented the fuctions getMaxColumnNameLength(), 
+          Implemented the methods getMaxColumnNameLength(), 
           hasScale() and hasSize() in PlatformDerbyImpl
         </li>
         <li>
