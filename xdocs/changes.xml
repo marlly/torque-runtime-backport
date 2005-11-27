@@ -26,6 +26,32 @@
   <body>
 
   <release version="3.2-rc4-dev" date="in SVN">
+    <action type="add" dev="tfischer">
+      Extended support for derby.
+      <ul>
+        <li>
+          IdMethod native is now supported
+        </li>
+        <li>
+          Added mappings for Torque types 
+          LONGVARCHAR, BINARY and VARBINARY
+        </li>
+        <li>
+          Implemented the fuctions getMaxColumnNameLength(), 
+          hasScale() and hasSize() in PlatformDerbyImpl
+        </li>
+        <li>
+          Foreign keys are now declared outside the CREATE TABLE statement,
+          allowing to create foreign references independent of the order of
+          tables in the schema.xml
+        </li>
+        <li>
+          The SQL for the creation of Indices is now generated correctly 
+          (a CRLF was missing at the end)
+        </li>
+      </ul>
+      Thanks to Johnny Macchione for the patches. 
+    </action>
     <action type="fix" dev="tfischer">
       Fixed foreign key support in mysql to allow the referenced table to
       be declared before the referencing table.

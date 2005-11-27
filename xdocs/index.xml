@@ -80,7 +80,7 @@
         <tr>
           <td>Derby</td>
           <td>org.apache.derby.jdbc.EmbeddedDriver</td>
-          <td>Only the embedded driver works. idMethod=&quot;native&quot; does not work.</td>
+          <td>Only the embedded driver works.</td>
           <td><a href="mailto:fischer@seitenbau.de">Thomas Fischer</a></td>
         </tr>
         <tr>

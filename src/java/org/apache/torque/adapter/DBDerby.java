@@ -67,15 +67,19 @@ public class DBDerby
      */
     public String getIDMethodType()
     {
-        return NO_ID_METHOD; // @todo IDENTITY;
+        return AUTO_INCREMENT;
     }
 
     /**
+     * Returns the SQL to get the database key of the last row
+     * inserted, which in this case is 
+     * <code>VALUES IDENTITY_VAL_LOCAL()</code>.
+     * 
      * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object obj)
      */
     public String getIDMethodSQL(Object obj)
     {
-        return ""; // @todo VALUES IDENTITY_VAL_LOCAL()";
+        return "VALUES IDENTITY_VAL_LOCAL()";
     }
 
     /**
