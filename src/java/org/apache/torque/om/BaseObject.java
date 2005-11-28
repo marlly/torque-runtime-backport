@@ -222,7 +222,8 @@ public abstract class BaseObject implements Persistent, Serializable
      * Compares the primary key of this instance with the key of another.
      *
      * @param bo The object to compare to.
-     * @return   Whether the primary keys are equal.
+     * @return   Whether the primary keys are equal and the object have the 
+     *           same class.
      */
     public boolean equals(BaseObject bo)
     {
@@ -235,6 +236,10 @@ public abstract class BaseObject implements Persistent, Serializable
             return true;
         }
         else if (getPrimaryKey() == null || bo.getPrimaryKey() == null)
+        {
+            return false;
+        }
+        else if (!getClass().equals(bo.getClass()))
         {
             return false;
         }
