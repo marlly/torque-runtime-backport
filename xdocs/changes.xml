@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2-rc4-dev" date="in SVN">
+    <action type="fix" dev="tfischer" issue="TRQS133">
+      BaseObject.equals() does not return true anymore if the objects
+      do not have the same class.
+      Thanks to Patrick Carl for the patch.
+    </action>
     <action type="add" dev="tfischer">
       Extended support for derby.
       <ul>
