@@ -26,6 +26,11 @@
   <body>
 
   <release version="3.2.1-dev" date="in SVN">
+    <action type="add" dev="tfischer" issue="TRQS133">
+      Subqueries are now supported.
+      This has caused Criterion.appendTo(StringBuffer) to declare throwing 
+      a Torque Exception.
+    </action>
     <action type="fix" dev="tfischer" issue="TRQS133">
       BaseObject.equals() does not return true anymore if the objects
       do not have the same class.

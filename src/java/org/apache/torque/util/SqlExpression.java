@@ -195,6 +195,7 @@ public class SqlExpression
                               boolean ignoreCase,
                               DB db,
                               StringBuffer whereClause)
+            throws TorqueException
     {
         // Allow null criteria
         // This will result in queries like
@@ -253,6 +254,30 @@ public class SqlExpression
             else if (criteria instanceof Boolean)
             {
                 criteria = db.getBooleanString((Boolean) criteria);
+            }
+            else if (criteria instanceof Criteria)
+            {
+                 Query subquery = SQLBuilder.buildQueryClause(
+                        (Criteria) criteria, 
+                        null, 
+                        new SQLBuilder.QueryCallback() {
+                            public String process(
+                                    Criteria.Criterion criterion, 
+                                    List params)
+                            {
+                                return criterion.toString();
+                            }
+                });
+                if (comparison.equals(Criteria.IN)
+                        || comparison.equals(Criteria.NOT_IN))
+                {
+                    // code below takes care of adding brackets
+                    criteria = subquery.toString();
+                }
+                else
+                {
+                    criteria = "(" + subquery.toString() + ")";
+                }
             }
         }
 
@@ -506,6 +531,11 @@ public class SqlExpression
                 // and/or wraps it in UPPER().
                 inClause.add(processInValue(value, ignoreCase, db));
             }
+        }
+        else if (criteria instanceof String)
+        {
+            // subquery
+            inClause.add(criteria);
         }
         else
         {

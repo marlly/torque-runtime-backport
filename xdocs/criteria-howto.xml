@@ -232,6 +232,35 @@ List bookAuthors = AuthorPeer.doSelect(criteria);</source>
 
   </section>
 
+  <section name="subselects">
+    <p>
+      To use a subselect, simply put a criteria which represents the 
+      subselect at the place where you would normally specify the column
+      value(s) explicitly.
+    </p>
+    
+    <p>
+      Do not forget to specify the selectColumns in the Criteria representing
+      the subselect (usually, the Peer classes do this for you, but not in the 
+      subselect).
+    </p>
+    
+    <p>
+      As an example, assume we want to read the author with the largest authorId
+      from the database. This can be done as follows:
+    </p>
+    
+<source>
+Criteria subquery = new Criteria();
+subquery.addSelectColumn("MAX(" + AuthorPeer.AUTHOR_ID + ")");
+
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.AUTHOR_ID, subquery);
+
+List authors = AuthorPeer.doSelect(criteria);
+</source>
+  </section>
+
   <section name="Using the Comparators in Criteria">
 
    <p>

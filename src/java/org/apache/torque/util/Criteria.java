@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.Torque;
+import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
@@ -3390,7 +3391,7 @@ public class Criteria extends Hashtable
         /**
          * Appends a representation of the Criterion onto the buffer.
          */
-        public void appendTo(StringBuffer sb)
+        public void appendTo(StringBuffer sb) throws TorqueException
         {
             //
             // it is alright if value == null
@@ -3567,7 +3568,14 @@ public class Criteria extends Hashtable
             }
 
             StringBuffer expr = new StringBuffer(25);
-            appendTo(expr);
+            try
+            {
+                appendTo(expr);
+            }
+            catch (TorqueException e)
+            {
+                return("Criterion cannot be evaluated");
+            }
             return expr.toString();
         }
 
