@@ -34,9 +34,9 @@
 
   <dependencies>
     <dependency>
-      <artifactId>avalon-framework</artifactId>
       <groupId>avalon-framework</groupId>
-      <version>4.1.4</version>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.3</version>
       <url>http://avalon.apache.org/</url>
       <properties>
         <dist.bundle>true</dist.bundle>
@@ -44,8 +44,18 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-beanutils</artifactId>
+        <groupId>avalon-logkit</groupId>
+        <artifactId>avalon-logkit</artifactId>
+        <version>2.1</version>
+        <type>jar</type>
+        <properties>
+            <war.bundle>true</war.bundle>
+        </properties>
+    </dependency>
+
+    <dependency>
       <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils-core</artifactId>
       <version>1.7.0</version>
       <url>http://jakarta.apache.org/commons/beanutils/</url>
       <properties>
@@ -54,8 +64,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-collections</artifactId>
       <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
       <version>3.1</version>
       <url>http://jakarta.apache.org/commons/collections/</url>
       <properties>
@@ -64,9 +74,9 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-configuration</artifactId>
       <groupId>commons-configuration</groupId>
-      <version>1.1</version>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.2</version>
       <url>http://jakarta.apache.org/commons/configuration/</url>
       <properties>
         <dist.bundle>true</dist.bundle>
@@ -74,8 +84,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-dbcp</artifactId>
       <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
       <version>1.2.1</version>
       <url>http://jakarta.apache.org/commons/dbcp/</url>
       <properties>
@@ -84,8 +94,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-lang</artifactId>
       <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
       <version>2.1</version>
       <url>http://jakarta.apache.org/commons/lang/</url>
       <properties>
@@ -94,8 +104,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-logging</artifactId>
       <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
       <url>http://jakarta.apache.org/commons/logging/</url>
       <properties>
@@ -104,8 +114,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>commons-pool</artifactId>
       <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
       <version>1.2</version>
       <url>http://jakarta.apache.org/commons/pool/</url>
       <properties>
@@ -114,32 +124,32 @@
     </dependency>
 
     <dependency>
-      <artifactId>jcs</artifactId>
       <groupId>jcs</groupId>
+      <artifactId>jcs</artifactId>
       <version>20030822.182132</version>
-      <url>http://jakarta.apache.org/turbine/jcs/</url>
+      <url>http://jakarta.apache.org/jcs/</url>
       <properties>
         <dist.bundle>true</dist.bundle>
       </properties>
     </dependency>
 
     <dependency>
-      <artifactId>jdbc</artifactId>
       <groupId>jdbc</groupId>
+      <artifactId>jdbc</artifactId>
       <version>2.0</version>
       <url>http://java.sun.com/products/jdbc/download.html#spec</url>
     </dependency>
 
     <dependency>
-      <artifactId>jndi</artifactId>
       <groupId>jndi</groupId>
+      <artifactId>jndi</artifactId>
       <version>1.2.1</version>
       <url>http://java.sun.com/products/jndi/</url>
     </dependency>
 
     <!--dependency>
-      <artifactId>log4j</artifactId>
       <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
       <version>1.2.8</version>
       <url>http://logging.apache.org/log4j/</url>
       <properties>
@@ -148,19 +158,8 @@
     </dependency-->
 
     <dependency>
-      <!-- just needed for the runtimetest, as far as I can see -->
-      <artifactId>logkit</artifactId>
-      <groupId>logkit</groupId>
-      <version>1.0.1</version>
-      <url>http://avalon.apache.org/products/runtime/system/logging/</url>
-      <properties>
-        <dist.bundle>true</dist.bundle>
-      </properties>
-    </dependency>
-
-    <dependency>
-      <artifactId>village</artifactId>
       <groupId>village</groupId>
+      <artifactId>village</artifactId>
       <version>2.0</version>
       <url>http://www.softwareforge.de/projects/village</url>
       <properties>
@@ -169,8 +168,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>xercesImpl</artifactId>
       <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
       <version>2.6.2</version>
       <url>http://xml.apache.org/xerces2-j/</url>
       <properties>
@@ -179,8 +178,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>xml-apis</artifactId>
       <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
       <version>2.0.2</version>
       <url>http://xml.apache.org/commons/</url>
       <properties>
@@ -189,8 +188,8 @@
     </dependency>
 
     <dependency>
-      <artifactId>junit</artifactId>
       <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <url>http://www.junit.org</url>
     </dependency>
