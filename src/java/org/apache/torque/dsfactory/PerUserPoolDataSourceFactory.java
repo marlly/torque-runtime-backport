@@ -38,7 +38,6 @@ import org.apache.torque.TorqueException;
  */
 public class PerUserPoolDataSourceFactory
     extends AbstractDataSourceFactory
-    implements DataSourceFactory
 {
 
     /** The log. */
@@ -46,7 +45,7 @@ public class PerUserPoolDataSourceFactory
             = LogFactory.getLog(PerUserPoolDataSourceFactory.class);
 
     /** The wrapped <code>DataSource</code>. */
-    private PerUserPoolDataSource ds;
+    private PerUserPoolDataSource ds = null;
 
     /**
      * @see org.apache.torque.dsfactory.DataSourceFactory#getDataSource

@@ -48,7 +48,6 @@ import org.apache.torque.TorqueException;
  */
 public class JndiDataSourceFactory
     extends AbstractDataSourceFactory
-    implements DataSourceFactory
 {
 
     /** The log. */
@@ -243,12 +242,12 @@ public class JndiDataSourceFactory
     {
         log.debug("InitialContext -------------------------------");
         Map env = ctx.getEnvironment();
-        Iterator qw = env.keySet().iterator();
+        Iterator qw = env.entrySet().iterator();
         log.debug("Environment properties:" + env.size());
         while (qw.hasNext())
         {
-            Object prop = qw.next();
-            log.debug("    " + prop + ": " + env.get(prop));
+            Map.Entry entry = (Map.Entry)qw.next(); 
+            log.debug("    " + entry.getKey() + ": " + entry.getValue());
         }
         log.debug("----------------------------------------------");
     }

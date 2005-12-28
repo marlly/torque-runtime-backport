@@ -47,6 +47,7 @@ import org.apache.torque.om.StringKey;
 
 import com.workingdogs.village.Column;
 import com.workingdogs.village.DataSet;
+import com.workingdogs.village.DataSetException;
 import com.workingdogs.village.KeyDef;
 import com.workingdogs.village.QueryDataSet;
 import com.workingdogs.village.Record;
@@ -89,7 +90,7 @@ public abstract class BasePeer
     private static Hashtable mapBuilders = new Hashtable(5);
 
     /** the log */
-    protected static Log log = LogFactory.getLog(BasePeer.class);
+    protected static final Log log = LogFactory.getLog(BasePeer.class);
 
     private static void throwTorqueException(Exception e)
         throws TorqueException
@@ -259,8 +260,9 @@ public abstract class BasePeer
                 {
                     statement.close();
                 }
-                catch (SQLException ignored)
+                catch (SQLException e)
                 {
+                    throw new TorqueException(e);
                 }
             }
         }
@@ -332,7 +334,6 @@ public abstract class BasePeer
         throws TorqueException
     {
         String dbName = criteria.getDbName();
-        final DB db = Torque.getDB(dbName);
         final DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
         // This Callback adds all tables to the Table set which
@@ -494,12 +495,6 @@ public abstract class BasePeer
             // we're inserting into.
             if (pk != null && !criteria.containsKey(pk.getFullyQualifiedName()))
             {
-                if (keyGen == null)
-                {
-                    throw new TorqueException(
-                            "IdGenerator for table '" + table + "' is null");
-                }
-
                 id = getId(pk, keyGen, con, keyInfo);
                 criteria.add(pk.getFullyQualifiedName(), id);
             }
@@ -515,7 +510,15 @@ public abstract class BasePeer
             // not the fully qualified name, insertOrUpdateRecord wants to use table as an index...
             BasePeer.insertOrUpdateRecord(rec, table, dbName, criteria);
         }
-        catch (Exception e)
+        catch (DataSetException e)
+        {
+            throwTorqueException(e);
+        }
+        catch (SQLException e)
+        {
+            throwTorqueException(e);
+        }
+        catch (TorqueException e)
         {
             throwTorqueException(e);
         }
@@ -894,7 +897,11 @@ public abstract class BasePeer
             results = getSelectResults(
                     qds, start, numberOfResults, singleRecord);
         }
-        catch (Exception e)
+        catch (DataSetException e)
+        {
+            throwTorqueException(e);
+        }
+        catch (SQLException e)
         {
             throwTorqueException(e);
         }
@@ -1206,10 +1213,6 @@ public abstract class BasePeer
         Connection con)
         throws TorqueException
     {
-        String dbName = criteria.getDbName();
-        DB db = Torque.getDB(dbName);
-        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
-
         Set tables = SQLBuilder.getTableSet(criteria, null);
 
         try
@@ -1444,7 +1447,11 @@ public abstract class BasePeer
                 VillageUtils.close(qds);
             }
         }
-        catch (Exception e)
+        catch (DataSetException e)
+        {
+            throwTorqueException(e);
+        }
+        catch (SQLException e)
         {
             throwTorqueException(e);
         }

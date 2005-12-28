@@ -3090,13 +3090,13 @@ public class Criteria extends Hashtable
 
         // Criteria.put() differs somewhat from Hashtable.put().
         // This necessitates some corrective behavior upon deserialization.
-        for (Iterator iter = keySet().iterator(); iter.hasNext();)
+        for (Iterator iter = entrySet().iterator(); iter.hasNext();)
         {
-            Object key = iter.next();
-            Object value = get(key);
+            Map.Entry entry = (Map.Entry)iter.next();
+            Object value = entry.getValue();
             if (value instanceof Criteria.Criterion)
             {
-                super.put(key, value);
+                super.put(entry.getKey(), value);
             }
         }
 

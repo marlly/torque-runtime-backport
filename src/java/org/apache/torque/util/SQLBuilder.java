@@ -404,7 +404,6 @@ public abstract class SQLBuilder
             final QueryCallback qc)
         throws TorqueException
     {
-        UniqueList fromClause = query.getFromClause();
         UniqueList whereClause = query.getWhereClause();
 
         for (Iterator it = crit.keySet().iterator(); it.hasNext(); )

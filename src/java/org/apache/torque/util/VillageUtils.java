@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
-import org.apache.torque.TorqueException;
 import org.apache.torque.om.SimpleKey;
 
 import com.workingdogs.village.QueryDataSet;
@@ -113,18 +113,15 @@ public abstract class VillageUtils
         throws Exception
     {
         Hashtable saveData = new Hashtable(hash.size());
-        String key = null;
-        Object value = null;
         byte[] byteArray = null;
 
-        Iterator keys = hash.keySet().iterator();
+        Iterator keys = hash.entrySet().iterator();
         while (keys.hasNext())
         {
-            key = (String) keys.next();
-            value = hash.get(key);
-            if (value instanceof Serializable)
+            Map.Entry entry = (Map.Entry)keys.next();
+            if (entry.getValue() instanceof Serializable)
             {
-                saveData.put(key, value);
+                saveData.put(entry.getKey(), entry.getValue());
             }
         }
 

@@ -33,7 +33,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.adapter.DBFactory;
-import org.apache.torque.dsfactory.AbstractDataSourceFactory;
 import org.apache.torque.dsfactory.DataSourceFactory;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
@@ -813,9 +812,6 @@ public class TorqueInstance
     public Connection getConnection(String name)
             throws TorqueException
     {
-        Connection con = null;
-        DataSourceFactory dsf = null;
-
         try
         {
             return getDataSourceFactory(name).getDataSource().getConnection();

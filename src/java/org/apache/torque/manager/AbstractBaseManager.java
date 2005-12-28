@@ -51,7 +51,7 @@ public abstract class AbstractBaseManager
     implements Serializable
 {
     /** the log */
-    protected static Log log = LogFactory.getLog(AbstractBaseManager.class);
+    protected static final Log log = LogFactory.getLog(AbstractBaseManager.class);
 
     /** used to cache the om objects. cache is set by the region property */
     protected transient GroupCacheAccess cache;
@@ -439,10 +439,11 @@ public abstract class AbstractBaseManager
                 mrCache = new NoOpMethodResultCache(cache);
             }
         }
-        catch (Exception e)
+        catch (CacheException e)
         {
             throw new TorqueException("Cache could not be initialized", e);
         }
+        
         if (cache == null)
         {
             log.info("Cache could not be initialized for region: " + v);
