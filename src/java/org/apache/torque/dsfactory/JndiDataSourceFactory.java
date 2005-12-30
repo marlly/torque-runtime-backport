@@ -49,6 +49,33 @@ import org.apache.torque.TorqueException;
 public class JndiDataSourceFactory
     extends AbstractDataSourceFactory
 {
+    /**
+     * Key for the configuration which contains jndi properties.
+     */
+    public static final String JNDI_KEY = "jndi";
+
+    /**
+     *  Key for the configuration property which contains the jndi path.
+     */
+    public static final String PATH_KEY = "path";
+
+    /**
+     *  Key for the configuration property which contains the 
+     *  time between two jndi lookups.
+     */
+    public static final String TIME_BETWEEN_LOOKUPS_KEY = "ttl";
+
+    /**
+     * Key for the configuration which contains properties for a DataSource
+     * which should be bound into jndi.
+     */
+    public static final String DATASOURCE_KEY = "datasource";
+    
+    /**
+     *  Key for the configuration property which contains the class name
+     *  of the datasource to be bound into jndi.
+     */
+    public static final String CLASSNAME_KEY = "classname";
 
     /** The log. */
     private static Log log = LogFactory.getLog(JndiDataSourceFactory.class);
@@ -111,7 +138,7 @@ public class JndiDataSourceFactory
     {
         log.debug("Starting initJNDI");
 
-        Configuration c = configuration.subset("jndi");
+        Configuration c = configuration.subset(JNDI_KEY);
         if (c == null || c.isEmpty())
         {
             throw new TorqueException(
@@ -125,7 +152,7 @@ public class JndiDataSourceFactory
             for (Iterator i = c.getKeys(); i.hasNext(); )
             {
                 String key = (String) i.next();
-                if (key.equals("path"))
+                if (key.equals(PATH_KEY))
                 {
                     path = c.getString(key);
                     if (log.isDebugEnabled())
@@ -133,7 +160,7 @@ public class JndiDataSourceFactory
                         log.debug("JNDI path: " + path);
                     }
                 }
-                else if (key.equals("ttl"))
+                else if (key.equals(TIME_BETWEEN_LOOKUPS_KEY))
                 {
                     ttl = c.getLong(key, ttl);
                     if (log.isDebugEnabled())
@@ -177,13 +204,13 @@ public class JndiDataSourceFactory
         {
             Object ds = null;
 
-            Configuration c = configuration.subset("datasource");
+            Configuration c = configuration.subset(DATASOURCE_KEY);
             if (c != null)
             {
                 for (Iterator i = c.getKeys(); i.hasNext(); )
                 {
                     String key = (String) i.next();
-                    if (key.equals("classname"))
+                    if (key.equals(CLASSNAME_KEY))
                     {
                         String classname = c.getString(key);
                         if (log.isDebugEnabled())
@@ -206,7 +233,8 @@ public class JndiDataSourceFactory
                         }
                         else
                         {
-                            log.error("Tried to set property " + key + " without Datasource definition!");
+                            log.error("Tried to set property " + key 
+                                    + " without Datasource definition!");
                         }
                     }
                 }
