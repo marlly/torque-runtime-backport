@@ -60,6 +60,7 @@ import org.apache.torque.om.ObjectKey;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @author <a href="mailto:seade@backstagetech.com.au">Scott Eade</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class Criteria extends Hashtable
@@ -3090,13 +3091,13 @@ public class Criteria extends Hashtable
 
         // Criteria.put() differs somewhat from Hashtable.put().
         // This necessitates some corrective behavior upon deserialization.
-        for (Iterator iter = entrySet().iterator(); iter.hasNext();)
+        for (Iterator iter = keySet().iterator(); iter.hasNext();)
         {
-            Map.Entry entry = (Map.Entry)iter.next();
-            Object value = entry.getValue();
+            Object key = iter.next();
+            Object value = get(key);
             if (value instanceof Criteria.Criterion)
             {
-                super.put(entry.getKey(), value);
+                super.put(key, value);
             }
         }
 
