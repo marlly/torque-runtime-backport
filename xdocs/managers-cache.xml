@@ -80,7 +80,7 @@
     The key given for the region is used in a JCS
     configuration file, cache.ccf, to set up a cache that the manager uses
     to store objects for which it is responsible. See the JCS
-    <a href="http://jakarta.apache.org/turbine/jcs/">
+    <a href="http://jakarta.apache.org/jcs/">
     documentation</a> for details on configuring JCS.  But here is a
     simple section that creates an in-memory only LRU cache for FooManager.
   </p>
