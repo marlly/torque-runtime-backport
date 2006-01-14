@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.sql.SQLException;
 /**
  * This is used to connect to Hypersonic SQL databases.
  *
- * <a href="http://hsql.oron.ch/">http://hsql.oron.ch</a>
+ * <a href="http://hsqldb.org/">http://hsqldb.org/</a>
  *
  * @author <a href="mailto:celkins@scardini.com">Christopher Elkins</a>
  * @version $Id$

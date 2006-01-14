@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import java.sql.SQLException;
  * This is used to connect via the NET-Driver to DB2 databases.
  *
  * <p>
- * <a href="http://www-4.ibm.com/software/data/db2/">
+ * <a href="http://www-306.ibm.com/software/data/db2/">
  * http://www-4.ibm.com/software/data/db2/
  * </a>
  *

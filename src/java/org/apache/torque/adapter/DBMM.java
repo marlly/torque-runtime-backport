@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,7 @@ import java.text.SimpleDateFormat;
  * fill in the appropriate values for DB_NAME, DB_HOST, DB_USER,
  * DB_PASS.
  *
- * <P><A HREF="http://www.worldserver.com/mm.mysql/">
- * http://www.worldserver.com/mm.mysql/</A>
+ * <P><a href="http://www.mysql.com/">http://www.mysql.com/</a>
  * <p>"jdbc:mysql://" + DB_HOST + "/" + DB_NAME + "?user=" +
  * DB_USER + "&password=" + DB_PASS;
  *
