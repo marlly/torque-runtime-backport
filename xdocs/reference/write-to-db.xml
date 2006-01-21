@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2001-2005 The Apache Software Foundation.
+
+ Licensed under the Apache License, Version 2.0 (the "License")
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<document>
+ <properties>
+   <title>Torque Runtime Reference - Writing to the database</title>
+   <author email="leon@opticode.co.za">Leon Messerschmidt</author>
+   <author email="jvanzyl@periapt.com">Jason van Zyl</author>
+   <author email="seade@backstagetech.com.au">Scott Eade</author>
+ </properties>
+
+ <body>
+  <section name="Saving an object (inserts and updates)">
+
+    <p>
+      To write an object into the database, call its save() method.  Depending 
+      on whether the data object was newly created or was read from the
+      database, the corresponding row in the database table is inserted or 
+      updated.  If the object is new, its primary key(s) is/are generated 
+      automatically if the id method was set to &quot;idbroker&quot; or
+      &quot;native&quot; in the schema.xml.
+    </p>
+    
+    <p>
+      As an example, consider the following code, which creates an Author 
+      object and inserts it into the database. Then the object is loaded again,
+      modified. and updates the corresponding row in the databse.
+    </p>
+
+<source>
+Author stevens = new Author();
+stevens.setFirstName("W.");
+stevens.setLastName("Stevens");
+stevens.save();
+</source>
+    
+    <p>
+      If the generator properties &quot;torque.complexObjectModel&quot; and 
+      &quot;torque.objectIsCaching&quot; were not set to false at generation 
+      time, any objects which are referenced in the foreign key Lists of the
+      object are also saved.  
+    </p>
+
+    <p>
+      For example, in the following code, calling
+      book.save() also saves the author added to the book:
+    </p>
+    
+<source>
+Author bloch = new Author();
+bloch.setFirstName("Joshua");
+bloch.setLastName("Bloch");
+Book effective = new Book();
+effective.setTitle("Effective Java");
+effective.setISBN("0-618-12902-2");
+effective.setPublisher(addison);
+bloch.addBook(effective);
+bloch.save(); //also saves the book "effective"
+</source>
+
+    <p>
+      Note that the save is only propagated in the 1->n directions of foreign 
+      keys, not in the n->1 direction. I.e. in the above example, calling 
+      <code>effective.save()</code> would NOT save the corresponding author.
+    </p>
+
+    <p>
+      If the object which save method is called is neither new nor modified,
+      it is not saved. Internally, this is handled via the <code>isNew</code>
+      and <code>modifed</code> flags of the object.
+    </p>
+      
+    <p>
+      There are alternative ways to insert or update an object in the database:
+      you can pass the objects to the <code>doInsert()</code> or 
+      <code>doUpdate</code> methods of their corresponding Peers, or you can 
+      create a criteria object which contains the data of the object and pass
+      the Criteria object to the <code>doInsert()</code> or 
+      <code>doUpdate</code> methods of the Peer class.  
+      Note that if you construct a criteria, the id field is not added to the 
+      Criteria.  It is taken care of by underlying database system (or perhaps 
+      the ID BROKER when it is in use).
+      The object that is returned by doInsert is the id of the newly added row.
+    </p>
+
+  </section>
+
+  <section name="Deleting objects">
+    <p>
+      Deletes work much in the same way as a select. If you, for example,
+      want to delete the author with id = 3 then you simply add it to the
+      Criteria and call doDelete.
+    </p>
+
+<source>
+Criteria criteria = new Criteria();
+crit.add(AuthorPeer.AUTHOR_ID, 3);
+AuthorPeer.doDelete(criteria);
+</source>
+
+  </section>
+ </body>
+</document>

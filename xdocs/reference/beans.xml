@@ -17,103 +17,99 @@
 
 <document>
  <properties>
-  <title>Beans Howto</title>
+  <title>Torque Runtime Reference - Beans</title>
   <author email="fischer@seitenbau.de">Thomas Fischer</author>
  </properties>
 
  <body>
+ 
+  <section name="Introduction">
+
+    <p>
+      Bean creation is turned off by default. To enable bean creation,
+      you have to generate your object model with the property 
+      <code>torque.generateBeans</code>code> set to <code>true</code>.
+    </p>
+    
+    <p>
+      Creating beans from Torque objects creates a bridge between
+      an environment which knows Torque and has access to a database,
+      and another environment which does not know anything about Torque
+      and databases.
+    </p>
+
+    <p>
+      For example, you might have a server using Torque, and a java client
+      without database access where you want to use data supplied by
+      Torque, but do not want to include Torque in any way.
+    </p>
+
+    <p>
+      If this is the case, you can create simple beans from Torque objects
+      in the server, send them over the network to your client,
+      manipulate them there, send them back over the network,
+      create Torque objects from the beans,
+      and save the objects generated from the beans.
+    </p>
+
+  </section>
 
   <section name="Creation of beans from Torque objects and vice versa">
 
-   <p>
-    Creating beans from Torque objects creates a bridge between
-    an environment which knows Torque and has access to a database,
-    and another environment which dies not know anything about Torque
-    and databases.
-   </p>
+    <subsection name="Created bean classes">
 
-   <p>
-    For example, you might have a server using Torque, and a java client
-    without database access where you want to use data supplied by
-    Torque, but do not want to include Torque in any way.
-   </p>
+      <p>
+        If bean creation is turned on, the beans are automatically created
+        by torque in the bean subpackage of your target package. 
+        E.g. in the bookstore example in the tutorial, the classes
+        are generated in the com.kazmier.om package, so the beans 
+        will be generated in the package com.kazmier.om.bean.
+        Each bean has getters and setters for all the properties defined
+        in the schema.xml.
+      </p>
 
-   <p>
-    If this is the case, you can create simple beans from Torque objects
-    in the server, send them over the network to your client,
-    manipulate them there, send them back over the network,
-    create Torque objects from the beans,
-    and save the objects generated from the beans.
-   </p>
+      <p>
+        Also, getters and setters for two boolean values, namely
+        isNew(), setNew(), isModified() and setModified() are generated, 
+        which keep track of which changes have already made it into the
+        database. You should not normally need to use these.
+      </p>
 
-   <subsection name="Enabling bean creation support in the generator">
+    </subsection>
 
-    <p>
-     Bean creation is turned off by default. To enable bean creation,
-     you have to add the following line to your build.properties file
-     in the generator
-    </p>
+    <subsection name="Additional methods in the Torque objects">
 
-    <source>
-torque.generateBeans = true</source>
+      <p>
+        If bean creation is enabled, every Torque object gets some
+        additional methods. E.g, the author class from the bookstore example
+        in the tutorial gets the additional methods
+      </p>
 
-    <p>
-     Then you just need to regenerate your object model to obtain an object model
-     with bean creation support enabled.
-    </p>
-
-   </subsection>
-
-   <subsection name="Created beans">
-    <p>
-     If bean creation is turned on, the beans are automatically created by torque
-     in the bean subpackage of your target package. E.g. in the bookstore example
-     in the tutorial, the classes are generated in the com.kazmier.om package,
-     so the beans will generated in the package com.kazmier.om.bean.
-     Each bean has getters and setters for all the properties defined
-     in the schema.xml.
-    </p>
-
-    <p>
-     Also, getters and setters for two boolean values, namely
-     isNew(), setNew(), isModified() and setModified() are generated, which keep
-     track of which changes have already made it into the
-     database. You should not normally need to use these.
-    </p>
-
-   </subsection>
-
-   <subsection name="Additional methods in the Torque objects">
-
-     <p>
-      If bean creation is enabled, every Torque object gets some
-      additional methods. E.g, the author class from the bookstore example
-      in the tutorial gets the additional methods
-    </p>
-
-    <source>
+<source>
 public AuthorBean createBean();
 
-public static Author createAuthor(AuthorBean bean);</source>
+public static Author createAuthor(AuthorBean bean);
+</source>
 
-    <p>
-     These methods are used to create a bookBean from a book or vice versa.
-    </p>
+      <p>
+        These methods are used to create an AuthorBean from an Author 
+        or vice versa.
+      </p>
 
-   </subsection>
+    </subsection>
 
-   <subsection name="Beans and database state">
+    <subsection name="Beans and database state">
 
-    <p>
-     If a bean is created from an object, the beans gets knowledge about
-     whether the object it was created from already exists in the database,
-     or whether it was changed after redaing it from the database
-     (that is what the isNew() and isModified() methods are for).
-     So assuming we have at least one author stored in the database,
-     the following code works as expected
-    </p>
+      <p>
+        If a bean is created from an object, the beans gets knowledge about
+        whether the object it was created from already exists in the database,
+        or whether it was changed after redaing it from the database
+        (that is what the isNew() and isModified() methods are for).
+        So assuming we have at least one author stored in the database,
+        the following code works as expected
+      </p>
 
-    <source>
+<source>
 List authors = AuthorPeer.doSelect(new Criteria());
 Author author = (Author) authors.get(0);
 
@@ -124,86 +120,92 @@ authorBean.setFirstName("Joshua");
 // e.g. send the authorBean back over the network
 
 Author authorFromBean = Author.createAuthor(authorBean);
-authorFromBean.save();</source>
+authorFromBean.save();
+</source>
 
-    <p>
-     This reads an author from the database,
-     creates a bean from the author,
-     manipulates the bean,
-     and saves the manipulated data back into the database.
-    </p>
+      <p>
+        This reads an author from the database,
+        creates a bean from the author,
+        manipulates the bean,
+        and saves the manipulated data back into the database.
+      </p>
 
-   </subsection>
+    </subsection>
 
-   <subsection name="Object relations">
+    <subsection name="Object relations">
 
-    <p>
-     The bean creation process preserves object relations.
-     Consider again the bookstore example from the tutorial:
-     Each book has an author, and an author can have serveral books.
-     So if you have created an author-book relation, e.g. by
-    </p>
+      <p>
+        The bean creation process preserves object relations.
+        Consider again the bookstore example from the tutorial:
+        Each book has an author, and an author can have serveral books.
+        So if you have created an author-book relation, e.g. by
+      </p>
 
-    <source>
+<source>
 Author author = new Author();
 // fill author data here
 Book book = new Book();
 // fill book data here();
 author.addBook(book);
 
-AuthorBean authorBean = author.getBean();</source>
+AuthorBean authorBean = author.getBean();
+</source>
 
-    <p>
-     then the related bookBean is automatically created,
-     and can be retrieved by
-    </p>
+      <p>
+        then the related bookBean is automatically created,
+        and can be retrieved by
+      </p>
 
-    <source>
-BookBean bookBean = (BookBean) authorBean.getBookBeans().get(0);</source>
+<source>
+BookBean bookBean = (BookBean) authorBean.getBookBeans().get(0);
+</source>
 
-    <p>
-     This is also true in the reverse direction. If you create an
-     author from this authorBean, the corresponding book can also
-     be retrieved:
-    </p>
+      <p>
+        This is also true in the reverse direction. If you create an
+        author from this authorBean, the corresponding book can also
+        be retrieved:
+      </p>
 
-    <source>
+<source>
 Author authorFromBean = Author.createAuthor(authorBean);
-Book bookFromBean = (Book) author.getBooks().get(0);</source>
+Book bookFromBean = (Book) author.getBooks().get(0);
+</source>
 
-    <p>
-     Note that only newly created or cached related objects are cosnidered
-     in bean creation.
-     To elaborate that, consider the case where one author which is related
-     to several books is stored in the database.
-    </p>
+      <p>
+        Note that only newly created or cached related objects are considered
+        in bean creation.
+        To elaborate that, consider the case where one author which is related
+        to several books is stored in the database.
+      </p>
 
-    <p>
-     The following code will NOT transfer the related books into the bean:
-    </p>
+      <p>
+        The following code will NOT transfer the related books into the bean:
+      </p>
 
-    <source>
+<source>
 List authorList = AuthorPeer.doSelect(new Criteria());
 Author author = (Author) authorList.get(0);
-AuthorBean authorBean = author.getBean()</source>
+AuthorBean authorBean = author.getBean();
+</source>
 
-    <p>
-     This is because the related books are never read from the database,
-     and thus are not included in bean conversion. To include the
-     related books into the author bean, you have to assure that the
-     related books are read into memory. This can be done as follows:
-    </p>
+      <p>
+        This is because the related books are never read from the database,
+        and thus are not included in bean conversion. To include the
+        related books into the author bean, you have to assure that the
+        related books are read into memory. This can be done as follows:
+      </p>
 
-    <source>
+<source>
 List authorList = AuthorPeer.doSelect(new Criteria());
 Author author = (Author) authorList.get(0);
 
 // the following reads all books related to the author into memory
 author.getBooks();
 
-AuthorBean authorBean = author.getBean();</source>
+AuthorBean authorBean = author.getBean();
+</source>
 
-   </subsection>
+    </subsection>
 
   </section>
 

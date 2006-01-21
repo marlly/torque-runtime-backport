@@ -18,165 +18,31 @@
 <document>
 
   <properties>
-    <title>Torque</title>
+    <title>Torque - Runtime Documentation</title>
     <author email="jvanzyl@apache.com">Jason van Zyl</author>
     <author email="mpoeschl@marmot.at">Martin Poeschl</author>
     <author email="seade@backstagetech.com.au">Scott Eade</author>
+    <author email="fischer@seitenbau.de">Thomas Fischer</author>
   </properties>
 
   <body>
 
-    <section name="What is Torque?">
+    <section name="Torque Runtime">
       <p>
-        Torque is a persistence layer. Torque includes a <a href="generator">
-        generator</a> to generate all the database
-        resources required by your application and includes a runtime
-        environment to run the generated classes.
+        The Torque runtime is the only part of Torque you need after you
+        have generated the persistence classes using the Torque Maven plugin
+        resp. the Torque generator.  It contains the classes the generated
+        classes depend on.
       </p>
+      
       <p>
-        Torque was developed as part of the
-        <a href="http://jakarta.apache.org/turbine/">Turbine Framework</a>.
-        It is now decoupled and can be used by itself. Starting with version
-        2.2 Turbine uses the decoupled Torque.
+        This section contains information about how to work with the generated
+        classes.  For information of how to generate these classes, see the
+        <a href="../maven-plugin/index.html">Maven plugin reference</a>
+        or the
+        <a href="../generator/index.html">generator reference</a>.
       </p>
-      <p>
-        Torque's runtime environment includes everything you need to use the
-        generated OM/Peer classes. It includes a jdbc connection pool.
-      </p>
-    </section>
 
-    <section name="Supported RDBMS">
-      <table>
-        <tr>
-          <th>RDBMS</th>
-          <th>Driver</th>
-          <th>Status</th>
-          <th>Tester</th>
-        </tr>
-        <tr>
-          <td>Axion</td>
-          <td>org.axiondb.jdbc.AxionDriver</td>
-          <td>Alpha</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Cloudscape</td>
-          <td>COM.cloudscape.core.JDBCDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>DB2</td>
-          <td>COM.ibm.db2.jdbc.{app|net}.DB2Driver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>DB2/AS400</td>
-          <td>com.ibm.as400.access.AS400JDBCDriver</td>
-          <td>Possible case-insensitivity issues</td>
-          <td><a href="mailto:Sweaver@rippe.com">Scott Weaver</a></td>
-        </tr>
-        <tr>
-          <td>Derby</td>
-          <td>org.apache.derby.jdbc.EmbeddedDriver</td>
-          <td>Only the embedded driver works.</td>
-          <td><a href="mailto:fischer@seitenbau.de">Thomas Fischer</a></td>
-        </tr>
-        <tr>
-          <td>Firebird</td>
-          <td>org.firebirdsql.jdbc.FBDriver</td>
-          <td>idMethod=&quot;native&quot; does not work</td>
-          <td><a href="mailto:fischer@seitenbau.de">Thomas Fischer</a></td>
-        </tr>
-        <tr>
-          <td>Hypersonic</td>
-          <td>org.hsql.jdbcDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Informix</td>
-          <td>com.informix.jdbc.IfxDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>InstantDB</td>
-          <td>org.enhydra.instantdb.jdbc.idbDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Interbase</td>
-          <td>interbase.interclient.Driver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>MS Access</td>
-          <td>sun.jdbc.odbc.JdbcOdbcDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><a href="mssql-howto.html">MS SQL</a></td>
-          <td>com.microsoft.jdbc.sqlserver.SQLServerDriver</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>MySQL</td>
-          <td>org.gjt.mm.mysql.Driver</td>
-          <td>No known problems</td>
-          <td><a href="mailto:seade@backstagetech.com.au">Scott Eade</a></td>
-        </tr>
-        <tr>
-          <td><a href="oracle-howto.html">Oracle</a></td>
-          <td>oracle.jdbc.driver.OracleDriver</td>
-          <td>Issues with LOBs</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><a href="postgres-howto.html">Postgres</a></td>
-          <td>org.postgresql.Driver</td>
-          <td>No known problems</td>
-          <td><a href="mailto:seade@backstagetech.com.au">Scott Eade</a></td>
-        </tr>
-        <tr>
-          <td>SapDB</td>
-          <td>com.sap.dbtech.jdbc.DriverSapDB</td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td><a href="sybase-howto.html">Sybase</a></td>
-          <td>com.sybase.jdbc2.jdbc.SybDriver</td>
-          <td>
-          JDBCToXMLSchema task will not generate the schema properly.
-          All other tests pass.
-          </td>
-          <td><a href="mailto:brekke@apache.org">Jeffrey D. Brekke</a></td>
-        </tr>
-        <tr>
-          <td>Weblogic</td>
-          <td>weblogic.jdbc.pool.Driver</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-
-      <p>
-        If your RDBMS is not listed here, please read the document about
-        <a href="db-adapters.html">writing DB Adapters</a>
-      </p>
-      <p>
-        If there is no tester for your RDBMS and you want to help, please read
-        the <a href="developer-guide.html">developer-guide</a>, run the tests
-        and send your results (and bugfixes ;) to the
-        <a href="mailto:torque-dev@db.apache.org">torque-dev@db.apache.org</a>
-        list.
-      </p>
     </section>
 
   </body>

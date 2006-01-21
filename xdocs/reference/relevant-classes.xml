@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2001-2005 The Apache Software Foundation.
+
+ Licensed under the Apache License, Version 2.0 (the "License")
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<document>
+ <properties>
+   <title>Torque Runtime Reference - Relevant classes and Resources</title>
+   <author email="leon@opticode.co.za">Leon Messerschmidt</author>
+   <author email="jvanzyl@periapt.com">Jason van Zyl</author>
+   <author email="seade@backstagetech.com.au">Scott Eade</author>
+ </properties>
+
+ <body>
+  <section name="Peers">
+    <p>
+      Everything in Peers resolve around Peer classes.  A Peer class has a
+      one-to-one mapping to a Database table.  You use each table's associated
+      Peer class to do operations on that table.  Peer classes are generated
+      for you automatically.
+    </p>
+
+    <p>
+      Peer classes have static methods only, so you would never create objects 
+      of Peer classes.  It is not necessary to have objects on this level 
+      because of the one-to-one mapping with a table.  Peer methods are thread
+      safe.
+    </p>
+     
+    <p>
+      Peer classes are generated for you automatically. For each table, two 
+      Peer classes are generated: Base&lt;table-name&gt;Peer and 
+      &lt;table-name&gt;Peer. The Base&lt;table-name&gt;Peer class contains 
+      all the functionality and should not be changed. The other class is 
+      empty but can be extended to add or change functionality. If you 
+      regenerate with torque only the Base* class changes. This allows you 
+      to change the schema, but still keep your existing code.
+    </p>
+
+  </section>
+
+  <section name="Data Objects">
+
+    <p>
+      A Data Object holds information about a single row of a specific table.
+      Data Objects can be generated automatically for you.  It takes the form
+      of Bean properties for each field of the table.
+    </p>
+
+    <p>
+      The Data Object classes also generated automatically. For each table, two 
+      Data Object classes are generated: Base&lt;table-name&gt; and 
+      &lt;table-name&gt;.  As with the Peers, the Base&lt;table-name&gt; class
+      contains all the functionality and should not be changed. The other class 
+      is empty but can be extended to add or change functionality.  If you 
+      regenerate the classes, only the Base* classes will be overwritten. 
+    </p>
+
+    <p>
+      Data Objects are used almost exclusively with their related Peer classes.
+      Where peer classes "wrap around" around a database table, a Data Object
+      "wrap around" individual rows of the table.  The two always go together.
+    </p>
+
+    <p>
+      You normally use Data Objects in one of two ways.  The most common way
+      is to extract data after you called a doSelect on a Peer class.  The
+      doSelect method returns a List of Data Objects that holds the data of
+      the resultset.  Secondly you can create Data Objects and call their save
+      methods to insert or update the related row into the database.
+    </p>
+
+  </section>
+
+  <section name="Criteria">
+
+    <p>
+      Criteria is an abstraction of the criteria of an sql query.  We use
+      criteria objects to specify the criteria of a sql statement.  The
+      database adaptor classes contains information on how this Criteria object
+      will be translated to different flavours of sql.
+    </p>
+
+    <p>
+      Criteria is in effect a map of field names and values that forms the
+      criteria of a query.  By default the comparison  is equals (=) but you
+      can define any comparison operator (&lt;, &gt;, &lt;=, &gt; =, IN, etc.).
+    </p>
+
+    <p>
+      Criteria can also be used to do some other sql function like ORDER BY or
+      DISTINCT.  If Criteria is too limited for your purposes (which should not
+      happen often) you are still free to use raw sql queries.
+    </p>
+
+  </section>
+
+  <section name="Database Maps">
+
+    <p>
+      The Peers make use of a DatabaseMap class that holds internal data about
+      the relational schema.  You will seldom, if ever, need to work with the
+      DatabaseMap class.  It is used internally by Peers to discover information
+      about the database at runtime.
+    </p>
+
+    <p>
+      There is exactly one DatabaseMap for each relational database that you
+      connect to.  You may wish to connect to more than one database in your
+      application.  You should then have one DatabaseMap for each of the
+      databases.
+    </p>
+
+    <p>
+      DatabaseMaps are constructed by classes called MapBuilders.  Torque
+      generates MapBuilder classes for each of the tables in your schema.
+      The MapBuilder for a table  is called when the Peer class for the table
+      is loaded.
+    </p>
+    
+    <p>
+      All DatabaseMaps are instances of the class 
+      <code>org.apache.torque.map.DatabaseMap</code>.
+      They are kept in the instance variable <code>TorqueInstance.dbMaps</code>.
+      The Map for the database with the name key can be retrieved
+      by the method Torque.getDatabaseMap(key).
+    </p>
+
+  </section>
+
+  <section name="ID Broker">
+
+    <p>
+      The ID Broker is used to automatically create unique primary keys for 
+      tables.  It creates id's from a database table called id_table.
+    </p>
+
+    <p>
+      Of course Torque also supports using the ID generation provided by the
+      underlying database system - just set the <code>idMethod</code> attributes
+      as desired in your schema.
+    </p>
+
+    <p>
+      The ID Broker is used in the underlying Peer code.  After you have 
+      generated your object model classes you need not worry about it anymore.
+    </p>
+
+  </section>
+  
+  <section name="Database adaptors">
+
+    <p>
+      Although all databases supported by Torque understand SQL, there are
+      differences in the behaviour of the databases which the Torque runtime
+      needs to know about. For example, the standard (String) format
+      of a date object in an Oracle9i database is different from a
+      postgresql database.
+      The adapter for a database provides the necessary methods to hide such
+      differences from the user.
+      For example, the adapter provides a method to create a String in the
+      database's preferred format from a Date object.
+    </p>
+
+    <p>
+      Adapters are subclasses of the <code>org.apache.torque.adapter.DB</code>
+      class.
+      The adapters are stored in the private map TorqueInstance.apdapterMap;
+      the key of the map is the name of the database (e.g. "bookstore"),
+      and the value of the map is the adapter. The adapter for a given key
+      can be retrieved via the method Torque.getDB(key).
+    </p>
+
+    <p>
+      If your database is not yet supported, you can read the 
+      <a href="new-database-support.html">Support for new Databases</a> 
+      docs on how to create a new adapter for your database.
+    </p>
+
+  <section name="DataSourceFactories">
+    <p>
+      To access a database, a connection must be made to the database.
+      A DataSource is an object which can provide Connections to the 
+      database.  A DataSourceFactory is used to configure and provide
+      one DataSource.
+    </p>
+
+    <p>
+      All DataSourceFactories used by Torque must implement the interface
+      <code>org.apache.torque.dsfactory.DataSourceFactory</code>.
+      The DataSourceFactories are stored in the private map
+      <code>TorqueInstance.dsFactoryMap</code>; the key of the map is the
+      name of the database (e.g. "bookstore"), and the
+      value of the map is the DataSourceFactory.
+      The DataSourceFactory for a given key can not be retrieved 
+      by a public method; however, a connection from the DataSource
+      for the DataSourceFactory for a given key can be obtained 
+      by Torque.getConnection(key);
+    </p>
+  </section>
+
+    
+  </section>
+
+  <section name="Internal resources used by the Torque Runtime">
+
+    <subsection name="Default database name">
+
+      <p>
+        Torque can be used with several databases at once.
+        The resources for each database are usually kept in Maps
+        where the key is the name of the database.  To make things easier
+        for people who use only one database, Torque supports the notion
+        of a default database. This allows it to provide convenience
+        methods like <code>Torque.getConnection()</code> where no database name 
+        must be specified.  These methods refer to the default database,
+        in contrast to e.g. <code>Torque.getConnection(String)</code>
+        where the name of the database must be supplied explicitly.
+      </p>
+      
+      <p>
+        The name of the default database can be retrieved by 
+        <code>Torque.getDefaultDB()</code>.
+      </p>
+
+    </subsection>
+
+  </section>
+   
+ </body>
+</document>

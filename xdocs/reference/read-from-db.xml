@@ -16,64 +16,291 @@
 -->
 
 <document>
-
  <properties>
-  <title>Criteria Howto</title>
-  <author email="criley@ekmail.com">Cameron Riley</author>
-  <author email="seade@backstagetech.com.au">Scott Eade</author>
-  <author email="fischer@seitenbau.de">Thomas Fischer</author>
+   <title>Torque Runtime Reference - Reading from the database</title>
+   <author email="leon@opticode.co.za">Leon Messerschmidt</author>
+   <author email="jvanzyl@periapt.com">Jason van Zyl</author>
+   <author email="seade@backstagetech.com.au">Scott Eade</author>
+   <author email="fischer@seitenbau.de">Thomas Fischer</author>
  </properties>
 
  <body>
-  <section name="Advanced Criteria Techniques">
 
-   <p>
-     For a basic description and examples of the Criteria Object with Peers
-     please view the <a href="peers-howto.html">Peers Howto</a> document. This
-     document intends to show more advanced techniques using Criteria, such as
-     comparators and joins. As always, for more information on the methods
-     available in the Criteria Object, view the javadocs.
-   </p>
+  <section name="Reading from the Database">
+    <p>
+      To read data from the database, you need to specify which datasets
+      you want to read from which tables. In Torque, this is done by
+      constructing a Criteria object, which is a
+      Java representation of a SQL Query. After you have done that, pass the 
+      Criteria object to a Peer class, which will query the database 
+      and convert the retrieved table rows into Data Objects.
+    </p>
+
   </section>
 
-  <section name="Ordering the Results">
+  <section name="Reading all Objects">
 
-   <p>
-     One of the common clauses in an SQL Query is the ORDER BY clause.
-     With the criteria object, the results can be ordered via the
-     addAscendingOrderByColumn(String columnname) and
-     addDescendingOrderByColumn(String columnname) methods.
-     As an example, consider the book table from the tutorial. To get all books ordered by their
-     title and ISBN (where the ISBN should only be taken into accout for equal titles),
-     use the following code:
-   </p>
+    <p>
+      To read all Datasets from a table in the datasets, create an empty 
+      Criteria object and pass it to the doSelect Method of the Peer class
+      for the table.  In SQL, this would be equivalent to the command
+      "SELECT * FROM SOME_TABLE"
+    </p>
+  
+    <p>  
+      For example, the following code can be used to read all 
+      Authors from the Author table.
+    </p>
 
-   <source>
+<source>
 Criteria criteria = new Criteria();
-criteria.addAscendingOrderByColumn(BookPeer.TITLE);
-criteria.addAscendingOrderByColumn(BookPeer.ISBN);
+List authors = AuthorPeer.doSelect(critieria);
+</source>
 
-List books = BookPeer.doSelect(criteria);</source>
+  </section>
+  
+  <section name="Specifying which objects should be read">
+
+    <p>
+      To read only the datasets which fulfil certain conditions, add the
+      conditions to the criteria object before you pass the criteria to the
+      select method.  In SQL, this would correspond to adding a "WHERE"-clause
+      to the select command.
+    </p>
+    
+    <p> 
+      As an example, to read all Authors which have the LAST_NAME field filled 
+      with "Stevens", the following code can be used: 
+    </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.LAST_NAME, "Stevens");
+List authors = AuthorPeer.doSelect(criteria);
+</source>
+
+    <p>
+      To use another comparison operator than EQUAL (=), you need to specify 
+      which operator should be used. Valid comparison operators are:
+      <ul>
+        <li>
+          <code>Criteria.EQUAL</code> (Default)
+        </li>
+        <li>
+          <code>Criteria.NOT_EQUAL</code> (&lt;&gt;)
+        </li>
+        <li>
+          <code>Criteria.ALT_NOT_EQUAL</code> (!=)
+        </li>
+        <li>
+          <code>Criteria.EQUALS</code> (Default)
+        </li>
+        <li>
+          <code>Criteria.GREATER_THAN</code>
+        </li>
+        <li>
+          <code>Criteria.LESS_THAN</code>
+        </li>
+        <li>
+          <code>Criteria.GREATER_EQUAL</code>
+        </li>
+        <li>
+          <code>Criteria.LESS_EQUAL</code>
+        </li>
+        <li>
+          <code>Criteria.IN</code>
+        </li>
+        <li>
+          <code>Criteria.NOT_IN</code>
+        </li>
+        <li>
+          <code>Criteria.LIKE</code>
+        </li>
+        <li>
+          <code>Criteria.NOT_LIKE</code>
+        </li>
+      </ul>
+    </p>
+    
+    <p>
+      For example, to read all authors with an id less than 5, use
+    </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.AUTHOR_ID, 5, Criteria.LESS_THAN);
+List authors = AuthorPeer.doSelect(criteria);
+</source>
+
+  </section>
+  
+  <section name="Foreign keys">
+
+    <p>
+      Foreign keys define a link between rows in different tables.  They are
+      defined in the database schema on generation time.  If the generator
+      option <code>complexObjectModel</code> is not set to false, getters
+      and setters are generated for linked objects.
+    </p>
+    
+    <p>
+      For example, in the Bookstore schema, a foreign key is defined which
+      creates a link between the book and the author tables:
+    </p>
+
+<source><![CDATA[
+<database ...>
+
+  <table name="author">
+    <column
+      name="author_id"
+      required="true"
+      primaryKey="true"
+      type="INTEGER"
+      description="Author Id"/>
+    ...
+  </table>
+  <table name="book" description="Book Table">
+    ...
+    <column
+      name="author_id"
+      required="true"
+      type="INTEGER"
+      description="Foreign Key Author"/>
+    ...
+    <foreign-key foreignTable="author">
+      <reference
+        local="author_id"
+        foreign="author_id"/>
+    </foreign-key>
+  </table>
+</database>
+]]></source>
+
+    <p>
+      The foreign key defines that a book is associated to an author by setting
+      the <code>author_id</code> column of the author to the id of the 
+      corresponding author.
+    </p>
+    
+    <p>
+      In the Book Object, the Torque generator generates the methods
+      <code>getAuthor()</code> and <code>setAuthor(Author author)</code> 
+      which can be used to access and set the corresponding author object.
+      In the Author object, the methods <code>getBooks()</code> and 
+      <code>addBook()</code> are generated. 
+    </p>
+    
+    <p>
+      Note that by default, the getters query the database for the 
+      corresponding objects if they hev not been read already.  For example,
+      the method <code>Author.getBooks()</code> silently queries the database 
+      for the books for the author, if they have not been read before.
+      If you do not like this behaviour (e.g. if you want to make sure that
+      all reads occur within one database transaction), set the generator option
+      <code>torque.silentDbFetch</code> to <code>false</code>.
+    </p>
 
   </section>
 
+  <section name="Joins">
 
+    <p>
+      In the database, Joins can be used for two purposes.  First, they
+      can be used to read corresponding rows in other tables along with
+      the original row.  Second, Joins can be used to qualify which 
+      objects in one table should be read, or how the objects in one
+      table should be ordered, depending on the content 
+      of another table.  In Torque, these two uses of joins are treated
+      differently.
+    </p>
+    
+    <subsection name="Joins to read corresponding rows" >
 
-  <section name="Using Criteria to create Joins ">
-
-   <p>
-    In a relational database, there are two different join types:
-    inner joins and outer joins. Both types can be generated using Torque
-    and will be discussed seperately in the following:
-   </p>
-
-    <subsection name="Inner joins">
       <p>
-        Imagine we want to know all authors which have published at least one book.
-        This can be achieved using the following code:
+        To read corresponding rows, <code>doSelectJoin&lt;tablename&gt;</code>
+        methods are generated for the foreign keys in the Peer classes.
+        To keep the public API of the Peer classes reasonable, 
+        these methods are generated as protected methods.  
+        To make them visible publicly, override them in the Peer class
+        with a public access modifier.
+      </p>
+    
+      <p>
+        For example, to read all Authors and their corresponding Books,
+        override the <code>doSelectJoinBooks()</code> method in the 
+        Author peer with the following code:
       </p>
 
-      <source>
+<source>
+public List doSelectJoinBooks(Criteria criteria) throws TorqueException
+{
+    return super.doSelectJoinBooks(criteria);
+}
+</source>
+
+      <p>
+        Then, you can read the author with the last Name "Stevens" and all his 
+        books using the following code: 
+      </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.LAST_NAME, "Stevens");
+List authorAndBooks = AuthorPeer.doSelectJoinBooks(criteria);
+</source>
+
+      <p>
+        Note that an inner join is used for reading the datasets, so no authors
+        are returned if no book is found.
+      </p>
+    
+      <p>
+        You can also put constraints on the related books.  For example, to read 
+        only the related book witht the title 
+        &quot;TCP/IP Illustrated, Volume 1&quot;:
+      </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.LAST_NAME, "Stevens");
+criteria.add(BookPeer.NAME, "TCP/IP Illustrated, Volume 1");
+List authorAndBooks = AuthorPeer.doSelectJoinBooks(criteria);
+</source>
+
+      <p>
+        The <code>doSelectJoin&lt;tablename&gt;</code> only read one related
+        table at once.  If there are more than 2 foreign keys in one table,
+        also <code>doSelectJoinAllExcept&lt;tablename&gt;</code> methods 
+        are generated, which read all related objects except the one
+        in the method names.
+      </p>
+    
+      <p>  
+        At the moment, there is no method which can read nested data which are 
+        more than one foreign key relation apart.  For example,
+        if a table A has a foreign key reference to a table B,
+        which has a foreign key reference to a table C, there is no way
+        to read the data in table A and the related datasests in table B
+        <em>and</em> table C in one single select.
+      </p>
+      
+    </subsection>
+    
+    <subsection name="Inner joins for qualifying">
+    
+      <p>
+        In the following subsections, the joins are not used for reading 
+        additional data, but for qualifying which data should be read in one
+        table by looking at the content of other tables.
+      </p>
+    
+      <p>
+        For example, we want to know all authors which have published at least 
+        one book.  This can be achieved using the following code:
+      </p>
+
+<source>
 Criteria criteria = new Criteria();
 criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
 
@@ -90,72 +317,56 @@ List bookAuthors = AuthorPeer.doSelect(criteria);</source>
         </tr>
         <tr>
           <td>
-    		    All joins which are created using Criteria are only used for data selection,
-    		    not for reading the related objects.
-    		    For example, in the above code, only author objects are read in from the database.
-    		    The book objects which are related to the authors are not read,
-    		    meaning that
-    	    	<source>
-Author author = (Author) bookAuthors.get(0);
-List books = author.getBooks();</source>
-    		    performs a background read in the database to get all the books for one author.
-
-    		    If you do not like this behaviour, there are also methods which do read the
-    		    related objects, see for example BaseBookPeer.doSelectJoinAuthor().
-    		    These methods are protected to keep the public API reasonable.
-    		    If you need public access to such a method, simply overwrite the method in
-    		    the Peer class and declare the method public. Note that these methods perform
-    		    inner joins (this behavour will hopefully be changed in the near future).
-          </td>
-        </tr>
-        <tr>
-          <td>
-    		    Also, in SQL, there are two different ways to state an inner join.
-    		    The first way is a statement like
-    	    	<source>
-SELECT BOOK.* FROM BOOK INNER JOIN AUTHOR ON BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID</source>
+            Also, in SQL, there are two different ways to state an inner join.
+            The first way is a statement like
+<source>
+SELECT BOOK.* FROM BOOK INNER JOIN AUTHOR ON BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID
+</source>
             SQL like this is produced if the join type is stated explicitly
             (as above).<br />
             The second way to create an inner join is
-    	    	<source>
-SELECT BOOK.* FROM BOOK,AUTHOR WHERE BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID</source>
+<source>
+SELECT BOOK.* FROM BOOK,AUTHOR WHERE BOOK.AUTHOR_ID=AUTHOR.AUTHOR_ID
+</source>
             A SQL statement like this is created by not supplying the join type,
             for example in
-            <source>
+<source>
 criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID);</source>
-            Note that both SQL statements return the same result set. <br/>
+            Note that both SQL statements return the same result set.<br/>
             It is not possible to combine both ways of creating a join
             in most databases, i.e. code like
-            <source>
+<source>
 criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID);
-criteria.addJoin(BookPeer.PUBLISHER_ID, PublisherPeer.PUBLISHER_ID, Criteria.INNER_JOIN);</source>
+criteria.addJoin(BookPeer.PUBLISHER_ID, PublisherPeer.PUBLISHER_ID, Criteria.INNER_JOIN);
+</source>
             produces an SQL error in most databases.
             In most circumstances, it is recommended to state t
             the join type explicitly.
-            However, if the "INNER JOIN" syntax is not supported by your database,
-            try not to state the join type explicitly.
+            However, if the "INNER JOIN" syntax is not supported by your
+            database, try not to state the join type explicitly.
           </td>
-
         </tr>
       </table>
     </subsection>
 
-    <subsection name="Outer joins">
+    <subsection name="Outer joins for qualifying">
       <p>
-        To discuss the difference between inner joins and outer joins, consider the
-        following code fragments. Joins will be used there just for discussing the effects
-        of the different join types, but for no other reason.
+        To discuss the difference between inner joins and outer joins, 
+        consider the following code fragments. Joins will be used there 
+        just for discussing the effects of the different join types, 
+        but for no other reason.
       </p>
 
       <p>
         First, let us reconsider the inner join code:
       </p>
 
-      <source>
+<source>
 Criteria criteria = new Criteria();
 criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
 
-List bookAuthors = AuthorPeer.doSelect(criteria);</source>
+List bookAuthors = AuthorPeer.doSelect(criteria);
+</source>
 
   	  <p>
   	    For an inner join, the database only returns an entry
@@ -166,10 +377,11 @@ List bookAuthors = AuthorPeer.doSelect(criteria);</source>
   	    even if there is no corresponding entry in the other table:
   	  </p>
 
-      <source>
+<source>
 Criteria criteria = new Criteria();
 criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.LEFT_JOIN);
-List authors = AuthorPeer.doSelect(criteria);</source>
+List authors = AuthorPeer.doSelect(criteria);
+</source>
 
       <p>
         The above code uses a left (outer) join. There, authors
@@ -184,7 +396,7 @@ List authors = AuthorPeer.doSelect(criteria);</source>
 
       <p>
         Usually, outer joins are used for reading in several tables at once
-        (not ?yet? supported in Torque), or for ordering the contents
+        (not ?yet? supported by Torque), or for ordering the contents
         of one table by the contents of another table.
       </p>
     </subsection>
@@ -193,134 +405,127 @@ List authors = AuthorPeer.doSelect(criteria);</source>
 
   <section name="Using DISTINCT with Criteria">
 
+    <p>
+      All of the examples in the section "joins" can return multiples
+      of the desired table rows, as one row may be linked to multiple
+      rows in the joined table.
+    </p>
+    
+    <p>
+      In the first example in the section 
+      &quot;Inner joins for qualifying&quot;, the author will appear 
+      for every book that is attached to it. 
+      If an author has published 10 books, the author will appear
+      in the returned List 10 times.
+      To avoid this problem so that our returned List only returns one author
+      once despite the number of times it appears, we can use the setDistinct()
+      method in Criteria. For instance:
+    </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
+criteria.setDistinct();
+
+List bookAuthors = AuthorPeer.doSelect(criteria);
+</source>
+
+    <p>
+      Note that distinct only has an effect if there are entries where 
+      <em>all</em> column values are the same.  It is not possible to specify
+      DISTINCT for single columns only. 
+    </p>
+
+  </section>
+
+  <section name="Ordering the Results">
+
    <p>
-     All of the examples in the section "joins" return multiples
-     of the desired table columns.
-     In the first example, the author will appear for every book that is
-     attached to it. If an author has published 10 books,
-     the author will appear in the returned List 10 times.
-     To avoid this problem so that our returned List only returns one author
-     once despite the number of times it appears, we can use the setDistinct()
-     method in Criteria. For instance:
+     One of the common clauses in an SQL Query is the ORDER BY clause.
+     With the criteria object, the results can be ordered via the
+     addAscendingOrderByColumn(String columnname) and
+     addDescendingOrderByColumn(String columnname) methods.
+     As an example, consider the book table from the tutorial. 
+     To get all books ordered by their title and ISBN 
+     (where the ISBN should only be taken into accout for equal titles),
+     use the following code:
    </p>
 
-    <source>
+   <source>
 Criteria criteria = new Criteria();
-criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
-criteria.setDistinct();
+criteria.addAscendingOrderByColumn(BookPeer.TITLE);
+criteria.addAscendingOrderByColumn(BookPeer.ISBN);
 
-List bookAuthors = AuthorPeer.doSelect(criteria);</source>
+List books = BookPeer.doSelect(criteria);</source>
 
   </section>
 
-  <section name="Putting Joins, Ordering and Distinct Together">
-
+  <section name="AND and OR operators">
+  
     <p>
-      To put all the above together, we can query the bookstore
-      database for all authors which have published a book,
-      and order them by the author's name. This requires a
-      join between the book table and the author table.
-    </p>
-
-    <source>
-Criteria criteria = new Criteria();
-criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
-criteria.setDistinct();
-criteria.addAscendingOrderByColumn(AuthorPeer.NAME);
-
-List bookAuthors = AuthorPeer.doSelect(criteria);</source>
-
-  </section>
-
-  <section name="subselects">
-    <p>
-      To use a subselect, simply put a criteria which represents the 
-      subselect at the place where you would normally specify the column
-      value(s) explicitly.
-    </p>
-    
-    <p>
-      Do not forget to specify the selectColumns in the Criteria representing
-      the subselect (usually, the Peer classes do this for you, but not in the 
-      subselect).
-    </p>
-    
-    <p>
-      As an example, assume we want to read the author with the largest authorId
-      from the database. This can be done as follows:
+      If you add multiple constraints to a Criteria, they are linked by default 
+      by a logical "AND" operator. For example, the code
     </p>
     
 <source>
-Criteria subquery = new Criteria();
-subquery.addSelectColumn("MAX(" + AuthorPeer.AUTHOR_ID + ")");
-
 Criteria criteria = new Criteria();
-criteria.add(AuthorPeer.AUTHOR_ID, subquery);
-
+Criteria.add(AuthorPeer.LAST_NAME, "Stevens");
+Criteria.add(AuthorPeer.FIRST_NAME, "W.");
 List authors = AuthorPeer.doSelect(criteria);
 </source>
-  </section>
-
-  <section name="Using the Comparators in Criteria">
-
-   <p>
-    The Criteria Object has the following camparators:
-   </p>
-
+      
+    <p>
+      results in the following SQL query:
+    </p>
+    
 <source>
-Criteria.ALT_NOT_EQUAL
-Criteria.CUSTOM
-Criteria.DISTINCT
-Criteria.EQUAL
-Criteria.GREATER_EQUAL
-Criteria.GREATER_THAN
-Criteria.IN
-Criteria.JOIN
-Criteria.LESS_EQUAL
-Criteria.LESS_THAN
-Criteria.LIKE
-Criteria.NOT_EQUAL
-Criteria.NOT_IN
+SELECT ... from AUTHOR where LAST_NAME='Stevens' AND FIRST_NAME='W.'
 </source>
 
+    <p>
+      To exlicitly specify which operator should be used to link the constraints
+      in a Criteria, use the methods 
+      <code>Criteria.Criterion.and()</code> and 
+      <code>Criteria.Criterion.or()</code>.
+    </p>
 
-   <p>The comparators can be used to return results that satisfy the chosen
-   comparisons. As an example, assume we have Invoice OM and Peer Objects that
-   map to an invoice table in a database. The invoice table contains the
-   columns, INVOICE_ID, COST, DATE and DESCRIPTION. Where the id is an integer,
-   the cost a double, the date an mysql DATETIME and the Description a VARCHAR.
-   </p>
+    <p>
+      For example, the criterion which corresponds to the SQL query
+    </p>
 
-   <p>
-     In the case of an invoice, we may need to know all the invoices that are
-     above a certain limit. Where the limit is greater than $1000, this could be
-     done via:
-   </p>
+<source><![CDATA[
+select * from abc where (a < 1 and b > 2) or (a > 5 and b < 3)
+]]></source>
 
-<source>
-Criteria criteria = new Criteria();
-criteria.add(InvoicePeer.COST, 1000, Criteria.GREATER_THAN);
+    <p>
+      is
+    </p>
 
-List invoices = InvoicePeer.doSelect(criteria);
-</source>
+<source><![CDATA[
+Criteria crit = new Criteria();
+Criteria.Criterion a1 = crit.getNewCriterion(ABC.A, 1, Criteria.LESS_THAN);
+Criteria.Criterion b2 = crit.getNewCriterion(ABC.B, 2, Criteria.GREATER_THAN);
+Criteria.Criterion a5 = crit.getNewCriterion(ABC.A, 5, Criteria.GREATER_THAN);
+Criteria.Criterion b3 = crit.getNewCriterion(ABC.B, 3, Criteria.LESS_THAN);
 
-   <p>
-     This will return a Vector of Invoice OM Objects which have cost values
-     greater than $1000. The other comparitors work similarly and can be used in
-     the same manner though many of the comparators are present as methods in
-     the Criteria Object already, such as the Joins.
-   </p>
+crit.add(a1.and(b2).or(a5.and(b3)));
+]]></source>
+
+    <p>
+      Note that the tables used in the last example are not defined
+      in the bookstore schema in the tutorial.
+    </p>
 
   </section>
 
-  <section name="Case insensitive LIKE Comparator">
+  <section name="Case insensitivity">
 
-   <p>
-     A LIKE comparison is usually case sensitive (unless the underlying
-     database only provides case sensitive LIKE clauses - e.g. MySQL).  To get
-     a case insensitive LIKE you need to tell the criteria that it should
-     ignore the case thus:
-   </p>
+    <p>
+      String comparisons is are usually case sensitive (unless the underlying
+      database only provides case sensitive LIKE clauses - e.g. MySQL).  To get
+      a case insensitive comparison, you need to tell the criteria that it 
+      should ignore the case thus:
+    </p>
 
 <source>
 Criteria criteria = new Criteria();
@@ -331,83 +536,227 @@ criteria.getCriterion(InvoicePeer.TABLE_NAME, searchField).setIgnoreCase(true);
 List invoices = InvoicePeer.doSelect(criteria);
 </source>
 
-   <p>
-     For PostgreSQL this will use ILIKE, for other databases it will use the
-     SQL upper() function on the column and search string (for Oracle you may
-     want to define a function index to make this efficient).
-   </p>
-
+    <p>
+      For PostgreSQL this will use ILIKE, for other databases it will use the
+      SQL upper() function on the column and search string (for Oracle you may
+      want to define a function index to make this efficient).
+    </p>
+    
+    <p>
+      You can also use <code>Criteria.setIgnoreCase(true)</code> to make all 
+      Criterions in the Criteria object case insensitive.
+    </p>
+    
   </section>
 
-  <section name="Using the CUSTOM Comparator to check for NULL and NOT NULL">
+  <section name="Using the CUSTOM modifier to use custom SQL">
 
-   <p>
-     There is currently no conditional operator for NULL and NOT NULL as the
-     database implementations vary fairly widely. The way to solve it for a
-     particular application is through the CUSTOM comparitor. Using the Invoice
-     example again to check if the description is null;
-   </p>
+    <p>
+      Although Criteria provide for the most common SQL queries, some queries
+      can not be created using standard Criteria methods.
+      With the CUSTOM modifier, the specified SQL is directly used 
+      in the where clause.  For internal reasons, you must still specify
+      a column on which the query part is acting.
+    </p>
+    <p>
+      For demonstration purposes, let us construct a query which retrieves
+      the author with the AUTHOR_ID of 5 using the CUSTOM modifier: 
+    </p>
 
 <source>
 Criteria criteria = new Criteria();
-criteria.add(InvoicePeer.DESCRIPTION, (Object)"DESCRIPTION is NULL", Criteria.CUSTOM);
-
-List invoices = InvoicePeer.doSelect(criteria);
+criteria.add(AuthorPeer.AUTHOR_ID, (Object)"AUTHOR_ID=5", Criteria.CUSTOM);
+List authors = AuthorPeer.doSelect(criteria);
 </source>
 
+    <p>
+      Note that in this specific example, there was no need for the CUSTOM
+      modifier. The same query could have been created by:
+    </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.add(AuthorPeer.AUTHOR_ID, 5);
+List authors = AuthorPeer.doSelect(criteria);
+</source>
+
+    <p>
+      It is recommended <em>not</em> to use the CUSTOM modifier whenever
+      you can avoid it.  If you use the CUSTOM modifier,  your code will be
+      less portable to other databases, and the compiler
+      will not alert you if you change your data model and access a column 
+      which no longer exists.
+    </p>
+    
   </section>
 
   <section name="Using Criterion to use a Column twice in a Criteria">
 
-   <p>
-    The Criteria Object extends the functionality of a Hashtable and as such
-    suffers from the Hashtable limitation of the key having to be unique in the
-    Hashtable. When a Criteria is set to use the same column twice, it
-    overwrites the previous key. The way around this is to use the Criterion
-    Object. The Criterion is a final inner class of Criteria. Because it is a
-    member class the Criterion can "look" into Criteria's instance fields and
-    methods including ones declared private. The Criterion also carries the
-    default package visibility which means it can be used in a sub-class of
-    Criteria.
+    <p>
+      The Criteria Object extends the functionality of a Hashtable and as such
+      suffers from the Hashtable limitation of the key having to be unique in 
+      the Hashtable.  When a Criteria is set to use the same column twice, it
+      overwrites the previous key.  The way around this is to use the Criterion
+      Object.  The Criterion is a final inner class of Criteria.  Because it is 
+      a member class the Criterion can "look" into Criteria's instance fields
+      and methods including ones declared private.  The Criterion also carries 
+      the default package visibility which means it can be used in a sub-class 
+      of Criteria.
    </p>
 
-   <p>
-     Using the Invoice table and OM Object again, we may want to search on the
-     Invoice Amounts within a certain Range, such as $1000 and $5000. For this
-     we would need to use the Criterion:
-   </p>
+    <p>
+      For example, we may want to search for authors which Author Ids are 
+      within a certain Range, such as 5 and 10. For this
+      we would need to use the Criterion:
+    </p>
 
 <source>
 Criteria criteria = new Criteria();
-criteria.add(InvoicePeer.COST, 1000, Criteria.GREATER_EQUAL);
+criteria.add(AuthorPeer.AUTHOR_ID, 5, Criteria.GREATER_EQUAL);
 
-Criteria.Criterion criterion = criteria.getCriterion(InvoicePeer.COST);
+Criteria.Criterion criterion = criteria.getCriterion(AuthorPeer.AUTHOR_ID);
 criterion.and(
-               criteria.getNewCriterion(
-                             criterion.getTable(),
-                             criterion.getColumn(),
-                             new Integer(5000),
-                             Criteria.LESS_EQUAL )
-               );
+        criteria.getNewCriterion(
+                 criterion.getTable(),
+                 criterion.getColumn(),
+                 new Integer(10),
+                 Criteria.LESS_EQUAL)
+             );
 </source>
 
   </section>
 
-  <section name="Simplifying Criteria">
+  <section name="Encapsulating and Re-using Criteria code">
 
-   <p>
-     The Criteria Object can be verbose to use directly in your code. Often in an
-     application the 80:20 rule applies when dealing with queries. The same 20% of
-     queries are used 80% of the time. While Criteria and Criterion offer a tonne of
-     flexibility, often having something simple to use is easier.
-   </p>
+    <p>
+      The Criteria Object can be verbose to use directly in your code. 
+      Often in an application the 80:20 rule applies when dealing with queries.
+      The same 20% of queries are used 80% of the time. While Criteria 
+      and Criterion offer a tonne of flexibility, often having something
+      simple to use is easier.
+    </p>
+    
+    <p>
+      Also, it is often desirable in an application to separate code which is
+      used to accesss the database from the other application code.
+      For example, the application may need to retrieve an author by his last
+      name.  One can, of course, construct a Criteria in the 
+      application code and use <code>AuthorPeer</code>'s <code>doSelect()</code>
+      method, but from an encapsulation point of view, this would better be done
+      in the database layer of the application.
+    </p>
+    
+    <p>
+      So there are basically two approaces to this. The first one is adding
+      additional methods to the Peer classes, the second one is writing 
+      custom filter classes, and the third one is inheriting
+      from the Criteria object.  Usually, the first approach is preferable 
+      because it offers better encapsulation.  The second approach is good if 
+      you want more flexibility but still want to retain encapsulation of the
+      database layer, and the third is good if you want all flexibility
+      of the Criteria object but still want to re-use code.
+    </p>
+    
+    <subsection name="Additional methods in Peers">
+      
+      <p>
+        To achieve encapsulation and code reuse for queries, you can
+        extend the Peer classes. For example, if you need to select authors
+        by last name, you could extend the author class in the following way:
+      </p>
+      
+<source>
+/**
+ *  Returns all the authors with a last name equal to lastName.
+ *  @param lastName the last name of the authors to select.
+ */
+public static List doSelectByLastName(String lastName)
+{
+    Criteria criteria = new Criteria();
+    criteria.add(AuthorPeer.LAST_NAME, lastName);
+    List result = AuthorPeer.doSelect(criteria);
+    return result;
+}
+</source>
 
-   <p>
-     One way to achieve this is to create a class that extends Criteria and add
-     convenience methods for your application or are specific to your database.
-     In this case the example Object will be the SimpleCriteria with the methods that
-     allow access to the examples above.
-   </p>
+    </subsection>
+
+    <subsection name="Custom filter classes">
+      
+      <p>
+        Custom filter classes are an encapsulation of the data one searches 
+        for.  They can create a criteria from their data.
+        Custom filter classes are often used if you present a "search mask"
+        to the user, where you want to retain the information the user has 
+        entered anyway.  For example, if you have a search mask for looking
+        for authors using their first and last name, you would use the
+        following code: 
+      </p>
+      
+<source>
+/**
+ *  Contains the data needed to find authors using their names.
+ *  Can create a criteria object which can be used to find the desired 
+ *  authors in the database.
+ */
+public class AuthorFilter
+{
+    /** the first name to look for. */
+    private String firstName = null;
+    
+    /** the last name to look for. */
+    private String LastName = null;
+    
+    /**
+     *  Creates a AuthorFilter looking for the firstName and lastName of the 
+     *  author.
+     *  @param firstName the first name of the authors to look for, 
+     *         or null for all first names
+     *  @param lastName the last name of the authors to look for,
+     *         or null for all last names 
+     */
+    public AuthorFilter(String firstName, String lastName)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    /**
+     *  returns the Criteria for the data in the filter.
+     *  @return the Criteria which returns the specified authors
+     */
+    public Criteria getCriteria()
+    {
+        Criteria result = new Criteria();
+        if (firstName != null)
+        {
+            result.add(AuthorPeer.FIRST_NAME, firstName);
+        }
+        if (lastName != null)
+        {
+            result.add(AuthorPeer.LAST_NAME, lastName);
+        }
+        return criteria;
+    }
+}
+</source>
+
+      <p>
+        In reality, you would also add getters and setters for first and
+        last name, and allow for wildcards and case-insensitive serach, 
+        but this example should show the basic idea.
+      </p>
+
+    </subsection>
+
+    <subsection name="Inheriting from Criteria">
+    
+      <p>
+        Another way to achieve code-reuse is to create a class that extends
+        Criteria and add convenience methods for your application.
+        In this case the example Object will be the SimpleCriteria with the 
+        methods that allow access to the examples above.
+      </p>
 
 <source>
 //Turbine
@@ -445,19 +794,7 @@ public class SimpleCriteria extends Criteria
     }
 
    /*
-     * Represents the Is NULL in the WHERE
-     * clause of an SQL Statement
-     *
-     * @param columnname the column name
-     */
-    public SimpleCriteria isNull(String columnname)
-    {
-        super.add(columnname, (columnname + " is NULL"), Criteria.CUSTOM);
-        return this;
-    }
-
-   /*
-     * Represents the Is NULL in the WHERE
+     * Represents the Between in the WHERE
      * clause of an SQL Statement
      *
      * @param columnname the column name
@@ -479,35 +816,63 @@ public class SimpleCriteria extends Criteria
 }
 </source>
 
-   <p>
-     This will simplify the code being written in the Business Objects or
-     Actions and condense all the Criteria knowledge into the SimpleCriteria
-     Object. The SimpleCriteria Object used in the same manner as Criteria.
-     For example the initial
-   </p>
+     <p>
+       This will simplify the code being written in the Business Objects or
+       Actions and condense all the Criteria knowledge into the SimpleCriteria
+       Object. The SimpleCriteria Object used in the same manner as Criteria.
+       For example, the example from the section 
+       &quot;Using Criterion to use a Column twice in a Criteria&quot;
+       above would be 
+     </p>
 
 <source>
 SimpleCriteria criteria = new SimpleCriteria();
-criteria.isBetween(InvoicePeer.COST, 1000, 5000);
+criteria.isBetween(AuthorPeer.AUTHOR_ID, 5, 10);
 
-List invoices = InvoicePeer.doSelect(criteria);
+List authors = AuthorPeer.doSelect(criteria);
 </source>
+
+    </subsection>
 
   </section>
 
   <section name="Debugging Criteria's">
 
-   <p>
-    Criteria contains a toString() method which will output a representation of
-    the Criteria as a String. A Criteria to a large extent represents the
-    statements in a WHERE clause of SQL.  To see the queries being processed by
-    your application you can configure the logging system to capture the SQL
-    by adding the following to your <code>log4j.properties</code> file:
-   </p>
+    <p>
+      Criteria contains a toString() method which will output a representation
+      of the Criteria as a String. A Criteria to a large extent represents the
+      statements in a WHERE clause of SQL.  To see the queries being processed
+      by your application you can configure the logging system to capture
+      the SQL by adding the following to your <code>log4j.properties</code>
+      file:
+    </p>
 
 <source>
-log4j.logger.org.apache.torque.util.BasePeer = DEBUG
+log4j.logger.org.apache.torque.util = DEBUG
 </source>
+
+  </section>
+
+  <section name="Examples">
+
+    <subsection name="Putting JOIN, DISTINCT and ORDER BY together">
+      <p>
+        To put all the above together, we can query the bookstore
+        database for all authors which have published a book,
+        and order them by the author's name. This requires a
+        join between the book table and the author table.
+      </p>
+
+<source>
+Criteria criteria = new Criteria();
+criteria.addJoin(AuthorPeer.AUTHOR_ID, BookPeer.AUTHOR_ID, Criteria.INNER_JOIN);
+criteria.setDistinct();
+criteria.addAscendingOrderByColumn(AuthorPeer.NAME);
+
+List bookAuthors = AuthorPeer.doSelect(criteria);
+</source>
+
+    </subsection>
 
   </section>
 
