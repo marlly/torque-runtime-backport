@@ -998,7 +998,7 @@ public abstract class BasePeer
         List results = null;
         try
         {
-            if (numberOfResults <= 0)
+            if (numberOfResults < 0)
             {
                 results = new ArrayList();
                 qds.fetchRecords();

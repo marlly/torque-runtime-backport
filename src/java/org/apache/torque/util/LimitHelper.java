@@ -48,7 +48,7 @@ public abstract class LimitHelper
 
         DB db = Torque.getDB(criteria.getDbName());
 
-        if (offset > 0 || limit > 0)
+        if (offset > 0 || limit >= 0)
         {
             // If we hit a database type, that is able to do native
             // limiting, we must set the criteria values to -1 and 0
