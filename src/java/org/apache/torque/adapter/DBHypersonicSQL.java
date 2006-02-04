@@ -69,6 +69,14 @@ public class DBHypersonicSQL
     }
 
     /**
+     * @see org.apache.torque.adapter.DB#ignoreCaseInOrderBy(String)
+     */
+    public String ignoreCaseInOrderBy(String in)
+    {
+        return "CAST(" + in + " AS VARCHAR_IGNORECASE)";
+    }
+
+    /**
      * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object obj)
      */
     public String getIDMethodSQL(Object obj)
