@@ -34,8 +34,15 @@
     </menu>
 
     <menu name="Documentation">
-      <item name="Documentation"         href="../../../documentation/index.html">
-        <item name="Torque 3.2 Runtime"  href="/index.html">
+      <item name="overview"              href="../../../documentation/index.html"/>
+      <item name="Torque 3.2"            href="../../../documentation/torque-3.2.html">
+        <item name="Generator"           href="../generator/index.html" collapse="true">
+          <item name="dummy"/>
+        </item>
+        <item name="Maven Plugin"        href="../maven-plugin/index.html" collapse="true">
+          <item name="dummy"/>
+        </item>
+        <item name="Runtime"             href="/index.html" collapse="true">
           <item name="Reference"         href="/reference/index.html" collapse="true">
             <item name="Initialisation"  href="/reference/initialisation-configuration.html"/>
             <item name="Reading from the DB" href="/reference/read-from-db.html"/>
@@ -68,16 +75,27 @@
             <item name="Link Check Report" href="/linkcheck.html"/>
           </item>
         </item>
+        <item name="Supported Databases" href="../docs-all-components/supported-databases.html"/>
+        <item name="Database Howtos"     href="../docs-all-components/database-howtos/index.html" collapse="true">
+          <item name="dummy"/>
+        </item>
+        <item name="Other Howtos"        href="../docs-all-components/other-howtos/index.html" collapse="true">
+          <item name="dummy"/>
+        </item> 
+        <item name="Tutorial"            href="../tutorial/index.html" collapse="true">
+          <item name="dummy"/>
+        </item>
       </item>
-    
-      <item name="Tutorial"              href="../../../tutorial/index.html"/>
+      <item name="Previous releases"     href="../../../documentation/previous-releases.html" collapse="true">
+        <item name="dummy"/>
+     </item>
     </menu>
 
     <menu name="Project documentation">
       <item name="Project info"          href="../../../project-info.html" collapse="true">
         <item name="dummy"               href="/dummy.html"/>
       </item>
-      <item name="Project Reports"       href="../../../project-reports.html" collapse="true">
+      <item name="Site Project Reports"  href="../../../project-reports.html" collapse="true">
         <item name="dummy"               href="/dummy.html"/>
       </item>
     </menu>
