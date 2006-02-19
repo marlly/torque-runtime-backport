@@ -975,7 +975,7 @@ public class Criteria extends Hashtable
      * <code>
      * Criteria crit = new Criteria().add(&quot;column&quot;,
      *                                      &quot;value&quot;
-     *                                      &quot;Criterion.GREATER_THAN&quot;);
+     *                                      Criteria.GREATER_THAN);
      * </code>
      *
      * Any comparison can be used.
@@ -1032,7 +1032,7 @@ public class Criteria extends Hashtable
      * Criteria crit = new Criteria().add(&quot;table&quot;,
      *                                      &quot;column&quot;,
      *                                      &quot;value&quot;,
-     *                                      &quot;Criterion.GREATER_THAN&quot;);
+     *                                      Criteria.GREATER_THAN);
      * </code>
      *
      * Any comparison can be used.
@@ -1991,7 +1991,7 @@ public class Criteria extends Hashtable
      * <code>
      * Criteria crit = new Criteria().and(&quot;column&quot;,
      *                                      &quot;value&quot;
-     *                                      &quot;Criterion.GREATER_THAN&quot;);
+     *                                      Criteria.GREATER_THAN);
      * </code>
      *
      * Any comparison can be used.
