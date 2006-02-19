@@ -3430,7 +3430,7 @@ public class Criteria extends Hashtable
                             .toString();
                 }
                 SqlExpression.build(field, value, comparison,
-                        ignoreStringCase, getDb(), sb);
+                        ignoreStringCase || ignoreCase, getDb(), sb);
             }
 
             for (int i = 0; i < this.clauses.size(); i++)
@@ -3503,7 +3503,7 @@ public class Criteria extends Hashtable
                         Object item = Array.get(value, i);
 
                         inClause.add(SqlExpression.processInValue(item,
-                                             ignoreCase,
+                                             ignoreStringCase || ignoreCase,
                                              db));
                     }
 
@@ -3514,7 +3514,7 @@ public class Criteria extends Hashtable
                 }
                 else
                 {
-                    if (ignoreCase)
+                    if (ignoreStringCase || ignoreCase)
                     {
                         sb.append(db.ignoreCase(field))
                                 .append(comparison)
