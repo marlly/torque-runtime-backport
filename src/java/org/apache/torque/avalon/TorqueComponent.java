@@ -16,11 +16,11 @@ package org.apache.torque.avalon;
  * limitations under the License.
  */
 
+import java.io.File;
 import java.sql.Connection;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -41,19 +41,20 @@ import org.apache.torque.map.DatabaseMap;
  *
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class TorqueComponent
         extends AbstractLogEnabled
-        implements Component,
+        implements Torque,
                    Configurable,
                    Initializable,
                    Contextualizable,
                    Startable,
                    ThreadSafe
 {
-    /** The Avalon Context */
-    private Context context = null;
+    /** The Avalon Application Root */
+    private String appRoot = null;
 
     /** The instance of Torque used by this component. */
     private TorqueInstance torqueInstance = null;
@@ -111,26 +112,9 @@ public class TorqueComponent
         getLogger().debug("configure(" + configuration + ")");
 
         String configFile = configuration.getChild("configfile").getValue();
-        String appRoot = null;
-
-        try
-        {
-            appRoot = (context == null)
-                    ? null : (String) context.get("componentAppRoot");
-        }
-        catch (ContextException ce)
-        {
-            getLogger().error("Could not load Application Root from Context");
-        }
 
         if (StringUtils.isNotEmpty(appRoot))
         {
-            if (appRoot.endsWith("/"))
-            {
-                appRoot = appRoot.substring(0, appRoot.length() - 1);
-                getLogger().debug("Application Root changed to " + appRoot);
-            }
-
             if (configFile.startsWith("/"))
             {
                 configFile = configFile.substring(1);
@@ -139,7 +123,7 @@ public class TorqueComponent
 
             StringBuffer sb = new StringBuffer();
             sb.append(appRoot);
-            sb.append('/');
+            sb.append(File.separator);
             sb.append(configFile);
 
             configFile = sb.toString();
@@ -156,7 +140,30 @@ public class TorqueComponent
     public void contextualize(Context context)
             throws ContextException
     {
-        this.context = context;
+        // check context Merlin and YAAFI style
+        try
+        {
+            appRoot = ((File)context.get("urn:avalon:home")).getAbsolutePath();
+        }
+        catch (ContextException ce)
+        {
+            appRoot = null;
+        }
+
+        if (appRoot == null)
+        {
+            // check context old ECM style, let exception flow if not available
+            appRoot = (String) context.get("componentAppRoot");
+        }
+
+        if (StringUtils.isNotEmpty(appRoot))
+        {
+            if (appRoot.endsWith("/"))
+            {
+                appRoot = appRoot.substring(0, appRoot.length() - 1);
+                getLogger().debug("Application Root changed to " + appRoot);
+            }
+        }
     }
 
     /**
@@ -362,5 +369,31 @@ public class TorqueComponent
     public void closeConnection(Connection con)
     {
         getTorque().closeConnection(con);
+    }
+
+    /**
+     * Sets the current schema for a database connection
+     *
+     * @param name The database name.
+     * @param schema The current schema name
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public void setSchema(String name, String schema) throws TorqueException
+    {
+        getTorque().setSchema(name, schema);
+    }
+
+    /**
+     * This method returns the current schema for a database connection
+     *
+     * @param name The database name.
+     * @return The current schema name. Null means, no schema has been set.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public String getSchema(String name) throws TorqueException
+    {
+        return getTorque().getSchema(name);
     }
 }

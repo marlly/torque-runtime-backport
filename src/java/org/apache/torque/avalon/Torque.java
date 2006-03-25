@@ -16,16 +16,168 @@ package org.apache.torque.avalon;
  * limitations under the License.
  */
 
+import java.sql.Connection;
+
 import org.apache.avalon.framework.component.Component;
+import org.apache.torque.TorqueException;
+import org.apache.torque.adapter.DB;
+import org.apache.torque.manager.AbstractBaseManager;
+import org.apache.torque.map.DatabaseMap;
 
 /**
  * Avalon role interface for Torque.
  *
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public interface Torque
         extends Component
 {
-    String ROLE = "org.apache.torque.avalon.Torque";
+    String ROLE = Torque.class.getName();
+
+    /*
+     * ========================================================================
+     *
+     * Torque Methods, accessible from the Component
+     *
+     * ========================================================================
+     */
+
+    /**
+     * Determine whether Torque has already been initialized.
+     *
+     * @return true if Torque is already initialized
+     */
+    public boolean isInit();
+
+    /**
+     * Get the configuration for this component.
+     *
+     * @return the Configuration
+     */
+    public org.apache.commons.configuration.Configuration getConfiguration();
+
+    /**
+     * This method returns a Manager for the given name.
+     *
+     * @param name name of the manager
+     * @return a Manager
+     */
+    public AbstractBaseManager getManager(String name);
+
+    /**
+     * This methods returns either the Manager from the configuration file,
+     * or the default one provided by the generated code.
+     *
+     * @param name name of the manager
+     * @param defaultClassName the class to use if name has not been configured
+     * @return a Manager
+     */
+    public AbstractBaseManager getManager(String name, String defaultClassName);
+
+    /**
+     * Returns the default database map information.
+     *
+     * @return A DatabaseMap.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public DatabaseMap getDatabaseMap() throws TorqueException;
+
+    /**
+     * Returns the database map information. Name relates to the name
+     * of the connection pool to associate with the map.
+     *
+     * @param name The name of the database corresponding to the
+     *        <code>DatabaseMap</code> to retrieve.
+     * @return The named <code>DatabaseMap</code>.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public DatabaseMap getDatabaseMap(String name) throws TorqueException;
+
+    /**
+     * Register a MapBuilder
+     *
+     * @param className the MapBuilder
+     */
+    public void registerMapBuilder(String className);
+
+    /**
+     * This method returns a Connection from the default pool.
+     *
+     * @return The requested connection.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public Connection getConnection() throws TorqueException;
+
+    /**
+     *
+     * @param name The database name.
+     * @return a database connection
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public Connection getConnection(String name) throws TorqueException;
+
+    /**
+     * This method returns a Connecton using the given parameters.
+     * You should only use this method if you need user based access to the
+     * database!
+     *
+     * @param name The database name.
+     * @param username The name of the database user.
+     * @param password The password of the database user.
+     * @return A Connection.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public Connection getConnection(String name, String username, String password)
+            throws TorqueException;
+
+    /**
+     * Returns database adapter for a specific connection pool.
+     *
+     * @param name A pool name.
+     * @return The corresponding database adapter.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public DB getDB(String name) throws TorqueException;
+
+    /**
+     * Returns the name of the default database.
+     *
+     * @return name of the default DB
+     */
+    public String getDefaultDB();
+
+    /**
+     * Closes a connection.
+     *
+     * @param con A Connection to close.
+     */
+    public void closeConnection(Connection con);
+
+    /**
+     * Sets the current schema for a database connection
+     *
+     * @param name The database name.
+     * @param schema The current schema name
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public void setSchema(String name, String schema) throws TorqueException;
+
+    /**
+     * This method returns the current schema for a database connection
+     *
+     * @param name The database name.
+     * @return The current schema name. Null means, no schema has been set.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public String getSchema(String name) throws TorqueException;
 }
