@@ -101,7 +101,7 @@ public abstract class LimitHelper
         }
         else
         {
-            if (limit > 0)
+            if (limit >= 0)
             {
                 limitStringBuffer.append(limit);
             }
