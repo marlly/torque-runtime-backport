@@ -134,7 +134,7 @@ public abstract class LimitHelper
         }
         else
         {
-            if (limit > 0)
+            if (limit >= 0)
             {
                 limitStringBuffer.append(limit);
             }
@@ -178,7 +178,7 @@ public abstract class LimitHelper
             postLimit.append(" B.TORQUE$ROWNUM > ")
                     .append(offset);
 
-            if (limit > 0)
+            if (limit >= 0)
             {
                 postLimit.append(" AND B.TORQUE$ROWNUM <= ")
                         .append(offset + limit);
@@ -228,7 +228,7 @@ public abstract class LimitHelper
             postLimit.append(" B.TORQUE$ROWNUM > ")
                     .append(offset);
 
-            if (limit > 0)
+            if (limit >= 0)
             {
                 postLimit.append(" AND B.TORQUE$ROWNUM <= ")
                         .append(offset + limit);
