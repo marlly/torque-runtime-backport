@@ -135,6 +135,9 @@ import com.workingdogs.village.QueryDataSet;
  */
 public class LargeSelect implements Runnable, Serializable
 {
+    /** Serial version */
+    private static final long serialVersionUID = -1166842932571491942L;
+    
     /** The number of records that a page consists of.  */
     private int pageSize;
     /** The maximum number of records to maintain in memory. */
@@ -1288,7 +1291,12 @@ public class LargeSelect implements Runnable, Serializable
             throws IOException, ClassNotFoundException
     {
         inputStream.defaultReadObject();
-        startQuery(pageSize);
+        
+        // avoid NPE because of Tomcat de-serialization of sessions 
+        if (Torque.isInit())
+        {
+            startQuery(pageSize);
+        }
     }
 
     /**
