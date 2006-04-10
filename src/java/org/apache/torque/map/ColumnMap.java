@@ -24,6 +24,9 @@ package org.apache.torque.map;
  */
 public class ColumnMap implements java.io.Serializable
 {
+    /** The serialVersionUID for this class. */
+    private static final long serialVersionUID = -5971184507395399165L;
+
     /** Type of the column. */
     private Object type = null;
 

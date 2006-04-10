@@ -60,6 +60,8 @@ public interface DataSourceFactory
      * Sets the current schema for the database connection
      *
      * @param schema The current schema name
+     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed 
+     *             in a future version of Torque.
      */
     void setSchema(String schema);
 
@@ -69,6 +71,8 @@ public interface DataSourceFactory
      * @return The current schema name. Null means, no schema has been set.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated use DatabaseInfo.getSchema() instead. Will be removed 
+     *             in a future version of Torque.
      */
     String getSchema();
 

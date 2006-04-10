@@ -16,9 +16,11 @@ package org.apache.torque.map;
  * limitations under the License.
  */
 
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+
+import org.apache.torque.Database;
 import org.apache.torque.adapter.IDMethod;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.oid.IdGenerator;
@@ -32,6 +34,9 @@ import org.apache.torque.oid.IdGenerator;
  */
 public class DatabaseMap implements java.io.Serializable
 {
+    /** The serialVersionUID for this class. */
+    private static final long serialVersionUID = 955251837095032274L;
+
     /** Name of the database. */
     private String name;
 
@@ -51,10 +56,12 @@ public class DatabaseMap implements java.io.Serializable
     private HashMap idGenerators;
 
     /**
-     * Required by proxy. Not used.
+     * Constructs a new DatabaseMap.
      */
     public DatabaseMap()
     {
+        tables = new Hashtable();
+        idGenerators = new HashMap(6);
     }
 
     /**
@@ -62,6 +69,8 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param name Name of the database.
      * @param numberOfTables Number of tables in the database.
+     * @deprecated use DatabaseMap() instead. Will be removed
+     *             in a future version of Torque.
      */
     public DatabaseMap(String name, int numberOfTables)
     {
@@ -74,6 +83,8 @@ public class DatabaseMap implements java.io.Serializable
      * Constructor.
      *
      * @param name Name of the database.
+     * @deprecated use DatabaseMap() instead. Will be removed
+     *             in a future version of Torque.
      */
     public DatabaseMap(String name)
     {
@@ -122,6 +133,9 @@ public class DatabaseMap implements java.io.Serializable
      * Get the IDBroker for this database.
      *
      * @return An IDBroker.
+     * @deprecated Will be removed in a future version of Torque.
+     *             Use DatabaseInfo#getIdBroker() instead 
+     *             to access the IDBroker.
      */
     public IDBroker getIDBroker()
     {
@@ -132,6 +146,8 @@ public class DatabaseMap implements java.io.Serializable
      * Get the name of this database.
      *
      * @return A String.
+     * @deprecated Will be removed in a future version of Torque. 
+     *             Use the name of the corresponding database instead.
      */
     public String getName()
     {
@@ -210,8 +226,6 @@ public class DatabaseMap implements java.io.Serializable
     {
         this.idTable = idTable;
         addTable(idTable);
-        idBroker = new IDBroker(idTable);
-        addIdGenerator(IDMethod.ID_BROKER, idBroker);
     }
 
     /**
@@ -230,6 +244,8 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param type a <code>String</code> value
      * @param idGen an <code>IdGenerator</code> value
+     * @deprecated use DatabaseInfo.addGenerator() instead.
+     *             Will be removed in a future version of Torque.
      */
     public void addIdGenerator(String type, IdGenerator idGen)
     {
@@ -242,9 +258,36 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @param type a <code>String</code> value
      * @return an <code>IdGenerator</code> value
+     * @deprecated use DatabaseInfo.getIdGenerator() instead.
+     *             Will be removed in a future version of Torque.
      */
-    IdGenerator getIdGenerator(String type)
+    public IdGenerator getIdGenerator(String type)
     {
         return (IdGenerator) idGenerators.get(type);
+    }
+    
+    /**
+     * Creates the Idbroker for this DatabaseMap.
+     * If an IDBroker already exists for the DatabaseMap, the method 
+     * does nothing.
+     * @return true if a new IdBroker was created, false otherwise.
+     * @deprecated Will be removed in a future version of Torque. 
+     *             Use DatabaseInfo.startIdBroker() instead.
+     */
+    public synchronized boolean startIdBroker()
+    {
+        if (idBroker == null)
+        {
+            setIdTable("ID_TABLE");
+            TableMap tMap = getIdTable();
+            tMap.addPrimaryKey("ID_TABLE_ID", new Integer(0));
+            tMap.addColumn("TABLE_NAME", "");
+            tMap.addColumn("NEXT_ID", new Integer(0));
+            tMap.addColumn("QUANTITY", new Integer(0));
+            idBroker = new IDBroker(idTable);
+            addIdGenerator(IDMethod.ID_BROKER, idBroker);
+            return true;
+        }
+        return false;
     }
 }

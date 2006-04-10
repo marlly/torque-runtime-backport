@@ -32,6 +32,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.torque.Database;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
@@ -480,10 +481,12 @@ public abstract class BasePeer
         }
 
         String dbName = criteria.getDbName();
-        DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
+        Database database = Torque.getDatabase(dbName);
+        DatabaseMap dbMap = database.getDatabaseMap();
         TableMap tableMap = dbMap.getTable(table);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
-        IdGenerator keyGen = tableMap.getIdGenerator();
+        IdGenerator keyGen 
+                = database.getIdGenerator(tableMap.getPrimaryKeyMethod());
 
         ColumnMap pk = getPrimaryKey(criteria);
 

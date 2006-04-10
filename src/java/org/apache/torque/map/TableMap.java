@@ -34,6 +34,9 @@ import org.apache.torque.oid.IdGenerator;
  */
 public class TableMap implements IDMethod, java.io.Serializable
 {
+    /** The serialVersionUID for this class. */
+    private static final long serialVersionUID = -9053174532511492818L;
+
     /** The list of valid ID generation methods. */
     protected static final String[] VALID_ID_METHODS =
     {
@@ -217,6 +220,8 @@ public class TableMap implements IDMethod, java.io.Serializable
     /**
      * Get the value of idGenerator.
      * @return value of idGenerator.
+     * @deprecated use DatabaseInfo.getIdGenerator(getPrimaryKeyMethod())
+     *             instead. Will be removed in a future version of Torque.
      */
     public IdGenerator getIdGenerator()
     {
@@ -488,6 +493,10 @@ public class TableMap implements IDMethod, java.io.Serializable
                 primaryKeyMethod = method;
                 break;
             }
+        }
+        if (ID_BROKER.equalsIgnoreCase(method))
+        {
+            getDatabaseMap().startIdBroker();
         }
     }
 

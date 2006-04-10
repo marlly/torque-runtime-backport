@@ -74,9 +74,14 @@ public abstract class DB implements Serializable, IDMethod
     public static final int LIMIT_STYLE_DB2 = 5;
 
 	/**
-	 * Key for the configuration which contains database adapters
+	 * Key for the configuration which contains database adapters.
 	 */
 	public static final String ADAPTER_KEY = "adapter";
+
+    /**
+     * Key for the configuration which contains database drivers.
+     */
+    public static final String DRIVER_KEY = "driver";
 
     /**
      * Empty constructor.

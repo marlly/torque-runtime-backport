@@ -258,6 +258,8 @@ public abstract class AbstractDataSourceFactory
      * @return The current schema name. Null means, no schema has been set.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed 
+     *             in a future version of Torque.
      */
     public String getSchema()
     {

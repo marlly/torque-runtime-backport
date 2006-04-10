@@ -17,9 +17,9 @@ package org.apache.torque;
  */
 
 import java.sql.Connection;
+import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
-
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
@@ -41,17 +41,18 @@ import org.apache.torque.map.DatabaseMap;
 public abstract class Torque
 {
     /**
-     * The prefix for all configuration keys used by Torque
+     * The prefix for all configuration keys used by Torque.
      */
     public static final String TORQUE_KEY = "torque";
 
     /**
-     * the prefix for configuring the database adapters and the default database
+     * The prefix for configuring the database adapters 
+     * and the default database.
      */
     public static final String DATABASE_KEY = "database";
 
     /**
-     * The key used to configure the name of the default database
+     * The key used to configure the name of the default database.
      */
     public static final String DEFAULT_KEY = "default";
 
@@ -349,5 +350,37 @@ public abstract class Torque
         throws TorqueException
     {
         return getInstance().getSchema(name);
+    }
+    
+    /**
+     * Returns the database for the given key.
+     *
+     * @param name The database name.
+     * @return the Database for the given name, or null if no database exists
+     *         for the given name. 
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public static Database getDatabase(String name) throws TorqueException
+    {
+        return getInstance().getDatabase(name);
+    }
+
+    /**
+     * Returns a Map containing all Databases registered to Torque.
+     * The key of the Map is the name of the database, and the value is the 
+     * database instance. <br/>
+     * Note that in the very special case where a new database which 
+     * is not configured in Torque's configuration gets known to Torque 
+     * at a later time, the returned map may change, and there is no way to
+     * protect you against this. However, Databases should be initialized
+     * in the init() method, so this will not happen if Torque is used
+     * properly.
+     * 
+     * @return a Map containing all Databases known to Torque, never null.
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public static Map getDatabases() throws TorqueException
+    {
+        return getInstance().getDatabases();
     }
 }

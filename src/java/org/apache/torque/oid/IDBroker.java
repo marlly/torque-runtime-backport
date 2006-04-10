@@ -26,10 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.apache.torque.Database;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.map.DatabaseMap;
@@ -105,8 +104,8 @@ public class IDBroker implements Runnable, IdGenerator
     /** Fully qualified Quantity column name */
     public static final String QUANTITY = ID_TABLE + "." + COL_QUANTITY;
 
-    /** The TableMap referencing the ID_TABLE for this IDBroker. */
-    private TableMap tableMap;
+    /** the name of the database in which this IdBroker is running. */
+    private String databaseName;
 
     /**
      * The default size of the per-table meta data <code>Hashtable</code>
@@ -182,13 +181,36 @@ public class IDBroker implements Runnable, IdGenerator
     private Log log = LogFactory.getLog(IDBroker.class);
 
     /**
+     * constructs an IdBroker for the given Database.
+     * @param database the database where this IdBroker is running in. 
+     */
+    public IDBroker(Database database)
+    {
+        this(database.getName());
+    }
+    
+    /**
      * Creates an IDBroker for the ID table.
      *
      * @param tMap A TableMap.
+     * @deprecated Use IDBroker(DatabaseInfo) instead. Will be removed
+     *             in a future version of Torque.
      */
     public IDBroker(TableMap tMap)
     {
-        this.tableMap = tMap;
+        this(tMap.getDatabaseMap().getName());
+    }
+    
+    /**
+     * Constructor. 
+     * Provided as long as both Constructors, IDBroker(DatabaseInfo) and
+     * IDBroker(TableMap), are around.
+     * @param databaseName the name of the database for which this IdBroker
+     *        provides Ids.
+     */
+    private IDBroker(String databaseName)
+    {
+        this.databaseName = databaseName;
         configuration = Torque.getConfiguration();
 
         // Start the housekeeper thread only if prefetch has not been disabled
@@ -207,15 +229,28 @@ public class IDBroker implements Runnable, IdGenerator
         // Check for Transaction support.  Give warning message if
         // IDBroker is being used with a database that does not
         // support transactions.
-        String dbName = tMap.getDatabaseMap().getName();
         Connection dbCon = null;
         try
         {
-            dbCon = Torque.getConnection(dbName);
+            dbCon = Torque.getConnection(databaseName);
+        }
+        catch (Throwable t)
+        {
+            log.error("Could not open a connection to the database " 
+                    + databaseName,
+                    t);
+            transactionsSupported = false;
+        }
+        try
+        {
             transactionsSupported = dbCon.getMetaData().supportsTransactions();
         }
         catch (Exception e)
         {
+            log.warn("Could not read from connection Metadata"
+                    + " whether transactions are supported for the database "
+                    + databaseName,
+                    e);
             transactionsSupported = false;
         }
         finally
@@ -231,7 +266,7 @@ public class IDBroker implements Runnable, IdGenerator
         }
         if (!transactionsSupported)
         {
-            log.warn("IDBroker is being used with db '" + dbName
+            log.warn("IDBroker is being used with db '" + databaseName
                     + "', which does not support transactions. IDBroker "
                     + "attempts to use transactions to limit the possibility "
                     + "of duplicate key generation.  Without transactions, "
@@ -463,8 +498,6 @@ public class IDBroker implements Runnable, IdGenerator
         Connection dbCon = null;
         try
         {
-            String databaseName = tableMap.getDatabaseMap().getName();
-
             dbCon = Torque.getConnection(databaseName);
             Statement statement = dbCon.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -618,7 +651,6 @@ public class IDBroker implements Runnable, IdGenerator
     {
         BigDecimal nextId = null;
         BigDecimal quantity = null;
-        DatabaseMap dbMap = tableMap.getDatabaseMap();
 
         // Block on the table.  Multiple tables are allowed to ask for
         // ids simultaneously.
@@ -636,7 +668,7 @@ public class IDBroker implements Runnable, IdGenerator
         {
             if (useNewConnection)
             {
-                connection = Transaction.beginOptional(dbMap.getName(),
+                connection = Transaction.beginOptional(databaseName,
                     transactionsSupported);
             }
 
@@ -724,7 +756,6 @@ public class IDBroker implements Runnable, IdGenerator
                 if (connection == null || configuration
                     .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
                 {
-                    String databaseName = tableMap.getDatabaseMap().getName();
                     // Get a connection to the db
                     dbCon = Torque.getConnection(databaseName);
                 }

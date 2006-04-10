@@ -48,6 +48,21 @@ public class Transaction
     private static Log log = LogFactory.getLog(Transaction.class);
 
     /**
+     * Begin a transaction for the default database.  
+     * This method will fallback gracefully to
+     * return a normal connection, if the database being accessed does
+     * not support transactions.
+     *
+     * @return The Connection for the transaction.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public static Connection begin() throws TorqueException
+    {
+        return Transaction.begin(Torque.getDefaultDB());
+    }
+
+    /**
      * Begin a transaction.  This method will fallback gracefully to
      * return a normal connection, if the database being accessed does
      * not support transactions.
