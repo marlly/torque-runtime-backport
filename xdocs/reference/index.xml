@@ -36,6 +36,8 @@
      <br/><br/>
      <a href="extend-classes.html">Extending the base classes</a>
      <br/><br/>
+     <a href="connections-transactions.html">Connection and Transaction handling</a>
+     <br/><br/>
      <a href="managers-cache.html">Managers and Caching</a>
      <br/><br/>    
      <a href="beans.html">Beans</a>

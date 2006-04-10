@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2001-2005 The Apache Software Foundation.
+
+ Licensed under the Apache License, Version 2.0 (the "License")
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<document>
+ <properties>
+   <title>Torque Runtime Reference - Reading from the database</title>
+   <author email="fischer@seitenbau.de">Thomas Fischer</author>
+ </properties>
+
+ <body>
+
+  <section name="Connection and transaction handling">
+    <p>
+      To read data from  or write data to the database, a connection to the
+      database is required. To be able to connect to a database,
+      you need to add the relevant information to Torque's configuration, 
+      see the section about 
+      <a href="initialisation-configuration.html">initialisation and configuration</a>.
+    </p>
+    
+    <p>
+      Connection and Transaction handling cannot be treated separately
+      from each other. Some databases, e.g. oracle, may automatically start
+      a transaction on an sql command, so you might not be able to
+      get a database connection without a transaction. Then, transactions live
+      in database connections, so it is not possible to get a transaction
+      without a database connection.
+    </p>
+    
+    <p>
+      There are two ways of connection and transaction handling:
+      <ul>
+        <li>Let Torque take care of it.</li>
+        <li>Do it yourself.</li>
+      </ul>
+      Unless you know what you are doing, the first approach is recommended.
+      If you choose the second approach and write incorrect code, this may lead
+      to connection leaks and/or blocked connections.  You have been warned.
+    </p>
+  </section>
+
+  <section name="Torque's connection and transaction handling">
+
+    <p>
+      When you use Torque, you need not bother about connections and 
+      transactions.  The only thing you have to do is to configure Torque 
+      correctly, then Torque is able to create a database connection whenever
+      it needs one.  For example, if you call the save() method of some object,
+      Torque retrieves a connection from its internal connection pool, 
+      uses it to save the connection, and returns it to the pool. 
+    </p>
+    
+    <p>
+      If the database supports transactions and autocommit is turned off,
+      one Transaction is used for every method which needs a database 
+      connection. See the source code for details.
+    </p>
+
+  </section>
+  
+  <section name="Handle connections and transactions yourself">
+
+    <p>
+      If you want to manipulate the database in some way which is not
+      incorporated into Torque, or want to execute several commands in one
+      transaction, you need to handle connections and transaction 
+      yourself.  This is potentially dangerous, as incorrect handling of
+      connections and transaction may lead to connection leaks 
+      (resulting in errors because no more connections can be opened to the 
+      database) or blocked connections (because some transaction has been 
+      left open).  Typically, these conditions appear if a database operation
+      fails, because error handling is insufficient.
+    </p>
+    
+    <p>
+      The following code is recommended if you need to handle connections 
+      and/or transactions yourself:
+    </p>
+
+<source>
+Connection connection = null;
+try
+{
+    connection = Transaction.begin();
+
+    // do something with connection, e.g.
+    // someObject.save(connection);
+
+    Transaction.commit(connection);
+    connection = null;
+}
+finally
+{
+    if (connection != null)
+    {
+        Transaction.safeRollback(connection);
+    }
+}
+</source>
+
+    <p>
+      This code ensures that if any error occurs within the try block,
+      an attempt is made to rollback the transaction and return it into the
+      pool.
+    </p>
+
+    <p>
+      If the database supports transactions and autocomit is turned off,
+      all database operations are executed in a single transaction. 
+      This has the following effect: For example, you execute two saves in the
+      try block, and the second save fails. The first save operation will be
+      rolled back, i.e. the database reverts the changes made by the first save.
+      If you do not like this behaviour, the safe way is to wrap everything in 
+      its own try ... finally block.
+      The alternative is to use
+      <code>Transaction.beginOptional(Torque.getDefaultDB(), false)</code>
+      instead of <code>Transaction.begin()</code> and make sure your 
+      connection pool returns connections in autocommit mode. This might
+      not work with CLOB and BLOB data fields, however.
+    </p>
+    
+    <p>
+      If you use more than one database, you might want to use 
+      <code>Transaction.begin(String databaseName)</code> instead of
+      <code>Transaction.begin()</code>.
+    </p>
+    
+    <p>
+      The following code is <em>NOT</em> recommended, as some databases
+      (like Oracle) start transactions automatically, and some pools 
+      (like dbcp, Torque's default pool) do not rollback automatically if
+      a connection is returned to the pool.  So under certain conditions,
+      you might have leftovers from the last transaction in a "fresh" 
+      connection from the pool, or, even worse, the connection blocks 
+      because the pool attempts to set some transaction property which 
+      needs to be set as first command in a transaction.
+    </p>
+
+<source>
+Connection connection = null;
+try
+{
+    // Bad ! No defined transaction state afterwards !
+    connection = Torque.getConnection();
+
+    // do something with connection, e.g.
+    // someObject.save(connection);
+
+    Transaction.commit(connection);
+    connection = null;
+}
+finally
+{
+    if (connection != null)
+    {
+        // Bad ! No rollback or commit !
+        Torque.closeConnection(connection);
+    }
+}
+</source>
+
+  </section>
+
+ </body>
+</document>

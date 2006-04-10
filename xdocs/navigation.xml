@@ -46,8 +46,9 @@
           <item name="Reference"         href="/reference/index.html" collapse="true">
             <item name="Initialisation"  href="/reference/initialisation-configuration.html"/>
             <item name="Reading from the DB" href="/reference/read-from-db.html"/>
-´           <item name="Writing to the DB" href="/reference/write-to-db.html"/>
+            <item name="Writing to the DB" href="/reference/write-to-db.html"/>
             <item name="Extending classes" href="/reference/extend-classes.html"/>
+            <item name="Connections"     href="/reference/connections-transactions.html"/>
             <item name="Managers and Cache" href="/reference/managers-cache.html"/>
             <item name="Beans"           href="/reference/beans.html"/>
             <item name="Relevant classes" href="/reference/relevant-classes.html"/>
