@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 public abstract class BaseTestCase extends TestCase
 {
     /** The path to the configuration file. */
-    private static final String CONFIG_FILE
+    protected static final String CONFIG_FILE
             = "src/test/TurbineResources.properties";
 
     /** Whether torque has been initialized. */
