@@ -17,8 +17,10 @@ package org.apache.torque.avalon;
  */
 
 import java.sql.Connection;
+import java.util.Map;
 
 import org.apache.avalon.framework.component.Component;
+import org.apache.torque.Database;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
@@ -180,4 +182,39 @@ public interface Torque
      *         rethrown wrapped into a TorqueException.
      */
     public String getSchema(String name) throws TorqueException;
+
+    /**
+     * Returns the database for the key <code>databaseName</code>.
+     * 
+     * @param databaseName the key to get the database for.
+     * @return the database for the specified key, or null if the database
+     *         does not exist.
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public Database getDatabase(String databaseName) throws TorqueException;
+    
+    /**
+     * Returns a Map containing all Databases registered to Torque.
+     * The key of the Map is the name of the database, and the value is the 
+     * database instance. <br/>
+     * Note that in the very special case where a new database which 
+     * is not configured in Torque's configuration gets known to Torque 
+     * at a later time, the returned map may change, and there is no way to
+     * protect you against this.
+     * 
+     * @return a Map containing all Databases known to Torque, never null.
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public Map getDatabases() throws TorqueException;
+    
+    /**
+     * Returns the database for the key <code>databaseName</code>.
+     * If no database is associated to the specified key,
+     * a new database is created, mapped to the specified key, and returned.
+     *
+     * @param databaseName the key to get the database for.
+     * @return the database associated with specified key, or the newly created
+     *         database, never null.
+     */
+    public Database getOrCreateDatabase(String databaseName);
 }

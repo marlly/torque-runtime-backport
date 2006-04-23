@@ -18,6 +18,7 @@ package org.apache.torque.avalon;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.Map;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
@@ -30,6 +31,7 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.lang.StringUtils;
+import org.apache.torque.Database;
 import org.apache.torque.TorqueException;
 import org.apache.torque.TorqueInstance;
 import org.apache.torque.adapter.DB;
@@ -395,5 +397,49 @@ public class TorqueComponent
     public String getSchema(String name) throws TorqueException
     {
         return getTorque().getSchema(name);
+    }
+
+    /**
+     * Returns the database for the key <code>databaseName</code>.
+     * 
+     * @param databaseName the key to get the database for.
+     * @return the database for the specified key, or null if the database
+     *         does not exist.
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public Database getDatabase(String databaseName) throws TorqueException
+    {
+        return getTorque().getDatabase(databaseName);
+    }
+    
+    /**
+     * Returns a Map containing all Databases registered to Torque.
+     * The key of the Map is the name of the database, and the value is the 
+     * database instance. <br/>
+     * Note that in the very special case where a new database which 
+     * is not configured in Torque's configuration gets known to Torque 
+     * at a later time, the returned map may change, and there is no way to
+     * protect you against this.
+     * 
+     * @return a Map containing all Databases known to Torque, never null.
+     * @throws TorqueException if Torque is not yet initialized.
+     */
+    public Map getDatabases() throws TorqueException
+    {
+        return getTorque().getDatabases();
+    }
+    
+    /**
+     * Returns the database for the key <code>databaseName</code>.
+     * If no database is associated to the specified key,
+     * a new database is created, mapped to the specified key, and returned.
+     *
+     * @param databaseName the key to get the database for.
+     * @return the database associated with specified key, or the newly created
+     *         database, never null.
+     */
+    public Database getOrCreateDatabase(String databaseName)
+    {
+        return getTorque().getOrCreateDatabase(databaseName);
     }
 }
