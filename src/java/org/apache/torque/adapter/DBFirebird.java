@@ -23,12 +23,12 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 /**
- * This code should be used for an Interbase database pool.
+ * This code should be used for a Firebird database pool.
  *
- * @author <a href="mailto:frank@opticode.co.za">Frank Conradie</a>
- * @version $Id$
+ * @author Joerg Friedrich
+ * @version $Id: DBInterbase.java 239630 2005-08-24 12:25:32Z henning $
  */
-public class DBInterbase extends DB
+public class DBFirebird extends DB
 {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:MM:ss";

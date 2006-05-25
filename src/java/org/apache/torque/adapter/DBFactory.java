@@ -47,6 +47,7 @@ public class DBFactory
         adapters.put("COM.ibm.db2.jdbc.app.DB2Driver", DBDB2App.class);
         adapters.put("COM.ibm.db2.jdbc.net.DB2Driver", DBDB2Net.class);
         adapters.put("COM.cloudscape.core.JDBCDriver", DBCloudscape.class);
+        adapters.put("org.firebirdsql.jdbc.FBDriver",DBFirebird.class);
         adapters.put("org.hsql.jdbcDriver", DBHypersonicSQL.class);
         adapters.put("org.hsqldb.jdbcDriver", DBHypersonicSQL.class);
         adapters.put("interbase.interclient.Driver", DBInterbase.class);
@@ -74,6 +75,7 @@ public class DBFactory
         adapters.put("db2app", DBDB2App.class);
         adapters.put("db2net", DBDB2Net.class);
         adapters.put("cloudscape", DBCloudscape.class);
+        adapters.put("firebird", DBFirebird.class);
         adapters.put("hypersonic", DBHypersonicSQL.class);
         adapters.put("interbase", DBInterbase.class);
         adapters.put("instantdb", DBInstantDB.class);
