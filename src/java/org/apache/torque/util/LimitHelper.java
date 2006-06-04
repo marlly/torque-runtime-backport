@@ -69,6 +69,9 @@ public abstract class LimitHelper
             case DB.LIMIT_STYLE_DB2 :
                 LimitHelper.generateDB2Limits(query, offset, limit);
                 break;
+            case DB.LIMIT_STYLE_SYBASE :
+            	LimitHelper.generateSybaseLimits(query, offset, limit);
+            	break;
             default:
                 if (db.supportsNativeLimit())
                 {
@@ -112,6 +115,19 @@ public abstract class LimitHelper
         query.setPostLimit(null);
     }
 
+    /**
+     * Modify a query to add limit and offset values for Sybase.
+     *
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
+     */
+    private static final void generateSybaseLimits(Query query,
+            int offset, int limit)
+    {
+    	query.setRowcount(String.valueOf(limit+offset));
+    }
+    
     /**
      * Generate a LIMIT limit OFFSET offset clause if offset &gt; 0
      * or an LIMIT limit clause if limit is &gt; 0 and offset
