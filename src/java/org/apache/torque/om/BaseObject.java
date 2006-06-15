@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.apache.torque.TorqueException;
+import org.apache.torque.map.TableMap;
 
 /**
  * This class contains attributes and methods that are used by all
@@ -294,4 +295,16 @@ public abstract class BaseObject implements Persistent, Serializable
      * @see org.apache.torque.om.Persistent#save(Connection)
      */
     public abstract void save(Connection con) throws Exception;
+    
+    /**
+     * Retrieves the TableMap object related to this Table data. 
+     * Must be overridden in generated classes.  If BaseObject's 
+     * implementation is called it will throw an Error.
+     *
+     * @return The associated TableMap object.
+     */
+    public TableMap getTableMap() throws TorqueException
+    {
+        throw new Error("BaseObject.getTableMap: " + NOT_IMPLEMENTED);
+    }
 }
