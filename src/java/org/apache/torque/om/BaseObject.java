@@ -163,10 +163,10 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Retrieves a field from the object by name. Must be overridden if called.
      * BaseObject's implementation will throw an Error.
-     *
+     * 
      * @param field The name of the field to retrieve.
      * @return The retrieved field value
-     *
+     * 
      */
     public Object getByName(String field)
     {
@@ -174,10 +174,26 @@ public abstract class BaseObject implements Persistent, Serializable
     }
 
     /**
-     * Retrieves a field from the object by name passed in
-     * as a String.  Must be overridden if called.
-     * BaseObject's implementation will throw an Error.
-     *
+     * Set a field in the object by field (Java) name.
+     * 
+     * @param name field name
+     * @param value field value
+     * @return True if value was set, false if not (invalid name / protected
+     *         field).
+     * @throws IllegalArgumentException if object type of value does not match
+     *             field object type.
+     * @throws TorqueException If a problem occures with the set[Field] method.
+     */
+    public boolean setByName(String name, Object value) throws TorqueException,
+            IllegalArgumentException
+    {
+        throw new Error("BaseObject.setByName: " + NOT_IMPLEMENTED);
+    }
+
+    /**
+     * Retrieves a field from the object by name passed in as a String. Must be
+     * overridden if called. BaseObject's implementation will throw an Error.
+     * 
      * @param name field name
      * @return value of the field
      */
@@ -187,10 +203,27 @@ public abstract class BaseObject implements Persistent, Serializable
     }
 
     /**
-     * Retrieves a field from the object by position as specified
-     * in a database schema for example.  Must be overridden if called.
-     * BaseObject's implementation will throw an Error.
-     *
+     * Set field values by Peer Field Name
+     * 
+     * @param name field name
+     * @param value field value
+     * @return True if value was set, false if not (invalid name / protected
+     *         field).
+     * @throws IllegalArgumentException if object type of value does not match
+     *             field object type.
+     * @throws TorqueException If a problem occures with the set[Field] method.
+     */
+    public boolean setByPeerName(String name, Object value)
+            throws TorqueException, IllegalArgumentException
+    {
+        throw new Error("BaseObject.setByPeerName: " + NOT_IMPLEMENTED);
+    }
+
+    /**
+     * Retrieves a field from the object by position as specified in a database
+     * schema for example. Must be overridden if called. BaseObject's
+     * implementation will throw an Error.
+     * 
      * @param pos field position
      * @return value of the field
      */
@@ -200,12 +233,30 @@ public abstract class BaseObject implements Persistent, Serializable
     }
 
     /**
-     * Compares this with another <code>BaseObject</code> instance.  If
-     * <code>obj</code> is an instance of <code>BaseObject</code>, delegates to
-     * <code>equals(BaseObject)</code>.  Otherwise, returns <code>false</code>.
-     *
+     * Set field values by it's position (zero based) in the XML schema.
+     * 
+     * @param position The field position
+     * @param value field value
+     * @return True if value was set, false if not (invalid position / protected
+     *         field).
+     * @throws IllegalArgumentException if object type of value does not match
+     *             field object type.
+     * @throws TorqueException If a problem occures with the set[Field] method.
+     */
+    public boolean setByPosition(int position, Object value)
+            throws TorqueException, IllegalArgumentException
+    {
+        throw new Error("BaseObject.setByPosition: " + NOT_IMPLEMENTED);
+    }
+    
+    /**
+     * Compares this with another <code>BaseObject</code> instance. If
+     * <code>obj</code> is an instance of <code>BaseObject</code>,
+     * delegates to <code>equals(BaseObject)</code>. Otherwise, returns
+     * <code>false</code>.
+     * 
      * @param obj The object to compare to.
-     * @return    Whether equal to the object specified.
+     * @return Whether equal to the object specified.
      */
     public boolean equals(Object obj)
     {
