@@ -47,6 +47,10 @@ public abstract class SQLBuilder
 {
     /** Logging */
     protected static Log log = LogFactory.getLog(SQLBuilder.class);
+    
+    /** Function Characters */
+    public static final String[] COLUMN_CHARS = {".", "*"};
+    public static final String[] DELIMITERS = {" ", ",", "(", ")", "<", ">"};
 
     /**
      * Fully qualify a table name with an optional schema reference
@@ -131,65 +135,36 @@ public abstract class SQLBuilder
             return name;
         }
 
-        final int leftParent = name.lastIndexOf('(');
-        final int rightParent = name.indexOf(')');
-
-        // Do we have Parentheses?
-        if (leftParent < 0)
+        // Find Table.Column
+        int dotIndex = name.indexOf('.');
+        if (dotIndex == -1)
         {
-            if (rightParent < 0)
-            {
-                // No left, no right => No function ==> return it
-                return name;
-            }
+            dotIndex = name.indexOf("*");
         }
-
-        // We have a left parenthesis. Is the right one behind it?
-        if (rightParent > leftParent)
+        if (dotIndex == -1)
         {
-            // Yes. Strip off the function, return the column name
-            return name.substring(leftParent + 1, rightParent);
+            throw new TorqueException("removeSQLFunction() : Column name " 
+                    + name
+                    + " does not contain a . or a *");
         }
-
-        // Bracket mismatch or wrong order ==> Exception
-        throwMalformedColumnNameException(
-                "removeSQLFunction",
-                name);
-
-        return null; // Ugh
-    }
-
-    /**
-     * Removes possible qualifiers (like DISTINCT) from a column name
-     *
-     * @param name The column name, possibly containing qualifiers
-     *
-     * @return The column name
-     *
-     * @throws TorqueException If the column name was malformed
-     */
-    private static String removeQualifiers(final String name)
-            throws TorqueException
-    {
-        // Empty name => return it
-        if (StringUtils.isEmpty(name))
+        String pre = name.substring(0, dotIndex);
+        String post = name.substring(dotIndex + 1, name.length());
+        int startIndex = StringUtils.lastIndexOfAny(pre, DELIMITERS);
+        int endIndex = StringUtils.indexOfAny(post, DELIMITERS);
+        if (startIndex < 0 && endIndex < 0)
         {
             return name;
         }
-
-        final int spacePos = name.trim().lastIndexOf(' ');
-
-        // Do we have spaces, indicating that qualifiers are used ?
-        if (spacePos > 0)
+        else
         {
-            // Qualifiers are first, tablename is piece after last space
-            return name.trim().substring(spacePos + 1);
+            if (endIndex < 0)
+            {
+                endIndex = post.length();
+            }
+            // if startIndex == -1 the formula is correct
+            return name.substring(startIndex + 1, dotIndex + 1 + endIndex);
         }
-
-        // no spaces, nothing changed
-        return name;
     }
-
 
     /**
      * Returns a table name from an identifier. Each identifier is to be qualified
@@ -204,7 +179,7 @@ public abstract class SQLBuilder
     public static String getTableName(final String name, final String dbName)
             throws TorqueException
     {
-        final String testName = removeQualifiers(removeSQLFunction(name));
+        final String testName = removeSQLFunction(name);
 
         if (StringUtils.isEmpty(testName))
         {
