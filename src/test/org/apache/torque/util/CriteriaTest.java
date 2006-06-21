@@ -25,8 +25,12 @@ import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.torque.BaseTestCase;
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DBFactory;
+import org.apache.torque.map.ColumnMap;
+import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.map.TableMap;
 import org.apache.torque.util.Criteria.Criterion;
 import org.apache.torque.util.Criteria.Join;
 
@@ -577,14 +581,41 @@ public class CriteriaTest extends BaseTestCase
     }
 
     /**
-     * test for TRQS25
+     * Checks whether orderBy works.
      */
-/*
- *    public void testCriteriaAndString()
- *    {
- *        Criteria c = new Criteria()
- *                .add("TABLE.COLUMN1", "string")
- *                .and("TABLE.COLUMN2", "string", Criteria.LIKE);
- *    }
- */
+    public void testOrderBy() throws TorqueException
+    {
+        // we need a rudementary databaseMap for this test case to work
+        DatabaseMap dbMap = Torque.getDatabaseMap(Torque.getDefaultDB());
+        
+        TableMap tableMap = new TableMap("AUTHOR", dbMap);
+        dbMap.addTable(tableMap);
+        
+        ColumnMap columnMap = new ColumnMap("NAME", tableMap);
+        columnMap.setType("");
+        tableMap.addColumn(columnMap);
+        
+        columnMap = new ColumnMap("AUTHOR_ID", tableMap);
+        columnMap.setType(new Integer(0));
+        tableMap.addColumn(columnMap);
+        
+        // check that alias'ed tables are referenced by their alias
+        // name when added to the select clause.
+        Criteria criteria = new Criteria();
+        criteria.addSelectColumn("AUTHOR.NAME");
+        criteria.addAlias("a", "AUTHOR");
+        criteria.addJoin(
+                "AUTHOR.AUTHOR_ID",
+                "a." + "AUTHOR_ID");
+        criteria.addAscendingOrderByColumn(
+                "a.NAME");
+        
+        String result = BasePeer.createQueryString(criteria);
+        assertEquals("SELECT AUTHOR.NAME, a.NAME "
+                    + "FROM AUTHOR, AUTHOR a "
+                    + "WHERE AUTHOR.AUTHOR_ID=a.AUTHOR_ID "
+                    + "ORDER BY a.NAME ASC", 
+                result);
+    }
+
 }
