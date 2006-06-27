@@ -31,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.torque.Database;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
-import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.TableMap;
 import org.apache.torque.util.Transaction;
 

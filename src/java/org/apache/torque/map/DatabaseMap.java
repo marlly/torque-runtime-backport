@@ -413,8 +413,8 @@ public class DatabaseMap implements java.io.Serializable
         }
         try
         {
-            Method initMethod = initClass.getMethod("init", null);
-            initMethod.invoke(null, null);
+            Method initMethod = initClass.getMethod("init", (Class []) null);
+            initMethod.invoke(null, (Object []) null);
         }
         catch (Exception e)
         {
