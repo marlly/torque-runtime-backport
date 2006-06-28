@@ -28,6 +28,7 @@
       <item name="Wiki"                  href="http://wiki.apache.org/db-torque/"/>
       <item name="Issue tracker"         href="../../../issue-tracking.html"/>
       <item name="Mailing lists"         href="../../../mail-lists.html"/>
+	  <item name="Tools"                 href="../../../tools/index.html" />
       <item name="Developer Information" href="../../../developer-info/index.html" collapse="true">
         <item name="dummy"               href="/dummy.html" />
       </item>
