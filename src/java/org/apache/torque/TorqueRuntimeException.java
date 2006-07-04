@@ -43,6 +43,11 @@ public class TorqueRuntimeException
     extends RuntimeException
 {
     /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -2997617341459640541L;
+
+    /**
      * Holds the reference to the exception or error that caused
      * this exception to be thrown.
      */

@@ -29,6 +29,11 @@ public class MethodCacheKey implements Serializable
     //private static final Category log =
     //    Category.getInstance("org.apache.torque");
 
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -1831486431185021200L;
+
     int n;
     private Serializable instanceOrClass;
     private String method;

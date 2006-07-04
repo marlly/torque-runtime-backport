@@ -31,6 +31,11 @@ import java.math.BigDecimal;
 public class NumberKey extends SimpleKey
 {
     /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -5566819786708264162L;
+
+    /**
      * Creates a NumberKey whose internal representation will be
      * set later, through a set method
      */

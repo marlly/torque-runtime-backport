@@ -27,6 +27,11 @@ import java.util.ArrayList;
 public class UniqueList extends ArrayList
 {
     /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 4467847559423445120L;
+
+    /**
      * Adds an Object to the list.
      *
      * @param o the Object to add

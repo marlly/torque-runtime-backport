@@ -31,6 +31,11 @@ import org.apache.commons.lang.ObjectUtils;
  */
 public class ComboKey extends ObjectKey
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -264927663211141894L;
+
     // might want to shift these to TR.props
 
     /** The single character used to separate key values in a string. */

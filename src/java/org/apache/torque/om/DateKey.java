@@ -27,6 +27,10 @@ import java.util.Date;
  */
 public class DateKey extends SimpleKey
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 3102583536685348517L;
 
     /**
      * Creates an DateKey whose internal representation will be

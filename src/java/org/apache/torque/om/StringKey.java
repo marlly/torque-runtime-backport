@@ -27,6 +27,11 @@ package org.apache.torque.om;
 public class StringKey extends SimpleKey
 {
     /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 5109588772086713341L;
+
+    /**
      * Creates an SimpleKey whose internal representation will be
      * set later, through a set method
      */

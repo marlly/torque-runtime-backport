@@ -27,6 +27,10 @@ import org.apache.commons.lang.exception.NestableException;
  */
 public class TorqueException extends NestableException
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 3090544800848674368L;
 
     /**
      * Constructs a new <code>TorqueException</code> without specified detail

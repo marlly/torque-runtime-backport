@@ -25,6 +25,10 @@ package org.apache.torque;
  */
 public class NoRowsException extends TorqueException
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 199486766559455753L;
 
     /**
      * Constructs a new <code>TorqueException</code> without specified detail

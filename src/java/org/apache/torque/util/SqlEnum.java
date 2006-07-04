@@ -28,6 +28,11 @@ package org.apache.torque.util;
  */
 public class SqlEnum implements java.io.Serializable
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 5963149836513364800L;
+
     private final String s;
 
     private SqlEnum(String s)

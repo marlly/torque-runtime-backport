@@ -24,6 +24,10 @@ package org.apache.torque;
  */
 public class TooManyRowsException extends TorqueException
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -2875429969148699158L;
 
     /**
      * Constructs a new <code>TorqueException</code> without specified detail
