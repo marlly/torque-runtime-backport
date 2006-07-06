@@ -729,26 +729,14 @@ public abstract class BasePeer
         throws TorqueException
     {
         Query query = createQuery(criteria);
-
-        if (query.hasLimit())
-        {
-            // We don't need Village to limit the Query
-            return executeQuery(query.toString(),
-                    0,
-                    -1,
-                    criteria.isSingleRecord(),
-                    con);
-        }
-        else
-        {
-            // There is no limit string registered
-            // with the query. Let Village decide.
-            return executeQuery(query.toString(),
-                    criteria.getOffset(),
-                    criteria.getLimit(),
-                    criteria.isSingleRecord(),
-                    con);
-        }
+        DB dbadapter = Torque.getDB(criteria.getDbName());
+        
+        // Call Village depending on the capabilities of the DB 
+        return executeQuery(query.toString(),
+                dbadapter.supportsNativeOffset() ? 0 : criteria.getOffset(),
+                dbadapter.supportsNativeLimit() ? -1 : criteria.getLimit(),
+                criteria.isSingleRecord(),
+                con);
     }
 
     /**

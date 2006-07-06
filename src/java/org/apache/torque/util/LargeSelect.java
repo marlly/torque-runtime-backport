@@ -32,7 +32,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
-import org.apache.torque.adapter.DB;
 
 import com.workingdogs.village.DataSetException;
 import com.workingdogs.village.QueryDataSet;
@@ -675,8 +674,7 @@ public class LargeSelect implements Runnable, Serializable
         try
         {
             dbSupportsNativeLimit 
-                    = (Torque.getDB(dbName).getLimitStyle()
-                        != DB.LIMIT_STYLE_NONE);
+                    = (Torque.getDB(dbName).supportsNativeLimit());
         }
         catch (TorqueException e)
         {
