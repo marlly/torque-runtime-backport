@@ -287,7 +287,7 @@ public abstract class SQLBuilder
         processGroupBy(crit, query);
         processHaving(crit, query);
         processOrderBy(db, dbMap, crit, query);
-        LimitHelper.buildLimit(crit, query);
+        processLimits(crit, query);
 
         if (log.isDebugEnabled())
         {
@@ -565,6 +565,28 @@ public abstract class SQLBuilder
         {
             //String groupByString = null;
             query.setHaving(having.toString());
+        }
+    }
+
+    /**
+     * adds a Limit clause to the query if supported by the database
+     * @param criteria the criteria from which the Limit and Offset values
+     *        are taken
+     * @param query the query to which the Limit clause should be added
+     * @throws TorqueException if the Database adapter cannot be obtained
+     */
+    private static final void processLimits(
+            final Criteria crit,
+            final Query query)
+            throws TorqueException
+    {
+        int limit = crit.getLimit();
+        int offset = crit.getOffset();
+
+        if (offset > 0 || limit >= 0)
+        {
+            DB db = Torque.getDB(crit.getDbName());
+            db.generateLimits(query, offset, limit);
         }
     }
 
