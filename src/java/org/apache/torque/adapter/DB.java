@@ -16,18 +16,20 @@ package org.apache.torque.adapter;
  * limitations under the License.
  */
 
-import java.util.Date;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Date;
+
+import org.apache.torque.util.Query;
 
 /**
  * <code>DB</code> defines the interface for a Torque database
- * adapter.  Support for new databases is added by subclassing
- * <code>DB</code> and implementing its abstract interface, and by
- * registering the new database adapter and its corresponding
- * JDBC driver in the service configuration file.
+ * adapter.  Support for new databases is added by implementing this 
+ * interface. A couple of default settings is provided by
+ * subclassing <code>AbstractDBAdapter</code>. The new database adapter
+ * and its corresponding JDBC driver need to be registered in the service
+ * configuration file.
  *
  * <p>The Torque database adapters exist to present a uniform
  * interface to database access across all available databases.  Once
@@ -51,26 +53,39 @@ import java.sql.Timestamp;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
-public abstract class DB implements Serializable, IDMethod
+public interface DB extends Serializable, IDMethod
 {
-    /** Database does not support limiting result sets. */
+    /** Database does not support limiting result sets. 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_NONE = 0;
 
-    /** <code>SELECT ... LIMIT <limit>, [&lt;offset&gt;]</code> */
+    /** <code>SELECT ... LIMIT <limit>, [&lt;offset&gt;]</code> 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_POSTGRES = 1;
 
-    /** <code>SELECT ... LIMIT [<offset>, ] &lt;offset&gt;</code> */
+    /** <code>SELECT ... LIMIT [<offset>, ] &lt;offset&gt;</code> 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_MYSQL = 2;
 
-    /** <code>SET ROWCOUNT &lt;offset&gt; SELECT ... SET ROWCOUNT 0</code> */
+    /** <code>SET ROWCOUNT &lt;offset&gt; SELECT ... SET ROWCOUNT 0</code> 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_SYBASE = 3;
 
-    /** <code><pre>SELECT ... WHERE ... AND ROWNUM < <limit></pre></code> */
+    /** <code><pre>SELECT ... WHERE ... AND ROWNUM < <limit></pre></code> 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_ORACLE = 4;
 
-    /** <code><pre>SELECT ... WHERE ... AND ROW_NUMBER() OVER() < <limit></pre></code> */
+    /** <code><pre>SELECT ... WHERE ... AND ROW_NUMBER() OVER() < <limit></pre></code> 
+     *  @deprecated This should not be exposed to the outside     
+     */
     public static final int LIMIT_STYLE_DB2 = 5;
 
 	/**
@@ -84,19 +99,12 @@ public abstract class DB implements Serializable, IDMethod
     public static final String DRIVER_KEY = "driver";
 
     /**
-     * Empty constructor.
-     */
-    protected DB()
-    {
-    }
-
-    /**
      * This method is used to ignore case.
      *
      * @param in The string to transform to upper case.
      * @return The upper case string.
      */
-    public abstract String toUpperCase(String in);
+    public String toUpperCase(String in);
 
     /**
      * Returns the character used to indicate the beginning and end of
@@ -105,10 +113,7 @@ public abstract class DB implements Serializable, IDMethod
      *
      * @return The text delimeter.
      */
-    public char getStringDelimiter()
-    {
-        return '\'';
-    }
+    public char getStringDelimiter();
 
     /**
      * Returns the constant from the {@link
@@ -117,7 +122,7 @@ public abstract class DB implements Serializable, IDMethod
      *
      * @return IDMethod constant
      */
-    public abstract String getIDMethodType();
+    public String getIDMethodType();
 
     /**
      * Returns SQL used to get the most recently inserted primary key.
@@ -127,7 +132,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param obj Information used for key generation.
      * @return The most recently inserted database key.
      */
-    public abstract String getIDMethodSQL(Object obj);
+    public String getIDMethodSQL(Object obj);
 
     /**
      * Locks the specified table.
@@ -136,7 +141,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param table The name of the table to lock.
      * @throws SQLException No Statement could be created or executed.
      */
-    public abstract void lockTable(Connection con, String table)
+    public void lockTable(Connection con, String table)
             throws SQLException;
 
     /**
@@ -146,7 +151,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param table The name of the table to unlock.
      * @throws SQLException No Statement could be created or executed.
      */
-    public abstract void unlockTable(Connection con, String table)
+    public void unlockTable(Connection con, String table)
             throws SQLException;
 
     /**
@@ -155,7 +160,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param in The string whose case to ignore.
      * @return The string in a case that can be ignored.
      */
-    public abstract String ignoreCase(String in);
+    public String ignoreCase(String in);
 
     /**
      * This method is used to ignore case in an ORDER BY clause.
@@ -166,10 +171,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param in The string whose case to ignore.
      * @return The string in a case that can be ignored.
      */
-    public String ignoreCaseInOrderBy(String in)
-    {
-        return ignoreCase(in);
-    }
+    public String ignoreCaseInOrderBy(String in);
 
     /**
      * This method is used to check whether the database natively
@@ -178,10 +180,7 @@ public abstract class DB implements Serializable, IDMethod
      * @return True if the database natively supports limiting the
      * size of the resultset.
      */
-    public boolean supportsNativeLimit()
-    {
-        return false;
-    }
+    public boolean supportsNativeLimit();
 
     /**
      * This method is used to check whether the database natively
@@ -191,12 +190,19 @@ public abstract class DB implements Serializable, IDMethod
      * @return True if the database natively supports returning
      * results starting at an offset position other than 0.
      */
-    public boolean supportsNativeOffset()
-    {
-        return false;
-    }
+    public boolean supportsNativeOffset();
 
-   /**
+    /**
+     * This method is used to generate the database specific query
+     * extension to limit the number of record returned.
+     *
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
+     */
+    public void generateLimits(Query query, int offset, int limit);
+
+    /**
     * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
     * any string in a SqlExpression with a BACKSLASH will either be changed to
     * "\\" or left as "\".  SapDB does not need the escape character.
@@ -204,21 +210,16 @@ public abstract class DB implements Serializable, IDMethod
     * @return true if the database needs to escape text in SqlExpressions.
     */
 
-    public boolean escapeText()
-    {
-        return true;
-    }
+    public boolean escapeText();
 
     /**
      * This method is used to check whether the database supports
      * limiting the size of the resultset.
      *
      * @return The limit style for the database.
+     * @deprecated This should not be exposed to the outside     
      */
-    public int getLimitStyle()
-    {
-        return LIMIT_STYLE_NONE;
-    }
+    public int getLimitStyle();
 
     /**
      * This method is used to format any date string.
@@ -227,20 +228,7 @@ public abstract class DB implements Serializable, IDMethod
      * @param date the Date to format
      * @return The proper date formatted String.
      */
-    public String getDateString(Date date)
-    {
-        Timestamp ts = null;
-        if (date instanceof Timestamp)
-        {
-            ts = (Timestamp) date;
-        }
-        else
-        {
-            ts = new Timestamp(date.getTime());
-        }
-
-        return ("{ts '" + ts + "'}");
-    }
+    public String getDateString(Date date);
 
     /**
      * This method is used to format a boolean string.
@@ -248,8 +236,5 @@ public abstract class DB implements Serializable, IDMethod
      * @param b the Boolean to format
      * @return The proper date formatted String.
      */
-    public String getBooleanString(Boolean b)
-    {
-        return (Boolean.TRUE.equals(b) ? "1" : "0");
-    }
+    public String getBooleanString(Boolean b);
 }

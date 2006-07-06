@@ -28,8 +28,13 @@ import java.sql.Statement;
  * @author <a href="mailto:dave.polito@planetcad.com">Dave Polito</a>
  * @version $Id$
  */
-public class DBSapDB extends DB
+public class DBSapDB extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 8277068258155186370L;
+
     /**
      * Empty constructor.
      */

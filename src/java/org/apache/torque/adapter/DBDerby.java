@@ -27,9 +27,13 @@ import java.sql.Statement;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public class DBDerby
-        extends DB
+public class DBDerby extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 6265962681516206415L;
+
     /**
      * Empty constructor.
      */

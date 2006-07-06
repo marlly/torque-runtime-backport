@@ -30,9 +30,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public class DBInstantDB
-    extends DB
+public class DBInstantDB extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -3988631220284628238L;
+
     /**
      * Empty constructor.
      */

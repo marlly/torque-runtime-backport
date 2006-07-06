@@ -19,6 +19,8 @@ package org.apache.torque.adapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.apache.torque.util.Query;
+
 /**
  * This is used to connect via the Application-Driver to DB2
  * databases.
@@ -29,8 +31,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:vido@ldh.org">Augustin Vidovic</a>
  * @version $Id$
  */
-public class DBDB2App extends DB
+public class DBDB2App extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -3097347241360840675L;
+
     /**
      * Empty constructor.
      */
@@ -105,9 +112,77 @@ public class DBDB2App extends DB
      * limiting the size of the resultset.
      *
      * @return LIMIT_STYLE_DB2.
+     * @deprecated This should not be exposed to the outside     
      */
     public int getLimitStyle()
     {
         return DB.LIMIT_STYLE_DB2;
+    }
+
+    /**
+     * Return true for DB2
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeLimit()
+     */
+    public boolean supportsNativeLimit()
+    {
+        return true;
+    }
+
+    /**
+     * Return true for DB2
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeOffset()
+     */
+    public boolean supportsNativeOffset()
+    {
+        return true;
+    }
+
+    /**
+     * Build DB2 (OLAP) -style query with limit or offset.
+     * If the original SQL is in variable: query then the requlting
+     * SQL looks like this:
+     * <pre>
+     * SELECT B.* FROM (
+     *          SELECT A.*, row_number() over() as TORQUE$ROWNUM FROM (
+     *                  query
+     *          ) A
+     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+     *     <= offset + limit
+     * </pre>
+     *
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
+     */
+    public void generateLimits(Query query, int offset, int limit)
+    {
+        StringBuffer preLimit = new StringBuffer()
+        .append("SELECT B.* FROM ( ")
+        .append("SELECT A.*, row_number() over() AS TORQUE$ROWNUM FROM ( ");
+
+        StringBuffer postLimit = new StringBuffer()
+                .append(" ) A ")
+                .append(" ) B WHERE ");
+        
+        if (offset > 0)
+        {
+            postLimit.append(" B.TORQUE$ROWNUM > ")
+                    .append(offset);
+        
+            if (limit >= 0)
+            {
+                postLimit.append(" AND B.TORQUE$ROWNUM <= ")
+                        .append(offset + limit);
+            }
+        }
+        else
+        {
+            postLimit.append(" B.TORQUE$ROWNUM <= ")
+                    .append(limit);
+        }
+        
+        query.setPreLimit(preLimit.toString());
+        query.setPostLimit(postLimit.toString());
+        query.setLimit(null);
     }
 }

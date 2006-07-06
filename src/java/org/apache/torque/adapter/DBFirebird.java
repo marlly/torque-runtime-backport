@@ -28,8 +28,12 @@ import java.text.SimpleDateFormat;
  * @author Joerg Friedrich
  * @version $Id: DBInterbase.java 239630 2005-08-24 12:25:32Z henning $
  */
-public class DBFirebird extends DB
+public class DBFirebird extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -2782124791802056450L;
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:MM:ss";
 

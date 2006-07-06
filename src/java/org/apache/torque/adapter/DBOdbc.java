@@ -26,9 +26,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:criley@ekmail.com">Cameron Riley</a>
  * @version $Id$
  */
-public class DBOdbc
-    extends DB
+public class DBOdbc extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -4852934297887694803L;
+
     /**
      * Empty constructor.
      */

@@ -27,9 +27,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:celkins@scardini.com">Christopher Elkins</a>
  * @version $Id$
  */
-public class DBHypersonicSQL
-    extends DB
+public class DBHypersonicSQL extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 8392727399615702372L;
+
     /**
      * Constructor.
      */

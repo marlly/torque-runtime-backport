@@ -22,6 +22,8 @@ import java.sql.Statement;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import org.apache.torque.util.Query;
+
 /**
  * This is used to connect to a Sybase database using Sybase's
  * JConnect JDBC driver.
@@ -33,8 +35,13 @@ import java.text.SimpleDateFormat;
  * @author <a href="mailto:ekkerbj@netscape.net">Jeff Brekke</a>
  * @version $Id$
  */
-public class DBSybase extends DB
+public class DBSybase extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 4782996646843056810L;
+
     /** date format */
     private static final String DATE_FORMAT = "yyyyMMdd HH:mm:ss";
 
@@ -121,10 +128,20 @@ public class DBSybase extends DB
     }
 
     /**
-     * This method is used to chek whether the database natively
-     * supports limiting the size of the resultset.
+     * This method is used to chek whether the database supports
+     * limiting the size of the resultset.
      *
-     * @return True.
+     * @return LIMIT_STYLE_SYBASE.
+     * @deprecated This should not be exposed to the outside     
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_SYBASE;
+    }
+
+    /**
+     * Return true for Sybase
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeLimit()
      */
     public boolean supportsNativeLimit()
     {
@@ -132,14 +149,15 @@ public class DBSybase extends DB
     }
 
     /**
-     * This method is used to chek whether the database supports
-     * limiting the size of the resultset.
+     * Modify a query to add limit and offset values for Sybase.
      *
-     * @return LIMIT_STYLE_SYBASE.
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
      */
-    public int getLimitStyle()
+    public void generateLimits(Query query, int offset, int limit)
     {
-        return DB.LIMIT_STYLE_SYBASE;
+        query.setRowcount(String.valueOf(limit+offset));
     }
 
     /**

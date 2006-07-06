@@ -22,6 +22,8 @@ import java.sql.Statement;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import org.apache.torque.util.Query;
+
 /**
  * This is used in order to connect to a MySQL database using the MM
  * drivers.  Simply comment the above and uncomment this code below and
@@ -37,8 +39,12 @@ import java.text.SimpleDateFormat;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class DBMM extends DB
+public class DBMM extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 7547291410802807010L;
 
     /** A specialized date format for MySQL. */
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
@@ -123,26 +129,35 @@ public class DBMM extends DB
     }
 
     /**
-     * This method is used to chek whether the database natively
-     * supports limiting the size of the resultset.
+     * Generate a LIMIT offset, limit clause if offset &gt; 0
+     * or an LIMIT limit clause if limit is &gt; 0 and offset
+     * is 0.
      *
-     * @return True.
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
      */
-    public boolean supportsNativeLimit()
+    public void generateLimits(Query query, int offset, int limit)
     {
-        return true;
-    }
+        StringBuffer limitStringBuffer = new StringBuffer();
 
-    /**
-     * This method is used to chek whether the database natively
-     * supports returning results starting at an offset position other
-     * than 0.
-     *
-     * @return True.
-     */
-    public boolean supportsNativeOffset()
-    {
-        return true;
+        if (offset > 0)
+        {
+            limitStringBuffer.append(offset)
+                    .append(", ")
+                    .append(limit);
+        }
+        else
+        {
+            if (limit >= 0)
+            {
+                limitStringBuffer.append(limit);
+            }
+        }
+
+        query.setLimit(limitStringBuffer.toString());
+        query.setPreLimit(null);
+        query.setPostLimit(null);
     }
 
     /**
@@ -150,10 +165,29 @@ public class DBMM extends DB
      * limiting the size of the resultset.
      *
      * @return LIMIT_STYLE_MYSQL.
+     * @deprecated This should not be exposed to the outside     
      */
     public int getLimitStyle()
     {
         return DB.LIMIT_STYLE_MYSQL;
+    }
+
+    /**
+     * Return true for MySQL
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeLimit()
+     */
+    public boolean supportsNativeLimit()
+    {
+        return true;
+    }
+
+    /**
+     * Return true for MySQL
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeOffset()
+     */
+    public boolean supportsNativeOffset()
+    {
+        return true;
     }
 
     /**

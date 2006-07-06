@@ -26,8 +26,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public class DBWeblogic extends DB
+public class DBWeblogic extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 6645853000903579587L;
+
     /**
      * Empty constructor.
      */

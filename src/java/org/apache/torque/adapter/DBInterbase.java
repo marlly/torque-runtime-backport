@@ -28,8 +28,12 @@ import java.text.SimpleDateFormat;
  * @author <a href="mailto:frank@opticode.co.za">Frank Conradie</a>
  * @version $Id$
  */
-public class DBInterbase extends DB
+public class DBInterbase extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -6709312389168248070L;
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:MM:ss";
 

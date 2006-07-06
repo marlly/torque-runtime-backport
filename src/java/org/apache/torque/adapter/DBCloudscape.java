@@ -26,8 +26,13 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:taylor@apache.org">David Sean Taylor</a>
  * @version $Id$
  */
-public class DBCloudscape extends DB
+public class DBCloudscape extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -7475830417640153351L;
+
     /** qualifier */
     private static final String QUALIFIER = ".";
 

@@ -27,8 +27,12 @@ import java.sql.SQLException;
  * @author <a href="mailto:bmclaugh@algx.net">Brett McLaughlin</a>
  * @version $Id$
  */
-public class DBNone extends DB
+public class DBNone extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -285009315025818009L;
 
     /**
      * Empty protected constructor.

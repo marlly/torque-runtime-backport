@@ -27,8 +27,13 @@ import java.sql.Statement;
  * @author <a href="mailto:bpm@ec-group.com">Brian P Millett</a>
  * @version $Id$
  */
-public class DBInformix extends DB
+public class DBInformix extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 2599963509284952957L;
+
     /**
      * Empty constructor.
      */

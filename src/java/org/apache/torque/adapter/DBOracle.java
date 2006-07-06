@@ -22,6 +22,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.torque.util.Query;
+
 /**
  * This code should be used for an Oracle database pool.
  *
@@ -31,8 +33,13 @@ import java.util.Date;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @version $Id$
  */
-public class DBOracle extends DB
+public class DBOracle extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = 8966976210230241194L;
+
     /** date format used in getDateString() */
     private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 
@@ -137,10 +144,20 @@ public class DBOracle extends DB
     }
 
     /**
-     * This method is used to check whether the database natively
-     * supports limiting the size of the resultset.
+     * This method is used to check whether the database supports
+     * limiting the size of the resultset.
      *
-     * @return True.
+     * @return LIMIT_STYLE_ORACLE.
+     * @deprecated This should not be exposed to the outside     
+     */
+    public int getLimitStyle()
+    {
+        return DB.LIMIT_STYLE_ORACLE;
+    }
+
+    /**
+     * Return true for Oracle
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeLimit()
      */
     public boolean supportsNativeLimit()
     {
@@ -148,14 +165,61 @@ public class DBOracle extends DB
     }
 
     /**
-     * This method is used to check whether the database supports
-     * limiting the size of the resultset.
-     *
-     * @return LIMIT_STYLE_ORACLE.
+     * Return true for Oracle
+     * @see org.apache.torque.adapter.AbstractDBAdapter#supportsNativeOffset()
      */
-    public int getLimitStyle()
+    public boolean supportsNativeOffset()
     {
-        return DB.LIMIT_STYLE_ORACLE;
+        return true;
+    }
+
+    /**
+     * Build Oracle-style query with limit or offset.
+     * If the original SQL is in variable: query then the requlting
+     * SQL looks like this:
+     * <pre>
+     * SELECT B.* FROM (
+     *          SELECT A.*, rownum as TORQUE$ROWNUM FROM (
+     *                  query
+     *          ) A
+     *     ) B WHERE B.TORQUE$ROWNUM > offset AND B.TORQUE$ROWNUM
+     *     <= offset + limit
+     * </pre>
+     *
+     * @param query The query to modify
+     * @param offset the offset Value
+     * @param limit the limit Value
+     */
+    public void generateLimits(Query query, int offset, int limit)
+    {
+        StringBuffer preLimit = new StringBuffer()
+        .append("SELECT B.* FROM ( ")
+        .append("SELECT A.*, rownum AS TORQUE$ROWNUM FROM ( ");
+
+        StringBuffer postLimit = new StringBuffer()
+                .append(" ) A ")
+                .append(" ) B WHERE ");
+        
+        if (offset > 0)
+        {
+            postLimit.append(" B.TORQUE$ROWNUM > ")
+                    .append(offset);
+        
+            if (limit >= 0)
+            {
+                postLimit.append(" AND B.TORQUE$ROWNUM <= ")
+                        .append(offset + limit);
+            }
+        }
+        else
+        {
+            postLimit.append(" B.TORQUE$ROWNUM <= ")
+                    .append(limit);
+        }
+        
+        query.setPreLimit(preLimit.toString());
+        query.setPostLimit(postLimit.toString());
+        query.setLimit(null);
     }
 
     /**

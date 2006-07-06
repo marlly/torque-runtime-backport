@@ -27,8 +27,13 @@ import java.sql.SQLException;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class DBAxion extends DB
+public class DBAxion extends AbstractDBAdapter
 {
+    /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -5982548040625874572L;
+
     /**
      * Constructor.
      */

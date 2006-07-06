@@ -30,20 +30,14 @@ package org.apache.torque.adapter;
 public class DBMSSQL extends DBSybase
 {
     /**
+     * Serial version
+     */
+    private static final long serialVersionUID = -2924485528975497044L;
+
+    /**
      * Empty constructor.
      */
     protected DBMSSQL()
     {
-    }
-
-    /**
-     * This method is used to chek whether the database natively
-     * supports limiting the size of the resultset.
-     *
-     * @return True.
-     */
-    public boolean supportsNativeLimit()
-    {
-        return false;
     }
 }
