@@ -2309,7 +2309,7 @@ public class Criteria extends Hashtable
      */
     public Criteria andDate(String column, int year, int month, int date)
     {
-        and(column, new GregorianCalendar(year, month, date));
+        and(column, new GregorianCalendar(year, month, date).getTime());
         return this;
     }
 
@@ -2334,7 +2334,7 @@ public class Criteria extends Hashtable
     public Criteria andDate(String column, int year, int month, int date,
             SqlEnum comparison)
     {
-        and(column, new GregorianCalendar(year, month, date), comparison);
+        and(column, new GregorianCalendar(year, month, date).getTime(), comparison);
         return this;
     }
 

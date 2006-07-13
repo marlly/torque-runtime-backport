@@ -310,6 +310,31 @@ public class CriteriaTest extends BaseTestCase
     }
 
     /**
+     * testcase for andDate()
+     * issue TORQUE-42
+     */
+    public void testAndDate()
+    {
+        Criteria c = new Criteria();
+        c.addDate("TABLE.DATE_COLUMN", 2003, 0, 22, Criteria.GREATER_THAN);
+        c.andDate("TABLE.DATE_COLUMN", 2004, 0, 22, Criteria.LESS_THAN);
+
+        String expect = "SELECT  FROM TABLE WHERE (TABLE.DATE_COLUMN>'20030122000000' AND TABLE.DATE_COLUMN<'20040122000000')";
+
+        String result = null;
+        try
+        {
+            result = BasePeer.createQueryString(c);
+        }
+        catch (TorqueException e)
+        {
+            e.printStackTrace();
+            fail("TorqueException thrown in BasePeer.createQueryString()");
+        }
+        assertEquals(expect, result);
+    }
+
+    /**
      * testcase for add(Date)
      */
     public void testDateAdd()
