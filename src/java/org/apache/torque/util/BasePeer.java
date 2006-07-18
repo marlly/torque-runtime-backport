@@ -999,14 +999,10 @@ public abstract class BasePeer
                 results = new ArrayList(numberOfResults);
                 qds.fetchRecords(start, numberOfResults);
             }
-            if (qds.size() > 1 && singleRecord)
-            {
-                handleMultipleRecords(qds);
-            }
 
             int startRecord = 0;
 
-            //Offset the correct number of people
+            //Offset the correct number of records
             if (start > 0 && numberOfResults <= 0)
             {
                 startRecord = start;
@@ -1017,6 +1013,11 @@ public abstract class BasePeer
             {
                 Record rec = qds.getRecord(i);
                 results.add(rec);
+            }
+
+            if (results.size() > 1 && singleRecord)
+            {
+                handleMultipleRecords(qds);
             }
         }
         catch (Exception e)

@@ -671,10 +671,13 @@ public class LargeSelect implements Runnable, Serializable
     public void run()
     {
         boolean dbSupportsNativeLimit;
+        boolean dbSupportsNativeOffset;
         try
         {
             dbSupportsNativeLimit 
                     = (Torque.getDB(dbName).supportsNativeLimit());
+            dbSupportsNativeOffset 
+                    = (Torque.getDB(dbName).supportsNativeOffset());
         }
         catch (TorqueException e)
         {
@@ -685,7 +688,7 @@ public class LargeSelect implements Runnable, Serializable
         }
         
         int size;
-        if (dbSupportsNativeLimit)
+        if (dbSupportsNativeLimit && dbSupportsNativeOffset)
         {
             // retrieve one page at a time
             size = pageSize;
@@ -707,14 +710,21 @@ public class LargeSelect implements Runnable, Serializable
             // Add 1 to memory limit to check if the query ends on a page break.
             results = new ArrayList(memoryLimit + 1);
 
+            // Use the criteria to limit the rows that are retrieved to the
+            // block of records that fit in the predefined memoryLimit.
             if (dbSupportsNativeLimit)
             {
-                // Use the criteria to limit the rows that are retrieved to the
-                // block of records that fit in the predefined memoryLimit.
-                criteria.setOffset(blockBegin);
-                // Add 1 to memory limit to check if the query ends on a 
-                // page break.
-                criteria.setLimit(memoryLimit + 1);
+                if (dbSupportsNativeOffset)
+                {
+                    criteria.setOffset(blockBegin);
+                    // Add 1 to memory limit to check if the query ends on a 
+                    // page break.
+                    criteria.setLimit(memoryLimit + 1);
+                }
+                else
+                {
+                    criteria.setLimit(blockBegin + memoryLimit + 1);
+                }
             }
             query = BasePeer.createQueryString(criteria);
 
@@ -758,17 +768,17 @@ public class LargeSelect implements Runnable, Serializable
                 List tempResults
                         = BasePeer.getSelectResults(qds, size, false);
 
+                int startIndex = dbSupportsNativeOffset ? 0 : blockBegin;  
+
                 synchronized (results)
                 {
-                    for (int i = 0, n = tempResults.size(); i < n; i++)
+                    for (int i = startIndex, n = tempResults.size(); i < n; i++)
                     {
-                        if (dbSupportsNativeLimit
-                                || (i >= blockBegin))
                         results.add(tempResults.get(i));
                     }
                 }
 
-                if (dbSupportsNativeLimit)
+                if (dbSupportsNativeLimit && dbSupportsNativeOffset)
                 {
                     currentlyFilledTo += tempResults.size();
                 }

@@ -19,10 +19,13 @@ package org.apache.torque.adapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.apache.torque.TorqueException;
+import org.apache.torque.util.Criteria;
 import org.apache.torque.util.Query;
+import org.apache.torque.util.SqlExpression;
 
 /**
  * This is used to connect to a Sybase database using Sybase's
@@ -154,10 +157,21 @@ public class DBSybase extends AbstractDBAdapter
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
+     * 
+     * @throws TorqueException if any error occurs when building the query
      */
     public void generateLimits(Query query, int offset, int limit)
+        throws TorqueException
     {
-        query.setRowcount(String.valueOf(limit+offset));
+        if (limit + offset > 0)
+        {
+            query.setRowcount(String.valueOf(limit + offset));
+        }
+        else if (limit + offset == 0)
+        {
+            // This is necessary to create the empty result set that Torque expects
+            query.getWhereClause().add(SqlExpression.build("1", new Integer(0), Criteria.EQUAL));
+        }
     }
 
     /**

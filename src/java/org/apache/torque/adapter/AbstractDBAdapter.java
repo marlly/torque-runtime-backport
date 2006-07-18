@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import org.apache.torque.TorqueException;
 import org.apache.torque.util.Query;
 
 /**
@@ -176,8 +177,11 @@ public abstract class AbstractDBAdapter implements DB
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
+     * 
+     * @throws TorqueException if any error occurs when building the query
      */
     public void generateLimits(Query query, int offset, int limit)
+        throws TorqueException
     {
         if (supportsNativeLimit())
         {

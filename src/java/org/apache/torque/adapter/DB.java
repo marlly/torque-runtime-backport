@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.apache.torque.TorqueException;
 import org.apache.torque.util.Query;
 
 /**
@@ -199,8 +200,11 @@ public interface DB extends Serializable, IDMethod
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
+     * 
+     * @throws TorqueException if any error occurs when building the query
      */
-    public void generateLimits(Query query, int offset, int limit);
+    public void generateLimits(Query query, int offset, int limit)
+        throws TorqueException;
 
     /**
     * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
