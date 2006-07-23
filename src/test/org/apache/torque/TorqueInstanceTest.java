@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.torque.adapter.DB;
 import org.apache.torque.dsfactory.DataSourceFactory;
 import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.MapBuilder;
@@ -73,6 +74,16 @@ public class TorqueInstanceTest extends TestCase
     }
     
     /**
+     * Tests whether an external adapter is loaded correctly.
+     * @throws Exception if an error occurs during the Test.
+     */
+    public void testExternalAdapter() throws Exception
+    {
+        DB adapter = Torque.getDatabase(TURBINE_NAME).getAdapter();
+        assertNotNull(adapter);
+    }
+
+    /**
      * Checks whether a DataSourceFactory with the name 
      * <code>DEFAULT_NAME</code> is defined. (TRQS 322)
      * @throws Exception if an error occurs during the Test.
@@ -120,7 +131,7 @@ public class TorqueInstanceTest extends TestCase
                     defaultDatabase,
                     turbineDatabase);    
     }
-    
+
     public void testShutdown() throws Exception
     {
         // because we have not properly initialized the DataSourceFactory,

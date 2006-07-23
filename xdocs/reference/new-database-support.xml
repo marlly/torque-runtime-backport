@@ -21,6 +21,7 @@
   <title>Torque Runtime Reference - Support for new Databases</title>
   <author email="jon@latchkey.com">Jon S. Stevens</author>
   <author email="fischer@seitenbau.de">Thomas Fischer</author>
+  <author email="tv@apache.org">Thomas Vandahl</author>
  </properties>
 
  <body>
@@ -41,7 +42,7 @@
       by Torque to generate a SQL schema for your RDBMS--in the templates 
       component. The recommend method for doing this is to copy an existing set
       of templates and adapt them to your RDBMS as needed.  This is not
-      elaborated forther here.
+      elaborated further here.
     </p>
 
   </section>
@@ -49,7 +50,7 @@
   <section name="Database Adapters">
 
     <p>
-      A database adapter class is a class that extends
+      A database adapter class is a class that implements
       <code>org.apache.torque.adapter.DB</code> and encapsulates access
       to a specific RDBMS implementation. Database adapter classes already
       found in Torque include DBOracle, DBMM, DBSybase, etc. 
@@ -75,10 +76,12 @@
     <p>
       <ul>
         <li>
-          Create a new class DB&lt;dbname> that extends
+          Create a new class DB&lt;dbname> that implements
           <code>org.apache.torque.adapter.DB</code> (where dbname is the name of
-          the database or database driver you wish to add to Torque). DB is an
-          abstract class, so you need to implement a number of methods.
+          the database or database driver you wish to add to Torque). An abstract
+          implementation, <code>org.apache.torque.adapter.AbstractDBAdapter</code> is
+          provided which sets some defaults so that you only need to implement a 
+          number of methods.
         </li>
 
         <li>
@@ -86,6 +89,13 @@
           the character that the specific database implementation uses to
           indicate string literals in SQL. This will usually be a single qoute
           (').
+        </li>
+
+        <li>
+          Implement generateLimits(). This method has to provide the special
+          SQL expressions to limit the number of records returned and/or the
+          offset into the result set. This is only needed if supportsNativeLimit()
+          or supportsNativeOffset() return true.
         </li>
 
         <li>
@@ -141,6 +151,19 @@
       </ul>
     </p>
 
+  </section>
+
+  <section name="Configuring Torque to use the new adapter">
+    <p>
+      The adapter you wrote does not need to be compiled into Torque but
+      it can be referenced in the configuration. Just use a new short name for 
+      the adapter and provide the class name in the configuration file. See the
+      following example:
+    </p>
+    <source>
+torque.database.mydatabase.adapter=myadapter
+torque.database.mydatabase.adapter.myadapter.className=com.acme.DBMyAdapter
+    </source>
   </section>
 
  </body>

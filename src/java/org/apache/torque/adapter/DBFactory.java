@@ -135,4 +135,50 @@ public class DBFactory
                 + ": Check your configuration file");
         }
     }
+
+    /**
+     * Creates a new instance of the Torque database adapter associated
+     * with the specified JDBC driver or adapter key and the class defined.
+     *
+     * @param driver The fully-qualified name of the JDBC driver to
+     * create a new adapter instance for or a shorter form adapter key.
+     * @param className The fully qualified name of the adapter class
+     * @return An instance of a Torque database adapter.
+     * @throws InstantiationException throws if the JDBC driver could not be
+     *      instantiated
+     */
+    public static DB create(String driver, String className)
+        throws InstantiationException
+    {
+        Class adapterClass;
+        
+        try
+        {
+            adapterClass = (Class) Class.forName(className);
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new InstantiationException(
+                    "Could not find adapter " 
+                    + className
+                    + " for driver "
+                    + driver
+                    + ": Check your configuration file");
+        }
+
+        try
+        {
+            DB adapter = (DB) adapterClass.newInstance();
+            adapters.put(driver, adapterClass);
+            // adapter.setJDBCDriver(driver);
+            return adapter;
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new InstantiationException(
+                "Could not instantiate adapter for JDBC driver: "
+                + driver
+                + ": Assure that adapter bytecodes are in your classpath");
+        }
+    }
 }

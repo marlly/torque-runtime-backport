@@ -53,6 +53,7 @@ import org.apache.torque.util.BasePeer;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
+ * @author <a href="mailto:tv@apache.org">Thomas Vandahl</a>
  * @version $Id$
  */
 public class TorqueInstance
@@ -238,7 +239,25 @@ public class TorqueInstance
                 {
                     String adapter = c.getString(key);
                     String handle = key.substring(0, key.indexOf('.'));
-                    DB db = DBFactory.create(adapter);
+                    
+                    DB db;
+                    
+                    try
+                    {
+                        db = DBFactory.create(adapter);
+                    }
+                    catch (InstantiationException e)
+                    {
+                        db = null;
+                    }
+                    
+                    // Not supported, try manually defined adapter class
+                    if (db == null)
+                    {
+                        String adapterClassName = c.getString(key + "." + adapter + ".className", null);
+                        db = DBFactory.create(adapter, adapterClassName);
+                    }
+
                     Database database = getOrCreateDatabase(handle);
                     
                     // register the adapter for this name
