@@ -1,7 +1,7 @@
 package org.apache.torque.avalon;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package org.apache.torque.avalon;
  */
 
 import java.io.File;
-import java.sql.Connection;
-import java.util.Map;
 
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.activity.Startable;
@@ -28,15 +26,11 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.lang.StringUtils;
-import org.apache.torque.Database;
-import org.apache.torque.TorqueException;
 import org.apache.torque.TorqueInstance;
-import org.apache.torque.adapter.DB;
-import org.apache.torque.manager.AbstractBaseManager;
-import org.apache.torque.map.DatabaseMap;
 
 /**
  * Avalon component for Torque.
@@ -47,8 +41,9 @@ import org.apache.torque.map.DatabaseMap;
  * @version $Id$
  */
 public class TorqueComponent
-        extends AbstractLogEnabled
+        extends TorqueInstance
         implements Torque,
+                   LogEnabled,
                    Configurable,
                    Initializable,
                    Contextualizable,
@@ -57,11 +52,11 @@ public class TorqueComponent
 {
     /** The Avalon Application Root */
     private String appRoot = null;
-
-    /** The instance of Torque used by this component. */
-    private TorqueInstance torqueInstance = null;
-
-    /** The configuration file for Torque. */
+    
+    /** The Avalon Logger */
+    private Logger logger = null;
+    
+    /** The configuration file name. */
     private String configFile = null;
 
 
@@ -70,31 +65,10 @@ public class TorqueComponent
      */
     public TorqueComponent()
     {
-        // If we simply do a "new TorqueInstance()" here, we will get
-        // into trouble when some internal classes (e.g. the DatasSource Factory)
-        // simply calls Torque.<xxx> and gets a different TorqueInstance
-        // than the one we configured here. Make sure that we use the
-        // same object as the Facade class does.
-        this.torqueInstance = org.apache.torque.Torque.getInstance();
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param torqueInstance The instance of the Torque core used by
-     * this component.
-     */
-    protected TorqueComponent(TorqueInstance torqueInstance)
-    {
-        this.torqueInstance = torqueInstance;
-    }
-
-    /**
-     * @return A reference to our instance of the Torque core.
-     */
-    private TorqueInstance getTorque()
-    {
-        return torqueInstance;
+        super();
+        
+        // Provide the singleton instance to the static accessor
+        org.apache.torque.Torque.setInstance(this);
     }
 
     /*
@@ -104,6 +78,22 @@ public class TorqueComponent
      *
      * ========================================================================
      */
+
+    /**
+     * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
+     */
+    public void enableLogging(Logger logger)
+    {
+        this.logger = logger;
+    }
+
+    /**
+     * Convenience method to provide the Avalon logger the way AbstractLogEnabled does.
+     */
+    public Logger getLogger()
+    {
+        return logger;
+    }
 
     /**
      * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
@@ -132,7 +122,7 @@ public class TorqueComponent
         }
 
         getLogger().debug("Config File is " + configFile);
-
+        
         this.configFile = configFile;
     }
 
@@ -175,7 +165,7 @@ public class TorqueComponent
             throws Exception
     {
         getLogger().debug("initialize()");
-        getTorque().init(configFile);
+        init(configFile);
     }
 
     /**
@@ -194,252 +184,11 @@ public class TorqueComponent
         getLogger().debug("stop()");
         try
         {
-        	getTorque().shutdown();
+        	shutdown();
         }
         catch (Exception e)
         {
             getLogger().error("Error while stopping Torque", e);
         }
-    }
-
-
-    /*
-     * ========================================================================
-     *
-     * Torque Methods, accessible from the Component
-     *
-     * ========================================================================
-     */
-
-    /**
-     * Determine whether Torque has already been initialized.
-     *
-     * @return true if Torque is already initialized
-     */
-    public boolean isInit()
-    {
-        return getTorque().isInit();
-    }
-
-    /**
-     * Get the configuration for this component.
-     *
-     * @return the Configuration
-     */
-    public org.apache.commons.configuration.Configuration getConfiguration()
-    {
-        return getTorque().getConfiguration();
-    }
-
-    /**
-     * This method returns a Manager for the given name.
-     *
-     * @param name name of the manager
-     * @return a Manager
-     */
-    public AbstractBaseManager getManager(String name)
-    {
-        return getTorque().getManager(name);
-    }
-
-    /**
-     * This methods returns either the Manager from the configuration file,
-     * or the default one provided by the generated code.
-     *
-     * @param name name of the manager
-     * @param defaultClassName the class to use if name has not been configured
-     * @return a Manager
-     */
-    public AbstractBaseManager getManager(String name,
-            String defaultClassName)
-    {
-        return getTorque().getManager(name, defaultClassName);
-    }
-
-    /**
-     * Returns the default database map information.
-     *
-     * @return A DatabaseMap.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public DatabaseMap getDatabaseMap()
-            throws TorqueException
-    {
-        return getTorque().getDatabaseMap();
-    }
-
-    /**
-     * Returns the database map information. Name relates to the name
-     * of the connection pool to associate with the map.
-     *
-     * @param name The name of the database corresponding to the
-     *        <code>DatabaseMap</code> to retrieve.
-     * @return The named <code>DatabaseMap</code>.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public DatabaseMap getDatabaseMap(String name)
-            throws TorqueException
-    {
-        return getTorque().getDatabaseMap(name);
-    }
-
-    /**
-     * Register a MapBuilder
-     *
-     * @param className the MapBuilder
-     */
-    public void registerMapBuilder(String className)
-    {
-        getTorque().registerMapBuilder(className);
-    }
-
-    /**
-     * This method returns a Connection from the default pool.
-     *
-     * @return The requested connection.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public Connection getConnection()
-            throws TorqueException
-    {
-        return getTorque().getConnection();
-    }
-
-    /**
-     *
-     * @param name The database name.
-     * @return a database connection
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public Connection getConnection(String name)
-            throws TorqueException
-    {
-        return getTorque().getConnection(name);
-    }
-
-    /**
-     * This method returns a Connecton using the given parameters.
-     * You should only use this method if you need user based access to the
-     * database!
-     *
-     * @param name The database name.
-     * @param username The name of the database user.
-     * @param password The password of the database user.
-     * @return A Connection.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public Connection getConnection(String name, String username,
-            String password)
-            throws TorqueException
-    {
-        return getTorque().getConnection(name, username, password);
-    }
-    /**
-     * Returns database adapter for a specific connection pool.
-     *
-     * @param name A pool name.
-     * @return The corresponding database adapter.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public DB getDB(String name)
-            throws TorqueException
-    {
-        return getTorque().getDB(name);
-    }
-
-    /**
-     * Returns the name of the default database.
-     *
-     * @return name of the default DB
-     */
-    public String getDefaultDB()
-    {
-        return getTorque().getDefaultDB();
-    }
-
-    /**
-     * Closes a connection.
-     *
-     * @param con A Connection to close.
-     */
-    public void closeConnection(Connection con)
-    {
-        getTorque().closeConnection(con);
-    }
-
-    /**
-     * Sets the current schema for a database connection
-     *
-     * @param name The database name.
-     * @param schema The current schema name
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public void setSchema(String name, String schema) throws TorqueException
-    {
-        getTorque().setSchema(name, schema);
-    }
-
-    /**
-     * This method returns the current schema for a database connection
-     *
-     * @param name The database name.
-     * @return The current schema name. Null means, no schema has been set.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
-     */
-    public String getSchema(String name) throws TorqueException
-    {
-        return getTorque().getSchema(name);
-    }
-
-    /**
-     * Returns the database for the key <code>databaseName</code>.
-     * 
-     * @param databaseName the key to get the database for.
-     * @return the database for the specified key, or null if the database
-     *         does not exist.
-     * @throws TorqueException if Torque is not yet initialized.
-     */
-    public Database getDatabase(String databaseName) throws TorqueException
-    {
-        return getTorque().getDatabase(databaseName);
-    }
-    
-    /**
-     * Returns a Map containing all Databases registered to Torque.
-     * The key of the Map is the name of the database, and the value is the 
-     * database instance. <br/>
-     * Note that in the very special case where a new database which 
-     * is not configured in Torque's configuration gets known to Torque 
-     * at a later time, the returned map may change, and there is no way to
-     * protect you against this.
-     * 
-     * @return a Map containing all Databases known to Torque, never null.
-     * @throws TorqueException if Torque is not yet initialized.
-     */
-    public Map getDatabases() throws TorqueException
-    {
-        return getTorque().getDatabases();
-    }
-    
-    /**
-     * Returns the database for the key <code>databaseName</code>.
-     * If no database is associated to the specified key,
-     * a new database is created, mapped to the specified key, and returned.
-     *
-     * @param databaseName the key to get the database for.
-     * @return the database associated with specified key, or the newly created
-     *         database, never null.
-     */
-    public Database getOrCreateDatabase(String databaseName)
-    {
-        return getTorque().getOrCreateDatabase(databaseName);
     }
 }

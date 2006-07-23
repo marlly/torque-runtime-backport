@@ -1,0 +1,7 @@
+<!-- This configuration file for Avalon components is used for testing the TorqueComponent -->
+<role-list>
+    <role
+        name="org.apache.torque.avalon.Torque"
+        shorthand="TorqueComponent"
+        default-class="org.apache.torque.avalon.TorqueComponent"/>
+</role-list>

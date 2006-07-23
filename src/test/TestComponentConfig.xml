@@ -1,0 +1,5 @@
+<componentConfig>
+    <TorqueComponent>
+        <configfile>/src/test/TurbineResources.properties</configfile>
+    </TorqueComponent>
+</componentConfig>

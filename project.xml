@@ -187,6 +187,29 @@
       </properties>
     </dependency>
 
+    <!--  Needed only for testing -->
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>4.3</version>
+      <type>jar</type>
+      <properties>
+          <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-testcontainer</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>fulcrum</groupId>
+      <artifactId>fulcrum-yaafi</artifactId>
+      <version>1.0.4</version>
+    </dependency>    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

@@ -111,6 +111,18 @@ public abstract class Torque
     }
 
     /**
+     * Sets the single {@link org.apache.torque.TorqueInstance}
+     * used by this class. This is used by the Avalon component
+     * to make sure that only one instance of Torque exists
+     *
+     * @param instance Our singleton.
+     */
+    public synchronized static void setInstance(TorqueInstance instance)
+    {
+        torqueSingleton = instance;
+    }
+
+    /**
      * Initialization of Torque with a properties file.
      *
      * @param configFile The absolute path to the configuration file.
