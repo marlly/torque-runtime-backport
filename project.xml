@@ -201,13 +201,13 @@
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-testcontainer</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.4</version>
     </dependency>
     
     <dependency>
       <groupId>fulcrum</groupId>
       <artifactId>fulcrum-yaafi</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.3</version>
     </dependency>    
 
     <dependency>
