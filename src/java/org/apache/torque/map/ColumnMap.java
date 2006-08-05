@@ -38,8 +38,11 @@ public class ColumnMap implements java.io.Serializable
     /** The serialVersionUID for this class. */
     private static final long serialVersionUID = -5971184507395399165L;
 
-    /** Type of the column. */
+    /** A sample object having the same java Type as the column. */
     private Object type = null;
+
+    /** The name of the Torque Type of the column. */
+    private String torqueType = null;
 
     /** Should object type be converted to primitive. */
     private boolean usePrimitive = true;
@@ -184,6 +187,16 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
+     * Set the Torque type of this column.
+     * 
+     * @param torqueType the Torque type of the column.
+     */
+    public void setTorqueType(String torqueType)
+    {
+        this.torqueType = torqueType;
+    }
+
+    /**
      * Set the size of this column.
      * 
      * @param size An int specifying the size.
@@ -265,6 +278,16 @@ public class ColumnMap implements java.io.Serializable
     public Object getType()
     {
         return type;
+    }
+
+    /**
+     * Get the name of the Torque type of this column. 
+     * 
+     * @return The name of the Torque type of this column.
+     */
+    public String getTorqueType()
+    {
+        return torqueType;
     }
 
     /**
