@@ -1520,6 +1520,99 @@ public abstract class BasePeer
     }
 
     /**
+     * Checks all columns in the criteria to see whether
+     * booleanchar and booleanint columns are queried with a boolean.
+     * If yes, the query values are mapped onto values the database
+     * does understand, i.e. 0 and 1 for booleanints and N and Y for
+     * booleanchar columns.
+     * 
+     * Limitations: The method does not yet check for criterions which contain
+     * other criterions.
+     * 
+     * @param criteria The criteria to be checked for booleanint and booleanchar
+     *        columns.
+     * @param defaultTableMap the table map to be used if the table name is
+     *        not given in a column.
+     * @throws TorqueException if the database map for the criteria cannot be
+     *         retrieved.
+     */
+    public static void correctBooleans(
+            Criteria criteria, 
+            TableMap defaultTableMap)
+        throws TorqueException
+    {
+        Iterator keyIt = criteria.keySet().iterator();
+        while (keyIt.hasNext())
+        {
+            String key = (String) keyIt.next();
+            String columnName;
+            TableMap tableMap = null;
+            int dotPosition = key.lastIndexOf(".");
+            if (dotPosition == -1)
+            {
+                columnName = key;
+                tableMap = defaultTableMap;
+            }
+            else
+            {
+                columnName = key.substring(dotPosition + 1);
+                String tableName = key.substring(0, dotPosition);
+                String databaseName = criteria.getDbName();
+                if (databaseName == null)
+                {
+                    databaseName = Torque.getDefaultDB();
+                }
+                DatabaseMap databaseMap = Torque.getDatabaseMap(databaseName);
+                if (databaseMap != null)
+                {
+                    tableMap = databaseMap.getTable(tableName);
+                }
+                if (tableMap == null)
+                {
+                    // try aliases
+                    if (criteria.getAliases().get(tableName) != null)
+                    {
+                        tableName = (String) 
+                                criteria.getAliases().get(tableName);
+                        tableMap = databaseMap.getTable(tableName);
+                    }
+                }
+                if (tableMap == null)
+                {
+                    // no description of table available, do not modify anything
+                    break;
+                }
+            }
+            ColumnMap columnMap = tableMap.getColumn(columnName);
+            if (columnMap != null)
+            {
+                if ("BOOLEANINT".equals(columnMap.getTorqueType()))
+                {
+                    Object criterionValue = criteria.get(key);
+                    if (criterionValue instanceof Boolean)
+                    {
+                        Boolean booleanValue = (Boolean) criterionValue;
+                        criteria.add(
+                                key, 
+                                Boolean.TRUE.equals(booleanValue) ? 1 : 0);
+                    }
+                }
+                else if ("BOOLEANCHAR".equals(columnMap.getTorqueType()))
+                {
+                    Object criterionValue = criteria.get(key);
+                    if (criterionValue instanceof Boolean)
+                    {
+                        Boolean booleanValue = (Boolean) criterionValue;
+                        criteria.add(
+                                key, 
+                                Boolean.TRUE.equals(booleanValue) ? "Y" : "N");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Process the result of a Table list generation.
      * This runs the statements onto the list of tables and
      * provides a callback hook to add functionality.
