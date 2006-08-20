@@ -100,39 +100,35 @@ public class DBFactory
      * Creates a new instance of the Torque database adapter associated
      * with the specified JDBC driver or adapter key.
      *
-     * @param driver The fully-qualified name of the JDBC driver to
-     * create a new adapter instance for or a shorter form adapter key.
-     * @return An instance of a Torque database adapter.
-     * @throws InstantiationException throws if the JDBC driver could not be
-     *      instantiated
+     * @param key The fully-qualified name of the JDBC driver
+     *        or a shorter form adapter key.
+     * @return An instance of a Torque database adapter, or null if
+     *         no adapter exists for the given key. 
+     * @throws InstantiationException throws if the adapter could not be
+     *         instantiated
      */
-    public static DB create(String driver)
+    public static DB create(String key)
         throws InstantiationException
     {
-        Class adapterClass = (Class) adapters.get(driver);
+        Class adapterClass = (Class) adapters.get(key);
 
-        if (adapterClass != null)
+        if (adapterClass == null)
         {
-            try
-            {
-                DB adapter = (DB) adapterClass.newInstance();
-                // adapter.setJDBCDriver(driver);
-                return adapter;
-            }
-            catch (IllegalAccessException e)
-            {
-                throw new InstantiationException(
-                    "Could not instantiate adapter for JDBC driver: "
-                    + driver
-                    + ": Assure that adapter bytecodes are in your classpath");
-            }
+            return null;
         }
-        else
+
+        try
+        {
+            DB adapter = (DB) adapterClass.newInstance();
+            // adapter.setJDBCDriver(driver);
+            return adapter;
+        }
+        catch (IllegalAccessException e)
         {
             throw new InstantiationException(
-                "Unknown JDBC driver: "
-                + driver
-                + ": Check your configuration file");
+                "Could not instantiate adapter for key : "
+                + key
+                + ": Assure that adapter classes are in your classpath");
         }
     }
 
@@ -140,14 +136,14 @@ public class DBFactory
      * Creates a new instance of the Torque database adapter associated
      * with the specified JDBC driver or adapter key and the class defined.
      *
-     * @param driver The fully-qualified name of the JDBC driver to
-     * create a new adapter instance for or a shorter form adapter key.
+     * @param key The fully-qualified name of the JDBC driver
+     *        or a shorter form adapter key.
      * @param className The fully qualified name of the adapter class
      * @return An instance of a Torque database adapter.
-     * @throws InstantiationException throws if the JDBC driver could not be
-     *      instantiated
+     * @throws InstantiationException throws if the adapter could not be
+     *         instantiated
      */
-    public static DB create(String driver, String className)
+    public static DB create(String key, String className)
         throws InstantiationException
     {
         Class adapterClass;
@@ -161,24 +157,24 @@ public class DBFactory
             throw new InstantiationException(
                     "Could not find adapter " 
                     + className
-                    + " for driver "
-                    + driver
+                    + " for key "
+                    + key
                     + ": Check your configuration file");
         }
 
         try
         {
             DB adapter = (DB) adapterClass.newInstance();
-            adapters.put(driver, adapterClass);
+            adapters.put(key, adapterClass);
             // adapter.setJDBCDriver(driver);
             return adapter;
         }
         catch (IllegalAccessException e)
         {
             throw new InstantiationException(
-                "Could not instantiate adapter for JDBC driver: "
-                + driver
-                + ": Assure that adapter bytecodes are in your classpath");
+                "Could not instantiate adapter for key: "
+                + key
+                + ": Assure that adapter classes are in your classpath");
         }
     }
 }
