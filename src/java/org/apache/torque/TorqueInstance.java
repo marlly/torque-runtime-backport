@@ -242,14 +242,7 @@ public class TorqueInstance
                     
                     DB db;
                     
-                    try
-                    {
-                        db = DBFactory.create(adapter);
-                    }
-                    catch (InstantiationException e)
-                    {
-                        db = null;
-                    }
+                    db = DBFactory.create(adapter);
                     
                     // Not supported, try manually defined adapter class
                     if (db == null)
