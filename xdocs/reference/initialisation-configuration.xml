@@ -145,6 +145,19 @@ torque.database.bookstore.adapter=mysql
           </td>
         </tr>
       </table>
+      
+      <p>
+        If you want to use a custom adapter that is not supplied by Torque,
+        you need to choose a custom key (not one of the above) and specify
+        the class of the adapter. For example, if the adapter class is
+        <code>com.acme.DBMyAdapter</code>, you could use the following
+        snippet in your configuration file:
+      </p>
+ 
+      <source>
+torque.database.bookstore.adapter=myadapter
+torque.database.bookstore.adapter.myadapter.className=com.acme.DBMyAdapter
+      </source>
 
     </subsection>
 
