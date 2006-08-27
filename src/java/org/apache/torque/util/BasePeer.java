@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -1570,10 +1571,10 @@ public abstract class BasePeer
                 if (tableMap == null)
                 {
                     // try aliases
-                    if (criteria.getAliases().get(tableName) != null)
+                    Map aliases = criteria.getAliases();
+                    if (aliases != null && aliases.get(tableName) != null)
                     {
-                        tableName = (String) 
-                                criteria.getAliases().get(tableName);
+                        tableName = (String)aliases.get(tableName);
                         tableMap = databaseMap.getTable(tableName);
                     }
                 }
@@ -1583,6 +1584,7 @@ public abstract class BasePeer
                     break;
                 }
             }
+            
             ColumnMap columnMap = tableMap.getColumn(columnName);
             if (columnMap != null)
             {
