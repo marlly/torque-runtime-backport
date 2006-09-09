@@ -403,7 +403,7 @@ public class ColumnMap implements java.io.Serializable
     /**
      * Sets the Java Name for this column.
      * 
-     * @return the Java Name.
+     * @param name the Java Name.
      */
     public void setJavaName(String name)
     {
@@ -515,7 +515,7 @@ public class ColumnMap implements java.io.Serializable
     /**
      * Sets the inheritance type.
      * 
-     * @param inheritance The inheritance type to set.
+     * @param inheritanceType The inheritance type to set.
      */
     public void setInheritance(String inheritanceType)
     {

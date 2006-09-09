@@ -138,7 +138,8 @@ public abstract class AbstractBaseManager
     /**
      * Return an instance of an om based on the id
      *
-     * @param id
+     * @param id the primary key of the object
+     * @return the object from persistent storage or from cache
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -151,6 +152,9 @@ public abstract class AbstractBaseManager
     /**
      * Return an instance of an om based on the id
      *
+     * @param key the primary key of the object
+     * @param fromCache true if the object should be retrieved from cache
+     * @return the object from persistent storage or from cache
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -175,6 +179,12 @@ public abstract class AbstractBaseManager
         return om;
     }
 
+    /**
+     * Get an object from cache
+     *
+     * @param key the primary key of the object
+     * @return the object from cache
+     */
     protected Persistent cacheGet(Serializable key)
     {
         Persistent om = null;
@@ -189,6 +199,7 @@ public abstract class AbstractBaseManager
     }
 
     /**
+     * Clears the cache
      *
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -211,9 +222,10 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     *
-     * @param key
-     * @return
+     * Remove an object from the cache
+     * 
+     * @param key the cache key for the object
+     * @return the object one last time
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -242,9 +254,11 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     *
-     * @param om
-     * @return
+     * Put an object into the cache
+     * 
+     * @param om the object
+     * @return if an object with the same key already is in the cache
+     *         this object will be returned, else null
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -256,10 +270,12 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     *
-     * @param key
-     * @param om
-     * @return
+     * Put an object into the cache
+     * 
+     * @param key the cache key for the object
+     * @param om the object
+     * @return if an object with this key already is in the cache
+     *         this object will be returned, else null
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -294,9 +310,10 @@ public abstract class AbstractBaseManager
     }
 
     /**
-     *
-     * @param id
-     * @return
+     * Retrieve an object from persistent storage
+     * 
+     * @param id the primary key of the object
+     * @return the object
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
@@ -397,9 +414,11 @@ public abstract class AbstractBaseManager
     }
 
     /**
+     * Gets a list of om's based on id's.
+     * This method must be implemented in the drived class
      *
-     * @param ids
-     * @return
+     * @param ids a <code>List</code> of <code>ObjectKey</code>'s
+     * @return a <code>List</code> value
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */

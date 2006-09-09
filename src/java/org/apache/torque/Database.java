@@ -93,8 +93,6 @@ public class Database
     /**
      * Returns the database map for this database.
      * If the database map does not exist yet, it is created by this method.
-     * 
-     * @param adapter The database map for this database, never null.
      */
     public synchronized DatabaseMap getDatabaseMap()
     {

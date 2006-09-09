@@ -24,17 +24,14 @@ import javax.sql.DataSource;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.MappedPropertyDescriptor;
 import org.apache.commons.beanutils.PropertyUtils;
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp.cpdsadapter.DriverAdapterCPDS;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
+import org.apache.torque.TorqueRuntimeException;
 
 /**
  * A class that contains common functionality of the factories in this
@@ -166,6 +163,11 @@ public abstract class AbstractDataSourceFactory
                     }
                 }
             }
+        }
+        catch (RuntimeException e)
+        {
+            throw new TorqueRuntimeException(
+                "Runtime error setting property " + property, e);
         }
         catch (Exception e)
         {

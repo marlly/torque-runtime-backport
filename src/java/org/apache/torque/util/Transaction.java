@@ -195,7 +195,7 @@ public class Transaction
      * errors are logged at warn level.
      *
      * @param con The Connection for the transaction.
-     * @see rollback
+     * @see Transaction#rollback(Connection)
      */
     public static void safeRollback(Connection con)
     {

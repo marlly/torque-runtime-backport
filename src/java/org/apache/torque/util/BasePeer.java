@@ -188,8 +188,7 @@ public abstract class BasePeer
      */
     public static String[] initColumnNames(Column[] columns)
     {
-        String[] columnNames = null;
-        columnNames = new String[columns.length];
+        String[] columnNames = new String[columns.length];
         for (int i = 0; i < columns.length; i++)
         {
             columnNames[i] = columns[i].name().toUpperCase();

@@ -700,7 +700,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     /**
      * Sets the Peer class for this table.
      * 
-     * @param peerClassName The peerClass to set.
+     * @param peerClass The peerClass to set.
      */
     public void setPeerClass(Class peerClass)
     {

@@ -191,7 +191,7 @@ public class Query
      * Get the Pre limit String. Oracle and DB2 want to encapsulate
      * a query into a subquery for limiting.
      *
-     * @return A String with the preLimit.
+     * @param preLimit A String with the preLimit.
      */
     public void setPreLimit(String preLimit)
     {
@@ -202,7 +202,7 @@ public class Query
      * Set the Post limit String. Oracle and DB2 want to encapsulate
      * a query into a subquery for limiting.
      *
-     * @return A String with the preLimit.
+     * @param postLimit A String with the postLimit.
      */
     public void setPostLimit(String postLimit)
     {

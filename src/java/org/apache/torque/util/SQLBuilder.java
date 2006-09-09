@@ -46,7 +46,7 @@ public abstract class SQLBuilder
         implements Serializable
 {
     /** Logging */
-    protected static Log log = LogFactory.getLog(SQLBuilder.class);
+    protected static final Log log = LogFactory.getLog(SQLBuilder.class);
     
     /** Function Characters */
     public static final String[] COLUMN_CHARS = {".", "*"};
@@ -332,12 +332,13 @@ public abstract class SQLBuilder
         UniqueList querySelectClause = query.getSelectClause();
         Map criteriaAsColumns = criteria.getAsColumns();
 
-        for (Iterator it = criteriaAsColumns.keySet().iterator(); it.hasNext(); )
+        for (Iterator it = criteriaAsColumns.entrySet().iterator(); it.hasNext(); )
         {
-            String key = (String) it.next();
+            Map.Entry entry = (Map.Entry)it.next();
+            String key = (String)entry.getKey();
             querySelectClause.add(
                     new StringBuffer()
-                    .append(criteriaAsColumns.get(key))
+                    .append(entry.getValue())
                     .append(SqlEnum.AS)
                     .append(key)
                     .toString());

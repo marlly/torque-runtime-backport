@@ -93,7 +93,7 @@ public class DBCloudscape extends AbstractDBAdapter
         switch (count)
         {
         case 0:
-            return ""; // not valid -- we need the column name and table name
+            /* return ""; */ // not valid -- we need the column name and table name
         case 1:
             return ""; // not valid -- we need the table name to select from
 

@@ -276,7 +276,12 @@ public class TorqueInstance
                 }
             }
         }
-        catch (Exception e)
+        catch (InstantiationException e)
+        {
+            log.error("Error creating a database adapter instance", e);
+            throw new TorqueException(e);
+        }
+        catch (TorqueException e)
         {
             log.error("Error reading configuration seeking database "
                       + "adapters", e);
@@ -354,6 +359,11 @@ public class TorqueInstance
                     database.setDataSourceFactory(dsf);
                 }
             }
+        }
+        catch (RuntimeException e)
+        {
+            log.error("Runtime Error reading adapter configuration", e);
+            throw new TorqueRuntimeException(e);
         }
         catch (Exception e)
         {

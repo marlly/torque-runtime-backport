@@ -89,7 +89,7 @@ public abstract class Torque
     /**
      * C'tor for usage with the Stratum Lifecycle.
      *
-     * @todo Should be made private or protected once Stratum is removed.
+     * TODO: Should be made private or protected once Stratum is removed.
      */
     public Torque()
     {

@@ -50,7 +50,7 @@ public class SequenceIdGenerator implements IdGenerator
     /**
      * Creates an IdGenerator which will work with the specified database.
      *
-     * @param adapter the adapter that knows the correct sql syntax.
+     * @param dbAdapter the adapter that knows the correct sql syntax.
      * @param name The name of the datasource to find the correct schema
      */
     public SequenceIdGenerator(final DB dbAdapter, final String name)
@@ -174,10 +174,7 @@ public class SequenceIdGenerator implements IdGenerator
         }
         finally
         {
-            if (qds != null)
-            {
-                qds.close();
-            }
+            qds.close();
         }
         return rec.getValue(1); // Values are 1 based.
     }
