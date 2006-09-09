@@ -14,28 +14,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+<!DOCTYPE project [
+<!ENTITY torque-nav SYSTEM "../../torque-nav-inc.xml">
+<!ENTITY project-nav SYSTEM "../../project-nav-inc.xml">
+]>
+
 <project name="Torque" href="http://db.apache.org/torque/">
 
   <title>Torque</title>
 
   <body>
 
-    <menu name="Torque"> 
-      <item name="Overview"              href="../../../index.html"/>
-      <item name="News and Status"       href="../../../status.html"/>
-      <item name="Downloads"             href="../../../download.html"/>
-      <item name="Changes"               href="../../../changes-report.html"/>
-      <item name="Wiki"                  href="http://wiki.apache.org/db-torque/"/>
-      <item name="Issue tracker"         href="../../../issue-tracking.html"/>
-      <item name="Mailing lists"         href="../../../mail-lists.html"/>
-	  <item name="Tools"                 href="../../../tools/index.html" />
-      <item name="Developer Information" href="../../../developer-info/index.html" collapse="true">
-        <item name="dummy"               href="/dummy.html" />
-      </item>
-    </menu>
-
-    <menu name="Documentation">
-      <item name="overview"              href="../../../documentation/index.html"/>
+	&torque-nav;
+	
+    <menu name="Module Documentation">
+      <item name="Overview"              href="../../../documentation/index.html"/>
       <item name="Torque 3.2"            href="../../../documentation/torque-3.2.html">
         <item name="Generator"           href="../generator/index.html" collapse="true">
           <item name="dummy"/>
@@ -77,13 +70,6 @@
             <item name="Link Check Report" href="/linkcheck.html"/>
           </item>
         </item>
-        <item name="Supported Databases" href="../docs-all-components/supported-databases.html"/>
-        <item name="Database Howtos"     href="../docs-all-components/database-howtos/index.html" collapse="true">
-          <item name="dummy"/>
-        </item>
-        <item name="Other Howtos"        href="../docs-all-components/other-howtos/index.html" collapse="true">
-          <item name="dummy"/>
-        </item> 
         <item name="Tutorial"            href="../tutorial/index.html" collapse="true">
           <item name="dummy"/>
         </item>
@@ -93,14 +79,7 @@
      </item>
     </menu>
 
-    <menu name="Project documentation">
-      <item name="Project info"          href="../../../project-info.html" collapse="true">
-        <item name="dummy"               href="/dummy.html"/>
-      </item>
-      <item name="Site Project Reports"  href="../../../project-reports.html" collapse="true">
-        <item name="dummy"               href="/dummy.html"/>
-      </item>
-    </menu>
+    &project-nav;
 
   </body>
 </project>
