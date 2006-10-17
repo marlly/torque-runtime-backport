@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,22 @@ public class UniqueList extends ArrayList
      */
     private static final long serialVersionUID = 4467847559423445120L;
 
+    /**
+     * Constructs an empty UniqueList.
+     */
+    public UniqueList()
+    {
+    }
+
+    /**
+     * Copy-constructor. Creates a shallow copy of an UniqueList.
+     * @param list the uniqueList to copy
+     */
+    public UniqueList(UniqueList list)
+    {
+        this.addAll(list);
+    }
+    
     /**
      * Adds an Object to the list.
      *

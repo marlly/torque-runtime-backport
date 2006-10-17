@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.ListIterator;
+import java.util.Set;
 
 import org.apache.torque.util.Query;
+import org.apache.torque.util.UniqueList;
 
 /**
  * This code should be used for an Oracle database pool.
@@ -220,6 +224,98 @@ public class DBOracle extends AbstractDBAdapter
         query.setPreLimit(preLimit.toString());
         query.setPostLimit(postLimit.toString());
         query.setLimit(null);
+        
+        // the query must not contain same column names or aliases.
+        // Find double column names and aliases and create unique aliases
+        // TODO: does not work for functions yet
+        UniqueList selectColumns = query.getSelectClause();
+        int replacementSuffix = 0;
+        Set columnNames = new HashSet();
+        // first pass: only remember aliased columns
+        // No replacements need to take place because double aliases
+        // are not allowed anyway
+        // So alias names will be retained 
+        for (ListIterator columnIt = selectColumns.listIterator();
+                columnIt.hasNext(); )
+        {
+            String selectColumn = (String) columnIt.next();
+
+            // check for sql function
+            if ((selectColumn.indexOf('(') != -1)
+                || (selectColumn.indexOf(')') != -1))
+            {
+                // Sql function. Disregard.
+                continue;
+            }
+
+            // check if alias name exists
+            int spacePos = selectColumn.lastIndexOf(' ');
+            if (spacePos == -1)
+            {
+                // no alias, disregard for now
+                continue;
+            }
+
+            String aliasName = selectColumn.substring(spacePos + 1);
+            columnNames.add(aliasName);
+        }
+
+        // second pass. Regard ordinary columns only
+        for (ListIterator columnIt = selectColumns.listIterator();
+                columnIt.hasNext(); )
+        {
+            String selectColumn = (String) columnIt.next();
+
+            // check for sql function
+            if ((selectColumn.indexOf('(') != -1)
+                || (selectColumn.indexOf(')') != -1))
+            {
+                // Sql function. Disregard.
+                continue;
+            }
+
+            {
+                int spacePos = selectColumn.lastIndexOf(' ');
+                if (spacePos != -1)
+                {
+                    // alias, already processed in first pass
+                    continue;
+                }
+            }
+            // split into column name and tableName 
+            String column;
+            {
+                int dotPos = selectColumn.lastIndexOf('.');
+                if (dotPos != -1)
+                {
+                    column = selectColumn.substring(dotPos + 1);
+                }
+                else
+                {
+                    column = selectColumn;
+                }
+            }
+            if (columnNames.contains(column))
+            {
+                // column needs to be aliased
+                // get replacement name
+                String aliasName;
+                do
+                {
+                    aliasName = "a" + replacementSuffix;
+                    ++replacementSuffix;
+                }
+                while (columnNames.contains(aliasName));
+                
+                selectColumn = selectColumn + " " + aliasName;
+                columnIt.set(selectColumn);
+                columnNames.add(aliasName);
+            }
+            else
+            {
+                columnNames.add(column);
+            }
+        }
     }
 
     /**
