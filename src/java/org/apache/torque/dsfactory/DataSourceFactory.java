@@ -1,7 +1,7 @@
 package org.apache.torque.dsfactory;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,13 @@ public interface DataSourceFactory
     /**
      * Key for the configuration which contains DataSourceFactories
      */
-    public static final String DSFACTORY_KEY = "dsfactory";
+    String DSFACTORY_KEY = "dsfactory";
 
     /**
      *  Key for the configuration which contains the fully qualified name
      *  of the factory implementation class
      */
-    public static final String FACTORY_KEY = "factory";
+    String FACTORY_KEY = "factory";
 
     /**
      * @return the <code>DataSource</code> configured by the factory.
@@ -60,7 +60,7 @@ public interface DataSourceFactory
      * Sets the current schema for the database connection
      *
      * @param schema The current schema name
-     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed 
+     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed
      *             in a future version of Torque.
      */
     void setSchema(String schema);
@@ -71,7 +71,7 @@ public interface DataSourceFactory
      * @return The current schema name. Null means, no schema has been set.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @deprecated use DatabaseInfo.getSchema() instead. Will be removed 
+     * @deprecated use DatabaseInfo.getSchema() instead. Will be removed
      *             in a future version of Torque.
      */
     String getSchema();
@@ -90,5 +90,4 @@ public interface DataSourceFactory
      */
     void close()
         throws TorqueException;
-
 }

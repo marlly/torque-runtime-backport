@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class Transaction
     private static Log log = LogFactory.getLog(Transaction.class);
 
     /**
-     * Begin a transaction for the default database.  
+     * Begin a transaction for the default database.
      * This method will fallback gracefully to
      * return a normal connection, if the database being accessed does
      * not support transactions.

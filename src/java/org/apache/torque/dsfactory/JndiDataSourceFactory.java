@@ -1,7 +1,7 @@
 package org.apache.torque.dsfactory;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class JndiDataSourceFactory
     public static final String PATH_KEY = "path";
 
     /**
-     *  Key for the configuration property which contains the 
+     *  Key for the configuration property which contains the
      *  time between two jndi lookups.
      */
     public static final String TIME_BETWEEN_LOOKUPS_KEY = "ttl";
@@ -70,7 +70,7 @@ public class JndiDataSourceFactory
      * which should be bound into jndi.
      */
     public static final String DATASOURCE_KEY = "datasource";
-    
+
     /**
      *  Key for the configuration property which contains the class name
      *  of the datasource to be bound into jndi.
@@ -149,7 +149,7 @@ public class JndiDataSourceFactory
         try
         {
             Hashtable env = new Hashtable();
-            for (Iterator i = c.getKeys(); i.hasNext(); )
+            for (Iterator i = c.getKeys(); i.hasNext();)
             {
                 String key = (String) i.next();
                 if (key.equals(PATH_KEY))
@@ -207,7 +207,7 @@ public class JndiDataSourceFactory
             Configuration c = configuration.subset(DATASOURCE_KEY);
             if (c != null)
             {
-                for (Iterator i = c.getKeys(); i.hasNext(); )
+                for (Iterator i = c.getKeys(); i.hasNext();)
                 {
                     String key = (String) i.next();
                     if (key.equals(CLASSNAME_KEY))
@@ -233,7 +233,7 @@ public class JndiDataSourceFactory
                         }
                         else
                         {
-                            log.error("Tried to set property " + key 
+                            log.error("Tried to set property " + key
                                     + " without Datasource definition!");
                         }
                     }
@@ -274,7 +274,7 @@ public class JndiDataSourceFactory
         log.debug("Environment properties:" + env.size());
         while (qw.hasNext())
         {
-            Map.Entry entry = (Map.Entry)qw.next(); 
+            Map.Entry entry = (Map.Entry)qw.next();
             log.debug("    " + entry.getKey() + ": " + entry.getValue());
         }
         log.debug("----------------------------------------------");

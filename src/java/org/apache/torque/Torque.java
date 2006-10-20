@@ -1,7 +1,7 @@
 package org.apache.torque;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public abstract class Torque
     public static final String TORQUE_KEY = "torque";
 
     /**
-     * The prefix for configuring the database adapters 
+     * The prefix for configuring the database adapters
      * and the default database.
      */
     public static final String DATABASE_KEY = "database";
@@ -117,7 +117,7 @@ public abstract class Torque
      *
      * @param instance Our singleton.
      */
-    public synchronized static void setInstance(TorqueInstance instance)
+    public static synchronized void setInstance(TorqueInstance instance)
     {
         torqueSingleton = instance;
     }
@@ -363,13 +363,13 @@ public abstract class Torque
     {
         return getInstance().getSchema(name);
     }
-    
+
     /**
      * Returns the database for the given key.
      *
      * @param name The database name.
      * @return the Database for the given name, or null if no database exists
-     *         for the given name. 
+     *         for the given name.
      * @throws TorqueException if Torque is not yet initialized.
      */
     public static Database getDatabase(String name) throws TorqueException
@@ -379,15 +379,15 @@ public abstract class Torque
 
     /**
      * Returns a Map containing all Databases registered to Torque.
-     * The key of the Map is the name of the database, and the value is the 
+     * The key of the Map is the name of the database, and the value is the
      * database instance. <br/>
-     * Note that in the very special case where a new database which 
-     * is not configured in Torque's configuration gets known to Torque 
+     * Note that in the very special case where a new database which
+     * is not configured in Torque's configuration gets known to Torque
      * at a later time, the returned map may change, and there is no way to
      * protect you against this. However, Databases should be initialized
      * in the init() method, so this will not happen if Torque is used
      * properly.
-     * 
+     *
      * @return a Map containing all Databases known to Torque, never null.
      * @throws TorqueException if Torque is not yet initialized.
      */

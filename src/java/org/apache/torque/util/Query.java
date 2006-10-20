@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -316,7 +316,7 @@ public class Query
             .append(FROM);
 
         boolean first = true;
-        for (Iterator it = fromTables.iterator(); it.hasNext(); )
+        for (Iterator it = fromTables.iterator(); it.hasNext();)
         {
             FromElement fromElement = (FromElement) it.next();
 
@@ -447,11 +447,13 @@ public class Query
         public String toString()
         {
             StringBuffer result = new StringBuffer();
-            if (joinType != null) {
+            if (joinType != null)
+            {
                 result.append(joinType);
             }
             result.append(tableName);
-            if (joinCondition != null) {
+            if (joinCondition != null)
+            {
                 result.append(SqlEnum.ON);
                 result.append(joinCondition);
             }

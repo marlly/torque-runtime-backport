@@ -112,7 +112,7 @@ public class DBDB2App extends AbstractDBAdapter
      * limiting the size of the resultset.
      *
      * @return LIMIT_STYLE_DB2.
-     * @deprecated This should not be exposed to the outside     
+     * @deprecated This should not be exposed to the outside
      */
     public int getLimitStyle()
     {
@@ -163,12 +163,12 @@ public class DBDB2App extends AbstractDBAdapter
         StringBuffer postLimit = new StringBuffer()
                 .append(" ) A ")
                 .append(" ) B WHERE ");
-        
+
         if (offset > 0)
         {
             postLimit.append(" B.TORQUE$ROWNUM > ")
                     .append(offset);
-        
+
             if (limit >= 0)
             {
                 postLimit.append(" AND B.TORQUE$ROWNUM <= ")
@@ -180,7 +180,7 @@ public class DBDB2App extends AbstractDBAdapter
             postLimit.append(" B.TORQUE$ROWNUM <= ")
                     .append(limit);
         }
-        
+
         query.setPreLimit(preLimit.toString());
         query.setPostLimit(postLimit.toString());
         query.setLimit(null);

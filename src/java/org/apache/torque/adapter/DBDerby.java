@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -76,9 +76,9 @@ public class DBDerby extends AbstractDBAdapter
 
     /**
      * Returns the SQL to get the database key of the last row
-     * inserted, which in this case is 
+     * inserted, which in this case is
      * <code>VALUES IDENTITY_VAL_LOCAL()</code>.
-     * 
+     *
      * @see org.apache.torque.adapter.DB#getIDMethodSQL(Object obj)
      */
     public String getIDMethodSQL(Object obj)

@@ -28,7 +28,7 @@ import org.apache.commons.collections.map.ListOrderedMap;
  * Note that this information should be set via the <Table>MapBuilder class and
  * not changed by applications. The set methods are only public because this
  * class needs them.
- * 
+ *
  * @author <a href="mailto:jmcnally@collab.net">John D. McNally</a>
  * @author <a href="mailto:greg.monroe@dukece.com">Greg Monroe</a>
  * @version $Id$
@@ -120,7 +120,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Constructor.
-     * 
+     *
      * @param name The name of the column.
      * @param containingTable TableMap of the table this column is in.
      */
@@ -133,7 +133,7 @@ public class ColumnMap implements java.io.Serializable
     /**
      * Makes sure that the column names don't include table prefixes. E.g.,
      * SCARAB_PROJECT.PROJECT_ID should be PROJECT_ID.
-     * 
+     *
      * @param name The name to check
      * @return The corrected name if needed or the same name if not.
      */
@@ -148,7 +148,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the name of a column.
-     * 
+     *
      * @return A String with the column name.
      */
     public String getColumnName()
@@ -158,7 +158,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the table name + column name.
-     * 
+     *
      * @return A String with the full column name.
      */
     public String getFullyQualifiedName()
@@ -168,7 +168,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the name of the table this column is in.
-     * 
+     *
      * @return A String with the table name.
      */
     public String getTableName()
@@ -178,7 +178,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set the type of this column.
-     * 
+     *
      * @param type An Object specifying the type.
      */
     public void setType(Object type)
@@ -188,7 +188,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set the Torque type of this column.
-     * 
+     *
      * @param torqueType the Torque type of the column.
      */
     public void setTorqueType(String torqueType)
@@ -198,7 +198,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set the size of this column.
-     * 
+     *
      * @param size An int specifying the size.
      */
     public void setSize(int size)
@@ -208,7 +208,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set if this column is a primary key or not.
-     * 
+     *
      * @param pk True if column is a primary key.
      */
     public void setPrimaryKey(boolean pk)
@@ -218,7 +218,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set if this column may be null.
-     * 
+     *
      * @param nn True if column may be null.
      */
     public void setNotNull(boolean nn)
@@ -228,7 +228,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set the foreign key for this column.
-     * 
+     *
      * @param fullyQualifiedName The name of the table.column that is
      * foreign.
      */
@@ -250,7 +250,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Set the foreign key for this column.
-     * 
+     *
      * @param tableName The name of the table that is foreign.
      * @param columnName The name of the column that is foreign.
      */
@@ -272,7 +272,7 @@ public class ColumnMap implements java.io.Serializable
     /**
      * Get the type of this column. Note that if usePrimitive is true, this may
      * need to be converted.
-     * 
+     *
      * @return An Object specifying the type.
      */
     public Object getType()
@@ -281,8 +281,8 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Get the name of the Torque type of this column. 
-     * 
+     * Get the name of the Torque type of this column.
+     *
      * @return The name of the Torque type of this column.
      */
     public String getTorqueType()
@@ -293,14 +293,14 @@ public class ColumnMap implements java.io.Serializable
     /**
      * The "precision" value from the XML
      * size="&lt;precision&gt;[,&lt;scale&gt;]"
-     * attribute. Where [,&lt;scale&gt;] is optional. 
-     * 
+     * attribute. Where [,&lt;scale&gt;] is optional.
+     *
      * If the size attribute has not been set in the XML, it will return 0.
      * <p>
-     * 
+     *
      * Note that the size="P,S" format should be replaced with size="P"
      * scale="S".
-     * 
+     *
      * @return An int specifying the size.
      */
     public int getSize()
@@ -310,7 +310,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Is this column a primary key?
-     * 
+     *
      * @return True if column is a primary key.
      */
     public boolean isPrimaryKey()
@@ -320,7 +320,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Is null value allowed ?
-     * 
+     *
      * @return True if column may be null.
      */
     public boolean isNotNull()
@@ -330,7 +330,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Is this column a foreign key?
-     * 
+     *
      * @return True if column is a foreign key.
      */
     public boolean isForeignKey()
@@ -340,7 +340,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the table.column that this column is related to.
-     * 
+     *
      * @return A String with the full name for the related column.
      */
     public String getRelatedName()
@@ -350,7 +350,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the table name that this column is related to.
-     * 
+     *
      * @return A String with the name for the related table.
      */
     public String getRelatedTableName()
@@ -360,7 +360,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the column name that this column is related to.
-     * 
+     *
      * @return A String with the name for the related column.
      */
     public String getRelatedColumnName()
@@ -373,7 +373,7 @@ public class ColumnMap implements java.io.Serializable
      * definition. E.g., the value of the scale attribute or the scale portion
      * of a size="P,S" attribute. (Note: size="P,S" format is being
      * deprecated!).
-     * 
+     *
      * @return Returns the scale.
      */
     public int getScale()
@@ -392,7 +392,7 @@ public class ColumnMap implements java.io.Serializable
     /**
      * Gets the Java Name for this column as defined in XML or created by
      * generator code.
-     * 
+     *
      * @return the Java Name.
      */
     public String getJavaName()
@@ -402,7 +402,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the Java Name for this column.
-     * 
+     *
      * @param name the Java Name.
      */
     public void setJavaName(String name)
@@ -412,7 +412,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns whether this column is an autoincrement column.
-     * 
+     *
      * @return true if this column is an autoIncrement column, false otherwise.
      */
     public boolean isAutoIncrement()
@@ -422,7 +422,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets whether this column is an autoincrement column.
-     * 
+     *
      * @param autoIncrement whether this colimn is an autoincrement column.
      */
     public void setAutoIncrement(boolean autoIncrement)
@@ -432,7 +432,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * A string representing the default value defined for this column.
-     * 
+     *
      * @return The default value of this column, if any.
      */
     public String getDefault()
@@ -442,7 +442,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the default value for this column.
-     * 
+     *
      * @param defaultValue The defaultValue to set.
      */
     public void setDefault(String defaultValue)
@@ -452,7 +452,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns the column description info.
-     * 
+     *
      * @return the description, if any.
      */
     public String getDescription()
@@ -462,7 +462,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the description for this column.
-     * 
+     *
      * @param description The description to set.
      */
     public void setDescription(String description)
@@ -472,8 +472,8 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the inheritance information associated with this column,
-     * 
-     * @return Returns an array of associated inheritanceMap. 
+     *
+     * @return Returns an array of associated inheritanceMap.
      *         The array is in XML order.
      */
     public InheritanceMap[] getInheritanceMaps()
@@ -493,7 +493,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Add an associated inheritance mapping.
-     * 
+     *
      * @param map The inheritanceMap to associate with this column.
      */
     public void addInheritanceMap(InheritanceMap map)
@@ -504,7 +504,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Gets the inheritance type used.
-     * 
+     *
      * @return the inheritance type used.
      */
     public String getInheritance()
@@ -514,7 +514,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the inheritance type.
-     * 
+     *
      * @param inheritanceType The inheritance type to set.
      */
     public void setInheritance(String inheritanceType)
@@ -523,9 +523,9 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Returns the input validator class name. 
+     * Returns the input validator class name.
      * (This property is in the DTD, but currently not used by Torque?)
-     * 
+     *
      * @return Returns the inputValidator.
      */
     public String getInputValidator()
@@ -535,7 +535,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the input validator class name.
-     * 
+     *
      * @param inputValidator The inputValidator to set.
      */
     public void setInputValidator(String inputValidator)
@@ -544,9 +544,9 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Returns whether getters and setters are generated with the 
+     * Returns whether getters and setters are generated with the
      * access modifier "protected" rather than "public".
-     * 
+     *
      * @return whether the accessors should be protected rather than public.
      */
     public boolean isProtected()
@@ -555,9 +555,9 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Sets whether getters and setters should be generated with the 
+     * Sets whether getters and setters should be generated with the
      * access modifier "protected" rather than "public".
-     * 
+     *
      * @param isProtected whether getters and setters for this column
      *        are protected.
      */
@@ -568,7 +568,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns whether this column is a primary key.
-     * 
+     *
      * @return whether this column is a primary key.
      */
     public boolean isPk()
@@ -578,7 +578,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets whether this column is a primary key.
-     * 
+     *
      * @param pk whether this column is a primary key.
      */
     public void setPk(boolean pk)
@@ -588,7 +588,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns whether this column uses inheritance subclasses.
-     * 
+     *
      * @return true if inheritance subclasses are used, false otherwise.
      */
     public boolean isUseInheritance()
@@ -598,7 +598,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets whether this column uses inheritance subclasses.
-     * 
+     *
      * @param useInheritance whether this column uses Inheritance subclasses.
      */
     public void setUseInheritance(boolean useInheritance)
@@ -608,10 +608,10 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Get the inheritance map with the specified key.
-     * 
+     *
      * @param key the key of the inheritance map.
-     * @return the inheritance map with the specified key, or null if no 
-     *         inheritance map with the specified key exists in this column. 
+     * @return the inheritance map with the specified key, or null if no
+     *         inheritance map with the specified key exists in this column.
      */
     public InheritanceMap getInheritanceMap(String key)
     {
@@ -620,7 +620,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns whether this colum uses primitive values rather than objects.
-     * 
+     *
      * @return true if this colum uses primitive values, false if it uses
      *         objects.
      */
@@ -631,8 +631,8 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets whether this colum uses primitive values rather than objects.
-     * 
-     * @param usePrimitive whether primitive objects are used 
+     *
+     * @param usePrimitive whether primitive objects are used
      *        rather than objects.
      */
     public void setUsePrimitive(boolean usePrimitive)
@@ -642,7 +642,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns the Java naming method for this column.
-     * 
+     *
      * @return the javaNamingMethod for this column.
      */
     public String getJavaNamingMethod()
@@ -652,7 +652,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the java naming method for this column.
-     * 
+     *
      * @param javaNamingMethod The javaNamingMethod to set.
      */
     public void setJavaNamingMethod(String javaNamingMethod)
@@ -662,7 +662,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns the map for the table this column belongs to.
-     * 
+     *
      * @return the table map for this column.
      */
     public TableMap getTable()
@@ -671,9 +671,9 @@ public class ColumnMap implements java.io.Serializable
     }
 
     /**
-     * Returns the position (one based) of this column in the table. 
+     * Returns the position (one based) of this column in the table.
      * XML order is preserved.
-     * 
+     *
      * @return The position of this column, one-based.
      */
     public int getPosition()
@@ -683,7 +683,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the position (one based) of this column in the table.
-     * 
+     *
      * @param position The position to set.
      */
     public void setPosition(int position)
@@ -693,7 +693,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Returns the java type of this column.
-     * 
+     *
      * @return the javaType.
      */
     public String getJavaType()
@@ -703,7 +703,7 @@ public class ColumnMap implements java.io.Serializable
 
     /**
      * Sets the java type of this column.
-     * 
+     *
      * @param javaType The javaType to set.
      */
     public void setJavaType(String javaType)

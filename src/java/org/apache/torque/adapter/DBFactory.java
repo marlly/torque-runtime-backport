@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class DBFactory
         adapters.put("COM.ibm.db2.jdbc.app.DB2Driver", DBDB2App.class);
         adapters.put("COM.ibm.db2.jdbc.net.DB2Driver", DBDB2Net.class);
         adapters.put("COM.cloudscape.core.JDBCDriver", DBCloudscape.class);
-        adapters.put("org.firebirdsql.jdbc.FBDriver",DBFirebird.class);
+        adapters.put("org.firebirdsql.jdbc.FBDriver", DBFirebird.class);
         adapters.put("org.hsql.jdbcDriver", DBHypersonicSQL.class);
         adapters.put("org.hsqldb.jdbcDriver", DBHypersonicSQL.class);
         adapters.put("interbase.interclient.Driver", DBInterbase.class);
@@ -103,7 +103,7 @@ public class DBFactory
      * @param key The fully-qualified name of the JDBC driver
      *        or a shorter form adapter key.
      * @return An instance of a Torque database adapter, or null if
-     *         no adapter exists for the given key. 
+     *         no adapter exists for the given key.
      * @throws InstantiationException throws if the adapter could not be
      *         instantiated
      */
@@ -147,7 +147,7 @@ public class DBFactory
         throws InstantiationException
     {
         Class adapterClass;
-        
+
         try
         {
             adapterClass = (Class) Class.forName(className);
@@ -155,7 +155,7 @@ public class DBFactory
         catch (ClassNotFoundException e)
         {
             throw new InstantiationException(
-                    "Could not find adapter " 
+                    "Could not find adapter "
                     + className
                     + " for key "
                     + key

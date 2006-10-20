@@ -66,11 +66,11 @@ public class TorqueInstance
 
     /** The db name that is specified as the default in the property file */
     private String defaultDBName = null;
-    
-    /** 
+
+    /**
      * The Map which contains all known databases. All iterations over the map
      * and other operations where the databaase map needs to stay
-     * in a defined state must be synchronized to this map. 
+     * in a defined state must be synchronized to this map.
      */
     private Map databases = Collections.synchronizedMap(new HashMap());
 
@@ -82,13 +82,13 @@ public class TorqueInstance
 
     /** flag to set to true once this class has been initialized */
     private boolean isInit = false;
-    
-    /** 
+
+    /**
      * a flag which indicates whether the DataSourceFactory in the database
      * named <code>DEFAULT</code> is a reference to another
-     * DataSourceFactory. This is important to know when closing the 
-     * DataSourceFactories on shutdown(); 
-     */ 
+     * DataSourceFactory. This is important to know when closing the
+     * DataSourceFactories on shutdown();
+     */
     private boolean defaultDsfIsReference = false;
 
     /**
@@ -170,7 +170,7 @@ public class TorqueInstance
 
 
     /**
-     * Initializes the name of the default database and 
+     * Initializes the name of the default database and
      * associates the database with the name <code>DEFAULT_NAME</code>
      * to the default database.
      *
@@ -178,7 +178,7 @@ public class TorqueInstance
      *        of the properties file.
      * @throws TorqueException if the appropriate key is not set.
      */
-    private final void initDefaultDbName(Configuration conf)
+    private void initDefaultDbName(Configuration conf)
             throws TorqueException
     {
         // Determine default database name.
@@ -203,7 +203,7 @@ public class TorqueInstance
 
     /**
      * Reads the adapter settings from the configuration and
-     * assigns the appropriate database adapters and Id Generators 
+     * assigns the appropriate database adapters and Id Generators
      * to the databases.
      *
      * @param conf the Configuration representing the torque section of the
@@ -211,7 +211,7 @@ public class TorqueInstance
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    private final void initAdapters(Configuration conf)
+    private void initAdapters(Configuration conf)
             throws TorqueException
     {
         log.debug("initAdapters(" + conf + ")");
@@ -231,7 +231,7 @@ public class TorqueInstance
 
         try
         {
-            for (Iterator it = c.getKeys(); it.hasNext(); )
+            for (Iterator it = c.getKeys(); it.hasNext();)
             {
                 String key = (String) it.next();
                 if (key.endsWith(DB.ADAPTER_KEY)
@@ -239,11 +239,11 @@ public class TorqueInstance
                 {
                     String adapter = c.getString(key);
                     String handle = key.substring(0, key.indexOf('.'));
-                    
+
                     DB db;
-                    
+
                     db = DBFactory.create(adapter);
-                    
+
                     // Not supported, try manually defined adapter class
                     if (db == null)
                     {
@@ -252,20 +252,20 @@ public class TorqueInstance
                     }
 
                     Database database = getOrCreateDatabase(handle);
-                    
+
                     // register the adapter for this name
                     database.setAdapter(db);
-                    log.debug("Adding " + adapter + " -> " 
+                    log.debug("Adding " + adapter + " -> "
                             + handle + " as Adapter");
-                    
+
                     // add Id generators
-                    
+
                     // first make sure that the dtabaseMap exists for the name
                     // as the idGenerators are still stored in the database map
                     // TODO: change when the idGenerators are stored in the
                     // database
                     getDatabaseMap(handle);
-                    for (int i = 0; 
+                    for (int i = 0;
                             i < IDGeneratorFactory.ID_GENERATOR_METHODS.length;
                             i++)
                     {
@@ -289,7 +289,7 @@ public class TorqueInstance
         }
 
         // check that at least the default database has got an adapter.
-        Database defaultDatabase 
+        Database defaultDatabase
                 = (Database) databases.get(Torque.getDefaultDB());
         if (defaultDatabase == null
             || defaultDatabase.getAdapter() == null)
@@ -312,11 +312,11 @@ public class TorqueInstance
     /**
      * Reads the settings for the DataSourceFactories from the configuration
      * and creates and/or cinfigures the DataSourceFactories for the databases.
-     * If no DataSorceFactory is assigned to the database with the name 
-     * <code>DEFAULT_NAME</code>, a reference to the DataSourceFactory 
-     * of the default daztabase is made from the database with the name 
+     * If no DataSorceFactory is assigned to the database with the name
+     * <code>DEFAULT_NAME</code>, a reference to the DataSourceFactory
+     * of the default daztabase is made from the database with the name
      * <code>DEFAULT_NAME</code>.
-     *  
+     *
      * @param conf the Configuration representing the properties file
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
@@ -355,7 +355,7 @@ public class TorqueInstance
                             (DataSourceFactory) dsfClass.newInstance();
                     dsf.initialize(c.subset(handle));
 
-                    Database database = getOrCreateDatabase(handle);                    
+                    Database database = getOrCreateDatabase(handle);
                     database.setDataSourceFactory(dsf);
                 }
             }
@@ -371,9 +371,9 @@ public class TorqueInstance
             throw new TorqueException(e);
         }
 
-        Database defaultDatabase 
+        Database defaultDatabase
                 = (Database) databases.get(defaultDBName);
-        if (defaultDatabase == null 
+        if (defaultDatabase == null
             || defaultDatabase.getDataSourceFactory() == null)
         {
             String error = "Invalid configuration : "
@@ -405,7 +405,7 @@ public class TorqueInstance
         //
 
         {
-            Database databaseInfoForKeyDefault 
+            Database databaseInfoForKeyDefault
                     = getOrCreateDatabase(DEFAULT_NAME);
             if ((!defaultDBName.equals(DEFAULT_NAME))
                 && databaseInfoForKeyDefault.getDataSourceFactory() == null)
@@ -567,7 +567,7 @@ public class TorqueInstance
     /**
      * Sets the configuration for Torque and all dependencies.
      * The prefix <code>TORQUE_KEY</code> needs to be removed from the
-     * configuration keys for the provided configuration. 
+     * configuration keys for the provided configuration.
      *
      * @param conf the Configuration.
      */
@@ -655,7 +655,7 @@ public class TorqueInstance
         {
             for (Iterator it = databases.values().iterator(); it.hasNext();)
             {
-                Database database = (Database) it.next();               
+                Database database = (Database) it.next();
                 IDBroker idBroker = database.getIDBroker();
                 if (idBroker != null)
                 {
@@ -663,7 +663,7 @@ public class TorqueInstance
                 }
             }
         }
-        
+
         // shut down the data source factories
         TorqueException exception = null;
         synchronized (databases)
@@ -671,22 +671,22 @@ public class TorqueInstance
             for (Iterator it = databases.keySet().iterator(); it.hasNext();)
             {
                 Object databaseKey = it.next();
-    
+
                 Database database
                         = (Database) databases.get(databaseKey);
                 if (DEFAULT_NAME.equals(databaseKey) && defaultDsfIsReference)
                 {
                     // the DataSourceFactory of the database with the name
-                    // DEFAULT_NAME is just a reference to aynother entry. 
-                    // Do not close because this leads to closing 
+                    // DEFAULT_NAME is just a reference to aynother entry.
+                    // Do not close because this leads to closing
                     // the same DataSourceFactory twice.
                     database.setDataSourceFactory(null);
                     break;
                 }
-    
+
                 try
                 {
-                    DataSourceFactory dataSourceFactory 
+                    DataSourceFactory dataSourceFactory
                             = database.getDataSourceFactory();
                     if (dataSourceFactory != null)
                     {
@@ -701,7 +701,7 @@ public class TorqueInstance
                             e);
                     if (exception == null)
                     {
-                    	exception = e;
+                        exception = e;
                     }
                 }
             }
@@ -783,12 +783,12 @@ public class TorqueInstance
     }
 
     /**
-     * Returns a database connection to the database with the key 
+     * Returns a database connection to the database with the key
      * <code>name</code>.
      * @param name The database name.
      * @return a database connection, never null.
-     * @throws TorqueException If no DataSourceFactory is configured for the 
-     *         named database, the connection information is wrong, or the 
+     * @throws TorqueException If no DataSourceFactory is configured for the
+     *         named database, the connection information is wrong, or the
      *         connection cannot be returned for any other reason.
      */
     public Connection getConnection(String name)
@@ -801,19 +801,19 @@ public class TorqueInstance
                     .getDataSource()
                     .getConnection();
         }
-        catch(SQLException se)
+        catch (SQLException se)
         {
             throw new TorqueException(se);
         }
     }
 
     /**
-     * Returns the DataSourceFactory for the database with the name 
+     * Returns the DataSourceFactory for the database with the name
      * <code>name</code>.
      *
      * @param name The name of the database to get the DSF for.
      * @return A DataSourceFactory object, never null.
-     * @throws TorqueException if Torque is not initiliaized, or 
+     * @throws TorqueException if Torque is not initiliaized, or
      *         no DatasourceFactory is configured for the given name.
      */
     public DataSourceFactory getDataSourceFactory(String name)
@@ -821,7 +821,7 @@ public class TorqueInstance
     {
         Database database = getDatabase(name);
 
-    	DataSourceFactory dsf = null;
+        DataSourceFactory dsf = null;
         if (database != null)
         {
             dsf = database.getDataSourceFactory();
@@ -858,7 +858,7 @@ public class TorqueInstance
             return getDataSourceFactory(name)
                     .getDataSource().getConnection(username, password);
         }
-        catch(SQLException se)
+        catch (SQLException se)
         {
             throw new TorqueException(se);
         }
@@ -950,7 +950,7 @@ public class TorqueInstance
 
     /**
      * Returns the database for the key <code>databaseName</code>.
-     * 
+     *
      * @param databaseName the key to get the database for.
      * @return the database for the specified key, or null if the database
      *         does not exist.
@@ -964,16 +964,16 @@ public class TorqueInstance
         }
         return (Database) databases.get(databaseName);
     }
-    
+
     /**
      * Returns a Map containing all Databases registered to Torque.
-     * The key of the Map is the name of the database, and the value is the 
+     * The key of the Map is the name of the database, and the value is the
      * database instance. <br/>
-     * Note that in the very special case where a new database which 
-     * is not configured in Torque's configuration gets known to Torque 
+     * Note that in the very special case where a new database which
+     * is not configured in Torque's configuration gets known to Torque
      * at a later time, the returned map may change, and there is no way to
      * protect you against this.
-     * 
+     *
      * @return a Map containing all Databases known to Torque, never null.
      * @throws TorqueException if Torque is not yet initialized.
      */
@@ -985,7 +985,7 @@ public class TorqueInstance
         }
         return Collections.unmodifiableMap(databases);
     }
-    
+
     /**
      * Returns the database for the key <code>databaseName</code>.
      * If no database is associated to the specified key,
@@ -1003,7 +1003,7 @@ public class TorqueInstance
             if (result == null)
             {
                 result = new Database(databaseName);
-                databases.put(databaseName, result);                
+                databases.put(databaseName, result);
             }
             return result;
         }

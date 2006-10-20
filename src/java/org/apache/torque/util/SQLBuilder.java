@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public abstract class SQLBuilder
 {
     /** Logging */
     protected static final Log log = LogFactory.getLog(SQLBuilder.class);
-    
+
     /** Function Characters */
     public static final String[] COLUMN_CHARS = {".", "*"};
     public static final String[] DELIMITERS = {" ", ",", "(", ")", "<", ">"};
@@ -143,7 +143,7 @@ public abstract class SQLBuilder
         }
         if (dotIndex == -1)
         {
-            throw new TorqueException("removeSQLFunction() : Column name " 
+            throw new TorqueException("removeSQLFunction() : Column name "
                     + name
                     + " does not contain a . or a *");
         }
@@ -224,14 +224,14 @@ public abstract class SQLBuilder
         HashSet tables = new HashSet();
 
         // Loop over all the Criterions
-        for (Iterator it = crit.keySet().iterator(); it.hasNext(); )
+        for (Iterator it = crit.keySet().iterator(); it.hasNext();)
         {
             String key = (String) it.next();
             Criteria.Criterion c = crit.getCriterion(key);
             List tableNames = c.getAllTables();
 
             // Loop over all Tables referenced in this criterion.
-            for (Iterator it2 = tableNames.iterator(); it2.hasNext(); )
+            for (Iterator it2 = tableNames.iterator(); it2.hasNext();)
             {
                 String name = (String) it2.next();
                 String aliasName = crit.getTableForAlias(name);
@@ -303,7 +303,7 @@ public abstract class SQLBuilder
      * @param query the query to which the select columns should be added
      * @throws TorqueException if the select columns can not be processed
      */
-    private static final void processSelectColumns(
+    private static void processSelectColumns(
             final Criteria criteria,
             final Query query,
             final String dbName)
@@ -325,17 +325,17 @@ public abstract class SQLBuilder
      * @param criteria the criteria from which the As-columns are taken
      * @param query the query to which the As-columns should be added
      */
-    private static final void processAsColumns(
+    private static void processAsColumns(
             final Criteria criteria,
             final Query query)
     {
         UniqueList querySelectClause = query.getSelectClause();
         Map criteriaAsColumns = criteria.getAsColumns();
 
-        for (Iterator it = criteriaAsColumns.entrySet().iterator(); it.hasNext(); )
+        for (Iterator it = criteriaAsColumns.entrySet().iterator(); it.hasNext();)
         {
-            Map.Entry entry = (Map.Entry)it.next();
-            String key = (String)entry.getKey();
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String) entry.getKey();
             querySelectClause.add(
                     new StringBuffer()
                     .append(entry.getValue())
@@ -350,7 +350,7 @@ public abstract class SQLBuilder
      * @param criteria the criteria from which the Modifiers are taken
      * @param query the query to which the Modifiers should be added
      */
-    private static final void processModifiers(
+    private static void processModifiers(
             final Criteria criteria,
             final Query query)
     {
@@ -370,7 +370,7 @@ public abstract class SQLBuilder
      *        or null if a normal statement should be built.
      * @throws TorqueException if the Criterion-objects can not be processed
      */
-    private static final void processCriterions(
+    private static void processCriterions(
             final DB db,
             final DatabaseMap dbMap,
             final String dbName,
@@ -382,7 +382,7 @@ public abstract class SQLBuilder
     {
         UniqueList whereClause = query.getWhereClause();
 
-        for (Iterator it = crit.keySet().iterator(); it.hasNext(); )
+        for (Iterator it = crit.keySet().iterator(); it.hasNext();)
         {
             String key = (String) it.next();
             Criteria.Criterion criterion = crit.getCriterion(key);
@@ -426,7 +426,7 @@ public abstract class SQLBuilder
      * @param query the query to which the OrderBy-Columns should be added
      * @throws TorqueException if the OrderBy-Columns can not be processed
      */
-    private static final void processOrderBy(
+    private static void processOrderBy(
             final DB db,
             final DatabaseMap dbMap,
             final Criteria crit,
@@ -516,7 +516,7 @@ public abstract class SQLBuilder
      * @param query the query to which the GroupBy-Columns should be added
      * @throws TorqueException if the GroupBy-Columns can not be processed
      */
-    private static final void processGroupBy(
+    private static void processGroupBy(
             final Criteria crit,
             final Query query)
             throws TorqueException
@@ -556,7 +556,7 @@ public abstract class SQLBuilder
      * @param query the query to which the Having-Columns should be added
      * @throws TorqueException if the Having-Columns can not be processed
      */
-    private static final void processHaving(
+    private static void processHaving(
             final Criteria crit,
             final Query query)
             throws TorqueException
@@ -576,7 +576,7 @@ public abstract class SQLBuilder
      * @param query the query to which the Limit clause should be added
      * @throws TorqueException if the Database adapter cannot be obtained
      */
-    private static final void processLimits(
+    private static void processLimits(
             final Criteria crit,
             final Query query)
             throws TorqueException
@@ -650,7 +650,7 @@ public abstract class SQLBuilder
         if (StringUtils.isNotEmpty(aliasName))
         {
             // If the tables have an alias, add an "<xxx> <yyy> statement"
-        	// <xxx> AS <yyy> causes problems on oracle
+            // <xxx> AS <yyy> causes problems on oracle
             return new StringBuffer(
                     tableName.length() + aliasName.length() + 1)
                     .append(aliasName)
@@ -689,7 +689,7 @@ public abstract class SQLBuilder
             // true is returned.
             return true;
         }
-        for ( Iterator it = fromClause.iterator(); it.hasNext();)
+        for (Iterator it = fromClause.iterator(); it.hasNext();)
         {
             Query.FromElement fromElement
                     = (Query.FromElement) it.next();
@@ -712,7 +712,7 @@ public abstract class SQLBuilder
      * @return the table in the from clause which represents the
      *         supplied tableOrAliasName
      */
-    private static final String addTableToFromClause(
+    private static String addTableToFromClause(
             final String tableName,
             final Criteria criteria,
             Query query)

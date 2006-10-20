@@ -1,7 +1,7 @@
 package org.apache.torque.manager;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -223,7 +223,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Remove an object from the cache
-     * 
+     *
      * @param key the cache key for the object
      * @return the object one last time
      * @throws TorqueException Any exceptions caught during processing will be
@@ -255,7 +255,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Put an object into the cache
-     * 
+     *
      * @param om the object
      * @return if an object with the same key already is in the cache
      *         this object will be returned, else null
@@ -271,7 +271,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Put an object into the cache
-     * 
+     *
      * @param key the cache key for the object
      * @param om the object
      * @return if an object with this key already is in the cache
@@ -311,7 +311,7 @@ public abstract class AbstractBaseManager
 
     /**
      * Retrieve an object from persistent storage
-     * 
+     *
      * @param id the primary key of the object
      * @return the object
      * @throws TorqueException Any exceptions caught during processing will be
@@ -462,7 +462,7 @@ public abstract class AbstractBaseManager
         {
             throw new TorqueException("Cache could not be initialized", e);
         }
-        
+
         if (cache == null)
         {
             log.info("Cache could not be initialized for region: " + v);

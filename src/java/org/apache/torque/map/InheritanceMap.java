@@ -18,15 +18,15 @@ package org.apache.torque.map;
 
 /**
  * InheritanceMap is used to model OM inheritance classes.
- * 
+ *
  * @author <a href="mailto:greg.monroe@dukece.com">Greg Monroe</a>
  * @version $Id$
  */
 public class InheritanceMap
 {
-    /** 
-     * The value in the related column that is associated with 
-     * this information. 
+    /**
+     * The value in the related column that is associated with
+     * this information.
      */
     private String key;
 
@@ -35,8 +35,8 @@ public class InheritanceMap
      */
     private String className;
 
-    /** 
-     * The name of class which class name extends. 
+    /**
+     * The name of class which class name extends.
      * Retrieved via getExtends().
      */
     private String ancestor;
@@ -46,7 +46,7 @@ public class InheritanceMap
 
     /**
      * Create an inheritance map object.
-     * 
+     *
      * @param column The column this inheritance map belongs to.
      * @param key Key to determine which subclass applies
      * @param className package.Name of sub class to use for record.
@@ -64,7 +64,7 @@ public class InheritanceMap
     /**
      * Returns the ancestor class for the class described by this
      * InheritanceMap.
-     * 
+     *
      * @return the ancestor class for the class described by this
      *         InheritanceMap.
      */
@@ -75,8 +75,8 @@ public class InheritanceMap
 
     /**
      * Sets the ancestor class for the class described by this InheritanceMap.
-     * 
-     * @param ancestor The ancestor for the class described by this 
+     *
+     * @param ancestor The ancestor for the class described by this
      *        InheritanceMap.
      */
     public void setExtends(String ancestor)
@@ -86,7 +86,7 @@ public class InheritanceMap
 
     /**
      * Returns the class name for this InheritanceMap.
-     * 
+     *
      * @return The class name for this InheritanceMap.
      */
     public String getClassName()
@@ -96,7 +96,7 @@ public class InheritanceMap
 
     /**
      * Sets the class name for this InheritanceMap.
-     * 
+     *
      * @param className The className for this InheritanceMap.
      */
     public void setClassName(String className)
@@ -106,7 +106,7 @@ public class InheritanceMap
 
     /**
      * Returns the column this inheritance map belongs to.
-     * 
+     *
      * @return the column this inheritance map belongs to.
      */
     public ColumnMap getColumn()
@@ -116,7 +116,7 @@ public class InheritanceMap
 
     /**
      * Sets the column this inheritance map belongs to.
-     * 
+     *
      * @param column the column this inheritance map belongs to.
      */
     public void setColumn(ColumnMap column)
@@ -126,7 +126,7 @@ public class InheritanceMap
 
     /**
      * Returns the key by which this inheritanceMap is activated.
-     * 
+     *
      * @return The key by which this inheritanceMap is activated.
      */
     public String getKey()
@@ -136,7 +136,7 @@ public class InheritanceMap
 
     /**
      * Sets the key by which this inheritanceMap is activated.
-     * 
+     *
      * @param key The key by which this inheritanceMap is activated.
      */
     public void setKey(String key)

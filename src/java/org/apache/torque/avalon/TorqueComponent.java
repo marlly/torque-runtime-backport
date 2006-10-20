@@ -52,10 +52,10 @@ public class TorqueComponent
 {
     /** The Avalon Application Root */
     private String appRoot = null;
-    
+
     /** The Avalon Logger */
     private Logger logger = null;
-    
+
     /** The configuration file name. */
     private String configFile = null;
 
@@ -66,7 +66,7 @@ public class TorqueComponent
     public TorqueComponent()
     {
         super();
-        
+
         // Provide the singleton instance to the static accessor
         org.apache.torque.Torque.setInstance(this);
     }
@@ -82,9 +82,9 @@ public class TorqueComponent
     /**
      * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
      */
-    public void enableLogging(Logger logger)
+    public void enableLogging(Logger aLogger)
     {
-        this.logger = logger;
+        this.logger = aLogger;
     }
 
     /**
@@ -96,7 +96,8 @@ public class TorqueComponent
     }
 
     /**
-     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     * @see
+     * org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
      */
     public void configure(Configuration configuration)
             throws ConfigurationException
@@ -122,7 +123,7 @@ public class TorqueComponent
         }
 
         getLogger().debug("Config File is " + configFile);
-        
+
         this.configFile = configFile;
     }
 
@@ -135,7 +136,7 @@ public class TorqueComponent
         // check context Merlin and YAAFI style
         try
         {
-            appRoot = ((File)context.get("urn:avalon:home")).getAbsolutePath();
+            appRoot = ((File) context.get("urn:avalon:home")).getAbsolutePath();
         }
         catch (ContextException ce)
         {
@@ -184,7 +185,7 @@ public class TorqueComponent
         getLogger().debug("stop()");
         try
         {
-        	shutdown();
+            shutdown();
         }
         catch (Exception e)
         {

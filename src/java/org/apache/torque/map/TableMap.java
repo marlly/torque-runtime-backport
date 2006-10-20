@@ -42,7 +42,7 @@ public class TableMap implements IDMethod, java.io.Serializable
     /** The list of valid ID generation methods. */
     protected static final String[] VALID_ID_METHODS =
     {
-            NATIVE, AUTO_INCREMENT, SEQUENCE, ID_BROKER, NO_ID_METHOD
+        NATIVE, AUTO_INCREMENT, SEQUENCE, ID_BROKER, NO_ID_METHOD
     };
 
     /** The columns in the table. XML Order is preserved. */
@@ -132,7 +132,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param containingDB A DatabaseMap that this table belongs to.
      */
     public TableMap(String tableName,
-                    String prefix, 
+                    String prefix,
                     DatabaseMap containingDB)
     {
         this.tableName = tableName;
@@ -338,7 +338,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      *
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
-     * @deprecated Associated Column maps should be populated using it's 
+     * @deprecated Associated Column maps should be populated using it's
      *             set methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
@@ -354,7 +354,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param type An Object specifying the type.
      * @param size An int specifying the size.
      * @param scale An int specifying the scale.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
@@ -369,7 +369,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
      * @param size An int specifying the size.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
@@ -383,7 +383,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      *
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
@@ -398,7 +398,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param columnName A String with the column name.
      * @param type An Object specifying the type.
      * @param size An int specifying the size.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
@@ -414,12 +414,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param type An Object specifying the type.
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    public void addForeignKey(String columnName, 
-                              Object type, 
+    public void addForeignKey(String columnName,
+                              Object type,
                               String fkTable,
                               String fkColumn)
     {
@@ -434,12 +434,12 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    public void addForeignKey(String columnName, 
-                              Object type, 
+    public void addForeignKey(String columnName,
+                              Object type,
                               String fkTable,
                                String fkColumn,
                                int size)
@@ -454,13 +454,13 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param type An Object specifying the type.
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    public void addForeignPrimaryKey(String columnName, 
+    public void addForeignPrimaryKey(String columnName,
                                      Object type,
-                                     String fkTable, 
+                                     String fkTable,
                                      String fkColumn)
     {
         addColumn(columnName, type, true, fkTable, fkColumn, 0);
@@ -474,14 +474,14 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    public void addForeignPrimaryKey(String columnName, 
+    public void addForeignPrimaryKey(String columnName,
                                      Object type,
-                                     String fkTable, 
-                                     String fkColumn, 
+                                     String fkTable,
+                                     String fkColumn,
                                      int size)
     {
         addColumn(columnName, type, true, fkTable, fkColumn, size);
@@ -496,15 +496,15 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkTable A String with the foreign key table name.
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    private void addColumn(String name, 
-                           Object type, 
+    private void addColumn(String name,
+                           Object type,
                            boolean pk,
-                           String fkTable, 
-                           String fkColumn, 
+                           String fkTable,
+                           String fkColumn,
                            int size)
     {
         addColumn(name, type, pk, fkTable, fkColumn, size, 0);
@@ -520,16 +520,16 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param fkColumn A String with the foreign key column name.
      * @param size An int specifying the size.
      * @param scale An int specifying the scale.
-     * @deprecated Associated Column maps should be populated using it's set 
+     * @deprecated Associated Column maps should be populated using it's set
      *             methods, then added to table via addColumn(ColumnMap).
      *             This method will be removed in a future version of Torque.
      */
-    private void addColumn(String name, 
-                           Object type, 
+    private void addColumn(String name,
+                           Object type,
                            boolean pk,
-                           String fkTable, 
-                           String fkColumn, 
-                           int size, 
+                           String fkTable,
+                           String fkColumn,
+                           int size,
                            int scale)
     {
         // If the tablename is prefixed with the name of the column,
@@ -600,7 +600,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return True if prefix is contained in data.
      */
-    private final boolean hasPrefix(String data)
+    private boolean hasPrefix(String data)
     {
         return (data.indexOf(getPrefix()) != -1);
     }
@@ -611,7 +611,7 @@ public class TableMap implements IDMethod, java.io.Serializable
      * @param data A String.
      * @return A String with data, but with prefix removed.
      */
-    private final String removePrefix(String data)
+    private String removePrefix(String data)
     {
         return data.substring(getPrefix().length());
     }
@@ -649,7 +649,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns the table description info.
-     * 
+     *
      * @return Returns the description.
      */
     public String getDescription()
@@ -659,7 +659,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets the table description.
-     * 
+     *
      * @param description The description to set.
      */
     public void setDescription(String description)
@@ -668,8 +668,8 @@ public class TableMap implements IDMethod, java.io.Serializable
     }
 
     /**
-     * Returns the OM class for this table. 
-     * 
+     * Returns the OM class for this table.
+     *
      * @return the OM class.
      */
     public Class getOMClass()
@@ -679,7 +679,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets the OM root class for this table.
-     * 
+     *
      * @param omClass The OM root class for this table.
      */
     public void setOMClass(Class omClass)
@@ -689,7 +689,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns the Peer Class for this table.
-     * 
+     *
      * @return The peerClass for this table.
      */
     public Class getPeerClass()
@@ -699,7 +699,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets the Peer class for this table.
-     * 
+     *
      * @param peerClass The peerClass to set.
      */
     public void setPeerClass(Class peerClass)
@@ -709,7 +709,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns the database map for this table.
-     * 
+     *
      * @return the database map for this table.
      */
     public DatabaseMap getDbMap()
@@ -719,7 +719,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns whether this table uses inheritance.
-     * 
+     *
      * @return whether inheritance is used.
      */
     public boolean isUseInheritance()
@@ -729,7 +729,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets whether this table uses inheritance.
-     * 
+     *
      * @param useInheritance whether this table uses inheritance.
      */
     public void setUseInheritance(boolean useInheritance)
@@ -739,7 +739,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns whether managers are used for this table.
-     * 
+     *
      * @return whether managers are used for this table.
      */
     public boolean isUseManager()
@@ -749,7 +749,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets whether managers are used for this table.
-     * 
+     *
      * @param useManager whether managers are used for this table.
      */
     public void setUseManager(boolean useManager)
@@ -759,7 +759,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Returns the manager class for this table.
-     * 
+     *
      * @return the managerClass.
      */
     public Class getManagerClass()
@@ -769,7 +769,7 @@ public class TableMap implements IDMethod, java.io.Serializable
 
     /**
      * Sets the manager class for this table.
-     * 
+     *
      * @param managerClass the manager class for this table.
      */
     public void setManagerClass(Class managerClass)

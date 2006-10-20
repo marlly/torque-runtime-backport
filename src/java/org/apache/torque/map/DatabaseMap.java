@@ -1,7 +1,7 @@
 package org.apache.torque.map;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -51,28 +51,28 @@ public class DatabaseMap implements java.io.Serializable
      * The character which separates the schema name from the table name
      */
     char SCHEMA_SEPARATOR_CHAR = '.';
-    
-    /** 
-     * Format used to create create the class name for initializing a DB 
-     * specific map 
+
+    /**
+     * Format used to create create the class name for initializing a DB
+     * specific map
      */
-    public static final String INIT_CLASS_NAME_FORMAT = 
+    public static final String INIT_CLASS_NAME_FORMAT =
                                 "org.apache.torque.linkage.{0}MapInit";
-    
-    public static String[] eMsgs = { 
-        "Invalid Torque OM setup for Database \"{0}\".\n"+
-            "Database Map initialization class, \"{1}\","+" " +
-            "could not be found in your classpath.",
-        "Invalid Torque OM setup for Database \"{0}\".\n"+
-            "A class that the Database Map initialization class, \"{1}\", "+
-            "depends on could not be found.",
-        "Invalid Torque OM setup for Database \"{0}\".\n"+
-            "Something unexpected happened doing Class.forName(\"{1}\").  "+
-            "See the nested exception for details.",
-        "Invalid Torque OM setup for Database \"{0}\".\n"+
-            "An error occured invoking the init() method in class, \"{1}\""
+
+    public static String[] eMsgs = {
+        "Invalid Torque OM setup for Database \"{0}\".\n"
+        + "Database Map initialization class, \"{1}\"," + " " 
+        + "could not be found in your classpath.",
+        "Invalid Torque OM setup for Database \"{0}\".\n"
+        + "A class that the Database Map initialization class, \"{1}\", "
+        + "depends on could not be found.",
+        "Invalid Torque OM setup for Database \"{0}\".\n"
+        + "Something unexpected happened doing Class.forName(\"{1}\").  "
+        + "See the nested exception for details.",
+        "Invalid Torque OM setup for Database \"{0}\".\n"
+        + "An error occured invoking the init() method in class, \"{1}\""
     };
-    
+
     /** The serialVersionUID for this class. */
     private static final long serialVersionUID = 955251837095032274L;
 
@@ -93,7 +93,7 @@ public class DatabaseMap implements java.io.Serializable
 
     /** The IdGenerators, keyed by type of idMethod. */
     private HashMap idGenerators;
-    
+
     /** Flag indicating that all tables have been loaded via initialize() */
     boolean isInitialized = false;
 
@@ -176,7 +176,7 @@ public class DatabaseMap implements java.io.Serializable
      *
      * @return An IDBroker.
      * @deprecated Will be removed in a future version of Torque.
-     *             Use DatabaseInfo#getIdBroker() instead 
+     *             Use DatabaseInfo#getIdBroker() instead
      *             to access the IDBroker.
      */
     public IDBroker getIDBroker()
@@ -188,7 +188,7 @@ public class DatabaseMap implements java.io.Serializable
      * Get the name of this database.
      *
      * @return A String.
-     * @deprecated Will be removed in a future version of Torque. 
+     * @deprecated Will be removed in a future version of Torque.
      *             Use the name of the corresponding database instead.
      */
     public String getName()
@@ -200,8 +200,8 @@ public class DatabaseMap implements java.io.Serializable
      * Get a TableMap for the table by name. <p>
      *
      * Note that by default Torque uses lazy initialization to minimize
-     * memory usage and startup time.  However, if an OM or PEER class 
-     * has not called the table's MapBuilder class, it will not be here. 
+     * memory usage and startup time.  However, if an OM or PEER class
+     * has not called the table's MapBuilder class, it will not be here.
      * See the optional initialize method if you need full OM Mapping.<p>
      *
      * @param name Name of the table.
@@ -214,10 +214,10 @@ public class DatabaseMap implements java.io.Serializable
 
     /**
      * Get a TableMap[] of all of the tables in the database.<P>
-     * 
+     *
      * Note that by default Torque uses lazy initialization to minimize
-     * memory usage and startup time.  However, if an OM or PEER class 
-     * has not called the table's MapBuilder class, it will not be here. 
+     * memory usage and startup time.  However, if an OM or PEER class
+     * has not called the table's MapBuilder class, it will not be here.
      * See the optional initialize method if you need full OM Mapping.<p>
      *
      * @return A TableMap[].
@@ -231,7 +231,7 @@ public class DatabaseMap implements java.io.Serializable
             int i = 0;
             while (it.hasNext())
             {
-                dbTables[i++] = (TableMap) it.next() ;
+                dbTables[i++] = (TableMap) it.next();
             }
         }
         return dbTables;
@@ -320,13 +320,13 @@ public class DatabaseMap implements java.io.Serializable
     {
         return (IdGenerator) idGenerators.get(type);
     }
-    
+
     /**
      * Creates the Idbroker for this DatabaseMap.
-     * If an IDBroker already exists for the DatabaseMap, the method 
+     * If an IDBroker already exists for the DatabaseMap, the method
      * does nothing.
      * @return true if a new IdBroker was created, false otherwise.
-     * @deprecated Will be removed in a future version of Torque. 
+     * @deprecated Will be removed in a future version of Torque.
      *             Use DatabaseInfo.startIdBroker() instead.
      */
     public synchronized boolean startIdBroker()
@@ -345,14 +345,14 @@ public class DatabaseMap implements java.io.Serializable
         }
         return false;
     }
-    
+
     /**
      * Fully populate this DatabaseMap with all the TablesMaps.  This
      * is only needed if the application needs to use the complete OM
      * mapping information.  Otherwise, the OM Mapping information
      * will be populated as needed by OM and Peer classes.  An example
      * of how to initialize the map info from the application:<p>
-     * 
+     *
      *   <code>
      *   DatabaseMap dbMap = Torque.getDatabaseMap( dbName );
      *   try {
@@ -361,54 +361,54 @@ public class DatabaseMap implements java.io.Serializable
      *      ... error handling
      *   }
      *   </code>
-     * 
-     * Note that Torque database names are case sensitive and this DB 
+     *
+     * Note that Torque database names are case sensitive and this DB
      * map must be retrieved with the exact name used in the XML schema.<p>
-     * 
-     * This uses Java reflection methods to locate and run the 
+     *
+     * This uses Java reflection methods to locate and run the
      * init() method of a class generated in the org.apache.torque.linkage
      * package with a name based on the XML Database name value, e.g.
-     * org.apache.torque.linkage.DefaultMapInit<p>  
-     * 
+     * org.apache.torque.linkage.DefaultMapInit<p>
+     *
      * Some misconfiguration situations that could cause this method to fail
      * are:<p>
-     * 
+     *
      * It was used with a Torque OM set of classes generated by V3.2 or older;
      * <br>
-     * The class(es) in the org.apache.torque.linkage package were not included 
+     * The class(es) in the org.apache.torque.linkage package were not included
      * with the other generated class files (e.g. the jar file creation process
      * only included com.* and not org.* files).<p>
-     * 
-     * @throws TorqueException If an error is encountered locating and calling 
+     *
+     * @throws TorqueException If an error is encountered locating and calling
      *                          the init method.
      */
     public synchronized void initialize() throws TorqueException
     {
-        if (isInitialized) 
+        if (isInitialized)
         {
             return;
-        }        
-        String initClassName = MessageFormat.format(INIT_CLASS_NAME_FORMAT, 
+        }
+        String initClassName = MessageFormat.format(INIT_CLASS_NAME_FORMAT,
                 new Object[] { javanameMethod(getName()) });
-        
+
         Class initClass = null;
-        try 
+        try
         {
             initClass = Class.forName(initClassName);
         }
         catch (ClassNotFoundException e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[0], 
+            throw new TorqueException(MessageFormat.format(eMsgs[0],
                     new Object[] { getName(), initClassName }), e);
         }
         catch (LinkageError e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[1], 
+            throw new TorqueException(MessageFormat.format(eMsgs[1],
                     new Object[] { getName(), initClassName }), e);
         }
         catch (Throwable e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[2], 
+            throw new TorqueException(MessageFormat.format(eMsgs[2],
                     new Object[] { getName(), initClassName }), e);
         }
         try
@@ -418,21 +418,21 @@ public class DatabaseMap implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[3], 
+            throw new TorqueException(MessageFormat.format(eMsgs[3],
                     new Object[] { getName(), initClassName }), e);
         }
         isInitialized = true;
     }
-    
+
     /**
      * Converts a database schema name to java object name.  Operates
      * same as underscoreMethod but does not convert anything to
-     * lowercase.  This must match the javaNameMethod in the 
-     * JavaNameGenerator class in Generator code. 
+     * lowercase.  This must match the javaNameMethod in the
+     * JavaNameGenerator class in Generator code.
      *
      * @param schemaName name to be converted.
      * @return converted name.
-     * 
+     *
      * @see org.apache.torque.engine.database.model.NameGenerator
      */
     protected String javanameMethod(String schemaName)

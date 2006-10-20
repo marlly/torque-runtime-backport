@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -136,7 +136,7 @@ public class LargeSelect implements Runnable, Serializable
 {
     /** Serial version */
     private static final long serialVersionUID = -1166842932571491942L;
-    
+
     /** The number of records that a page consists of.  */
     private int pageSize;
     /** The maximum number of records to maintain in memory. */
@@ -674,9 +674,9 @@ public class LargeSelect implements Runnable, Serializable
         boolean dbSupportsNativeOffset;
         try
         {
-            dbSupportsNativeLimit 
+            dbSupportsNativeLimit
                     = (Torque.getDB(dbName).supportsNativeLimit());
-            dbSupportsNativeOffset 
+            dbSupportsNativeOffset
                     = (Torque.getDB(dbName).supportsNativeOffset());
         }
         catch (TorqueException e)
@@ -686,17 +686,17 @@ public class LargeSelect implements Runnable, Serializable
             // correctly
             return;
         }
-        
+
         int size;
         if (dbSupportsNativeLimit && dbSupportsNativeOffset)
         {
             // retrieve one page at a time
             size = pageSize;
         }
-        else 
+        else
         {
             // retrieve the whole block at once and add the offset,
-            // and add one record to check if we have reached the end of the 
+            // and add one record to check if we have reached the end of the
             // data
             size = blockBegin + memoryLimit + 1;
         }
@@ -717,7 +717,7 @@ public class LargeSelect implements Runnable, Serializable
                 if (dbSupportsNativeOffset)
                 {
                     criteria.setOffset(blockBegin);
-                    // Add 1 to memory limit to check if the query ends on a 
+                    // Add 1 to memory limit to check if the query ends on a
                     // page break.
                     criteria.setLimit(memoryLimit + 1);
                 }
@@ -768,7 +768,7 @@ public class LargeSelect implements Runnable, Serializable
                 List tempResults
                         = BasePeer.getSelectResults(qds, size, false);
 
-                int startIndex = dbSupportsNativeOffset ? 0 : blockBegin;  
+                int startIndex = dbSupportsNativeOffset ? 0 : blockBegin;
 
                 synchronized (results)
                 {
@@ -786,14 +786,14 @@ public class LargeSelect implements Runnable, Serializable
                 {
                     currentlyFilledTo = tempResults.size() - 1 - blockBegin;
                 }
-                
+
                 boolean perhapsLastPage = true;
 
                 // If the extra record was indeed found then we know we are not
                 // on the last page but we must now get rid of it.
-                if ((dbSupportsNativeLimit 
+                if ((dbSupportsNativeLimit
                         && (results.size() == memoryLimit + 1))
-                    || (!dbSupportsNativeLimit 
+                    || (!dbSupportsNativeLimit
                             && currentlyFilledTo >= memoryLimit))
                 {
                     synchronized (results)
@@ -810,7 +810,7 @@ public class LargeSelect implements Runnable, Serializable
                     totalRecords = blockBegin + currentlyFilledTo + 1;
                 }
 
-                // if the db has limited the datasets, we must retrieve all 
+                // if the db has limited the datasets, we must retrieve all
                 // datasets. If not, we are always finished because we fetch
                 // the whole block at once.
                 if (qds.allRecordsRetrieved()
@@ -1299,8 +1299,8 @@ public class LargeSelect implements Runnable, Serializable
             throws IOException, ClassNotFoundException
     {
         inputStream.defaultReadObject();
-        
-        // avoid NPE because of Tomcat de-serialization of sessions 
+
+        // avoid NPE because of Tomcat de-serialization of sessions
         if (Torque.isInit())
         {
             startQuery(pageSize);

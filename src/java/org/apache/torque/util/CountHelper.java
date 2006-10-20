@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,9 @@ public class CountHelper
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c ) throws TorqueException
+    public int count(Criteria c) throws TorqueException
     {
-        return count( c, null, "*" );
+        return count(c, null, "*");
     }
 
     /**
@@ -64,9 +64,9 @@ public class CountHelper
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c, Connection conn ) throws TorqueException
+    public int count(Criteria c, Connection conn) throws TorqueException
     {
-        return count( c, conn, "*" );
+        return count(c, conn, "*");
     }
 
     /**
@@ -78,10 +78,10 @@ public class CountHelper
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c, String columnName )
+    public int count(Criteria c, String columnName)
         throws TorqueException
     {
-        return count( c, null, columnName );
+        return count(c, null, columnName);
     }
 
     /**
@@ -94,7 +94,7 @@ public class CountHelper
      * @return number of rows matching the query provided
      * @throws TorqueException if the query could not be executed
      */
-    public int count( Criteria c, Connection conn, String columnName )
+    public int count(Criteria c, Connection conn, String columnName)
         throws TorqueException
     {
         /* Clear the select columns. */
@@ -106,35 +106,38 @@ public class CountHelper
         criteriaSelectModifiers = c.getSelectModifiers();
 
         boolean distinct = false;
-        if( criteriaSelectModifiers != null &&
-            criteriaSelectModifiers.size() > 0 &&
-            criteriaSelectModifiers.contains( SqlEnum.DISTINCT.toString() ) )
-    	{
-            criteriaSelectModifiers.remove( SqlEnum.DISTINCT.toString() );
+        if (criteriaSelectModifiers != null
+            && criteriaSelectModifiers.size() > 0
+            && criteriaSelectModifiers.contains(SqlEnum.DISTINCT.toString()))
+        {
+            criteriaSelectModifiers.remove(SqlEnum.DISTINCT.toString());
             distinct = true;
         }
 
-        StringBuffer countStr = new StringBuffer( "COUNT(" );
-        countStr.append( distinct == true ? SqlEnum.DISTINCT.toString() : "" );
-        countStr.append( columnName );
-        countStr.append( ")" );
+        StringBuffer countStr = new StringBuffer("COUNT(");
+        countStr.append(distinct ? SqlEnum.DISTINCT.toString() : "");
+        countStr.append(columnName);
+        countStr.append(")");
 
-        c.addSelectColumn( countStr.toString() );
+        c.addSelectColumn(countStr.toString());
 
         List result;
-        if( conn == null )
+        if (conn == null)
         {
-            result = BasePeer.doSelect( c );
+            result = BasePeer.doSelect(c);
         }
         else
-    	{
-            result = BasePeer.doSelect( c, conn );
+        {
+            result = BasePeer.doSelect(c, conn);
         }
+
         Record record = (Record) result.get(0);
-        try {
+        try
+        {
             return record.getValue(1).asInt();
         }
-        catch (DataSetException e) {
+        catch (DataSetException e)
+        {
             throw new TorqueException(e);
         }
     }

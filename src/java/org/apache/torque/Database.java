@@ -1,7 +1,7 @@
 package org.apache.torque;
 
 /*
- * Copyright 2006 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -28,37 +28,37 @@ import org.apache.torque.oid.IdGenerator;
  */
 public class Database
 {
-    /** 
-     * The name of the database. Must be the same as the key in Torque's 
+    /**
+     * The name of the database. Must be the same as the key in Torque's
      * databaseMap.
      */
     private String name;
-    
+
     /**
-     * The Database adapter which encapsulates database-specific peculiarities. 
+     * The Database adapter which encapsulates database-specific peculiarities.
      */
     private DB adapter;
-    
+
     /**
      * the Map of this database.
      */
     private DatabaseMap databaseMap;
-    
+
     /**
-     * The DataSourceFactory to optain connections to this database. 
+     * The DataSourceFactory to optain connections to this database.
      */
     private DataSourceFactory dataSourceFactory;
-    
+
     /**
      * Creates a new Database with the given name.
      *
-     * @param name the name of the database, not null.
+     * @param aName the name of the database, not null.
      */
-    Database(String name)
+    Database(String aName)
     {
-        this.name = name;
+        this.name = aName;
     }
-    
+
     /**
      * returns the name of the database.
      *
@@ -82,12 +82,12 @@ public class Database
     /**
      * Sets the adapter for this database.
      *
-     * @param adapter The adapter for this database, or null to remove the 
+     * @param anAdapter The adapter for this database, or null to remove the
      *        current adapter from this database.
      */
-    public void setAdapter(DB adapter)
+    public void setAdapter(DB anAdapter)
     {
-        this.adapter = adapter;
+        this.adapter = anAdapter;
     }
 
     /**
@@ -104,11 +104,11 @@ public class Database
     }
 
     /**
-     * Returns the DataSourceFactory for this database. 
-     * The DataSourceFactory is responsible to create connections 
+     * Returns the DataSourceFactory for this database.
+     * The DataSourceFactory is responsible to create connections
      * to this database.
-     * 
-     * @return the DataSourceFactory for this database, or null if no 
+     *
+     * @return the DataSourceFactory for this database, or null if no
      *         DataSourceFactory exists for this database.
      */
     public DataSourceFactory getDataSourceFactory()
@@ -120,19 +120,19 @@ public class Database
      * Sets the DataSourceFactory for this database.
      * The DataSourceFactory is responsible to create connections
      * to this database.
-     * 
-     * @param dataSourceFactory The new DataSorceFactory for this database,
+     *
+     * @param aDataSourceFactory The new DataSorceFactory for this database,
      *        or null to remove the current DataSourceFactory.
      */
-    public void setDataSourceFactory(DataSourceFactory dataSourceFactory)
+    public void setDataSourceFactory(DataSourceFactory aDataSourceFactory)
     {
-        this.dataSourceFactory = dataSourceFactory;
+        this.dataSourceFactory = aDataSourceFactory;
     }
-    
+
     /**
      * Get the IDBroker for this database.
      *
-     * @return The IDBroker for this database, or null if no IdBroker has 
+     * @return The IDBroker for this database, or null if no IdBroker has
      *         been started for this database.
      */
     public IDBroker getIDBroker()
@@ -143,15 +143,15 @@ public class Database
         }
         return databaseMap.getIDBroker();
     }
-    
+
     /**
-     * Creates the IDBroker for this DatabaseMap and starts it for the 
+     * Creates the IDBroker for this DatabaseMap and starts it for the
      * given database.
      * The information about the IdTable is stored in the databaseMap.
-     * If an IDBroker already exists for the DatabaseMap, the method 
+     * If an IDBroker already exists for the DatabaseMap, the method
      * does nothing.
      *
-     * @return true if a new IDBroker was created, false otherwise. 
+     * @return true if a new IDBroker was created, false otherwise.
      */
     public synchronized boolean startIDBroker()
     {
@@ -203,12 +203,12 @@ public class Database
         }
         return dsf.getSchema();
     }
-    
+
     /**
-     * Sets the schema for this database. 
+     * Sets the schema for this database.
      * @param schema the name of the database schema to set, or null to remove
      *        the current schema.
-     * @throws NullPointerException if no DatasourceFactory exists for this 
+     * @throws NullPointerException if no DatasourceFactory exists for this
      *         database.
      */
     public void setSchema(String schema)

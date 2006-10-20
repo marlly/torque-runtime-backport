@@ -1,7 +1,7 @@
 package org.apache.torque.oid;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -181,13 +181,13 @@ public class IDBroker implements Runnable, IdGenerator
 
     /**
      * constructs an IdBroker for the given Database.
-     * @param database the database where this IdBroker is running in. 
+     * @param database the database where this IdBroker is running in.
      */
     public IDBroker(Database database)
     {
         this(database.getName());
     }
-    
+
     /**
      * Creates an IDBroker for the ID table.
      *
@@ -199,9 +199,9 @@ public class IDBroker implements Runnable, IdGenerator
     {
         this(tMap.getDatabaseMap().getName());
     }
-    
+
     /**
-     * Constructor. 
+     * Constructor.
      * Provided as long as both Constructors, IDBroker(DatabaseInfo) and
      * IDBroker(TableMap), are around.
      * @param databaseName the name of the database for which this IdBroker
@@ -235,7 +235,7 @@ public class IDBroker implements Runnable, IdGenerator
         }
         catch (Throwable t)
         {
-            log.error("Could not open a connection to the database " 
+            log.error("Could not open a connection to the database "
                     + databaseName,
                     t);
             transactionsSupported = false;

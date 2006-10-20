@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -258,11 +258,11 @@ public class SqlExpression
             else if (criteria instanceof Criteria)
             {
                  Query subquery = SQLBuilder.buildQueryClause(
-                        (Criteria) criteria, 
-                        null, 
+                        (Criteria) criteria,
+                        null,
                         new SQLBuilder.QueryCallback() {
                             public String process(
-                                    Criteria.Criterion criterion, 
+                                    Criteria.Criterion criterion,
                                     List params)
                             {
                                 return criterion.toString();

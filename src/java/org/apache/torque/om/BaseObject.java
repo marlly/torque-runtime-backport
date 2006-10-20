@@ -1,7 +1,7 @@
 package org.apache.torque.om;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -163,10 +163,10 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Retrieves a field from the object by name. Must be overridden if called.
      * BaseObject's implementation will throw an Error.
-     * 
+     *
      * @param field The name of the field to retrieve.
      * @return The retrieved field value
-     * 
+     *
      */
     public Object getByName(String field)
     {
@@ -175,7 +175,7 @@ public abstract class BaseObject implements Persistent, Serializable
 
     /**
      * Set a field in the object by field (Java) name.
-     * 
+     *
      * @param name field name
      * @param value field value
      * @return True if value was set, false if not (invalid name / protected
@@ -193,7 +193,7 @@ public abstract class BaseObject implements Persistent, Serializable
     /**
      * Retrieves a field from the object by name passed in as a String. Must be
      * overridden if called. BaseObject's implementation will throw an Error.
-     * 
+     *
      * @param name field name
      * @return value of the field
      */
@@ -204,7 +204,7 @@ public abstract class BaseObject implements Persistent, Serializable
 
     /**
      * Set field values by Peer Field Name
-     * 
+     *
      * @param name field name
      * @param value field value
      * @return True if value was set, false if not (invalid name / protected
@@ -223,7 +223,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * Retrieves a field from the object by position as specified in a database
      * schema for example. Must be overridden if called. BaseObject's
      * implementation will throw an Error.
-     * 
+     *
      * @param pos field position
      * @return value of the field
      */
@@ -234,7 +234,7 @@ public abstract class BaseObject implements Persistent, Serializable
 
     /**
      * Set field values by it's position (zero based) in the XML schema.
-     * 
+     *
      * @param position The field position
      * @param value field value
      * @return True if value was set, false if not (invalid position / protected
@@ -248,13 +248,13 @@ public abstract class BaseObject implements Persistent, Serializable
     {
         throw new Error("BaseObject.setByPosition: " + NOT_IMPLEMENTED);
     }
-    
+
     /**
      * Compares this with another <code>BaseObject</code> instance. If
      * <code>obj</code> is an instance of <code>BaseObject</code>,
      * delegates to <code>equals(BaseObject)</code>. Otherwise, returns
      * <code>false</code>.
-     * 
+     *
      * @param obj The object to compare to.
      * @return Whether equal to the object specified.
      */
@@ -274,7 +274,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * Compares the primary key of this instance with the key of another.
      *
      * @param bo The object to compare to.
-     * @return   Whether the primary keys are equal and the object have the 
+     * @return   Whether the primary keys are equal and the object have the
      *           same class.
      */
     public boolean equals(BaseObject bo)
@@ -346,10 +346,10 @@ public abstract class BaseObject implements Persistent, Serializable
      * @see org.apache.torque.om.Persistent#save(Connection)
      */
     public abstract void save(Connection con) throws Exception;
-    
+
     /**
-     * Retrieves the TableMap object related to this Table data. 
-     * Must be overridden in generated classes.  If BaseObject's 
+     * Retrieves the TableMap object related to this Table data.
+     * Must be overridden in generated classes.  If BaseObject's
      * implementation is called it will throw an Error.
      *
      * @return The associated TableMap object.

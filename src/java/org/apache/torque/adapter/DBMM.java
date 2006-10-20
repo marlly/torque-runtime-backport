@@ -165,7 +165,7 @@ public class DBMM extends AbstractDBAdapter
      * limiting the size of the resultset.
      *
      * @return LIMIT_STYLE_MYSQL.
-     * @deprecated This should not be exposed to the outside     
+     * @deprecated This should not be exposed to the outside
      */
     public int getLimitStyle()
     {

@@ -1,7 +1,7 @@
 package org.apache.torque.avalon;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -51,14 +51,14 @@ public interface Torque
      *
      * @return true if Torque is already initialized
      */
-    public boolean isInit();
+    boolean isInit();
 
     /**
      * Get the configuration for this component.
      *
      * @return the Configuration
      */
-    public org.apache.commons.configuration.Configuration getConfiguration();
+    org.apache.commons.configuration.Configuration getConfiguration();
 
     /**
      * This method returns a Manager for the given name.
@@ -66,7 +66,7 @@ public interface Torque
      * @param name name of the manager
      * @return a Manager
      */
-    public AbstractBaseManager getManager(String name);
+    AbstractBaseManager getManager(String name);
 
     /**
      * This methods returns either the Manager from the configuration file,
@@ -76,7 +76,7 @@ public interface Torque
      * @param defaultClassName the class to use if name has not been configured
      * @return a Manager
      */
-    public AbstractBaseManager getManager(String name, String defaultClassName);
+    AbstractBaseManager getManager(String name, String defaultClassName);
 
     /**
      * Returns the default database map information.
@@ -85,7 +85,7 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public DatabaseMap getDatabaseMap() throws TorqueException;
+    DatabaseMap getDatabaseMap() throws TorqueException;
 
     /**
      * Returns the database map information. Name relates to the name
@@ -97,14 +97,14 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public DatabaseMap getDatabaseMap(String name) throws TorqueException;
+    DatabaseMap getDatabaseMap(String name) throws TorqueException;
 
     /**
      * Register a MapBuilder
      *
      * @param className the MapBuilder
      */
-    public void registerMapBuilder(String className);
+    void registerMapBuilder(String className);
 
     /**
      * This method returns a Connection from the default pool.
@@ -113,7 +113,7 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public Connection getConnection() throws TorqueException;
+    Connection getConnection() throws TorqueException;
 
     /**
      *
@@ -122,7 +122,7 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public Connection getConnection(String name) throws TorqueException;
+    Connection getConnection(String name) throws TorqueException;
 
     /**
      * This method returns a Connecton using the given parameters.
@@ -136,7 +136,7 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public Connection getConnection(String name, String username, String password)
+    Connection getConnection(String name, String username, String password)
             throws TorqueException;
 
     /**
@@ -147,21 +147,21 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public DB getDB(String name) throws TorqueException;
+    DB getDB(String name) throws TorqueException;
 
     /**
      * Returns the name of the default database.
      *
      * @return name of the default DB
      */
-    public String getDefaultDB();
+    String getDefaultDB();
 
     /**
      * Closes a connection.
      *
      * @param con A Connection to close.
      */
-    public void closeConnection(Connection con);
+    void closeConnection(Connection con);
 
     /**
      * Sets the current schema for a database connection
@@ -171,7 +171,7 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public void setSchema(String name, String schema) throws TorqueException;
+    void setSchema(String name, String schema) throws TorqueException;
 
     /**
      * This method returns the current schema for a database connection
@@ -181,32 +181,32 @@ public interface Torque
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public String getSchema(String name) throws TorqueException;
+    String getSchema(String name) throws TorqueException;
 
     /**
      * Returns the database for the key <code>databaseName</code>.
-     * 
+     *
      * @param databaseName the key to get the database for.
      * @return the database for the specified key, or null if the database
      *         does not exist.
      * @throws TorqueException if Torque is not yet initialized.
      */
-    public Database getDatabase(String databaseName) throws TorqueException;
-    
+    Database getDatabase(String databaseName) throws TorqueException;
+
     /**
      * Returns a Map containing all Databases registered to Torque.
-     * The key of the Map is the name of the database, and the value is the 
+     * The key of the Map is the name of the database, and the value is the
      * database instance. <br/>
-     * Note that in the very special case where a new database which 
-     * is not configured in Torque's configuration gets known to Torque 
+     * Note that in the very special case where a new database which
+     * is not configured in Torque's configuration gets known to Torque
      * at a later time, the returned map may change, and there is no way to
      * protect you against this.
-     * 
+     *
      * @return a Map containing all Databases known to Torque, never null.
      * @throws TorqueException if Torque is not yet initialized.
      */
-    public Map getDatabases() throws TorqueException;
-    
+    Map getDatabases() throws TorqueException;
+
     /**
      * Returns the database for the key <code>databaseName</code>.
      * If no database is associated to the specified key,
@@ -216,5 +216,5 @@ public interface Torque
      * @return the database associated with specified key, or the newly created
      *         database, never null.
      */
-    public Database getOrCreateDatabase(String databaseName);
+    Database getOrCreateDatabase(String databaseName);
 }

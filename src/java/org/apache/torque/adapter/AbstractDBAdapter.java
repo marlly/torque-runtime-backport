@@ -1,7 +1,7 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -177,7 +177,7 @@ public abstract class AbstractDBAdapter implements DB
      * @param query The query to modify
      * @param offset the offset Value
      * @param limit the limit Value
-     * 
+     *
      * @throws TorqueException if any error occurs when building the query
      */
     public void generateLimits(Query query, int offset, int limit)
@@ -207,7 +207,7 @@ public abstract class AbstractDBAdapter implements DB
      * limiting the size of the resultset.
      *
      * @return The limit style for the database.
-     * @deprecated This should not be exposed to the outside     
+     * @deprecated This should not be exposed to the outside
      */
     public int getLimitStyle()
     {

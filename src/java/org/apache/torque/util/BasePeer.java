@@ -1,7 +1,7 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -485,7 +485,7 @@ public abstract class BasePeer
         DatabaseMap dbMap = database.getDatabaseMap();
         TableMap tableMap = dbMap.getTable(table);
         Object keyInfo = tableMap.getPrimaryKeyMethodInfo();
-        IdGenerator keyGen 
+        IdGenerator keyGen
                 = database.getIdGenerator(tableMap.getPrimaryKeyMethod());
 
         ColumnMap pk = getPrimaryKey(criteria);
@@ -730,8 +730,8 @@ public abstract class BasePeer
     {
         Query query = createQuery(criteria);
         DB dbadapter = Torque.getDB(criteria.getDbName());
-        
-        // Call Village depending on the capabilities of the DB 
+
+        // Call Village depending on the capabilities of the DB
         return executeQuery(query.toString(),
                 dbadapter.supportsNativeOffset() ? 0 : criteria.getOffset(),
                 dbadapter.supportsNativeLimit() ? -1 : criteria.getLimit(),
@@ -1525,10 +1525,10 @@ public abstract class BasePeer
      * If yes, the query values are mapped onto values the database
      * does understand, i.e. 0 and 1 for booleanints and N and Y for
      * booleanchar columns.
-     * 
+     *
      * Limitations: The method does not yet check for criterions which contain
      * other criterions.
-     * 
+     *
      * @param criteria The criteria to be checked for booleanint and booleanchar
      *        columns.
      * @param defaultTableMap the table map to be used if the table name is
@@ -1537,7 +1537,7 @@ public abstract class BasePeer
      *         retrieved.
      */
     public static void correctBooleans(
-            Criteria criteria, 
+            Criteria criteria,
             TableMap defaultTableMap)
         throws TorqueException
     {
@@ -1573,7 +1573,7 @@ public abstract class BasePeer
                     Map aliases = criteria.getAliases();
                     if (aliases != null && aliases.get(tableName) != null)
                     {
-                        tableName = (String)aliases.get(tableName);
+                        tableName = (String) aliases.get(tableName);
                         tableMap = databaseMap.getTable(tableName);
                     }
                 }
@@ -1583,7 +1583,7 @@ public abstract class BasePeer
                     break;
                 }
             }
-            
+
             ColumnMap columnMap = tableMap.getColumn(columnName);
             if (columnMap != null)
             {
@@ -1594,7 +1594,7 @@ public abstract class BasePeer
                     {
                         Boolean booleanValue = (Boolean) criterionValue;
                         criteria.add(
-                                key, 
+                                key,
                                 Boolean.TRUE.equals(booleanValue) ? 1 : 0);
                     }
                 }
@@ -1605,7 +1605,7 @@ public abstract class BasePeer
                     {
                         Boolean booleanValue = (Boolean) criterionValue;
                         criteria.add(
-                                key, 
+                                key,
                                 Boolean.TRUE.equals(booleanValue) ? "Y" : "N");
                     }
                 }
@@ -1635,7 +1635,7 @@ public abstract class BasePeer
         DatabaseMap dbMap = Torque.getDatabaseMap(dbName);
 
         // create the statements for the tables
-        for (Iterator it = tables.iterator(); it.hasNext(); )
+        for (Iterator it = tables.iterator(); it.hasNext();)
         {
             String table = (String) it.next();
             KeyDef kd = new KeyDef();

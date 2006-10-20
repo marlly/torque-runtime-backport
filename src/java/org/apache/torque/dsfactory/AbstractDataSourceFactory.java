@@ -1,7 +1,7 @@
 package org.apache.torque.dsfactory;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Copyright 2001-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -260,7 +260,7 @@ public abstract class AbstractDataSourceFactory
      * @return The current schema name. Null means, no schema has been set.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
-     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed 
+     * @deprecated use DatabaseInfo.setSchema() instead. Will be removed
      *             in a future version of Torque.
      */
     public String getSchema()
