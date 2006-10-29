@@ -3283,6 +3283,16 @@ public class Criteria extends Hashtable
         }
 
         /**
+         * Set the value of the criterion.
+         *
+         * @param value the new value.
+         */
+        public void setValue(Object value)
+        {
+            this.value = value;
+        }
+
+        /**
          * Get the value of db.
          * The DB adaptor which might be used to get db specific
          * variations of sql.

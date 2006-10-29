@@ -1526,9 +1526,6 @@ public abstract class BasePeer
      * does understand, i.e. 0 and 1 for booleanints and N and Y for
      * booleanchar columns.
      *
-     * Limitations: The method does not yet check for criterions which contain
-     * other criterions.
-     *
      * @param criteria The criteria to be checked for booleanint and booleanchar
      *        columns.
      * @param defaultTableMap the table map to be used if the table name is
@@ -1589,28 +1586,54 @@ public abstract class BasePeer
             {
                 if ("BOOLEANINT".equals(columnMap.getTorqueType()))
                 {
-                    Object criterionValue = criteria.get(key);
-                    if (criterionValue instanceof Boolean)
-                    {
-                        Boolean booleanValue = (Boolean) criterionValue;
-                        criteria.add(
-                                key,
-                                Boolean.TRUE.equals(booleanValue) ? 1 : 0);
-                    }
+                    Criteria.Criterion criterion = criteria.getCriterion(key);
+                    replaceBooleanValues(
+                            criterion, 
+                            new Integer(1), 
+                            new Integer(0));
                 }
                 else if ("BOOLEANCHAR".equals(columnMap.getTorqueType()))
                 {
-                    Object criterionValue = criteria.get(key);
-                    if (criterionValue instanceof Boolean)
-                    {
-                        Boolean booleanValue = (Boolean) criterionValue;
-                        criteria.add(
-                                key,
-                                Boolean.TRUE.equals(booleanValue) ? "Y" : "N");
-                    }
-                }
+                    Criteria.Criterion criterion = criteria.getCriterion(key);
+                    replaceBooleanValues(criterion, "Y", "N");
+                 }
             }
         }
+    }
+    
+    /**
+     * Replaces any Boolean value in the criterion and its attached Criterions
+     * by trueValue if the Boolean equals <code>Boolean.TRUE</code>
+     * and falseValue if the Boolean equals <code>Boolean.FALSE</code>.
+     * 
+     * @param criterion the criterion to replace Boolean values in.
+     * @param trueValue the value by which Boolean.TRUE should be replaced.
+     * @param falseValue the value by which Boolean.FALSE should be replaced.
+     */
+    private static void replaceBooleanValues(
+            Criteria.Criterion criterion, 
+            Object trueValue, 
+            Object falseValue)
+    {
+        // attachedCriterions also contains the criterion itself,
+        // so no additional treatment is needed for the criterion itself.
+        Criteria.Criterion[] attachedCriterions 
+            = criterion.getAttachedCriterion();
+        for (int i = 0; i < attachedCriterions.length; ++i)
+        {
+            Object criterionValue 
+                    = attachedCriterions[i].getValue();
+            if (criterionValue instanceof Boolean)
+            {
+                Boolean booleanValue = (Boolean) criterionValue;
+                attachedCriterions[i].setValue(
+                        Boolean.TRUE.equals(booleanValue) 
+                                ? trueValue 
+                                : falseValue);
+            }
+            
+        }
+        
     }
 
     /**
