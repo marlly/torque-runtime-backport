@@ -156,9 +156,12 @@ public interface DB extends Serializable, IDMethod
             throws SQLException;
 
     /**
-     * This method is used to ignore case.
+     * Modifies a SQL snippet such that its case is ignored by the database.
+     * The SQL snippet can be a column name (like AURHOR.NAME), an
+     * quoted explicit sql string (like 'abc') or any other sql value (like a
+     * number etc.).
      *
-     * @param in The string whose case to ignore.
+     * @param in The SQL snippet whose case to ignore.
      * @return The string in a case that can be ignored.
      */
     String ignoreCase(String in);
@@ -207,11 +210,12 @@ public interface DB extends Serializable, IDMethod
         throws TorqueException;
 
     /**
-    * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
-    * any string in a SqlExpression with a BACKSLASH will either be changed to
-    * "\\" or left as "\".  SapDB does not need the escape character.
+    * Whether backslashes (\) should be escaped in explicit SQL strings.
+    * If true is returned, a BACKSLASH will be changed to "\\". If false 
+    * is returned, a BACKSLASH will be left as "\".
     *
-    * @return true if the database needs to escape text in SqlExpressions.
+    * @return true if the database needs to escape backslashes
+    *         in SqlExpressions.
     */
 
     boolean escapeText();
@@ -241,4 +245,20 @@ public interface DB extends Serializable, IDMethod
      * @return The proper date formatted String.
      */
     String getBooleanString(Boolean b);
+
+    /**
+     * Whether ILIKE should be used for case insensitive like clauses.
+     *  
+     * @return true if ilike should be used for case insensitive likes,
+     *         false if ignoreCase should be applied to the compared strings.
+     */
+    boolean useIlike();
+    
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     * 
+     * @return whether the escape clause should be appended or not. 
+     */
+    boolean useEscapeClauseForLike();
 }

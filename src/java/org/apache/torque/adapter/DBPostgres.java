@@ -208,4 +208,17 @@ public class DBPostgres extends AbstractDBAdapter
         dateBuf.append(delim);
         return dateBuf.toString();
     }
+    
+    /**
+     * Whether ILIKE should be used for case insensitive like clauses.
+     * 
+     * As postgres uses ILIKE, this mimplementation returns true.
+     *  
+     * @return true if ilike should be used for case insensitive likes,
+     *         false if ignoreCase should be applied to the compared strings.
+     */
+    public boolean useIlike()
+    {
+        return true;
+    }
 }

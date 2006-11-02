@@ -98,7 +98,7 @@ public class SqlExpressionTest extends TestCase
             // jdk 1.3
             assertEquals(result, "COL IN ('43','44','42')");
         }
-        }
+    }
 
     public void testLargeBuildInStringObjectSqlEnumbooleanDB()
     {
@@ -115,4 +115,17 @@ public class SqlExpressionTest extends TestCase
         System.out.println("large buildIn took " + (end - start) + " milliseconds");
     }
 
+    /**
+     * Test whether LIKE clauses are built correctly.
+     */
+    public void testBuildLike()
+    {
+        String result = SqlExpression.buildLike(
+                "COL", "fre%", SqlEnum.LIKE, false, db);
+        assertEquals("COL LIKE fre%", result);
+        
+        result = SqlExpression.buildLike(
+                "COL", "50\\\\%", SqlEnum.LIKE, false, db);
+        assertEquals("COL = 50%", result);
+    }
 }

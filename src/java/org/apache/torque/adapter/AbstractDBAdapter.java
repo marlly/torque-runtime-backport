@@ -25,7 +25,7 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.util.Query;
 
 /**
- * This class iis the abstract base for any database adapter
+ * This class is the abstract base for any database adapter
  * Support for new databases is added by subclassing this
  * class and implementing its abstract methods, and by
  * registering the new database adapter and its corresponding
@@ -245,5 +245,34 @@ public abstract class AbstractDBAdapter implements DB
     public String getBooleanString(Boolean b)
     {
         return (Boolean.TRUE.equals(b) ? "1" : "0");
+    }
+    
+    /**
+     * Whether ILIKE should be used for case insensitive like clauses.
+     * 
+     * As most databases do not use ILIKE, this implementation returns false.
+     * This behaviour may be overwritten in subclasses.
+     *  
+     * @return true if ilike should be used for case insensitive likes,
+     *         false if ignoreCase should be applied to the compared strings.
+     */
+    public boolean useIlike()
+    {
+        return false;
+    }
+    
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     * 
+     * As most databases do not need the escape clause, this implementation
+     * always returns <code>false</code>. This behaviour can be overwritten
+     * in subclasses. 
+     * 
+     * @return whether the escape clause should be appended or not. 
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return false;
     }
 }

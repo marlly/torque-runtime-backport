@@ -380,39 +380,17 @@ public class SqlExpression
                            DB db,
                            StringBuffer whereClause)
     {
-        // If selection is case insensitive use ILIKE for PostgreSQL or SQL
-        // UPPER() function on column name for other databases.
-        if (ignoreCase)
-        {
-            if (db instanceof DBPostgres)
-            {
-                if (comparison.equals(Criteria.LIKE))
-                {
-                    comparison = Criteria.ILIKE;
-                }
-                else if (comparison.equals(Criteria.NOT_LIKE))
-                {
-                    comparison = Criteria.NOT_ILIKE;
-                }
-            }
-            else
-            {
-                columnName = db.ignoreCase(columnName);
-            }
-        }
-        whereClause.append(columnName);
-
         // If selection criteria contains wildcards use LIKE otherwise
         // use = (equals).  Wildcards can be escaped by prepending
-        // them with \ (backslash).
-        String equalsOrLike = " = ";
-        if (comparison.equals(Criteria.NOT_LIKE))
-        {
-            equalsOrLike = " " + Criteria.NOT_EQUAL + " ";
-        }
-
+        // them with \ (backslash). However, if we switch from
+        // like to equals, we need to remove the escape characters.
+        // from the wildcards.
+        // So we need two passes: The first replaces * and ? by % and _,
+        // and checks whether we switch to equals, 
+        // the second removes escapes if we have switched to equals.
         int position = 0;
         StringBuffer sb = new StringBuffer();
+        boolean replaceWithEquals = true;
         while (position < criteria.length())
         {
             char checkWildcard = criteria.charAt(position);
@@ -420,28 +398,38 @@ public class SqlExpression
             switch (checkWildcard)
             {
             case BACKSLASH:
-                // Determine whether to skip over next character.
-                switch (criteria.charAt(position + 1))
+                // if text is escaped, all backslashes are already escaped,
+                // so the next character after the backslash is the doubled
+                // backslash from escaping.
+                int charsToProceed = db.escapeText() ? 2 : 1;
+                if (position + charsToProceed >= criteria.length())
                 {
-                case '%':
-                case '_':
-                case '*':
-                case '?':
-                case BACKSLASH:
-                    position++;
-                    break;
+                    charsToProceed = criteria.length() - position - 1;
                 }
+                else if (criteria.charAt(position + charsToProceed) == BACKSLASH
+                        && db.escapeText())
+                {
+                    // the escaped backslash is also escaped,
+                    // so we need to proceed another character
+                    charsToProceed += 1;
+                }
+                sb.append(criteria.substring(
+                        position, 
+                        position + charsToProceed));
+                position += charsToProceed;
+                // code below copies escaped character into sb
+                checkWildcard = criteria.charAt(position);
                 break;
             case '%':
             case '_':
-                equalsOrLike = comparison.toString();
+                replaceWithEquals = false;
                 break;
             case '*':
-                equalsOrLike = comparison.toString();
+                replaceWithEquals = false;
                 checkWildcard = '%';
                 break;
             case '?':
-                equalsOrLike = comparison.toString();
+                replaceWithEquals = false;
                 checkWildcard = '_';
                 break;
             }
@@ -449,16 +437,98 @@ public class SqlExpression
             sb.append(checkWildcard);
             position++;
         }
-        whereClause.append(equalsOrLike);
+        criteria = sb.toString();
+        
+        if (ignoreCase)
+        {
+            if (db.useIlike() && !replaceWithEquals)
+            {
+                if (SqlEnum.LIKE.equals(comparison))
+                {
+                    comparison = SqlEnum.ILIKE;
+                }
+                else if (SqlEnum.NOT_LIKE.equals(comparison))
+                {
+                    comparison = SqlEnum.NOT_ILIKE;
+                }
+            }
+            else
+            {
+                // no native case insensitive like is offered by the DB,
+                // or the LIKE was replaced with equals.
+                // need to ignore case manually.
+                columnName = db.ignoreCase(columnName);
+            }
+        }
+        whereClause.append(columnName);
+
+        if (replaceWithEquals)
+        {
+            if (comparison.equals(Criteria.NOT_LIKE) 
+                    || comparison.equals(Criteria.NOT_ILIKE))
+            {
+                whereClause.append(" ").append(Criteria.NOT_EQUAL).append(" ");
+            }
+            else
+            {
+                whereClause.append(" ").append(Criteria.EQUAL).append(" ");
+            }
+            
+            // remove escape backslashes from String 
+            position = 0;
+            sb = new StringBuffer();
+            while (position < criteria.length())
+            {
+                char checkWildcard = criteria.charAt(position);
+
+                if (checkWildcard == BACKSLASH)
+                {
+                    // if text is escaped, all backslashes are already escaped,
+                    // so the next character after the backslash is the doubled
+                    // backslash from escaping.
+                    int charsToSkip = db.escapeText() ? 2 : 1;
+                    if (position + charsToSkip >= criteria.length())
+                    {
+                        charsToSkip = criteria.length() - position - 1;
+                    }
+                    else if (criteria.charAt(position + charsToSkip) 
+                                == BACKSLASH
+                            && db.escapeText())
+                    {
+                        // the escaped backslash is also escaped,
+                        // so we need to skip another character
+                        // but add the escaped backslash to sb
+                        // so that the escaping remains.
+                        sb.append(BACKSLASH);
+                        charsToSkip += 1;
+                    }
+                    position += charsToSkip;
+                    // code below copies escaped character into sb
+                    checkWildcard = criteria.charAt(position);
+                }
+                sb.append(checkWildcard);
+                position++;
+            }
+            criteria = sb.toString();
+       }
+        else
+        {
+            whereClause.append(comparison);
+        }
 
         // If selection is case insensitive use SQL UPPER() function
         // on criteria.
-        String clauseItem = sb.toString();
-        if (ignoreCase && !(db instanceof DBPostgres))
+        if (ignoreCase && (!(db.useIlike()) || replaceWithEquals))
         {
-            clauseItem = db.ignoreCase(clauseItem);
+            criteria = db.ignoreCase(criteria);
         }
-        whereClause.append(clauseItem);
+        whereClause.append(criteria);
+        
+        if (!replaceWithEquals && db.useEscapeClauseForLike())
+        {
+            whereClause.append(SqlEnum.ESCAPE)
+                       .append("'\\'");
+        }
     }
 
     /**

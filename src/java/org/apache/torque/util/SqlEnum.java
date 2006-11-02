@@ -101,6 +101,8 @@ public class SqlEnum implements java.io.Serializable
         new SqlEnum(" ON ");
     public static final SqlEnum AS =
         new SqlEnum(" AS ");
+    public static final SqlEnum ESCAPE =
+        new SqlEnum(" ESCAPE ");
 
     /**
      * returns whether o is the same SqlEnum as this object.
