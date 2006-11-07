@@ -114,4 +114,35 @@ public class DBDerby extends AbstractDBAdapter
             throws SQLException
     {
     }
+
+    /**
+     * Whether backslashes (\) should be escaped in explicit SQL strings.
+     * If true is returned, a BACKSLASH will be changed to "\\". If false 
+     * is returned, a BACKSLASH will be left as "\".
+     * 
+     * As derby does not need escaping of Backslashes, this method always
+     * returns false.
+     *
+     * @return true if the database needs to escape backslashes
+     *         in SqlExpressions.
+     */
+
+     public boolean escapeText()
+     {
+         return false;
+     }
+
+     /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     * 
+     * Derby needs this, so this implementation always returns
+     * <code>true</code>.
+     * 
+     * @return whether the escape clause should be appended or not. 
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return true;
+    }
 }
