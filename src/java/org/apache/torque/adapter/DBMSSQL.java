@@ -40,4 +40,19 @@ public class DBMSSQL extends DBSybase
     protected DBMSSQL()
     {
     }
+
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     * 
+     * TODO: check the following:
+     * MS-SQL does not need this, so this implementation always returns
+     * <code>false</code>.
+     * 
+     * @return whether the escape clause should be appended or not. 
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return false;
+    }
 }

@@ -187,4 +187,18 @@ public class DBSybase extends AbstractDBAdapter
         char delim = getStringDelimiter();
         return (delim + new SimpleDateFormat(DATE_FORMAT).format(date) + delim);
     }
+
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     * 
+     * Sybase needs this, so this implementation always returns
+     * <code>true</code>.
+     * 
+     * @return whether the escape clause should be appended or not. 
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return true;
+    }
 }
