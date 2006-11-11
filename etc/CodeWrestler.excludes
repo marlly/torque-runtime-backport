@@ -7,5 +7,5 @@ profile/
 proposals/
 ^KEYS$
 etc/CodeWrestler.excludes$
-master/Torque.master$
-
+target/
+.*\.txt$

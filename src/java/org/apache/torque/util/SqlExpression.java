@@ -1,19 +1,22 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.lang.reflect.Array;
@@ -386,7 +389,7 @@ public class SqlExpression
         // like to equals, we need to remove the escape characters.
         // from the wildcards.
         // So we need two passes: The first replaces * and ? by % and _,
-        // and checks whether we switch to equals, 
+        // and checks whether we switch to equals,
         // the second removes escapes if we have switched to equals.
         int position = 0;
         StringBuffer sb = new StringBuffer();
@@ -414,7 +417,7 @@ public class SqlExpression
                     charsToProceed += 1;
                 }
                 sb.append(criteria.substring(
-                        position, 
+                        position,
                         position + charsToProceed));
                 position += charsToProceed;
                 // code below copies escaped character into sb
@@ -438,7 +441,7 @@ public class SqlExpression
             position++;
         }
         criteria = sb.toString();
-        
+
         if (ignoreCase)
         {
             if (db.useIlike() && !replaceWithEquals)
@@ -464,7 +467,7 @@ public class SqlExpression
 
         if (replaceWithEquals)
         {
-            if (comparison.equals(Criteria.NOT_LIKE) 
+            if (comparison.equals(Criteria.NOT_LIKE)
                     || comparison.equals(Criteria.NOT_ILIKE))
             {
                 whereClause.append(" ").append(Criteria.NOT_EQUAL).append(" ");
@@ -473,8 +476,8 @@ public class SqlExpression
             {
                 whereClause.append(" ").append(Criteria.EQUAL).append(" ");
             }
-            
-            // remove escape backslashes from String 
+
+            // remove escape backslashes from String
             position = 0;
             sb = new StringBuffer();
             while (position < criteria.length())
@@ -491,7 +494,7 @@ public class SqlExpression
                     {
                         charsToSkip = criteria.length() - position - 1;
                     }
-                    else if (criteria.charAt(position + charsToSkip) 
+                    else if (criteria.charAt(position + charsToSkip)
                                 == BACKSLASH
                             && db.escapeText())
                     {
@@ -523,7 +526,7 @@ public class SqlExpression
             criteria = db.ignoreCase(criteria);
         }
         whereClause.append(criteria);
-        
+
         if (!replaceWithEquals && db.useEscapeClauseForLike())
         {
             whereClause.append(SqlEnum.ESCAPE)

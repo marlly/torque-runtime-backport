@@ -1,19 +1,22 @@
 package org.apache.torque.adapter;
 
 /*
- * Copyright 2001-2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.sql.Connection;
@@ -224,7 +227,7 @@ public class DBOracle extends AbstractDBAdapter
         query.setPreLimit(preLimit.toString());
         query.setPostLimit(postLimit.toString());
         query.setLimit(null);
-        
+
         // the query must not contain same column names or aliases.
         // Find double column names and aliases and create unique aliases
         // TODO: does not work for functions yet
@@ -234,7 +237,7 @@ public class DBOracle extends AbstractDBAdapter
         // first pass: only remember aliased columns
         // No replacements need to take place because double aliases
         // are not allowed anyway
-        // So alias names will be retained 
+        // So alias names will be retained
         for (ListIterator columnIt = selectColumns.listIterator();
                 columnIt.hasNext(); )
         {
@@ -282,7 +285,7 @@ public class DBOracle extends AbstractDBAdapter
                     continue;
                 }
             }
-            // split into column name and tableName 
+            // split into column name and tableName
             String column;
             {
                 int dotPos = selectColumn.lastIndexOf('.');
@@ -306,7 +309,7 @@ public class DBOracle extends AbstractDBAdapter
                     ++replacementSuffix;
                 }
                 while (columnNames.contains(aliasName));
-                
+
                 selectColumn = selectColumn + " " + aliasName;
                 columnIt.set(selectColumn);
                 columnNames.add(aliasName);
@@ -333,11 +336,11 @@ public class DBOracle extends AbstractDBAdapter
     /**
      * Whether an escape clause in like should be used.
      * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
-     * 
+     *
      * Oracle needs this, so this implementation always returns
      * <code>true</code>.
-     * 
-     * @return whether the escape clause should be appended or not. 
+     *
+     * @return whether the escape clause should be appended or not.
      */
     public boolean useEscapeClauseForLike()
     {

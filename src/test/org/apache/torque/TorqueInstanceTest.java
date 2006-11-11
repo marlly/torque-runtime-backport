@@ -15,19 +15,22 @@ import org.apache.torque.map.TableMap;
 import org.apache.torque.util.BasePeer;
 
 /*
- * Copyright 2001-2005 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 /**
@@ -37,16 +40,16 @@ import org.apache.torque.util.BasePeer;
  * @version $Id$
  */
 public class TorqueInstanceTest extends TestCase
-{  
+{
     /** The name of the "default" dataSourceFactory" as used by Turbine */
     private static final String DEFAULT_NAME = "default";
-    
-    /** 
-     * The name of the "turbine" dataSourceFactory" 
+
+    /**
+     * The name of the "turbine" dataSourceFactory"
      * as used by the Turbine configuration
      */
     private static final String TURBINE_NAME = "turbine";
-    
+
     /**
      * Creates a new instance.
      *
@@ -56,7 +59,7 @@ public class TorqueInstanceTest extends TestCase
     {
         super(name);
     }
-    
+
     /**
      * Tests whether registration of Map Builders works before and after
      * initialisation of Torque.
@@ -67,12 +70,12 @@ public class TorqueInstanceTest extends TestCase
         Torque.registerMapBuilder(MapBuilderA.CLASS_NAME);
         Torque.init(getConfiguration());
         BasePeer.getMapBuilder(MapBuilderB.CLASS_NAME);
-        
+
         DatabaseMap databaseMap = Torque.getDatabaseMap(Torque.getDefaultDB());
         assertNotNull(databaseMap.getTable(MapBuilderA.TABLE_NAME));
         assertNotNull(databaseMap.getTable(MapBuilderB.TABLE_NAME));
     }
-    
+
     /**
      * Tests whether an external adapter is loaded correctly.
      * @throws Exception if an error occurs during the Test.
@@ -84,20 +87,20 @@ public class TorqueInstanceTest extends TestCase
     }
 
     /**
-     * Checks whether a DataSourceFactory with the name 
+     * Checks whether a DataSourceFactory with the name
      * <code>DEFAULT_NAME</code> is defined. (TRQS 322)
      * @throws Exception if an error occurs during the Test.
      */
     public void testDefaultDataSourceFactory() throws Exception
     {
-        DataSourceFactory defaultDataSourceFactory 
+        DataSourceFactory defaultDataSourceFactory
                 = Torque.getInstance().getDataSourceFactory(DEFAULT_NAME);
         assertNotNull(
-                "The DataSourceFactory for Key " 
+                "The DataSourceFactory for Key "
                 + DEFAULT_NAME
                 + " should not be null",
                 defaultDataSourceFactory);
-        DataSourceFactory turbineDataSourceFactory 
+        DataSourceFactory turbineDataSourceFactory
                 = Torque.getInstance().getDataSourceFactory(DEFAULT_NAME);
         assertSame("The default DataSourceFactory "
                 + "and the turbine DataSourceFactory "
@@ -116,20 +119,20 @@ public class TorqueInstanceTest extends TestCase
         Map databases = Torque.getDatabases();
         // check whether all expected databases are contained in the Map
         assertEquals(
-                "Databases should contain 2 Databases, not " 
+                "Databases should contain 2 Databases, not "
                     + databases.size(),
-                databases.size(), 
+                databases.size(),
                 2);
-        
+
         // check that the default database and the turbine database
         // refer to the same object
         Database defaultDatabase = Torque.getDatabase(DEFAULT_NAME);
         Database turbineDatabase = Torque.getDatabase(TURBINE_NAME);
-        
+
         assertNotSame("The default database and the turbine database "
                         + "are the same object",
                     defaultDatabase,
-                    turbineDatabase);    
+                    turbineDatabase);
     }
 
     public void testShutdown() throws Exception
@@ -152,7 +155,7 @@ public class TorqueInstanceTest extends TestCase
         {
         }
     }
-    
+
     /**
      * Reads and returns the configuration out of the configuration file.
      * @return
@@ -160,11 +163,11 @@ public class TorqueInstanceTest extends TestCase
      */
     private Configuration getConfiguration() throws ConfigurationException
     {
-        Configuration conf 
+        Configuration conf
                 = new PropertiesConfiguration(BaseTestCase.CONFIG_FILE);
         return conf;
     }
-    
+
     /**
      * The base class for the Map Builders used in this testbed.
      */
@@ -185,7 +188,7 @@ public class TorqueInstanceTest extends TestCase
         {
             this.tableName = tableName;
         }
-        
+
         /**
          * Tells us if this DatabaseMapBuilder is built so that we
          * don't have to re-build it every time.
@@ -227,7 +230,7 @@ public class TorqueInstanceTest extends TestCase
             tMap.addColumn(tableName + "NAME", "", 50 );
         }
     }
-    
+
     /**
      * Map builder implementation for testing.
      */
@@ -236,7 +239,7 @@ public class TorqueInstanceTest extends TestCase
         /** The name of this class. */
         public static final String CLASS_NAME =
             MapBuilderA.class.getName();
-        
+
         /** The name of the associated table. */
         public static final String TABLE_NAME = "a";
 
@@ -245,7 +248,7 @@ public class TorqueInstanceTest extends TestCase
             super(TABLE_NAME);
         }
     }
-    
+
     /**
      * Second map builder implementation for testing.
      */
@@ -254,7 +257,7 @@ public class TorqueInstanceTest extends TestCase
         /** The name of this class. */
         public static final String CLASS_NAME =
             MapBuilderB.class.getName();
-        
+
         /** The name of the associated table. */
         public static final String TABLE_NAME = "b";
 

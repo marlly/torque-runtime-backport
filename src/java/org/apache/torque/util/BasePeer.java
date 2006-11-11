@@ -1,19 +1,22 @@
 package org.apache.torque.util;
 
 /*
- * Copyright 2001-2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License")
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 import java.io.Serializable;
@@ -1588,8 +1591,8 @@ public abstract class BasePeer
                 {
                     Criteria.Criterion criterion = criteria.getCriterion(key);
                     replaceBooleanValues(
-                            criterion, 
-                            new Integer(1), 
+                            criterion,
+                            new Integer(1),
                             new Integer(0));
                 }
                 else if ("BOOLEANCHAR".equals(columnMap.getTorqueType()))
@@ -1600,40 +1603,40 @@ public abstract class BasePeer
             }
         }
     }
-    
+
     /**
      * Replaces any Boolean value in the criterion and its attached Criterions
      * by trueValue if the Boolean equals <code>Boolean.TRUE</code>
      * and falseValue if the Boolean equals <code>Boolean.FALSE</code>.
-     * 
+     *
      * @param criterion the criterion to replace Boolean values in.
      * @param trueValue the value by which Boolean.TRUE should be replaced.
      * @param falseValue the value by which Boolean.FALSE should be replaced.
      */
     private static void replaceBooleanValues(
-            Criteria.Criterion criterion, 
-            Object trueValue, 
+            Criteria.Criterion criterion,
+            Object trueValue,
             Object falseValue)
     {
         // attachedCriterions also contains the criterion itself,
         // so no additional treatment is needed for the criterion itself.
-        Criteria.Criterion[] attachedCriterions 
+        Criteria.Criterion[] attachedCriterions
             = criterion.getAttachedCriterion();
         for (int i = 0; i < attachedCriterions.length; ++i)
         {
-            Object criterionValue 
+            Object criterionValue
                     = attachedCriterions[i].getValue();
             if (criterionValue instanceof Boolean)
             {
                 Boolean booleanValue = (Boolean) criterionValue;
                 attachedCriterions[i].setValue(
-                        Boolean.TRUE.equals(booleanValue) 
-                                ? trueValue 
+                        Boolean.TRUE.equals(booleanValue)
+                                ? trueValue
                                 : falseValue);
             }
-            
+
         }
-        
+
     }
 
     /**
