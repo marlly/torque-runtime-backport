@@ -29,9 +29,6 @@ import org.apache.torque.TorqueException;
  */
 public class MethodCacheKey implements Serializable
 {
-    //private static final Category log =
-    //    Category.getInstance("org.apache.torque");
-
     /**
      * Serial version
      */
@@ -150,7 +147,7 @@ public class MethodCacheKey implements Serializable
     }
 
     /**
-     * Initialize key for method with more than two arguments.
+     * Initialize key for method with more than three arguments.
      *
      * @param keys Serializable[] where
      * [0]=>the Object on which the method is invoked
@@ -170,7 +167,7 @@ public class MethodCacheKey implements Serializable
                 this.arg2 = keys[3];
                 if (n > 2)
                 {
-                    this.arg2 = keys[4];
+                    this.arg3 = keys[4];
                     if (n > 3)
                     {
                         this.moreThanThree = keys;
