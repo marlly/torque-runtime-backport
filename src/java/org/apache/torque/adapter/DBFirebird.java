@@ -77,16 +77,6 @@ public class DBFirebird extends AbstractDBAdapter
     }
 
     /**
-     * Gets the string delimiter (usually '\'').
-     *
-     * @return The delimiter.
-     */
-    public char getStringDelimiter()
-    {
-        return '\'';
-    }
-
-    /**
      * @see org.apache.torque.adapter.DB#getIDMethodType()
      */
     public String getIDMethodType()
@@ -152,5 +142,32 @@ public class DBFirebird extends AbstractDBAdapter
     {
         char delim = getStringDelimiter();
         return (delim + new SimpleDateFormat(DATE_FORMAT).format(date) + delim);
+    }
+    
+    /**
+     * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
+     * any string in a SqlExpression with a BACKSLASH will either be changed to
+     * "\\" (if the method returns true) or left as "\" (if the method returns
+     * false).
+     *
+     * @return false.
+     */
+    public boolean escapeText()
+    {
+        return false;
+    }
+
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     *
+     * Firebird needs this, so this implementation always returns
+     * <code>true</code>.
+     *
+     * @return whether the escape clause should be appended or not.
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return true;
     }
 }
