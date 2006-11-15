@@ -115,4 +115,30 @@ public class DBHypersonicSQL extends AbstractDBAdapter
     public void unlockTable(Connection con, String table) throws SQLException
     {
     }
+
+    /**
+     * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
+     * any string in a SqlExpression with a BACKSLASH will either be changed to
+     * "\\" or left as "\". 
+     *
+     * @return false.
+     */
+    public boolean escapeText()
+    {
+        return false;
+    }
+
+    /**
+     * Whether an escape clause in like should be used.
+     * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
+     *
+     * HSQLDB needs this, so this implementation always returns
+     * <code>true</code>.
+     *
+     * @return whether the escape clause should be appended or not.
+     */
+    public boolean useEscapeClauseForLike()
+    {
+        return true;
+    }
 }
