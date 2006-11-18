@@ -21,6 +21,7 @@ package org.apache.torque.adapter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,14 +46,11 @@ public class DBPostgres extends AbstractDBAdapter
     /** A specialized date format for PostgreSQL. */
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    private SimpleDateFormat sdf = null;
-
     /**
      * Empty constructor.
      */
     protected DBPostgres()
     {
-        sdf = new SimpleDateFormat(DATE_FORMAT);
     }
 
     /**
@@ -204,10 +202,11 @@ public class DBPostgres extends AbstractDBAdapter
      */
     public String getDateString(Date date)
     {
+        DateFormat df = new SimpleDateFormat(DATE_FORMAT);
         StringBuffer dateBuf = new StringBuffer();
         char delim = getStringDelimiter();
         dateBuf.append(delim);
-        dateBuf.append(sdf.format(date));
+        dateBuf.append(df.format(date));
         dateBuf.append(delim);
         return dateBuf.toString();
     }

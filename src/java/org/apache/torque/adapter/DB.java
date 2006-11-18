@@ -41,6 +41,10 @@ import org.apache.torque.util.Query;
  * transparent swapping of databases is theoretically supported with
  * <i>zero code changes</i> and minimal configuration file
  * modifications.
+ * 
+ * All database adapters need to be thread safe, as they are instantiated
+ * only once fore a gviven configured database and may be accessed 
+ * simultaneously from several threads.
  *
  * <p>Torque uses the driver class name to find the right adapter.
  * A JDBC driver corresponding to your adapter must be added to the properties
