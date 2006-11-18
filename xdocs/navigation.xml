@@ -32,7 +32,7 @@
 	
     <menu name="Module Documentation">
       <item name="Overview"              href="../../../documentation/index.html"/>
-      <item name="Torque 3.2"            href="../../../documentation/torque-3.2.html">
+      <item name="Torque 3.3"            href="../../../documentation/torque-3.3.html">
         <item name="Generator"           href="../generator/index.html" collapse="true">
           <item name="dummy"/>
         </item>
