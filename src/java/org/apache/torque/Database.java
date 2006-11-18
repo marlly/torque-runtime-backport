@@ -158,12 +158,12 @@ public class Database
      */
     public synchronized boolean startIDBroker()
     {
-        DatabaseMap databaseMap = getDatabaseMap();
-        if (databaseMap.getIDBroker() != null)
+        DatabaseMap dbMap = getDatabaseMap();
+        if (dbMap.getIDBroker() != null)
         {
             return false;
         }
-        return databaseMap.startIdBroker();
+        return dbMap.startIdBroker();
     }
 
     /**

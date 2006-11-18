@@ -32,6 +32,16 @@ import org.apache.torque.adapter.IDMethod;
 public class IDGeneratorFactory
 {
     /**
+     * Private constructor to prevent initialisation.
+     *
+     * This class contains only static methods and thus should not be
+     * instantiated.
+     */
+    private IDGeneratorFactory()
+    {
+    }
+
+    /**
      * The list of ID generation method types which have associated
      * {@link org.apache.torque.oid.IdGenerator} implementations.
      */

@@ -34,10 +34,13 @@ import java.text.SimpleDateFormat;
 public class DBFirebird extends AbstractDBAdapter
 {
     /**
-     * Serial version
+     * Serial version.
      */
     private static final long serialVersionUID = -2782124791802056450L;
 
+    /**
+     * The format in which firebird expects dates (with time).
+     */
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:MM:ss";
 
     /**
@@ -143,7 +146,7 @@ public class DBFirebird extends AbstractDBAdapter
         char delim = getStringDelimiter();
         return (delim + new SimpleDateFormat(DATE_FORMAT).format(date) + delim);
     }
-    
+
     /**
      * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
      * any string in a SqlExpression with a BACKSLASH will either be changed to

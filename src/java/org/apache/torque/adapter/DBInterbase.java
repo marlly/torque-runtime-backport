@@ -38,6 +38,9 @@ public class DBInterbase extends AbstractDBAdapter
      */
     private static final long serialVersionUID = -6709312389168248070L;
 
+    /**
+     * The format in which interbase expects dates (with time).
+     */
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:MM:ss";
 
     /**

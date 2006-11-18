@@ -142,7 +142,7 @@ public class IDBroker implements Runnable, IdGenerator
     /**
      * Amount of time for the thread to sleep
      */
-    private static final int SLEEP_PERIOD = 1 * 60000;
+    private static final int SLEEP_PERIOD = 60000;
 
     /**
      * The safety Margin
@@ -264,6 +264,9 @@ public class IDBroker implements Runnable, IdGenerator
             }
             catch (Exception e)
             {
+                log.warn("Could not close the connection which was used "
+                        + "for testing whether transactions are supported",
+                        e);
             }
         }
         if (!transactionsSupported)
@@ -478,16 +481,14 @@ public class IDBroker implements Runnable, IdGenerator
     }
 
     /**
-     * Describe <code>exists</code> method here.
-     *
      * @param tableName a <code>String</code> value that is used to identify
      * the row
      * @return a <code>boolean</code> value
-     * @exception TorqueException if an error occurs
-     * @exception Exception a generic exception.
+     * @exception TorqueException if a Torque error occurs.
+     * @exception Exception if another error occurs.
      */
     public boolean exists(String tableName)
-        throws TorqueException, Exception
+        throws Exception
     {
         String query = new StringBuffer(100)
             .append("select ")

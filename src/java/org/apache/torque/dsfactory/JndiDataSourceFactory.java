@@ -205,7 +205,7 @@ public class JndiDataSourceFactory
         log.debug("Starting initDataSource");
         try
         {
-            Object ds = null;
+            Object dataSource = null;
 
             Configuration c = configuration.subset(DATASOURCE_KEY);
             if (c != null)
@@ -222,17 +222,17 @@ public class JndiDataSourceFactory
                         }
 
                         Class dsClass = Class.forName(classname);
-                        ds = dsClass.newInstance();
+                        dataSource = dsClass.newInstance();
                     }
                     else
                     {
-                        if (ds != null)
+                        if (dataSource != null)
                         {
                             if (log.isDebugEnabled())
                             {
                                 log.debug("Setting datasource property: " + key);
                             }
-                            setProperty(key, c, ds);
+                            setProperty(key, c, dataSource);
                         }
                         else
                         {
@@ -243,9 +243,9 @@ public class JndiDataSourceFactory
                 }
             }
 
-            if (ds != null)
+            if (dataSource != null)
             {
-                bindDStoJndi(ctx, path, ds);
+                bindDStoJndi(ctx, path, dataSource);
             }
         }
         catch (Exception e)
@@ -277,7 +277,7 @@ public class JndiDataSourceFactory
         log.debug("Environment properties:" + env.size());
         while (qw.hasNext())
         {
-            Map.Entry entry = (Map.Entry)qw.next();
+            Map.Entry entry = (Map.Entry) qw.next();
             log.debug("    " + entry.getKey() + ": " + entry.getValue());
         }
         log.debug("----------------------------------------------");
@@ -315,9 +315,14 @@ public class JndiDataSourceFactory
                 catch (NameAlreadyBoundException nabe)
                 {
                     // ignore
+                    log.debug("Sub context " + subctx + " already exists");
                 }
                 catch (NamingException ne)
                 {
+                    log.debug("Naming exception caught "
+                                + "when creating subcontext"
+                                + subctx,
+                            ne);
                     // even though there is a specific exception
                     // for this condition, some implementations
                     // throw the more general one.

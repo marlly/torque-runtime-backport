@@ -381,13 +381,13 @@ public class Query
     {
 
         /** the tablename, might contain an appended alias name */
-        String tableName = null;
+        private String tableName = null;
 
         /** the type of the join, e.g. SqlEnum.LEFT_JOIN */
-        SqlEnum joinType = null;
+        private SqlEnum joinType = null;
 
         /** the join condition, e.g. table_a.id = table_b.a_id */
-        String joinCondition = null;
+        private String joinCondition = null;
 
         /**
          * Constructor

@@ -1808,6 +1808,7 @@ public class Criteria extends Hashtable
         }
         catch (Exception exc)
         {
+            log.debug("Exception when evaluating a Criteria", exc);
         }
 
         return sb.toString();
@@ -3588,7 +3589,7 @@ public class Criteria extends Hashtable
             }
             catch (TorqueException e)
             {
-                return("Criterion cannot be evaluated");
+                return "Criterion cannot be evaluated";
             }
             return expr.toString();
         }

@@ -29,6 +29,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.torque.om.SimpleKey;
 
 import com.workingdogs.village.QueryDataSet;
@@ -41,9 +43,21 @@ import com.workingdogs.village.TableDataSet;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class VillageUtils
-        implements Serializable
+public final class VillageUtils
 {
+    /** The log. */
+    private static Log log = LogFactory.getLog(VillageUtils.class);
+
+    /**
+     * Private constructor to prevent instantiation.
+     *
+     * Class contains only static method ans should therefore not be
+     * instantiated.
+     */
+    private VillageUtils()
+    {
+    }
+
     /**
      * Convenience Method to close a Table Data Set without
      * Exception check.
@@ -60,6 +74,8 @@ public abstract class VillageUtils
             }
             catch (Exception ignored)
             {
+                log.debug("Caught exception when closing a TableDataSet",
+                        ignored);
             }
         }
     }
@@ -80,6 +96,8 @@ public abstract class VillageUtils
             }
             catch (Exception ignored)
             {
+                log.debug("Caught exception when closing a QueryDataSet",
+                        ignored);
             }
         }
     }
@@ -101,6 +119,8 @@ public abstract class VillageUtils
         }
         catch (Exception ignored)
         {
+            log.debug("Caught exception when closing an OutputStream",
+                    ignored);
         }
     }
 
@@ -109,8 +129,7 @@ public abstract class VillageUtils
      *
      * @param hash The Hashtable to convert.
      * @return A byte[] with the converted Hashtable.
-     * @throws TorqueException Any exceptions caught during processing will be
-     *         rethrown wrapped into a TorqueException.
+     * @throws Exception If an error occurs.
      */
     public static final byte[] hashtableToByteArray(final Hashtable hash)
         throws Exception
@@ -121,7 +140,7 @@ public abstract class VillageUtils
         Iterator keys = hash.entrySet().iterator();
         while (keys.hasNext())
         {
-            Map.Entry entry = (Map.Entry)keys.next();
+            Map.Entry entry = (Map.Entry) keys.next();
             if (entry.getValue() instanceof Serializable)
             {
                 saveData.put(entry.getKey(), entry.getValue());
@@ -238,5 +257,3 @@ public abstract class VillageUtils
         }
     }
 }
-
-

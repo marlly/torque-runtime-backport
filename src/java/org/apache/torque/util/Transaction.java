@@ -44,11 +44,21 @@ import org.apache.torque.TorqueException;
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
  * @version $Id$
  */
-public class Transaction
+public final class Transaction
 {
 
     /** The log. */
     private static Log log = LogFactory.getLog(Transaction.class);
+
+    /**
+     * Private constructor to prevent instantiation.
+     *
+     * Class contains only static method ans should therefore not be
+     * instantiated.
+     */
+    private Transaction()
+    {
+    }
 
     /**
      * Begin a transaction for the default database.

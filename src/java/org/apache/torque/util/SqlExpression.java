@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
-import org.apache.torque.adapter.DBPostgres;
 import org.apache.torque.om.DateKey;
 import org.apache.torque.om.ObjectKey;
 import org.apache.torque.om.StringKey;
@@ -50,12 +49,22 @@ import org.apache.torque.om.StringKey;
  * @author <a href="mailto:mpoeschl@marmot.at">Martin Poeschl</a>
  * @version $Id$
  */
-public class SqlExpression
+public final class SqlExpression
 {
     /** escaped single quote */
     private static final char SINGLE_QUOTE = '\'';
     /** escaped backslash */
     private static final char BACKSLASH = '\\';
+
+    /**
+     * Private constructor to prevent instantiation.
+     *
+     * Class contains only static method ans should therefore not be
+     * instantiated.
+     */
+    private SqlExpression()
+    {
+    }
 
     /**
      * Used to specify a join on two columns.

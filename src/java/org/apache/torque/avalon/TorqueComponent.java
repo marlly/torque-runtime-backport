@@ -107,27 +107,29 @@ public class TorqueComponent
     {
         getLogger().debug("configure(" + configuration + ")");
 
-        String configFile = configuration.getChild("configfile").getValue();
+        String configurationFile
+                = configuration.getChild("configfile").getValue();
 
         if (StringUtils.isNotEmpty(appRoot))
         {
-            if (configFile.startsWith("/"))
+            if (configurationFile.startsWith("/"))
             {
-                configFile = configFile.substring(1);
-                getLogger().debug("Config File changes to " + configFile);
+                configurationFile = configurationFile.substring(1);
+                getLogger().debug("Config File changes to "
+                        + configurationFile);
             }
 
             StringBuffer sb = new StringBuffer();
             sb.append(appRoot);
             sb.append(File.separator);
-            sb.append(configFile);
+            sb.append(configurationFile);
 
-            configFile = sb.toString();
+            configurationFile = sb.toString();
         }
 
-        getLogger().debug("Config File is " + configFile);
+        getLogger().debug("Config File is " + configurationFile);
 
-        this.configFile = configFile;
+        this.configFile = configurationFile;
     }
 
     /**

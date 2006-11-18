@@ -50,7 +50,7 @@ public class DateKey extends SimpleKey
      * @param key the key value
      * @throws NumberFormatException if key is not valid
      */
-    public DateKey(String key) throws NumberFormatException
+    public DateKey(String key)
     {
         this.key = new Date(Long.parseLong(key));
     }

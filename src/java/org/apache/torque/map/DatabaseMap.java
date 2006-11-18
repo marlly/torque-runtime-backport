@@ -48,12 +48,12 @@ public class DatabaseMap implements java.io.Serializable
      * The character used by most implementations as the separator
      * between name elements.
      */
-    char STD_SEPARATOR_CHAR = '_';
+    public static final char STD_SEPARATOR_CHAR = '_';
 
     /**
-     * The character which separates the schema name from the table name
+     * The character which separates the schema name from the table name.
      */
-    char SCHEMA_SEPARATOR_CHAR = '.';
+    public static final char SCHEMA_SEPARATOR_CHAR = '.';
 
     /**
      * Format used to create create the class name for initializing a DB
@@ -62,7 +62,10 @@ public class DatabaseMap implements java.io.Serializable
     public static final String INIT_CLASS_NAME_FORMAT =
                                 "org.apache.torque.linkage.{0}MapInit";
 
-    public static String[] eMsgs = {
+    /**
+     * Error Messages for initialisation.
+     */
+    protected static final String[] ERROR_MESSAGES_INIT = {
         "Invalid Torque OM setup for Database \"{0}\".\n"
         + "Database Map initialization class, \"{1}\"," + " "
         + "could not be found in your classpath.",
@@ -78,6 +81,9 @@ public class DatabaseMap implements java.io.Serializable
 
     /** The serialVersionUID for this class. */
     private static final long serialVersionUID = 955251837095032274L;
+
+    /** The initial size of the Id-Generators map. */
+    private static final int ID_GENERATORS_INITIAL_SIZE = 6;
 
     /** Name of the database. */
     private String name;
@@ -98,7 +104,7 @@ public class DatabaseMap implements java.io.Serializable
     private HashMap idGenerators;
 
     /** Flag indicating that all tables have been loaded via initialize() */
-    boolean isInitialized = false;
+    private boolean isInitialized = false;
 
     /**
      * Constructs a new DatabaseMap.
@@ -106,7 +112,7 @@ public class DatabaseMap implements java.io.Serializable
     public DatabaseMap()
     {
         tables = Collections.synchronizedMap(new ListOrderedMap());
-        idGenerators = new HashMap(6);
+        idGenerators = new HashMap(ID_GENERATORS_INITIAL_SIZE);
     }
 
     /**
@@ -121,7 +127,7 @@ public class DatabaseMap implements java.io.Serializable
     {
         this.name = name;
         tables = Collections.synchronizedMap(new ListOrderedMap());
-        idGenerators = new HashMap(6);
+        idGenerators = new HashMap(ID_GENERATORS_INITIAL_SIZE);
     }
 
     /**
@@ -135,7 +141,7 @@ public class DatabaseMap implements java.io.Serializable
     {
         this.name = name;
         tables = Collections.synchronizedMap(new ListOrderedMap());
-        idGenerators = new HashMap(6);
+        idGenerators = new HashMap(ID_GENERATORS_INITIAL_SIZE);
     }
 
     /**
@@ -392,7 +398,9 @@ public class DatabaseMap implements java.io.Serializable
             return;
         }
         String initClassName = MessageFormat.format(INIT_CLASS_NAME_FORMAT,
-                new Object[] { javanameMethod(getName()) });
+                new Object[] {
+                    javanameMethod(getName())
+                });
 
         Class initClass = null;
         try
@@ -401,18 +409,31 @@ public class DatabaseMap implements java.io.Serializable
         }
         catch (ClassNotFoundException e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[0],
-                    new Object[] { getName(), initClassName }), e);
+            throw new TorqueException(MessageFormat.format(
+                    ERROR_MESSAGES_INIT[0],
+                    new Object[] {
+                        getName(),
+                        initClassName
+                    }),
+                    e);
         }
         catch (LinkageError e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[1],
-                    new Object[] { getName(), initClassName }), e);
+            throw new TorqueException(MessageFormat.format(
+                    ERROR_MESSAGES_INIT[1],
+                    new Object[] {
+                        getName(), initClassName
+                    }),
+                    e);
         }
         catch (Throwable e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[2],
-                    new Object[] { getName(), initClassName }), e);
+            throw new TorqueException(MessageFormat.format(
+                    ERROR_MESSAGES_INIT[2],
+                    new Object[] {
+                        getName(), initClassName
+                    }),
+                    e);
         }
         try
         {
@@ -421,8 +442,12 @@ public class DatabaseMap implements java.io.Serializable
         }
         catch (Exception e)
         {
-            throw new TorqueException(MessageFormat.format(eMsgs[3],
-                    new Object[] { getName(), initClassName }), e);
+            throw new TorqueException(MessageFormat.format(
+                    ERROR_MESSAGES_INIT[3],
+                    new Object[] {
+                        getName(), initClassName
+                    }),
+                    e);
         }
         isInitialized = true;
     }
@@ -440,27 +465,27 @@ public class DatabaseMap implements java.io.Serializable
      */
     protected String javanameMethod(String schemaName)
     {
-        StringBuffer name = new StringBuffer();
+        StringBuffer result = new StringBuffer();
         StringTokenizer tok = new StringTokenizer
             (schemaName, String.valueOf(STD_SEPARATOR_CHAR));
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(StringUtils.capitalize(namePart));
+            result.append(StringUtils.capitalize(namePart));
         }
 
         // remove the SCHEMA_SEPARATOR_CHARs and capitalize
         // the tokens
-        schemaName = name.toString();
-        name = new StringBuffer();
+        schemaName = result.toString();
+        result = new StringBuffer();
 
         tok = new StringTokenizer
             (schemaName, String.valueOf(SCHEMA_SEPARATOR_CHAR));
         while (tok.hasMoreTokens())
         {
             String namePart = (String) tok.nextElement();
-            name.append(StringUtils.capitalize(namePart));
+            result.append(StringUtils.capitalize(namePart));
         }
-        return name.toString();
+        return result.toString();
     }
 }

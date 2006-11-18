@@ -228,6 +228,17 @@ public class LargeSelect implements Runnable, Serializable
      */
     private static int memoryPageLimit = DEFAULT_MEMORY_LIMIT_PAGES;
 
+    /**
+     * The number of milliseconds to sleep when the result of a query
+     * is not yet available.
+     */
+    private static final int QUERY_NOT_COMPLETED_SLEEP_TIME = 500;
+
+    /**
+     * The number of milliseconds to sleep before retrying to stop a query.
+     */
+    private static final int QUERY_STOP_SLEEP_TIME = 100;
+
     /** A place to store search parameters that relate to this query. */
     private Hashtable params = null;
 
@@ -249,7 +260,6 @@ public class LargeSelect implements Runnable, Serializable
      * both of offset and limit, or if <code>pageSize</code> is less than 1;
      */
     public LargeSelect(Criteria criteria, int pageSize)
-            throws IllegalArgumentException
     {
         this(criteria, pageSize, LargeSelect.memoryPageLimit);
     }
@@ -272,7 +282,6 @@ public class LargeSelect implements Runnable, Serializable
      * <code>memoryLimitPages</code> are less than 1;
      */
     public LargeSelect(Criteria criteria, int pageSize, int memoryPageLimit)
-            throws IllegalArgumentException
     {
         init(criteria, pageSize, memoryPageLimit);
     }
@@ -305,7 +314,6 @@ public class LargeSelect implements Runnable, Serializable
             Criteria criteria,
             int pageSize,
             String returnBuilderClassName)
-            throws IllegalArgumentException
     {
         this(
             criteria,
@@ -346,7 +354,6 @@ public class LargeSelect implements Runnable, Serializable
             int pageSize,
             int memoryPageLimit,
             String returnBuilderClassName)
-            throws IllegalArgumentException
     {
         try
         {
@@ -375,9 +382,14 @@ public class LargeSelect implements Runnable, Serializable
 
     /**
      * Access the populateObjects method.
+     *
+     * @throws SecurityException if the security manager does not allow
+     *         access to the method.
+     * @throws NoSuchMethodException if the poulateObjects method does not
+     *         exist.
      */
     private Method getPopulateObjectsMethod()
-            throws SecurityException, NoSuchMethodException
+            throws NoSuchMethodException
     {
         if (null == populateObjectsMethod)
         {
@@ -403,7 +415,6 @@ public class LargeSelect implements Runnable, Serializable
      * <code>memoryLimitPages</code> are less than 1;
      */
     private void init(Criteria criteria, int pageSize, int memoryLimitPages)
-            throws IllegalArgumentException
     {
         if (criteria.getOffset() != 0 || criteria.getLimit() != -1)
         {
@@ -541,7 +552,7 @@ public class LargeSelect implements Runnable, Serializable
      * method runs into problems or a sleep is unexpectedly interrupted.
      */
     private synchronized List getResults(int start, int size)
-            throws IllegalArgumentException, TorqueException
+            throws TorqueException
     {
         if (log.isDebugEnabled())
         {
@@ -571,7 +582,7 @@ public class LargeSelect implements Runnable, Serializable
             {
                 try
                 {
-                    Thread.sleep(500);
+                    Thread.sleep(QUERY_NOT_COMPLETED_SLEEP_TIME);
                 }
                 catch (InterruptedException e)
                 {
@@ -913,7 +924,7 @@ public class LargeSelect implements Runnable, Serializable
             {
                 try
                 {
-                    Thread.sleep(100);
+                    Thread.sleep(QUERY_STOP_SLEEP_TIME);
                 }
                 catch (InterruptedException e)
                 {

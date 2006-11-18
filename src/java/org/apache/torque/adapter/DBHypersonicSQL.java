@@ -119,7 +119,7 @@ public class DBHypersonicSQL extends AbstractDBAdapter
     /**
      * This method is for the SqlExpression.quoteAndEscape rules.  The rule is,
      * any string in a SqlExpression with a BACKSLASH will either be changed to
-     * "\\" or left as "\". 
+     * "\\" or left as "\".
      *
      * @return false.
      */

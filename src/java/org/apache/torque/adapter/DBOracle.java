@@ -239,7 +239,7 @@ public class DBOracle extends AbstractDBAdapter
         // are not allowed anyway
         // So alias names will be retained
         for (ListIterator columnIt = selectColumns.listIterator();
-                columnIt.hasNext(); )
+                columnIt.hasNext();)
         {
             String selectColumn = (String) columnIt.next();
 
@@ -265,7 +265,7 @@ public class DBOracle extends AbstractDBAdapter
 
         // second pass. Regard ordinary columns only
         for (ListIterator columnIt = selectColumns.listIterator();
-                columnIt.hasNext(); )
+                columnIt.hasNext();)
         {
             String selectColumn = (String) columnIt.next();
 

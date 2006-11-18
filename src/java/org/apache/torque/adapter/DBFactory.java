@@ -100,6 +100,15 @@ public class DBFactory
     }
 
     /**
+     * Private constructor to prevent instantiation.
+     *
+     * Class contains only static methods, so no instances are needed.
+     */
+    private DBFactory()
+    {
+    }
+
+    /**
      * Creates a new instance of the Torque database adapter associated
      * with the specified JDBC driver or adapter key.
      *

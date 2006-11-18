@@ -187,8 +187,8 @@ public abstract class BaseObject implements Persistent, Serializable
      *             field object type.
      * @throws TorqueException If a problem occures with the set[Field] method.
      */
-    public boolean setByName(String name, Object value) throws TorqueException,
-            IllegalArgumentException
+    public boolean setByName(String name, Object value)
+            throws TorqueException
     {
         throw new Error("BaseObject.setByName: " + NOT_IMPLEMENTED);
     }
@@ -217,7 +217,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * @throws TorqueException If a problem occures with the set[Field] method.
      */
     public boolean setByPeerName(String name, Object value)
-            throws TorqueException, IllegalArgumentException
+            throws TorqueException
     {
         throw new Error("BaseObject.setByPeerName: " + NOT_IMPLEMENTED);
     }
@@ -247,7 +247,7 @@ public abstract class BaseObject implements Persistent, Serializable
      * @throws TorqueException If a problem occures with the set[Field] method.
      */
     public boolean setByPosition(int position, Object value)
-            throws TorqueException, IllegalArgumentException
+            throws TorqueException
     {
         throw new Error("BaseObject.setByPosition: " + NOT_IMPLEMENTED);
     }

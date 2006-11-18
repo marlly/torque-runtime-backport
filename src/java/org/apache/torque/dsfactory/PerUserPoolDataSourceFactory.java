@@ -66,9 +66,9 @@ public class PerUserPoolDataSourceFactory
         super.initialize(configuration);
 
         ConnectionPoolDataSource cpds = initCPDS(configuration);
-        PerUserPoolDataSource ds = initJdbc2Pool(configuration);
-        ds.setConnectionPoolDataSource(cpds);
-        this.ds = ds;
+        PerUserPoolDataSource dataSource = initJdbc2Pool(configuration);
+        dataSource.setConnectionPoolDataSource(cpds);
+        this.ds = dataSource;
     }
 
     /**
@@ -82,7 +82,7 @@ public class PerUserPoolDataSourceFactory
         throws TorqueException
     {
         log.debug("Starting initJdbc2Pool");
-        PerUserPoolDataSource ds = new PerUserPoolDataSource();
+        PerUserPoolDataSource dataSource = new PerUserPoolDataSource();
         Configuration c = Torque.getConfiguration();
 
         if (c == null || c.isEmpty())
@@ -93,12 +93,12 @@ public class PerUserPoolDataSourceFactory
         else
         {
             Configuration conf = c.subset(DEFAULT_POOL_KEY);
-            applyConfiguration(conf, ds);
+            applyConfiguration(conf, dataSource);
         }
 
         Configuration conf = configuration.subset(POOL_KEY);
-        applyConfiguration(conf, ds);
-        return ds;
+        applyConfiguration(conf, dataSource);
+        return dataSource;
     }
 
     /**

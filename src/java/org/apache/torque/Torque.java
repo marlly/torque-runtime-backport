@@ -41,7 +41,7 @@ import org.apache.torque.map.DatabaseMap;
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
-public abstract class Torque
+public class Torque
 {
     /**
      * The prefix for all configuration keys used by Torque.
@@ -90,11 +90,12 @@ public abstract class Torque
     private static TorqueInstance torqueSingleton = null;
 
     /**
-     * C'tor for usage with the Stratum Lifecycle.
+     * Private constructor to prevent instantiation.
      *
-     * TODO: Should be made private or protected once Stratum is removed.
+     * Class contains only static method ans should therefore not be
+     * instantiated.
      */
-    public Torque()
+    private Torque()
     {
     }
 

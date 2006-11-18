@@ -39,6 +39,9 @@ import org.apache.torque.map.DatabaseMap;
 public interface Torque
         extends Component
 {
+    /**
+     * The avalon role.
+     */
     String ROLE = Torque.class.getName();
 
     /*

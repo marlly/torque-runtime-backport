@@ -19,7 +19,6 @@ package org.apache.torque.util;
  * under the License.
  */
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.torque.TorqueException;
@@ -35,16 +34,25 @@ import org.apache.torque.map.DatabaseMap;
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen</a>
  * @version $Id$
  */
-public abstract class JoinBuilder
-        implements Serializable
+public final class JoinBuilder
 {
+    /**
+     * Private constructor to prevent initialisation.
+     *
+     * Class contains only static methods and should therefore not be
+     * instantiated.
+     */
+    private JoinBuilder()
+    {
+    }
+
     /**
      * adds the Joins from the criteria to the query
      * @param criteria the criteria from which the Joins are taken
      * @param query the query to which the Joins should be added
      * @throws TorqueException if the Joins can not be processed
      */
-    public static final void processJoins(
+    public static void processJoins(
             final DB db,
             final DatabaseMap dbMap,
             final Criteria criteria,
@@ -209,8 +217,7 @@ public abstract class JoinBuilder
      * @param joinType the join type to be reversed
      * @return the reversed join type
      */
-    private static final SqlEnum reverseJoinType(
-            final SqlEnum joinType)
+    private static SqlEnum reverseJoinType(final SqlEnum joinType)
     {
         if (SqlEnum.LEFT_JOIN.equals(joinType))
         {

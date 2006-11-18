@@ -437,10 +437,11 @@ public class TorqueInstance
         log.debug("init(" + configFile + ")");
         try
         {
-            Configuration conf = new PropertiesConfiguration(configFile);
+            Configuration configuration
+                    = new PropertiesConfiguration(configFile);
 
-            log.debug("Config Object is " + conf);
-            init(conf);
+            log.debug("Config Object is " + configuration);
+            init(configuration);
         }
         catch (ConfigurationException e)
         {

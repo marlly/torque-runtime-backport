@@ -19,7 +19,6 @@ package org.apache.torque.util;
  * under the License.
  */
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -45,8 +44,7 @@ import org.apache.torque.util.Criteria.Criterion;
  * @author <a href="mailto:fischer@seitenbau.de">Thomas Fischer</a>
  * @version $Id$
  */
-public abstract class SQLBuilder
-        implements Serializable
+public final class SQLBuilder
 {
     /** Logging */
     protected static final Log log = LogFactory.getLog(SQLBuilder.class);
@@ -54,6 +52,16 @@ public abstract class SQLBuilder
     /** Function Characters */
     public static final String[] COLUMN_CHARS = {".", "*"};
     public static final String[] DELIMITERS = {" ", ",", "(", ")", "<", ">"};
+
+    /**
+     * Private constructor to prevent instantiation.
+     *
+     * Class contains only static method ans should therefore not be
+     * instantiated.
+     */
+    private SQLBuilder()
+    {
+    }
 
     /**
      * Fully qualify a table name with an optional schema reference
@@ -66,8 +74,10 @@ public abstract class SQLBuilder
      *         into this method, null is returned.
      * @exception TorqueException if an error occurs
      */
-    public static final String getFullTableName(final String table, final String dbName)
-            throws TorqueException
+    public static String getFullTableName(
+            final String table,
+            final String dbName)
+        throws TorqueException
     {
         if (table != null)
         {
@@ -105,7 +115,7 @@ public abstract class SQLBuilder
      * @return The table name with a possible schema name
      *         stripped off
      */
-    public static final String getUnqualifiedTableName(final String table)
+    public static String getUnqualifiedTableName(final String table)
     {
         if (table != null)
         {
@@ -220,7 +230,7 @@ public abstract class SQLBuilder
      * @param tableCallback A Callback Object
      * @return A Set of tables.
      */
-    public static final Set getTableSet(
+    public static Set getTableSet(
             final Criteria crit,
             final TableCallback tableCallback)
     {
@@ -271,7 +281,7 @@ public abstract class SQLBuilder
      * @return a <code>Query</code> value
      * @exception TorqueException if an error occurs
      */
-    public static final Query buildQueryClause(final Criteria crit,
+    public static Query buildQueryClause(final Criteria crit,
             final List params,
             final QueryCallback qc)
             throws TorqueException
@@ -608,7 +618,7 @@ public abstract class SQLBuilder
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static final void throwMalformedColumnNameException(
+    public static void throwMalformedColumnNameException(
         final String criteriaPhrase,
         final String columnName)
         throws TorqueException
@@ -636,7 +646,7 @@ public abstract class SQLBuilder
      *         or a String of the form "tableName tableOrAliasName"
      *         if tableOrAliasName is an alias for a table name
      */
-    public static final String getTableNameForFromClause(
+    public static String getTableNameForFromClause(
             final String tableName,
             final Criteria criteria)
     {
@@ -681,7 +691,7 @@ public abstract class SQLBuilder
      * @return if the Tablename tableName is already contained in a from clause.
      *         If tableName is null, true is returned.
      */
-    public static final boolean fromClauseContainsTableName(
+    public static boolean fromClauseContainsTableName(
             final UniqueList fromClause,
             final String tableName)
     {
