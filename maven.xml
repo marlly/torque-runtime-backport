@@ -62,6 +62,7 @@
         <include name="Torque.properties" />
         <include name="master/*" />
       </fileset>
+      <fileset file='${basedir}/common/NOTICE'/>
     </copy>
   </preGoal>
 
@@ -77,6 +78,7 @@
       <fileset dir="${basedir}/common">
         <include name="project.xml"/>
         <include name="project.properties"/>
+        <include name="NOTICE"/>
       </fileset>
     </copy>
   </preGoal>
