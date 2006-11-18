@@ -192,6 +192,22 @@ public class DBSybase extends AbstractDBAdapter
     }
 
     /**
+     * Determines whether backslashes (\) should be escaped in explicit SQL
+     * strings. If true is returned, a BACKSLASH will be changed to "\\".
+     * If false is returned, a BACKSLASH will be left as "\".
+     *
+     * Sybase (and MSSQL) doesn't define a default escape character,
+     * so false is returned.
+     *
+     * @return false
+     * @see org.apache.torque.adapter.DB#escapeText()
+     */
+    public boolean escapeText()
+    {
+        return false;
+    }
+
+    /**
      * Whether an escape clause in like should be used.
      * Example : select * from AUTHOR where AUTHOR.NAME like '\_%' ESCAPE '\';
      *
