@@ -48,14 +48,14 @@ foo = FooManager.getInstance(id);
 List foos = FooManager.getInstances(ids);
 ]]></source>
 
-    <p>
+    <!-- p>
       Note: Managers and the caching they provide is fairly new.  Feedback 
       is welcome and usage by the brave is encouraged.  
       But the api should not be expected to be stable.
-    </p>
+    </p -->
     
     <p>
-      Also, note that the cache is global and is not Transaction-aware.
+      Note that the cache is global and is not Transaction-aware.
       This implies that isolation of different transactions will be difficult
       to achieve. For example, you might read uncommited data out of the 
       cache even if you database transaction isolation is set to 
