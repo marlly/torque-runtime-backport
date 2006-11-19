@@ -41,7 +41,7 @@ import org.apache.torque.map.DatabaseMap;
  * @author <a href="mailto:kschrader@karmalab.org">Kurt Schrader</a>
  * @version $Id$
  */
-public abstract class Torque
+public class Torque
 {
     /**
      * The prefix for all configuration keys used by Torque.
