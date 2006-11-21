@@ -36,9 +36,10 @@
         <item name="Generator"           href="../generator/index.html" collapse="true">
           <item name="dummy"/>
         </item>
-        <item name="Maven Plugin"        href="../maven-plugin/index.html" collapse="true">
+        <item name="Maven 1 Plugin"      href="../maven-plugin/index.html" collapse="true">
           <item name="dummy"/>
         </item>
+        <item name="Maven 2 Plugin"      href="../maven2-plugin/index.html" target="_blank"/>
         <item name="Runtime"             href="/index.html" collapse="true">
           <item name="Reference"         href="/reference/index.html" collapse="true">
             <item name="Initialisation"  href="/reference/initialisation-configuration.html"/>
