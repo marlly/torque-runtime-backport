@@ -26,13 +26,13 @@
 
   <description>Torque is a persistence layer.</description>
   <shortDescription>Persistence Layer</shortDescription>
-  <url>http://db.apache.org/torque/</url>
-  <siteDirectory>/www/db.apache.org/torque/runtime/</siteDirectory>
+  <url>http://db.apache.org/torque/releases/torque-3.3/runtime/</url>
+  <siteDirectory>/www/db.apache.org/torque/releases/torque-3.3/runtime/</siteDirectory>
 
   <repository>
     <connection>scm:svn:http://svn.apache.org/repos/asf/db/torque/runtime/trunk</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/db/torque/runtime/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs</url>
+    <url>http://svn.apache.org/viewvc</url>
   </repository>
 
   <dependencies>
