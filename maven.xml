@@ -63,6 +63,7 @@
         <include name="master/*" />
       </fileset>
       <fileset file='${basedir}/common/NOTICE'/>
+      <fileset file='${basedir}/common/LICENSE.txt'/>
     </copy>
   </preGoal>
 
@@ -79,6 +80,7 @@
         <include name="project.xml"/>
         <include name="project.properties"/>
         <include name="NOTICE"/>
+        <include name="LICENSE.txt"/>
       </fileset>
     </copy>
   </preGoal>
