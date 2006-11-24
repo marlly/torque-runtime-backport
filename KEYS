@@ -51,3 +51,75 @@ Dfo/l2HE66uKYUKKX2UDLFWZUUS5ryXuH+OOj5BpDamf4Cmh/6HzUbi2CGkj3AKH
 Ihy0M5zY
 =+Pkt
 -----END PGP PUBLIC KEY BLOCK-----
+pub   1024D/88817402 1998-03-18
+      Key fingerprint = 839B 8C32 286C 100B DB08  F552 2EB9 4682 8881 7402
+uid                  Thomas Vandahl <thomas@vandahl.org>
+sig 3        88817402 2006-11-19  Thomas Vandahl <thomas@vandahl.org>
+sig 3        88817402 2006-10-14  Thomas Vandahl <thomas@vandahl.org>
+sig 3        5D91D0AA 2006-11-19  Thomas Fischer <tfischer@apache.org>
+sig 3        88817402 2006-10-14  Thomas Vandahl <thomas@vandahl.org>
+uid                  Thomas Vandahl (Apache) <tv@apache.org>
+sig 3        88817402 2006-11-19  Thomas Vandahl <thomas@vandahl.org>
+sig 3        5D91D0AA 2006-11-19  Thomas Fischer <tfischer@apache.org>
+sig 3        88817402 2006-10-14  Thomas Vandahl <thomas@vandahl.org>
+uid                  Dr. Thomas Vandahl <thomas.vandahl@contec-dt.de>
+sig          88817402 2006-11-19  Thomas Vandahl <thomas@vandahl.org>
+sig          2C1AA577 1998-03-18  Dr. Thomas Vandahl <thomas.vandahl@contec-dt.de>
+sig          BB1D9F6D 1998-08-26  ct magazine CERTIFICATE <pgpCA@ct.heise.de>
+sig          88817402 1998-03-18  Thomas Vandahl <thomas@vandahl.org>
+sub   2048g/9FB1189B 1998-03-18
+sig          88817402 1998-03-18  Thomas Vandahl <thomas@vandahl.org>
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.5 (Darwin)
+
+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
+hiw=
+=+HED
+-----END PGP PUBLIC KEY BLOCK-----
