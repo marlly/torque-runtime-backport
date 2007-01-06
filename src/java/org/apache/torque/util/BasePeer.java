@@ -27,7 +27,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,9 +89,6 @@ public abstract class BasePeer
 
     /** Classes that implement this class should override this value. */
     public static final String TABLE_NAME = "TABLE_NAME";
-
-    /** Hashtable that contains the cached mapBuilders. */
-    private static Hashtable mapBuilders = new Hashtable(5);
 
     /** the log */
     protected static final Log log = LogFactory.getLog(BasePeer.class);
@@ -1333,60 +1329,17 @@ public abstract class BasePeer
      * This method returns the MapBuilder specified in the name
      * parameter.  You should pass in the full path to the class, ie:
      * org.apache.torque.util.db.map.TurbineMapBuilder.  The
-     * MapBuilder instances are cached in this class for speed.
+     * MapBuilder instances are cached in the TorqueInstance for speed.
      *
      * @param name name of the MapBuilder
      * @return A MapBuilder, not null
      * @throws TorqueException if the Map Builder cannot be instantiated
+     * @deprecated Use Torque.getMapBuilder(name) instead
      */
     public static MapBuilder getMapBuilder(String name)
         throws TorqueException
     {
-        synchronized (mapBuilders)
-        {
-            try
-            {
-                MapBuilder mb = (MapBuilder) mapBuilders.get(name);
-
-                if (mb == null)
-                {
-                    mb = (MapBuilder) Class.forName(name).newInstance();
-                    // Cache the MapBuilder before it is built.
-                    mapBuilders.put(name, mb);
-                }
-
-                // Build the MapBuilder in its own synchronized block to
-                //  avoid locking up the whole Hashtable while doing so.
-                // Note that *all* threads need to do a sync check on isBuilt()
-                //  to avoid grabing an uninitialized MapBuilder. This, however,
-                //  is a relatively fast operation.
-
-                if (mb.isBuilt())
-                {
-                    return mb;
-                }
-
-                try
-                {
-                    mb.doBuild();
-                }
-                catch (Exception e)
-                {
-                    // need to think about whether we'd want to remove
-                    //  the MapBuilder from the cache if it can't be
-                    //  built correctly...?  pgo
-                    throw e;
-                }
-
-                return mb;
-            }
-            catch (Exception e)
-            {
-                log.error("BasePeer.MapBuilder failed trying to instantiate: "
-                        + name, e);
-                throw new TorqueException(e);
-            }
-        }
+        return Torque.getMapBuilder(name);
     }
 
     /**

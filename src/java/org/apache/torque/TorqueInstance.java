@@ -21,11 +21,9 @@ package org.apache.torque;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
@@ -38,9 +36,9 @@ import org.apache.torque.adapter.DBFactory;
 import org.apache.torque.dsfactory.DataSourceFactory;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.map.MapBuilder;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.oid.IDGeneratorFactory;
-import org.apache.torque.util.BasePeer;
 
 /**
  * The core of Torque's implementation.  Both the classic {@link
@@ -100,7 +98,7 @@ public class TorqueInstance
      * are serialized then unserialized prior to Torque being reinitialized.
      * This condition exists in a normal catalina restart.
      */
-    private List mapBuilders = null;
+    private Map mapBuilderCache = null;
 
     /**
      * Creates a new instance with default configuration.
@@ -157,13 +155,34 @@ public class TorqueInstance
         initAdapters(conf);
         initDataSourceFactories(conf);
 
-        for (Iterator i = mapBuilders.iterator(); i.hasNext();)
+        // re-build any MapBuilders that may have gone lost during serialization 
+        synchronized (mapBuilderCache)
         {
-            //this will add any maps in this builder to the proper database map
-            BasePeer.getMapBuilder((String) i.next());
+            for (Iterator i = mapBuilderCache.entrySet().iterator(); i.hasNext();)
+            {
+                Map.Entry entry = (Map.Entry)i.next();
+                
+                if (null == entry.getValue())
+                {
+                    try
+                    {
+                        // create and build the MapBuilder
+                        MapBuilder builder = (MapBuilder) Class.forName((String) entry.getKey()).newInstance();
+        
+                        if (!builder.isBuilt())
+                        {
+                            builder.doBuild();
+                        }
+    
+                        entry.setValue(builder);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new TorqueException(e);
+                    }
+                }
+            }
         }
-        // any further mapBuilders will be called/built on demand
-        mapBuilders = null;
 
         // setup manager mappings
         initManagerMappings(conf);
@@ -723,7 +742,7 @@ public class TorqueInstance
      */
     private void resetConfiguration()
     {
-        mapBuilders = Collections.synchronizedList(new ArrayList());
+        mapBuilderCache = Collections.synchronizedMap(new HashMap());
         managers = new HashMap();
         isInit = false;
     }
@@ -770,9 +789,68 @@ public class TorqueInstance
      */
     public void registerMapBuilder(String className)
     {
-        mapBuilders.add(className);
+        mapBuilderCache.put(className, null);
     }
 
+    /**
+     * Register a MapBuilder
+     *
+     * @param builder the instance of the MapBuilder
+     * 
+     */
+    public void registerMapBuilder(MapBuilder builder)
+    {
+        mapBuilderCache.put(builder.getClass().getName(), builder);
+    }
+    
+    /**
+     * Get a MapBuilder
+     *
+     * @param className of the MapBuilder
+     * @return A MapBuilder, not null
+     * @throws TorqueException if the Map Builder cannot be instantiated
+     * 
+     */
+    public MapBuilder getMapBuilder(String className)
+        throws TorqueException
+    {
+        try
+        {
+            MapBuilder mb = (MapBuilder)mapBuilderCache.get(className);
+
+            if (mb == null)
+            {
+                mb = (MapBuilder) Class.forName(className).newInstance();
+                // Cache the MapBuilder before it is built.
+                mapBuilderCache.put(className, mb);
+            }
+
+            if (mb.isBuilt())
+            {
+                return mb;
+            }
+
+            try
+            {
+                mb.doBuild();
+            }
+            catch (Exception e)
+            {
+                // remove the MapBuilder from the cache if it can't be built correctly
+                mapBuilderCache.remove(className);
+                throw e;
+            }
+
+            return mb;
+        }
+        catch (Exception e)
+        {
+            log.error("getMapBuilder failed trying to instantiate: "
+                    + className, e);
+            throw new TorqueException(e);
+        }
+    }
+    
     /**
      * This method returns a Connection from the default pool.
      *

@@ -28,6 +28,7 @@ import org.apache.torque.TorqueException;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.map.MapBuilder;
 
 /**
  * Avalon role interface for Torque.
@@ -112,6 +113,25 @@ public interface Torque
      */
     void registerMapBuilder(String className);
 
+    /**
+     * Register a MapBuilder
+     *
+     * @param builder the instance of the MapBuilder
+     * 
+     */
+    void registerMapBuilder(MapBuilder builder);
+    
+    /**
+     * Get a MapBuilder
+     *
+     * @param className of the MapBuilder
+     * @return A MapBuilder, not null
+     * @throws TorqueException if the Map Builder cannot be instantiated
+     * 
+     */
+    MapBuilder getMapBuilder(String className)
+        throws TorqueException;
+    
     /**
      * This method returns a Connection from the default pool.
      *

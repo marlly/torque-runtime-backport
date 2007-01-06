@@ -26,6 +26,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.torque.adapter.DB;
 import org.apache.torque.manager.AbstractBaseManager;
 import org.apache.torque.map.DatabaseMap;
+import org.apache.torque.map.MapBuilder;
 
 /**
  * A static facade wrapper around the Torque implementation (which is in
@@ -261,6 +262,31 @@ public class Torque
         getInstance().registerMapBuilder(className);
     }
 
+    /**
+     * Register a MapBuilder
+     *
+     * @param builder the instance of the MapBuilder
+     * 
+     */
+    public static void registerMapBuilder(MapBuilder builder)
+    {
+        getInstance().registerMapBuilder(builder);
+    }
+
+    /**
+     * Get a MapBuilder
+     *
+     * @param className of the MapBuilder
+     * @return A MapBuilder, not null
+     * @throws TorqueException if the Map Builder cannot be instantiated
+     * 
+     */
+    public static MapBuilder getMapBuilder(String className)
+        throws TorqueException
+    {
+        return getInstance().getMapBuilder(className);
+    }
+    
     /**
      * This method returns a Connection from the default pool.
      *
