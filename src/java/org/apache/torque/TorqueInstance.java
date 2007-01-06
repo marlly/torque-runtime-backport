@@ -155,6 +155,11 @@ public class TorqueInstance
         initAdapters(conf);
         initDataSourceFactories(conf);
 
+        // setup manager mappings
+        initManagerMappings(conf);
+
+        isInit = true;
+
         // re-build any MapBuilders that may have gone lost during serialization 
         synchronized (mapBuilderCache)
         {
@@ -183,11 +188,6 @@ public class TorqueInstance
                 }
             }
         }
-
-        // setup manager mappings
-        initManagerMappings(conf);
-
-        isInit = true;
     }
 
 
