@@ -20,9 +20,11 @@ package org.apache.torque.avalon;
  */
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.Map;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
-import org.apache.avalon.framework.activity.Startable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -31,7 +33,7 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.avalon.framework.thread.ThreadSafe;
+import org.apache.avalon.framework.thread.SingleThreaded;
 import org.apache.commons.lang.StringUtils;
 import org.apache.torque.TorqueInstance;
 
@@ -50,8 +52,8 @@ public class TorqueComponent
                    Configurable,
                    Initializable,
                    Contextualizable,
-                   Startable,
-                   ThreadSafe
+                   Disposable,
+                   SingleThreaded
 {
     /** The Avalon Application Root */
     private String appRoot = null;
@@ -61,18 +63,6 @@ public class TorqueComponent
 
     /** The configuration file name. */
     private String configFile = null;
-
-
-    /**
-     * Creates a new instance.  Default constructor used by Avalon.
-     */
-    public TorqueComponent()
-    {
-        super();
-
-        // Provide the singleton instance to the static accessor
-        org.apache.torque.Torque.setInstance(this);
-    }
 
     /*
      * ========================================================================
@@ -171,23 +161,34 @@ public class TorqueComponent
             throws Exception
     {
         getLogger().debug("initialize()");
+        
+        TorqueInstance instance = org.apache.torque.Torque.getInstance();
+        
+        // Check if another singleton is already running 
+        if (instance.isInit())
+        {
+            Map mapBuilders = instance.getMapBuilders();
+            
+            // Copy the registered MapBuilders and take care that they will be built again
+            for (Iterator  i = mapBuilders.keySet().iterator(); i.hasNext();)
+            {
+                String className = (String)i.next();
+                registerMapBuilder(className);
+            }
+        }
+        
+        // Provide the singleton instance to the static accessor
+        org.apache.torque.Torque.setInstance(this);
+
         init(configFile);
     }
 
     /**
-     * @see org.apache.avalon.framework.activity.Startable#start()
+     * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
-    public void start()
+    public void dispose()
     {
-        getLogger().debug("start()");
-    }
-
-    /**
-     * @see org.apache.avalon.framework.activity.Startable#stop()
-     */
-    public void stop()
-    {
-        getLogger().debug("stop()");
+        getLogger().debug("dispose()");
         try
         {
             shutdown();

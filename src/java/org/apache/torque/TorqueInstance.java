@@ -783,6 +783,17 @@ public class TorqueInstance
     }
 
     /**
+     * Get the registered MapBuilders
+     *
+     * @return the MapBuilder cache
+     * 
+     */
+    public Map getMapBuilders()
+    {
+        return mapBuilderCache;
+    }
+
+    /**
      * Register a MapBuilder
      *
      * @param className the MapBuilder
