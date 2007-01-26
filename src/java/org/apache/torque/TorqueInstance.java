@@ -887,6 +887,10 @@ public class TorqueInstance
     public Connection getConnection(String name)
             throws TorqueException
     {
+        if (!Torque.isInit())
+        {
+            throw new TorqueException("Torque is not initialized");
+        }
         try
         {
             return getDatabase(name)
@@ -946,6 +950,10 @@ public class TorqueInstance
             String password)
             throws TorqueException
     {
+        if (!Torque.isInit())
+        {
+            throw new TorqueException("Torque is not initialized");
+        }
         try
         {
             return getDataSourceFactory(name)
