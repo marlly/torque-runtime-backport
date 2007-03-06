@@ -164,11 +164,10 @@ public class TorqueComponent
         
         TorqueInstance instance = org.apache.torque.Torque.getInstance();
         
-        // Check if another singleton is already running 
-        if (instance.isInit())
-        {
-            Map mapBuilders = instance.getMapBuilders();
-            
+        Map mapBuilders = instance.getMapBuilders();
+        
+        if (mapBuilders != null)
+        {    
             // Copy the registered MapBuilders and take care that they will be built again
             for (Iterator  i = mapBuilders.keySet().iterator(); i.hasNext();)
             {
