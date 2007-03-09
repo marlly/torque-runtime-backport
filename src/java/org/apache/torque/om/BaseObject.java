@@ -185,7 +185,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *         field).
      * @throws IllegalArgumentException if object type of value does not match
      *             field object type.
-     * @throws TorqueException If a problem occures with the set[Field] method.
+     * @throws TorqueException If a problem occurs with the set[Field] method.
      */
     public boolean setByName(String name, Object value)
             throws TorqueException
@@ -214,7 +214,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *         field).
      * @throws IllegalArgumentException if object type of value does not match
      *             field object type.
-     * @throws TorqueException If a problem occures with the set[Field] method.
+     * @throws TorqueException If a problem occurs with the set[Field] method.
      */
     public boolean setByPeerName(String name, Object value)
             throws TorqueException
@@ -244,7 +244,7 @@ public abstract class BaseObject implements Persistent, Serializable
      *         field).
      * @throws IllegalArgumentException if object type of value does not match
      *             field object type.
-     * @throws TorqueException If a problem occures with the set[Field] method.
+     * @throws TorqueException If a problem occurs with the set[Field] method.
      */
     public boolean setByPosition(int position, Object value)
             throws TorqueException
