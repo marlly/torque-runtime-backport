@@ -31,7 +31,7 @@
     <p>
       Bean creation is turned off by default. To enable bean creation,
       you have to generate your object model with the property 
-      <code>torque.generateBeans</code>code> set to <code>true</code>.
+      <code>torque.generateBeans</code> set to <code>true</code>.
     </p>
     
     <p>
