@@ -159,23 +159,15 @@ public class DBPostgres extends AbstractDBAdapter
      */
     public void generateLimits(Query query, int offset, int limit)
     {
-        StringBuffer limitStringBuffer = new StringBuffer();
-
         if (offset > 0)
         {
-            limitStringBuffer.append(limit)
-                    .append(" offset ")
-                    .append(offset);
+            query.setOffset(Integer.toString(offset));
         }
-        else
+        if (limit >= 0)
         {
-            if (limit >= 0)
-            {
-                limitStringBuffer.append(limit);
-            }
+            query.setLimit(Integer.toString(limit));
         }
 
-        query.setLimit(limitStringBuffer.toString());
         query.setPreLimit(null);
         query.setPostLimit(null);
     }

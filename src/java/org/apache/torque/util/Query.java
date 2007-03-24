@@ -46,6 +46,7 @@ public class Query
     private static final String GROUP_BY = " GROUP BY ";
     private static final String HAVING = " HAVING ";
     private static final String LIMIT = " LIMIT ";
+    private static final String OFFSET = " OFFSET ";
     private static final String ROWCOUNT = " SET ROWCOUNT ";
 
     private UniqueList selectModifiers = new UniqueList();
@@ -58,6 +59,7 @@ public class Query
     private String limit;
     private String preLimit;
     private String postLimit;
+    private String offset;
     private String rowcount;
 
     /**
@@ -181,7 +183,7 @@ public class Query
 
     /**
      * Set the limit number.  This is used to limit the number of rows
-     * returned by a query, and the row where the resultset starts.
+     * returned by a query.
      *
      * @param limit A String.
      */
@@ -210,6 +212,17 @@ public class Query
     public void setPostLimit(String postLimit)
     {
         this.postLimit = postLimit;
+    }
+
+    /**
+     * Set the offset number.  This is used to set the row where the 
+     * resultset starts.
+     *
+     * @param offset A String.
+     */
+    public void setOffset(String offset)
+    {
+        this.offset = offset;
     }
 
     /**
@@ -265,6 +278,17 @@ public class Query
     public String getPreLimit()
     {
         return preLimit;
+    }
+
+    /**
+     * Get the offset number.  This is used to set the row where the 
+     * resultset starts.
+     *
+     * @return A String with the offset, or null if no offset is set.
+     */
+    public String getOffset()
+    {
+        return offset;
     }
 
     /**
@@ -355,6 +379,11 @@ public class Query
         {
             stmt.append(LIMIT)
                 .append(limit);
+        }
+        if (offset != null)
+        {
+            stmt.append(OFFSET)
+                .append(offset);
         }
         if (rowcount != null)
         {
