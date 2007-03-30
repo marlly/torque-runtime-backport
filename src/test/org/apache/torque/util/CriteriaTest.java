@@ -425,19 +425,43 @@ public class CriteriaTest extends BaseTestCase
 
         String toStringExpect = "Criteria:: TABLE.DATE_COLUMN<=>TABLE.DATE_COLUMN=CURRENT_DATE:  "
                 + "\nCurrent Query SQL (may not be complete or applicable): "
-                + "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN=CURRENT_DATE LIMIT 3, 5";
+                + "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN=CURRENT_DATE LIMIT 5 OFFSET 3";
 
         String cString = c.toString();
         //System.out.println(cString);
         assertEquals(toStringExpect, cString);
 
-        // Note that this is intentially the same as above as the behaviour is
+        // Note that this is intentionally the same as above as the behaviour is
         // only observed on subsequent invocations of toString().
         cString = c.toString();
         //System.out.println(cString);
         assertEquals(toStringExpect, cString);
     }
 
+    /**
+     * TORQUE-87
+     */
+    public void testCriteriaWithOffsetNoLimit()
+    {
+        Criteria c = new Criteria()
+        .add("TABLE.DATE_COLUMN", Criteria.CURRENT_DATE)
+        .setOffset(3);
+        
+        String toStringExpect = "Criteria:: TABLE.DATE_COLUMN<=>TABLE.DATE_COLUMN=CURRENT_DATE:  "
+            + "\nCurrent Query SQL (may not be complete or applicable): "
+            + "SELECT  FROM TABLE WHERE TABLE.DATE_COLUMN=CURRENT_DATE LIMIT 18446744073709551615 OFFSET 3";
+        
+        String cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(toStringExpect, cString);
+        
+        // Note that this is intentionally the same as above as the behaviour is
+        // only observed on subsequent invocations of toString().
+        cString = c.toString();
+        //System.out.println(cString);
+        assertEquals(toStringExpect, cString);
+    }
+    
     /**
      * This test case has been written to try out the fix applied to resolve
      * TRQS73 - i.e. ensuring that Criteria.toString() does not alter any limit
@@ -459,7 +483,7 @@ public class CriteriaTest extends BaseTestCase
         //System.out.println(cString);
         assertEquals(toStringExpect, cString);
 
-        // Note that this is intentially the same as above as the behaviour is
+        // Note that this is intentionally the same as above as the behaviour is
         // only observed on subsequent invocations of toString().
         cString = c.toString();
         //System.out.println(cString);
@@ -613,7 +637,7 @@ public class CriteriaTest extends BaseTestCase
      */
     public void testOrderBy() throws TorqueException
     {
-        // we need a rudementary databaseMap for this test case to work
+        // we need a rudimentary databaseMap for this test case to work
         DatabaseMap dbMap = Torque.getDatabaseMap(Torque.getDefaultDB());
 
         TableMap tableMap = new TableMap("AUTHOR", dbMap);
