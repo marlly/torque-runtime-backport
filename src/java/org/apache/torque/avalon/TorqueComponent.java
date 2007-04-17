@@ -33,7 +33,7 @@ import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.avalon.framework.thread.SingleThreaded;
+import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.commons.lang.StringUtils;
 import org.apache.torque.TorqueInstance;
 
@@ -53,7 +53,7 @@ public class TorqueComponent
                    Initializable,
                    Contextualizable,
                    Disposable,
-                   SingleThreaded
+                   ThreadSafe
 {
     /** The Avalon Application Root */
     private String appRoot = null;
