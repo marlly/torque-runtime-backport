@@ -740,6 +740,15 @@ public class LargeSelect implements Runnable, Serializable
                     criteria.setLimit(blockBegin + memoryLimit + 1);
                 }
             }
+
+            /* 
+             * Fix criterions relating to booleanint or booleanchar columns
+             * The defaultTableMap parameter in this call is null because we have
+             * no default peer class inside LargeSelect. This means that all
+             * columns not fully qualified will not be modified.
+             */
+            BasePeer.correctBooleans(criteria, null);
+            
             query = BasePeer.createQueryString(criteria);
 
             // Get a connection to the db.

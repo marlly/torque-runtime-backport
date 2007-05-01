@@ -1530,11 +1530,11 @@ public abstract class BasePeer
                         tableMap = databaseMap.getTable(tableName);
                     }
                 }
-                if (tableMap == null)
-                {
-                    // no description of table available, do not modify anything
-                    break;
-                }
+            }
+            if (tableMap == null)
+            {
+                // no description of table available, do not modify anything
+                continue;
             }
 
             ColumnMap columnMap = tableMap.getColumn(columnName);
