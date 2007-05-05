@@ -303,8 +303,29 @@ public abstract class BasePeer
      * @param criteria The criteria to use.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated This method causes unexpected results when joins are used.
+     *              Please use doDelete(Criteria, String).
      */
     public static void doDelete(Criteria criteria) throws TorqueException
+    {
+        doDelete(criteria, (String) null);
+    }
+
+    /**
+     * Method to perform deletes based on values and keys in a
+     * Criteria.
+     * This method is protected because it may cause ambiguity between
+     * doDelete(Criteria,Connection) and this method. It will be made public
+     * once doDelete(Criteria, Connection) is removed.
+     *
+     * @param criteria The criteria to use.
+     * @param tableName the name of the table to delete records from.
+     *         If set to null, the name of the table(s) can be extracted from
+     *         the criteria, but this can cause unexpected results.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    protected static void doDelete(Criteria criteria, String tableName) throws TorqueException
     {
         Connection con = null;
         try
@@ -312,7 +333,7 @@ public abstract class BasePeer
             con = Transaction.beginOptional(
                     criteria.getDbName(),
                     criteria.isUseTransaction());
-            doDelete(criteria, con);
+            doDelete(criteria, tableName, con);
             Transaction.commit(con);
         }
         catch (TorqueException e)
@@ -329,8 +350,27 @@ public abstract class BasePeer
      * @param con A Connection.
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
+     * @deprecated This method causes unexpected results when joins are used.
+     *              Please use doDelete(Criteria, String, Connection).
      */
     public static void doDelete(Criteria criteria, Connection con)
+        throws TorqueException
+    {
+        doDelete(criteria, null, con);
+    }
+
+    /**
+     * Method to perform deletes based on values and keys in a Criteria.
+     *
+     * @param criteria The criteria to use.
+     * @param tableName the name of the table to delete records from.
+     *         If set to null, the name of the table(s) can be extracted from
+     *         the criteria, but this can cause unexpected results.
+     * @param con A Connection.
+     * @throws TorqueException Any exceptions caught during processing will be
+     *         rethrown wrapped into a TorqueException.
+     */
+    public static void doDelete(Criteria criteria, String tableName, Connection con)
         throws TorqueException
     {
         String dbName = criteria.getDbName();
@@ -370,7 +410,16 @@ public abstract class BasePeer
                 }
             };
 
-        Set tables = SQLBuilder.getTableSet(criteria, tc);
+        Set tables;
+        if (tableName == null)
+        {
+            tables = SQLBuilder.getTableSet(criteria, tc);
+        }
+        else
+        {
+            tables = new HashSet(1);
+            tables.add(tableName);
+        }
 
         try
         {
