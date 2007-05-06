@@ -61,7 +61,7 @@ public final class JoinBuilder
     {
         List criteriaJoins = criteria.getJoins();
 
-        if (criteriaJoins == null)
+        if (criteriaJoins.isEmpty())
         {
             return;
         }

@@ -160,7 +160,7 @@ public class Criteria extends Hashtable
     private UniqueList groupByColumns = new UniqueList();
     private Criterion having = null;
     private OrderedMap asColumns = ListOrderedMap.decorate(new HashMap());
-    private transient List joins = null;
+    private transient List joins = new ArrayList(3);
 
     /** The name of the database. */
     private String dbName;
@@ -177,7 +177,7 @@ public class Criteria extends Hashtable
     /** To start the results at a row other than the first one. */
     private int offset = 0;
 
-    private HashMap aliases = null;
+    private HashMap aliases = new HashMap(8);
 
     private boolean useTransaction = false;
 
@@ -244,11 +244,11 @@ public class Criteria extends Hashtable
         groupByColumns.clear();
         having = null;
         asColumns.clear();
-        joins = null;
+        joins.clear();
         dbName = originalDbName;
         offset = 0;
         limit = -1;
-        aliases = null;
+        aliases.clear();
         useTransaction = false;
     }
 
@@ -305,10 +305,6 @@ public class Criteria extends Hashtable
      */
     public void addAlias(String alias, String table)
     {
-        if (aliases == null)
-        {
-            aliases = new HashMap(8);
-        }
         aliases.put(alias, table);
     }
 
@@ -320,10 +316,6 @@ public class Criteria extends Hashtable
      */
     public String getTableForAlias(String alias)
     {
-        if (aliases == null)
-        {
-            return null;
-        }
         return (String) aliases.get(alias);
     }
 
@@ -1353,10 +1345,6 @@ public class Criteria extends Hashtable
      */
     public Criteria addJoin(String left, String right, SqlEnum operator)
     {
-        if (joins == null)
-        {
-            joins = new ArrayList(3);
-        }
         joins.add(new Join(left, right, operator));
 
         return this;
@@ -1365,8 +1353,8 @@ public class Criteria extends Hashtable
     /**
      * get the List of Joins.  This method is meant to
      * be called by BasePeer.
-     * @return a List which contains objects of type Join,
-     *         or null if the criteria dies not contains any joins
+     * @return a List which contains objects of type Join.
+     *         If the criteria does not contains any joins, the list is empty
      */
     public List getJoins()
     {
@@ -1841,9 +1829,9 @@ public class Criteria extends Hashtable
                     && selectModifiers.equals(criteria.getSelectModifiers())
                     && selectColumns.equals(criteria.getSelectColumns())
                     && orderByColumns.equals(criteria.getOrderByColumns())
-                    && ObjectUtils.equals(aliases, criteria.getAliases())
+                    && aliases.equals(criteria.getAliases())
                     && asColumns.equals(criteria.getAsColumns())
-                    && ObjectUtils.equals(joins, criteria.getJoins())
+                    && joins.equals(criteria.getJoins())
                 )
             {
                 isEquiv = true;
@@ -1888,9 +1876,9 @@ public class Criteria extends Hashtable
         result = 37 * result + selectModifiers.hashCode();
         result = 37 * result + selectColumns.hashCode();
         result = 37 * result + orderByColumns.hashCode();
-        result = 37 * result + (aliases == null ? 0 : aliases.hashCode());
+        result = 37 * result + aliases.hashCode();
         result = 37 * result + asColumns.hashCode();
-        result = 37 * result + (joins == null ? 0 : joins.hashCode());
+        result = 37 * result + joins.hashCode();
         result = 37 * result + super.hashCode();
         return result;
     }
@@ -3061,7 +3049,7 @@ public class Criteria extends Hashtable
 
         // Joins need to be serialized manually.
         ArrayList serializableJoins = null;
-        if (joins != null && joins.size() > 0)
+        if (!joins.isEmpty())
         {
             serializableJoins = new ArrayList(joins.size());
 
@@ -3106,6 +3094,8 @@ public class Criteria extends Hashtable
         }
 
         // Joins need to be deserialized manually.
+        this.joins = new ArrayList(3);
+        
         ArrayList joins = (ArrayList) s.readObject();
         if (joins != null)
         {

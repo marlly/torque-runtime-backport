@@ -1573,7 +1573,7 @@ public abstract class BasePeer
                 {
                     // try aliases
                     Map aliases = criteria.getAliases();
-                    if (aliases != null && aliases.get(tableName) != null)
+                    if (aliases.get(tableName) != null)
                     {
                         tableName = (String) aliases.get(tableName);
                         tableMap = databaseMap.getTable(tableName);
