@@ -464,9 +464,12 @@ public final class SQLBuilder
                 int dotPos = strippedColumnName.lastIndexOf('.');
                 if (dotPos == -1)
                 {
-                    throwMalformedColumnNameException(
-                            "order by",
-                            orderByColumn);
+                    // We are not able to look up the table in the
+                    // tableMap, as no table name is given. Simply add
+                    // the orderBy and hope the user knows what he is
+                    // doing.
+                    orderByClause.add(orderByColumn);
+                    continue;
                 }
 
                 String tableName = strippedColumnName.substring(0, dotPos);
