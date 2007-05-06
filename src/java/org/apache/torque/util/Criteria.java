@@ -1843,7 +1843,7 @@ public class Criteria extends Hashtable
                     && orderByColumns.equals(criteria.getOrderByColumns())
                     && ObjectUtils.equals(aliases, criteria.getAliases())
                     && asColumns.equals(criteria.getAsColumns())
-                    && joins.equals(criteria.getJoins())
+                    && ObjectUtils.equals(joins, criteria.getJoins())
                 )
             {
                 isEquiv = true;
@@ -1890,7 +1890,7 @@ public class Criteria extends Hashtable
         result = 37 * result + orderByColumns.hashCode();
         result = 37 * result + (aliases == null ? 0 : aliases.hashCode());
         result = 37 * result + asColumns.hashCode();
-        result = 37 * result + joins.hashCode();
+        result = 37 * result + (joins == null ? 0 : joins.hashCode());
         result = 37 * result + super.hashCode();
         return result;
     }

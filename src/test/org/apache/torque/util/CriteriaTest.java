@@ -633,6 +633,20 @@ public class CriteriaTest extends BaseTestCase
     }
 
     /**
+     * Test that {@link Criteria#equals(Object)} works correctly for a simple
+     * Criteria object.
+     * @throws TorqueException
+     */
+    public void testEquals() throws TorqueException
+    {
+        c.addSelectColumn("Author.NAME");
+        c.addSelectColumn("Author.AUTHOR_ID");
+        c.add("Author.NAME", "foobar");
+        Criteria cClone = (Criteria) SerializationUtils.clone(c);
+        assertTrue(c.equals(cClone));
+    }
+
+    /**
      * Checks whether orderBy works.
      */
     public void testOrderBy() throws TorqueException
