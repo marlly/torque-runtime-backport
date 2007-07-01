@@ -73,7 +73,7 @@ public class MethodResultCache
         {
             try
             {
-                jcsCache.remove();
+                jcsCache.clear();
                 groups.clear();
             }
             catch (CacheException ce)

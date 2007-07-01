@@ -214,7 +214,7 @@ public abstract class AbstractBaseManager
         {
             try
             {
-                cache.remove();
+                cache.clear();
             }
             catch (CacheException ce)
             {
