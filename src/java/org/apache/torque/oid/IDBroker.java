@@ -744,7 +744,7 @@ public class IDBroker implements Runnable, IdGenerator
         // If prefetch is turned off we simply return 1
         if (!configuration.getBoolean(DB_IDBROKER_PREFETCH, true))
         {
-            quantity = new BigDecimal(1);
+            quantity = new BigDecimal((double)1);
         }
         // Initialize quantity, if necessary.
         else if (quantityStore.containsKey(tableName))
@@ -772,7 +772,7 @@ public class IDBroker implements Runnable, IdGenerator
             }
             catch (Exception e)
             {
-                quantity = new BigDecimal(10);
+                quantity = new BigDecimal((double)10);
             }
             finally
             {
