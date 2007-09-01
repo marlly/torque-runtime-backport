@@ -225,6 +225,20 @@ public abstract class AbstractBaseManager
     }
 
     /**
+     * Disposes of the cache. This triggers a shutdown of the connected cache
+     * instances. This method should only be used during shutdown of Torque. The
+     * manager instance will not cache anymore after this call.
+     */
+    public void dispose()
+    {
+        if (cache != null)
+        {
+            cache.dispose();
+            cache = null;
+        }
+    }
+
+    /**
      * Remove an object from the cache
      *
      * @param key the cache key for the object

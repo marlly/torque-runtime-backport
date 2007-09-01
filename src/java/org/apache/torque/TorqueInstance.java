@@ -432,11 +432,14 @@ public class TorqueInstance
             if ((!defaultDBName.equals(DEFAULT_NAME))
                 && databaseInfoForKeyDefault.getDataSourceFactory() == null)
             {
-                log.debug("Adding the DatasourceFactory from database "
+                log.debug("Adding the DatasourceFactory and DatabaseAdapter from database "
                         + defaultDBName
                         + " onto database " + DEFAULT_NAME);
                 databaseInfoForKeyDefault.setDataSourceFactory(
                         defaultDatabase.getDataSourceFactory());
+                databaseInfoForKeyDefault.setAdapter(
+                        defaultDatabase.getAdapter());
+                
                 this.defaultDsfIsReference = true;
             }
         }
@@ -684,6 +687,19 @@ public class TorqueInstance
                 {
                     idBroker.stop();
                 }
+            }
+        }
+        
+        // shut down the cache managers
+        synchronized (managers)
+        {
+            for (Iterator it = managers.entrySet().iterator(); it.hasNext();)
+            {
+                Map.Entry mentry = (Map.Entry)it.next();
+                
+                AbstractBaseManager manager = (AbstractBaseManager)mentry.getValue();
+                manager.dispose();
+                it.remove();
             }
         }
 
