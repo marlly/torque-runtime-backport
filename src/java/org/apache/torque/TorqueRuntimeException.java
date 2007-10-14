@@ -222,6 +222,6 @@ public class TorqueRuntimeException
         {
             list.add(st.nextToken());
         }
-        return (String[]) list.toArray();
+        return (String[]) list.toArray(new String[list.size()]); 
     }
 }
