@@ -96,6 +96,13 @@
 torque.database.default=bookstore
 ]]></source>
 
+      <p>
+        The handle name 'default' is reserved, as Torque uses it as a reference
+        to the default database.
+        So you should not define the handle 'default' yourself (but of course
+        you can use it e.g. in generated code).
+      </p>
+
     </subsection>
 
     <subsection name="Database Adapters">
