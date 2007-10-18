@@ -166,6 +166,9 @@ public class DBSybase extends AbstractDBAdapter
     public void generateLimits(Query query, int offset, int limit)
         throws TorqueException
     {
+        if ( limit < 0 && offset >= 0 ) { // Offset only test
+            return;
+        }
         if (limit + offset > 0)
         {
             query.setRowcount(String.valueOf(limit + offset));
