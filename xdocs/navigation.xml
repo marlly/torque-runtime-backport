@@ -77,6 +77,9 @@
         <item name="Tutorial"            href="../tutorial/index.html" collapse="true">
           <item name="dummy"/>
         </item>
+        <item name="Village"             href="../village/index.html" collapse="true">
+          <item name="dummy"/>
+        </item>
       </item>
       <item name="Previous releases"     href="../../../documentation/previous-releases.html" collapse="true">
         <item name="dummy"/>
