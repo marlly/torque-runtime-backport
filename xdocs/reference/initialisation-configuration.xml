@@ -225,7 +225,7 @@ torque.dsfactory.bookstore.connection.password = 1234
     <p>
       The &quot;pool&quot; set contains information of how the pool should
       handle the physical connections.  See
-      <a href="http://jakarta.apache.org/commons/dbcp/configuration.html">the dbcp reference</a>
+      <a href="http://commons.apache.org/dbcp/configuration.html">the dbcp reference</a>
       for possible properties.  For example, you could use: 
     </p>
 
