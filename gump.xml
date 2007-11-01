@@ -17,12 +17,12 @@
  specific language governing permissions and limitations
  under the License.
 -->
-<module name="jakarta-turbine-torque">
+<module name="db-torque">
 
   <description>Persistence Layer</description>
-  <url href="http://jakarta.apache.org/turbine/torque/"/>
+  <url href="http://db.apache.org/torque/"/>
 
-  <cvs repository="jakarta"/>
+  <cvs repository="db"/>
 
   <!-- This is really the cvs module. We need to change this but -->
   <!-- I will leave this for now until everything works.         -->
@@ -53,7 +53,6 @@
     <depend project="jakarta-velocity"/>
     <depend project="jakarta-velocity-dvsl"/>
     <depend project="jdbc"/>
-    <depend project="village"/>
     <depend project="xml-xerces"/>
     <depend project="xml-apis"/>
 
@@ -62,7 +61,7 @@
     <jar name="torque-@@DATE@@.jar"/>
     <javadoc nested="docs/apidocs"/>
 
-    <nag from="turbine-torque-dev@jakarta.apache.org"
-         to="turbine-torque-dev@jakarta.apache.org"/>
+    <nag from="torque-dev@db.apache.org"
+         to="torque-dev@db.apache.org"/>
   </project>
 </module>
