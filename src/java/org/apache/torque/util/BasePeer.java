@@ -1427,6 +1427,10 @@ public abstract class BasePeer
                     statement.setBigDecimal(i + 1,
                         ((NumberKey) param).getBigDecimal());
                 }
+                else if (param instanceof Integer)
+                {
+                    statement.setInt(i + 1, ((Integer) param).intValue());
+                }
                 else
                 {
                     statement.setString(i + 1, param.toString());

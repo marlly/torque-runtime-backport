@@ -3541,6 +3541,10 @@ public class Criteria extends Hashtable
                         params.add(new java.sql.Date(
                                            ((DateKey) value).getDate().getTime()));
                     }
+                    else if (value instanceof Integer)
+                    {
+                        params.add(value);
+                    }
                     else
                     {
                         params.add(value.toString());
