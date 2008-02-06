@@ -89,9 +89,14 @@ public class SqlExpressionTest extends TestCase
         String[] values = new String[] { "42", "43", "44" };
         String result = SqlExpression.buildIn("COL", values, SqlEnum.IN,
                 true, db);
-        // It seems the order of the values is different for jdk1.3 vs 1.4
+        // It seems the order of the values is different for jdk1.3 vs 1.4, etc.
         // In any case, the order is not significant.
-        if (result.equals("COL IN ('42','43','44')"))
+        if (result.equals("COL IN ('43','42','44')"))
+        {
+            // jdk 1.6
+            assertEquals(result, "COL IN ('43','42','44')");
+        }
+        else if (result.equals("COL IN ('42','43','44')"))
         {
             // jdk 1.4
             assertEquals(result, "COL IN ('42','43','44')");
