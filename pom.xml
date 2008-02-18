@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.apache.torque</groupId>
     <artifactId>torque</artifactId>
-    <version>3.3-RC3</version>
+    <version>3.3</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
