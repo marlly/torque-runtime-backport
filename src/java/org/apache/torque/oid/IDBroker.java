@@ -671,8 +671,7 @@ public class IDBroker implements Runnable, IdGenerator
         {
             if (useNewConnection)
             {
-                connection = Transaction.beginOptional(databaseName,
-                    transactionsSupported);
+                connection = Transaction.begin(databaseName);
             }
 
             // Write the current value of quantity of keys to grab

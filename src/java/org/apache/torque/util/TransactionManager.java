@@ -24,52 +24,12 @@ import java.sql.Connection;
 import org.apache.torque.TorqueException;
 
 /**
- * Encapsulates transaction and connection handling within Torque.
+ * Torque's interface to the transaction management system.
  *
- * If the underlying database does not support transaction or the database
- * pool returns autocommit connections, the commit and rollback methods
- * fallback to simple connection pool handling.
- *
- * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
- * @version $Id: Transaction.java 1484364 2013-05-19 22:29:37Z tfischer $
+ * @version $Id: TransactionManager.java 1448414 2013-02-20 21:06:35Z tfischer $
  */
-public final class Transaction
+public interface TransactionManager
 {
-    /** The transaction manager to use. */
-    private static TransactionManager transactionManager;
-
-    /**
-     * Private constructor to prevent instantiation.
-     *
-     * Class contains only static method and should therefore not be
-     * instantiated.
-     */
-    private Transaction()
-    {
-        // empty
-    }
-
-    /**
-     * Sets the transaction manager to use.
-     *
-     * @param transactionManager the transaction manager to use.
-     */
-    public static void setTransactionManager(
-            final TransactionManager transactionManager)
-    {
-        Transaction.transactionManager = transactionManager;
-    }
-
-    /**
-     * Returns the current transaction manager.
-     *
-     * @return the current transaction manager.
-     */
-    public static TransactionManager getTransactionManager()
-    {
-        return transactionManager;
-    }
-
     /**
      * Begin a transaction by retrieving a connection from the default database
      * connection pool.
@@ -81,10 +41,7 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static Connection begin() throws TorqueException
-    {
-        return transactionManager.begin();
-    }
+    Connection begin() throws TorqueException;
 
     /**
      * Begin a transaction by retrieving a connection from the named database
@@ -99,10 +56,7 @@ public final class Transaction
      *
      * @throws TorqueException If the connection cannot be retrieved.
      */
-    public static Connection begin(final String dbName) throws TorqueException
-    {
-        return transactionManager.begin(dbName);
-    }
+    Connection begin(String dbName) throws TorqueException;
 
 
     /**
@@ -114,10 +68,7 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static void commit(final Connection con) throws TorqueException
-    {
-        transactionManager.commit(con);
-    }
+    void commit(Connection con) throws TorqueException;
 
     /**
      * Roll back a transaction and release the connection.
@@ -129,10 +80,7 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static void rollback(final Connection con) throws TorqueException
-    {
-        transactionManager.rollback(con);
-    }
+    void rollback(Connection con) throws TorqueException;
 
     /**
      * Roll back a transaction without throwing errors if they occur.
@@ -140,10 +88,7 @@ public final class Transaction
      * errors are logged at warn level.
      *
      * @param con The Connection for the transaction.
-     * @see Transaction#rollback(Connection)
+     * @see TransactionManagerImpl#rollback(Connection)
      */
-    public static void safeRollback(final Connection con)
-    {
-        transactionManager.safeRollback(con);
-    }
+    void safeRollback(Connection con);
 }

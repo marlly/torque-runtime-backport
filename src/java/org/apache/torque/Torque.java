@@ -83,6 +83,9 @@ public class Torque
      * property to determine whether caching is used.
      */
     public static final String CACHE_KEY = "manager.useCache";
+    
+    /** The prefix for configuring the transaction manger. */
+    public static final String TRANSACTION_MANAGER_KEY = "transactionManager";
 
     /**
      * The single instance of {@link TorqueInstance} used by the

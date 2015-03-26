@@ -29,6 +29,7 @@ import java.util.Map;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.torque.adapter.DB;
@@ -39,6 +40,9 @@ import org.apache.torque.map.DatabaseMap;
 import org.apache.torque.map.MapBuilder;
 import org.apache.torque.oid.IDBroker;
 import org.apache.torque.oid.IDGeneratorFactory;
+import org.apache.torque.util.Transaction;
+import org.apache.torque.util.TransactionManager;
+import org.apache.torque.util.TransactionManagerImpl;
 
 /**
  * The core of Torque's implementation.  Both the classic {@link
@@ -151,6 +155,7 @@ public class TorqueInstance
         }
         setConfiguration(subConf);
 
+        initTransactionManager(conf);
         initDefaultDbName(conf);
         initAdapters(conf);
         initDataSourceFactories(conf);
@@ -188,6 +193,58 @@ public class TorqueInstance
                 }
             }
         }
+    }
+    
+    /**
+     * Initializes the transaction manager.
+     *
+     * @param conf the configuration representing the torque section.
+     *        of the properties file.
+     *
+     * @throws TorqueException if the transaction manger configuration
+     *         is invalid.
+     */
+    private void initTransactionManager(final Configuration conf)
+            throws TorqueException
+    {
+        log.debug("initTransactionManager(" + conf + ")");
+
+        String transactionManagerClassName =
+                conf.getString(Torque.TRANSACTION_MANAGER_KEY);
+        TransactionManager transactionManager;
+        if (StringUtils.isEmpty(transactionManagerClassName))
+        {
+            if (log.isTraceEnabled())
+            {
+                log.trace("Configuration key " + Torque.TORQUE_KEY + "."
+                    + Torque.TRANSACTION_MANAGER_KEY
+                    + " not set, using default transaction manager "
+                    + TransactionManagerImpl.class.getName());
+            }
+            transactionManager = new TransactionManagerImpl();
+        }
+        else
+        {
+            try
+            {
+                Class transactionManagerClass
+                        = Class.forName(transactionManagerClassName);
+                transactionManager = (TransactionManager)
+                        transactionManagerClass.newInstance();
+                if (log.isTraceEnabled())
+                {
+                    log.trace("Using transaction manager "
+                            + transactionManager.getClass().getName());
+                }
+            }
+            catch (Exception e)
+            {
+                log.error("Error handling transaction manager configuration",
+                        e);
+                throw new TorqueException(e);
+            }
+        }
+        Transaction.setTransactionManager(transactionManager);
     }
 
 

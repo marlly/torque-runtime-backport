@@ -20,55 +20,26 @@ package org.apache.torque.util;
  */
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.torque.Torque;
 import org.apache.torque.TorqueException;
 
 /**
- * Encapsulates transaction and connection handling within Torque.
- *
- * If the underlying database does not support transaction or the database
- * pool returns autocommit connections, the commit and rollback methods
- * fallback to simple connection pool handling.
+ * Standard connection and transaction management for Torque.
+ * Uses JDBC connection operations and Torque's own database pools
+ * for managing connections and transactions.
  *
  * @author <a href="mailto:stephenh@chase3000.com">Stephen Haberman</a>
- * @version $Id: Transaction.java 1484364 2013-05-19 22:29:37Z tfischer $
+ * @version $Id: TransactionManagerImpl.java 1448414 2013-02-20 21:06:35Z tfischer $
  */
-public final class Transaction
+public class TransactionManagerImpl implements TransactionManager
 {
-    /** The transaction manager to use. */
-    private static TransactionManager transactionManager;
 
-    /**
-     * Private constructor to prevent instantiation.
-     *
-     * Class contains only static method and should therefore not be
-     * instantiated.
-     */
-    private Transaction()
-    {
-        // empty
-    }
-
-    /**
-     * Sets the transaction manager to use.
-     *
-     * @param transactionManager the transaction manager to use.
-     */
-    public static void setTransactionManager(
-            final TransactionManager transactionManager)
-    {
-        Transaction.transactionManager = transactionManager;
-    }
-
-    /**
-     * Returns the current transaction manager.
-     *
-     * @return the current transaction manager.
-     */
-    public static TransactionManager getTransactionManager()
-    {
-        return transactionManager;
-    }
+    /** The log. */
+    private static Log log = LogFactory.getLog(TransactionManagerImpl.class);
 
     /**
      * Begin a transaction by retrieving a connection from the default database
@@ -81,9 +52,9 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static Connection begin() throws TorqueException
+    public Connection begin() throws TorqueException
     {
-        return transactionManager.begin();
+        return begin(Torque.getDefaultDB());
     }
 
     /**
@@ -99,9 +70,10 @@ public final class Transaction
      *
      * @throws TorqueException If the connection cannot be retrieved.
      */
-    public static Connection begin(final String dbName) throws TorqueException
+    public Connection begin(String dbName) throws TorqueException
     {
-        return transactionManager.begin(dbName);
+        Connection con = Torque.getConnection(dbName);
+        return con;
     }
 
 
@@ -114,9 +86,32 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static void commit(final Connection con) throws TorqueException
+    public void commit(Connection con) throws TorqueException
     {
-        transactionManager.commit(con);
+        if (con == null)
+        {
+            throw new NullPointerException("Connection object was null. "
+                    + "This could be due to a misconfiguration of the "
+                    + "DataSourceFactory. Check the logs and Torque.properties "
+                    + "to better determine the cause.");
+        }
+
+        try
+        {
+            if (con.getMetaData().supportsTransactions()
+                && !con.getAutoCommit())
+            {
+                con.commit();
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new TorqueException(e);
+        }
+        finally
+        {
+            Torque.closeConnection(con);
+        }
     }
 
     /**
@@ -129,9 +124,37 @@ public final class Transaction
      * @throws TorqueException Any exceptions caught during processing will be
      *         rethrown wrapped into a TorqueException.
      */
-    public static void rollback(final Connection con) throws TorqueException
+    public void rollback(Connection con) throws TorqueException
     {
-        transactionManager.rollback(con);
+        if (con == null)
+        {
+            throw new TorqueException("Connection object was null. "
+                    + "This could be due to a misconfiguration of the "
+                    + "DataSourceFactory. Check the logs and Torque.properties "
+                    + "to better determine the cause.");
+        }
+        else
+        {
+            try
+            {
+                if (con.getMetaData().supportsTransactions()
+                    && !con.getAutoCommit())
+                {
+                    con.rollback();
+                }
+            }
+            catch (SQLException e)
+            {
+                log.error("An attempt was made to rollback a transaction "
+                        + "but the database did not allow the operation to be "
+                        + "rolled back.", e);
+                throw new TorqueException(e);
+            }
+            finally
+            {
+                Torque.closeConnection(con);
+            }
+        }
     }
 
     /**
@@ -140,10 +163,24 @@ public final class Transaction
      * errors are logged at warn level.
      *
      * @param con The Connection for the transaction.
-     * @see Transaction#rollback(Connection)
+     * @see TransactionManagerImpl#rollback(Connection)
      */
-    public static void safeRollback(final Connection con)
+    public void safeRollback(Connection con)
     {
-        transactionManager.safeRollback(con);
+        if (con == null)
+        {
+            log.debug("called safeRollback with null argument");
+        }
+        else
+        {
+            try
+            {
+                rollback(con);
+            }
+            catch (TorqueException e)
+            {
+                log.warn("An error occured during rollback.", e);
+            }
+        }
     }
 }

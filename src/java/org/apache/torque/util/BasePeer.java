@@ -330,9 +330,7 @@ public abstract class BasePeer
         Connection con = null;
         try
         {
-            con = Transaction.beginOptional(
-                    criteria.getDbName(),
-                    criteria.isUseTransaction());
+            con = Transaction.begin(criteria.getDbName());
             doDelete(criteria, tableName, con);
             Transaction.commit(con);
         }
@@ -469,9 +467,7 @@ public abstract class BasePeer
 
         try
         {
-            con = Transaction.beginOptional(
-                    criteria.getDbName(),
-                    criteria.isUseTransaction());
+            con = Transaction.begin(criteria.getDbName());
             id = doInsert(criteria, con);
             Transaction.commit(con);
         }
@@ -750,9 +746,7 @@ public abstract class BasePeer
 
         try
         {
-            con = Transaction.beginOptional(
-                    criteria.getDbName(),
-                    criteria.isUseTransaction());
+            con = Transaction.begin(criteria.getDbName());
             results = doSelect(criteria, con);
             Transaction.commit(con);
         }
@@ -1143,9 +1137,7 @@ public abstract class BasePeer
         Connection con = null;
         try
         {
-            con = Transaction.beginOptional(
-                    updateValues.getDbName(),
-                    updateValues.isUseTransaction());
+            con = Transaction.begin(updateValues.getDbName());
             doUpdate(updateValues, con);
             Transaction.commit(con);
         }
@@ -1217,9 +1209,7 @@ public abstract class BasePeer
         Connection con = null;
         try
         {
-            con = Transaction.beginOptional(
-                    selectCriteria.getDbName(),
-                    updateValues.isUseTransaction());
+            con = Transaction.begin(selectCriteria.getDbName());
             doUpdate(selectCriteria, updateValues, con);
             Transaction.commit(con);
         }
