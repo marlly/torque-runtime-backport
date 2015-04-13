@@ -1,6 +1,6 @@
-# Torque Runtime 3 Backport
+# Apache Torque Runtime Backport
 
-This version is based on legacy Apache Torque Runtime 3.3 release with some additional fixies and new funcionality backported from version [4.0][torque-4.0].
+This version is based on legacy Torque Runtime 3.3 release with some additional fixies and new functionality backported from version [4.0][torque-4.0].
 
 ## Fixies
 * [TORQUE-108][] - Criteria addJoin causes incorrect SQL to be generated when optional schema references are in use (Oracle)
@@ -9,11 +9,11 @@ This version is based on legacy Apache Torque Runtime 3.3 release with some addi
 
 ### `TransactionManager`
 
-Custom transaction manager is necessary when you need to control database transactions using external framework such as Spring. To specify alternative implementation of `TransactionManager` interface, you can choose one of the following options. Otherwise default `TransactionManagerImpl` will be used.
+Custom transaction manager is necessary when you need to control database transactions using external framework such as Spring. To specify alternative implementation of `TransactionManager` interface you can choose one of the following options. Otherwise default `TransactionManagerImpl` will be used.
 
 #### Configuration approach
 
-Edit `Torque.properties` and add next line:
+Edit `Torque.properties` and add line below:
 
 ```ini
 torque.transactionManager = package.YourTxManagerImplementationClass
