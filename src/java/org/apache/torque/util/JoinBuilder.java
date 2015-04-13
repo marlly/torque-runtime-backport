@@ -66,6 +66,7 @@ public final class JoinBuilder
             return;
         }
 
+        String dbName = dbMap.getName();
         UniqueList queryFromClause = query.getFromClause();
         UniqueList queryWhereClause = query.getWhereClause();
 
@@ -91,8 +92,9 @@ public final class JoinBuilder
             int dot = leftColumn.lastIndexOf('.');
             String leftTableName = leftColumn.substring(0, dot);
 
-            leftTableName =
-                    SQLBuilder.getTableNameForFromClause(leftTableName, criteria);
+            leftTableName = SQLBuilder.getFullTableName(
+                    SQLBuilder.getTableNameForFromClause(leftTableName, criteria),
+                    dbName);
 
             dot = rightColumn.lastIndexOf('.');
             String rightTableName = rightColumn.substring(0, dot);
@@ -115,8 +117,9 @@ public final class JoinBuilder
                             .getType()
                             instanceof String));
 
-            rightTableName = SQLBuilder.getTableNameForFromClause(
-                    rightTableName, criteria);
+            rightTableName = SQLBuilder.getFullTableName(
+                    SQLBuilder.getTableNameForFromClause(rightTableName, criteria),
+                    dbName);
 
             // now check the join type and add the join to the
             // appropriate places in the query
@@ -232,4 +235,5 @@ public final class JoinBuilder
             return joinType;
         }
     }
+
 }
