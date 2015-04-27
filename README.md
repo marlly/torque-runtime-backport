@@ -5,7 +5,7 @@ This version is based on legacy Torque Runtime 3.3 release with some additional 
 ## Fixies
 * [TORQUE-108][] - Criteria addJoin causes incorrect SQL to be generated when optional schema references are in use (Oracle)
 
-## New funcionality
+## New functionality
 
 ### `TransactionManager`
 
