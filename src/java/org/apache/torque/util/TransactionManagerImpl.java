@@ -44,8 +44,8 @@ public class TransactionManagerImpl implements TransactionManager
     /**
      * Begin a transaction by retrieving a connection from the default database
      * connection pool.
-     * WARNING: If the database does not support transaction or the pool has set
-     * autocommit to true on the connection, the database will commit after
+     * WARNING: If the database does not support transactions,
+     * the database will commit after
      * every statement, regardless of when a commit or rollback is issued.
      *
      * @return The Connection for the transaction.
@@ -60,8 +60,8 @@ public class TransactionManagerImpl implements TransactionManager
     /**
      * Begin a transaction by retrieving a connection from the named database
      * connection pool.
-     * WARNING: If the database does not support transaction or the pool has set
-     * autocommit to true on the connection, the database will commit after
+     * WARNING: If the database does not support transactions,
+     * the database will commit after
      * every statement, regardless of when a commit or rollback is issued.
      *
      * @param dbName Name of database.
@@ -73,6 +73,17 @@ public class TransactionManagerImpl implements TransactionManager
     public Connection begin(String dbName) throws TorqueException
     {
         Connection con = Torque.getConnection(dbName);
+        try
+        {
+            if (con.getMetaData().supportsTransactions())
+            {
+                con.setAutoCommit(false);
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new TorqueException(e);
+        }
         return con;
     }
 
@@ -102,6 +113,12 @@ public class TransactionManagerImpl implements TransactionManager
                 && !con.getAutoCommit())
             {
                 con.commit();
+                // TODO Some coders, even in Torque code, suppose to have autoCommit on when getting connection
+                // from pool, so we activate it for sure in here.
+                // This is not ideal though: we should activate the autoCommit ONLY when it was on when getting
+                // the connection from the pool. Exactly as Spring's TransactionManager does -> but we need some wrapping
+                // object for remembering the original autoCommit state first.
+                con.setAutoCommit(true);
             }
         }
         catch (SQLException e)
@@ -141,6 +158,8 @@ public class TransactionManagerImpl implements TransactionManager
                     && !con.getAutoCommit())
                 {
                     con.rollback();
+                    // TODO Always setting autoCommit to true is not ideal - see the to-do at commit()
+                    con.setAutoCommit(true);
                 }
             }
             catch (SQLException e)
