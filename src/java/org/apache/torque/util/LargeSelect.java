@@ -752,7 +752,7 @@ public class LargeSelect implements Runnable, Serializable
             query = BasePeer.createQueryString(criteria);
 
             // Get a connection to the db.
-            conn = Torque.getConnection(dbName);
+            conn = Transaction.begin(dbName);
 
             // Execute the query.
             if (log.isDebugEnabled())
@@ -865,6 +865,9 @@ public class LargeSelect implements Runnable, Serializable
                 log.debug("run(): - blockEnd: " + blockEnd);
                 log.debug("run(): - results.size(): " + results.size());
             }
+
+            Transaction.commit(conn);
+            conn = null;
         }
         catch (TorqueException e)
         {
@@ -886,7 +889,10 @@ public class LargeSelect implements Runnable, Serializable
                 {
                     qds.close();
                 }
-                Torque.closeConnection(conn);
+                if (conn != null)
+                {
+                    Transaction.safeRollback(conn);
+                }
             }
             catch (SQLException e)
             {

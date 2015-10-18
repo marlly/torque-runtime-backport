@@ -134,8 +134,10 @@ public abstract class BasePeer
 
         try
         {
-            con = Torque.getConnection(dbName);
+            con = Transaction.begin(dbName);
             schema = new Schema().schema(con, tableName);
+            Transaction.commit(con);
+            con = null;
         }
         catch (Exception e)
         {
@@ -147,7 +149,10 @@ public abstract class BasePeer
         }
         finally
         {
-            Torque.closeConnection(con);
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
         return schema;
     }
@@ -287,12 +292,17 @@ public abstract class BasePeer
         try
         {
             // Get a connection to the db.
-            con = Torque.getConnection(Torque.getDefaultDB());
+            con = Transaction.begin(Torque.getDefaultDB());
             deleteAll(con, table, column, value);
+            Transaction.commit(con);
+            con = null;
         }
         finally
         {
-            Torque.closeConnection(con);
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
     }
 
@@ -333,11 +343,14 @@ public abstract class BasePeer
             con = Transaction.begin(criteria.getDbName());
             doDelete(criteria, tableName, con);
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
+        finally
         {
-            Transaction.safeRollback(con);
-            throw e;
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
     }
 
@@ -470,11 +483,14 @@ public abstract class BasePeer
             con = Transaction.begin(criteria.getDbName());
             id = doInsert(criteria, con);
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
+        finally
         {
-            Transaction.safeRollback(con);
-            throw e;
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
 
         return id;
@@ -749,11 +765,14 @@ public abstract class BasePeer
             con = Transaction.begin(criteria.getDbName());
             results = doSelect(criteria, con);
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
+        finally
         {
-            Transaction.safeRollback(con);
-            throw e;
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
         return results;
     }
@@ -878,7 +897,7 @@ public abstract class BasePeer
         List results = null;
         try
         {
-            con = Torque.getConnection(dbName);
+            con = Transaction.begin(dbName);
             // execute the query
             results = executeQuery(
                     queryString,
@@ -886,10 +905,15 @@ public abstract class BasePeer
                     numberOfResults,
                     singleRecord,
                     con);
+            Transaction.commit(con);
+            con = null;
         }
         finally
         {
-            Torque.closeConnection(con);
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
         return results;
     }
@@ -1140,11 +1164,14 @@ public abstract class BasePeer
             con = Transaction.begin(updateValues.getDbName());
             doUpdate(updateValues, con);
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
+        finally
         {
-            Transaction.safeRollback(con);
-            throw e;
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
     }
 
@@ -1212,11 +1239,14 @@ public abstract class BasePeer
             con = Transaction.begin(selectCriteria.getDbName());
             doUpdate(selectCriteria, updateValues, con);
             Transaction.commit(con);
+            con = null;
         }
-        catch (TorqueException e)
+        finally
         {
-            Transaction.safeRollback(con);
-            throw e;
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
     }
 
@@ -1292,17 +1322,21 @@ public abstract class BasePeer
         throws TorqueException
     {
         Connection con = null;
-        int rowCount = -1;
         try
         {
-            con = Torque.getConnection(dbName);
-            rowCount = executeStatement(statementString, con);
+            con = Transaction.begin(dbName);
+            int rowCount = executeStatement(statementString, con);
+            Transaction.commit(con);
+            con = null;
+            return rowCount;
         }
         finally
         {
-            Torque.closeConnection(con);
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
-        return rowCount;
     }
 
     /**
@@ -1473,7 +1507,7 @@ public abstract class BasePeer
      */
     public static List doPSSelect(Criteria criteria) throws TorqueException
     {
-        Connection con = Torque.getConnection(criteria.getDbName());
+        Connection con = Transaction.begin(criteria.getDbName());
         List v = null;
 
         try
@@ -1482,7 +1516,10 @@ public abstract class BasePeer
         }
         finally
         {
-            Torque.closeConnection(con);
+        	if (con != null)
+            {
+                Transaction.safeRollback(con);
+            }
         }
         return v;
     }

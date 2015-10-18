@@ -234,7 +234,7 @@ public class IDBroker implements Runnable, IdGenerator
         Connection dbCon = null;
         try
         {
-            dbCon = Torque.getConnection(databaseName);
+            dbCon = Transaction.begin(databaseName);
         }
         catch (Throwable t)
         {
@@ -246,6 +246,8 @@ public class IDBroker implements Runnable, IdGenerator
         try
         {
             transactionsSupported = dbCon.getMetaData().supportsTransactions();
+            Transaction.commit(dbCon);
+            dbCon = null;
         }
         catch (Exception e)
         {
@@ -257,16 +259,9 @@ public class IDBroker implements Runnable, IdGenerator
         }
         finally
         {
-            try
+        	if (dbCon != null)
             {
-                // Return the connection to the pool.
-                dbCon.close();
-            }
-            catch (Exception e)
-            {
-                log.warn("Could not close the connection which was used "
-                        + "for testing whether transactions are supported",
-                        e);
+                Transaction.safeRollback(dbCon);
             }
         }
         if (!transactionsSupported)
@@ -501,22 +496,19 @@ public class IDBroker implements Runnable, IdGenerator
         Connection dbCon = null;
         try
         {
-            dbCon = Torque.getConnection(databaseName);
+            dbCon = Transaction.begin(databaseName);
             Statement statement = dbCon.createStatement();
             ResultSet rs = statement.executeQuery(query);
             exists = rs.next();
             statement.close();
+            Transaction.commit(dbCon);
+            dbCon = null;
         }
         finally
         {
-            // Return the connection to the pool.
-            try
+        	if (dbCon != null)
             {
-                dbCon.close();
-            }
-            catch (Exception e)
-            {
-                log.error("Release of connection failed.", e);
+                Transaction.safeRollback(dbCon);
             }
         }
         return exists;
@@ -700,7 +692,7 @@ public class IDBroker implements Runnable, IdGenerator
         {
             if (useNewConnection)
             {
-                Transaction.rollback(connection);
+                Transaction.safeRollback(connection);
             }
             throw e;
         }
@@ -759,7 +751,7 @@ public class IDBroker implements Runnable, IdGenerator
                     .getBoolean(DB_IDBROKER_USENEWCONNECTION, true))
                 {
                     // Get a connection to the db
-                    dbCon = Torque.getConnection(databaseName);
+                    dbCon = Transaction.begin(databaseName);
                 }
 
                 // Read the row from the ID_TABLE.
@@ -768,6 +760,8 @@ public class IDBroker implements Runnable, IdGenerator
                 // QUANTITY column.
                 quantity = results[1];
                 quantityStore.put(tableName, quantity);
+                Transaction.commit(dbCon);
+                dbCon = null;
             }
             catch (Exception e)
             {
@@ -775,14 +769,9 @@ public class IDBroker implements Runnable, IdGenerator
             }
             finally
             {
-                // Return the connection to the pool.
-                try
+            	if (dbCon != null)
                 {
-                    dbCon.close();
-                }
-                catch (Exception e)
-                {
-                    log.error("Release of connection failed.", e);
+                    Transaction.safeRollback(dbCon);
                 }
             }
         }
